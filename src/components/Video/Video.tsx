@@ -53,6 +53,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		onFullScreenChange,
 		onVolumeChange,
 		onLoadedFrameData,
+		onQuit,
 		...divAttributes
 	} = props;
 	const { id: divId, className, style, ...rest } = divAttributes;
@@ -349,6 +350,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 			'--video-object-fit': objectFit ?? 'contain',
 			'--video-controls-pointer-events': hovered ? 'auto' : 'none',
 			'--video-controls-opacity': hovered ? 1 : 0,
+			'--video-progress-padding-left': customControls.quit ? '8px' : '16px',
 		} as React.CSSProperties;
 	}, [
 		width,
@@ -359,6 +361,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		backgroundColor,
 		objectFit,
 		hovered,
+		customControls.quit,
 	]);
 
 	// memo speaker icon
@@ -502,6 +505,20 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 											onChange={handleSetProgress}
 											width={'100%'}
 										/>
+										{customControls.quit && (
+											<IconButton
+												toggle={false}
+												icon={'x'}
+												buttonSize={'m'}
+												bgColor={'rgba(255,255,255,0.05)'}
+												bgColorHover={'rgba(0,0,0,0.7)'}
+												bgColorOn={'rgba(255,255,255,0.05)'}
+												iconColor={'var(--core-text-light)'}
+												iconColorHover={'var(--core-text-light)'}
+												iconColorOn={'var(--core-text-light)'}
+												onClick={() => onQuit?.()}
+											/>
+										)}
 									</div>
 								)}
 							</div>

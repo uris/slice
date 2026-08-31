@@ -96,7 +96,7 @@
 	gap: 8px;
 	border-radius: 100px;
 	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
-	padding: 8px 16px 8px 8px;
+	padding: 8px var(--video-progress-padding-left) 8px 8px;
 	box-sizing: border-box;
 	width: 50%;
 }

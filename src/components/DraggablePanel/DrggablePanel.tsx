@@ -454,6 +454,7 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 			}}
 			{...rest}
 		>
+			<div className={css.content}>{children}</div>
 			<div
 				ref={handle}
 				style={{
@@ -493,8 +494,6 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 					}}
 				/>
 			</div>
-
-			<div className={css.content}>{children}</div>
 		</div>
 	);
 });

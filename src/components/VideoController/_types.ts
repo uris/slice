@@ -1,5 +1,6 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
+import type { CustomVideoControls } from '../Video';
 
 export type VideoControllerProps = {
 	dragConstraintsRef?: React.RefObject<HTMLElement | null>;
@@ -13,4 +14,7 @@ export type VideoControllerProps = {
 	draggable?: boolean;
 	padding?: number | string;
 	borderRadius?: number | string;
+	customControls?: CustomVideoControls;
+	quit?: 'inside' | 'outside' | 'none';
+	onQuit?: () => void;
 };

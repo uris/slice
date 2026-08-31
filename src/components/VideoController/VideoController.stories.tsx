@@ -15,6 +15,12 @@ const demoVideoProps: VideoProps = {
 	controls: 'simple',
 	muted: false,
 	borderRadius: 16,
+	customControls: {
+		play: false,
+		progress: true,
+		volume: false,
+		fullscreen: false,
+	},
 };
 
 const meta: Meta<typeof VideoController> = {
@@ -49,7 +55,7 @@ function VideoControllerDemo() {
 			<Button iconRight={'arrow right'} onClick={handleShowVideo}>
 				Show Video
 			</Button>
-			<VideoController />
+			<VideoController quit={'inside'} />
 		</FlexDiv>
 	);
 }

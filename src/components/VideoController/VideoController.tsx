@@ -39,6 +39,8 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 		overlayColor = 'rgb(0,0,0)',
 		padding = 64,
 		borderRadius = 8,
+		quit = 'inline',
+		onQuit,
 	} = props;
 	const controls = useDragControls();
 	const video = useVideo();
@@ -69,6 +71,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 	const handleHide = () => {
 		setReady(false);
 		hide();
+		onQuit?.();
 	};
 
 	// memo CSS vars
@@ -112,17 +115,24 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 										{...videoProps}
 										borderRadius={borderRadius ?? videoBorderRadius}
 										onLoadedFrameData={handleDidLoadFrame}
+										customControls={{
+											...videoProps.customControls,
+											quit: quit === 'inside',
+										}}
+										onQuit={() => handleHide()}
 									/>
 								</div>
-								<IconButton
-									icon={'x'}
-									buttonSize={'l'}
-									onClick={handleHide}
-									bgColor={'rgba(255,255,255,0.05)'}
-									bgColorHover={'rgba(255,255,255,0.25)'}
-									iconColor={'var(--core-text-light)'}
-									iconColorHover={'var(--core-text-light)'}
-								/>
+								{quit === 'outside' && (
+									<IconButton
+										icon={'x'}
+										buttonSize={'l'}
+										onClick={handleHide}
+										bgColor={'rgba(255,255,255,0.05)'}
+										bgColorHover={'rgba(255,255,255,0.25)'}
+										iconColor={'var(--core-text-light)'}
+										iconColorHover={'var(--core-text-light)'}
+									/>
+								)}
 							</motion.div>
 						</div>
 					</div>

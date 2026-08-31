@@ -213,8 +213,13 @@ For `src/components/<Name>/...`:
 2. Export the component and public types from that `index.ts`.
 3. Re-export from `src/index.ts` if the component should be available from the package root.
 4. Keep Storybook files named `*.stories.tsx`.
-5. Run `npm run build`.
-6. Verify:
+5. Add or update benchmark coverage:
+   - `benchmarks/components/<Name>.bench.tsx`
+   - the component config in `benchmarks/configs/all-configs.tsx`
+   - `benchmarks/components/index.ts`
+6. Run `npm run benchmark` when benchmark coverage or benchmarked behavior changes.
+7. Run `npm run build`.
+8. Verify:
    - `dist/esm/components/<Name>/index.mjs`
    - `dist/cjs/components/<Name>/index.js`
    - `dist/types/components/<Name>/index.d.ts`
@@ -310,3 +315,5 @@ Before publishing:
 5. Confirm story files are not present in the type output:
    - `rg 'stories\\.d\\.ts|\\.stories\\.' dist/types`
 6. Confirm `package.json` `exports` includes any new public import path.
+7. Run `npm run benchmark` when benchmark coverage or performance-sensitive component behavior changed.
+8. If the benchmark report changed intentionally, confirm `reports/benchmark-results.md` still renders in Storybook docs.

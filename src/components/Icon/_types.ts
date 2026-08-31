@@ -109,6 +109,7 @@ export const SliceIcons = {
 		linkedin: 'linkedin',
 		github: 'github',
 		npm: 'npm',
+		openAI: 'openAI',
 	},
 	edit: {
 		edit: 'edit',

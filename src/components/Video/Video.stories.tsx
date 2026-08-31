@@ -4,6 +4,14 @@ import { fn } from 'storybook/test';
 import { Preset } from '../FlexDiv';
 import { Video } from './Video';
 
+const customControls = {
+	play: false,
+	progress: true,
+	volume: true,
+	fullscreen: true,
+	quit: true,
+};
+
 const meta: Meta<typeof Video> = {
 	title: 'Components/Video',
 	component: Video,
@@ -15,6 +23,7 @@ const meta: Meta<typeof Video> = {
 		objectFit: 'cover',
 		controls: 'simple',
 		muted: false,
+		customControls,
 		onPlayStateChange: fn(),
 		onFullScreenChange: fn(),
 		onVolumeChange: fn(),

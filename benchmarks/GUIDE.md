@@ -57,10 +57,13 @@ benchmarks/
 │   ├── Button.bench.tsx
 │   ├── FlexDiv.bench.tsx
 │   └── Icon.bench.tsx
+├── configs/
+│   └── all-configs.tsx  # Centralized component benchmark configs
 ├── utils/              # Benchmark utilities
 │   ├── benchmark.ts    # Core measurement functions
+│   ├── registerBenchConfig.ts # Registers Vitest bench() cases from a config
 │   └── reporter.ts     # Results formatting & reporting
-├── setup.ts            # Test environment setup (mocks motion/react)
+├── setup.tsx           # Test environment setup (mocks motion/react/media APIs)
 ├── run-with-report.bench.ts  # Main benchmark runner with reporting
 └── GUIDE.md            # This file
 ```
@@ -103,71 +106,86 @@ benchmarks/
 
 ## Writing Benchmarks
 
-### Option 1: Individual Benchmark Files (components/ folder)
+The current benchmark workflow is config-driven.
 
-Create `.bench.tsx` files for vitest-style benchmarks:
+To add a new component benchmark:
+
+1. Add a component config to `benchmarks/configs/all-configs.tsx`.
+2. Add a thin wrapper file at `benchmarks/components/<Name>.bench.tsx`.
+3. Export the benchmark from `benchmarks/components/index.ts`.
+4. Run `npm run benchmark` to regenerate `reports/benchmark-results.md`.
+
+### Step 1: Add a config in `configs/all-configs.tsx`
+
+Create or extend a `ComponentBenchmarkConfig` entry for the component:
 
 ```typescript
-import { bench, describe } from 'vitest';
 import React from 'react';
-import { YourComponent } from '../../src/components/YourComponent';
-import { measureMountTime } from '../utils/benchmark';
+import { YourComponent } from '../../src';
+import {
+	measureMountTime,
+	measureRerenderTime,
+	measureMemoryDelta,
+	type ComponentBenchmarkConfig,
+} from '../utils/benchmark';
 
-describe('YourComponent Performance Benchmarks', () => {
-	bench(
-		'YourComponent - Mount Time',
-		async () => {
-			await measureMountTime(
-				<YourComponent prop="value" />,
-				50,
-			);
+export const yourComponentConfig: ComponentBenchmarkConfig = {
+	componentName: 'YourComponent',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(<YourComponent prop="value" />, 50),
 		},
-		{ iterations: 5 },
-	);
-});
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<YourComponent prop="value" />,
+					(container) => {
+						container.rerender(<YourComponent prop="new value" />);
+					},
+					50,
+				),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(<YourComponent prop="value" />, 10),
+		},
+	],
+};
 ```
 
-### Option 2: Add to Main Report (run-with-report.bench.ts)
+Then add that config to the exported `allBenchmarkConfigs` list so the reporting suite picks it up.
 
-Add component tests to the main benchmark runner for inclusion in the consolidated report:
+### Step 2: Add a thin benchmark file in `components/`
+
+Each component benchmark file should register the shared config instead of duplicating benchmark logic:
 
 ```typescript
-it('YourComponent - Performance Tests', async () => {
-	console.log('\n⏱️  Testing YourComponent...');
+import { yourComponentConfig } from '../configs/all-configs';
+import { registerBenchConfig } from '../utils/registerBenchConfig';
 
-	const mountTime = await measureMountTime(
-		React.createElement(YourComponent, { prop: 'value' }),
-		50,
-	);
-	console.log(formatBenchmarkResult(mountTime));
+registerBenchConfig(yourComponentConfig);
 
-	const rerenderTime = await measureRerenderTime(
-		React.createElement(YourComponent, { prop: 'value' }),
-		(container) => {
-			container.rerender(
-				React.createElement(YourComponent, { prop: 'new value' }),
-			);
-		},
-		50,
-	);
-	console.log(formatBenchmarkResult(rerenderTime));
-
-	const memory = await measureMemoryDelta(
-		React.createElement(YourComponent, { prop: 'value' }),
-		10,
-	);
-	console.log(formatMemoryResult(memory));
-
-	reporter.addResult({
-		componentName: 'YourComponent',
-		mountTime,
-		rerenderTime,
-		memory,
-	});
-
-	expect(mountTime.average).toBeLessThan(50);
-});
+export const yourComponentBenchmarkConfig = yourComponentConfig;
 ```
+
+### Step 3: Export it from `components/index.ts`
+
+Add the new benchmark export to `benchmarks/components/index.ts` so the component benchmark set stays complete.
+
+### Step 4: Regenerate the consolidated report
+
+Run:
+
+```bash
+npm run benchmark
+```
+
+This updates `reports/benchmark-results.md`, which is consumed directly by the Storybook benchmarks page.
 
 ### Available Measurement Functions
 

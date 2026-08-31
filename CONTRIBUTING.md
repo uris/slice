@@ -49,6 +49,22 @@ npm run lint
 - `ThemeProvider` manages theme state and document attributes. It does not bootstrap theme CSS by itself.
 - If you move or rename public CSS files, update `src/theme.css`, the build pipeline, `package.json` `exports`, and public usage docs in the same change.
 
+## Component Lifecycle Checklist
+
+When adding a new component or making a material change to an existing one:
+
+1. Add or update the component source under `src/components/<Name>/`.
+2. Keep the local public entrypoint current in `src/components/<Name>/index.ts`.
+3. Re-export from `src/index.ts` if the component belongs on the package root API.
+4. Add or update Storybook coverage in `src/components/<Name>/<Name>.stories.tsx`.
+5. Add or update benchmark coverage:
+   - add or update `benchmarks/components/<Name>.bench.tsx`
+   - add or update the config in `benchmarks/configs/all-configs.tsx`
+   - export the benchmark from `benchmarks/components/index.ts`
+6. Re-run the generated benchmark report with `npm run benchmark` when benchmark coverage changes.
+7. If the benchmark report changed intentionally, verify the Storybook benchmarks page still renders the updated `reports/benchmark-results.md`.
+8. Run `npm run build` and verify the component output exists in `dist/cjs`, `dist/esm`, and `dist/types`.
+
 ## Build and Package Validation
 
 Before opening a PR or publishing:
@@ -58,6 +74,7 @@ Before opening a PR or publishing:
 3. Verify the new or changed API appears under `dist/cjs`, `dist/esm`, and `dist/types`.
 4. Verify `dist/styles.css` contains the expected shared theme or component styles when CSS output changed.
 5. Verify Storybook files do not appear in `dist/types`.
+6. Run `npm run benchmark` when component performance coverage or benchmarkable behavior changed.
 
 Build architecture details: [contributor-docs/build-architecture.md](./contributor-docs/build-architecture.md)
 

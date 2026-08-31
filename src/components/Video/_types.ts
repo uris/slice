@@ -5,6 +5,7 @@ export type CustomVideoControls = {
 	fullscreen?: boolean;
 	progress?: boolean;
 	volume?: boolean;
+	quit?: boolean;
 };
 
 export enum PlayState {
@@ -56,6 +57,7 @@ type VideoBaseProps = {
 	onFullScreenChange?: (fullScreen: boolean) => void;
 	onVolumeChange?: (volume: number) => void;
 	onLoadedFrameData?: () => void;
+	onQuit?: () => void;
 	captionsSrc?: string;
 };
 

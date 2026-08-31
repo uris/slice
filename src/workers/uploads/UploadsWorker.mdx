@@ -1,0 +1,261 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../components/FlexDiv';
+import NoteSection from '../../../documentation/_components/Notice/Notice';
+
+<Meta title="Utils/Uploads Worker Class" />
+
+<FlexDiv width={'fill'} height={'fill'} align={'center'}>
+    <FlexDiv width={'fill'} maxWidth={760} height={'auto'}>
+        <Unstyled>
+        <NoteSection>
+            `UploadsWorker` is the low-level upload queue engine that powers Slice's uploads web worker. Most app code should use the uploads store plus `createUploadsWorker()`; use this class directly when you need custom worker wiring, tests, or contributor-level access to the queue/runtime internals.
+        </NoteSection>
+
+        # UploadsWorker Class
+        Queue-based file uploader used by the Slice uploads worker runtime. It handles:
+        - queueing browser `File` objects
+        - client-side file size and type validation
+        - configurable upload concurrency
+        - per-file upload URL overrides
+        - progress/status updates through a worker bridge
+        - worker-runtime message handling through `UploadsWorkerRuntime`
+
+        ## Public vs internal usage
+        For application code, prefer the published worker entry and uploads store helpers:
+
+        <RenderSource>
+        ```
+        import uploadsWorkerUrl from '@apple-pie/slice/workers/uploads/uploads?url';
+        import { createUploadsWorker } from '@apple-pie/slice/stores/uploads';
+        
+        const worker = createUploadsWorker(uploadsWorkerUrl);
+        ```
+        </RenderSource>
+
+        The class documented on this page lives in the source worker module and is mainly useful inside the repo, in tests, or in custom worker setups.
+
+        ## Source-level imports
+        <RenderSource>
+        ```
+        import {
+            UploadsWorker,
+            UploadsWorkerRuntime,
+            registerUploadsWorker,
+            WorkerStatus,
+            FileUploadStatus,
+            UploadError,
+        } from './uploads-worker';
+        ```
+        </RenderSource>
+
+        ## Core types
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '24%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Type</th>
+              <th className={'left'}>Shape</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>UploadInput</code></td><td><code>{`{ file: File; uploadURL?: string }`}</code></td><td>Input shape accepted by the queue. A raw browser <code>File</code> may also be passed directly.</td></tr>
+            <tr><td><code>Upload</code></td><td><code>{`{ id, file, uploadURL?, status, progress?, error? }`}</code></td><td>Tracked upload item emitted back through status updates.</td></tr>
+            <tr><td><code>WorkerStatus</code></td><td><code>'idle' | 'busy'</code></td><td>High-level scheduler status for the worker runtime.</td></tr>
+            <tr><td><code>FileUploadStatus</code></td><td><code>'pending' | 'uploading' | 'completed' | 'failed'</code></td><td>Per-file lifecycle state.</td></tr>
+            <tr><td><code>UploadError</code></td><td><code>enum</code></td><td>Validation and network/server failure values used on failed uploads.</td></tr>
+          </tbody>
+        </table>
+
+        ## Constructor options
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '24%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Option</th>
+              <th className={'left'}>Type</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>uploadURL</code></td><td><code>string</code></td><td>Default POST endpoint used when a queued file does not provide its own <code>uploadURL</code>.</td></tr>
+            <tr><td><code>maxQueueSize</code></td><td><code>number</code></td><td>Maximum combined queued + active uploads. Defaults to <code>5</code>.</td></tr>
+            <tr><td><code>maxFileSize</code></td><td><code>number</code></td><td>Maximum file size in bytes before client-side rejection. Defaults to <code>5MB</code>.</td></tr>
+            <tr><td><code>accepted</code></td><td><code>string[]</code></td><td>Optional allowlist of file extensions or MIME types. Empty means no client-side type filter.</td></tr>
+            <tr><td><code>maxConcurrentUploads</code></td><td><code>number</code></td><td>Maximum number of simultaneous in-flight uploads. Defaults to <code>5</code>.</td></tr>
+          </tbody>
+        </table>
+
+        ## Public class API
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '24%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Member</th>
+              <th className={'left'}>Type</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>new UploadsWorker(options, worker?)</code></td><td><code>constructor</code></td><td>Creates the queue engine. If no bridge is supplied, it posts status responses back to <code>globalThis.postMessage</code>.</td></tr>
+            <tr><td><code>addFiles(file)</code></td><td><code>{`(UploadInput | File | Array<UploadInput | File>) => void`}</code></td><td>Adds one or more files to the queue and immediately kicks off processing.</td></tr>
+            <tr><td><code>clearUploads()</code></td><td><code>{`() => void`}</code></td><td>Clears tracked queue/active/completed/failed maps and emits a fresh status update.</td></tr>
+            <tr><td><code>process()</code></td><td><code>{`() => void`}</code></td><td>Starts or continues draining the queue until the active upload limit is reached.</td></tr>
+            <tr><td><code>status</code></td><td><code>WorkerStatus</code></td><td>Read-only worker scheduler state.</td></tr>
+          </tbody>
+        </table>
+
+        ## Queue behavior
+        `UploadsWorker` enforces a few important behaviors:
+        - If the queue is already at <code>maxQueueSize</code>, additional files are ignored rather than queued.
+        - Files larger than <code>maxFileSize</code> fail immediately with <code>UploadError.SizeExceedsLimit</code>.
+        - If <code>accepted</code> is configured, the worker matches either the file extension or MIME type.
+        - Each upload uses its own <code>uploadURL</code> when provided; otherwise it falls back to the worker-level <code>uploadURL</code>.
+        - Uploads are sent as <code>POST</code> requests with a <code>FormData</code> payload containing one field named <code>file</code>.
+
+        ## Direct class usage
+        This is useful in tests or local tools where you want status snapshots without spinning up a full `Worker`.
+
+        <RenderSource language={'typescript'}>
+        ```
+        import {
+            UploadsWorker,
+            type Upload,
+            type UploadWorkerBridge,
+        } from './uploads-worker';
+        
+        const snapshots: Upload[][] = [];
+        
+        const bridge: UploadWorkerBridge = {
+            updateStatus(uploads) {
+                snapshots.push(uploads);
+            },
+        };
+        
+        const uploads = new UploadsWorker(
+            {
+                uploadURL: '/api/uploads',
+                maxConcurrentUploads: 2,
+                accepted: ['png', 'image/png'],
+            },
+            bridge,
+        );
+        
+        uploads.addFiles([
+            fileA,
+            { file: fileB, uploadURL: presignedUrl },
+        ]);
+        ```
+</RenderSource>
+
+        ## Runtime message protocol
+        `UploadsWorkerRuntime` is the worker-facing wrapper. It listens for messages from the main thread, owns one `UploadsWorker` instance, and posts status/error responses back to the target.
+
+        Incoming messages:
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '24%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Message</th>
+              <th className={'left'}>Shape</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>initialize</code></td><td><code>{`{ type: 'initialize', options }`}</code></td><td>Creates the underlying <code>UploadsWorker</code> with the provided configuration.</td></tr>
+            <tr><td><code>add-files</code></td><td><code>{`{ type: 'add-files', files }`}</code></td><td>Queues one or more uploads.</td></tr>
+            <tr><td><code>clear-uploads</code></td><td><code>{`{ type: 'clear-uploads' }`}</code></td><td>Clears the tracked upload state.</td></tr>
+          </tbody>
+        </table>
+
+        Outgoing messages:
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '24%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Message</th>
+              <th className={'left'}>Shape</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>status</code></td><td><code>{`{ type: 'status', uploads, workerStatus }`}</code></td><td>Snapshot of the full tracked upload list plus the worker busy/idle state.</td></tr>
+            <tr><td><code>error</code></td><td><code>{`{ type: 'error', message }`}</code></td><td>Runtime-level error message, typically emitted when commands arrive before initialization.</td></tr>
+          </tbody>
+        </table>
+
+        ## Registering the worker runtime
+        The published uploads worker entry simply registers this runtime against the current worker global:
+
+        <RenderSource>
+{`
+import { registerUploadsWorker } from './uploads-worker';
+
+registerUploadsWorker();
+`}
+</RenderSource>
+
+        If you need to mount the runtime onto a custom message target in tests, instantiate it directly:
+
+        <RenderSource>
+{`
+const runtime = new UploadsWorkerRuntime(customTarget);
+`}
+</RenderSource>
+
+        ## Error mapping
+        Upload failures are mapped to `UploadError` values before the failed item is reported back through status updates.
+
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '30%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Error</th>
+              <th className={'left'}>Value</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>SizeExceedsLimit</code></td><td><code>size exceed limit</code></td><td>File is larger than the configured client-side size limit.</td></tr>
+            <tr><td><code>TypeNotAllowed</code></td><td><code>file type not allowed</code></td><td>File extension or MIME type did not match the configured allowlist.</td></tr>
+            <tr><td><code>UploadFailed</code></td><td><code>upload failed</code></td><td>Generic upload failure for network, abort, or unmapped request failures.</td></tr>
+            <tr><td><code>UploadURLNotFound</code></td><td><code>invalid upload url</code></td><td>Server returned <code>404</code>.</td></tr>
+            <tr><td><code>AccessForbidden</code></td><td><code>upload access forbidden</code></td><td>Server returned <code>403</code>.</td></tr>
+            <tr><td><code>NotAuthorized</code></td><td><code>upload not authorized on server</code></td><td>Server returned <code>401</code>.</td></tr>
+            <tr><td><code>TooLarge</code></td><td><code>payload too large for server</code></td><td>Server returned <code>413</code>.</td></tr>
+            <tr><td><code>MediaNotSupported</code></td><td><code>server does not supported file type</code></td><td>Server returned <code>415</code>.</td></tr>
+            <tr><td><code>InternalError</code></td><td><code>Internal server error</code></td><td>Server returned <code>500</code>.</td></tr>
+            <tr><td><code>Other</code></td><td><code>Other server error</code></td><td>Fallback for uncategorized failures.</td></tr>
+          </tbody>
+        </table>
+
+        ## Operational note
+        `clearUploads()` clears the worker's tracked state immediately, but it does not currently abort in-flight network requests. Use it as a state reset, not as a guaranteed transport-level cancel operation.
+        </Unstyled>
+    </FlexDiv>
+</FlexDiv>
