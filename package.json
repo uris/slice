@@ -1,6 +1,6 @@
 {
 	"name": "@apple-pie/slice",
-	"version": "0.1.38",
+	"version": "0.1.39",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.mjs",
 	"exports": {
@@ -109,6 +109,7 @@
 		"benchmark:raw": "vitest bench --project benchmarks --run",
 		"benchmark:watch": "vitest bench --project benchmarks",
 		"benchmark:ui": "vitest bench --project benchmarks --ui",
+		"coverage": "NODE_OPTIONS=--max-old-space-size=8192 npx vitest run --project storybook --coverage",
 		"pack:tarball": "npm pack && ./scripts/copy-tgz.sh",
 		"prepack": "npm run build",
 		"prebuild": "rm -rf dist",

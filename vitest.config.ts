@@ -17,7 +17,18 @@ const coverageExclude = [
 	'reports/**',
 	'public/**',
 	'**/*.bench.{ts,tsx}',
+	'**/*.stories.{ts,tsx}',
+	'**/*.css',
+	'.storybook/**',
 ];
+
+// Browser-mode (v8) coverage captures EVERYTHING that executes in the page -
+// Vite's client/HMR runtime, the coverage-v8 browser hook itself, CSS module
+// scripts, etc. Those aren't real source files and don't have usable source
+// maps, which can make the report-merge step throw and silently produce no
+// report at all. Scoping to an explicit include is more reliable than trying
+// to exclude every virtual/internal module by name.
+const coverageInclude = ['src/**/*.{ts,tsx}'];
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
@@ -26,6 +37,7 @@ export default defineConfig({
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
+			include: coverageInclude,
 			exclude: coverageExclude,
 		},
 		projects: [

@@ -244,9 +244,9 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>(
 			return {
 				border: '1px',
 				iconColor: {
-					normal: destructiveColor(true),
-					hover: destructiveColor(true),
-					disabled: 'var(--core-text-disabled)',
+					normal: iconColor || destructiveColor(true),
+					hover: iconColor || destructiveColor(true),
+					disabled: iconColor || 'var(--core-text-disabled)',
 				},
 				background: {
 					normal: 'transparent',
@@ -264,7 +264,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>(
 					disabled: 'var(--core-text-disabled)',
 				},
 			};
-		}, [destructiveColor, labelColor]);
+		}, [destructiveColor, labelColor, iconColor]);
 
 		// group variant-specific color styles into a single lookup map
 		const colorStyles = useMemo(() => {
