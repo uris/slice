@@ -34,7 +34,6 @@ export {
 	useIntersecting,
 	type IntersectContainer,
 	type IntersectEntry,
-	type IntersectThreshold,
 	type IntersectMargin,
 	type IntersectOptions,
 	type IntersectResult,

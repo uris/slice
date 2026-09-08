@@ -1,10 +1,9 @@
 'use client';
 
-import { type RefObject, useEffect, useState } from 'react';
+import { type RefObject, useEffect, useMemo, useState } from 'react';
 
 export type IntersectContainer = RefObject<HTMLElement | null> | null;
 export type IntersectEntry = RefObject<HTMLElement | null> | string;
-export type IntersectThreshold = number;
 export type IntersectMargin = number | string;
 
 export type IntersectOptions = {
@@ -13,7 +12,7 @@ export type IntersectOptions = {
 	/** Element(s) to observe: a ref, a CSS selector, or a mix of both. */
 	entries: IntersectEntry | IntersectEntry[];
 	/** Ratio(s) of visibility at which to fire updates. Mirrors `IntersectionObserverInit.threshold`. */
-	thresholds: IntersectThreshold | IntersectThreshold[];
+	thresholds: number | number[];
 	/** CSS-margin-like value grown/shrunk around the container. Mirrors `IntersectionObserverInit.rootMargin`. */
 	margin: IntersectMargin;
 };
@@ -33,7 +32,10 @@ export const defaultOptions: IntersectOptions = {
 	margin: 0,
 };
 
-function resolveEntries(entries: IntersectEntry | IntersectEntry[]): ResolvedEntries {
+// create the list of elements to observe
+function resolveEntries(
+	entries: IntersectEntry | IntersectEntry[],
+): ResolvedEntries {
 	const list = Array.isArray(entries) ? entries : [entries];
 	const resolved: ResolvedEntries = [];
 
@@ -50,52 +52,54 @@ function resolveEntries(entries: IntersectEntry | IntersectEntry[]): ResolvedEnt
 	return resolved;
 }
 
-/**
- * Track intersection of one or more elements (by ref or CSS selector)
- * against a container, returning the latest intersection state for each
- * resolved target.
- *
- * ```tsx
- * const sentinelRef = useRef<HTMLDivElement>(null);
- * const [result] = useIntersecting({
- *   ...defaultOptions,
- *   entries: sentinelRef,
- *   thresholds: 0.5,
- *   margin: 200,
- * });
- * const isVisible = result?.isIntersecting ?? false;
- * ```
- */
 export function useIntersecting(
 	options: IntersectOptions = defaultOptions,
 ): IntersectResult[] {
-	const { container, entries, thresholds, margin } = options;
+	const { container, entries, thresholds: rawThresholds, margin } = options;
 
-	// Stable dependency keys so the effect doesn't tear down/rebuild the
-	// observer just because a new array/ref/object literal was passed in.
+	// will hold updated intersection results
+	const [results, setResults] = useState<IntersectResult[]>([]);
+
+	// Content-based keys so a fresh array/object literal from the caller
+	// doesn't look like a "change" -- only the actual targets/thresholds do.
 	const entryList = Array.isArray(entries) ? entries : [entries];
 	const entryKey = entryList
 		.map((entry) => (typeof entry === 'string' ? `s:${entry}` : 'r'))
 		.join('|');
-	const thresholdKey = Array.isArray(thresholds)
-		? thresholds.join(',')
-		: String(thresholds);
-	const containerKey = container ? 'r' : 'none';
+	const thresholdKey = Array.isArray(rawThresholds)
+		? rawThresholds.join(',')
+		: String(rawThresholds);
 
-	const [results, setResults] = useState<IntersectResult[]>([]);
+	// Resolved once per meaningful change, not once per render. This is the
+	// only place that needs to key off entryKey instead of entries directly --
+	// downstream, `elements` is a normal, honestly-stable dependency.
+	const elements = useMemo(
+		() =>
+			resolveEntries(entries).filter(
+				(element): element is Element => element !== null,
+			),
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- entryKey stands in for entries
+		[entryKey],
+	);
+
+	// Same trick for thresholds: it can also arrive as a fresh array literal.
+	const thresholds = useMemo(
+		() => rawThresholds,
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- thresholdKey stands in for rawThresholds
+		[thresholdKey],
+	);
 
 	useEffect(() => {
+		// protect for ssr where no api is present for intersection observer
 		if (typeof IntersectionObserver === 'undefined') return;
 
-		const elements = resolveEntries(entries).filter(
-			(element): element is Element => element !== null,
-		);
-
+		// if there are no elements to observe, reset results
 		if (elements.length === 0) {
 			setResults([]);
 			return;
 		}
 
+		// set initial result values for each element to observe
 		setResults(
 			elements.map((target) => ({
 				target,
@@ -104,6 +108,7 @@ export function useIntersecting(
 			})),
 		);
 
+		// create the intersection observer
 		const observer = new IntersectionObserver(
 			(observedEntries) => {
 				setResults((previous) => {
@@ -124,18 +129,20 @@ export function useIntersecting(
 				});
 			},
 			{
+				// container is a ref (or null) -- its identity is already stable
+				// across renders, so it's safe to depend on directly below.
 				root: container?.current ?? null,
 				rootMargin: typeof margin === 'number' ? `${margin}px` : margin,
 				threshold: thresholds,
 			},
 		);
 
+		// add each element to the observer
 		for (const element of elements) observer.observe(element);
 
+		// disconnect the observer when unmounting
 		return () => observer.disconnect();
-		// entryKey/thresholdKey/containerKey stand in for entries/thresholds/container
-		// so the observer only rebuilds when what it's watching actually changes.
-	}, [entryKey, thresholdKey, margin, containerKey]);
+	}, [elements, thresholds, margin, container]);
 
 	return results;
 }
