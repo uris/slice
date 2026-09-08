@@ -18,7 +18,7 @@ export function cleanString(
 	removeHtml = true,
 ) {
 	let clean: string = input;
-	const scriptsRegEx = /\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
+	const scriptsRegEx = /<script\b[^>]*>[\s\S]*?<\/script>/gi;
 	clean = clean.replaceAll(scriptsRegEx, '');
 	if (removeInvisible) {
 		const invisibleRegEx = /[\r\n\t]/gi;
