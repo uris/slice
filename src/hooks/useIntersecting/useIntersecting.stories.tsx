@@ -75,7 +75,23 @@ function UseIntersectingDemo() {
 						Item {item}
 					</FlexDiv>
 				))}
-				<div ref={sentinelRef} style={{ height: 1, flexShrink: 0 }} />
+				<FlexDiv
+					ref={sentinelRef}
+					width={'fill'}
+					height={'auto'}
+					padding={12}
+					align={'center'}
+					justify={'center'}
+					border={'1px dashed var(--core-outline-secondary)'}
+					borderRadius={8}
+					background={
+						isVisible
+							? 'var(--core-surface-special)'
+							: 'transparent'
+					}
+				>
+					sentinel
+				</FlexDiv>
 			</FlexDiv>
 		</FlexDiv>
 	);

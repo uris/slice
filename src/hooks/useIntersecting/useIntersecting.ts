@@ -1,6 +1,6 @@
 'use client';
 
-import { type RefObject, useEffect, useMemo, useState } from 'react';
+import { type RefObject, useEffect, useState } from 'react';
 
 export type IntersectContainer = RefObject<HTMLElement | null> | null;
 export type IntersectEntry = RefObject<HTMLElement | null> | string;
@@ -70,27 +70,26 @@ export function useIntersecting(
 	// will hold updated intersection results
 	const [results, setResults] = useState<IntersectResult[]>([]);
 
-	// create key and values (use key to drive updates)
+	// Content-based keys purely to stabilize the effect below -- NOT to cache
+	// resolveEntries' result. Refs aren't attached to their DOM node until
+	// after commit, so reading ref.current has to happen inside the effect;
+	// doing it in a useMemo (which runs during render) would see a stale/null
+	// ref on first mount and, for a plain ref target, never re-run again
+	// since its key never changes.
 	const entryArray = Array.isArray(entries) ? entries : [entries];
 	const entryKey = resolvedElementsKey(entryArray);
 
-	// create key and values (use key to drive updates)
 	const thresholdArray = Array.isArray(rawThresholds)
 		? rawThresholds
 		: [rawThresholds];
 	const thresholdKey = resolvedThresholdsKey(thresholdArray);
 
-	// stable element list via key artifact
-	// biome-ignore lint/correctness/useExhaustiveDependencies: entryKey stands in for entryArray
-	const elements = useMemo(() => resolveEntries(entryArray), [entryKey]);
-
-	// stable threshold list via key artifact
-	// biome-ignore lint/correctness/useExhaustiveDependencies: thresholdKey stands in for thresholdArray
-	const thresholds = useMemo(() => thresholdArray, [thresholdKey]);
-
 	useEffect(() => {
 		// protect for ssr where no api is present for intersection observer
 		if (typeof IntersectionObserver === 'undefined') return;
+
+		// resolve elements here, post-commit, so ref.current is populated
+		const elements = resolveEntries(entryArray);
 
 		// if there are no elements to observe, reset results
 		if (elements.length === 0) {
@@ -127,7 +126,7 @@ export function useIntersecting(
 			{
 				root: container?.current ?? null,
 				rootMargin: typeof margin === 'number' ? `${margin}px` : margin,
-				threshold: thresholds,
+				threshold: thresholdArray,
 			},
 		);
 
@@ -136,7 +135,8 @@ export function useIntersecting(
 
 		// disconnect the observer when unmounting
 		return () => observer.disconnect();
-	}, [elements, thresholds, margin, container]);
+		// biome-ignore lint/correctness/useExhaustiveDependencies: entryKey/thresholdKey stand in for entryArray/thresholdArray
+	}, [entryKey, thresholdKey, margin, container]);
 
 	return results;
 }
