@@ -25,6 +25,12 @@ export type IntersectResult = {
 	entry: IntersectionObserverEntry | undefined;
 };
 
+export type IntersectResultList = {
+	results: IntersectResult[];
+	exited: IntersectResult[];
+	entered: IntersectResult[];
+};
+
 export const defaultOptions: IntersectOptions = {
 	container: null,
 	entries: [],
@@ -64,11 +70,17 @@ export function resolvedThresholdsKey(thresholds: number[]): string {
 
 export function useIntersecting(
 	options: IntersectOptions = defaultOptions,
-): IntersectResult[] {
+): IntersectResultList {
 	const { container, entries, thresholds: rawThresholds, margin } = options;
 
 	// will hold updated intersection results
 	const [results, setResults] = useState<IntersectResult[]>([]);
+
+	// will hold items that enter
+	const [entered, setEntered] = useState<IntersectResult[]>([]);
+
+	// hold items that leave
+	const [exited, setExited] = useState<IntersectResult[]>([]);
 
 	// Content-based keys purely to stabilize the effect below -- NOT to cache
 	// resolveEntries' result. Refs aren't attached to their DOM node until
@@ -84,6 +96,7 @@ export function useIntersecting(
 		: [rawThresholds];
 	const thresholdKey = resolvedThresholdsKey(thresholdArray);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: entryKey/thresholdKey stand in for entryArray/thresholdArray
 	useEffect(() => {
 		// protect for ssr where no api is present for intersection observer
 		if (typeof IntersectionObserver === 'undefined') return;
@@ -94,6 +107,8 @@ export function useIntersecting(
 		// if there are no elements to observe, reset results
 		if (elements.length === 0) {
 			setResults([]);
+			setEntered([]);
+			setExited([]);
 			return;
 		}
 
@@ -106,22 +121,38 @@ export function useIntersecting(
 		// create the intersection observer updating results by keeping the same items in order
 		const observer = new IntersectionObserver(
 			(observedEntries) => {
+				// Collected here, outside setResults' updater, and applied once per
+				// batch below -- calling setEntered/setExited *inside* setResults'
+				// updater would be a side effect inside a state updater function,
+				// which React may invoke more than once (e.g. Strict Mode).
+				const entered: IntersectResult[] = [];
+				const exited: IntersectResult[] = [];
+
 				setResults((previous) => {
 					const next = [...previous];
 					for (const entry of observedEntries) {
 						const index = next.findIndex(
 							(result) => result.target === entry.target,
 						);
+						const wasIntersecting = index !== -1 && next[index].isIntersecting;
 						const updated: IntersectResult = {
 							target: entry.target,
 							isIntersecting: entry.isIntersecting,
 							entry,
 						};
+						// updated all results
 						if (index === -1) next.push(updated);
 						else next[index] = updated;
+
+						// track exits and entries for this batch
+						if (wasIntersecting && !entry.isIntersecting) exited.push(updated);
+						if (!wasIntersecting && entry.isIntersecting) entered.push(updated);
 					}
 					return next;
 				});
+
+				if (entered.length > 0) setEntered(entered);
+				if (exited.length > 0) setExited(exited);
 			},
 			{
 				root: container?.current ?? null,
@@ -135,8 +166,7 @@ export function useIntersecting(
 
 		// disconnect the observer when unmounting
 		return () => observer.disconnect();
-		// biome-ignore lint/correctness/useExhaustiveDependencies: entryKey/thresholdKey stand in for entryArray/thresholdArray
 	}, [entryKey, thresholdKey, margin, container]);
 
-	return results;
+	return { results, entered, exited };
 }

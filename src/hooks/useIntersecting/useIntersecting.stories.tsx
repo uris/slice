@@ -9,13 +9,30 @@ function UseIntersectingDemo() {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const sentinelRef = useRef<HTMLDivElement>(null);
 
-	const [result] = useIntersecting({
+	// sentinel and list items are observed separately -- mixing a ref and a
+	// class selector in one entries array made results[i] a fragile stand-in
+	// for "which item", since array position depended on entries order.
+	const { results: sentinelResults } = useIntersecting({
 		...defaultOptions,
 		container: containerRef,
 		entries: sentinelRef,
 		thresholds: threshold,
 	});
-	const isVisible = result?.isIntersecting ?? false;
+	const isVisible = sentinelResults[0]?.isIntersecting ?? false;
+
+	const { results: itemResults } = useIntersecting({
+		...defaultOptions,
+		container: containerRef,
+		entries: '.list-item',
+		thresholds: threshold,
+	});
+	const isItemVisible = (item: number) =>
+		itemResults.some(
+			(result) =>
+				result.isIntersecting &&
+				result.target.getAttribute('data-item-id') === String(item),
+		);
+
 	const items = Array.from({ length: 20 }, (_, index) => index + 1);
 
 	return (
@@ -65,12 +82,18 @@ function UseIntersectingDemo() {
 				{items.map((item) => (
 					<FlexDiv
 						key={item}
+						data-item-id={item}
 						width={'fill'}
 						height={'auto'}
 						padding={12}
 						border={'1px solid var(--core-outline-primary)'}
 						borderRadius={8}
-						background={'var(--core-surface-primary)'}
+						background={
+							isItemVisible(item)
+								? 'var(--core-surface-special)'
+								: 'var(--core-surface-primary)'
+						}
+						className={'list-item'}
 					>
 						Item {item}
 					</FlexDiv>
@@ -84,11 +107,7 @@ function UseIntersectingDemo() {
 					justify={'center'}
 					border={'1px dashed var(--core-outline-secondary)'}
 					borderRadius={8}
-					background={
-						isVisible
-							? 'var(--core-surface-special)'
-							: 'transparent'
-					}
+					background={isVisible ? 'var(--core-surface-special)' : 'transparent'}
 				>
 					sentinel
 				</FlexDiv>
