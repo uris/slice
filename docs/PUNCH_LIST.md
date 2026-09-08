@@ -19,7 +19,7 @@ Already wrapped today, for reference (don't re-add): `localStorage` (`useLocalSt
 | Clipboard API (read + write) | `useClipboard` | P0 | Upgrades the existing write-only `copyToClipboard` util (`src/utils/functions/misc.ts`) into a real hook with read support, paste events, and permission state. |
 | Fullscreen API | `useFullscreen` | P1 | Currently inlined ad hoc in `Video.tsx` (`video.requestFullscreen()`); worth extracting into a reusable hook so any element can use it. |
 | Online/offline status | `useOnlineStatus` | P1 | `navigator.onLine` + `online`/`offline` events. |
-| IntersectionObserver | `useIntersectionObserver` / `useInView` | P1 | Natural sibling to `useObserveResize`; useful for lazy loading, infinite scroll, view tracking. |
+| IntersectionObserver | `useIntersectionObserver` / `useInView` | P0 | Natural sibling to `useObserveResize`. Bumped to P0 — it's the detection mechanism the new Infinite Scroll component (below) should be built on, rather than scroll-event polling. |
 | Generic media query | `useMediaQuery` | P1 | `useObserveTheme` is dark/light-specific — a generic breakpoint/query hook is a common ask on top of it. |
 | Notifications API | `useNotification` | P2 | Permission request + display wrapper. |
 | Web Share API | `useShare` | P2 | `navigator.share` with feature-detection fallback. |
@@ -35,6 +35,14 @@ Already wrapped today, for reference (don't re-add): `localStorage` (`useLocalSt
 Current Slice inventory (44): AudioBubble, Avatar, AvatarGroup, Badge, Button, ButtonBar, Camera, CheckBox, Chip, DivInput, Dot, DraggablePanel, DropDown, ErrorSummary, FileIcon, FileList, FlexDiv, Grouper, Icon, IconButton, Label, Level, Modal, ModalController, Overlay, Pager, Progress (ProgressIndicator, DoneCheck), PromptInput, RadioButton, RadioButtonList, Slider, Spacer, Switch, TabBar, TextArea, Textfield, Tip, Toast, ToggleButton, UploadArea, Video, VideoController.
 
 Already covered, functionally equivalent to an M3 component (naming differs — no action needed unless you want to formalize the mapping): Tooltip ≈ `Tip`, Menu ≈ `DropDown`, Snackbar ≈ `Toast`, Dialog ≈ `Modal`/`Overlay`.
+
+### Composite / data components (explicitly requested)
+
+| Component | Priority | Notes |
+|---|---|---|
+| Table | P0 | Generic, renderer-driven: accepts **column definitions** (id, header renderer, cell/content renderer per column) and a **data array**, rather than fixed markup. Both header cells and body cells are user-supplied renderers, so consumers can drop any Slice component into a cell. Type the component generically over the row shape so column defs and renderer props stay type-safe end to end (`Column<T>` with `accessor: keyof T | (row: T) => unknown`, `renderHeader?`, `renderCell?`). Sorting/selection/row-virtualization are natural P1/P2 follow-ons once the core renderer contract lands. |
+| Infinite Scroll (list) | P0 | Reveals/loads more items as the user scrolls toward the end of a list. Build on the `useIntersectionObserver` hook above (sentinel-element detection) rather than scroll-event polling, so it composes cleanly with `FileList`, a future generic `List`, and the new `Table`. Consider exposing it as both a hook (`useInfiniteScroll`) and a thin wrapper component, so it can wrap arbitrary list content. |
+
 
 | Missing component | Priority | Notes |
 |---|---|---|
