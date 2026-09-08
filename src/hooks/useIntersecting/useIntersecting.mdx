@@ -1,0 +1,95 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../components/FlexDiv';
+
+<Meta title="Hooks/useIntersecting" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        # useIntersecting
+        Tracks intersection of one or more elements — by ref or CSS selector — against a container using `IntersectionObserver`, returning the latest intersection state for each resolved target. Commonly used for infinite scroll sentinels, lazy loading, and view/impression tracking.
+
+        String selectors are resolved via `document.querySelectorAll` whenever the resolved target list actually changes; prefer refs for elements that mount after the initial render, or for one-of-many list items.
+
+        ## Signature
+        `useIntersecting(options?)`
+
+        ## Parameters
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Param</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>options.container</code></td><td><code>RefObject&lt;HTMLElement | null&gt; | null</code></td><td><code>null</code></td><td>Ancestor used as the intersection viewport. <code>null</code> means the browser viewport.</td></tr>
+            <tr><td><code>options.entries</code></td><td><code>(RefObject&lt;HTMLElement | null&gt; | string) | (RefObject&lt;HTMLElement | null&gt; | string)[]</code></td><td><code>[]</code></td><td>Element(s) to observe: a ref, a CSS selector, or a mix of both.</td></tr>
+            <tr><td><code>options.thresholds</code></td><td><code>number | number[]</code></td><td><code>1</code></td><td>Ratio(s) of visibility at which to fire updates. Mirrors <code>IntersectionObserverInit.threshold</code>.</td></tr>
+            <tr><td><code>options.margin</code></td><td><code>number | string</code></td><td><code>0</code></td><td>Margin grown/shrunk around the container. A number is treated as pixels; a string is passed through as-is (CSS-margin syntax). Mirrors <code>IntersectionObserverInit.rootMargin</code>.</td></tr>
+          </tbody>
+        </table>
+
+        ## Returns
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Return</th>
+              <th>Type/Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>results</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`{ target: Element; isIntersecting: boolean; entry: IntersectionObserverEntry | undefined }[]`}</code><br/><code>{`[]`}</code></td><td>Latest intersection state for each resolved target, in the same order as <code>options.entries</code>.</td></tr>
+          </tbody>
+        </table>
+
+        ## Code Examples
+        </Unstyled>
+
+        <RenderSource language={"tsx"}>
+        ```
+        import { useRef } from 'react';
+        import { defaultOptions, useIntersecting } from '@apple-pie/slice';
+
+        function InfiniteList() {
+            const containerRef = useRef<HTMLDivElement>(null);
+            const sentinelRef = useRef<HTMLDivElement>(null);
+
+            const [sentinel] = useIntersecting({
+                ...defaultOptions,
+                container: containerRef,
+                entries: sentinelRef,
+                thresholds: 0.1,
+                margin: 200,
+            });
+
+            useEffect(() => {
+                if (sentinel?.isIntersecting) loadNextPage();
+            }, [sentinel?.isIntersecting]);
+
+            return (
+                <div ref={containerRef} style={{ overflowY: 'auto', height: 320 }}>
+                    {items.map((item) => <Row key={item.id} item={item} />)}
+                    <div ref={sentinelRef} />
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+</FlexDiv>
+</FlexDiv>

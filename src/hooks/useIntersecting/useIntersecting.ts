@@ -17,7 +17,7 @@ export type IntersectOptions = {
 	margin: IntersectMargin;
 };
 
-export type ResolvedEntries = (Element | null)[];
+export type ResolvedEntries = Element[];
 
 export type IntersectResult = {
 	target: Element;
@@ -33,9 +33,7 @@ export const defaultOptions: IntersectOptions = {
 };
 
 // create the list of elements to observe
-function resolveEntries(
-	entries: IntersectEntry | IntersectEntry[],
-): ResolvedEntries {
+function resolveEntries(entries: IntersectEntry[]): ResolvedEntries {
 	const list = Array.isArray(entries) ? entries : [entries];
 	const resolved: ResolvedEntries = [];
 
@@ -44,12 +42,24 @@ function resolveEntries(
 			if (typeof document === 'undefined') continue;
 			const elements = document.querySelectorAll(entry);
 			for (const element of Array.from(elements)) resolved.push(element);
-		} else {
+		} else if (entry.current) {
 			resolved.push(entry.current);
 		}
 	}
 
 	return resolved;
+}
+
+// resolve entries to entry key
+export function resolvedElementsKey(entries: IntersectEntry[]): string {
+	return entries
+		.map((entry) => (typeof entry === 'string' ? `s:${entry}` : 'r'))
+		.join('|');
+}
+
+// resolve thresholds key
+export function resolvedThresholdsKey(thresholds: number[]): string {
+	return thresholds.map((threshold) => threshold.toString()).join(',');
 }
 
 export function useIntersecting(
@@ -60,34 +70,23 @@ export function useIntersecting(
 	// will hold updated intersection results
 	const [results, setResults] = useState<IntersectResult[]>([]);
 
-	// Content-based keys so a fresh array/object literal from the caller
-	// doesn't look like a "change" -- only the actual targets/thresholds do.
-	const entryList = Array.isArray(entries) ? entries : [entries];
-	const entryKey = entryList
-		.map((entry) => (typeof entry === 'string' ? `s:${entry}` : 'r'))
-		.join('|');
-	const thresholdKey = Array.isArray(rawThresholds)
-		? rawThresholds.join(',')
-		: String(rawThresholds);
+	// create key and values (use key to drive updates)
+	const entryArray = Array.isArray(entries) ? entries : [entries];
+	const entryKey = resolvedElementsKey(entryArray);
 
-	// Resolved once per meaningful change, not once per render. This is the
-	// only place that needs to key off entryKey instead of entries directly --
-	// downstream, `elements` is a normal, honestly-stable dependency.
-	const elements = useMemo(
-		() =>
-			resolveEntries(entries).filter(
-				(element): element is Element => element !== null,
-			),
-		// eslint-disable-next-line react-hooks/exhaustive-deps -- entryKey stands in for entries
-		[entryKey],
-	);
+	// create key and values (use key to drive updates)
+	const thresholdArray = Array.isArray(rawThresholds)
+		? rawThresholds
+		: [rawThresholds];
+	const thresholdKey = resolvedThresholdsKey(thresholdArray);
 
-	// Same trick for thresholds: it can also arrive as a fresh array literal.
-	const thresholds = useMemo(
-		() => rawThresholds,
-		// eslint-disable-next-line react-hooks/exhaustive-deps -- thresholdKey stands in for rawThresholds
-		[thresholdKey],
-	);
+	// stable element list via key artifact
+	// biome-ignore lint/correctness/useExhaustiveDependencies: entryKey stands in for entryArray
+	const elements = useMemo(() => resolveEntries(entryArray), [entryKey]);
+
+	// stable threshold list via key artifact
+	// biome-ignore lint/correctness/useExhaustiveDependencies: thresholdKey stands in for thresholdArray
+	const thresholds = useMemo(() => thresholdArray, [thresholdKey]);
 
 	useEffect(() => {
 		// protect for ssr where no api is present for intersection observer
@@ -100,15 +99,12 @@ export function useIntersecting(
 		}
 
 		// set initial result values for each element to observe
-		setResults(
-			elements.map((target) => ({
-				target,
-				isIntersecting: false,
-				entry: undefined,
-			})),
-		);
+		const initResults = elements.map((target) => {
+			return { target, isIntersecting: false, entry: undefined };
+		});
+		setResults(initResults);
 
-		// create the intersection observer
+		// create the intersection observer updating results by keeping the same items in order
 		const observer = new IntersectionObserver(
 			(observedEntries) => {
 				setResults((previous) => {
@@ -129,8 +125,6 @@ export function useIntersecting(
 				});
 			},
 			{
-				// container is a ref (or null) -- its identity is already stable
-				// across renders, so it's safe to depend on directly below.
 				root: container?.current ?? null,
 				rootMargin: typeof margin === 'number' ? `${margin}px` : margin,
 				threshold: thresholds,
