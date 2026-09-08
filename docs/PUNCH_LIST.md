@@ -108,14 +108,14 @@ Until that list exists, a few components worth a close look based on their imple
 
 Snapshot: 28 files under `documentation/` (Welcome, QuickStart, ThemeTokens, Motion, Icons, BrandColors, FunnelSans, Typesizes, AboutStores, Benchmarks, Support + shared MDX components), and per-component/per-hook `.mdx` docs are structurally complete — only one folder (`Progress`) lacks its own top-level `.mdx`/story, and that's because it's a composite of `ProgressIndicator` and `DoneCheck`, which are each documented individually, so not a real gap.
 
-The open question isn't "do docs exist" — it's whether they're still *accurate*. Suggested audit pass:
+The open question isn't "do docs exist" — it's whether they're still *accurate*. Where a check below turns up a mismatch, the fix isn't always "update the doc" — reconcile in whichever direction is actually correct: if the code drifted from a documented convention, fix the code; if the convention itself changed, update the doc. Suggested audit pass:
 
 | Task | Priority | Notes |
 |---|---|---|
 | Verify README/QuickStart install & usage snippets against the current API | P1 | First-impression surface; e.g. confirm the `zustand` peer-dependency note, the Funnel Sans font-loading snippet, and the `ThemeProvider` example still match current props. |
 | Spot-check each hook/component `.mdx` prop table against its actual TS types | P1 | Highest risk of drift is anywhere an API changed but the doc wasn't updated in the same PR. |
 | Confirm `CONTRIBUTING.md` commands still work as written | P2 | e.g. Node version requirement, `npm run` script list — cross-check against current `package.json` scripts. |
-| Check `contributor-docs/build-architecture.md` and `style-prop-naming.md` for staleness | P2 | Contributor-facing, lower traffic, but same drift risk. |
+| Reconcile `contributor-docs/build-architecture.md` and `style-prop-naming.md` against the actual codebase — fix whichever side is stale | P1 | For `build-architecture.md`: diff its description against the real `rollup.config.js`/`tsconfig.build.json`/`scripts/*` pipeline. For `style-prop-naming.md`: spot-check documented naming conventions (e.g. style-prop patterns) against how components actually name their props today — if components have drifted from the documented convention, that's a codebase fix (rename/align props), not just a doc edit; if the convention documented is simply outdated, update the doc instead. Contributor-facing and lower traffic than user-facing docs, but same drift risk, and it's the doc new contributors will trust literally. |
 | Audit external links (fonts CDN, docs site, GitHub repo URL) for correctness | P2 | Quick pass, easy to script with a link checker. |
 
 ---
