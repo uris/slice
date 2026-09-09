@@ -223,9 +223,7 @@ describe('WSConnection', () => {
 
 		vi.advanceTimersByTime(3000);
 
-		expect(socket.sent.filter((message) => message === 'ping').length).toBe(
-			3,
-		);
+		expect(socket.sent.filter((message) => message === 'ping').length).toBe(3);
 	});
 
 	it('sends string payloads as-is and objects as JSON', () => {

@@ -30,3 +30,14 @@ export {
 	type WindowGeolocationError,
 } from './useWindow/useWindow';
 export { useObserveResize } from './useObserveResize/useObserveResize';
+export {
+	useIntersecting,
+	type IntersectContainer,
+	type IntersectEntry,
+	type IntersectMargin,
+	type IntersectOptions,
+	type IntersectResult,
+	type IntersectResultList,
+	type ResolvedEntries,
+	defaultOptions as defaultIntersectingOptions,
+} from './useIntersecting/useIntersecting';

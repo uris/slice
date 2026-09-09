@@ -1,0 +1,120 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../components/FlexDiv';
+
+<Meta title="Hooks/useIntersecting" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        # useIntersecting
+        Tracks intersection of one or more elements — by ref or CSS selector — against a container using `IntersectionObserver`, returning the latest intersection state for every resolved target, plus enter/exit transitions and on/off-screen partitions. Commonly used for infinite scroll sentinels, lazy loading, and view/impression tracking.
+
+        Elements are (re)resolved — refs read, string selectors passed to `document.querySelectorAll` — whenever `options.entries`, `options.thresholds`, `options.margin`, or `options.container` actually change, not on every render. A single `IntersectionObserver` is created per resolution and disconnected on cleanup.
+
+        ## Signature
+        `useIntersecting(options?)`
+
+        ## Parameters
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Param</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>options.container</code></td><td><code>RefObject&lt;HTMLElement | null&gt; | null</code></td><td><code>null</code></td><td>Ancestor used as the intersection viewport. <code>null</code> means the browser viewport.</td></tr>
+            <tr><td><code>options.entries</code></td><td><code>(RefObject&lt;HTMLElement | null&gt; | string) | (RefObject&lt;HTMLElement | null&gt; | string)[]</code></td><td><code>[]</code></td><td>Element(s) to observe: a ref, a CSS selector (e.g. <code>'.list-item'</code>), or a mix of both. A selector is passed straight to <code>document.querySelectorAll</code>, so class selectors need the leading <code>.</code>.</td></tr>
+            <tr><td><code>options.thresholds</code></td><td><code>number | number[]</code></td><td><code>1</code></td><td>Ratio(s) of visibility at which to fire updates. Mirrors <code>IntersectionObserverInit.threshold</code>.</td></tr>
+            <tr><td><code>options.margin</code></td><td><code>number | string</code></td><td><code>0</code></td><td>Margin grown/shrunk around the container. A number is treated as pixels; a string is passed through as-is (CSS-margin syntax). Mirrors <code>IntersectionObserverInit.rootMargin</code>.</td></tr>
+          </tbody>
+        </table>
+
+        ## Returns
+        `useIntersecting` returns an object, not an array — destructure the fields you need.
+
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Return</th>
+              <th>Type/Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>results</code></td><td><code>{`{ target: HTMLElement; isIntersecting: boolean; entry: IntersectionObserverEntry | undefined }[]`}</code><br/><code>{`[]`}</code></td><td>Latest intersection state for every resolved target, in the order the elements were resolved.</td></tr>
+            <tr><td><code>onScreen</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`IntersectResult[]`}</code><br/><code>{`[]`}</code></td><td>Subset of <code>results</code> currently intersecting, recomputed on every observer callback.</td></tr>
+            <tr><td><code>offScreen</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`IntersectResult[]`}</code><br/><code>{`[]`}</code></td><td>Subset of <code>results</code> not currently intersecting, recomputed on every observer callback.</td></tr>
+            <tr><td><code>entered</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`IntersectResult[]`}</code><br/><code>{`[]`}</code></td><td>Targets that transitioned from not-intersecting to intersecting on the most recent observer callback. Reflects only the latest batch, not a running history.</td></tr>
+            <tr><td><code>exited</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`IntersectResult[]`}</code><br/><code>{`[]`}</code></td><td>Targets that transitioned from intersecting to not-intersecting on the most recent observer callback. Reflects only the latest batch, not a running history.</td></tr>
+          </tbody>
+        </table>
+
+        ## Code Examples
+        </Unstyled>
+
+        <RenderSource language={"tsx"}>
+        ```
+        import { useEffect, useRef } from 'react';
+        import { defaultOptions, useIntersecting } from '@apple-pie/slice';
+
+        function InfiniteList() {
+            const containerRef = useRef<HTMLDivElement>(null);
+            const sentinelRef = useRef<HTMLDivElement>(null);
+
+            const { onScreen } = useIntersecting({
+                ...defaultOptions,
+                container: containerRef,
+                entries: sentinelRef,
+                thresholds: 0.1,
+                margin: 200,
+            });
+            const sentinelVisible = onScreen.length > 0;
+
+            useEffect(() => {
+                if (sentinelVisible) loadNextPage();
+            }, [sentinelVisible]);
+
+            return (
+                <div ref={containerRef} style={{ overflowY: 'auto', height: 320 }}>
+                    {items.map((item) => <Row key={item.id} item={item} />)}
+                    <div ref={sentinelRef} />
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+
+        <Unstyled>
+        Observing a list of items by class selector works the same way — read `dataset` (or any DOM attribute) off `target` to identify which item changed:
+        </Unstyled>
+
+        <RenderSource language={"tsx"}>
+        ```
+        const { entered, exited } = useIntersecting({
+            ...defaultOptions,
+            container: containerRef,
+            entries: '.list-item',
+            thresholds: 0.5,
+        });
+
+        const enteredIds = entered.map((result) => result.target.dataset.itemId);
+        const exitedIds = exited.map((result) => result.target.dataset.itemId);
+        ```
+        </RenderSource>
+</FlexDiv>
+</FlexDiv>

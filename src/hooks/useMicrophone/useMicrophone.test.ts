@@ -27,7 +27,8 @@ class MockMediaStreamTrack {
 	}
 
 	dispatch(type: string) {
-		for (const listener of this.listeners.get(type) ?? []) listener(new Event(type));
+		for (const listener of this.listeners.get(type) ?? [])
+			listener(new Event(type));
 	}
 
 	stop() {
@@ -132,9 +133,7 @@ describe('useMicrophone', () => {
 	});
 
 	it('muteMic()/unmuteMic() toggle the live track and muted state', async () => {
-		const { result } = renderHook(() =>
-			useMicrophone(false, undefined, true),
-		);
+		const { result } = renderHook(() => useMicrophone(false, undefined, true));
 		await waitFor(() => expect(result.current.isActive).toBe(true));
 		expect(result.current.muted).toBe(false);
 
@@ -150,9 +149,7 @@ describe('useMicrophone', () => {
 	});
 
 	it('toggleMute() flips based on the current muted state', async () => {
-		const { result } = renderHook(() =>
-			useMicrophone(false, undefined, true),
-		);
+		const { result } = renderHook(() => useMicrophone(false, undefined, true));
 		await waitFor(() => expect(result.current.isActive).toBe(true));
 
 		act(() => {
@@ -162,9 +159,7 @@ describe('useMicrophone', () => {
 	});
 
 	it('setInputVolume() clamps and applies the gain value', async () => {
-		const { result } = renderHook(() =>
-			useMicrophone(false, undefined, true),
-		);
+		const { result } = renderHook(() => useMicrophone(false, undefined, true));
 		await waitFor(() => expect(result.current.isActive).toBe(true));
 
 		act(() => {
@@ -189,13 +184,13 @@ describe('useMicrophone', () => {
 		});
 
 		expect(stream).toBeNull();
-		expect(result.current.error?.message).toBe(`Microphone access isn't supported`);
+		expect(result.current.error?.message).toBe(
+			`Microphone access isn't supported`,
+		);
 	});
 
 	it('stopMicrophone() stops tracks and clears active state', async () => {
-		const { result } = renderHook(() =>
-			useMicrophone(false, undefined, true),
-		);
+		const { result } = renderHook(() => useMicrophone(false, undefined, true));
 		await waitFor(() => expect(result.current.isActive).toBe(true));
 
 		act(() => {
@@ -207,10 +202,10 @@ describe('useMicrophone', () => {
 	});
 
 	it('setMicrophone() requests a stream for the given device', async () => {
-		const { result } = renderHook(() =>
-			useMicrophone(false, undefined, false),
+		const { result } = renderHook(() => useMicrophone(false, undefined, false));
+		await waitFor(() =>
+			expect(result.current.micOptions.length).toBeGreaterThan(0),
 		);
-		await waitFor(() => expect(result.current.micOptions.length).toBeGreaterThan(0));
 
 		await act(async () => {
 			await result.current.setMicrophone('device-1');

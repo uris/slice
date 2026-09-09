@@ -33,9 +33,7 @@ describe('setSizeStyle', () => {
 
 describe('cleanString', () => {
 	it('always strips script tags', () => {
-		expect(cleanString('a<script>alert(1)</script>b', false, false)).toBe(
-			'ab',
-		);
+		expect(cleanString('a<script>alert(1)</script>b', false, false)).toBe('ab');
 	});
 
 	it('removes invisible characters when requested', () => {
@@ -81,7 +79,9 @@ describe('debug / setProps', () => {
 	});
 
 	it('debug() returns a fresh props/mount/unmount snapshot outside of tests', () => {
-		const previous = { current: { props: { a: 1 }, mount: false, unmount: false } };
+		const previous = {
+			current: { props: { a: 1 }, mount: false, unmount: false },
+		};
 		const result = debug(previous, { a: 2 });
 		expect(result).toEqual({ props: { a: 2 }, mount: false, unmount: false });
 	});

@@ -64,7 +64,9 @@ afterEach(() => {
 describe('useAudioRecorder', () => {
 	it('startRecording() creates and starts a MediaRecorder with a supported mime type', () => {
 		const stream = new MockMediaStream([new MockMediaStreamTrack()]);
-		const { result } = renderHook(() => useAudioRecorder(stream as unknown as MediaStream));
+		const { result } = renderHook(() =>
+			useAudioRecorder(stream as unknown as MediaStream),
+		);
 
 		act(() => {
 			result.current.startRecording();
@@ -78,7 +80,9 @@ describe('useAudioRecorder', () => {
 
 	it('startRecording() is a no-op when already recording', () => {
 		const stream = new MockMediaStream([new MockMediaStreamTrack()]);
-		const { result } = renderHook(() => useAudioRecorder(stream as unknown as MediaStream));
+		const { result } = renderHook(() =>
+			useAudioRecorder(stream as unknown as MediaStream),
+		);
 
 		act(() => {
 			result.current.startRecording();
@@ -96,13 +100,17 @@ describe('useAudioRecorder', () => {
 		});
 
 		expect(result.current.isRecording).toBe(false);
-		expect(result.current.error?.message).toBe('No audio stream or track provided');
+		expect(result.current.error?.message).toBe(
+			'No audio stream or track provided',
+		);
 	});
 
 	it('startRecording() sets an error when MediaRecorder is unsupported', () => {
 		vi.stubGlobal('MediaRecorder', undefined);
 		const stream = new MockMediaStream([new MockMediaStreamTrack()]);
-		const { result } = renderHook(() => useAudioRecorder(stream as unknown as MediaStream));
+		const { result } = renderHook(() =>
+			useAudioRecorder(stream as unknown as MediaStream),
+		);
 
 		act(() => {
 			result.current.startRecording();
@@ -129,7 +137,9 @@ describe('useAudioRecorder', () => {
 
 	it('accumulates chunk sizes as data becomes available', () => {
 		const stream = new MockMediaStream([new MockMediaStreamTrack()]);
-		const { result } = renderHook(() => useAudioRecorder(stream as unknown as MediaStream));
+		const { result } = renderHook(() =>
+			useAudioRecorder(stream as unknown as MediaStream),
+		);
 
 		act(() => {
 			result.current.startRecording();
@@ -143,7 +153,9 @@ describe('useAudioRecorder', () => {
 
 	it('stopRecording() resolves with the recorded blob and clears isRecording', async () => {
 		const stream = new MockMediaStream([new MockMediaStreamTrack()]);
-		const { result } = renderHook(() => useAudioRecorder(stream as unknown as MediaStream));
+		const { result } = renderHook(() =>
+			useAudioRecorder(stream as unknown as MediaStream),
+		);
 
 		act(() => {
 			result.current.startRecording();
@@ -171,7 +183,9 @@ describe('useAudioRecorder', () => {
 
 	it('resetRecording() clears the blob, size, and error', () => {
 		const stream = new MockMediaStream([new MockMediaStreamTrack()]);
-		const { result } = renderHook(() => useAudioRecorder(stream as unknown as MediaStream));
+		const { result } = renderHook(() =>
+			useAudioRecorder(stream as unknown as MediaStream),
+		);
 
 		act(() => {
 			result.current.startRecording();

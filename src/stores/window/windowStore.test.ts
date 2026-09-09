@@ -72,9 +72,9 @@ describe('windowStore', () => {
 	});
 
 	it('getLocation() rejects when geolocation is unsupported', async () => {
-		await expect(useWindowStore.getState().actions.getLocation()).rejects.toThrow(
-			'Geolocation is not supported in this browser.',
-		);
+		await expect(
+			useWindowStore.getState().actions.getLocation(),
+		).rejects.toThrow('Geolocation is not supported in this browser.');
 		expect(useWindowStore.getState().locationError?.message).toBe(
 			'Geolocation is not supported in this browser.',
 		);
@@ -100,7 +100,9 @@ describe('windowStore', () => {
 
 		const location = await useWindowStore.getState().actions.getLocation();
 
-		expect(location).toEqual(expect.objectContaining({ latitude: 1, longitude: 2 }));
+		expect(location).toEqual(
+			expect.objectContaining({ latitude: 1, longitude: 2 }),
+		);
 		expect(useWindowStore.getState().gettingLocation).toBe(false);
 	});
 
@@ -114,9 +116,9 @@ describe('windowStore', () => {
 			},
 		});
 
-		await expect(useWindowStore.getState().actions.getLocation()).rejects.toThrow(
-			'denied',
-		);
+		await expect(
+			useWindowStore.getState().actions.getLocation(),
+		).rejects.toThrow('denied');
 		expect(useWindowStore.getState().gettingLocation).toBe(false);
 	});
 });

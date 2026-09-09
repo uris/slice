@@ -146,12 +146,16 @@ afterEach(() => {
 });
 
 function micStream() {
-	return new MockMediaStream([new MockMediaStreamTrack('audio')]) as unknown as MediaStream;
+	return new MockMediaStream([
+		new MockMediaStreamTrack('audio'),
+	]) as unknown as MediaStream;
 }
 
 describe('webRTCStore', () => {
 	it('addConnection() registers a connection reachable by name', () => {
-		useWebRTCStore.getState().actions.addConnection('call', { micStream: micStream() });
+		useWebRTCStore
+			.getState()
+			.actions.addConnection('call', { micStream: micStream() });
 
 		expect(useWebRTCStore.getState().connections).toHaveLength(1);
 		expect(useWebRTCStore.getState().connections[0].name).toBe('call');
@@ -159,10 +163,14 @@ describe('webRTCStore', () => {
 	});
 
 	it('addConnection() with an existing name closes the old one and replaces it', () => {
-		useWebRTCStore.getState().actions.addConnection('call', { micStream: micStream() });
+		useWebRTCStore
+			.getState()
+			.actions.addConnection('call', { micStream: micStream() });
 		const first = MockRTCPeerConnection.instances[0];
 
-		useWebRTCStore.getState().actions.addConnection('call', { micStream: micStream() });
+		useWebRTCStore
+			.getState()
+			.actions.addConnection('call', { micStream: micStream() });
 
 		expect(first.close).toHaveBeenCalled();
 		expect(useWebRTCStore.getState().connections).toHaveLength(1);
@@ -170,7 +178,9 @@ describe('webRTCStore', () => {
 	});
 
 	it('removeConnection() closes and removes a tracked connection', () => {
-		useWebRTCStore.getState().actions.addConnection('call', { micStream: micStream() });
+		useWebRTCStore
+			.getState()
+			.actions.addConnection('call', { micStream: micStream() });
 		const peer = MockRTCPeerConnection.instances[0];
 
 		useWebRTCStore.getState().actions.removeConnection('call');
@@ -213,10 +223,14 @@ describe('webRTCStore', () => {
 	});
 
 	it('setMicStream() replaces the outgoing audio track', async () => {
-		useWebRTCStore.getState().actions.addConnection('call', { micStream: micStream() });
+		useWebRTCStore
+			.getState()
+			.actions.addConnection('call', { micStream: micStream() });
 		const peer = MockRTCPeerConnection.instances[0];
 		const nextTrack = new MockMediaStreamTrack('audio');
-		const nextStream = new MockMediaStream([nextTrack]) as unknown as MediaStream;
+		const nextStream = new MockMediaStream([
+			nextTrack,
+		]) as unknown as MediaStream;
 
 		await useWebRTCStore.getState().actions.setMicStream('call', nextStream);
 
@@ -230,7 +244,9 @@ describe('webRTCStore', () => {
 	});
 
 	it('setVolume() sets the connection audio element volume', () => {
-		useWebRTCStore.getState().actions.addConnection('call', { micStream: micStream() });
+		useWebRTCStore
+			.getState()
+			.actions.addConnection('call', { micStream: micStream() });
 
 		useWebRTCStore.getState().actions.setVolume('call', 0.4);
 
@@ -247,7 +263,9 @@ describe('webRTCStore', () => {
 		MockRTCPeerConnection.instances[0].connectionState = 'connected';
 
 		const { result: connections } = renderHook(() => useWebRTCConnections());
-		const { result: connection } = renderHook(() => useWebRTCConnection('call'));
+		const { result: connection } = renderHook(() =>
+			useWebRTCConnection('call'),
+		);
 		const { result: connected } = renderHook(() => useWebRTCConnected('call'));
 		const { result: connectedGlobal } = renderHook(() => useWebRTCConnected());
 		const { result: actions } = renderHook(() => useWebRTC());
