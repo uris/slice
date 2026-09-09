@@ -13,7 +13,11 @@
 			"storybook-static",
 			"build",
 			"public",
-			"benchmarks"
+			"benchmarks",
+			"**/*.test.ts",
+			"**/*.test.tsx",
+			"**/*.spec.ts",
+			"**/*.spec.tsx"
 		]
 	},
 	"formatter": {
