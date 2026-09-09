@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { FileUploadStatus, WorkerStatus } from '../../workers/uploads/uploads-worker';
+import {
+	FileUploadStatus,
+	WorkerStatus,
+} from '../../workers/uploads/uploads-worker';
 import { useUploadsStore } from './uploadsStore';
 
 // The store keeps a module-level worker singleton that only ever binds once
@@ -40,7 +43,9 @@ describe('uploadsStore', () => {
 	});
 
 	it('push() after initialize() posts add-files with normalized inputs', () => {
-		useUploadsStore.getState().actions.initialize({ uploadURL: '/upload' }, mockWorker);
+		useUploadsStore
+			.getState()
+			.actions.initialize({ uploadURL: '/upload' }, mockWorker);
 		const file = new File(['a'], 'a.txt');
 		const input = { file: new File(['b'], 'b.txt'), uploadURL: '/custom' };
 
@@ -53,7 +58,9 @@ describe('uploadsStore', () => {
 	});
 
 	it('reset() posts clear-uploads and resets local state', () => {
-		useUploadsStore.getState().actions.initialize({ uploadURL: '/upload' }, mockWorker);
+		useUploadsStore
+			.getState()
+			.actions.initialize({ uploadURL: '/upload' }, mockWorker);
 		useUploadsStore.setState({
 			uploads: [
 				{
@@ -68,14 +75,18 @@ describe('uploadsStore', () => {
 
 		useUploadsStore.getState().actions.reset();
 
-		expect(mockWorker.postMessage).toHaveBeenCalledWith({ type: 'clear-uploads' });
+		expect(mockWorker.postMessage).toHaveBeenCalledWith({
+			type: 'clear-uploads',
+		});
 		expect(useUploadsStore.getState().uploads).toEqual([]);
 		expect(useUploadsStore.getState().workerStatus).toBe(WorkerStatus.Idle);
 		expect(useUploadsStore.getState().error).toBeNull();
 	});
 
 	it('applies a status message from the worker to the store', () => {
-		useUploadsStore.getState().actions.initialize({ uploadURL: '/upload' }, mockWorker);
+		useUploadsStore
+			.getState()
+			.actions.initialize({ uploadURL: '/upload' }, mockWorker);
 		const upload = {
 			id: '1',
 			file: new File(['a'], 'a.txt'),
@@ -83,7 +94,11 @@ describe('uploadsStore', () => {
 		};
 
 		mockWorker.onmessage?.({
-			data: { type: 'status', uploads: [upload], workerStatus: WorkerStatus.Busy },
+			data: {
+				type: 'status',
+				uploads: [upload],
+				workerStatus: WorkerStatus.Busy,
+			},
 		} as MessageEvent);
 
 		expect(useUploadsStore.getState().uploads).toEqual([upload]);
@@ -91,7 +106,9 @@ describe('uploadsStore', () => {
 	});
 
 	it('applies an error message from the worker to the store', () => {
-		useUploadsStore.getState().actions.initialize({ uploadURL: '/upload' }, mockWorker);
+		useUploadsStore
+			.getState()
+			.actions.initialize({ uploadURL: '/upload' }, mockWorker);
 
 		mockWorker.onmessage?.({
 			data: { type: 'error', message: 'upload failed' },

@@ -71,10 +71,14 @@ describe('microphoneStore', () => {
 	});
 
 	it('unbound actions are safe no-ops before sync()', async () => {
-		expect(await useMicrophoneStore.getState().actions.requestMicrophone()).toBeNull();
+		expect(
+			await useMicrophoneStore.getState().actions.requestMicrophone(),
+		).toBeNull();
 		expect(useMicrophoneStore.getState().actions.muteMic()).toBe(false);
 		expect(useMicrophoneStore.getState().actions.setInputVolume(1)).toBe(1);
-		expect(await useMicrophoneStore.getState().actions.refreshMicrophones()).toEqual([]);
+		expect(
+			await useMicrophoneStore.getState().actions.refreshMicrophones(),
+		).toEqual([]);
 	});
 
 	it('useSyncMicrophoneStore() syncs a hook return value into the store on mount', () => {

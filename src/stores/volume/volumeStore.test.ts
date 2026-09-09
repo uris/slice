@@ -78,7 +78,9 @@ describe('volumeStore', () => {
 		const feedback = document.createElement('audio');
 		useVolumeStore.getState().actions.attachFeedbackElement(feedback);
 
-		await useVolumeStore.getState().actions.setVolume(0.6, { playFeedback: true });
+		await useVolumeStore
+			.getState()
+			.actions.setVolume(0.6, { playFeedback: true });
 
 		expect(feedback.play).toHaveBeenCalled();
 	});

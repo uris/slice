@@ -26,19 +26,20 @@ describe('useLastUpdated', () => {
 
 	it('reports singular and plural minute/hour/day phrasing', () => {
 		const minuteAgo = new Date(Date.now() - 60_000).toISOString();
-		expect(renderHook(() => useLastUpdated(minuteAgo)).result.current.lastUpdated).toBe(
-			'1 min. ago',
-		);
+		expect(
+			renderHook(() => useLastUpdated(minuteAgo)).result.current.lastUpdated,
+		).toBe('1 min. ago');
 
 		const fiveMinutesAgo = new Date(Date.now() - 5 * 60_000).toISOString();
 		expect(
-			renderHook(() => useLastUpdated(fiveMinutesAgo)).result.current.lastUpdated,
+			renderHook(() => useLastUpdated(fiveMinutesAgo)).result.current
+				.lastUpdated,
 		).toBe('5 mins. ago');
 
 		const hourAgo = new Date(Date.now() - 60 * 60_000).toISOString();
-		expect(renderHook(() => useLastUpdated(hourAgo)).result.current.lastUpdated).toBe(
-			'1 hour ago',
-		);
+		expect(
+			renderHook(() => useLastUpdated(hourAgo)).result.current.lastUpdated,
+		).toBe('1 hour ago');
 
 		const fiveHoursAgo = new Date(Date.now() - 5 * 60 * 60_000).toISOString();
 		expect(
@@ -46,9 +47,9 @@ describe('useLastUpdated', () => {
 		).toBe('5 hours ago');
 
 		const dayAgo = new Date(Date.now() - 24 * 60 * 60_000).toISOString();
-		expect(renderHook(() => useLastUpdated(dayAgo)).result.current.lastUpdated).toBe(
-			'1 day ago',
-		);
+		expect(
+			renderHook(() => useLastUpdated(dayAgo)).result.current.lastUpdated,
+		).toBe('1 day ago');
 
 		const fiveDaysAgo = new Date(
 			Date.now() - 5 * 24 * 60 * 60_000,

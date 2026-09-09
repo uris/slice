@@ -64,7 +64,11 @@ function rawSocketOf(name: string) {
 
 beforeEach(() => {
 	vi.stubGlobal('WebSocket', MockWebSocket);
-	useWSStore.setState({ connections: [], message: null, closedConnection: null });
+	useWSStore.setState({
+		connections: [],
+		message: null,
+		closedConnection: null,
+	});
 });
 
 afterEach(() => {
@@ -131,10 +135,11 @@ describe('wsStore', () => {
 		const raw = rawSocketOf('feed');
 		raw.dispatch('open', new Event('open'));
 
-		raw.dispatch(
-			'close',
-			{ wasClean: true, code: 1000, reason: '' } as CloseEvent,
-		);
+		raw.dispatch('close', {
+			wasClean: true,
+			code: 1000,
+			reason: '',
+		} as CloseEvent);
 
 		expect(useWSStore.getState().closedConnection).toBe('feed');
 	});

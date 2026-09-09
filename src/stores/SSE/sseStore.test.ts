@@ -61,7 +61,11 @@ function rawSourceOf(name: string) {
 
 beforeEach(() => {
 	vi.stubGlobal('EventSource', MockEventSource);
-	useSSEStore.setState({ connections: [], message: null, closedConnection: null });
+	useSSEStore.setState({
+		connections: [],
+		message: null,
+		closedConnection: null,
+	});
 });
 
 afterEach(() => {

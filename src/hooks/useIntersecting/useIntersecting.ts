@@ -49,7 +49,8 @@ function resolveEntries(entries: IntersectEntry[]): ResolvedEntries {
 		if (typeof entry === 'string') {
 			if (typeof document === 'undefined') continue;
 			const elements = document.querySelectorAll(entry);
-			for (const element of Array.from(elements)) resolved.push(element as HTMLElement);
+			for (const element of Array.from(elements))
+				resolved.push(element as HTMLElement);
 		} else if (entry.current) {
 			resolved.push(entry.current);
 		}

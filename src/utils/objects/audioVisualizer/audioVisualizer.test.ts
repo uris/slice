@@ -118,7 +118,9 @@ describe('AudioVisualizer', () => {
 
 	it('wraps a bare MediaStreamTrack into a MediaStream', () => {
 		const track = new MockMediaStreamTrack();
-		const visualizer = new AudioVisualizer(track as unknown as MediaStreamTrack);
+		const visualizer = new AudioVisualizer(
+			track as unknown as MediaStreamTrack,
+		);
 
 		expect(() => visualizer.start()).not.toThrow();
 	});

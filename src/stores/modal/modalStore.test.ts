@@ -33,7 +33,9 @@ describe('modalStore', () => {
 	});
 
 	it('show() rejects a previously pending modalResponse()', async () => {
-		const pending = useModalStore.getState().actions.modalResponse(descriptor('a'));
+		const pending = useModalStore
+			.getState()
+			.actions.modalResponse(descriptor('a'));
 		useModalStore.getState().actions.show(descriptor('b'));
 
 		await expect(pending).rejects.toThrow('Modal replaced.');
@@ -41,9 +43,9 @@ describe('modalStore', () => {
 	});
 
 	it('modalResponse() resolves via the modal state resolve callback', async () => {
-		const pending = useModalStore.getState().actions.modalResponse<string>(
-			descriptor('a'),
-		);
+		const pending = useModalStore
+			.getState()
+			.actions.modalResponse<string>(descriptor('a'));
 
 		useModalStore.getState().modal?.resolve?.('done');
 
@@ -52,7 +54,9 @@ describe('modalStore', () => {
 	});
 
 	it('modalResponse() rejects via the modal state reject callback', async () => {
-		const pending = useModalStore.getState().actions.modalResponse(descriptor('a'));
+		const pending = useModalStore
+			.getState()
+			.actions.modalResponse(descriptor('a'));
 
 		useModalStore.getState().modal?.reject?.(new Error('nope'));
 
@@ -61,7 +65,9 @@ describe('modalStore', () => {
 	});
 
 	it('hide() rejects the pending modal and clears state', async () => {
-		const pending = useModalStore.getState().actions.modalResponse(descriptor('a'));
+		const pending = useModalStore
+			.getState()
+			.actions.modalResponse(descriptor('a'));
 
 		useModalStore.getState().actions.hide();
 
@@ -70,7 +76,9 @@ describe('modalStore', () => {
 	});
 
 	it('hide() accepts a custom reject reason', async () => {
-		const pending = useModalStore.getState().actions.modalResponse(descriptor('a'));
+		const pending = useModalStore
+			.getState()
+			.actions.modalResponse(descriptor('a'));
 
 		useModalStore.getState().actions.hide('custom reason');
 
@@ -78,21 +86,25 @@ describe('modalStore', () => {
 	});
 
 	it('resolve()/reject() actions call through to the active modal', async () => {
-		const pending = useModalStore.getState().actions.modalResponse<number>(
-			descriptor('a'),
-		);
+		const pending = useModalStore
+			.getState()
+			.actions.modalResponse<number>(descriptor('a'));
 		useModalStore.getState().actions.resolve(7);
 		await expect(pending).resolves.toBe(7);
 		expect(useModalStore.getState().modal).toBeNull();
 
-		const pending2 = useModalStore.getState().actions.modalResponse(descriptor('b'));
+		const pending2 = useModalStore
+			.getState()
+			.actions.modalResponse(descriptor('b'));
 		useModalStore.getState().actions.reject('bad');
 		await expect(pending2).rejects.toBe('bad');
 		expect(useModalStore.getState().modal).toBeNull();
 	});
 
 	it('clear() rejects any pending modal and is a no-op when idle', async () => {
-		const pending = useModalStore.getState().actions.modalResponse(descriptor('a'));
+		const pending = useModalStore
+			.getState()
+			.actions.modalResponse(descriptor('a'));
 		useModalStore.getState().actions.clear();
 		await expect(pending).rejects.toThrow('Modal cleared.');
 
