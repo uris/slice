@@ -56,7 +56,7 @@ import {FlexDiv} from '../../components/FlexDiv';
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>results</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`{ target: HTMLElement; isIntersecting: boolean; entry: IntersectionObserverEntry | undefined }[]`}</code><br/><code>{`[]`}</code></td><td>Latest intersection state for every resolved target, in the order the elements were resolved.</td></tr>
+            <tr><td><code>results</code></td><td><code>{`{ target: HTMLElement; isIntersecting: boolean; entry: IntersectionObserverEntry | undefined }[]`}</code><br/><code>{`[]`}</code></td><td>Latest intersection state for every resolved target, in the order the elements were resolved.</td></tr>
             <tr><td><code>onScreen</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`IntersectResult[]`}</code><br/><code>{`[]`}</code></td><td>Subset of <code>results</code> currently intersecting, recomputed on every observer callback.</td></tr>
             <tr><td><code>offScreen</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`IntersectResult[]`}</code><br/><code>{`[]`}</code></td><td>Subset of <code>results</code> not currently intersecting, recomputed on every observer callback.</td></tr>
             <tr><td><code>entered</code></td><td style={{ whiteSpace: 'nowrap'}}><code>{`IntersectResult[]`}</code><br/><code>{`[]`}</code></td><td>Targets that transitioned from not-intersecting to intersecting on the most recent observer callback. Reflects only the latest batch, not a running history.</td></tr>
