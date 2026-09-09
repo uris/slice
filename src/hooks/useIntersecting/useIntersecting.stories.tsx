@@ -45,6 +45,16 @@ function UseIntersectingDemo() {
 		.map((result) => result.target.getAttribute('data-item-id'))
 		.join(', ');
 
+	// A per-item background can only ever be seen on whatever sliver of that
+	// item is still inside the scrollbox's clipped viewport -- an item mostly
+	// scrolled out shows almost none of its highlight regardless of color.
+	// This readout lives outside the scrollbox (never clipped) so the full
+	// set of currently-intersecting items is always legible while you scroll.
+	const visibleIds = itemResults
+		.filter((result) => result.isIntersecting)
+		.map((result) => result.target.getAttribute('data-item-id'))
+		.join(', ');
+
 	const items = Array.from({ length: 20 }, (_, index) => index + 1);
 
 	return (
@@ -81,6 +91,7 @@ function UseIntersectingDemo() {
 					{isVisible ? 'Sentinel is intersecting' : 'Sentinel is off-screen'}
 				</FlexDiv>
 				<FlexDiv width={'fit'} height={'auto'} gap={4}>
+					<div>Currently intersecting: {visibleIds || '—'}</div>
 					<div>Last entered: {enteredIds || '—'}</div>
 					<div>Last exited: {exitedIds || '—'}</div>
 				</FlexDiv>
