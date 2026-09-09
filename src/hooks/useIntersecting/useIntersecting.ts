@@ -17,10 +17,10 @@ export type IntersectOptions = {
 	margin: IntersectMargin;
 };
 
-export type ResolvedEntries = Element[];
+export type ResolvedEntries = HTMLElement[];
 
 export type IntersectResult = {
-	target: Element;
+	target: HTMLElement;
 	isIntersecting: boolean;
 	entry: IntersectionObserverEntry | undefined;
 };
@@ -29,6 +29,8 @@ export type IntersectResultList = {
 	results: IntersectResult[];
 	exited: IntersectResult[];
 	entered: IntersectResult[];
+	onScreen: IntersectResult[];
+	offScreen: IntersectResult[];
 };
 
 export const defaultOptions: IntersectOptions = {
@@ -47,7 +49,7 @@ function resolveEntries(entries: IntersectEntry[]): ResolvedEntries {
 		if (typeof entry === 'string') {
 			if (typeof document === 'undefined') continue;
 			const elements = document.querySelectorAll(entry);
-			for (const element of Array.from(elements)) resolved.push(element);
+			for (const element of Array.from(elements)) resolved.push(element as HTMLElement);
 		} else if (entry.current) {
 			resolved.push(entry.current);
 		}
@@ -82,21 +84,17 @@ export function useIntersecting(
 	// hold items that leave
 	const [exited, setExited] = useState<IntersectResult[]>([]);
 
+	// hold visible items
+	const [onScreen, setOnScreen] = useState<IntersectResult[]>([]);
+
+	// hold invisible items
+	const [offScreen, setOffScreen] = useState<IntersectResult[]>([]);
+
 	// Imperative mirror of `results`, mutated directly inside the observer
 	// callback below. This exists so that callback never needs a setState
-	// *updater function* to read the previous value -- reading/writing a ref
-	// has no purity requirement, whereas a setResults(prev => ...) updater
-	// does (React may invoke it more than once, e.g. in Strict Mode), and
-	// mutating outer variables from inside one is a real correctness bug,
-	// not just a style nit.
+	// *updater function* to read the previous value
 	const resultsRef = useRef<IntersectResult[]>([]);
 
-	// Content-based keys purely to stabilize the effect below -- NOT to cache
-	// resolveEntries' result. Refs aren't attached to their DOM node until
-	// after commit, so reading ref.current has to happen inside the effect;
-	// doing it in a useMemo (which runs during render) would see a stale/null
-	// ref on first mount and, for a plain ref target, never re-run again
-	// since its key never changes.
 	const entryArray = Array.isArray(entries) ? entries : [entries];
 	const entryKey = resolvedElementsKey(entryArray);
 
@@ -119,6 +117,8 @@ export function useIntersecting(
 			setResults([]);
 			setEntered([]);
 			setExited([]);
+			setOffScreen([]);
+			setOnScreen([]);
 			return;
 		}
 
@@ -142,7 +142,7 @@ export function useIntersecting(
 					);
 					const wasIntersecting = index !== -1 && next[index].isIntersecting;
 					const updated: IntersectResult = {
-						target: entry.target,
+						target: entry.target as HTMLElement,
 						isIntersecting: entry.isIntersecting,
 						entry,
 					};
@@ -150,12 +150,16 @@ export function useIntersecting(
 					if (index === -1) next.push(updated);
 					else next[index] = updated;
 
-					if (wasIntersecting && !entry.isIntersecting) nextExited.push(updated);
-					if (!wasIntersecting && entry.isIntersecting) nextEntered.push(updated);
+					if (wasIntersecting && !entry.isIntersecting)
+						nextExited.push(updated);
+					if (!wasIntersecting && entry.isIntersecting)
+						nextEntered.push(updated);
 				}
 
 				resultsRef.current = next;
 				setResults(next);
+				setOnScreen(next.filter((result) => result.isIntersecting));
+				setOffScreen(next.filter((result) => !result.isIntersecting));
 				if (nextEntered.length > 0) setEntered(nextEntered);
 				if (nextExited.length > 0) setExited(nextExited);
 			},
@@ -173,5 +177,5 @@ export function useIntersecting(
 		return () => observer.disconnect();
 	}, [entryKey, thresholdKey, margin, container]);
 
-	return { results, entered, exited };
+	return { results, entered, exited, onScreen, offScreen };
 }

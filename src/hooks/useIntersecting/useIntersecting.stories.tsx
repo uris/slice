@@ -5,54 +5,42 @@ import { Slider } from '../../components/Slider';
 import { defaultOptions, useIntersecting } from './useIntersecting';
 
 function UseIntersectingDemo() {
-	const [threshold, setThreshold] = useState(0.1);
+	const [thresholds, setThresholds] = useState(0.1);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const sentinelRef = useRef<HTMLDivElement>(null);
 
-	// sentinel and list items are observed separately -- mixing a ref and a
-	// class selector in one entries array made results[i] a fragile stand-in
-	// for "which item", since array position depended on entries order.
-	const { results: sentinelResults } = useIntersecting({
+	// sentinel observer
+	const sentinel = useIntersecting({
 		...defaultOptions,
 		container: containerRef,
 		entries: sentinelRef,
-		thresholds: threshold,
+		thresholds,
 	});
-	const isVisible = sentinelResults[0]?.isIntersecting ?? false;
+	const isVisible = sentinel.results[0]?.isIntersecting ?? false;
 
-	const {
-		results: itemResults,
-		entered,
-		exited,
-	} = useIntersecting({
+	// list items observer
+	const listItems = useIntersecting({
 		...defaultOptions,
 		container: containerRef,
 		entries: '.list-item',
-		thresholds: threshold,
+		thresholds,
+		margin: 0,
 	});
 
-	const isItemVisible = (item: number) =>
-		itemResults.some(
-			(result) =>
-				result.isIntersecting &&
-				result.target.getAttribute('data-item-id') === String(item),
-		);
-
-	const enteredIds = entered
-		.map((result) => result.target.getAttribute('data-item-id'))
-		.join(', ');
-	const exitedIds = exited
-		.map((result) => result.target.getAttribute('data-item-id'))
+	const enteredIds = listItems.entered
+		.map((result) => result.target.dataset.itemId)
 		.join(', ');
 
-	// A per-item background can only ever be seen on whatever sliver of that
-	// item is still inside the scrollbox's clipped viewport -- an item mostly
-	// scrolled out shows almost none of its highlight regardless of color.
-	// This readout lives outside the scrollbox (never clipped) so the full
-	// set of currently-intersecting items is always legible while you scroll.
-	const visibleIds = itemResults
-		.filter((result) => result.isIntersecting)
-		.map((result) => result.target.getAttribute('data-item-id'))
+	const exitedIds = listItems.exited
+		.map((result) => result.target.dataset.itemId)
+		.join(', ');
+
+	const onScreenIds = listItems.onScreen
+		.map((result) => result.target.dataset.itemId)
+		.join(', ');
+
+	const offScreenIds = listItems.offScreen
+		.map((result) => result.target.dataset.itemId)
 		.join(', ');
 
 	const items = Array.from({ length: 20 }, (_, index) => index + 1);
@@ -73,9 +61,9 @@ function UseIntersectingDemo() {
 					scaleMin={0}
 					scaleMax={1}
 					step={0.05}
-					value={threshold}
+					value={thresholds}
 					trackHeadSize={0}
-					onChange={(v, _) => setThreshold(v)}
+					onChange={(v, _) => setThresholds(v)}
 				/>
 				<FlexDiv
 					width={'fit'}
@@ -91,7 +79,8 @@ function UseIntersectingDemo() {
 					{isVisible ? 'Sentinel is intersecting' : 'Sentinel is off-screen'}
 				</FlexDiv>
 				<FlexDiv width={'fit'} height={'auto'} gap={4}>
-					<div>Currently intersecting: {visibleIds || '—'}</div>
+					<div>Currently intersecting: {onScreenIds || '—'}</div>
+					<div>Currently not intersecting: {offScreenIds || '—'}</div>
 					<div>Last entered: {enteredIds || '—'}</div>
 					<div>Last exited: {exitedIds || '—'}</div>
 				</FlexDiv>
@@ -103,7 +92,7 @@ function UseIntersectingDemo() {
 				height={280}
 				border={'1px solid var(--core-outline-primary)'}
 				background={'var(--core-surface-secondary)'}
-				padding={12}
+				padding={24}
 				gap={8}
 			>
 				{items.map((item) => (
@@ -115,11 +104,7 @@ function UseIntersectingDemo() {
 						padding={12}
 						border={'1px solid var(--core-outline-primary)'}
 						borderRadius={8}
-						background={
-							isItemVisible(item)
-								? 'var(--core-surface-special)'
-								: 'var(--core-surface-primary)'
-						}
+						background={'var(--core-surface-primary)'}
 						className={'list-item'}
 					>
 						Item {item}

@@ -37,6 +37,7 @@ export {
 	type IntersectMargin,
 	type IntersectOptions,
 	type IntersectResult,
+	type IntersectResultList,
 	type ResolvedEntries,
 	defaultOptions as defaultIntersectingOptions,
 } from './useIntersecting/useIntersecting';
