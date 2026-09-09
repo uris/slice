@@ -20,18 +20,30 @@ function UseIntersectingDemo() {
 	});
 	const isVisible = sentinelResults[0]?.isIntersecting ?? false;
 
-	const { results: itemResults } = useIntersecting({
+	const {
+		results: itemResults,
+		entered,
+		exited,
+	} = useIntersecting({
 		...defaultOptions,
 		container: containerRef,
 		entries: '.list-item',
 		thresholds: threshold,
 	});
+
 	const isItemVisible = (item: number) =>
 		itemResults.some(
 			(result) =>
 				result.isIntersecting &&
 				result.target.getAttribute('data-item-id') === String(item),
 		);
+
+	const enteredIds = entered
+		.map((result) => result.target.getAttribute('data-item-id'))
+		.join(', ');
+	const exitedIds = exited
+		.map((result) => result.target.getAttribute('data-item-id'))
+		.join(', ');
 
 	const items = Array.from({ length: 20 }, (_, index) => index + 1);
 
@@ -67,6 +79,10 @@ function UseIntersectingDemo() {
 					}
 				>
 					{isVisible ? 'Sentinel is intersecting' : 'Sentinel is off-screen'}
+				</FlexDiv>
+				<FlexDiv width={'fit'} height={'auto'} gap={4}>
+					<div>Last entered: {enteredIds || '—'}</div>
+					<div>Last exited: {exitedIds || '—'}</div>
 				</FlexDiv>
 			</FlexDiv>
 			<FlexDiv

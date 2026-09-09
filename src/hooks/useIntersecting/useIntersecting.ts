@@ -1,6 +1,6 @@
 'use client';
 
-import { type RefObject, useEffect, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 
 export type IntersectContainer = RefObject<HTMLElement | null> | null;
 export type IntersectEntry = RefObject<HTMLElement | null> | string;
@@ -82,6 +82,15 @@ export function useIntersecting(
 	// hold items that leave
 	const [exited, setExited] = useState<IntersectResult[]>([]);
 
+	// Imperative mirror of `results`, mutated directly inside the observer
+	// callback below. This exists so that callback never needs a setState
+	// *updater function* to read the previous value -- reading/writing a ref
+	// has no purity requirement, whereas a setResults(prev => ...) updater
+	// does (React may invoke it more than once, e.g. in Strict Mode), and
+	// mutating outer variables from inside one is a real correctness bug,
+	// not just a style nit.
+	const resultsRef = useRef<IntersectResult[]>([]);
+
 	// Content-based keys purely to stabilize the effect below -- NOT to cache
 	// resolveEntries' result. Refs aren't attached to their DOM node until
 	// after commit, so reading ref.current has to happen inside the effect;
@@ -106,6 +115,7 @@ export function useIntersecting(
 
 		// if there are no elements to observe, reset results
 		if (elements.length === 0) {
+			resultsRef.current = [];
 			setResults([]);
 			setEntered([]);
 			setExited([]);
@@ -116,43 +126,38 @@ export function useIntersecting(
 		const initResults = elements.map((target) => {
 			return { target, isIntersecting: false, entry: undefined };
 		});
+		resultsRef.current = initResults;
 		setResults(initResults);
 
 		// create the intersection observer updating results by keeping the same items in order
 		const observer = new IntersectionObserver(
 			(observedEntries) => {
-				// Collected here, outside setResults' updater, and applied once per
-				// batch below -- calling setEntered/setExited *inside* setResults'
-				// updater would be a side effect inside a state updater function,
-				// which React may invoke more than once (e.g. Strict Mode).
-				const entered: IntersectResult[] = [];
-				const exited: IntersectResult[] = [];
+				const next = [...resultsRef.current];
+				const nextEntered: IntersectResult[] = [];
+				const nextExited: IntersectResult[] = [];
 
-				setResults((previous) => {
-					const next = [...previous];
-					for (const entry of observedEntries) {
-						const index = next.findIndex(
-							(result) => result.target === entry.target,
-						);
-						const wasIntersecting = index !== -1 && next[index].isIntersecting;
-						const updated: IntersectResult = {
-							target: entry.target,
-							isIntersecting: entry.isIntersecting,
-							entry,
-						};
-						// updated all results
-						if (index === -1) next.push(updated);
-						else next[index] = updated;
+				for (const entry of observedEntries) {
+					const index = next.findIndex(
+						(result) => result.target === entry.target,
+					);
+					const wasIntersecting = index !== -1 && next[index].isIntersecting;
+					const updated: IntersectResult = {
+						target: entry.target,
+						isIntersecting: entry.isIntersecting,
+						entry,
+					};
 
-						// track exits and entries for this batch
-						if (wasIntersecting && !entry.isIntersecting) exited.push(updated);
-						if (!wasIntersecting && entry.isIntersecting) entered.push(updated);
-					}
-					return next;
-				});
+					if (index === -1) next.push(updated);
+					else next[index] = updated;
 
-				if (entered.length > 0) setEntered(entered);
-				if (exited.length > 0) setExited(exited);
+					if (wasIntersecting && !entry.isIntersecting) nextExited.push(updated);
+					if (!wasIntersecting && entry.isIntersecting) nextEntered.push(updated);
+				}
+
+				resultsRef.current = next;
+				setResults(next);
+				if (nextEntered.length > 0) setEntered(nextEntered);
+				if (nextExited.length > 0) setExited(nextExited);
 			},
 			{
 				root: container?.current ?? null,
