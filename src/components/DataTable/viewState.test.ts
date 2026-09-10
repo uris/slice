@@ -2,17 +2,19 @@ import { describe, expect, it } from 'vitest';
 import type { ColumnDefinition } from './_types';
 import {
 	applyDataTableViewState,
+	captureSortToViewState,
 	createDefaultViewState,
+	resolveSortFromViewState,
 	type DataTableViewState,
 } from './viewState';
 
 type Row = { name: string; age: number };
 
-function col(id: string): ColumnDefinition<Row, unknown> {
-	return { id, title: id, accessor: (row) => row[id as keyof Row] };
+function col(id: string, sort?: keyof Row): ColumnDefinition<Row, unknown> {
+	return { id, title: id, sort, accessor: (row) => row[id as keyof Row] };
 }
 
-const columns = [col('name'), col('age'), col('country')];
+const columns = [col('name', 'name'), col('age', 'age'), col('country')];
 
 describe('createDefaultViewState', () => {
 	it('reflects the columns in their natural order', () => {
@@ -99,5 +101,62 @@ describe('applyDataTableViewState', () => {
 		expect(
 			applyDataTableViewState(columns, roundTripped).map((c) => c.id),
 		).toEqual(['age', 'name']);
+	});
+});
+
+describe('resolveSortFromViewState', () => {
+	it('returns undefined when there is no saved sort', () => {
+		expect(resolveSortFromViewState(columns, undefined)).toBeUndefined();
+		expect(resolveSortFromViewState(columns, { columnOrder: [] })).toBeUndefined();
+	});
+
+	it('resolves the saved columnId to that column\'s sort key', () => {
+		const state: DataTableViewState = {
+			columnOrder: ['name', 'age', 'country'],
+			sort: { columnId: 'age', dir: 'desc' },
+		};
+		expect(resolveSortFromViewState(columns, state)).toEqual({ key: 'age', dir: 'desc' });
+	});
+
+	it('drops the sort when the saved columnId no longer exists', () => {
+		const state: DataTableViewState = {
+			columnOrder: ['name', 'age', 'country'],
+			sort: { columnId: 'deleted-column', dir: 'asc' },
+		};
+		expect(resolveSortFromViewState(columns, state)).toBeUndefined();
+	});
+
+	it('drops the sort when the saved column is no longer sortable in code', () => {
+		const state: DataTableViewState = {
+			columnOrder: ['name', 'age', 'country'],
+			sort: { columnId: 'country', dir: 'asc' },
+		};
+		expect(resolveSortFromViewState(columns, state)).toBeUndefined();
+	});
+});
+
+describe('captureSortToViewState', () => {
+	it('returns undefined for no active sort', () => {
+		expect(captureSortToViewState(columns, undefined)).toBeUndefined();
+	});
+
+	it('captures a live SortKey as the sorted column\'s id', () => {
+		expect(captureSortToViewState(columns, { key: 'age', dir: 'desc' })).toEqual({
+			columnId: 'age',
+			dir: 'desc',
+		});
+	});
+
+	it('returns undefined when no column sorts on that key', () => {
+		expect(
+			captureSortToViewState(columns, { key: 'unknown' as keyof Row, dir: 'asc' }),
+		).toBeUndefined();
+	});
+
+	it('round-trips through resolveSortFromViewState', () => {
+		const sort = { key: 'age' as const, dir: 'asc' as const };
+		const captured = captureSortToViewState(columns, sort);
+		const state: DataTableViewState = { columnOrder: [], sort: captured };
+		expect(resolveSortFromViewState(columns, state)).toEqual(sort);
 	});
 });

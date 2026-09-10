@@ -13,6 +13,7 @@ export type CellContext<T, V> = {
 // the context data for rendering a table header
 export type HeaderContext<T, V> = {
 	column: ColumnDefinition<T, V>;
+	sortKey?: SortKey<T>;
 };
 
 // shape for how to define a table column
@@ -24,6 +25,7 @@ export type ColumnDefinition<T, V = unknown> = {
 	align?: 'start' | 'center' | 'end';
 	padding?: number | string;
 	nowrap?: boolean;
+	sort?: keyof T /* defining a key makes the header click sortable asc/desc */;
 	accessor: (row: T) => V /* pull this column's value out of a row. uses createColumnHelper. */;
 	renderHeader?: (ctx: HeaderContext<T, V>) => ReactNode /* custom header cell renderer */;
 	renderCell?: (ctx: CellContext<T, V>) => ReactNode /* custom body cell renderer */;
@@ -53,9 +55,23 @@ export interface DataTableProps<T> {
 	 * filtered rows, not the original array.
 	 */
 	filter?: (row: T, index: number, array: T[]) => boolean;
+	/*
+	 * Optional sort. Pass this to run DataTable as a controlled component:
+	 * clicking a sortable header calls `onSortChange` with the next SortKey
+	 * instead of updating any state internally, so you're responsible for
+	 * feeding the new value back in (handy for persisting it alongside a
+	 * DataTableViewState). Omit it and DataTable manages sort itself,
+	 * seeded once from this prop's initial value.
+	 */
+	sort?: SortKey<T>;
+	/* Fires whenever the user changes sort by clicking a sortable header,
+	 * whether or not `sort` is controlled. */
+	onSortChange?: (sort: SortKey<T>) => void;
 	caption?: string;
 	onClick?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
 	onDoubleClick?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
 	onMouseOver?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
 	onMouseOut?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
 }
+
+export type SortKey<T> = { key?: keyof T; dir: 'asc' | 'desc' } | undefined;

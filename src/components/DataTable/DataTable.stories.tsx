@@ -30,10 +30,12 @@ const meta: Meta<typeof TypedDataTable> = {
 		columnDefinitions: sampleTableColumnDefinitions,
 		tableData: sampleTableData,
 		borderStyle: 'box',
+		sort: { key: 'started', dir: 'asc' },
 		onMouseOver: fn(),
 		onMouseOut: fn(),
 		onClick: fn(),
 		onDoubleClick: fn(),
+		onSortChange: fn(),
 	},
 };
 

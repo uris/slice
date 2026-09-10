@@ -31,7 +31,7 @@
 
 /* each table header cell is sticky by default */
 .table thead tr th {
-	position: var(--table-header-sticky-poition);
+	position: var(--table-header-sticky-position);
 	top: 0;
 	z-index: 1;
 	border-right: var(--table-border-width) solid var(--table-border-color);
