@@ -14,11 +14,7 @@ type IconBaseProps = {
 	onClick?: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
 };
 
-export type IconProps = Omit<
-	React.SVGAttributes<SVGSVGElement>,
-	keyof IconBaseProps
-> &
-	IconBaseProps;
+export type IconProps = Omit<React.SVGAttributes<SVGSVGElement>, keyof IconBaseProps> & IconBaseProps;
 
 export const SliceIcons = {
 	arrows: {

@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { setStyle } from '../../utils/functions/misc';
@@ -56,9 +50,7 @@ export const TabBar = React.memo((props: TabBarProps) => {
 	useEffect(() => {
 		let selectedIndex = 0;
 		if (selectedValue && options) {
-			selectedIndex = options.findIndex(
-				(option) => option.value === selectedValue,
-			);
+			selectedIndex = options.findIndex((option) => option.value === selectedValue);
 			setIndex(selectedIndex === -1 ? selected : selectedIndex);
 		} else {
 			setIndex(selected);
@@ -177,16 +169,7 @@ export const TabBar = React.memo((props: TabBarProps) => {
 			'--tab-bar-close-width': `${closeWidth}px`,
 			'--tab-bar-close-padding': setStyle(padding, '8px'),
 		} as React.CSSProperties;
-	}, [
-		tabGap,
-		height,
-		width,
-		border,
-		closeWidth,
-		padding,
-		borderColor,
-		justify,
-	]);
+	}, [tabGap, height, width, border, closeWidth, padding, borderColor, justify]);
 
 	return (
 		<div
@@ -245,8 +228,7 @@ const Option = React.memo(
 
 		// resolve the option icon color from selection and disabled state
 		const strokeColor = useMemo(() => {
-			if (!disabled && selected)
-				return theme.current.colors['core-text-special'];
+			if (!disabled && selected) return theme.current.colors['core-text-special'];
 			if (disabled) return theme.current.colors['core-text-disabled'];
 			return theme.current.colors['core-text-primary'];
 		}, [disabled, selected, theme]);
@@ -312,17 +294,7 @@ const Option = React.memo(
 				'--tab-bar-option-width': setTabWidth,
 				'--tab-bar-option-flex': setTabFlex,
 			} as React.CSSProperties;
-		}, [
-			padding,
-			iconSize,
-			disabled,
-			textColor,
-			iconGap,
-			setTabFlex,
-			setTabWidth,
-			setUnderline,
-			borderColor,
-		]);
+		}, [padding, iconSize, disabled, textColor, iconGap, setTabFlex, setTabWidth, setUnderline, borderColor]);
 
 		/* START.DEBUG */
 		useTrackRenders(props, 'TabBar');
@@ -347,18 +319,11 @@ const Option = React.memo(
 			>
 				{icon && (
 					<div className={css.icon}>
-						<Icon
-							name={icon}
-							fill={iconFill}
-							size={iconSize}
-							strokeColor={strokeColor}
-						/>
+						<Icon name={icon} fill={iconFill} size={iconSize} strokeColor={strokeColor} />
 					</div>
 				)}
 				{label}
-				{count !== 0 && (
-					<Badge variant={'light'} hideNull={false} count={count} />
-				)}
+				{count !== 0 && <Badge variant={'light'} hideNull={false} count={count} />}
 			</button>
 		);
 	},

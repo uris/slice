@@ -1,18 +1,8 @@
 'use client';
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import {
-	accessibleKeyDown,
-	normalizedPercent,
-	setStyle,
-} from '../../utils/functions/misc';
+import { accessibleKeyDown, normalizedPercent, setStyle } from '../../utils/functions/misc';
 import css from './Avatar.module.css';
 import type { AvatarProps } from './_types';
 
@@ -73,10 +63,7 @@ export const Avatar = React.memo((props: AvatarProps) => {
 			setTextSize('inherit');
 			return;
 		}
-		if (
-			fontSize === 'auto' ||
-			(typeof fontSize === 'number' && fontSize <= 1)
-		) {
+		if (fontSize === 'auto' || (typeof fontSize === 'number' && fontSize <= 1)) {
 			const parentHeight = ref.current?.offsetHeight;
 			if (!parentHeight) {
 				setTextSize('inherit');
@@ -97,10 +84,7 @@ export const Avatar = React.memo((props: AvatarProps) => {
 	}, [fontSize]);
 
 	// derive whether the avatar should render initials or image-only content
-	const displayContent = useMemo(
-		() => (image ? null : initials),
-		[image, initials],
-	);
+	const displayContent = useMemo(() => (image ? null : initials), [image, initials]);
 
 	// forward tooltip payload on hover
 	const onMouseEnter = useCallback(
@@ -133,16 +117,13 @@ export const Avatar = React.memo((props: AvatarProps) => {
 			'--avatar-frame': setStyle(frame),
 			'--avatar-border': `${resolvedBorderWidth}px`,
 			'--avatar-color': resolvedTextColor ?? 'var(--core-text-primary)',
-			'--avatar-bg-color':
-				resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
+			'--avatar-bg-color': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
 			'--avatar-border-color': borderColor ?? 'var(--core-outline-primary)',
-			'--avatar-border-color-hover':
-				borderColorHover ?? 'var(--core-outline-special)',
+			'--avatar-border-color-hover': borderColorHover ?? 'var(--core-outline-special)',
 			'--avatar-bg-image': `${bgImage}`,
 			'--avatar-font-size': setStyle(textSize),
 			'--avatar-outer-border-size': setStyle(outerBorderSize),
-			'--avatar-outer-border-color':
-				outerBorderColor ?? 'var(--core-surface-primary)',
+			'--avatar-outer-border-color': outerBorderColor ?? 'var(--core-surface-primary)',
 		} as React.CSSProperties;
 	}, [
 		size,

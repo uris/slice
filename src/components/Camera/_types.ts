@@ -13,9 +13,7 @@ export interface ToolbarButtonProps {
 	active?: boolean;
 	label?: string;
 	disabled?: boolean;
-	onMouseOver?: (
-		e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>,
-	) => void;
+	onMouseOver?: (e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => void;
 }
 
 export interface CameraElement {
@@ -80,18 +78,11 @@ export interface BaseCameraProps {
 	onNoVideo?: (reason?: string | Error) => void;
 	onNoAudio?: (reason?: string | Error) => void;
 	onChangeProfile?: (profile?: UserProfile) => void;
-	onChangeSettings?: (
-		settings?: Settings,
-		devices?: MediaDeviceInfo[] | Error,
-	) => void;
+	onChangeSettings?: (settings?: Settings, devices?: MediaDeviceInfo[] | Error) => void;
 	showControlBar?: boolean;
 	autoHideControlBar?: boolean;
 	controls?: Controls;
 	pipSnapshot?: boolean;
 }
 
-export type CameraProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof BaseCameraProps
-> &
-	BaseCameraProps;
+export type CameraProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof BaseCameraProps> & BaseCameraProps;

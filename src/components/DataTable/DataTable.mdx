@@ -1,0 +1,245 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {FlexDiv} from '../FlexDiv';
+import * as DataTableStories from './DataTable.stories';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+
+<Meta of={DataTableStories} />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        # DataTable
+        `DataTable` renders a scrollable, typed table bound to an array of row data. Columns are declared separately from the row shape, each with its own accessor and optional custom header/cell renderers, so the table's markup stays generic while every column stays fully typed.
+
+        ## Base element
+        `HTMLDivElement` (scroll wrapper) containing an `HTMLTableElement`.
+
+        ## Typing
+        `DataTable` is generic over `T`, the shape of a single row. Specify it explicitly so `columnDefinitions` and `tableData` are checked against your row type: `<DataTable<Person> columnDefinitions={columns} tableData={people} />`.
+
+        ## Props
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '24%'}} />
+            <col style={{width: '15%'}} />
+            <col style={{width: '60%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={"left"}>Prop</th>
+              <th className={"left"}>Type</th>
+              <th className={"left"}>Default</th>
+              <th className={"left"}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>columnDefinitions</code></td><td><code>{`ColumnDefinition<T>[]`}</code></td><td><code>[]</code></td><td>The column list. Build entries with <code>createColumnHelper</code> - see <a href="#building-columns">Building columns</a>.</td></tr>
+            <tr><td><code>tableData</code></td><td><code>T[]</code></td><td><code>[]</code></td><td>Row data to render, one <code>&lt;tr&gt;</code> per item, in array order.</td></tr>
+            <tr><td><code>getRowId</code></td><td><code>{`(row: T, index: number) => string | number`}</code></td><td><code>-</code></td><td>Stable row identity used for React's <code>key</code>. Falls back to the row's array index when omitted - fine for static data, but pass this when rows can be reordered, filtered, or streamed in, so React doesn't misattribute state across rows.</td></tr>
+            <tr><td><code>filter</code></td><td><code>{`(row: T, index: number, array: T[]) => boolean`}</code></td><td><code>-</code></td><td>Filters <code>tableData</code> before it's rendered - same signature as <code>Array.prototype.filter</code>, so an existing predicate (including a type-predicate one) can be passed straight through. Downstream <code>rowIndex</code> (in <code>getRowId</code>, the click/hover handlers, and <code>renderCell</code>) reflects position in the filtered rows, not the original array. See <a href="#filtering-rows">Filtering rows</a>.</td></tr>
+            <tr><td><code>caption</code></td><td><code>string</code></td><td><code>'Data Table'</code></td><td>Accessible name for the table. Rendered into a <code>&lt;caption&gt;</code> element that's visually hidden but present for screen readers.</td></tr>
+            <tr><td><code>height</code></td><td><code>{`number | string`}</code></td><td><code>'auto'</code></td><td>Wrapper height.</td></tr>
+            <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Wrapper width.</td></tr>
+            <tr><td><code>headerSticky</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Keeps the header row pinned to the top of the scroll area.</td></tr>
+            <tr><td><code>freezeColumn</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Pins the first column while the rest of the table scrolls horizontally.</td></tr>
+            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary)'</code></td><td>Table body background color.</td></tr>
+            <tr><td><code>backgroundColorHoverRow</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary-tint)'</code></td><td>Body cell background color for the currently hovered row. See <a href="#row-hover-and-click-events">Row hover and click events</a>.</td></tr>
+            <tr><td><code>headerBackgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Header row background color.</td></tr>
+            <tr><td><code>candyStripeBackgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary-tint)'</code></td><td>Body cell background color applied to every other row (odd row indexes, 0-based) for an alternating-stripe effect. Overridden by <code>backgroundColorHoverRow</code> while that row is hovered.</td></tr>
+            <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Border color used by the wrapper, sticky header shadow, and frozen column shadow.</td></tr>
+            <tr><td><code>borderStyle</code></td><td><code>{`'box' | 'row' | 'none'`}</code></td><td><code>'box'</code></td><td><code>'box'</code> draws the full grid (outer border, column dividers, row separators). <code>'row'</code> draws horizontal row separators only - no outer left/right border, no vertical column dividers. <code>'none'</code> draws no borders at all.</td></tr>
+            <tr><td><code>freezeColumnBackgroundColor</code></td><td><code>string</code></td><td><code>-</code></td><td>Declared prop type; not currently used by the component implementation.</td></tr>
+            <tr><td><code>onClick</code></td><td><code>{`(col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void`}</code></td><td><code>-</code></td><td>Fires on a body cell click (and Enter/Space when the cell has focus). See <a href="#row-hover-and-click-events">Row hover and click events</a>.</td></tr>
+            <tr><td><code>onDoubleClick</code></td><td><code>{`(col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void`}</code></td><td><code>-</code></td><td>Fires on a body cell double-click, instead of <code>onClick</code>.</td></tr>
+            <tr><td><code>onMouseOver</code></td><td><code>{`(col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void`}</code></td><td><code>-</code></td><td>Fires when a body cell is hovered or focused.</td></tr>
+            <tr><td><code>onMouseOut</code></td><td><code>{`(col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void`}</code></td><td><code>-</code></td><td>Fires when a body cell stops being hovered or focused.</td></tr>
+          </tbody>
+        </table>
+
+        ## Building columns
+        Build the column list with `createColumnHelper<T>()`. It infers each column's value type from its `accessor`, so `renderCell`/`renderHeader` receive a typed `value` instead of `unknown`:
+
+        <RenderSource>
+        ```
+        const column = createColumnHelper<Person>();
+
+        const columns = [
+            column.accessor(row => row.age, {
+                id: 'age',
+                title: 'Age',
+                align: 'end',
+                renderCell: ({ value }) => <span>{value} yrs</span>, // value: number
+            }),
+        ];
+        ```
+        </RenderSource>
+
+        There's deliberately no separate "key" shorthand (e.g. `accessorKey: 'age'`) - `row => row.age` is exactly as type-safe as a string key, so there's a single, consistent way to define every column, whether its value comes straight off the row or is computed.
+
+        ### Column fields
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '24%'}} />
+            <col style={{width: '15%'}} />
+            <col style={{width: '60%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={"left"}>Field</th>
+              <th className={"left"}>Type</th>
+              <th className={"left"}>Default</th>
+              <th className={"left"}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>id</code></td><td><code>string</code></td><td><code>-</code></td><td>Unique column id. Used for the React key and as the reference point for persisted layout - see <a href="#persisting-column-layout">Persisting column layout</a>.</td></tr>
+            <tr><td><code>title</code></td><td><code>string</code></td><td><code>-</code></td><td>Header text, shown when no <code>renderHeader</code> is given.</td></tr>
+            <tr><td><code>accessor</code></td><td><code>{`(row: T) => V`}</code></td><td><code>-</code></td><td>Reads this column's value out of a row. Passed to <code>createColumnHelper(...).accessor(...)</code> - see above.</td></tr>
+            <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Column width.</td></tr>
+            <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>16</code></td><td>Cell padding, for both header and body cells. A number is treated as pixels.</td></tr>
+            <tr><td><code>nowrap</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Prevents cell content from wrapping. Applies to body cells only - header cells always wrap normally.</td></tr>
+            <tr><td><code>justify</code></td><td><code>{`'start' | 'center' | 'end'`}</code></td><td><code>'center'</code></td><td>Horizontal alignment of cell content.</td></tr>
+            <tr><td><code>align</code></td><td><code>{`'start' | 'center' | 'end'`}</code></td><td><code>'center'</code></td><td>Vertical alignment of cell content.</td></tr>
+            <tr><td><code>renderHeader</code></td><td><code>{`(ctx: { column }) => ReactNode`}</code></td><td><code>-</code></td><td>Custom header cell. Falls back to plain <code>title</code> text when omitted.</td></tr>
+            <tr><td><code>renderCell</code></td><td><code>{`(ctx: { row, value, rowIndex }) => ReactNode`}</code></td><td><code>-</code></td><td>Custom body cell. Falls back to <code>String(value)</code> when omitted. Receives the whole row, not just <code>value</code> - useful for fallbacks, see <a href="#cell-fallbacks">Cell fallbacks</a>.</td></tr>
+          </tbody>
+        </table>
+
+        ## Cell fallbacks
+        Because `renderCell` gets `row` as well as `value`, a column can fall back to a different field without reshaping the accessor's return type:
+
+        <RenderSource>
+        ```
+        column.accessor(row => row.pic, {
+            id: 'photo',
+            title: 'Profile Photo',
+            renderCell: ({ value, row }) =>
+                value ? <Avatar image={value} name={row.name} /> : <Avatar name={row.name} />,
+        })
+        ```
+        </RenderSource>
+
+        If a resolved display value needs to exist independent of rendering (for CSV export, search, or sort, where there's no `row` around to fall back to), push the fallback into the accessor instead and return something that still distinguishes the cases, such as a small discriminated union (`{ kind: 'image'; url: string } | { kind: 'initials'; label: string }`), rather than collapsing both cases into one plain string.
+
+        ## Filtering rows
+        `filter` narrows `tableData` before it's rendered, using the exact signature of `Array.prototype.filter`, so an existing predicate - including a type-narrowing one - can be passed straight through without adapting it:
+
+        <RenderSource>
+        ```
+        const filter = (row: Person) => row.country !== '';
+
+        <DataTable<Person> columnDefinitions={columns} tableData={people} filter={filter} />
+        ```
+        </RenderSource>
+
+        `DataTable` doesn't manage filter state itself - `filter` is a plain predicate prop, so building a search box or a set of toggles on top of it is just component state feeding a new predicate in on every render. Because filtering happens before rendering, `rowIndex` everywhere downstream (`getRowId`, `onClick`/`onDoubleClick`/`onMouseOver`/`onMouseOut`, and `renderCell`'s `CellContext`) reflects the row's position in the filtered rows, not the original `tableData` array.
+
+        ## Row hover and click events
+        `onClick`, `onDoubleClick`, `onMouseOver`, and `onMouseOut` all fire per body cell with the same arguments - the cell's `ColumnDefinition`, its column index, the row, and the row's index - so a single handler can branch on `col.id` when it needs to know which column was involved:
+
+        <RenderSource>
+        ```
+        <DataTable<Person>
+            columnDefinitions={columns}
+            tableData={people}
+            onClick={(col, colId, row, rowIndex) => {
+                if (col.id === 'name') selectPerson(row);
+            }}
+        />
+        ```
+        </RenderSource>
+
+        Hovering (or focusing, via keyboard) a cell also drives the row's background: `backgroundColorHoverRow` is applied to every cell in that row for as long as it's hovered, taking priority over `candyStripeBackgroundColor`'s alternating stripe. This is purely visual state internal to `DataTable` - `onMouseOver`/`onMouseOut` are how a consumer observes it, not how it's controlled.
+
+        ## Persisting column layout
+        `columnDefinitions` always carries functions (`accessor`, `renderHeader`, `renderCell`), so it can't be saved as-is. What actually needs to survive a reload or sync to a backend is much smaller: which columns are visible, what order they're in, and how wide they are. `DataTableViewState` is that smaller, plain-data shape, referencing columns purely by `id`:
+
+        <RenderSource>
+        ```
+        type DataTableViewState = {
+            columnOrder: string[];
+            hiddenColumns?: string[];
+            columnWidths?: Record<string, number | string>;
+        };
+        ```
+        </RenderSource>
+
+        `applyDataTableViewState(columns, state)` reconciles a code-defined `columnDefinitions` array against a persisted `DataTableViewState`: it reorders to match `columnOrder`, drops `hiddenColumns`, applies `columnWidths`, appends any columns the state doesn't mention (for example a column added in code after the state was captured), and silently ignores ids in `columnOrder` that no longer exist (a deleted or renamed column) rather than breaking the table. It's a standalone function, not a `DataTable` prop - call it wherever `columnDefinitions` is assembled, before it reaches `DataTable`. `createDefaultViewState(columns)` gives you a starting `DataTableViewState` that reflects the columns' natural order, for when nothing's been saved yet.
+
+        ## Code examples
+        </Unstyled>
+
+        <RenderSource>
+        ```
+        import { DataTable, createColumnHelper } from '@apple-pie/slice';
+
+        type Person = {
+            name: string;
+            age: number;
+            pic: string;
+            country: string;
+            compensation: number;
+        };
+
+        const column = createColumnHelper<Person>();
+
+        const columns = [
+            column.accessor(row => row.name, { id: 'name', title: 'Full Name' }),
+            column.accessor(row => row.age, {
+                id: 'age',
+                title: 'Age',
+                align: 'end',
+                renderCell: ({ value }) => <span>{value} yrs</span>,
+            }),
+            column.accessor(row => row.compensation, {
+                id: 'salary',
+                title: 'Salary',
+                align: 'end',
+                renderCell: ({ value }) => <span>${value.toLocaleString()}</span>,
+            }),
+        ];
+
+        const people: Person[] = [
+            { name: 'John Appleseed', age: 25, pic: '', country: 'Portugal', compensation: 1_000_000 },
+        ];
+
+        export function PeopleTableExample() {
+            return (
+                <DataTable<Person>
+                    columnDefinitions={columns}
+                    tableData={people}
+                    getRowId={row => row.name}
+                    id="people-table-example"
+                    data-testid="people-table-example"
+                />
+            );
+        }
+        ```
+        </RenderSource>
+
+        <RenderSource>
+        ```
+        import { DataTable, applyDataTableViewState, type DataTableViewState } from '@apple-pie/slice';
+
+        // as if just read back from localStorage or a backend
+        const savedViewState: DataTableViewState = {
+            columnOrder: ['salary', 'name'],
+            hiddenColumns: ['age'],
+            columnWidths: { salary: '30%' },
+        };
+
+        export function PeopleTableWithSavedLayoutExample() {
+            return (
+                <DataTable<Person>
+                    columnDefinitions={applyDataTableViewState(columns, savedViewState)}
+                    tableData={people}
+                    getRowId={row => row.name}
+                />
+            );
+        }
+        ```
+        </RenderSource>
+    </FlexDiv>
+</FlexDiv>

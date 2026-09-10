@@ -10,10 +10,7 @@ export type VolumeStore = {
 		attachFeedbackElement: (element: AudioElement) => void;
 		detachFeedbackElement: (element: AudioElement) => void;
 		playFeedback: (volume?: number) => Promise<void>;
-		setVolume: (
-			volume: number,
-			options?: { playFeedback?: boolean },
-		) => Promise<void>;
+		setVolume: (volume: number, options?: { playFeedback?: boolean }) => Promise<void>;
 		mute: () => Promise<void>;
 		unmute: () => Promise<void>;
 		clearMedia: () => void;

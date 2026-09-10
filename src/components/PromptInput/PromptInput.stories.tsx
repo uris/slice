@@ -3,11 +3,7 @@ import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { fn } from 'storybook/test';
 import { PromptInput } from './PromptInput';
 
-const attachments = [
-	{ file: 'document.doc' },
-	{ file: 'presentation.ppt' },
-	{ file: 'spreadsheet.xls' },
-];
+const attachments = [{ file: 'document.doc' }, { file: 'presentation.ppt' }, { file: 'spreadsheet.xls' }];
 
 const meta: Meta<typeof PromptInput> = {
 	title: 'Components/PromptInput',
@@ -47,13 +43,7 @@ export default meta;
 export const Default: StoryObj<typeof PromptInput> = {
 	render: (args) => {
 		return (
-			<FlexDiv
-				direction={'row'}
-				justify={'center'}
-				align={'center'}
-				absolute
-				padding={64}
-			>
+			<FlexDiv direction={'row'} justify={'center'} align={'center'} absolute padding={64}>
 				<PromptInput {...args} />
 			</FlexDiv>
 		);
@@ -63,18 +53,8 @@ export const Default: StoryObj<typeof PromptInput> = {
 export const Prompt: StoryObj<typeof PromptInput> = {
 	render: (args) => {
 		return (
-			<FlexDiv
-				direction={'row'}
-				justify={'center'}
-				align={'center'}
-				absolute
-				padding={64}
-			>
-				<PromptInput
-					{...args}
-					value={'This is my question to you ...'}
-					attachments={attachments}
-				/>
+			<FlexDiv direction={'row'} justify={'center'} align={'center'} absolute padding={64}>
+				<PromptInput {...args} value={'This is my question to you ...'} attachments={attachments} />
 			</FlexDiv>
 		);
 	},
@@ -83,13 +63,7 @@ export const Prompt: StoryObj<typeof PromptInput> = {
 export const Working: StoryObj<typeof PromptInput> = {
 	render: (args) => {
 		return (
-			<FlexDiv
-				direction={'row'}
-				justify={'center'}
-				align={'center'}
-				absolute
-				padding={64}
-			>
+			<FlexDiv direction={'row'} justify={'center'} align={'center'} absolute padding={64}>
 				<PromptInput {...args} working stopEnabled />
 			</FlexDiv>
 		);

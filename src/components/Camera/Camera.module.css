@@ -108,8 +108,7 @@
 	border: 1px solid transparent;
 	border-radius: 100%;
 	opacity: var(--toolbar-button-opacity);
-	transition: background, border var(--motion-water-duration)
-		var(--motion-water) 0s;
+	transition: background, border var(--motion-water-duration) var(--motion-water) 0s;
 }
 
 .buttonIcon:hover {

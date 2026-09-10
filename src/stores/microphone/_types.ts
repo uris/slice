@@ -27,9 +27,7 @@ export type MicrophoneStoreActions = {
 	toggleMute: () => void;
 	setInputVolume: (volume: number) => number;
 	refreshMicrophones: () => Promise<MediaDeviceInfo[]>;
-	setMicrophone: (
-		deviceId: string | DropDownOption<MicOption>,
-	) => Promise<void>;
+	setMicrophone: (deviceId: string | DropDownOption<MicOption>) => Promise<void>;
 };
 
 export type MicrophoneStore = MicrophoneStoreState & {

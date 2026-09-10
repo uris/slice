@@ -48,8 +48,5 @@ type ModalBaseProps<T = string> = {
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
-export type ModalProps<T = string> = Omit<
-	React.HTMLAttributes<HTMLElement>,
-	keyof ModalBaseProps<T>
-> &
+export type ModalProps<T = string> = Omit<React.HTMLAttributes<HTMLElement>, keyof ModalBaseProps<T>> &
 	ModalBaseProps<T>;

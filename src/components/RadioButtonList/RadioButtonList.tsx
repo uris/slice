@@ -176,8 +176,6 @@ function RadioButtonListComponent<T = string>(props: RadioButtonListProps<T>) {
 
 RadioButtonListComponent.displayName = 'RadioButtonList';
 
-export const RadioButtonList = React.memo(RadioButtonListComponent) as <
-	T = string,
->(
+export const RadioButtonList = React.memo(RadioButtonListComponent) as <T = string>(
 	props: RadioButtonListProps<T>,
 ) => React.JSX.Element;

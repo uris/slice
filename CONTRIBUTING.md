@@ -48,6 +48,8 @@ npm run lint
 - Keep package stylesheet behavior intentional. Public theme and base styles are published through `@apple-pie/slice/styles.css`, which is built from `src/theme.css`.
 - `ThemeProvider` manages theme state and document attributes. It does not bootstrap theme CSS by itself.
 - If you move or rename public CSS files, update `src/theme.css`, the build pipeline, `package.json` `exports`, and public usage docs in the same change.
+- Component CSS Modules (`src/components/**/*.module.css`) must stay unlayered and must not use `!important`. That is what lets them always win the cascade against page-level or docs-only CSS, regardless of specificity.
+- Global, bare-tag-selector CSS meant only for Storybook docs cosmetics (e.g. `.storybook/preview-body.html`, MDX prose styling) must be wrapped in `@layer slice-docs-chrome`, not left unlayered and not forced with `!important`. Unlayered rules always beat layered ones, so this guarantees docs styling can never leak into and override an actual component's rendered output on a docs page.
 
 ## Component Lifecycle Checklist
 

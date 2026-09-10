@@ -1,13 +1,6 @@
 'use client';
 
-import React, {
-	type SyntheticEvent,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { setStyle } from '../../utils/functions/misc';
 import { IconButton } from '../IconButton';
 import { Slider } from '../Slider';
@@ -100,24 +93,18 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 				onProgress?.(percentPlayed);
 				progress.current = percentPlayed;
 				const isAtZero = videoRef.current?.currentTime === 0;
-				const isAtEnd =
-					videoRef.current?.currentTime === videoRef.current?.duration;
+				const isAtEnd = videoRef.current?.currentTime === videoRef.current?.duration;
 				if (isAtZero && target.paused) {
-					if (playState.current !== PlayState.Stopped)
-						onPlayStateChange?.(PlayState.Stopped);
+					if (playState.current !== PlayState.Stopped) onPlayStateChange?.(PlayState.Stopped);
 					playState.current = PlayState.Stopped;
 				} else if (isAtEnd) {
-					if (playState.current !== PlayState.Ended)
-						onPlayStateChange?.(PlayState.Ended);
+					if (playState.current !== PlayState.Ended) onPlayStateChange?.(PlayState.Ended);
 					playState.current = PlayState.Ended;
 				} else {
 					if (target.paused && playState.current !== PlayState.Paused) {
 						onPlayStateChange?.(PlayState.Paused);
 						playState.current = PlayState.Paused;
-					} else if (
-						!target.paused &&
-						playState.current !== PlayState.Playing
-					) {
+					} else if (!target.paused && playState.current !== PlayState.Playing) {
 						onPlayStateChange?.(PlayState.Playing);
 						playState.current = PlayState.Playing;
 					}
@@ -137,11 +124,9 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		if (videoRef.current?.paused) videoRef.current.play().then(() => null);
 		onPlay?.();
 		setIsPlaying(true);
-		const isAtEnd =
-			videoRef.current?.currentTime === videoRef.current?.duration;
+		const isAtEnd = videoRef.current?.currentTime === videoRef.current?.duration;
 		if (isAtEnd) {
-			if (playState.current !== PlayState.Ended)
-				onPlayStateChange?.(PlayState.Ended);
+			if (playState.current !== PlayState.Ended) onPlayStateChange?.(PlayState.Ended);
 			playState.current = PlayState.Ended;
 		} else if (playState.current !== PlayState.Playing) {
 			onPlayStateChange?.(PlayState.Playing);
@@ -154,8 +139,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		onPause?.();
 		setIsPlaying(false);
 		const isAtZero = videoRef.current?.currentTime === 0;
-		const isAtEnd =
-			videoRef.current?.currentTime === videoRef.current?.duration;
+		const isAtEnd = videoRef.current?.currentTime === videoRef.current?.duration;
 		if (!isAtEnd && !isAtZero) {
 			if (playState.current !== PlayState.Paused) {
 				onPlayStateChange?.(PlayState.Paused);
@@ -224,8 +208,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		const video = videoRef.current;
 		if (!video) return;
 		if (state) video.requestFullscreen().catch(() => null);
-		else if (document.fullscreenElement === video)
-			document.exitFullscreen().catch(() => null);
+		else if (document.fullscreenElement === video) document.exitFullscreen().catch(() => null);
 	}, []);
 
 	// handle mute / unmute
@@ -324,14 +307,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 				return videoRef.current ?? undefined;
 			},
 		}),
-		[
-			handlePlayClick,
-			handleRestart,
-			handleMute,
-			handleFullScreen,
-			handleRateChange,
-			handleVolumeChange,
-		],
+		[handlePlayClick, handleRestart, handleMute, handleFullScreen, handleRateChange, handleVolumeChange],
 	);
 
 	const showCustomControls = useMemo(() => {
@@ -352,17 +328,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 			'--video-controls-opacity': hovered ? 1 : 0,
 			'--video-progress-padding-left': customControls.quit ? '8px' : '16px',
 		} as React.CSSProperties;
-	}, [
-		width,
-		height,
-		borderRadius,
-		borderSize,
-		borderColor,
-		backgroundColor,
-		objectFit,
-		hovered,
-		customControls.quit,
-	]);
+	}, [width, height, borderRadius, borderSize, borderColor, backgroundColor, objectFit, hovered, customControls.quit]);
 
 	// memo speaker icon
 	const speakerIcon = useMemo(() => {

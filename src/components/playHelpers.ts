@@ -14,9 +14,7 @@ function isFn(value: unknown): value is (...args: unknown[]) => unknown {
 }
 
 function getOverlay(canvasElement: HTMLElement): HTMLElement | null {
-	return canvasElement.querySelector(
-		'[class*="overlay"]',
-	) as HTMLElement | null;
+	return canvasElement.querySelector('[class*="overlay"]') as HTMLElement | null;
 }
 
 async function expectCanvas(canvasElement: HTMLElement) {
@@ -24,24 +22,16 @@ async function expectCanvas(canvasElement: HTMLElement) {
 	await expect(canvasElement.childElementCount).toBeGreaterThan(0);
 }
 
-export async function runAvatarGroupPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runAvatarGroupPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const avatars = canvas.getAllByLabelText(/User Avatar -/i);
 	const storyArgs = asArgs(args);
-	const expected = Array.isArray(storyArgs.avatars)
-		? storyArgs.avatars.length
-		: avatars.length;
+	const expected = Array.isArray(storyArgs.avatars) ? storyArgs.avatars.length : avatars.length;
 	await expect(avatars).toHaveLength(expected);
 }
 
-export async function runBadgePlay<TArgs>({
-	canvasElement,
-	args,
-}: PlayContext<TArgs>) {
+export async function runBadgePlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const badge = canvas.getByRole('status');
@@ -52,18 +42,12 @@ export async function runBadgePlay<TArgs>({
 	}
 }
 
-export async function runCheckBoxPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runCheckBoxPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
 	const checkbox = canvas.getByRole('checkbox');
-	await expect(checkbox).toHaveAttribute(
-		'aria-checked',
-		String(storyArgs.checked ?? false),
-	);
+	await expect(checkbox).toHaveAttribute('aria-checked', String(storyArgs.checked ?? false));
 	await userEvent.click(checkbox);
 	await userEvent.keyboard('{Space}');
 	if (isFn(storyArgs.onChange)) {
@@ -71,10 +55,7 @@ export async function runCheckBoxPlay<TArgs>({
 	}
 }
 
-export async function runDivInputPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runDivInputPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -98,24 +79,16 @@ export async function runDotPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const dot = canvas.getByRole('status');
-	await expect(dot).toHaveAttribute(
-		'aria-label',
-		expect.stringContaining('dot'),
-	);
+	await expect(dot).toHaveAttribute('aria-label', expect.stringContaining('dot'));
 }
 
-export async function runDraggablePanelPlay<TArgs>({
-	canvasElement,
-	args,
-}: PlayContext<TArgs>) {
+export async function runDraggablePanelPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
-	const handle = Array.from(canvasElement.querySelectorAll('div')).find(
-		(node) => {
-			const el = node as HTMLElement;
-			return el.style.cursor === 'col-resize';
-		},
-	) as HTMLElement | undefined;
+	const handle = Array.from(canvasElement.querySelectorAll('div')).find((node) => {
+		const el = node as HTMLElement;
+		return el.style.cursor === 'col-resize';
+	}) as HTMLElement | undefined;
 	if (handle) {
 		fireEvent.mouseDown(handle, { clientX: 120 });
 		fireEvent.mouseMove(document.documentElement, { clientX: 180 });
@@ -132,10 +105,7 @@ export async function runDraggablePanelPlay<TArgs>({
 	}
 }
 
-export async function runDropDownPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runDropDownPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -155,10 +125,7 @@ export async function runDropDownPlay<TArgs>({
 	}
 }
 
-export async function runErrorSummaryPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runErrorSummaryPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -172,24 +139,17 @@ export async function runErrorSummaryPlay<TArgs>({
 			typeof (entry as { title?: unknown }).title === 'string'
 		) {
 			const title = (entry as { title: string }).title;
-			await expect(
-				canvas.getByText((content) => content.includes(title)),
-			).toBeInTheDocument();
+			await expect(canvas.getByText((content) => content.includes(title))).toBeInTheDocument();
 		}
 	}
 }
 
-export async function runFlexDivPlay<TArgs>({
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runFlexDivPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	await expect(canvasElement.querySelector('div')).toBeInTheDocument();
 }
 
-export async function runGrouperPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runGrouperPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -207,10 +167,7 @@ export async function runGrouperPlay<TArgs>({
 	}
 }
 
-export async function runIconPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runIconPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -221,10 +178,7 @@ export async function runIconPlay<TArgs>({
 	}
 }
 
-export async function runIconButtonPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runIconButtonPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -235,18 +189,13 @@ export async function runIconButtonPlay<TArgs>({
 	}
 }
 
-export async function runLogosPlay<TArgs>({
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runLogosPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	await expect(canvas.getByRole('img')).toBeInTheDocument();
 }
 
-export async function runOverlayPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runOverlayPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
 	const overlay = getOverlay(canvasElement);
@@ -262,10 +211,7 @@ export async function runOverlayPlay<TArgs>({
 	}
 }
 
-export async function runPagerPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runPagerPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
 	const bullets = canvasElement.querySelectorAll('input[type="button"]');
@@ -278,20 +224,13 @@ export async function runPagerPlay<TArgs>({
 	}
 }
 
-export async function runProgressIndicatorPlay<TArgs>({
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runProgressIndicatorPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
-	await expect(
-		canvas.getByRole('img', { name: /Loading spinner/i }),
-	).toBeInTheDocument();
+	await expect(canvas.getByRole('img', { name: /Loading spinner/i })).toBeInTheDocument();
 }
 
-export async function runRadioButtonPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runRadioButtonPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -304,10 +243,7 @@ export async function runRadioButtonPlay<TArgs>({
 	}
 }
 
-export async function runRadioButtonListPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runRadioButtonListPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -318,10 +254,7 @@ export async function runRadioButtonListPlay<TArgs>({
 	}
 }
 
-export async function runSliderPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runSliderPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -339,30 +272,20 @@ export async function runSliderPlay<TArgs>({
 	}
 }
 
-export async function runSpacerPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runSpacerPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
-	const spacer = canvasElement.querySelector(
-		'[style*="min-height"]',
-	) as HTMLElement | null;
+	const spacer = canvasElement.querySelector('[style*="min-height"]') as HTMLElement | null;
 	await expect(spacer).toBeInTheDocument();
 	if (spacer && typeof storyArgs.size === 'number') {
 		await expect(spacer).toHaveStyle({ minHeight: `${storyArgs.size}px` });
 	}
 }
 
-export async function runSwitchPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runSwitchPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
-	const el = canvasElement.querySelector(
-		'[style*="--switch-width"]',
-	) as HTMLElement | null;
+	const el = canvasElement.querySelector('[style*="--switch-width"]') as HTMLElement | null;
 	if (el) {
 		await userEvent.click(el);
 		await userEvent.click(el);
@@ -372,10 +295,7 @@ export async function runSwitchPlay<TArgs>({
 	}
 }
 
-export async function runTabBarPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runTabBarPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -393,10 +313,7 @@ export async function runTabBarPlay<TArgs>({
 	}
 }
 
-export async function runTextAreaPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runTextAreaPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -421,10 +338,7 @@ export async function runTextAreaPlay<TArgs>({
 	}
 }
 
-export async function runTextFieldPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runTextFieldPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -463,10 +377,7 @@ export async function runTextFieldPlay<TArgs>({
 	}
 }
 
-export async function runButtonPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runButtonPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -476,10 +387,7 @@ export async function runButtonPlay<TArgs>({
 	}
 }
 
-export async function runButtonBarPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runButtonBarPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -499,10 +407,7 @@ export async function runButtonBarPlay<TArgs>({
 	}
 }
 
-export async function runCardPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runCardPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -512,19 +417,14 @@ export async function runCardPlay<TArgs>({
 	}
 }
 
-export async function runChipPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runChipPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
 	const chipLabel =
-		typeof storyArgs.children === 'string' ||
-		typeof storyArgs.children === 'number'
+		typeof storyArgs.children === 'string' || typeof storyArgs.children === 'number'
 			? String(storyArgs.children)
-			: typeof storyArgs.label === 'string' ||
-					typeof storyArgs.label === 'number'
+			: typeof storyArgs.label === 'string' || typeof storyArgs.label === 'number'
 				? String(storyArgs.label)
 				: null;
 	if (!chipLabel) return;
@@ -539,10 +439,7 @@ export async function runChipPlay<TArgs>({
 	}
 }
 
-export async function runUIFileIconPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runUIFileIconPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
@@ -553,16 +450,12 @@ export async function runUIFileIconPlay<TArgs>({
 	}
 }
 
-export async function runLabelPlay<TArgs>({
-	args,
-	canvasElement,
-}: PlayContext<TArgs>) {
+export async function runLabelPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
 	const labelText =
-		typeof storyArgs.children === 'string' ||
-		typeof storyArgs.children === 'number'
+		typeof storyArgs.children === 'string' || typeof storyArgs.children === 'number'
 			? String(storyArgs.children)
 			: typeof storyArgs.label === 'string'
 				? storyArgs.label

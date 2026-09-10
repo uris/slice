@@ -71,22 +71,12 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
 	const cssVars = useMemo(() => {
 		return {
 			'--tooltip-padding': padding ?? '3px 6px',
-			'--tooltip-background':
-				resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
+			'--tooltip-background': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
 			'--tooltip-color': resolvedTextColor ?? 'var(--core-text-primary)',
-			'--tooltip-border': border
-				? `1px solid ${borderColor ?? 'var(--core-outline-primary)'}`
-				: 'unset',
+			'--tooltip-border': border ? `1px solid ${borderColor ?? 'var(--core-outline-primary)'}` : 'unset',
 			'--tooltip-border-radius': resolvedBorderRadius ?? '4px',
 		} as React.CSSProperties;
-	}, [
-		padding,
-		resolvedBackgroundColor,
-		resolvedTextColor,
-		border,
-		borderColor,
-		resolvedBorderRadius,
-	]);
+	}, [padding, resolvedBackgroundColor, resolvedTextColor, border, borderColor, resolvedBorderRadius]);
 
 	// resolve inline coordinates from the current tooltip position
 	const coordStyle = useMemo(() => {
@@ -119,11 +109,7 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
 				visibility: ready ? 'visible' : 'hidden',
 			}}
 			initial={{ opacity: 0 }}
-			animate={
-				animate
-					? { opacity: 1, transition: { ease: 'easeInOut', duration: 0.25 } }
-					: undefined
-			}
+			animate={animate ? { opacity: 1, transition: { ease: 'easeInOut', duration: 0.25 } } : undefined}
 			exit={{ opacity: 0, transition: { duration: 0 } }}
 			{...rest}
 		>

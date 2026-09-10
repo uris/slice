@@ -52,17 +52,13 @@ export const Default: StoryObj<typeof Modal> = {
 		return (
 			<FlexDiv absolute justify={'center'} align={'center'} ref={ref}>
 				<Modal<string> {...args} actions={demoActions} title={'Confirmation'}>
-					Are you sure you would like to continue? Are you sure you would like
-					to continue? Are you sure you would like to continue? Are you sure you
-					would like to continue? Are you sure you would like to continue? Are
-					you sure you would like to continue? Are you sure you would like to
-					continue? Are you sure you would like to continue? Are you sure you
-					would like to continue? Are you sure you would like to continue? Are
-					you sure you would like to continue? Are you sure you would like to
-					continue? Are you sure you would like to continue? Are you sure you
-					would like to continue? Are you sure you would like to continue? Are
-					you sure you would like to continue? Are you sure you would like to
-					continue? Are you sure you would like to continue?
+					Are you sure you would like to continue? Are you sure you would like to continue? Are you sure you would like
+					to continue? Are you sure you would like to continue? Are you sure you would like to continue? Are you sure
+					you would like to continue? Are you sure you would like to continue? Are you sure you would like to continue?
+					Are you sure you would like to continue? Are you sure you would like to continue? Are you sure you would like
+					to continue? Are you sure you would like to continue? Are you sure you would like to continue? Are you sure
+					you would like to continue? Are you sure you would like to continue? Are you sure you would like to continue?
+					Are you sure you would like to continue? Are you sure you would like to continue?
 				</Modal>
 			</FlexDiv>
 		);

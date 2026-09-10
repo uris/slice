@@ -4,12 +4,7 @@ import { Button } from '../../components/Button';
 import { FlexDiv } from '../../components/FlexDiv';
 import { Spacer } from '../../components/Spacer';
 import { TextArea } from '../../components/TextArea';
-import {
-	useLocalDB,
-	useLocalDBError,
-	useLocalDBValues,
-	useManageLocalDB,
-} from './localDBStore';
+import { useLocalDB, useLocalDBError, useLocalDBValues, useManageLocalDB } from './localDBStore';
 
 const STORE_NAME = 'storybook-localdb-messages';
 const MAX_MESSAGES = 10;
@@ -47,19 +42,11 @@ function LocalDBStoreDemo() {
 	};
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'center'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
 			<FlexDiv width={520} height={'auto'} direction={'column'} gap={12}>
 				<h1>Local IndexedDB Store Demo</h1>
-				Add up to {MAX_MESSAGES} short messages. The list is stored in IndexedDB
-				called '{STORE_NAME}' and survives page refreshes. Note: inspect the
-				browser dev tools to see the IndexedDB store.
+				Add up to {MAX_MESSAGES} short messages. The list is stored in IndexedDB called '{STORE_NAME}' and survives page
+				refreshes. Note: inspect the browser dev tools to see the IndexedDB store.
 				<FlexDiv width={'fill'} gap={8} align={'end'}>
 					<TextArea
 						name={'message'}
@@ -72,11 +59,7 @@ function LocalDBStoreDemo() {
 					<Button
 						label={'Add to IndexedDB Store'}
 						onClick={() => void handleAdd()}
-						state={
-							!draft.trim() || values.length >= MAX_MESSAGES
-								? 'disabled'
-								: 'normal'
-						}
+						state={!draft.trim() || values.length >= MAX_MESSAGES ? 'disabled' : 'normal'}
 					/>
 				</FlexDiv>
 				<h4>IndexedDB Store Entries</h4>
@@ -118,11 +101,7 @@ function LocalDBStoreDemo() {
 					)}
 				</FlexDiv>
 				<Spacer size={24} />
-				<Button
-					label={'Destroy Store'}
-					destructive={true}
-					onClick={() => void destroyStore(STORE_NAME)}
-				/>
+				<Button label={'Destroy Store'} destructive={true} onClick={() => void destroyStore(STORE_NAME)} />
 			</FlexDiv>
 		</FlexDiv>
 	);

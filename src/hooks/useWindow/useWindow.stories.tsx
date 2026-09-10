@@ -7,14 +7,7 @@ function UseWindowDemo() {
 	const win = useWindow();
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'center'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
 			<FlexDiv
 				width={420}
 				height={'auto'}
@@ -33,28 +26,18 @@ function UseWindowDemo() {
 				<span>IsAppleDevice: {win.isAppleDevice ? 'true' : 'false'}</span>
 				<span>Display Pixel Density: {win.dpr}</span>
 				<span>"True" height token: {win.height}</span>
-				<span>
-					(Geo)Location Supported: {win.geolocationSupported ? 'true' : 'false'}
-				</span>
+				<span>(Geo)Location Supported: {win.geolocationSupported ? 'true' : 'false'}</span>
 				{win.location && (
 					<span>
 						Geolocation:{' '}
-						{win.location
-							? `${win.location.latitude.toFixed(4)}, ${win.location.longitude.toFixed(4)}`
-							: '-'}
+						{win.location ? `${win.location.latitude.toFixed(4)}, ${win.location.longitude.toFixed(4)}` : '-'}
 					</span>
 				)}
-				{win.locationError && (
-					<span>Geolocation Error: {win.locationError?.message ?? '-'}</span>
-				)}
+				{win.locationError && <span>Geolocation Error: {win.locationError?.message ?? '-'}</span>}
 				<Button
 					label={'Request location'}
 					onClick={() => win.requestGeolocation()}
-					state={
-						!win.geolocationSupported || win.gettingLocation
-							? 'disabled'
-							: 'normal'
-					}
+					state={!win.geolocationSupported || win.gettingLocation ? 'disabled' : 'normal'}
 					working={win.gettingLocation}
 					progress={true}
 				/>

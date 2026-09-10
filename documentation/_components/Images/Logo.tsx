@@ -8,19 +8,10 @@ export interface LogoProps {
 }
 
 export function Logo(props: Readonly<LogoProps>) {
-	const {
-		height = undefined,
-		width = 'auto',
-		color = 'var(--core-text-primary)',
-	} = props;
+	const { height = undefined, width = 'auto', color = 'var(--core-text-primary)' } = props;
 
 	return (
-		<svg
-			height={height}
-			width={width}
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 285.92 121.92"
-		>
+		<svg height={height} width={width} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 285.92 121.92">
 			<title>Slice Logo</title>
 			<path
 				d="M16.45,67.75c2.56,0,4.83.75,6.19,2.41v2.87c0,20.52,9.36,29.58,19.47,29.58,5.73,0,10.26-5.28,10.26-12.98,0-4.98-.91-9.05-14.94-26.86-8-10.26-10.56-18.71-10.56-28.07C26.86,17.96,39.84,0,58.85,0c16.3,0,22.78,9.36,22.78,18.41,0,5.88-3.17,10.71-6.49,12.37-8-6.64-13.58-9.66-19.16-9.66-3.32,0-6.04,2.87-6.04,7.24,0,4.83,2.56,10.71,11.32,22.94,12.68,17.96,14.79,24.29,14.79,33.2,0,17.05-15.69,37.42-41.04,37.42C11.77,121.92,0,108.19,0,91.59c0-11.02,5.89-23.84,16.45-23.84Z"

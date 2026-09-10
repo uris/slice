@@ -3,7 +3,8 @@
 	position: relative;
 	padding: var(--ta-padding) !important;
 	width: var(--ta-width);
-	height: auto;
+	height: var(--ta-height);
+	max-height: var(--ta-max-height);
 	border-radius: var(--ta-border-radius);
 	background-color: var(--ta-bg-color);
 	box-shadow: 0 0 0 1px var(--ta-border-color);
@@ -30,28 +31,7 @@
 	}
 
 	overflow-y: auto;
-
-	&::-webkit-scrollbar {
-		background-color: transparent;
-		width: 14px;
-	}
-
-	&::-webkit-scrollbar-track {
-		background-color: transparent;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background-color: var(--scroll-bar);
-		border-radius: 20px;
-		border: 4px solid var(--core-surface-primary);
-	}
-
-	&::-webkit-scrollbar-thumb:hover {
-		background-color: var(--scroll-bar);
-		border-radius: 20px;
-		border: 4px solid var(--core-surface-primary);
-		cursor: default;
-	}
+	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
 }
 
 .actions {

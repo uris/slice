@@ -1,17 +1,7 @@
-import type {
-	SSEConnection,
-	SSEConnectionOptions,
-	SSEEventMap,
-	SSEUnifiedMessage,
-} from '../../utils';
+import type { SSEConnection, SSEConnectionOptions, SSEEventMap, SSEUnifiedMessage } from '../../utils';
 
-export type SSEStoreConnectionOptions = Omit<
-	SSEConnectionOptions<unknown, SSEEventMap>,
-	'unifiedOnMessage'
-> & {
-	onMessageCallback?: (
-		message: SSEUnifiedMessage<unknown, SSEEventMap>,
-	) => void;
+export type SSEStoreConnectionOptions = Omit<SSEConnectionOptions<unknown, SSEEventMap>, 'unifiedOnMessage'> & {
+	onMessageCallback?: (message: SSEUnifiedMessage<unknown, SSEEventMap>) => void;
 };
 
 export interface SSEStoreConnection {
@@ -24,10 +14,7 @@ export interface SSEStore {
 	message: SSEUnifiedMessage<unknown, SSEEventMap> | null;
 	closedConnection: string | null;
 	actions: {
-		addConnection: (
-			name: string,
-			options: SSEStoreConnectionOptions,
-		) => SSEStoreConnection;
+		addConnection: (name: string, options: SSEStoreConnectionOptions) => SSEStoreConnection;
 		removeConnection: (name: string) => void;
 	};
 }

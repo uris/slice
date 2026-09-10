@@ -10,19 +10,14 @@ export class WebRTCConnection {
 	private RTCScreenShareSender: RTCRtpSender | null = null;
 	private readonly RTCReceiverAudioStream: MediaStream = new MediaStream();
 	private readonly RTCReceiverVideoTracks: Map<string, MediaStream> = new Map();
-	private readonly RTCReceiverAudioTracks: Map<string, MediaStreamTrack> =
-		new Map();
+	private readonly RTCReceiverAudioTracks: Map<string, MediaStreamTrack> = new Map();
 	private readonly RTCDataChannels: RTCDataChannel[] = [];
 	private readonly connectionUrl: string = '';
 	private connectionOffer: RTCSessionDescriptionInit | null = null;
 	private readonly audioElement!: HTMLAudioElement;
 	private readonly autoPlayAudio: boolean = true;
-	private readonly onRemoteAudioStream?: (
-		streams: Map<string, MediaStream>,
-	) => void;
-	private readonly onRemoteVideoStream?: (
-		streams: Map<string, MediaStream>,
-	) => void;
+	private readonly onRemoteAudioStream?: (streams: Map<string, MediaStream>) => void;
+	private readonly onRemoteVideoStream?: (streams: Map<string, MediaStream>) => void;
 	private readonly onDataChannelEvent?: (
 		channel: string,
 		eventType: 'message' | 'open' | 'close' | 'error',
@@ -43,8 +38,7 @@ export class WebRTCConnection {
 	 * Report whether the connection currently has an audio path attached
 	 */
 	public get audioConnected() {
-		const hasLocalAudioTrack =
-			this.RTCSenderAudioSender?.track?.readyState === 'live';
+		const hasLocalAudioTrack = this.RTCSenderAudioSender?.track?.readyState === 'live';
 		const hasRemoteAudioTrack = this.RTCReceiverAudioTracks.size > 0;
 		return Boolean(hasLocalAudioTrack || hasRemoteAudioTrack);
 	}
@@ -54,8 +48,7 @@ export class WebRTCConnection {
 	 */
 	public get videoConnected() {
 		const hasLocalVideoTrack =
-			this.RTCSenderVideoTrack?.readyState === 'live' ||
-			this.RTCScreenShareTrack?.readyState === 'live';
+			this.RTCSenderVideoTrack?.readyState === 'live' || this.RTCScreenShareTrack?.readyState === 'live';
 		const hasRemoteVideoTrack = this.RTCReceiverVideoTracks.size > 0;
 		return Boolean(hasLocalVideoTrack || hasRemoteVideoTrack);
 	}
@@ -64,9 +57,7 @@ export class WebRTCConnection {
 	 * Report whether any data channel is currently open
 	 */
 	public get dataConnected() {
-		return this.RTCDataChannels.some(
-			(channel) => channel.readyState === 'open',
-		);
+		return this.RTCDataChannels.some((channel) => channel.readyState === 'open');
 	}
 
 	/**
@@ -80,16 +71,12 @@ export class WebRTCConnection {
 
 		this.connectionUrl = rtcConnectionInfo.connectionUrl ?? '';
 		this.peerConnection = new RTCPeerConnection();
-		this.RTCSenderAudioTrack =
-			rtcConnectionInfo.micStream?.getAudioTracks()[0] ??
-			rtcConnectionInfo.micTrack ??
-			null;
+		this.RTCSenderAudioTrack = rtcConnectionInfo.micStream?.getAudioTracks()[0] ?? rtcConnectionInfo.micTrack ?? null;
 		if (!this.RTCSenderAudioTrack) {
 			throw new Error('WebRTCConnection requires a microphone stream or track');
 		}
 		this.RTCSenderVideoTrack = rtcConnectionInfo.videoTrack;
-		this.audioElement =
-			rtcConnectionInfo.audioElement ?? document.createElement('audio');
+		this.audioElement = rtcConnectionInfo.audioElement ?? document.createElement('audio');
 		this.autoPlayAudio = rtcConnectionInfo.autoPlayAudio ?? true;
 		const channels = rtcConnectionInfo.dataChannels ?? [];
 		this.onRemoteVideoStream = rtcConnectionInfo.onRemoteVideoStream;
@@ -118,10 +105,7 @@ export class WebRTCConnection {
 	/**
 	 * Initialize the RTC connection
 	 */
-	public async initialize(
-		offerOptions?: RTCOfferOptions,
-		bearerToken?: string,
-	): Promise<void> {
+	public async initialize(offerOptions?: RTCOfferOptions, bearerToken?: string): Promise<void> {
 		this.offerOptions = offerOptions;
 		this.bearerToken = bearerToken;
 		await this.negotiate();
@@ -151,10 +135,7 @@ export class WebRTCConnection {
 
 		const screenShareStream = new MediaStream([screenTrack]);
 		this.RTCScreenShareTrack = screenTrack;
-		this.RTCScreenShareSender = this.peerConnection.addTrack(
-			screenTrack,
-			screenShareStream,
-		);
+		this.RTCScreenShareSender = this.peerConnection.addTrack(screenTrack, screenShareStream);
 
 		screenTrack.addEventListener('ended', () => {
 			void this.stopScreenShare(false);
@@ -198,9 +179,7 @@ export class WebRTCConnection {
 		}
 
 		// get the connection offer
-		this.connectionOffer = await this.peerConnection.createOffer(
-			this.offerOptions,
-		);
+		this.connectionOffer = await this.peerConnection.createOffer(this.offerOptions);
 		await this.peerConnection.setLocalDescription(this.connectionOffer);
 
 		// await ofr ICE gathering to be complete
@@ -240,22 +219,15 @@ export class WebRTCConnection {
 	/**
 	 * Send a JSON-serializable payload over a named data channel
 	 */
-	public sendMessage(
-		channelName: string,
-		data: string | number | boolean | object | null,
-	): void {
-		const channel = this.RTCDataChannels.find(
-			(dataChannel) => dataChannel.label === channelName,
-		);
+	public sendMessage(channelName: string, data: string | number | boolean | object | null): void {
+		const channel = this.RTCDataChannels.find((dataChannel) => dataChannel.label === channelName);
 
 		if (!channel) {
 			throw new Error(`Data channel "${channelName}" not found`);
 		}
 
 		if (channel.readyState !== 'open') {
-			throw new Error(
-				`Data channel "${channelName}" is not open. Current state: ${channel.readyState}`,
-			);
+			throw new Error(`Data channel "${channelName}" is not open. Current state: ${channel.readyState}`);
 		}
 
 		channel.send(JSON.stringify(data));
@@ -291,18 +263,14 @@ export class WebRTCConnection {
 	/**
 	 * Replace the outgoing audio source with the first track from a stream
 	 */
-	public async setOutgoingAudioStream(
-		stream: MediaStream | null,
-	): Promise<void> {
+	public async setOutgoingAudioStream(stream: MediaStream | null): Promise<void> {
 		await this.replaceAudioTrack(stream?.getAudioTracks()[0] ?? null);
 	}
 
 	/**
 	 * Replace the outgoing audio track without rebuilding the peer connection
 	 */
-	public async replaceAudioTrack(
-		track: MediaStreamTrack | null,
-	): Promise<void> {
+	public async replaceAudioTrack(track: MediaStreamTrack | null): Promise<void> {
 		this.RTCSenderAudioTrack = track;
 		this.syncSenderAudioStream(track);
 
@@ -315,10 +283,7 @@ export class WebRTCConnection {
 			return;
 		}
 
-		this.RTCSenderAudioSender = this.peerConnection.addTrack(
-			track,
-			this.RTCSenderAudioStream,
-		);
+		this.RTCSenderAudioSender = this.peerConnection.addTrack(track, this.RTCSenderAudioStream);
 
 		if (this.peerConnection.remoteDescription) {
 			await this.negotiate();
@@ -353,9 +318,7 @@ export class WebRTCConnection {
 	/**
 	 * Create an audio source node from the unified incoming audio stream
 	 */
-	public createIncomingAudioSource(
-		audioContext: AudioContext,
-	): MediaStreamAudioSourceNode {
+	public createIncomingAudioSource(audioContext: AudioContext): MediaStreamAudioSourceNode {
 		return audioContext.createMediaStreamSource(this.RTCReceiverAudioStream);
 	}
 
@@ -384,11 +347,7 @@ export class WebRTCConnection {
 			if (!existing) {
 				this.RTCReceiverAudioStream.addTrack(event.track);
 				this.RTCReceiverAudioTracks.set(id, event.track);
-				this.onRemoteAudioStream?.(
-					new Map([
-						[this.RTCReceiverAudioStream.id, this.RTCReceiverAudioStream],
-					]),
-				);
+				this.onRemoteAudioStream?.(new Map([[this.RTCReceiverAudioStream.id, this.RTCReceiverAudioStream]]));
 			}
 		}
 	}
@@ -407,10 +366,7 @@ export class WebRTCConnection {
 	private setupOutgoingMediaStream(): void {
 		if (this.RTCSenderAudioTrack) {
 			this.syncSenderAudioStream(this.RTCSenderAudioTrack);
-			this.RTCSenderAudioSender = this.peerConnection.addTrack(
-				this.RTCSenderAudioTrack,
-				this.RTCSenderAudioStream,
-			);
+			this.RTCSenderAudioSender = this.peerConnection.addTrack(this.RTCSenderAudioTrack, this.RTCSenderAudioStream);
 		}
 		if (this.RTCSenderVideoTrack) {
 			const senderStream = new MediaStream([this.RTCSenderVideoTrack]);
@@ -478,24 +434,15 @@ export class WebRTCConnection {
 				if (this.peerConnection.iceGatheringState === 'complete') {
 					if (this.iceTimer) clearTimeout(this.iceTimer);
 					this.iceTimer = null;
-					this.peerConnection.removeEventListener(
-						'icegatheringstatechange',
-						handleStateChange,
-					);
+					this.peerConnection.removeEventListener('icegatheringstatechange', handleStateChange);
 					resolve();
 				}
 			};
 
-			this.peerConnection.addEventListener(
-				'icegatheringstatechange',
-				handleStateChange,
-			);
+			this.peerConnection.addEventListener('icegatheringstatechange', handleStateChange);
 
 			this.iceTimer = setTimeout(() => {
-				this.peerConnection.removeEventListener(
-					'icegatheringstatechange',
-					handleStateChange,
-				);
+				this.peerConnection.removeEventListener('icegatheringstatechange', handleStateChange);
 				this.iceTimer = null;
 				reject(new Error('ICE gathering timed out'));
 			}, 5000);

@@ -18,8 +18,5 @@ type GrouperBaseProps = {
 	onClick?: () => void;
 };
 
-export type GrouperProps = Omit<
-	React.ButtonHTMLAttributes<HTMLButtonElement>,
-	keyof GrouperBaseProps
-> &
+export type GrouperProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof GrouperBaseProps> &
 	GrouperBaseProps;

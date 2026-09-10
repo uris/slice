@@ -1,13 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { setStyle } from '../../utils/functions/misc';
@@ -150,26 +144,19 @@ export const TextField = React.memo(
 
 		// derive the left icon container dimensions from the icon config
 		const iconContainerStyle = useMemo(
-			() =>
-				iconLeft ? { width: iconLeft.size, height: iconLeft.size } : undefined,
+			() => (iconLeft ? { width: iconLeft.size, height: iconLeft.size } : undefined),
 			[iconLeft],
 		);
 
 		// resolve the left icon stroke color from the theme and icon config
 		const iconStrokeColor = useMemo(
-			() =>
-				iconLeft?.color
-					? iconLeft.color
-					: theme.current.colors['core-icon-secondary'],
+			() => (iconLeft?.color ? iconLeft.color : theme.current.colors['core-icon-secondary']),
 			[iconLeft, theme],
 		);
 
 		// derive the clear-button dimensions from the button config
 		const clearButtonStyle = useMemo(
-			() =>
-				clearButton
-					? { minWidth: clearButton.size, minHeight: clearButton.size }
-					: undefined,
+			() => (clearButton ? { minWidth: clearButton.size, minHeight: clearButton.size } : undefined),
 			[clearButton],
 		);
 
@@ -184,17 +171,9 @@ export const TextField = React.memo(
 		const setBorderColor = useMemo(() => {
 			if (borderType === 'none') return 'transparent';
 			if (error) return borderColorError ?? borderColorBlurred ?? 'transparent';
-			if (isFocused)
-				return borderColorFocused ?? borderColorBlurred ?? 'transparent';
+			if (isFocused) return borderColorFocused ?? borderColorBlurred ?? 'transparent';
 			return borderColorBlurred ?? 'transparent';
-		}, [
-			borderType,
-			error,
-			isFocused,
-			borderColorError,
-			borderColorFocused,
-			borderColorBlurred,
-		]);
+		}, [borderType, error, isFocused, borderColorError, borderColorFocused, borderColorBlurred]);
 
 		// resolve the border rendering style for box and underline modes
 		const setBoxShadow = useMemo(() => {
@@ -249,13 +228,10 @@ export const TextField = React.memo(
 				'--tf-bg-color': setBackgroundColor,
 				'--tf-box-shadow': setBoxShadow,
 				'--tf-color': textColor,
-				'--tf-label-color': disabled
-					? (textColorDisabled ?? 'var(--core-text-disabled)')
-					: labelColor,
+				'--tf-label-color': disabled ? (textColorDisabled ?? 'var(--core-text-disabled)') : labelColor,
 				'--tf-text-align': setTextAlign,
 				'--tf-show-opacity': setShowOpacity,
-				'--tf-placeholder-color':
-					textColorPlaceholder ?? 'var(--core-text-disabled)',
+				'--tf-placeholder-color': textColorPlaceholder ?? 'var(--core-text-disabled)',
 			} as React.CSSProperties;
 		}, [
 			size,
@@ -279,23 +255,12 @@ export const TextField = React.memo(
 		/* END.DEBUG */
 
 		return (
-			<div
-				id={divId}
-				className={`${css.wrapper}${divClass}`}
-				style={{ ...divStyle, ...cssVars }}
-				{...rest}
-			>
-				{label && (
-					<div className={`${css.label} ${css[labelSize]}`}>{label}</div>
-				)}
+			<div id={divId} className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} {...rest}>
+				{label && <div className={`${css.label} ${css[labelSize]}`}>{label}</div>}
 				<div className={css.container}>
 					{iconLeft && (
 						<div style={iconContainerStyle}>
-							<Icon
-								name={iconLeft.name}
-								size={iconLeft.size}
-								strokeColor={iconStrokeColor}
-							/>
+							<Icon name={iconLeft.name} size={iconLeft.size} strokeColor={iconStrokeColor} />
 						</div>
 					)}
 					<input
@@ -327,11 +292,7 @@ export const TextField = React.memo(
 							onClick={handleClearTextField}
 						>
 							{isFocused && text !== '' && (
-								<Icon
-									name={'x'}
-									size={clearButton.size}
-									strokeColor={theme.current.colors['core-icon-secondary']}
-								/>
+								<Icon name={'x'} size={clearButton.size} strokeColor={theme.current.colors['core-icon-secondary']} />
 							)}
 						</button>
 					)}

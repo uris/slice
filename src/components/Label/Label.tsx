@@ -7,15 +7,11 @@ import { setStyle } from '../../utils/functions/misc';
 import css from './Label.module.css';
 import { LabelBackground, type LabelProps } from './_types';
 
-function resolveSemanticBackground(
-	backgroundColor: LabelProps['backgroundColor'],
-): LabelBackground | undefined {
+function resolveSemanticBackground(backgroundColor: LabelProps['backgroundColor']): LabelBackground | undefined {
 	if (!backgroundColor || typeof backgroundColor !== 'string') return undefined;
 	const semanticKey = backgroundColor as keyof typeof LabelBackground;
 	if (LabelBackground[semanticKey]) return LabelBackground[semanticKey];
-	return Object.values(LabelBackground).find(
-		(value) => value === backgroundColor,
-	);
+	return Object.values(LabelBackground).find((value) => value === backgroundColor);
 }
 
 export function Label(props: Readonly<LabelProps>) {
@@ -111,15 +107,7 @@ export function Label(props: Readonly<LabelProps>) {
 			'--label-border-size': setStyle(resolvedBorderWidth),
 			'--label-border-color': setBorderColor,
 		} as React.CSSProperties;
-	}, [
-		setPadding,
-		borderRadius,
-		onClick,
-		textColor,
-		setBorderColor,
-		setBgColor,
-		resolvedBorderWidth,
-	]);
+	}, [setPadding, borderRadius, onClick, textColor, setBorderColor, setBgColor, resolvedBorderWidth]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Label');

@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
@@ -83,8 +77,7 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 		const foundIndex = options.findIndex(
 			(option) =>
 				option?.value === selectedValue ||
-				(selectedKey !== undefined &&
-					resolveValueKey(option?.value, valueKey) === selectedKey) ||
+				(selectedKey !== undefined && resolveValueKey(option?.value, valueKey) === selectedKey) ||
 				option?.label?.toLowerCase() === String(selectedValue).toLowerCase() ||
 				option?.alt?.toLowerCase() === String(selectedValue).toLowerCase(),
 		);
@@ -116,21 +109,14 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 	const renderedOptions = useMemo(() => {
 		if (!options) return null;
 		return options.map((option: DropDownOption<T>, i: number) => (
-			<option
-				key={`${option?.value}_${i}`}
-				value={i}
-				onMouseUp={() => handleChange(i)}
-			>
+			<option key={`${option?.value}_${i}`} value={i} onMouseUp={() => handleChange(i)}>
 				{option?.label}
 			</option>
 		));
 	}, [options, handleChange]);
 
 	// resolve the display label shown in the custom face element
-	const displayText = useMemo(
-		() => selectedText.replace('-- ', ''),
-		[selectedText],
-	);
+	const displayText = useMemo(() => selectedText.replace('-- ', ''), [selectedText]);
 
 	// block interaction when disabled and otherwise treat the pointer down as focus
 	const handleMouseDown = useCallback(
@@ -183,15 +169,13 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 
 	// set border
 	const setBorder = useMemo(() => {
-		if (borderStyle === 'box')
-			return `${setStyle(resolvedBorderWidth)} solid ${setBorderColor}`;
+		if (borderStyle === 'box') return `${setStyle(resolvedBorderWidth)} solid ${setBorderColor}`;
 		return 'unset';
 	}, [resolvedBorderWidth, setBorderColor, borderStyle]);
 
 	// set border bottom
 	const setBorderBottom = useMemo(() => {
-		if (borderStyle !== 'none')
-			return `${setStyle(resolvedBorderWidth)} solid ${setStyle(borderColor)}`;
+		if (borderStyle !== 'none') return `${setStyle(resolvedBorderWidth)} solid ${setStyle(borderColor)}`;
 		return 'unset';
 	}, [resolvedBorderWidth, borderColor, borderStyle]);
 
@@ -238,12 +222,7 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 	/* END.DEBUG */
 
 	return (
-		<span
-			id={divId}
-			className={`${css.wrapper}${divClass}`}
-			style={{ ...divStyle, ...cssVars }}
-			{...rest}
-		>
+		<span id={divId} className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} {...rest}>
 			{label && <span className={`${css.label} ${css[size]}`}>{label}</span>}
 			<span className={`${css.face} ${css[size]}`}>
 				<span className={css.faceText}>{displayText}</span>
@@ -267,6 +246,4 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 
 DropDownComponent.displayName = 'DropDown';
 
-export const DropDown = React.memo(DropDownComponent) as <T = string>(
-	props: DropDownProps<T>,
-) => React.JSX.Element;
+export const DropDown = React.memo(DropDownComponent) as <T = string>(props: DropDownProps<T>) => React.JSX.Element;

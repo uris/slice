@@ -84,8 +84,5 @@ type IconButtonBaseProps = {
 	customAnimations?: ButtonAnimation;
 };
 
-export type IconButtonProps = Omit<
-	React.ButtonHTMLAttributes<HTMLButtonElement>,
-	keyof IconButtonBaseProps
-> &
+export type IconButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof IconButtonBaseProps> &
 	IconButtonBaseProps;

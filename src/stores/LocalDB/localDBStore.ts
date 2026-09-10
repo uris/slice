@@ -14,12 +14,7 @@ import type {
 
 // determine if a value is a valid IDB key
 function isValidIDBKey(key: unknown): key is IDBValidKey {
-	if (
-		typeof key === 'string' ||
-		typeof key === 'number' ||
-		key instanceof Date ||
-		key instanceof ArrayBuffer
-	) {
+	if (typeof key === 'string' || typeof key === 'number' || key instanceof Date || key instanceof ArrayBuffer) {
 		return true;
 	}
 
@@ -55,13 +50,8 @@ function normalizeValues<TValue>(value: TValue | TValue[]): TValue[] {
 /**
  * Read and return all records from an IndexedDB connection
  */
-async function readStoreRecords(
-	connection: IndexedDB<unknown>,
-): Promise<LocalDBRecord<unknown>[]> {
-	const [keys, values] = await Promise.all([
-		connection.getAllKeys(),
-		connection.getAll(),
-	]);
+async function readStoreRecords(connection: IndexedDB<unknown>): Promise<LocalDBRecord<unknown>[]> {
+	const [keys, values] = await Promise.all([connection.getAllKeys(), connection.getAll()]);
 
 	return keys.map((key, index) => ({
 		key,
@@ -72,10 +62,7 @@ async function readStoreRecords(
 /**
  * Get the db connection for a given store name
  */
-function getConnection(
-	stores: LocalDBConnection[],
-	name: string,
-): LocalDBConnection<unknown> {
+function getConnection(stores: LocalDBConnection[], name: string): LocalDBConnection<unknown> {
 	const connection = stores.find((entry) => entry.name === name);
 	if (!connection) {
 		throw new Error(`IndexedDB store "${name}" is not registered.`);
@@ -87,14 +74,9 @@ function getConnection(
 /**
  * Apply a partial state patch to a connection
  */
-function applyConnectionState(
-	name: string,
-	patch: Partial<LocalDBConnection<unknown>>,
-) {
+function applyConnectionState(name: string, patch: Partial<LocalDBConnection<unknown>>) {
 	useLocalDBStore.setState((state) => ({
-		stores: state.stores.map((entry) =>
-			entry.name === name ? { ...entry, ...patch } : entry,
-		),
+		stores: state.stores.map((entry) => (entry.name === name ? { ...entry, ...patch } : entry)),
 	}));
 }
 
@@ -131,18 +113,14 @@ function failureResult(error: unknown): LocalDBActionResult {
 /**
  * Helper to derive the success value from an op
  */
-function successValueResult<TValue>(
-	value: TValue,
-): LocalDBActionValueResult<TValue> {
+function successValueResult<TValue>(value: TValue): LocalDBActionValueResult<TValue> {
 	return { ok: true, value };
 }
 
 /**
  * Helper to derive the success value from an op
  */
-function failureValueResult<TValue>(
-	error: unknown,
-): LocalDBActionValueResult<TValue> {
+function failureValueResult<TValue>(error: unknown): LocalDBActionValueResult<TValue> {
 	return { ok: false, error: toError(error) };
 }
 
@@ -151,9 +129,7 @@ function failureValueResult<TValue>(
  */
 function requireStoreKey(store: LocalDBConnection<unknown>): string {
 	if (!store.key) {
-		throw new Error(
-			`IndexedDB store "${store.name}" requires a configured key field for value-driven actions.`,
-		);
+		throw new Error(`IndexedDB store "${store.name}" requires a configured key field for value-driven actions.`);
 	}
 	return store.key;
 }
@@ -161,28 +137,19 @@ function requireStoreKey(store: LocalDBConnection<unknown>): string {
 /**
  * Helper to get the a store key field from a value
  */
-function deriveRecordKey(
-	store: LocalDBConnection<unknown>,
-	value: unknown,
-): IDBValidKey {
+function deriveRecordKey(store: LocalDBConnection<unknown>, value: unknown): IDBValidKey {
 	const keyField = requireStoreKey(store);
 	if (!value || typeof value !== 'object') {
-		throw new Error(
-			`IndexedDB store "${store.name}" expects object values for value-driven actions.`,
-		);
+		throw new Error(`IndexedDB store "${store.name}" expects object values for value-driven actions.`);
 	}
 
 	const candidate = (value as Record<string, unknown>)[keyField];
 	if (candidate === undefined) {
-		throw new Error(
-			`IndexedDB store "${store.name}" expected field "${keyField}" on the provided value.`,
-		);
+		throw new Error(`IndexedDB store "${store.name}" expected field "${keyField}" on the provided value.`);
 	}
 
 	if (!isValidIDBKey(candidate)) {
-		throw new Error(
-			`IndexedDB store "${store.name}" field "${keyField}" does not contain a valid IndexedDB key.`,
-		);
+		throw new Error(`IndexedDB store "${store.name}" field "${keyField}" does not contain a valid IndexedDB key.`);
 	}
 
 	return candidate;
@@ -190,22 +157,14 @@ function deriveRecordKey(
 
 function replaceConnection(connection: LocalDBConnection<unknown>) {
 	useLocalDBStore.setState((state) => ({
-		stores: [
-			...state.stores.filter((entry) => entry.name !== connection.name),
-			connection,
-		],
+		stores: [...state.stores.filter((entry) => entry.name !== connection.name), connection],
 	}));
 }
 
 /**
  * Update connection with an error state
  */
-function replaceConnectionWithError(
-	name: string,
-	connection: IndexedDB<unknown>,
-	key: string | null,
-	error: unknown,
-) {
+function replaceConnectionWithError(name: string, connection: IndexedDB<unknown>, key: string | null, error: unknown) {
 	replaceConnection({
 		name,
 		connection,
@@ -241,12 +200,7 @@ export const useLocalDBStore = create<LocalDBStoreState>((set, get) => ({
 				replaceConnection(nextConnection);
 				return successResult();
 			} catch (error) {
-				replaceConnectionWithError(
-					name,
-					connection,
-					options.key ?? null,
-					error,
-				);
+				replaceConnectionWithError(name, connection, options.key ?? null, error);
 				return failureResult(error);
 			}
 		},
@@ -288,9 +242,7 @@ export const useLocalDBStore = create<LocalDBStoreState>((set, get) => ({
 				}
 				const records = await readStoreRecords(existing.connection);
 				applyConnectionState(name, { records, error: null });
-				return successValueResult(
-					Array.isArray(value) ? resolvedKeys : resolvedKeys[0],
-				);
+				return successValueResult(Array.isArray(value) ? resolvedKeys : resolvedKeys[0]);
 			} catch (error) {
 				applyStoreError(name, error);
 				return failureValueResult(error);
@@ -307,9 +259,7 @@ export const useLocalDBStore = create<LocalDBStoreState>((set, get) => ({
 				}
 				const records = await readStoreRecords(existing.connection);
 				applyConnectionState(name, { records, error: null });
-				return successValueResult(
-					Array.isArray(value) ? resolvedKeys : resolvedKeys[0],
-				);
+				return successValueResult(Array.isArray(value) ? resolvedKeys : resolvedKeys[0]);
 			} catch (error) {
 				applyStoreError(name, error);
 				return failureValueResult(error);
@@ -386,13 +336,8 @@ export const useLocalDB = (name: string): BoundLocalDBActions => {
 	);
 };
 
-export function useLocalDBValues<TValue = Record<string, unknown>>(
-	name: string,
-): TValue[];
-export function useLocalDBValues<TValue = Record<string, unknown>>(
-	name: string,
-	key: IDBValidKey,
-): TValue | null;
+export function useLocalDBValues<TValue = Record<string, unknown>>(name: string): TValue[];
+export function useLocalDBValues<TValue = Record<string, unknown>>(name: string, key: IDBValidKey): TValue | null;
 export function useLocalDBValues<TValue = Record<string, unknown>>(
 	name: string,
 	field: keyof TValue,
@@ -406,9 +351,7 @@ export function useLocalDBValues<TValue = Record<string, unknown>>(
 	const records = useLocalDBStore(
 		useShallow(
 			(state) =>
-				(state.stores.find((entry) => entry.name === name)?.records as
-					| LocalDBRecord<TValue>[]
-					| undefined) ?? [],
+				(state.stores.find((entry) => entry.name === name)?.records as LocalDBRecord<TValue>[] | undefined) ?? [],
 		),
 	);
 
@@ -416,25 +359,16 @@ export function useLocalDBValues<TValue = Record<string, unknown>>(
 		const values = records.map((record) => record.value);
 		if (fieldOrKey === undefined) return values;
 		if (value === undefined) {
-			return (
-				records.find((record) =>
-					areKeysEqual(record.key, fieldOrKey as IDBValidKey),
-				)?.value ?? null
-			);
+			return records.find((record) => areKeysEqual(record.key, fieldOrKey as IDBValidKey))?.value ?? null;
 		}
-		return values.filter(
-			(entry) => entry?.[fieldOrKey as keyof TValue] === value,
-		);
+		return values.filter((entry) => entry?.[fieldOrKey as keyof TValue] === value);
 	}, [fieldOrKey, records, value]);
 }
 
 export const useLocalDBError = (name: string) =>
-	useLocalDBStore(
-		(state) => state.stores.find((entry) => entry.name === name)?.error ?? null,
-	);
+	useLocalDBStore((state) => state.stores.find((entry) => entry.name === name)?.error ?? null);
 
-export const useManageLocalDB = (): LocalDBActions =>
-	useLocalDBStore.getState().actions;
+export const useManageLocalDB = (): LocalDBActions => useLocalDBStore.getState().actions;
 
 // deprecated alias maintained for compatibility
 export const localDBActions = useLocalDBStore.getState().actions;

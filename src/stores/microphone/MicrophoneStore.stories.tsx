@@ -37,9 +37,7 @@ function MicrophoneStoreDemo() {
 
 	return (
 		<FlexDiv width={'fill'} height={'fill'} padding={32} gap={16}>
-			<div>
-				Store-bound microphone state from a single `useMicrophone()` instance.
-			</div>
+			<div>Store-bound microphone state from a single `useMicrophone()` instance.</div>
 			<div>
 				Supported: <Label>{String(isSupported)}</Label>
 			</div>
@@ -59,8 +57,7 @@ function MicrophoneStoreDemo() {
 				Track ready: <Label>{micTrack.current?.readyState ?? 'none'}</Label>
 			</div>
 			<div>
-				Processed Stream:{' '}
-				<Label>{processedMicStream.current?.id ?? 'none'}</Label>
+				Processed Stream: <Label>{processedMicStream.current?.id ?? 'none'}</Label>
 			</div>
 			<div>
 				Current Device Id: <Label>{currentDeviceId ?? 'none'}</Label>
@@ -80,15 +77,9 @@ function MicrophoneStoreDemo() {
 				onChange={(value) => actions.setInputVolume(value)}
 			/>
 			<FlexDiv direction={'row'} wrap gap={8}>
-				<Button
-					label={'Request Microphone'}
-					onClick={() => void actions.requestMicrophone()}
-				/>
+				<Button label={'Request Microphone'} onClick={() => void actions.requestMicrophone()} />
 				<Button label={'Toggle Mute'} onClick={() => actions.toggleMute()} />
-				<Button
-					label={'Refresh Devices'}
-					onClick={() => void actions.refreshMicrophones()}
-				/>
+				<Button label={'Refresh Devices'} onClick={() => void actions.refreshMicrophones()} />
 				<Button label={'Stop'} onClick={() => actions.stopMicrophone()} />
 			</FlexDiv>
 		</FlexDiv>

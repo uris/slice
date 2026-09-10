@@ -2,11 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
-import {
-	AudioVisualizer,
-	type AudioVisualizerOptions,
-	addOpacity,
-} from '../../utils';
+import { AudioVisualizer, type AudioVisualizerOptions, addOpacity } from '../../utils';
 import css from './AudioBubble.module.css';
 import type { AudioBubbleProps } from './_types';
 
@@ -44,17 +40,9 @@ export const AudioBubble = React.memo((props: AudioBubbleProps) => {
 			peakIntensity,
 			risePerSecond: risePerSeconds,
 			releasePerSecond: ReleasePerSeconds,
-			onUpdate: ({ scale: nextScale }: { intensity: number; scale: number }) =>
-				setScale(nextScale),
+			onUpdate: ({ scale: nextScale }: { intensity: number; scale: number }) => setScale(nextScale),
 		} as AudioVisualizerOptions;
-	}, [
-		minScale,
-		maxScale,
-		intensity,
-		peakIntensity,
-		risePerSeconds,
-		ReleasePerSeconds,
-	]);
+	}, [minScale, maxScale, intensity, peakIntensity, risePerSeconds, ReleasePerSeconds]);
 
 	const setGlow = useMemo(() => {
 		if (!glow) return 'unset';
@@ -102,12 +90,7 @@ export const AudioBubble = React.memo((props: AudioBubbleProps) => {
 	}, [minScale, playing]);
 
 	return (
-		<div
-			id={divId}
-			className={`${css.wrapper}${divClass}`}
-			style={divStyle}
-			{...rest}
-		>
+		<div id={divId} className={`${css.wrapper}${divClass}`} style={divStyle} {...rest}>
 			<div
 				className={css.bubble}
 				style={{

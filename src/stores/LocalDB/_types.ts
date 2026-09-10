@@ -14,8 +14,7 @@ export interface LocalDBConnection<TValue = unknown> {
 	error: string | null;
 }
 
-export interface LocalDBStoreOptions
-	extends Omit<IndexedDBOptions, 'databaseName'> {
+export interface LocalDBStoreOptions extends Omit<IndexedDBOptions, 'databaseName'> {
 	create?: boolean;
 }
 
@@ -39,10 +38,7 @@ export type LocalDBActionValueResult<TValue> =
 	  };
 
 export interface LocalDBActions {
-	addStore: (
-		name: string,
-		options?: LocalDBStoreOptions,
-	) => Promise<LocalDBActionResult>;
+	addStore: (name: string, options?: LocalDBStoreOptions) => Promise<LocalDBActionResult>;
 	removeStore: (name: string) => Promise<LocalDBActionResult>;
 	refreshStore: (name: string) => Promise<LocalDBActionResult>;
 	setValue: (
@@ -53,10 +49,7 @@ export interface LocalDBActions {
 		name: string,
 		value: unknown | unknown[],
 	) => Promise<LocalDBActionValueResult<IDBValidKey | IDBValidKey[]>>;
-	removeValue: (
-		name: string,
-		value: unknown | unknown[],
-	) => Promise<LocalDBActionResult>;
+	removeValue: (name: string, value: unknown | unknown[]) => Promise<LocalDBActionResult>;
 	clearStore: (name: string) => Promise<LocalDBActionResult>;
 	destroyStore: (name: string) => Promise<LocalDBActionResult>;
 }

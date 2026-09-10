@@ -28,8 +28,5 @@ export type AvatarGroupBaseProps = {
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
-export type AvatarGroupProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof AvatarGroupBaseProps
-> &
+export type AvatarGroupProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof AvatarGroupBaseProps> &
 	AvatarGroupBaseProps;

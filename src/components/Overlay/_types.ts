@@ -14,8 +14,4 @@ type OverlayBaseProps = {
 	toggleOverlay?: (state: boolean) => void;
 };
 
-export type OverlayProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof OverlayBaseProps
-> &
-	OverlayBaseProps;
+export type OverlayProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof OverlayBaseProps> & OverlayBaseProps;

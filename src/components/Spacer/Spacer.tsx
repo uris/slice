@@ -9,10 +9,7 @@ export const Spacer = React.memo((props: SpacerProps) => {
 	const { id: divId, className, style, ...rest } = divAttributes;
 
 	// derive the fixed spacer dimensions from the configured size
-	const spacerStyle = useMemo(
-		() => ({ height: size, minHeight: size, maxHeight: size }),
-		[size],
-	);
+	const spacerStyle = useMemo(() => ({ height: size, minHeight: size, maxHeight: size }), [size]);
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
 
@@ -20,12 +17,5 @@ export const Spacer = React.memo((props: SpacerProps) => {
 	useTrackRenders(props, 'Spacer');
 	/* END.DEBUG */
 
-	return (
-		<div
-			id={divId}
-			className={divClass.trim()}
-			style={{ ...divStyle, ...spacerStyle }}
-			{...rest}
-		/>
-	);
+	return <div id={divId} className={divClass.trim()} style={{ ...divStyle, ...spacerStyle }} {...rest} />;
 });

@@ -208,3 +208,17 @@ export type {
 
 export { VideoController } from './components/VideoController';
 export type { VideoControllerProps } from './components/VideoController';
+
+export { DataTable } from './components/DataTable';
+export type {
+	DataTableProps,
+	ColumnDefinition,
+	CellContext,
+	HeaderContext,
+} from './components/DataTable';
+export {
+	createColumnHelper,
+	applyDataTableViewState,
+	createDefaultViewState,
+} from './components/DataTable';
+export type { DataTableViewState } from './components/DataTable';

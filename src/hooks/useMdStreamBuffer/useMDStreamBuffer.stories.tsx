@@ -36,18 +36,8 @@ type MDStreamBufferHookRunnerProps = {
 	simulateStream: boolean;
 };
 
-function MDStreamBufferHookRunner(
-	props: Readonly<MDStreamBufferHookRunnerProps>,
-) {
-	const {
-		raw,
-		chunkSize,
-		intervalMs,
-		healthyEndMarker,
-		includeLinksAndImages,
-		htmlHandling,
-		simulateStream,
-	} = props;
+function MDStreamBufferHookRunner(props: Readonly<MDStreamBufferHookRunnerProps>) {
+	const { raw, chunkSize, intervalMs, healthyEndMarker, includeLinksAndImages, htmlHandling, simulateStream } = props;
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const cursorRef = useRef(0);
 	const [playing, setPlaying] = useState(false);
@@ -97,10 +87,7 @@ function MDStreamBufferHookRunner(
 	const streamNextChunk = () => {
 		const parsedChunkSize = Math.max(Number.parseInt(chunkSize, 10) || 1, 1);
 		const parsedInterval = Math.max(Number.parseInt(intervalMs, 10) || 16, 0);
-		const nextChunk = raw.slice(
-			cursorRef.current,
-			cursorRef.current + parsedChunkSize,
-		);
+		const nextChunk = raw.slice(cursorRef.current, cursorRef.current + parsedChunkSize);
 
 		if (!nextChunk) {
 			complete();
@@ -139,11 +126,7 @@ function MDStreamBufferHookRunner(
 						onClick={startStream}
 						state={playing ? 'disabled' : 'normal'}
 					/>
-					<Button
-						label={'Stop'}
-						onClick={stopStream}
-						state={playing ? 'normal' : 'disabled'}
-					/>
+					<Button label={'Stop'} onClick={stopStream} state={playing ? 'normal' : 'disabled'} />
 					<Button label={'Reset'} onClick={resetStream} />
 				</FlexDiv>
 			)}
@@ -236,11 +219,10 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 
 	return (
 		<FlexDiv absolute width={'fill'} height={'fill'} padding={64} gap={16}>
-			This hook wraps `MdBuffer` for React apps and exposes raw plus healthy
-			stream state without manually instantiating the underlying class. Inline
-			selects using `$$Option 1$$Option 2$$Option 3$$ ` close only when the last
-			`$$` is followed by whitespace. `healthyEndMarker` is appended only to
-			healthy output and is inserted before optimistic newline closures.
+			This hook wraps `MdBuffer` for React apps and exposes raw plus healthy stream state without manually instantiating
+			the underlying class. Inline selects using `$$Option 1$$Option 2$$Option 3$$ ` close only when the last `$$` is
+			followed by whitespace. `healthyEndMarker` is appended only to healthy output and is inserted before optimistic
+			newline closures.
 			<FlexDiv
 				width={'fill'}
 				height={'fit'}

@@ -42,11 +42,7 @@ export const Grouper = React.memo((props: GrouperProps) => {
 	const animate = useCallback(
 		(state: boolean) => {
 			const animation = { rotate: state ? 0 : 180 };
-			animateIcon(
-				icon.current,
-				{ ...animation },
-				{ ease: 'easeInOut', duration: 0.25 },
-			);
+			animateIcon(icon.current, { ...animation }, { ease: 'easeInOut', duration: 0.25 });
 		},
 		[animateIcon, icon],
 	);
@@ -87,13 +83,7 @@ export const Grouper = React.memo((props: GrouperProps) => {
 				<div className={css.title}>
 					{title}
 					<Badge hideNull={hideNull} count={count} variant={'light'} />
-					{showFilterBadge && (
-						<Icon
-							name="filter"
-							size={16}
-							strokeColor={theme.current.colors['core-text-disabled']}
-						/>
-					)}
+					{showFilterBadge && <Icon name="filter" size={16} strokeColor={theme.current.colors['core-text-disabled']} />}
 				</div>
 				{hasIcon && (
 					<div ref={icon} className={css.icon}>

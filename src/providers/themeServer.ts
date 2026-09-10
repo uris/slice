@@ -25,18 +25,10 @@ export function resolveInitialTheme(options: ResolveInitialThemeOptions = {}): {
 	initialTheme: SliceThemeName;
 	initialSystem: boolean;
 } {
-	const {
-		theme,
-		activeTheme,
-		systemTheme,
-		fallbackTheme = 'darkMode',
-	} = options;
+	const { theme, activeTheme, systemTheme, fallbackTheme = 'darkMode' } = options;
 
 	return {
-		initialTheme:
-			normalizeThemeName(theme) ??
-			normalizeThemeName(activeTheme) ??
-			fallbackTheme,
+		initialTheme: normalizeThemeName(theme) ?? normalizeThemeName(activeTheme) ?? fallbackTheme,
 		initialSystem: resolveSystem(systemTheme),
 	};
 }

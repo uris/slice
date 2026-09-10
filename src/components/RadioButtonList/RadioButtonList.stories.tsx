@@ -48,14 +48,7 @@ export default meta;
 export const Default: StoryObj<typeof RadioButtonList> = {
 	render: (args) => {
 		return (
-			<FlexDiv
-				absolute
-				justify={'center'}
-				align={'center'}
-				padding={64}
-				width={'fill'}
-				height={'fit'}
-			>
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64} width={'fill'} height={'fit'}>
 				<RadioButtonList {...args} />
 			</FlexDiv>
 		);
@@ -66,14 +59,7 @@ export const SingleSelect: StoryObj<typeof RadioButtonList> = {
 	tags: ['tests'],
 	render: (args) => {
 		return (
-			<FlexDiv
-				absolute
-				justify={'center'}
-				align={'center'}
-				padding={64}
-				width={'fill'}
-				height={'fit'}
-			>
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64} width={'fill'} height={'fit'}>
 				<RadioButtonList {...args} />
 			</FlexDiv>
 		);

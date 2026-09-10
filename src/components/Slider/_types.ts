@@ -21,8 +21,4 @@ type SliderBaseProps = {
 	onDragChange?: (value: number, percent: number) => void;
 };
 
-export type SliderProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof SliderBaseProps
-> &
-	SliderBaseProps;
+export type SliderProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof SliderBaseProps> & SliderBaseProps;

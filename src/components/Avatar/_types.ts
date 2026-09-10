@@ -24,8 +24,4 @@ export type AvatarBaseProps = {
 	outerBorderColor?: string;
 };
 
-export type AvatarProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof AvatarBaseProps
-> &
-	AvatarBaseProps;
+export type AvatarProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof AvatarBaseProps> & AvatarBaseProps;

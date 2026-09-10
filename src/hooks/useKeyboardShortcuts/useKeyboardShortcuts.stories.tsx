@@ -2,11 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { FlexDiv } from '../../components/FlexDiv';
 import { useWindow } from '../useWindow/useWindow';
-import {
-	type KeyboardShortcut,
-	type KeyboardShortcuts,
-	useKeyboardShortcuts,
-} from './useKeyboardShortcuts';
+import { type KeyboardShortcut, type KeyboardShortcuts, useKeyboardShortcuts } from './useKeyboardShortcuts';
 
 function UseKeyboardShortcutsDemo() {
 	const { isAppleDevice } = useWindow();
@@ -27,14 +23,7 @@ function UseKeyboardShortcutsDemo() {
 	useKeyboardShortcuts(shortcuts, handleShortcut, isAppleDevice);
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'center'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
 			<FlexDiv
 				width={520}
 				height={'auto'}

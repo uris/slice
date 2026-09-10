@@ -1,13 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { cleanString } from '../../utils/functions/misc';
 import css from './DivInput.module.css';
@@ -42,9 +36,7 @@ export const DivInput = React.memo((props: DivInputProps) => {
 	const divClass = className ? ` ${className}` : '';
 
 	const ref = useRef<HTMLDivElement>(null);
-	const innerText = useRef<string>(
-		value === '' ? cleanString(placeholder) : cleanString(value),
-	);
+	const innerText = useRef<string>(value === '' ? cleanString(placeholder) : cleanString(value));
 	const [isFocused, setIsFocused] = useState(focus);
 	const [text, setText] = useState(innerText.current);
 	const [isPlaceholder, setIsPlaceholder] = useState<boolean>(false);
@@ -87,8 +79,7 @@ export const DivInput = React.memo((props: DivInputProps) => {
 		setIsFocused(focus);
 
 		// Update text
-		const newText =
-			value === '' ? cleanString(placeholder) : cleanString(value);
+		const newText = value === '' ? cleanString(placeholder) : cleanString(value);
 		innerText.current = newText;
 		ref.current.innerText = newText;
 		setText(newText);
@@ -215,24 +206,17 @@ export const DivInput = React.memo((props: DivInputProps) => {
 	// compose CSS custom properties for layout, wrapping, and editing state
 	const cssVars = useMemo(() => {
 		return {
-			'--div-input-color': isPlaceholder
-				? 'var(--core-text-tertiary)'
-				: 'var(--core-text-primary)',
+			'--div-input-color': isPlaceholder ? 'var(--core-text-tertiary)' : 'var(--core-text-primary)',
 			'--div-input-width': `${setWidth(width)}`,
 			'--div-input-user-select': isEditable ? 'text' : 'none',
 			'--div-input-padding': padding ?? '0',
 			'--div-input-text-align': textAlign ?? 'left',
 			'--div-input-white-space': isEditable && wrap ? 'wrap' : 'no-wrap',
-			'--div-input-line-clamp':
-				isEditable && isFocused ? 'none' : (clamp ?? 'none'),
+			'--div-input-line-clamp': isEditable && isFocused ? 'none' : (clamp ?? 'none'),
 			'--div-input-cursor': isEditable ? 'text' : 'default',
-			'--div-input-bg': isEditable
-				? (bgColor ?? 'var(--core-surface-secondary)')
-				: 'transparent',
+			'--div-input-bg': isEditable ? (bgColor ?? 'var(--core-surface-secondary)') : 'transparent',
 			'--div-input-wrapper-bg':
-				isEditable && isFocused
-					? (resolvedBackgroundColor ?? 'var(--core-surface-secondary)')
-					: 'transparent',
+				isEditable && isFocused ? (resolvedBackgroundColor ?? 'var(--core-surface-secondary)') : 'transparent',
 			'--div-input-border-radius': `${resolvedBorderRadius}px`,
 		} as React.CSSProperties;
 	}, [
@@ -256,12 +240,7 @@ export const DivInput = React.memo((props: DivInputProps) => {
 
 	// wrap the editable div to avoid Safari refocus issues on blur
 	return (
-		<div
-			id={divId}
-			className={`${css.wrapper}${divClass}`}
-			style={{ ...divStyle, ...cssVars }}
-			{...rest}
-		>
+		<div id={divId} className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} {...rest}>
 			<motion.div
 				className={css.input}
 				ref={ref}

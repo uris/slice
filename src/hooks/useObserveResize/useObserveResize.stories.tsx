@@ -18,14 +18,7 @@ function UseObserveResizeDemo(props: Readonly<ResizeDemoProps>) {
 	const size = useObserveResize(boxRef, { ignore });
 
 	return (
-		<FlexDiv
-			align={'center'}
-			justify={'center'}
-			padding={24}
-			absolute
-			direction={'column'}
-			gap={12}
-		>
+		<FlexDiv align={'center'} justify={'center'} padding={24} absolute direction={'column'} gap={12}>
 			<FlexDiv direction={'column'} align={'center'} height={'auto'} gap={12}>
 				Change Width
 				<Slider

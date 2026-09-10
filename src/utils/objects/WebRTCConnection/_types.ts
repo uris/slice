@@ -8,10 +8,7 @@ type WebRTCMicTrackOption = {
 	micTrack: MediaStreamTrack;
 };
 
-export type WebRTCConnectionOptions = (
-	| WebRTCMicStreamOption
-	| WebRTCMicTrackOption
-) & {
+export type WebRTCConnectionOptions = (WebRTCMicStreamOption | WebRTCMicTrackOption) & {
 	connectionUrl?: string;
 	audioElement?: HTMLAudioElement;
 	autoPlayAudio?: boolean;

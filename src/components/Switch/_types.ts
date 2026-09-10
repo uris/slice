@@ -15,8 +15,5 @@ type SwitchBaseProps<T = string> = {
 	onChange?: (value: T | undefined, state: boolean) => void;
 };
 
-export type SwitchProps<T = string> = Omit<
-	React.ButtonHTMLAttributes<HTMLButtonElement>,
-	keyof SwitchBaseProps
-> &
+export type SwitchProps<T = string> = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof SwitchBaseProps> &
 	SwitchBaseProps<T>;

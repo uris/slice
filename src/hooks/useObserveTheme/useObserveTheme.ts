@@ -16,23 +16,16 @@ export function useObserveTheme() {
 
 	const [theme, setTheme] = useState<SliceTheme>(() => {
 		if (typeof document === 'undefined') return resolveTheme(initialTheme);
-		return resolveTheme(
-			document.documentElement.dataset.sliceTheme || initialTheme,
-		);
+		return resolveTheme(document.documentElement.dataset.sliceTheme || initialTheme);
 	});
 
 	useEffect(() => {
 		// Sync once on mount in case the theme was set before this hook subscribed.
-		setTheme(
-			resolveTheme(document.documentElement.dataset.sliceTheme || initialTheme),
-		);
+		setTheme(resolveTheme(document.documentElement.dataset.sliceTheme || initialTheme));
 
 		const observer = new MutationObserver((mutations) => {
 			for (const mutation of mutations) {
-				if (
-					mutation.type === 'attributes' &&
-					mutation.attributeName === 'data-slice-theme'
-				) {
+				if (mutation.type === 'attributes' && mutation.attributeName === 'data-slice-theme') {
 					const newTheme = document.documentElement.dataset.sliceTheme;
 					setTheme(resolveTheme(newTheme || initialTheme));
 				}

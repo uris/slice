@@ -1,10 +1,7 @@
 import type { JSX } from 'react';
 import { iconColorSchemes } from './_types';
 
-export const STATIC_FILE_ICONS = new Map<
-	string,
-	{ paths: (theme: 'dark' | 'light') => JSX.Element }
->([
+export const STATIC_FILE_ICONS = new Map<string, { paths: (theme: 'dark' | 'light') => JSX.Element }>([
 	[
 		'pdf',
 		{
@@ -106,14 +103,7 @@ export const STATIC_FILE_ICONS = new Map<
 						d="M15.28,10.18l-2.4-1.6-.55.83,1.78,1.18-1.78,1.18.55.83,2.4-1.6c.14-.09.22-.25.22-.42s-.08-.32-.22-.42Z"
 						fill="#fff"
 					/>
-					<rect
-						x="6.53"
-						y="10"
-						width="7.43"
-						height="1"
-						transform="translate(-1.52 19.26) rotate(-82.36)"
-						fill="#fff"
-					/>
+					<rect x="6.53" y="10" width="7.43" height="1" transform="translate(-1.52 19.26) rotate(-82.36)" fill="#fff" />
 				</>
 			),
 		},
@@ -162,15 +152,7 @@ export const STATIC_FILE_ICONS = new Map<
 						d="M3,2v15.99c0,.55.45,1,1,1h11.99c.55,0,1-.45,1-1V5c0-.55-.45-1-1-1h-2v-2c0-.55-.45-1-1-1H4c-.55,0-1,.45-1,1Z"
 						fill={iconColorSchemes.pink[theme]}
 					/>
-					<rect
-						x="6"
-						y="7.75"
-						width="5.5"
-						height="5.5"
-						rx=".75"
-						ry=".75"
-						fill="#fff"
-					/>
+					<rect x="6" y="7.75" width="5.5" height="5.5" rx=".75" ry=".75" fill="#fff" />
 					<path
 						d="M13.87,8.03c-.08-.04-.18-.04-.26.01l-1.5,1c-.07.05-.11.12-.11.21v2.5c0,.08.04.16.11.21l1.5,1s.09.04.14.04c.04,0,.08,0,.12-.03.08-.04.13-.13.13-.22v-4.5c0-.09-.05-.18-.13-.22Z"
 						fill="#fff"

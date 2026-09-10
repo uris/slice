@@ -71,21 +71,8 @@ export const Grouped: StoryObj<typeof ToggleButton> = {
 		const [theme, setTheme] = useState<'system' | 'light' | 'dark'>('system');
 
 		return (
-			<FlexDiv
-				absolute
-				justify={'center'}
-				align={'center'}
-				width={'viewport'}
-				height={'viewport'}
-				padding={64}
-			>
-				<FlexDiv
-					justify={'center'}
-					align={'start'}
-					padding={64}
-					gap={12}
-					width={'fit'}
-				>
+			<FlexDiv absolute justify={'center'} align={'center'} width={'viewport'} height={'viewport'} padding={64}>
+				<FlexDiv justify={'center'} align={'start'} padding={64} gap={12} width={'fit'}>
 					<ToggleButton
 						label="System"
 						icon="laptop"

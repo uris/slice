@@ -61,8 +61,4 @@ type VideoBaseProps = {
 	captionsSrc?: string;
 };
 
-export type VideoProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof VideoBaseProps
-> &
-	VideoBaseProps;
+export type VideoProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof VideoBaseProps> & VideoBaseProps;

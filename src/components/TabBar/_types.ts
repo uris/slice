@@ -41,11 +41,7 @@ type TabBarBaseProps = {
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 };
 
-export type TabBarProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof TabBarBaseProps
-> &
-	TabBarBaseProps;
+export type TabBarProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof TabBarBaseProps> & TabBarBaseProps;
 
 export interface TabOptionProps {
 	label?: string;
@@ -62,10 +58,7 @@ export interface TabOptionProps {
 	tabWidth?: 'compact' | 'fill' | number;
 	underline?: boolean;
 	onClick?: (value: number) => void;
-	onKeyDown?: (
-		event: React.KeyboardEvent<HTMLButtonElement>,
-		value: number,
-	) => void;
+	onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>, value: number) => void;
 	onToolTip?: (tip: ToolTip | null) => void;
 	buttonRef?: (element: HTMLButtonElement | null) => void;
 	borderColor?: string;

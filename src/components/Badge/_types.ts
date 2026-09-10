@@ -6,8 +6,4 @@ type BadgeBaseProps = {
 	variant?: 'light' | 'dark';
 };
 
-export type BadgeProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof BadgeBaseProps
-> &
-	BadgeBaseProps;
+export type BadgeProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof BadgeBaseProps> & BadgeBaseProps;

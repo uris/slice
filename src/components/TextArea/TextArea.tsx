@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { Button } from '../Button';
 import css from './TextArea.module.css';
@@ -17,6 +11,7 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 		value = '',
 		name = 'text_area',
 		width = '100%',
+		height = 'auto',
 		focused = false,
 		placeholder = 'Enter text here...',
 		rows = 6,
@@ -150,8 +145,9 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 			'--ta-border-radius': `${borderRadius}px`,
 			'--ta-width': `${setStyleValue(width)}`,
 			'--ta-min-width': minWidth ? `${minWidth}px` : 'unset',
-			'--ta-bg-color':
-				resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
+			'--ta-height': `${setStyleValue(height)}`,
+			'--ta-max-height': height === 'auto' ? 'unset' : `${setStyleValue(height)}`,
+			'--ta-bg-color': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
 			'--ta-border-color': setBorderColor,
 			'--ta-padding': `${setStyleValue(padding)}`,
 			'--ta-send-icon-offset-bottom': `${sendOffset.bottom}px`,
@@ -170,6 +166,7 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 		setStyleValue,
 		borderRadius,
 		resizable,
+		height,
 	]);
 
 	/* START.DEBUG */
@@ -187,12 +184,7 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 		>
 			{hasSend && (
 				<div className={css.send} onMouseDown={(e) => handleSubmit(e)}>
-					<Button
-						iconLeft={'arrow up'}
-						size={'medium'}
-						variant={'solid'}
-						round
-					/>
+					<Button iconLeft={'arrow up'} size={'medium'} variant={'solid'} round />
 				</div>
 			)}
 			<textarea

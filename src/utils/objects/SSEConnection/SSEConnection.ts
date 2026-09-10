@@ -12,10 +12,7 @@ type SSEParsedData<T> = T | string;
  * Restricts custom event names to string keys so they can be used with
  * `addEventListener`.
  */
-type SSEEventName<TCustomEvents extends SSEEventMap> = Extract<
-	keyof TCustomEvents,
-	string
->;
+type SSEEventName<TCustomEvents extends SSEEventMap> = Extract<keyof TCustomEvents, string>;
 
 /**
  * Built-in EventSource events represented in unified callback mode.
@@ -39,9 +36,7 @@ export type SSEUnifiedBuiltInMessage<TMessage> =
 			event: Event;
 	  };
 
-export interface SSEConnectionCloseOption<
-	TCustomEvents extends SSEEventMap = Record<string, never>,
-> {
+export interface SSEConnectionCloseOption<TCustomEvents extends SSEEventMap = Record<string, never>> {
 	event?: SSEEventName<TCustomEvents>;
 	message?: string;
 }
@@ -70,9 +65,7 @@ export type SSEUnifiedMessage<TMessage, TCustomEvents extends SSEEventMap> =
  * Callback signature for standard mode, where only the default `message`
  * event is routed to `onMessageCallback`.
  */
-type SSEStandardMessageCallback<TMessage> = (
-	data: SSEParsedData<TMessage>,
-) => void;
+type SSEStandardMessageCallback<TMessage> = (data: SSEParsedData<TMessage>) => void;
 
 /**
  * Callback signature for unified mode, where built-in and custom events are
@@ -97,28 +90,22 @@ export interface SSECustomEvent<
 /**
  * Options shared by both standard and unified message modes.
  */
-interface SSEConnectionOptionsBase<
-	TCustomEvents extends SSEEventMap = Record<string, never>,
-> {
+interface SSEConnectionOptionsBase<TCustomEvents extends SSEEventMap = Record<string, never>> {
 	url?: string;
 	options?: EventSourceInit;
 	connectionClose?: SSEConnectionCloseOption<TCustomEvents>;
 	onErrorCallback?: (event: Event) => void;
 	onOpenCallback?: (event: Event) => void;
 	onCloseCallback?: (event: Event) => void;
-	customEvents?:
-		| SSECustomEvent<TCustomEvents>
-		| SSECustomEvent<TCustomEvents>[];
+	customEvents?: SSECustomEvent<TCustomEvents> | SSECustomEvent<TCustomEvents>[];
 }
 
 /**
  * Options for unified mode. When enabled, every built-in and custom event is
  * emitted through `onMessageCallback`.
  */
-interface SSEConnectionUnifiedOptions<
-	TMessage = unknown,
-	TCustomEvents extends SSEEventMap = Record<string, never>,
-> extends SSEConnectionOptionsBase<TCustomEvents> {
+interface SSEConnectionUnifiedOptions<TMessage = unknown, TCustomEvents extends SSEEventMap = Record<string, never>>
+	extends SSEConnectionOptionsBase<TCustomEvents> {
 	unifiedOnMessage: true;
 	onMessageCallback?: SSEUnifiedMessageCallback<TMessage, TCustomEvents>;
 }
@@ -127,10 +114,8 @@ interface SSEConnectionUnifiedOptions<
  * Options for standard mode. Only the default `message` event payload is sent
  * to `onMessageCallback`.
  */
-interface SSEConnectionStandardOptions<
-	TMessage = unknown,
-	TCustomEvents extends SSEEventMap = Record<string, never>,
-> extends SSEConnectionOptionsBase<TCustomEvents> {
+interface SSEConnectionStandardOptions<TMessage = unknown, TCustomEvents extends SSEEventMap = Record<string, never>>
+	extends SSEConnectionOptionsBase<TCustomEvents> {
 	unifiedOnMessage?: false;
 	onMessageCallback?: SSEStandardMessageCallback<TMessage>;
 }
@@ -139,20 +124,14 @@ interface SSEConnectionStandardOptions<
  * Public connection options. The `unifiedOnMessage` flag selects which
  * callback signature is valid.
  */
-export type SSEConnectionOptions<
-	TMessage = unknown,
-	TCustomEvents extends SSEEventMap = Record<string, never>,
-> =
+export type SSEConnectionOptions<TMessage = unknown, TCustomEvents extends SSEEventMap = Record<string, never>> =
 	| SSEConnectionStandardOptions<TMessage, TCustomEvents>
 	| SSEConnectionUnifiedOptions<TMessage, TCustomEvents>;
 
 /**
  * Manage an EventSource connection with optional unified callbacks and typed custom events.
  */
-export class SSEConnection<
-	TMessage = unknown,
-	TCustomEvents extends SSEEventMap = Record<string, never>,
-> {
+export class SSEConnection<TMessage = unknown, TCustomEvents extends SSEEventMap = Record<string, never>> {
 	private readonly url!: string;
 	private readonly options!: EventSourceInit | undefined;
 	private sseConnection: EventSource | null = null;
@@ -164,10 +143,7 @@ export class SSEConnection<
 	private readonly onCloseCallback?: (event: Event) => void;
 	private readonly connectionClose?: SSEConnectionCloseOption<TCustomEvents>;
 	private readonly customEvents!: SSECustomEvent<TCustomEvents>[];
-	private readonly customEventHandlers = new Map<
-		string,
-		Array<(event: MessageEvent) => void>
-	>();
+	private readonly customEventHandlers = new Map<string, Array<(event: MessageEvent) => void>>();
 	private readonly unifiedOnMessage: boolean = false;
 
 	/**
@@ -197,14 +173,11 @@ export class SSEConnection<
 		this.onCloseCallback = options?.onCloseCallback;
 		this.connectionClose = options?.connectionClose;
 		if (options?.customEvents) {
-			this.customEvents = Array.isArray(options?.customEvents)
-				? options.customEvents
-				: [options.customEvents];
+			this.customEvents = Array.isArray(options?.customEvents) ? options.customEvents : [options.customEvents];
 		} else this.customEvents = [];
 		this.sseConnection = new EventSource(this.url, this.options);
 		this.attachDefaultEventListeners(this.sseConnection);
-		if (this.customEvents.length > 0)
-			this.attachCustomEventListeners(this.customEvents);
+		if (this.customEvents.length > 0) this.attachCustomEventListeners(this.customEvents);
 	}
 
 	/**
@@ -232,23 +205,15 @@ export class SSEConnection<
 	 */
 	private emitParsedMessage(data: SSEParsedData<TMessage>) {
 		if (this.unifiedOnMessage) return;
-		(
-			this.onMessageCallback as SSEStandardMessageCallback<TMessage> | undefined
-		)?.(data);
+		(this.onMessageCallback as SSEStandardMessageCallback<TMessage> | undefined)?.(data);
 	}
 
 	/**
 	 * Emit a unified message object when unified callback mode is enabled.
 	 */
-	private emitUnifiedMessage(
-		message: SSEUnifiedMessage<TMessage, TCustomEvents>,
-	) {
+	private emitUnifiedMessage(message: SSEUnifiedMessage<TMessage, TCustomEvents>) {
 		if (!this.unifiedOnMessage) return;
-		(
-			this.onMessageCallback as
-				| SSEUnifiedMessageCallback<TMessage, TCustomEvents>
-				| undefined
-		)?.(message);
+		(this.onMessageCallback as SSEUnifiedMessageCallback<TMessage, TCustomEvents> | undefined)?.(message);
 	}
 
 	/**
@@ -271,15 +236,9 @@ export class SSEConnection<
 	/**
 	 * Check whether an incoming message should close the connection.
 	 */
-	private shouldCloseFromMessage(
-		rawData: string,
-		data: SSEParsedData<TMessage>,
-	) {
+	private shouldCloseFromMessage(rawData: string, data: SSEParsedData<TMessage>) {
 		if (!this.connectionClose?.message) return false;
-		return (
-			rawData === this.connectionClose.message ||
-			data === this.connectionClose.message
-		);
+		return rawData === this.connectionClose.message || data === this.connectionClose.message;
 	}
 
 	/**
@@ -312,24 +271,16 @@ export class SSEConnection<
 				this.closeFromConnectionEvent();
 			}
 		};
-		const currentHandlers =
-			this.customEventHandlers.get(customEvent.name) ?? [];
+		const currentHandlers = this.customEventHandlers.get(customEvent.name) ?? [];
 		currentHandlers.push(handler);
 		this.customEventHandlers.set(customEvent.name, currentHandlers);
-		this.sseConnection.addEventListener(
-			customEvent.name,
-			handler as EventListener,
-		);
+		this.sseConnection.addEventListener(customEvent.name, handler as EventListener);
 	}
 
 	/**
 	 * Attach all configured custom event listeners to the SSE connection.
 	 */
-	private attachCustomEventListeners(
-		customEvents:
-			| SSECustomEvent<TCustomEvents>
-			| SSECustomEvent<TCustomEvents>[],
-	) {
+	private attachCustomEventListeners(customEvents: SSECustomEvent<TCustomEvents> | SSECustomEvent<TCustomEvents>[]) {
 		const events = Array.isArray(customEvents) ? customEvents : [customEvents];
 		for (const event of events) {
 			this.attachCustomEventListener(event);

@@ -4,6 +4,7 @@ type TextAreaBaseProps = {
 	value?: string;
 	name?: string;
 	width?: number | string;
+	height?: number | string;
 	minWidth?: number | string;
 	rows?: number;
 	focused?: boolean;
@@ -30,11 +31,7 @@ type TextAreaBaseProps = {
 	onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 };
 
-export type TextAreaProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof TextAreaBaseProps
-> &
-	TextAreaBaseProps;
+export type TextAreaProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof TextAreaBaseProps> & TextAreaBaseProps;
 
 export type Tip = {
 	icon?: string;

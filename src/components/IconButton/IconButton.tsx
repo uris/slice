@@ -1,13 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
@@ -146,17 +140,7 @@ export const IconButton = React.memo((props: IconButtonProps) => {
 			'--ib-color': textColor,
 			'--ib-cursor': disabled ? 'default' : 'pointer',
 		} as React.CSSProperties;
-	}, [
-		bgColorNormal,
-		bgHoverColor,
-		textColor,
-		border,
-		size,
-		borderRadius,
-		iconSize,
-		round,
-		disabled,
-	]);
+	}, [bgColorNormal, bgHoverColor, textColor, border, size, borderRadius, iconSize, round, disabled]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'IconButton');

@@ -1,9 +1,5 @@
 import { create } from 'zustand';
-import {
-	SSEConnection,
-	type SSEEventMap,
-	type SSEUnifiedMessage,
-} from '../../utils';
+import { SSEConnection, type SSEEventMap, type SSEUnifiedMessage } from '../../utils';
 import type { SSEStore, SSEStoreConnectionOptions } from './_types';
 
 export const useSSEStore = create<SSEStore>((set, get) => ({
@@ -30,10 +26,7 @@ export const useSSEStore = create<SSEStore>((set, get) => ({
 			});
 
 			set((state) => ({
-				connections: [
-					...state.connections.filter((connection) => connection.name !== name),
-					{ name, connection },
-				],
+				connections: [...state.connections.filter((connection) => connection.name !== name), { name, connection }],
 			}));
 
 			return { name, connection };
@@ -44,9 +37,7 @@ export const useSSEStore = create<SSEStore>((set, get) => ({
 
 			existingConnection.connection.close();
 			set((state) => ({
-				connections: state.connections.filter(
-					(connection) => connection.name !== name,
-				),
+				connections: state.connections.filter((connection) => connection.name !== name),
 			}));
 		},
 	},
@@ -54,21 +45,13 @@ export const useSSEStore = create<SSEStore>((set, get) => ({
 
 // atomic hook exports for use in React components
 export const useSSE = () => useSSEStore((state) => state.actions);
-export const useConnectionClose = () =>
-	useSSEStore((state) => state.closedConnection);
+export const useConnectionClose = () => useSSEStore((state) => state.closedConnection);
 export const useConnectionMessage = (connection: string) =>
-	useSSEStore((state) =>
-		state.connections.some((entry) => entry.name === connection)
-			? state.message
-			: null,
-	);
+	useSSEStore((state) => (state.connections.some((entry) => entry.name === connection) ? state.message : null));
 export const useIsConnected = (connection?: string) =>
 	useSSEStore((state) => {
 		if (connection) {
-			return (
-				state.connections.find((entry) => entry.name === connection)?.connection
-					.connected ?? false
-			);
+			return state.connections.find((entry) => entry.name === connection)?.connection.connected ?? false;
 		}
 
 		return state.connections.some((entry) => entry.connection.connected);
@@ -76,24 +59,12 @@ export const useIsConnected = (connection?: string) =>
 
 // reactive hook exports for reading the latest unified message state
 export function useMessage(): SSEUnifiedMessage<unknown, SSEEventMap> | null;
-export function useMessage<T = unknown>(
-	type: 'message',
-	connection?: string,
-): T | string | null;
-export function useMessage(
-	type: 'open' | 'error' | 'close',
-	connection?: string,
-): Event | null;
-export function useMessage<T = unknown>(
-	type: string,
-	connection?: string,
-): T | string | null;
+export function useMessage<T = unknown>(type: 'message', connection?: string): T | string | null;
+export function useMessage(type: 'open' | 'error' | 'close', connection?: string): Event | null;
+export function useMessage<T = unknown>(type: string, connection?: string): T | string | null;
 export function useMessage<T = unknown>(type?: string, connection?: string) {
 	return useSSEStore((state) => {
-		const sourceMessage =
-			connection && !state.connections.some((c) => c.name === connection)
-				? null
-				: state.message;
+		const sourceMessage = connection && !state.connections.some((c) => c.name === connection) ? null : state.message;
 		if (!type) return sourceMessage;
 		if (sourceMessage?.type !== type) return null;
 

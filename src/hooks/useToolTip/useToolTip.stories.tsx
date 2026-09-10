@@ -13,11 +13,7 @@ function UseToolTipDemo() {
 
 	return (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-			<IconButton
-				icon={'home'}
-				tooltip={'Click Me'}
-				onToolTip={(nextTip) => setTip(nextTip)}
-			/>
+			<IconButton icon={'home'} tooltip={'Click Me'} onToolTip={(nextTip) => setTip(nextTip)} />
 			<Tip coords={coords} tip={tip} ref={tipRef} size={'m'} />
 		</FlexDiv>
 	);

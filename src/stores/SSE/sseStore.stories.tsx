@@ -42,19 +42,13 @@ function formatValue(value: unknown) {
 	}
 	if (typeof value === 'object') {
 		const record = value as Record<string, unknown>;
-		const timestamp =
-			record.timestamp ?? record.timeStamp ?? record.time ?? record.date;
-		if (
-			typeof timestamp === 'string' ||
-			typeof timestamp === 'number' ||
-			timestamp instanceof Date
-		) {
+		const timestamp = record.timestamp ?? record.timeStamp ?? record.time ?? record.date;
+		if (typeof timestamp === 'string' || typeof timestamp === 'number' || timestamp instanceof Date) {
 			return JSON.stringify({
 				...record,
 				[timestamp instanceof Date
 					? 'timestamp'
-					: (Object.keys(record).find((key) => record[key] === timestamp) ??
-						'timestamp')]: formatTimestamp(timestamp),
+					: (Object.keys(record).find((key) => record[key] === timestamp) ?? 'timestamp')]: formatTimestamp(timestamp),
 			});
 		}
 	}
@@ -66,13 +60,7 @@ function formatValue(value: unknown) {
 }
 
 function formatEventType(type: string) {
-	if (
-		type === 'open' ||
-		type === 'error' ||
-		type === 'close' ||
-		type === 'message'
-	)
-		return type;
+	if (type === 'open' || type === 'error' || type === 'close' || type === 'message') return type;
 	if (type === 'disconnect') return 'disconnect';
 	return `${type} [Custom Event]`;
 }
@@ -103,9 +91,7 @@ function SSEStoreDemo() {
 		const now = formatTimestamp(new Date());
 
 		const value =
-			lastMessage.type === 'open' || lastMessage.type === 'error'
-				? '[Event]'
-				: formatValue((lastMessage as any).data);
+			lastMessage.type === 'open' || lastMessage.type === 'error' ? '[Event]' : formatValue((lastMessage as any).data);
 
 		setEventLog((current) => [
 			{
@@ -119,14 +105,7 @@ function SSEStoreDemo() {
 	}, [lastMessage]);
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'start'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'start'} padding={24}>
 			<FlexDiv
 				width={640}
 				height={'auto'}
@@ -136,10 +115,8 @@ function SSEStoreDemo() {
 				border={'1px solid var(--core-outline-primary)'}
 			>
 				<h1>{`SEE Connection ${connections.length > 0 ? ': Active' : ''}`}</h1>
-				Slice does not provide a test SSE end point. You'll need to enter own
-				custom SSE enabled URL. If your endpoint supports it, you can also
-				provide 1 (one) optional custom event to listen for (event names are
-				case sensitive).
+				Slice does not provide a test SSE end point. You'll need to enter own custom SSE enabled URL. If your endpoint
+				supports it, you can also provide 1 (one) optional custom event to listen for (event names are case sensitive).
 				<Spacer size={12} />
 				<TextField
 					label={'URL:'}

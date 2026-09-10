@@ -41,8 +41,5 @@ type DropDownBaseProps<T = string> = {
 	onOption?: (option: DropDownOption<T>) => void;
 };
 
-export type DropDownProps<T = string> = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof DropDownBaseProps<T>
-> &
+export type DropDownProps<T = string> = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DropDownBaseProps<T>> &
 	DropDownBaseProps<T>;

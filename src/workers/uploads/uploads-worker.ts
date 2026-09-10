@@ -64,9 +64,7 @@ export type UploadWorkerMessage =
 			type: 'clear-uploads';
 	  };
 
-export type UploadWorkerResponse =
-	| UploadStatusMessage
-	| UploadWorkerErrorMessage;
+export type UploadWorkerResponse = UploadStatusMessage | UploadWorkerErrorMessage;
 
 export interface UploadWorkerBridge {
 	updateStatus(status: Upload[]): void;
@@ -183,10 +181,7 @@ export class UploadsWorker {
 		this.workerStatus = WorkerStatus.Busy;
 		this.notifyStatus();
 
-		while (
-			this.active.size < this.maxConcurrentUploads &&
-			this.queue.size > 0
-		) {
+		while (this.active.size < this.maxConcurrentUploads && this.queue.size > 0) {
 			const nextUpload = this.queue.values().next().value;
 			if (!nextUpload) break;
 
@@ -209,8 +204,7 @@ export class UploadsWorker {
 			const ext = upload.file.name.split('.').pop();
 			const mime = upload.file.type;
 			const filter = this.accepted.length > 0;
-			const accepted =
-				this.accepted.includes(ext ?? '') || this.accepted.includes(mime ?? '');
+			const accepted = this.accepted.includes(ext ?? '') || this.accepted.includes(mime ?? '');
 			if (filter && !accepted) {
 				throw new Error(UploadError.TypeNotAllowed);
 			}
@@ -356,12 +350,7 @@ export class UploadsWorker {
 	 */
 	private currentStatus(): Upload[] {
 		// combine queue, active, completed and failed into a single array
-		return [
-			...this.queue.values(),
-			...this.active.values(),
-			...this.completed.values(),
-			...this.failed.values(),
-		];
+		return [...this.queue.values(), ...this.active.values(), ...this.completed.values(), ...this.failed.values()];
 	}
 
 	/**
@@ -420,8 +409,6 @@ export class UploadsWorkerRuntime {
 	}
 }
 
-export function registerUploadsWorker(
-	target = globalThis as UploadWorkerTarget,
-): UploadsWorkerRuntime {
+export function registerUploadsWorker(target = globalThis as UploadWorkerTarget): UploadsWorkerRuntime {
 	return new UploadsWorkerRuntime(target);
 }

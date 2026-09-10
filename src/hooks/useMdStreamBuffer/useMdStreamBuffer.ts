@@ -2,10 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MdBuffer } from '../../utils';
-import type {
-	MarkdownStreamBufferOptions,
-	MarkdownStreamBufferSnapshot,
-} from '../../utils';
+import type { MarkdownStreamBufferOptions, MarkdownStreamBufferSnapshot } from '../../utils';
 
 export type UseMDStreamBufferOptions = MarkdownStreamBufferOptions & {
 	paceDelayMs?: number;
@@ -21,18 +18,11 @@ export function useMDStreamBuffer(options?: UseMDStreamBufferOptions) {
 	const [isComplete, setIsComplete] = useState<boolean>(false);
 	const [pendingCharacters, setPendingCharacters] = useState<number>(0);
 	const paceDelayMs = Math.max(0, options?.paceDelayMs ?? 0);
-	const paceChunkSize = Math.max(
-		1,
-		options?.paceChunkSize ?? Number.POSITIVE_INFINITY,
-	);
-	const usesPacing =
-		options?.paceDelayMs !== undefined || options?.paceChunkSize !== undefined;
+	const paceChunkSize = Math.max(1, options?.paceChunkSize ?? Number.POSITIVE_INFINITY);
+	const usesPacing = options?.paceDelayMs !== undefined || options?.paceChunkSize !== undefined;
 
 	const getTotalPendingCharacters = useCallback(() => {
-		return (
-			queuedValueRef.current.length +
-			(bufferRef.current?.pendingCharacters ?? 0)
-		);
+		return queuedValueRef.current.length + (bufferRef.current?.pendingCharacters ?? 0);
 	}, []);
 
 	const clearPaceTimer = useCallback(() => {
@@ -79,11 +69,7 @@ export function useMDStreamBuffer(options?: UseMDStreamBufferOptions) {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: sets up on mount only
 	useEffect(() => {
-		const {
-			paceDelayMs: _paceDelayMs,
-			paceChunkSize: _paceChunkSize,
-			...bufferOptions
-		} = options ?? {};
+		const { paceDelayMs: _paceDelayMs, paceChunkSize: _paceChunkSize, ...bufferOptions } = options ?? {};
 		bufferRef.current = new MdBuffer({
 			...bufferOptions,
 			onFlush: (snapshot: MarkdownStreamBufferSnapshot) => {
@@ -91,9 +77,7 @@ export function useMDStreamBuffer(options?: UseMDStreamBufferOptions) {
 				setHealthy(healthy);
 				setRaw(raw);
 				setIsComplete(isComplete);
-				setPendingCharacters(
-					queuedValueRef.current.length + snapshot.pendingCharacters,
-				);
+				setPendingCharacters(queuedValueRef.current.length + snapshot.pendingCharacters);
 			},
 		});
 

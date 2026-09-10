@@ -12,13 +12,10 @@ import type { UploadsStoreState, UploadsWorkerInstance } from './_types';
 
 let uploadsWorker: UploadsWorkerInstance | null = null;
 
-export function createUploadsWorker(
-	workerUrl?: string | URL,
-): UploadsWorkerInstance {
-	return new Worker(
-		workerUrl ?? new URL('../../workers/uploads/uploads.ts', import.meta.url),
-		{ type: 'module' },
-	) as UploadsWorkerInstance;
+export function createUploadsWorker(workerUrl?: string | URL): UploadsWorkerInstance {
+	return new Worker(workerUrl ?? new URL('../../workers/uploads/uploads.ts', import.meta.url), {
+		type: 'module',
+	}) as UploadsWorkerInstance;
 }
 
 export const useUploadsStore = create<UploadsStoreState>((set, get) => ({
@@ -27,10 +24,7 @@ export const useUploadsStore = create<UploadsStoreState>((set, get) => ({
 	initialized: false,
 	error: null,
 	actions: {
-		initialize: (
-			options: ConfigurationOptions,
-			worker: UploadsWorkerInstance,
-		) => {
+		initialize: (options: ConfigurationOptions, worker: UploadsWorkerInstance) => {
 			if (!uploadsWorker) {
 				uploadsWorker = worker;
 				uploadsWorker.onmessage = handleWorkerMessage;
@@ -104,18 +98,14 @@ function applyErrorMessage(message: UploadWorkerErrorMessage) {
 
 // atomic hook exports for use in React components
 export const useUploads = () => useUploadsStore((state) => state.uploads);
-export const useUploadsWorkerStatus = () =>
-	useUploadsStore((state) => state.workerStatus);
-export const useUploadsInitialized = () =>
-	useUploadsStore((state) => state.initialized);
+export const useUploadsWorkerStatus = () => useUploadsStore((state) => state.workerStatus);
+export const useUploadsInitialized = () => useUploadsStore((state) => state.initialized);
 export const useUploadsError = () => useUploadsStore((state) => state.error);
-export const useUploadsActions = () =>
-	useUploadsStore((state) => state.actions);
+export const useUploadsActions = () => useUploadsStore((state) => state.actions);
 
 // non-reactive imperative exports for use outside the React context
 export const uploadsActions = useUploadsStore.getState().actions;
 export const getUploads = () => useUploadsStore.getState().uploads;
-export const getUploadsWorkerStatus = () =>
-	useUploadsStore.getState().workerStatus;
+export const getUploadsWorkerStatus = () => useUploadsStore.getState().workerStatus;
 export const uploadsInitialized = () => useUploadsStore.getState().initialized;
 export const getUploadsError = () => useUploadsStore.getState().error;

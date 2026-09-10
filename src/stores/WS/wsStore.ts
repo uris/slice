@@ -33,10 +33,7 @@ export const useWSStore = create<WSStore>((set, get) => ({
 
 			const nextConnection = { name, connection };
 			set((state) => ({
-				connections: [
-					...state.connections.filter((connection) => connection.name !== name),
-					nextConnection,
-				],
+				connections: [...state.connections.filter((connection) => connection.name !== name), nextConnection],
 			}));
 
 			return nextConnection;
@@ -50,9 +47,7 @@ export const useWSStore = create<WSStore>((set, get) => ({
 				reason: 'Connection removed',
 			});
 			set((state) => ({
-				connections: state.connections.filter(
-					(connection) => connection.name !== name,
-				),
+				connections: state.connections.filter((connection) => connection.name !== name),
 			}));
 		},
 	},
@@ -60,21 +55,13 @@ export const useWSStore = create<WSStore>((set, get) => ({
 
 // reactive hook exports for React components
 export const useWS = () => useWSStore((state) => state.actions);
-export const useConnectionClose = () =>
-	useWSStore((state) => state.closedConnection);
+export const useConnectionClose = () => useWSStore((state) => state.closedConnection);
 export const useConnectionMessage = (connection: string) =>
-	useWSStore((state) =>
-		state.connections.some((entry) => entry.name === connection)
-			? state.message
-			: null,
-	);
+	useWSStore((state) => (state.connections.some((entry) => entry.name === connection) ? state.message : null));
 export const useIsConnected = (connection?: string) =>
 	useWSStore((state) => {
 		if (connection) {
-			return (
-				state.connections.find((entry) => entry.name === connection)?.connection
-					.connected ?? false
-			);
+			return state.connections.find((entry) => entry.name === connection)?.connection.connected ?? false;
 		}
 
 		return state.connections.some((entry) => entry.connection.connected);
@@ -82,24 +69,15 @@ export const useIsConnected = (connection?: string) =>
 
 // reactive hook exports for reading the latest unified message state
 export function useMessage(): UnifiedMessageEvent<unknown> | null;
-export function useMessage<T = unknown>(
-	type: 'message',
-	connection?: string,
-): T | string | Blob | ArrayBuffer | null;
+export function useMessage<T = unknown>(type: 'message', connection?: string): T | string | Blob | ArrayBuffer | null;
 export function useMessage(
 	type: 'open' | 'error' | 'close',
 	connection?: string,
 ): Event | ErrorEvent | CloseEvent | null;
-export function useMessage<T = unknown>(
-	type: string,
-	connection?: string,
-): T | string | Blob | ArrayBuffer | null;
+export function useMessage<T = unknown>(type: string, connection?: string): T | string | Blob | ArrayBuffer | null;
 export function useMessage<T = unknown>(type?: string, connection?: string) {
 	return useWSStore((state) => {
-		const sourceMessage =
-			connection && !state.connections.some((c) => c.name === connection)
-				? null
-				: state.message;
+		const sourceMessage = connection && !state.connections.some((c) => c.name === connection) ? null : state.message;
 		if (!type) return sourceMessage;
 		if (sourceMessage?.type !== type) return null;
 
@@ -107,9 +85,7 @@ export function useMessage<T = unknown>(type?: string, connection?: string) {
 			return 'event' in sourceMessage ? sourceMessage.event : null;
 		}
 
-		return 'data' in sourceMessage
-			? (sourceMessage.data as T | string | Blob | ArrayBuffer)
-			: null;
+		return 'data' in sourceMessage ? (sourceMessage.data as T | string | Blob | ArrayBuffer) : null;
 	});
 }
 

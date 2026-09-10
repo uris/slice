@@ -21,8 +21,4 @@ type ToolTipBaseProps = {
 	hideDelay?: number;
 };
 
-export type ToolTipProps = Omit<
-	HTMLMotionProps<'div'>,
-	keyof ToolTipBaseProps
-> &
-	ToolTipBaseProps;
+export type ToolTipProps = Omit<HTMLMotionProps<'div'>, keyof ToolTipBaseProps> & ToolTipBaseProps;

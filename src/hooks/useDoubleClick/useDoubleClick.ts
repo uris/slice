@@ -2,11 +2,7 @@
 
 import { useRef } from 'react';
 
-export function useDoubleClick<T, Y>(
-	onClick: (payload?: T) => void,
-	onDblClick: (payload?: Y) => void,
-	delay = 200,
-) {
+export function useDoubleClick<T, Y>(onClick: (payload?: T) => void, onDblClick: (payload?: Y) => void, delay = 200) {
 	const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const didClick = (payload: T) => {

@@ -37,10 +37,7 @@ export const ErrorSummary = React.memo((props: ErrorSummaryProps) => {
 	);
 
 	// keep the summary transition consistent across visibility changes
-	const transition: Transition = useMemo(
-		() => ({ ease: 'easeInOut', duration: 0.25 }),
-		[],
-	);
+	const transition: Transition = useMemo(() => ({ ease: 'easeInOut', duration: 0.25 }), []);
 
 	// recurse through error entries to render the error messages
 	const renderMessages = useCallback(
@@ -63,10 +60,7 @@ export const ErrorSummary = React.memo((props: ErrorSummaryProps) => {
 		const addNumbers = autoNumber && entries.length > 1;
 		return entries.map((error: ErrorMessage, index: number) => {
 			let messages: string[] | undefined = undefined;
-			if (error.message)
-				messages = Array.isArray(error.message)
-					? error.message
-					: [error.message];
+			if (error.message) messages = Array.isArray(error.message) ? error.message : [error.message];
 			const number = addNumbers ? `${index + 1}. ` : '';
 			return (
 				<div className={css.error} key={`${error.title}_${index}`}>

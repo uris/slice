@@ -20,8 +20,4 @@ export type LevelBaseProps = {
 	ReleasePerSeconds?: number;
 };
 
-export type LevelProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof LevelBaseProps
-> &
-	LevelBaseProps;
+export type LevelProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof LevelBaseProps> & LevelBaseProps;

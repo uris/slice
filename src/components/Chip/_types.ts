@@ -34,8 +34,4 @@ type ChipBaseProps = {
 	onClick?: (e: React.MouseEvent<HTMLDivElement> | undefined) => void;
 };
 
-export type ChipProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof ChipBaseProps
-> &
-	ChipBaseProps;
+export type ChipProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof ChipBaseProps> & ChipBaseProps;

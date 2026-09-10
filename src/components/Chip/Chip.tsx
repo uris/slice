@@ -21,26 +21,18 @@ export const Chip = React.memo((props: ChipProps) => {
 		iconPosition = 'left',
 		labelSize = 'm',
 		labelColor = 'var(--core-text-primary)',
-		labelColorHover = variant === 'normal'
-			? labelColor
-			: 'var(--core-text-special)',
+		labelColorHover = variant === 'normal' ? labelColor : 'var(--core-text-special)',
 		iconColor = 'var(--core-text-primary)',
-		iconColorHover = variant === 'normal'
-			? iconColor
-			: 'var(--core-text-special)',
+		iconColorHover = variant === 'normal' ? iconColor : 'var(--core-text-special)',
 		backgroundColor,
 		backgroundColorHover,
 		borderWidth,
 		borderSize = 1,
 		borderColor = 'var(--core-text-primary)',
-		borderColorHover = variant === 'normal'
-			? borderColor
-			: 'var(--core-text-special)',
+		borderColorHover = variant === 'normal' ? borderColor : 'var(--core-text-special)',
 		borderColorDisabled = 'var(--core-text-disabled)',
 		bgColor = 'transparent',
-		bgColorHover = variant === 'normal'
-			? bgColor
-			: 'var(--core-surface-secondary)',
+		bgColorHover = variant === 'normal' ? bgColor : 'var(--core-surface-secondary)',
 		borderRadius = 8,
 		paddingTop,
 		paddingTops = 8,
@@ -92,10 +84,8 @@ export const Chip = React.memo((props: ChipProps) => {
 	// resolve chip padding adjusting for side icon is on
 	const padding = useMemo(() => {
 		if (!label || !icon) return `${resolvedPaddingTop}px ${paddingSides}px`;
-		const paddingLeft =
-			iconPosition === 'right' ? paddingSides - 4 : paddingSides;
-		const paddingRight =
-			iconPosition === 'right' ? paddingSides : paddingSides - 4;
+		const paddingLeft = iconPosition === 'right' ? paddingSides - 4 : paddingSides;
+		const paddingRight = iconPosition === 'right' ? paddingSides : paddingSides - 4;
 		return `${resolvedPaddingTop}px ${paddingLeft}px ${resolvedPaddingTop}px ${paddingRight}px`;
 	}, [icon, iconPosition, resolvedPaddingTop, paddingSides, label]);
 
@@ -114,21 +104,12 @@ export const Chip = React.memo((props: ChipProps) => {
 			'--ui-chip-border-radius': setStyle(borderRadius),
 			'--ui-chip-border-size': setStyle(resolvedBorderWidth),
 			'--ui-chip-border-color': disabled ? borderColorDisabled : borderColor,
-			'--ui-chip-border-color-hover': disabled
-				? borderColorDisabled
-				: borderColorHover,
+			'--ui-chip-border-color-hover': disabled ? borderColorDisabled : borderColorHover,
 			'--ui-chip-bg-color': resolvedBackgroundColor,
-			'--ui-chip-bg-color-hover': disabled
-				? resolvedBackgroundColor
-				: resolvedBackgroundColorHover,
-			'--ui-chip-label-color': disabled
-				? 'var(--core-text-disabled)'
-				: labelColor,
-			'--ui-chip-label-color-hover': disabled
-				? 'var(--core-text-disabled)'
-				: labelColorHover,
-			'--ui-chip-cursor':
-				disabled || variant === 'normal' ? 'default' : 'pointer',
+			'--ui-chip-bg-color-hover': disabled ? resolvedBackgroundColor : resolvedBackgroundColorHover,
+			'--ui-chip-label-color': disabled ? 'var(--core-text-disabled)' : labelColor,
+			'--ui-chip-label-color-hover': disabled ? 'var(--core-text-disabled)' : labelColorHover,
+			'--ui-chip-cursor': disabled || variant === 'normal' ? 'default' : 'pointer',
 		} as React.CSSProperties;
 	}, [
 		padding,
@@ -166,9 +147,7 @@ export const Chip = React.memo((props: ChipProps) => {
 					<Icon name={icon} size={iconSize} strokeColor={computedIconColor} />
 				</div>
 			)}
-			{(children || label) && (
-				<div className={css[labelSize]}>{children ?? label}</div>
-			)}
+			{(children || label) && <div className={css[labelSize]}>{children ?? label}</div>}
 			{icon && iconPosition === 'right' && (
 				<div className={css.icon}>
 					<Icon name={icon} size={iconSize} strokeColor={computedIconColor} />

@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv';
 import { SliceIcons } from 'src/components/Icon/_types';
-import {
-	AnimationType,
-	type ButtonAnimation,
-	IconButton,
-} from 'src/components/IconButton';
+import { AnimationType, type ButtonAnimation, IconButton } from 'src/components/IconButton';
 import { runIconButtonPlay } from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
 

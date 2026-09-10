@@ -23,25 +23,11 @@ export function FunnelSans() {
 
 	return (
 		<FlexDiv width={'fill'} height={'fit'} align={'start'} justify={'start'}>
-			<TabBar
-				options={tabs}
-				selectedValue={style}
-				onTabChange={(option) => setStyle(option.value)}
-			/>
-			<div
-				className={css.glyphs}
-				style={{ fontWeight: weight, fontStyle: style }}
-			>
+			<TabBar options={tabs} selectedValue={style} onTabChange={(option) => setStyle(option.value)} />
+			<div className={css.glyphs} style={{ fontWeight: weight, fontStyle: style }}>
 				{`ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖabcdefghijklmnopqrstuvwxyzåäö1234567890!"#€%&/()=?*@£<~+>`}
 			</div>
-			<FlexDiv
-				width={'fill'}
-				height={'fit'}
-				direction={'row'}
-				justify={'between'}
-				align={'center'}
-				gap={16}
-			>
+			<FlexDiv width={'fill'} height={'fit'} direction={'row'} justify={'between'} align={'center'} gap={16}>
 				<Label borderSize={0}>Adjust Font Weight</Label>
 				<Slider
 					value={weight}

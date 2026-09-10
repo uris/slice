@@ -13,6 +13,7 @@ export { divInputBenchmarkConfig } from './DivInput.bench';
 export { dotBenchmarkConfig } from './Dot.bench';
 export { draggablePanelBenchmarkConfig } from './DraggablePanel.bench';
 export { dropDownBenchmarkConfig } from './DropDown.bench';
+export { dataTableBenchmarkConfig } from './DataTable.bench';
 export { errorSummaryBenchmarkConfig } from './ErrorSummary.bench';
 export { fileIconBenchmarkConfig } from './FileIcon.bench';
 export { fileListBenchmarkConfig } from './FileList.bench';

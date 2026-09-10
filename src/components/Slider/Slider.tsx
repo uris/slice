@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useObserveResize } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { debounce } from '../../utils';
@@ -124,8 +118,7 @@ export const Slider = React.memo((props: SliderProps) => {
 			const rect = el.getBoundingClientRect();
 			const sliderWidth = rect.width;
 			relativeProgressRef.current = sliderWidth > 0 ? posX / sliderWidth : 0;
-			absProgressRef.current =
-				scaleMin + relativeProgressRef.current * (scaleMax - scaleMin);
+			absProgressRef.current = scaleMin + relativeProgressRef.current * (scaleMax - scaleMin);
 			setCurrentValue(absProgressRef.current);
 		},
 		[scaleMax, scaleMin],
@@ -133,10 +126,7 @@ export const Slider = React.memo((props: SliderProps) => {
 
 	// update the slider to an absolute value and optionally notify listeners
 	const commitValue = useCallback(
-		(
-			nextValue: number,
-			notify: 'silent' | 'change' | 'drag' | 'both' = 'change',
-		) => {
+		(nextValue: number, notify: 'silent' | 'change' | 'drag' | 'both' = 'change') => {
 			const el = ref.current;
 			if (!el) return;
 			const sliderWidth = el.getBoundingClientRect().width;
@@ -146,10 +136,8 @@ export const Slider = React.memo((props: SliderProps) => {
 			relativeProgressRef.current = percent;
 			setCurrentValue(clampedValue);
 			setTrackAndHead(percent * sliderWidth);
-			if (notify === 'change' || notify === 'both')
-				onChange(clampedValue, percent);
-			if (notify === 'drag' || notify === 'both')
-				onDragChange(clampedValue, percent);
+			if (notify === 'change' || notify === 'both') onChange(clampedValue, percent);
+			if (notify === 'drag' || notify === 'both') onDragChange(clampedValue, percent);
 		},
 		[clampValue, valueToPercent, setTrackAndHead, onChange, onDragChange],
 	);
@@ -206,14 +194,7 @@ export const Slider = React.memo((props: SliderProps) => {
 			globalThis.removeEventListener('mouseup', handleMouseUp, false);
 			globalThis.removeEventListener('touchend', handleMouseUp, false);
 		},
-		[
-			handleMouseMove,
-			progress,
-			updateSlider,
-			debouncedOnChange,
-			onDragChange,
-			onChange,
-		],
+		[handleMouseMove, progress, updateSlider, debouncedOnChange, onDragChange, onChange],
 	);
 
 	// support standard slider keyboard controls
@@ -251,14 +232,7 @@ export const Slider = React.memo((props: SliderProps) => {
 			debouncedOnChange.cancel();
 			commitValue(nextValue, 'change');
 		},
-		[
-			scaleMin,
-			scaleMax,
-			debouncedOnChange,
-			commitValue,
-			stepIncrement,
-			disabled,
-		],
+		[scaleMin, scaleMax, debouncedOnChange, commitValue, stepIncrement, disabled],
 	);
 
 	// start dragging from the current pointer position and emit the initial value
@@ -279,15 +253,7 @@ export const Slider = React.memo((props: SliderProps) => {
 				onChange(absProgressRef.current, relativeProgressRef.current); // immediate update
 			}
 		},
-		[
-			handleMouseMove,
-			handleMouseUp,
-			onChange,
-			progress,
-			updateSlider,
-			debouncedOnChange,
-			disabled,
-		],
+		[handleMouseMove, handleMouseUp, onChange, progress, updateSlider, debouncedOnChange, disabled],
 	);
 
 	// sync the slider head position from the controlled value prop
@@ -378,12 +344,7 @@ export const Slider = React.memo((props: SliderProps) => {
 	/* END.DEBUG */
 
 	return (
-		<div
-			id={divId}
-			className={`${css.wrapper}${divClass}`}
-			style={{ ...divStyle, ...cssVars }}
-			{...rest}
-		>
+		<div id={divId} className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} {...rest}>
 			<div
 				ref={ref}
 				className={css.trackWrapper}

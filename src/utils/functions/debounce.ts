@@ -7,10 +7,7 @@ export interface DebouncedFunction<T extends (...args: any[]) => any> {
 /**
  * Delay a function call until activity stops, with cancel and flush helpers.
  */
-export function debounce<T extends (...args: any[]) => any>(
-	func: T,
-	delay: number,
-): DebouncedFunction<T> {
+export function debounce<T extends (...args: any[]) => any>(func: T, delay: number): DebouncedFunction<T> {
 	let timeoutId: ReturnType<typeof setTimeout> | null = null;
 	let lastArgs: Parameters<T> | null = null;
 

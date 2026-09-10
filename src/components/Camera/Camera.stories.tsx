@@ -59,10 +59,7 @@ function CameraDemo(args: any) {
 					<Camera {...args} ref={cameraRef} onVideoStream={refreshStreamInfo} />
 				</FlexDiv>
 				<FlexDiv width={360} padding={16} gap={12}>
-					<div>
-						NOTE: This demo uses the forwarded ref instead of component state
-						events.
-					</div>
+					<div>NOTE: This demo uses the forwarded ref instead of component state events.</div>
 					Stream ID: <Label>{streamInfo.streamId ?? 'none'}</Label>
 					Video Device ID: <Label>{streamInfo.videoDeviceId ?? 'none'}</Label>
 					Video Enabled:{' '}
@@ -79,10 +76,7 @@ function CameraDemo(args: any) {
 				</FlexDiv>
 			</FlexDiv>
 			<FlexDiv direction={'row'} wrap gap={8}>
-				<Button
-					label={'Refresh Ref Info'}
-					onClick={() => refreshStreamInfo()}
-				/>
+				<Button label={'Refresh Ref Info'} onClick={() => refreshStreamInfo()} />
 				<Button
 					label={'Start Stream'}
 					onClick={async () => {

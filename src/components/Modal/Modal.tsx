@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { setStyle } from '../../utils/functions/misc';
 import { Button } from '../Button';
 import { Icon } from '../Icon';
@@ -170,17 +164,9 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 	};
 
 	return (
-		<div
-			id={id}
-			className={`${css.wrapper}${modalClass}`}
-			style={{ ...modalStyle, ...cssVars }}
-			{...(rest as any)}
-		>
+		<div id={id} className={`${css.wrapper}${modalClass}`} style={{ ...modalStyle, ...cssVars }} {...(rest as any)}>
 			{(title || close) && (
-				<div
-					className={`${css.title} ${css[titleSize]}`}
-					onPointerDown={onDragPointerDown}
-				>
+				<div className={`${css.title} ${css[titleSize]}`} onPointerDown={onDragPointerDown}>
 					<div className={css.titleBlock}>
 						{titleIcon && (
 							<div className={css.titleIcon}>
@@ -192,12 +178,7 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 					{close && (
 						<div className={css.close}>
 							<div className={css.titleIcon}>
-								<IconButton
-									tooltip={'close'}
-									icon={'x'}
-									onClick={handleClose}
-									onToolTip={(tip) => onToolTip?.(tip)}
-								/>
+								<IconButton tooltip={'close'} icon={'x'} onClick={handleClose} onToolTip={(tip) => onToolTip?.(tip)} />
 							</div>
 						</div>
 					)}
@@ -216,6 +197,4 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 	);
 };
 
-export const Modal = React.memo(BaseModal) as <T = string>(
-	props: ModalProps<T>,
-) => React.JSX.Element;
+export const Modal = React.memo(BaseModal) as <T = string>(props: ModalProps<T>) => React.JSX.Element;

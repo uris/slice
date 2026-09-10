@@ -6,10 +6,7 @@ import { runErrorSummaryPlay } from 'src/components/playHelpers';
 const errorMessages: ErrorMessage[] = [
 	{
 		title: 'Password Format',
-		message: [
-			'Needs at least one special character',
-			'Needs at least one number',
-		],
+		message: ['Needs at least one special character', 'Needs at least one number'],
 	},
 	{ title: 'An email address is required' },
 ];

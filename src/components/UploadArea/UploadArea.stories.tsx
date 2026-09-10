@@ -48,13 +48,7 @@ export default meta;
 export const Default: StoryObj<typeof UploadArea> = {
 	render: (args) => {
 		return (
-			<FlexDiv
-				absolute
-				justify={'center'}
-				align={'center'}
-				padding={64}
-				gap={16}
-			>
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
 				<UploadArea {...args} />
 			</FlexDiv>
 		);
@@ -64,13 +58,7 @@ export const Default: StoryObj<typeof UploadArea> = {
 export const Busy: StoryObj<typeof UploadArea> = {
 	render: (args) => {
 		return (
-			<FlexDiv
-				absolute
-				justify={'center'}
-				align={'center'}
-				padding={64}
-				gap={16}
-			>
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
 				<UploadArea {...args} files={uploadFiles} busy={true} />
 			</FlexDiv>
 		);

@@ -49,8 +49,7 @@ function resolveEntries(entries: IntersectEntry[]): ResolvedEntries {
 		if (typeof entry === 'string') {
 			if (typeof document === 'undefined') continue;
 			const elements = document.querySelectorAll(entry);
-			for (const element of Array.from(elements))
-				resolved.push(element as HTMLElement);
+			for (const element of Array.from(elements)) resolved.push(element as HTMLElement);
 		} else if (entry.current) {
 			resolved.push(entry.current);
 		}
@@ -61,9 +60,7 @@ function resolveEntries(entries: IntersectEntry[]): ResolvedEntries {
 
 // resolve entries to entry key
 export function resolvedElementsKey(entries: IntersectEntry[]): string {
-	return entries
-		.map((entry) => (typeof entry === 'string' ? `s:${entry}` : 'r'))
-		.join('|');
+	return entries.map((entry) => (typeof entry === 'string' ? `s:${entry}` : 'r')).join('|');
 }
 
 // resolve thresholds key
@@ -71,9 +68,7 @@ export function resolvedThresholdsKey(thresholds: number[]): string {
 	return thresholds.map((threshold) => threshold.toString()).join(',');
 }
 
-export function useIntersecting(
-	options: IntersectOptions = defaultOptions,
-): IntersectResultList {
+export function useIntersecting(options: IntersectOptions = defaultOptions): IntersectResultList {
 	const { container, entries, thresholds: rawThresholds, margin } = options;
 
 	// will hold updated intersection results
@@ -99,9 +94,7 @@ export function useIntersecting(
 	const entryArray = Array.isArray(entries) ? entries : [entries];
 	const entryKey = resolvedElementsKey(entryArray);
 
-	const thresholdArray = Array.isArray(rawThresholds)
-		? rawThresholds
-		: [rawThresholds];
+	const thresholdArray = Array.isArray(rawThresholds) ? rawThresholds : [rawThresholds];
 	const thresholdKey = resolvedThresholdsKey(thresholdArray);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: entryKey/thresholdKey stand in for entryArray/thresholdArray
@@ -138,9 +131,7 @@ export function useIntersecting(
 				const nextExited: IntersectResult[] = [];
 
 				for (const entry of observedEntries) {
-					const index = next.findIndex(
-						(result) => result.target === entry.target,
-					);
+					const index = next.findIndex((result) => result.target === entry.target);
 					const wasIntersecting = index !== -1 && next[index].isIntersecting;
 					const updated: IntersectResult = {
 						target: entry.target as HTMLElement,
@@ -151,10 +142,8 @@ export function useIntersecting(
 					if (index === -1) next.push(updated);
 					else next[index] = updated;
 
-					if (wasIntersecting && !entry.isIntersecting)
-						nextExited.push(updated);
-					if (!wasIntersecting && entry.isIntersecting)
-						nextEntered.push(updated);
+					if (wasIntersecting && !entry.isIntersecting) nextExited.push(updated);
+					if (!wasIntersecting && entry.isIntersecting) nextEntered.push(updated);
 				}
 
 				resultsRef.current = next;

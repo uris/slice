@@ -21,14 +21,8 @@ export const Badge = React.memo((props: BadgeProps) => {
 	// compose CSS custom properties for the badge colors
 	const cssVars = useMemo(() => {
 		return {
-			'--badge-color':
-				variant === 'light'
-					? 'var(--core-text-primary)'
-					: 'var(--core-text-light)',
-			'--badge-bg':
-				variant === 'light'
-					? 'var(--core-badge-secondary)'
-					: 'var(--core-badge-primary)',
+			'--badge-color': variant === 'light' ? 'var(--core-text-primary)' : 'var(--core-text-light)',
+			'--badge-bg': variant === 'light' ? 'var(--core-badge-secondary)' : 'var(--core-badge-primary)',
 		} as React.CSSProperties;
 	}, [variant]);
 
@@ -36,8 +30,7 @@ export const Badge = React.memo((props: BadgeProps) => {
 	useTrackRenders(props, 'Badge');
 	/* END.DEBUG */
 
-	if (count === undefined || count === '' || (hideNull && count === 0))
-		return null;
+	if (count === undefined || count === '' || (hideNull && count === 0)) return null;
 
 	return (
 		<div
