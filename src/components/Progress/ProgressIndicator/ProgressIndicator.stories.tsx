@@ -8,7 +8,7 @@ const meta: Meta<typeof ProgressIndicator> = {
 	title: 'Components/ProgressIndicator',
 	component: ProgressIndicator,
 	args: {
-		size: '100%',
+		size: 24,
 		inset: true,
 		secondsPerSpin: 1,
 		show: true,
