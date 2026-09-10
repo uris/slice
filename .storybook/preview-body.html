@@ -1,131 +1,143 @@
 <!-- Inject global styles for the preview iframe -->
 <style>
+	.css-3rewwu {
+		background: transparent;
+		padding: 0;
+		margin: 0;
+	}
 
-    
-    .css-3rewwu {
-        background: transparent;
-        padding: 0;
-        margin: 0;
-    }
+	.css-1xcvvxl {
+		max-width: 100%;
+	}
 
-    .css-1xcvvxl {
-        max-width: 100%;
-    }
+	.docblock-source {
+		border-radius: 0;
+		border-width: 1px;
+		box-shadow: none;
+		box-sizing: border-box;
+		width: 100%;
+		margin: 0 auto 1.5em auto;
+	}
+
+	/*
+	 * Docs-page cosmetics only (typography, tables, code blocks, lists
+	 * rendered from MDX prose). Wrapped in a layer so it can NEVER win
+	 * against an actual Slice component's own CSS Module, no matter what
+	 * specificity is added here later: unlayered rules (all component
+	 * module CSS) always beat layered rules. Do not use !important.
+	 * NOTE: the three rules above (Storybook's own emotion-generated
+	 * chrome classnames) intentionally stay OUTSIDE this layer -- they
+	 * override Storybook's own unlayered default styling, and putting
+	 * them in a layer would make them permanently lose that fight.
+	 */
+	@layer slice-docs-chrome {
+
+        .sbdocs-content pre {
+                    display:flex;
+                    overflow: visible;
+                    flex-direction: column;
+                    height: auto;
+                    margin: 0;
+                    padding: 24px;
+                }
+                
+        .sbdocs-content img {
+                    margin: 0 auto 1.5em auto;
+                }
+                
+        .sbdocs-content p {
+                    font-family: 'Funnel Sans', sans-serif;
+                    font-weight: 300;
+                    font-size: var(--font-size-l);
+                    line-height: 1.4em;
+                    letter-spacing: 2%;
+                    margin: 0 auto 1.5em auto;
+                    padding: 0;
+                    color: var(--core-text-secondary);
+                    text-align: left;
+                    width: 100%;
+                }
+                
+        .sbdocs-content p.note {
+                    font-size: var(--font-size-s);
+                    color: var(--core-text-tertiary);
+                }
+                
+        .sbdocs-content b, .sbdocs-content strong {
+                    font-family: 'Funnel Sans', sans-serif;
+                    font-weight: 580;
+                }
+        .sbdocs-content a {
+                    font-family: 'Funnel Sans', sans-serif;
+                    color: var(--core-text-special);
+                    text-decoration: underline;
+                }
+        .sbdocs-content a:hover {
+                    text-decoration: none;
+                }
+        .sbdocs-content table:not(.docs-story *) {
+                    width: 100%;
+                    border-collapse: collapse;
+                    border: 0 solid var(--core-surface-secondary);
+                    margin: 0 auto 1.5em auto;
+                }
+        .sbdocs-content tr:not(.docs-story *) {
+                    border-top: 1px solid var(--core-outline-primary);
+                }
+        .sbdocs-content tr:first-child:not(.docs-story *) {
+                    border-top: 1px solid var(--core-outline-primary);
+                }
+        .sbdocs-content tr:last-child:not(.docs-story *) {
+                    border-bottom: 1px solid var(--core-outline-primary);
+                }
+        .sbdocs-content tr:nth-of-type(2n):not(.docs-story *) {
+                    background-color: var(--core-surface-secondary);
+                }
+        .sbdocs-content th:not(.docs-story *), .sbdocs-content td:not(.docs-story *) {
+                    font-family: 'Funnel Sans', sans-serif;
+                    font-weight: 300;
+                    font-size: var(--font-size-m);
+                    line-height: 1.4em;
+                    letter-spacing: 2%;
+                    padding: 16px 8px;
+                    color: var(--core-text-secondary);
+                    border: 0 solid var(--core-surface-secondary);
+                }
+        .sbdocs-content th:not(.docs-story *) {
+                    text-align: left;
+                }
+        .sbdocs-content code {
+                    border: 1px solid var(--core-outline-primary);
+                    background: var(--core-surface-secondary);
+                    color: var(--core-text-primary);
+                }
+        .sbdocs-content a code {
+                    color: var(--core-text-special);
+                    text-decoration: underline;
+                }
+        .sbdocs-content a:hover code {
+                    color: var(--core-text-special);
+                    text-decoration: none;
+                }
+        .sbdocs-content td code {
+                    font-family: 'Funnel Sans', sans-serif;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    font-size: var(--font-size-s);
+                    margin: 2px 0;
+                    display:inline-block;
+                }
+        .sbdocs-content div.note-section p:first-child {
+                    margin:0;
+                }
+        .sbdocs-content ul {
+                    list-style-position: inside;
+                    margin: 0 0 1.5em -2.4em;
+                }
+        .sbdocs-content ul li {
+                    font-family: 'Funnel Sans', sans-serif;
+                    margin: 0;
+                }
     
-    .docblock-source {
-        border-radius: 0;
-        border-width: 1px;
-        box-shadow: none;
-        box-sizing: border-box;
-        width: 100%;
-        margin: 0 auto 1.5em auto !important;
-    }
-    
-    pre {
-        display:flex;
-        overflow: visible;
-        flex-direction: column;
-        height: auto !important;
-        margin: 0 !important;
-        padding: 24px !important;
-    }
-    
-    img {
-        margin: 0 auto 1.5em auto !important;
-    }
-    
-    p {
-        font-family: 'Funnel Sans', sans-serif !important;
-        font-weight: 300 !important;
-        font-size: var(--font-size-l) !important;
-        line-height: 1.4em;
-        letter-spacing: 2%;
-        margin: 0 auto 1.5em auto !important;
-        padding: 0 !important;
-        color: var(--core-text-secondary) !important;
-        text-align: left !important;
-        width: 100% !important;
-    }
-    
-    p.note {
-        font-size: var(--font-size-s) !important;
-        color: var(--core-text-tertiary) !important;
-    }
-    
-    b, strong {
-        font-family: 'Funnel Sans', sans-serif !important;
-        font-weight: 580;
-    }
-    a {
-        font-family: 'Funnel Sans', sans-serif !important;
-        color: var(--core-text-special) !important;
-        text-decoration: underline !important;
-    }
-    a:hover {
-        text-decoration: none !important;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        border: 0 solid var(--core-surface-secondary) !important;
-        margin: 0 auto 1.5em auto !important;
-    }
-    tr {
-        border-top: 1px solid var(--core-outline-primary) !important;
-    }
-    tr:first-child {
-        border-top: 1px solid var(--core-outline-primary) !important;
-    }
-    tr:last-child {
-        border-bottom: 1px solid var(--core-outline-primary) !important;
-    }
-    tr:nth-of-type(2n) {
-        background-color: var(--core-surface-secondary) !important;
-    }
-    th, td {
-        font-family: 'Funnel Sans', sans-serif !important;
-        font-weight: 300 !important;
-        font-size: var(--font-size-m) !important;
-        line-height: 1.4em;
-        letter-spacing: 2%;
-        padding: 16px 8px !important;
-        color: var(--core-text-secondary) !important;
-        border: 0 solid var(--core-surface-secondary) !important;
-    }
-    th {
-        text-align: left !important;
-    }
-    code {
-        border: 1px solid var(--core-outline-primary) !important;
-        background: var(--core-surface-secondary) !important;
-        color: var(--core-text-primary) !important;
-    }
-    a code {
-        color: var(--core-text-special) !important;
-        text-decoration: underline !important;
-    }
-    a:hover code {
-        color: var(--core-text-special) !important;
-        text-decoration: none !important;
-    }
-    td code {
-        font-family: 'Funnel Sans', sans-serif !important;
-        padding: 2px 6px !important;
-        border-radius: 4px !important;
-        font-size: var(--font-size-s) !important;
-        margin: 2px 0 !important;
-        display:inline-block !important;
-    }
-    div.note-section p:first-child {
-        margin:0 !important;
-    }
-    ul {
-        list-style-position: inside;
-        margin: 0 0 1.5em -2.4em !important;
-    }
-    ul li {
-        font-family: 'Funnel Sans', sans-serif !important;
-        margin: 0 !important;
-    }
-    
+	}
 </style>

@@ -1,0 +1,120 @@
+.tableWrapper {
+	position: relative;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	width: var(--table-width);
+	height: var(--table-height);
+	overflow-x: auto;
+	overflow-y: auto;
+	padding: 0;
+	margin: 0;
+	border: 1px solid var(--table-border-color);
+}
+
+.table {
+	box-sizing: border-box;
+	border-collapse: collapse;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	color: var(--core-text-primary);
+}
+
+/* hide caption - in code for accessbibility */
+.table caption {
+	display: none;
+}
+
+/* each table header cell is sticky by default */
+.table thead tr th {
+	position: var(--table-header-sticky-poition);
+	top: 0;
+	z-index: 1;
+	border-right: 1px solid var(--table-border-color);
+	border-bottom: 1px solid var(--table-border-color);
+	box-shadow: var(--table-header-box-shadow);
+	background: var(--table-header-background-color);
+}
+
+/* last th of the header row, remove the right border */
+.table thead tr th:last-child {
+	border-right: 0;
+}
+
+/* border bot and right to all body cells */
+.table tbody tr td {
+	border-right: 1px solid var(--table-border-color);
+	border-bottom: 1px solid var(--table-border-color);
+}
+
+/* candy stripe all even body rows */
+.table tbody tr:nth-child(even) td {
+	background-color: var(--table-candy-stripe-background-color);
+}
+
+/* remove right border from last cell of each body row */
+.table tbody tr td:last-child {
+	border-right: 0;
+}
+
+/* remove the bottom border from every td in the last tr of the body */
+.table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+/* style first cell in each row of the body */
+.table tbody tr td:nth-child(1) {
+	position: var(--table-freeze-column-position);
+	left: 0;
+	z-index: 2;
+	box-shadow: var(--table-column-box-shadow);
+}
+
+/* style first cell in the header row */
+.table thead tr th:nth-child(1) {
+	position: var(--table-corner-position);
+	left: var(--table-corner-left);
+	top: 0;
+	z-index: 3;
+	box-shadow: var(--table-corner-box-shadow);
+}
+
+.baseCell {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background-color: var(--table-background-color);
+}
+
+.baseCellWrapper,
+.headerCellWrapper {
+	box-sizing: border-box;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+.xs {
+	composes: body-xs-regular from "../../utils/styling/type.module.css";
+}
+
+.m {
+	composes: body-m-regular from "../../utils/styling/type.module.css";
+}
+
+.l {
+	composes: body-l-regular from "../../utils/styling/type.module.css";
+}
+
+.s {
+	composes: body-s-regular from "../../utils/styling/type.module.css";
+}
+
+.scroll {
+	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
+}

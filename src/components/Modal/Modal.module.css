@@ -43,32 +43,16 @@
 
 .contentWrapper {
 	composes: columnStart from "../../utils/styling/flexBox.module.css";
+	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
 	width: 100%;
 	flex: 1;
 	overflow: hidden;
 	overflow-y: auto;
 	margin-right: 4px !important;
-	&::-webkit-scrollbar {
-		background-color: var(--modal-background-color);
-		width: 6px;
-	}
-
-	&::-webkit-scrollbar-track {
-		background-color: var(--modal-background-color);
-		width: 6px;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background-color: var(--modal-scroll-handle);
-		border-radius: 20px;
-		border: 1px solid var(--modal-background-color);
-	}
-
-	&::-webkit-scrollbar-thumb:hover {
-		background-color: var(--modal-scroll-handle-hover);
-		border-radius: 20px;
-		border: 1px solid var(--modal-background-color);
-	}
+	/* keeps scrollHandleColor/scrollHandleColorHover props working as before */
+	--scrollbar-bg: var(--modal-background-color);
+	--scrollbar-thumb: var(--modal-scroll-handle);
+	--scrollbar-thumb-hover: var(--modal-scroll-handle-hover);
 }
 
 .content {

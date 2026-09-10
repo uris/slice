@@ -4,6 +4,7 @@ type TextAreaBaseProps = {
 	value?: string;
 	name?: string;
 	width?: number | string;
+	height?: number | string;
 	minWidth?: number | string;
 	rows?: number;
 	focused?: boolean;
