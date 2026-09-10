@@ -1,6 +1,6 @@
 {
 	"name": "@apple-pie/slice",
-	"version": "0.1.40",
+	"version": "0.1.41",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.mjs",
 	"exports": {
@@ -120,11 +120,11 @@
 		"build-storybook": "storybook build"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Uris Dacosta",
 	"license": "ISC",
 	"type": "commonjs",
 	"types": "dist/types/index.d.ts",
-	"description": "",
+	"description": "React UI SDK",
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@chromatic-com/storybook": "^5.0.1",

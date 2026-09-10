@@ -6,7 +6,7 @@ The package is currently in beta. Until `1.0.0`, breaking API changes may still 
 
 Docs and showcase: https://slice-uikit.com
 
-GitHub repository: https://github.com/uris/uikit
+GitHub repository: https://github.com/uris/slice
 
 ## Installation
 
@@ -54,7 +54,7 @@ function ThemeToggle() {
 export default function App() {
 	return (
 		<ThemeProvider system global>
-			<Avatar size={32} first="John" last="Appleseed" />
+			<Avatar size={32} name="John Appleseed" />
 			<ThemeToggle />
 		</ThemeProvider>
 	);
@@ -97,6 +97,8 @@ Common subpaths:
 - `@apple-pie/slice/theme/motion`
 - `@apple-pie/slice/theme/type`
 - `@apple-pie/slice/theme/themes`
+- `@apple-pie/slice/css/flexBox.module.css`
+- `@apple-pie/slice/css/type.module.css`
 - `@apple-pie/slice/utils`
 - `@apple-pie/slice/utils/objects`
 - `@apple-pie/slice/workers/*`
@@ -119,7 +121,11 @@ Contributor setup and workflow:
 - [CONTRIBUTING.md](./CONTRIBUTING.md)
 - [contributor-docs/build-architecture.md](./contributor-docs/build-architecture.md)
 
+## License
+
+[ISC](./LICENSE) - do whatever you'd like with it.
+
 ## Support
 
 - Documentation and demos: https://slice-uikit.com
-- Source and issues: https://github.com/uris/uikit
+- Source and issues: https://github.com/uris/slice
