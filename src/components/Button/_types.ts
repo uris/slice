@@ -42,16 +42,10 @@ type ButtonBaseProps = {
 	link?: string;
 	target?: '_blank' | '_self' | '_parent' | '_top';
 	onToolTip?: (tip: ToolTip | null) => void;
-	onClick?: (
-		e: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined,
-	) => void;
+	onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => void;
 };
 
-export type ButtonProps = Omit<
-	React.ButtonHTMLAttributes<HTMLButtonElement>,
-	keyof ButtonBaseProps
-> &
-	ButtonBaseProps;
+export type ButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof ButtonBaseProps> & ButtonBaseProps;
 
 export interface ButtonHandle {
 	triggerClick: () => void;

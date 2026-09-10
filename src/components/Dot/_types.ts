@@ -15,11 +15,7 @@ type DotBaseProps = {
 	show?: boolean;
 };
 
-export type DotProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof DotBaseProps
-> &
-	DotBaseProps;
+export type DotProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DotBaseProps> & DotBaseProps;
 
 export const DEFAULT_VARIANTS: Variants = {
 	initial: { opacity: 0 },

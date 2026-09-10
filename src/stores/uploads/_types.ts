@@ -13,10 +13,7 @@ export type UploadsStoreState = {
 	initialized: boolean;
 	error: string | null;
 	actions: {
-		initialize: (
-			options: ConfigurationOptions,
-			worker: UploadsWorkerInstance,
-		) => UploadsWorkerInstance;
+		initialize: (options: ConfigurationOptions, worker: UploadsWorkerInstance) => UploadsWorkerInstance;
 		push: (files: File | UploadInput | Array<File | UploadInput>) => void;
 		reset: () => void;
 	};

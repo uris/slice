@@ -45,8 +45,7 @@ const bootstrapBreakPoints: BreakPoints = {
 	[FormFactor.DesktopXL]: 1400,
 };
 
-const isBrowser =
-	typeof window !== 'undefined' && typeof navigator !== 'undefined';
+const isBrowser = typeof window !== 'undefined' && typeof navigator !== 'undefined';
 
 function checkElectron() {
 	if (!isBrowser) return false;
@@ -56,9 +55,7 @@ function checkElectron() {
 
 function checkAppleDevice() {
 	if (!isBrowser) return false;
-	return (
-		navigator.platform.startsWith('Mac') || navigator.platform === 'iPhone'
-	);
+	return navigator.platform.startsWith('Mac') || navigator.platform === 'iPhone';
 }
 
 function checkTouchDevice() {
@@ -84,8 +81,7 @@ export function useWindow(breakpoints = bootstrapBreakPoints, top = true) {
 	const [locationError, setLocationError] = useState<Error | null>(null);
 	const [gettingLocation, setGettingLocation] = useState<boolean>(false);
 
-	const geolocationSupported =
-		typeof navigator !== 'undefined' && 'geolocation' in navigator;
+	const geolocationSupported = typeof navigator !== 'undefined' && 'geolocation' in navigator;
 
 	useEffect(() => {
 		if (!isBrowser) return;
@@ -98,9 +94,7 @@ export function useWindow(breakpoints = bootstrapBreakPoints, top = true) {
 	const getFormFactor = useCallback(
 		(width: number) => {
 			if (!width || width <= 0) return FormFactor.Mobile;
-			const orderedBps = Object.entries(breakpoints).sort(
-				(a, b) => b[1] - a[1],
-			) as [FormFactor, number][];
+			const orderedBps = Object.entries(breakpoints).sort((a, b) => b[1] - a[1]) as [FormFactor, number][];
 			for (const [formFactor, breakpoint] of orderedBps) {
 				if (width >= breakpoint) return formFactor;
 			}
@@ -145,12 +139,8 @@ export function useWindow(breakpoints = bootstrapBreakPoints, top = true) {
 
 	function handleResize() {
 		if (!isBrowser) return;
-		const windowWidth = top
-			? (window.top?.innerWidth ?? window.innerWidth)
-			: window.innerWidth;
-		const windowHeight = top
-			? (window.top?.innerHeight ?? window.innerHeight)
-			: window.innerHeight;
+		const windowWidth = top ? (window.top?.innerWidth ?? window.innerWidth) : window.innerWidth;
+		const windowHeight = top ? (window.top?.innerHeight ?? window.innerHeight) : window.innerHeight;
 		setFormFactor(getFormFactor(windowWidth));
 		setViewportHeight(windowHeight);
 		setViewportWidth(windowWidth);

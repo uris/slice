@@ -14,8 +14,5 @@ type ErrorSummaryBaseProps = {
 	textSize?: 'xs' | 's' | 'm' | 'l';
 };
 
-export type ErrorSummaryProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof ErrorSummaryBaseProps
-> &
+export type ErrorSummaryProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof ErrorSummaryBaseProps> &
 	ErrorSummaryBaseProps;

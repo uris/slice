@@ -31,8 +31,4 @@ type ButtonBarBaseProps = {
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
-export type ButtonBarProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof ButtonBarBaseProps
-> &
-	ButtonBarBaseProps;
+export type ButtonBarProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof ButtonBarBaseProps> & ButtonBarBaseProps;

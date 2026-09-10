@@ -56,9 +56,7 @@ const resolveAudioSource = (audioStream: AudioRecorderSource) => {
 	return audioStream;
 };
 
-const toMediaStream = (
-	audioStream: AudioRecorderSource,
-): MediaStream | null => {
+const toMediaStream = (audioStream: AudioRecorderSource): MediaStream | null => {
 	const source = resolveAudioSource(audioStream);
 	if (!source) return null;
 	if (typeof MediaStream === 'undefined') return null;
@@ -66,9 +64,7 @@ const toMediaStream = (
 	return new MediaStream([source]);
 };
 
-export function useAudioRecorder(
-	audioStream: AudioRecorderSource,
-): UseStreamToMp3Return {
+export function useAudioRecorder(audioStream: AudioRecorderSource): UseStreamToMp3Return {
 	const audioBlob = useRef<Blob | null>(null);
 	const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 	const recordedChunksRef = useRef<BlobPart[]>([]);
@@ -172,10 +168,7 @@ export function useAudioRecorder(
 	// setup media recoridng on unmount with unmount cleanup
 	useEffect(() => {
 		return () => {
-			if (
-				mediaRecorderRef.current &&
-				mediaRecorderRef.current.state !== 'inactive'
-			) {
+			if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
 				mediaRecorderRef.current.stop();
 			}
 			mediaRecorderRef.current = null;

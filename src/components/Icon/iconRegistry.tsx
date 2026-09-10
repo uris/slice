@@ -71,12 +71,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 	[
 		'play',
 		{
-			line: ({ strokeColor }) => (
-				<polygon
-					points="15.4 10 7.3 5.62 7.3 14.38 15.4 10"
-					fill={strokeColor}
-				/>
-			),
+			line: ({ strokeColor }) => <polygon points="15.4 10 7.3 5.62 7.3 14.38 15.4 10" fill={strokeColor} />,
 		},
 	],
 	[
@@ -93,10 +88,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 						d="M10,2.5c4.14,0,7.5,3.36,7.5,7.5s-3.36,7.5-7.5,7.5-7.5-3.36-7.5-7.5,3.36-7.5,7.5-7.5M10,1C5.03,1,1,5.03,1,10s4.03,9,9,9,9-4.03,9-9S14.97,1,10,1h0Z"
 						fill={strokeColor}
 					/>
-					<polygon
-						points="15.4 10 7.3 5.62 7.3 14.38 15.4 10"
-						fill={strokeColor}
-					/>
+					<polygon points="15.4 10 7.3 5.62 7.3 14.38 15.4 10" fill={strokeColor} />
 				</>
 			),
 		},
@@ -177,16 +169,8 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ stroke, strokeColor, fillColor }) => (
 				<>
-					<polygon
-						points="4.82 8.35 9.61 12.51 4.82 12.51 4.82 8.35"
-						fill={strokeColor}
-						fillOpacity={fillColor}
-					/>
-					<polygon
-						points="8.51 7.58 14.51 12.78 14.5 3 14 2.5 8.51 7.58"
-						fill={strokeColor}
-						fillOpacity={fillColor}
-					/>
+					<polygon points="4.82 8.35 9.61 12.51 4.82 12.51 4.82 8.35" fill={strokeColor} fillOpacity={fillColor} />
+					<polygon points="8.51 7.58 14.51 12.78 14.5 3 14 2.5 8.51 7.58" fill={strokeColor} fillOpacity={fillColor} />
 					<path
 						d="M9.02,8.02h.34c.29,0,.57-.11.77-.32l3.41-3.41v7.65l1.5,1.3V3.15c0-.42-.25-.79-.64-.95-.39-.16-.83-.07-1.12.22l-4.09,4.09h-1.9l1.73,1.5Z"
 						fill={strokeColor}
@@ -254,16 +238,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ fillColor, strokeColor }) => (
 				<>
-					<rect
-						x="4"
-						y="5"
-						width="12"
-						height="9"
-						rx="1"
-						ry="1"
-						fill={strokeColor}
-						opacity={fillColor}
-					/>
+					<rect x="4" y="5" width="12" height="9" rx="1" ry="1" fill={strokeColor} opacity={fillColor} />
 					<path
 						d="M18,13.25h-1.25v-7.25c0-.96-.79-1.75-1.75-1.75H5c-.96,0-1.75.79-1.75,1.75v7.25h-1.25c-.41,0-.75.34-.75.75s.34.75.75.75h16c.41,0,.75-.34.75-.75s-.34-.75-.75-.75ZM4.75,6c0-.14.11-.25.25-.25h10c.14,0,.25.11.25.25v7.25H4.75v-7.25Z"
 						fill={strokeColor}
@@ -277,21 +252,8 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ strokeColor, fillColor }: IconRenderProps) => (
 				<>
-					<circle
-						cx="10"
-						cy="10"
-						r="6.5"
-						fill={'none'}
-						stroke={strokeColor}
-						strokeWidth={1.5}
-					/>
-					<circle
-						cx="10"
-						cy="10"
-						r="6.5"
-						fill={strokeColor}
-						fillOpacity={fillColor}
-					/>
+					<circle cx="10" cy="10" r="6.5" fill={'none'} stroke={strokeColor} strokeWidth={1.5} />
+					<circle cx="10" cy="10" r="6.5" fill={strokeColor} fillOpacity={fillColor} />
 				</>
 			),
 		},
@@ -349,16 +311,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ strokeColor, fillColor }) => (
 				<>
-					<rect
-						x="10"
-						y="4.5"
-						width="8"
-						height="11"
-						rx="1"
-						ry="1"
-						opacity={fillColor}
-						fill={strokeColor}
-					/>
+					<rect x="10" y="4.5" width="8" height="11" rx="1" ry="1" opacity={fillColor} fill={strokeColor} />
 					<path
 						d="M17,3.75H3c-.96,0-1.75.78-1.75,1.75v9c0,.96.78,1.75,1.75,1.75h14c.96,0,1.75-.78,1.75-1.75V5.5c0-.96-.78-1.75-1.75-1.75ZM2.75,14.5V5.5c0-.14.11-.25.25-.25h6.25v9.5H3c-.14,0-.25-.11-.25-.25ZM17.25,14.5c0,.14-.11.25-.25.25h-6.25V5.25h6.25c.14,0,.25.11.25.25v9Z"
 						fill={strokeColor}
@@ -372,16 +325,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ fillColor, strokeColor }) => (
 				<>
-					<rect
-						x="10"
-						y="4.5"
-						width="8"
-						height="11"
-						rx="1"
-						ry="1"
-						fill={strokeColor}
-						fillOpacity={fillColor}
-					/>
+					<rect x="10" y="4.5" width="8" height="11" rx="1" ry="1" fill={strokeColor} fillOpacity={fillColor} />
 					<path
 						d="M17,16.25H3c-.96,0-1.75-.78-1.75-1.75V5.5c0-.96.78-1.75,1.75-1.75h14c.96,0,1.75.78,1.75,1.75v9c0,.96-.78,1.75-1.75,1.75ZM3,5.25c-.14,0-.25.11-.25.25v9c0,.14.11.25.25.25h14c.14,0,.25-.11.25-.25V5.5c0-.14-.11-.25-.25-.25H3Z"
 						fill={strokeColor}
@@ -480,10 +424,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 						d="M8.78,3.95c.14-.68.74-1.2,1.47-1.2.83,0,1.5.67,1.5,1.5v2.67l1.5,1.5v-4.17c0-1.65-1.35-3-3-3-1.13,0-2.1.63-2.61,1.56l1.14,1.14Z"
 						fill={strokeColor}
 					/>
-					<path
-						d="M7.25,8.08v.67c0,1.65,1.35,3,3,3,.21,0,.41-.02.61-.06l-3.61-3.61Z"
-						fill={strokeColor}
-					/>
+					<path d="M7.25,8.08v.67c0,1.65,1.35,3,3,3,.21,0,.41-.02.61-.06l-3.61-3.61Z" fill={strokeColor} />
 					<path
 						d="M14.75,7.25v1.25c0,.43-.08.84-.19,1.23l1.17,1.17c.33-.74.52-1.54.52-2.4v-1.25h-1.5Z"
 						fill={strokeColor}
@@ -640,24 +581,9 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 						stroke={strokeColor}
 						strokeLinejoin="round"
 					/>
-					<path
-						d="M 6.5 9 L 6.5 14"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
-					<path
-						d="M 10.451 5 L 10.451 14"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
-					<path
-						d="M 14.5 7 L 14.5 14"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
+					<path d="M 6.5 9 L 6.5 14" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
+					<path d="M 10.451 5 L 10.451 14" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
+					<path d="M 14.5 7 L 14.5 14" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
 				</>
 			),
 		},
@@ -718,30 +644,12 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 						d="M 9.75 2.641 C 13.666 2.641 16.859 5.834 16.859 9.75 C 16.859 13.666 13.666 16.859 9.75 16.859 C 5.834 16.859 2.641 13.666 2.641 9.75 C 2.641 5.834 5.834 2.641 9.75 2.641 M 9.75 1 C 4.916 1 1 4.916 1 9.75 C 1 14.584 4.916 18.5 9.75 18.5 C 14.584 18.5 18.5 14.584 18.5 9.75 C 18.5 4.916 14.584 1 9.75 1 Z"
 						fill={strokeColor}
 					/>
-					<path
-						d="M 5.492 12.657 L 6.03 11.706 L 13.892 16.157 L 13.353 17.109 Z"
-						fill={strokeColor}
-					/>
-					<path
-						d="M 5.112 7.527 L 6.206 7.519 L 6.282 16.553 L 5.188 16.562 Z"
-						fill={strokeColor}
-					/>
-					<path
-						d="M 1.573 9.2 L 9.36 4.62 L 9.914 5.563 L 2.127 10.144 Z"
-						fill={strokeColor}
-					/>
-					<path
-						d="M 5.605 3.344 L 6.143 2.392 L 14.005 6.844 L 13.465 7.795 Z"
-						fill={strokeColor}
-					/>
-					<path
-						d="M 13.223 2.953 L 14.316 2.945 L 14.392 11.979 L 13.298 11.988 Z"
-						fill={strokeColor}
-					/>
-					<path
-						d="M 9.579 13.946 L 17.366 9.365 L 17.92 10.308 L 10.133 14.888 Z"
-						fill={strokeColor}
-					/>
+					<path d="M 5.492 12.657 L 6.03 11.706 L 13.892 16.157 L 13.353 17.109 Z" fill={strokeColor} />
+					<path d="M 5.112 7.527 L 6.206 7.519 L 6.282 16.553 L 5.188 16.562 Z" fill={strokeColor} />
+					<path d="M 1.573 9.2 L 9.36 4.62 L 9.914 5.563 L 2.127 10.144 Z" fill={strokeColor} />
+					<path d="M 5.605 3.344 L 6.143 2.392 L 14.005 6.844 L 13.465 7.795 Z" fill={strokeColor} />
+					<path d="M 13.223 2.953 L 14.316 2.945 L 14.392 11.979 L 13.298 11.988 Z" fill={strokeColor} />
+					<path d="M 9.579 13.946 L 17.366 9.365 L 17.92 10.308 L 10.133 14.888 Z" fill={strokeColor} />
 				</>
 			),
 		},
@@ -856,18 +764,8 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 						d="M 10 10 C 10.552 10 11 9.552 11 9 C 11 8.448 10.552 8 10 8 C 9.448 8 9 8.448 9 9 C 9 9.552 9.448 10 10 10 Z"
 						fill={strokeColor}
 					/>
-					<path
-						d="M 6.5 15 L 13.5 15"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
-					<path
-						d="M 7.5 18 L 12.5 18"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
+					<path d="M 6.5 15 L 13.5 15" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
+					<path d="M 7.5 18 L 12.5 18" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
 				</>
 			),
 		},
@@ -953,10 +851,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 				<>
 					<path d="M 1 1 L 19 1 L 19 19 L 1 19 Z" fill="transparent" />
 					<g transform="translate(8.75 4)">
-						<path
-							d="M 2.471 7.765 L 2.471 0 L 0.353 0 L 0.353 7.765 Z"
-							fill={strokeColor}
-						/>
+						<path d="M 2.471 7.765 L 2.471 0 L 0.353 0 L 0.353 7.765 Z" fill={strokeColor} />
 						<path
 							d="M 2.824 10.588 C 2.824 11.368 2.191 12 1.412 12 C 0.632 12 0 11.368 0 10.588 C 0 9.809 0.632 9.176 1.412 9.176 C 2.191 9.176 2.824 9.809 2.824 10.588 Z"
 							fill={strokeColor}
@@ -971,12 +866,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ stroke, strokeColor }: IconRenderProps) => (
 				<>
-					<path
-						d="M 13.5 2 L 15.5 2 L 11.5 2 L 11.5 6"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
+					<path d="M 13.5 2 L 15.5 2 L 11.5 2 L 11.5 6" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
 					<path
 						d="M 18 10 C 18 14.418 14.418 18 10 18 C 5.582 18 2 14.418 2 10 C 2 8.543 2.39 7.177 3.07 6 L 4.876 6 C 4.014 7.103 3.5 8.491 3.5 10 C 3.5 13.59 6.41 16.5 10 16.5 C 13.59 16.5 16.5 13.59 16.5 10 C 16.5 7.108 14.611 4.657 12 3.813 L 12 2.252 C 15.45 3.14 18 6.272 18 10 Z"
 						fill={strokeColor}
@@ -1050,18 +940,8 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 						d="M 15.5 8 C 15.5 8.552 15.052 9 14.5 9 C 13.948 9 13.5 8.552 13.5 8 C 13.5 7.448 13.948 7 14.5 7 C 15.052 7 15.5 7.448 15.5 8 Z"
 						fill={strokeColor}
 					/>
-					<path
-						d="M 11.5 8 L 4.5 8"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
-					<path
-						d="M 9.75 11 L 4.5 11"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
+					<path d="M 11.5 8 L 4.5 8" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
+					<path d="M 9.75 11 L 4.5 11" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
 				</>
 			),
 		},
@@ -1070,10 +950,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		'concise',
 		{
 			line: ({ strokeColor }: IconRenderProps) => (
-				<path
-					d="M 18 7 L 2 7 L 2 8.5 L 18 8.5 Z M 14 12 L 2 12 L 2 13.5 L 14 13.5 Z"
-					fill={strokeColor}
-				/>
+				<path d="M 18 7 L 2 7 L 2 8.5 L 18 8.5 Z M 14 12 L 2 12 L 2 13.5 L 14 13.5 Z" fill={strokeColor} />
 			),
 		},
 	],
@@ -1396,18 +1273,8 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 						strokeWidth={stroke}
 						stroke={strokeColor}
 					/>
-					<path
-						d="M 14 12 L 6 12"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
-					<path
-						d="M 12 8 L 6 8"
-						fill="transparent"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
+					<path d="M 14 12 L 6 12" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
+					<path d="M 12 8 L 6 8" fill="transparent" strokeWidth={stroke} stroke={strokeColor} />
 				</>
 			),
 		},
@@ -1464,12 +1331,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		'menu',
 		{
 			line: ({ strokeColor }: IconRenderProps) => (
-				<path
-					fillRule="evenodd"
-					clipRule="evenodd"
-					d="M18 6.25H2v1.5h16v-1.5Zm0 6H2v1.5h16v-1.5Z"
-					fill={strokeColor}
-				/>
+				<path fillRule="evenodd" clipRule="evenodd" d="M18 6.25H2v1.5h16v-1.5Zm0 6H2v1.5h16v-1.5Z" fill={strokeColor} />
 			),
 		},
 	],
@@ -1487,11 +1349,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 					</g>
 					<defs>
 						<clipPath id="a">
-							<path
-								fill="transparent"
-								transform="translate(1 1)"
-								d="M0 0h18v18H0z"
-							/>
+							<path fill="transparent" transform="translate(1 1)" d="M0 0h18v18H0z" />
 						</clipPath>
 					</defs>
 				</>
@@ -1516,10 +1374,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ strokeColor }: IconRenderProps) => (
 				<g transform="translate(1 0.94)">
-					<path
-						d="M 0 0.06 L 18 0.06 L 18 18.06 L 0 18.06 Z"
-						fill="transparent"
-					/>
+					<path d="M 0 0.06 L 18 0.06 L 18 18.06 L 0 18.06 Z" fill="transparent" />
 					<path
 						d="M 9.53 0.53 L 14.53 5.53 L 13.47 6.59 L 9.75 2.87 L 9.75 13.06 L 8.25 13.06 L 8.25 2.87 L 4.53 6.59 L 3.47 5.53 L 8.47 0.53 L 9 0 Z M 1 13.06 L 1 15.56 C 1 16.388 1.672 17.06 2.5 17.06 L 15.5 17.06 C 16.328 17.06 17 16.388 17 15.56 L 17 13.06 L 15.5 13.06 L 15.5 15.56 L 2.5 15.56 L 2.5 13.06 Z"
 						fill={strokeColor}
@@ -1546,19 +1401,8 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ strokeColor, stroke }: IconRenderProps) => (
 				<>
-					<circle
-						cx="10"
-						cy="10"
-						r="8.25"
-						fill="none"
-						stroke={strokeColor}
-						strokeWidth={stroke}
-					/>
-					<polyline
-						points="6.66 9.94 9.05 12.06 13.26 7.86"
-						strokeWidth={stroke}
-						stroke={strokeColor}
-					/>
+					<circle cx="10" cy="10" r="8.25" fill="none" stroke={strokeColor} strokeWidth={stroke} />
+					<polyline points="6.66 9.94 9.05 12.06 13.26 7.86" strokeWidth={stroke} stroke={strokeColor} />
 				</>
 			),
 		},
@@ -1691,15 +1535,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		'checkbox',
 		{
 			line: ({ stroke, strokeColor }: IconRenderProps) => (
-				<rect
-					x="2.75"
-					y="2.75"
-					width="14.5"
-					height="14.5"
-					rx=".75"
-					stroke={strokeColor}
-					strokeWidth={stroke}
-				/>
+				<rect x="2.75" y="2.75" width="14.5" height="14.5" rx=".75" stroke={strokeColor} strokeWidth={stroke} />
 			),
 		},
 	],
@@ -1708,15 +1544,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		{
 			line: ({ stroke, strokeColor }: IconRenderProps) => (
 				<>
-					<rect
-						x="2"
-						y="2"
-						width="16"
-						height="16"
-						rx="1.5"
-						stroke={strokeColor}
-						strokeWidth={stroke}
-					/>
+					<rect x="2" y="2" width="16" height="16" rx="1.5" stroke={strokeColor} strokeWidth={stroke} />
 					<path d="M14 10H6" stroke={strokeColor} strokeWidth={stroke} />
 				</>
 			),
@@ -1773,20 +1601,8 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 							d="M9 18v.75V18Zm-.004 0v.75V18ZM10 18h.75v.75H10V18ZM2 9.5h-.75H2Zm0 4.376-.656.364-.094-.17v-.194H2Zm7 4.874h-.004v-1.5H9v1.5Zm1 0H9v-1.5h1v1.5Zm.75-9.25V18h-1.5V9.5h1.5ZM9.5 8.25c.69 0 1.25.56 1.25 1.25h-1.5c0 .138.112.25.25.25v-1.5Zm-7 0h7v1.5h-7v-1.5ZM1.25 9.5c0-.69.56-1.25 1.25-1.25v1.5a.25.25 0 0 0 .25-.25h-1.5Zm0 4.376V9.5h1.5v4.376h-1.5Zm7.746 4.874a8.748 8.748 0 0 1-7.652-4.51l1.312-.728a7.248 7.248 0 0 0 6.34 3.738v1.5Z"
 							fill={strokeColor}
 						/>
-						<circle
-							cx="6"
-							cy="4"
-							r="2"
-							stroke={strokeColor}
-							strokeWidth={stroke}
-						/>
-						<circle
-							cx="14"
-							cy="6"
-							r="2"
-							stroke={strokeColor}
-							strokeWidth={stroke}
-						/>
+						<circle cx="6" cy="4" r="2" stroke={strokeColor} strokeWidth={stroke} />
+						<circle cx="14" cy="6" r="2" stroke={strokeColor} strokeWidth={stroke} />
 					</g>
 					<defs>
 						<clipPath id="a">
@@ -1881,11 +1697,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 					</g>
 					<defs>
 						<clipPath id="a">
-							<path
-								fill="transparent"
-								transform="translate(1 1)"
-								d="M0 0h18v18H0z"
-							/>
+							<path fill="transparent" transform="translate(1 1)" d="M0 0h18v18H0z" />
 						</clipPath>
 					</defs>
 				</>

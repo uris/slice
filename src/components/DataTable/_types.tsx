@@ -24,15 +24,9 @@ export type ColumnDefinition<T, V = unknown> = {
 	align?: 'start' | 'center' | 'end';
 	padding?: number | string;
 	nowrap?: boolean;
-	accessor: (
-		row: T,
-	) => V /* pull this column's value out of a row. uses createColumnHelper. */;
-	renderHeader?: (
-		ctx: HeaderContext<T, V>,
-	) => ReactNode /* custom header cell renderer */;
-	renderCell?: (
-		ctx: CellContext<T, V>,
-	) => ReactNode /* custom body cell renderer */;
+	accessor: (row: T) => V /* pull this column's value out of a row. uses createColumnHelper. */;
+	renderHeader?: (ctx: HeaderContext<T, V>) => ReactNode /* custom header cell renderer */;
+	renderCell?: (ctx: CellContext<T, V>) => ReactNode /* custom body cell renderer */;
 };
 
 export interface DataTableProps<T> {
@@ -40,15 +34,28 @@ export interface DataTableProps<T> {
 	width: number | string;
 	headerSticky: boolean;
 	freezeColumn: boolean;
-	scrollable: boolean;
 	backgroundColor?: string;
+	backgroundColorHoverRow?: string;
 	freezeColumnBackgroundColor?: string;
 	headerBackgroundColor?: string;
 	candyStripeBackgroundColor?: string;
-	borderStyle?: 'box' | 'row' | 'column' | 'none';
+	borderStyle?: 'box' | 'row' | 'none';
 	borderColor?: string;
 	tableData?: T[];
 	columnDefinitions: ColumnDefinition<T, any>[];
 	/* get a stable row identity for React keys. Falls back to row index when omitted. */
 	getRowId?: (row: T, index: number) => string | number;
+	/*
+	 * Filters tableData before it's rendered. Matches Array.prototype.filter's
+	 * own callback signature, so an existing predicate (including a type-predicate
+	 * one) can be passed straight through, and rowIndex downstream (getRowId,
+	 * onClick/onMouseOver/etc., hover-row matching) reflects position in the
+	 * filtered rows, not the original array.
+	 */
+	filter?: (row: T, index: number, array: T[]) => boolean;
+	caption?: string;
+	onClick?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
+	onDoubleClick?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
+	onMouseOver?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
+	onMouseOut?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
 }

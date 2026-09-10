@@ -27,14 +27,6 @@ type ToastBaseProps = {
 };
 
 // reserved for internal working - not overridable
-type ReservedToastEvents =
-	| 'onMouseEnter'
-	| 'onMouseLeave'
-	| 'onFocus'
-	| 'onBlur';
+type ReservedToastEvents = 'onMouseEnter' | 'onMouseLeave' | 'onFocus' | 'onBlur';
 
-export type ToastProps = Omit<
-	HTMLMotionProps<'div'>,
-	keyof ToastBaseProps | ReservedToastEvents
-> &
-	ToastBaseProps;
+export type ToastProps = Omit<HTMLMotionProps<'div'>, keyof ToastBaseProps | ReservedToastEvents> & ToastBaseProps;

@@ -9,9 +9,7 @@ import { debug } from '../../utils/functions/misc';
  */
 
 export function useTrackRenders(props: any, componentName = 'Component') {
-	const prev = useRef<
-		{ props: any; mount: boolean; unmount: boolean } | undefined
-	>({
+	const prev = useRef<{ props: any; mount: boolean; unmount: boolean } | undefined>({
 		props,
 		mount: true,
 		unmount: false,

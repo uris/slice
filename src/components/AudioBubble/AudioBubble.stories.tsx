@@ -37,10 +37,7 @@ function AudioBubbleDemo(props: Readonly<AudioBubbleProps>) {
 
 	return (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={24}>
-			<AudioBubble
-				{...props}
-				audioStream={isRequesting ? null : micStream.current}
-			/>
+			<AudioBubble {...props} audioStream={isRequesting ? null : micStream.current} />
 			<Label>{error ? error.message : 'Say something!'}</Label>
 		</FlexDiv>
 	);

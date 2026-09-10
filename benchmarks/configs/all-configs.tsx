@@ -44,6 +44,8 @@ import {
 	ButtonBar,
 	Chip,
 	Label,
+	DataTable,
+	createColumnHelper,
 } from '../../src';
 import { FileList } from '../../src/components/FileList';
 import { PromptInput } from '../../src/components/PromptInput/PromptInput';
@@ -1104,6 +1106,93 @@ export const dropDownConfig: ComponentBenchmarkConfig = {
 	],
 };
 
+type MockDataTableRow = {
+	id: string;
+	name: string;
+	age: number;
+	amount: number;
+};
+
+const mockDataTableRows: MockDataTableRow[] = Array.from({ length: 10 }, (_, i) => ({
+	id: `row-${i}`,
+	name: `Person ${i}`,
+	age: 20 + i,
+	amount: 1000 * (i + 1),
+}));
+
+const mockDataTableColumnHelper = createColumnHelper<MockDataTableRow>();
+const mockDataTableColumns = [
+	mockDataTableColumnHelper.accessor((row) => row.name, {
+		id: 'name',
+		title: 'Name',
+	}),
+	mockDataTableColumnHelper.accessor((row) => row.age, {
+		id: 'age',
+		title: 'Age',
+		align: 'end',
+	}),
+	mockDataTableColumnHelper.accessor((row) => row.amount, {
+		id: 'amount',
+		title: 'Amount',
+		align: 'end',
+		renderCell: ({ value }) => <span>${value.toLocaleString()}</span>,
+	}),
+];
+
+export const dataTableConfig: ComponentBenchmarkConfig = {
+	componentName: 'DataTable',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () =>
+				measureMountTime(
+					<DataTable
+						columnDefinitions={mockDataTableColumns}
+						tableData={mockDataTableRows}
+						getRowId={(row) => row.id}
+					/>,
+					50,
+				),
+		},
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<DataTable
+						columnDefinitions={mockDataTableColumns}
+						tableData={mockDataTableRows}
+						getRowId={(row) => row.id}
+					/>,
+					(container) => {
+						container.rerender(
+							<DataTable
+								columnDefinitions={mockDataTableColumns}
+								tableData={[...mockDataTableRows].reverse()}
+								getRowId={(row) => row.id}
+							/>,
+						);
+					},
+					50,
+				),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () =>
+				measureMemoryDelta(
+					<DataTable
+						columnDefinitions={mockDataTableColumns}
+						tableData={mockDataTableRows}
+						getRowId={(row) => row.id}
+					/>,
+					10,
+				),
+		},
+	],
+};
+
 export const errorSummaryConfig: ComponentBenchmarkConfig = {
 	componentName: 'ErrorSummary',
 	tests: [
@@ -1723,6 +1812,7 @@ export const allBenchmarkConfigs = [
 	dotConfig,
 	draggablePanelConfig,
 	dropDownConfig,
+	dataTableConfig,
 	errorSummaryConfig,
 	fileIconConfig,
 	fileListConfig,

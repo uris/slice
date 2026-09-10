@@ -24,8 +24,4 @@ type FileListBaseProps = {
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
-export type FileListProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof FileListBaseProps
-> &
-	FileListBaseProps;
+export type FileListProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof FileListBaseProps> & FileListBaseProps;

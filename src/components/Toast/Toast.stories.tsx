@@ -44,13 +44,7 @@ export const Demo: StoryObj<typeof Toast> = {
 		};
 
 		return (
-			<FlexDiv
-				absolute
-				justify={'center'}
-				align={'center'}
-				padding={64}
-				gap={16}
-			>
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
 				Click me!
 				<IconButton
 					icon={'home'}

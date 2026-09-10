@@ -58,16 +58,7 @@ export const AvatarGroup = React.memo((props: AvatarGroupProps) => {
 				/>
 			</div>
 		));
-	}, [
-		avatars,
-		size,
-		resolvedBorderWidth,
-		borderColor,
-		borderColorHover,
-		outerBorderSize,
-		outerBorderColor,
-		onToolTip,
-	]);
+	}, [avatars, size, resolvedBorderWidth, borderColor, borderColorHover, outerBorderSize, outerBorderColor, onToolTip]);
 
 	// compose wrapper class names
 	const classNames = useMemo(() => {
@@ -79,12 +70,7 @@ export const AvatarGroup = React.memo((props: AvatarGroupProps) => {
 	/* END.DEBUG */
 
 	return (
-		<div
-			id={divId}
-			className={classNames}
-			style={{ ...divStyle, ...cssVars }}
-			{...rest}
-		>
+		<div id={divId} className={classNames} style={{ ...divStyle, ...cssVars }} {...rest}>
 			{renderedAvatars}
 		</div>
 	);

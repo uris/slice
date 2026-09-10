@@ -69,13 +69,7 @@ export const DoneCheck = React.memo((props: DoneCheckProps) => {
 				onTransitionEnd={() => didEnd?.()}
 				onTransitionStart={() => didStart?.()}
 			>
-				<Icon
-					name="check circle"
-					size={size}
-					color={color}
-					stroke={stroke}
-					strokeColor={color}
-				/>
+				<Icon name="check circle" size={size} color={color} stroke={stroke} strokeColor={color} />
 			</div>
 		</div>
 	);

@@ -5,11 +5,7 @@ import { useEffect } from 'react';
 import { create } from 'zustand';
 import type { DropDownOption } from '../../components/DropDown';
 import type { MicOption, UseMicrophoneReturn } from '../../hooks';
-import type {
-	MicrophoneStore,
-	MicrophoneStoreActions,
-	MicrophoneStoreState,
-} from './_types';
+import type { MicrophoneStore, MicrophoneStoreActions, MicrophoneStoreState } from './_types';
 
 const emptyMicStreamRef = { current: null } as RefObject<MediaStream | null>;
 const emptyMicTrackRef = {
@@ -35,9 +31,7 @@ function createEmptyState(): MicrophoneStoreState {
 }
 
 // create the state for the store based on the microphone object
-function toStoreState(
-	microphone: UseMicrophoneReturn | null,
-): MicrophoneStoreState {
+function toStoreState(microphone: UseMicrophoneReturn | null): MicrophoneStoreState {
 	if (!microphone) return createEmptyState();
 
 	return {
@@ -117,8 +111,7 @@ export function useSyncMicrophoneStore(microphone: UseMicrophoneReturn | null) {
 	const sync = useMicrophoneStore((state) => state.actions.sync);
 	const hasMicrophone = microphone !== null;
 	const micStream = microphone?.micStream ?? emptyMicStreamRef;
-	const processedMicStream =
-		microphone?.processedMicStream ?? emptyMicStreamRef;
+	const processedMicStream = microphone?.processedMicStream ?? emptyMicStreamRef;
 	const micTrack = microphone?.micTrack ?? emptyMicTrackRef;
 	const currentDeviceId = microphone?.currentDeviceId ?? null;
 	const isActive = microphone?.isActive ?? false;
@@ -193,13 +186,10 @@ export function useSyncMicrophoneStore(microphone: UseMicrophoneReturn | null) {
 }
 
 // atomic hook exports for use in React components
-export const useMicStream = () =>
-	useMicrophoneStore((state) => state.micStream);
-export const useProcessedMicStream = () =>
-	useMicrophoneStore((state) => state.processedMicStream);
+export const useMicStream = () => useMicrophoneStore((state) => state.micStream);
+export const useProcessedMicStream = () => useMicrophoneStore((state) => state.processedMicStream);
 export const useMicTrack = () => useMicrophoneStore((state) => state.micTrack);
-export const useCurrentMicDeviceId = () =>
-	useMicrophoneStore((state) => state.currentDeviceId);
+export const useCurrentMicDeviceId = () => useMicrophoneStore((state) => state.currentDeviceId);
 export const useCurrentMicDeviceLabel = () =>
 	useMicrophoneStore((state) => {
 		const liveTrackLabel = state.micTrack.current?.label;
@@ -207,42 +197,29 @@ export const useCurrentMicDeviceLabel = () =>
 
 		const currentDeviceId = state.currentDeviceId;
 		if (!currentDeviceId) return null;
-		return (
-			state.microphones.find((device) => device.deviceId === currentDeviceId)
-				?.label ?? null
-		);
+		return state.microphones.find((device) => device.deviceId === currentDeviceId)?.label ?? null;
 	});
 export const useMicActive = () => useMicrophoneStore((state) => state.isActive);
-export const useMicInputVolume = () =>
-	useMicrophoneStore((state) => state.inputVolume);
+export const useMicInputVolume = () => useMicrophoneStore((state) => state.inputVolume);
 export const useMicMuted = () => useMicrophoneStore((state) => state.muted);
-export const useMicSupported = () =>
-	useMicrophoneStore((state) => state.isSupported);
-export const useMicRequesting = () =>
-	useMicrophoneStore((state) => state.isRequesting);
+export const useMicSupported = () => useMicrophoneStore((state) => state.isSupported);
+export const useMicRequesting = () => useMicrophoneStore((state) => state.isRequesting);
 export const useMicError = () => useMicrophoneStore((state) => state.error);
-export const useMicrophones = () =>
-	useMicrophoneStore((state) => state.microphones);
-export const useMicOptions = () =>
-	useMicrophoneStore((state) => state.micOptions);
-export const useMicrophoneStoreActions = () =>
-	useMicrophoneStore((state) => state.actions);
+export const useMicrophones = () => useMicrophoneStore((state) => state.microphones);
+export const useMicOptions = () => useMicrophoneStore((state) => state.micOptions);
+export const useMicrophoneStoreActions = () => useMicrophoneStore((state) => state.actions);
 
 // non-reactive imperative exports for use outside the React context
 export const microphoneActions = {
-	sync: (microphone: UseMicrophoneReturn | null) =>
-		useMicrophoneStore.getState().actions.sync(microphone),
+	sync: (microphone: UseMicrophoneReturn | null) => useMicrophoneStore.getState().actions.sync(microphone),
 	clear: () => useMicrophoneStore.getState().actions.clear(),
-	requestMicrophone: () =>
-		useMicrophoneStore.getState().actions.requestMicrophone(),
+	requestMicrophone: () => useMicrophoneStore.getState().actions.requestMicrophone(),
 	stopMicrophone: () => useMicrophoneStore.getState().actions.stopMicrophone(),
 	muteMic: () => useMicrophoneStore.getState().actions.muteMic(),
 	unmuteMic: () => useMicrophoneStore.getState().actions.unmuteMic(),
 	toggleMute: () => useMicrophoneStore.getState().actions.toggleMute(),
-	setInputVolume: (volume: number) =>
-		useMicrophoneStore.getState().actions.setInputVolume(volume),
-	refreshMicrophones: () =>
-		useMicrophoneStore.getState().actions.refreshMicrophones(),
+	setInputVolume: (volume: number) => useMicrophoneStore.getState().actions.setInputVolume(volume),
+	refreshMicrophones: () => useMicrophoneStore.getState().actions.refreshMicrophones(),
 	setMicrophone: (deviceId: string | DropDownOption<MicOption>) =>
 		useMicrophoneStore.getState().actions.setMicrophone(deviceId),
 } satisfies MicrophoneStoreActions;
@@ -254,8 +231,5 @@ export const getCurrentMicDeviceLabel = () => {
 
 	const currentDeviceId = state.currentDeviceId;
 	if (!currentDeviceId) return null;
-	return (
-		state.microphones.find((device) => device.deviceId === currentDeviceId)
-			?.label ?? null
-	);
+	return state.microphones.find((device) => device.deviceId === currentDeviceId)?.label ?? null;
 };

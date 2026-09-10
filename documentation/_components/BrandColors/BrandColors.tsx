@@ -43,31 +43,12 @@ export function BrandColors() {
 	}, []);
 
 	return (
-		<FlexDiv
-			width={'fill'}
-			height={'fit'}
-			gap={16}
-			justify={'start'}
-			align={'start'}
-			scrollY
-			padding={'0 0 32px 0'}
-		>
+		<FlexDiv width={'fill'} height={'fit'} gap={16} justify={'start'} align={'start'} scrollY padding={'0 0 32px 0'}>
 			{groupedColors.map((group) => {
 				return (
-					<FlexDiv
-						width={'fill'}
-						height={'fit'}
-						direction={'column'}
-						key={group.key}
-					>
+					<FlexDiv width={'fill'} height={'fit'} direction={'column'} key={group.key}>
 						<h3 style={{ textTransform: 'capitalize' }}>{group.key}</h3>
-						<FlexDiv
-							width={'fill'}
-							height={'fit'}
-							direction={'row'}
-							wrap={true}
-							gap={16}
-						>
+						<FlexDiv width={'fill'} height={'fit'} direction={'row'} wrap={true} gap={16}>
 							{group.values.map((color) => {
 								return (
 									<ColorTile

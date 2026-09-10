@@ -13,22 +13,13 @@ export const useWebRTCStore = create<WebRTCStore>((set, get) => ({
 			const nextConnection = { name, connection };
 
 			set((state) => ({
-				connections: [
-					...state.connections.filter((connection) => connection.name !== name),
-					nextConnection,
-				],
+				connections: [...state.connections.filter((connection) => connection.name !== name), nextConnection],
 			}));
 
 			return nextConnection;
 		},
-		initializeConnection: async (
-			name: string,
-			offerOptions?: RTCOfferOptions,
-			bearerToken?: string,
-		) => {
-			const connection = get().connections.find(
-				(c) => c.name === name,
-			)?.connection;
+		initializeConnection: async (name: string, offerOptions?: RTCOfferOptions, bearerToken?: string) => {
+			const connection = get().connections.find((c) => c.name === name)?.connection;
 			if (!connection) return;
 
 			await connection.initialize(offerOptions, bearerToken);
@@ -39,23 +30,17 @@ export const useWebRTCStore = create<WebRTCStore>((set, get) => ({
 
 			existingConnection.connection.close();
 			set((state) => ({
-				connections: state.connections.filter(
-					(connection) => connection.name !== name,
-				),
+				connections: state.connections.filter((connection) => connection.name !== name),
 			}));
 		},
 		setMicStream: async (name: string, stream: MediaStream | null) => {
-			const connection = get().connections.find(
-				(c) => c.name === name,
-			)?.connection;
+			const connection = get().connections.find((c) => c.name === name)?.connection;
 			if (!connection) return;
 
 			await connection.setOutgoingAudioStream(stream);
 		},
 		setVolume: (name: string, volume: number) => {
-			const connection = get().connections.find(
-				(c) => c.name === name,
-			)?.connection;
+			const connection = get().connections.find((c) => c.name === name)?.connection;
 			if (!connection) return;
 
 			connection.setVolume(volume);
@@ -64,29 +49,20 @@ export const useWebRTCStore = create<WebRTCStore>((set, get) => ({
 }));
 
 export const useWebRTC = () => useWebRTCStore((state) => state.actions);
-export const useWebRTCConnections = () =>
-	useWebRTCStore((state) => state.connections);
+export const useWebRTCConnections = () => useWebRTCStore((state) => state.connections);
 export const useWebRTCConnection = (name: string) =>
-	useWebRTCStore(
-		(state) =>
-			state.connections.find((connection) => connection.name === name) ?? null,
-	);
+	useWebRTCStore((state) => state.connections.find((connection) => connection.name === name) ?? null);
 export const useWebRTCConnected = (name?: string) =>
 	useWebRTCStore((state) => {
 		if (name) {
-			return (
-				state.connections.find((entry) => entry.name === name)?.connection
-					.connected ?? false
-			);
+			return state.connections.find((entry) => entry.name === name)?.connection.connected ?? false;
 		}
 
 		return state.connections.some((entry) => entry.connection.connected);
 	});
 
 export const useWebRTCActions = useWebRTCStore.getState().actions;
-export function getWebRTCConnections(): ReturnType<
-	typeof useWebRTCStore.getState
->['connections'];
+export function getWebRTCConnections(): ReturnType<typeof useWebRTCStore.getState>['connections'];
 export function getWebRTCConnections(
 	name: string,
 ): ReturnType<typeof useWebRTCStore.getState>['connections'][number] | null;

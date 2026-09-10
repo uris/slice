@@ -28,12 +28,7 @@ export function useKeyboardShortcuts(
 		const target = e.target as HTMLElement | null;
 		if (target) {
 			const tag = target.tagName;
-			return (
-				target.isContentEditable ||
-				tag === 'INPUT' ||
-				tag === 'TEXTAREA' ||
-				tag === 'SELECT'
-			);
+			return target.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
 		}
 		return false;
 	}, []);
@@ -42,8 +37,7 @@ export function useKeyboardShortcuts(
 	const handleKeyPress = useCallback(
 		(e: KeyboardEvent) => {
 			if (isEditable(e)) return;
-			const isMeta =
-				(isAppleDevice && e.metaKey) || (!isAppleDevice && e.ctrlKey);
+			const isMeta = (isAppleDevice && e.metaKey) || (!isAppleDevice && e.ctrlKey);
 			const normalizedEventKey = normalizeShortcutKey(e.key);
 			for (const s of shortcuts) {
 				if (Boolean(s.metaPressed) !== isMeta) continue;

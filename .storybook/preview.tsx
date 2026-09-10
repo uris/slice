@@ -12,9 +12,7 @@ const items = [
 ] as any;
 
 // get system theme
-const darkModeMediaQuery = globalThis.matchMedia(
-	'(prefers-color-scheme: dark)',
-);
+const darkModeMediaQuery = globalThis.matchMedia('(prefers-color-scheme: dark)');
 const isDark = darkModeMediaQuery.matches;
 
 const preview: Preview = {
@@ -51,12 +49,7 @@ const preview: Preview = {
 				return (
 					<DocsContainer context={context}>
 						<ThemeProvider theme={theme} system={true} global={true}>
-							<FlexDiv
-								padding={'64px 88px'}
-								absolute={true}
-								centerSelf={true}
-								scrollY={true}
-							>
+							<FlexDiv padding={'64px 88px'} absolute={true} centerSelf={true} scrollY={true}>
 								{children}
 							</FlexDiv>
 						</ThemeProvider>

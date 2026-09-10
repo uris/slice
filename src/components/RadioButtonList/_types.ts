@@ -21,10 +21,7 @@ type RadioButtonListBaseProps<T = string> = {
 	icon?: string;
 	checkedIcon?: string;
 	width?: number | string;
-	onChange?: (
-		options: RadioButtonOption<T>[] | null,
-		indexes: number[] | null,
-	) => void;
+	onChange?: (options: RadioButtonOption<T>[] | null, indexes: number[] | null) => void;
 };
 
 export type RadioButtonListProps<T = string> = Omit<

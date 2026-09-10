@@ -143,10 +143,8 @@ export const light: Colors = {
 	'core-outline-primary': coreColors['brand-grey-100'],
 	'core-outline-special': coreColors['brand-sea-100'],
 	'core-outline-tertiary': coreColors['brand-sea-500'],
-	'core-surface-coverup-translucent':
-		coreColors['core-surface-coverup-translucent-light'],
-	'core-surface-overlay-translucent':
-		coreColors['core-surface-overlay-translucent-light'],
+	'core-surface-coverup-translucent': coreColors['core-surface-coverup-translucent-light'],
+	'core-surface-overlay-translucent': coreColors['core-surface-overlay-translucent-light'],
 	'core-surface-primary': coreColors['brand-white-0'],
 	'core-surface-primary-tint': coreColors['surface-primary-tint-light'],
 	'core-surface-secondary': coreColors['brand-grey-50'],
@@ -215,10 +213,8 @@ export const dark: Colors = {
 	'core-outline-primary': coreColors['brand-grey-700'],
 	'core-outline-special': coreColors['brand-sky-900'],
 	'core-outline-tertiary': coreColors['brand-sky-300'],
-	'core-surface-coverup-translucent':
-		coreColors['core-surface-coverup-translucent-dark'],
-	'core-surface-overlay-translucent':
-		coreColors['core-surface-overlay-translucent-dark'],
+	'core-surface-coverup-translucent': coreColors['core-surface-coverup-translucent-dark'],
+	'core-surface-overlay-translucent': coreColors['core-surface-overlay-translucent-dark'],
 	'core-surface-primary': coreColors['brand-grey-950'],
 	'core-surface-primary-tint': coreColors['surface-primary-tint-dark'],
 	'core-surface-secondary': coreColors['brand-grey-900'],

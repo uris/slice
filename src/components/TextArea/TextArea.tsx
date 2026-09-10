@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { Button } from '../Button';
 import css from './TextArea.module.css';
@@ -152,10 +146,8 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 			'--ta-width': `${setStyleValue(width)}`,
 			'--ta-min-width': minWidth ? `${minWidth}px` : 'unset',
 			'--ta-height': `${setStyleValue(height)}`,
-			'--ta-max-height':
-				height === 'auto' ? 'unset' : `${setStyleValue(height)}`,
-			'--ta-bg-color':
-				resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
+			'--ta-max-height': height === 'auto' ? 'unset' : `${setStyleValue(height)}`,
+			'--ta-bg-color': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
 			'--ta-border-color': setBorderColor,
 			'--ta-padding': `${setStyleValue(padding)}`,
 			'--ta-send-icon-offset-bottom': `${sendOffset.bottom}px`,
@@ -192,12 +184,7 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 		>
 			{hasSend && (
 				<div className={css.send} onMouseDown={(e) => handleSubmit(e)}>
-					<Button
-						iconLeft={'arrow up'}
-						size={'medium'}
-						variant={'solid'}
-						round
-					/>
+					<Button iconLeft={'arrow up'} size={'medium'} variant={'solid'} round />
 				</div>
 			)}
 			<textarea

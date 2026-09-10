@@ -23,8 +23,4 @@ type DivInputBaseProps = {
 	bgColor?: string;
 };
 
-export type DivInputProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof DivInputBaseProps
-> &
-	DivInputBaseProps;
+export type DivInputProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DivInputBaseProps> & DivInputBaseProps;

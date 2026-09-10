@@ -1,9 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useRef, useState } from 'react';
-import {
-	DraggablePanel,
-	type DraggablePanelProps,
-} from 'src/components/DraggablePanel/DrggablePanel';
+import { DraggablePanel, type DraggablePanelProps } from 'src/components/DraggablePanel/DrggablePanel';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { IconButton } from 'src/components/IconButton';
 import { runDraggablePanelPlay } from 'src/components/playHelpers';
@@ -84,12 +81,7 @@ function DraggablePanelWithChildren(args: Readonly<DraggablePanelProps>) {
 	const [closed, setClosed] = useState(args.isClosed);
 	useEffect(() => setClosed(args.isClosed), [args.isClosed]);
 	return (
-		<FlexDiv
-			width={'viewport'}
-			height={'viewport'}
-			direction={'row'}
-			ref={containerRef}
-		>
+		<FlexDiv width={'viewport'} height={'viewport'} direction={'row'} ref={containerRef}>
 			<DraggablePanel
 				{...args}
 				containerRef={containerRef}
@@ -97,11 +89,7 @@ function DraggablePanelWithChildren(args: Readonly<DraggablePanelProps>) {
 				bgColor={'var(--core-surface-primary-tint)'}
 			/>
 			<FlexDiv width={'auto'} height={'fill'} justify={'start'} padding={24}>
-				<IconButton
-					icon={closed ? 'arrow right' : 'arrow left'}
-					iconSize={20}
-					onClick={() => setClosed(!closed)}
-				/>
+				<IconButton icon={closed ? 'arrow right' : 'arrow left'} iconSize={20} onClick={() => setClosed(!closed)} />
 			</FlexDiv>
 		</FlexDiv>
 	);

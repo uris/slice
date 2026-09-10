@@ -25,10 +25,7 @@ function ThemeProviderChildDemo() {
 			gap={10}
 			padding={24}
 		>
-			<h3>
-				{theme.current.name.includes('light') ? 'Light theme' : 'Dark theme'}{' '}
-				selected
-			</h3>
+			<h3>{theme.current.name.includes('light') ? 'Light theme' : 'Dark theme'} selected</h3>
 			<span>Current: {theme.current.name}</span>
 			<span>isDark: {theme.isDark ? 'true' : 'false'}</span>
 			<Spacer size={8} />

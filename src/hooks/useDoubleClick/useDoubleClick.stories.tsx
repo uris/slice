@@ -14,11 +14,7 @@ function UseDoubleClickDemo(props: Readonly<UseDoubleClickDemoProps>) {
 	const [singleCount, setSingleCount] = useState(0);
 	const [doubleCount, setDoubleCount] = useState(0);
 
-	const [click, doubleClick] = useDoubleClick(
-		handleClick,
-		handleDoubleClick,
-		delay,
-	);
+	const [click, doubleClick] = useDoubleClick(handleClick, handleDoubleClick, delay);
 
 	function handleClick() {
 		setSingleCount((v) => v + 1);

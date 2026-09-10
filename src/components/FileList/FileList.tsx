@@ -103,9 +103,7 @@ export const FileList = React.memo((props: FileListProps) => {
 
 	// show the remove action tooltip on hover or focus
 	const handleMouseOver = useCallback(
-		(
-			e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>,
-		) => {
+		(e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
 			const toolTip: ToolTip = {
 				payload: { label: 'Remove file' },
 				ref: { current: e.currentTarget },
@@ -124,60 +122,35 @@ export const FileList = React.memo((props: FileListProps) => {
 	const cssVars = useMemo(() => {
 		return {
 			'--file-max-width': direction === 'column' ? '100%' : setStyle(maxWidth),
-			'--file-min-width':
-				direction === 'column' && !minWidth ? '100%' : setStyle(minWidth),
+			'--file-min-width': direction === 'column' && !minWidth ? '100%' : setStyle(minWidth),
 			'--file-gap': setStyle(gap),
 			'--file-direction': direction,
 			'--file-wrap': direction === 'column' ? 'nowrap' : 'wrap',
 			'--file-padding': padding ? setStyle(padding) : '4px 4px 4px 2px',
 			'--file-icon-size': setStyle(iconSize),
 			'--file-overflow': direction === 'column' ? 'unset' : 'hidden',
-			'--file-bg-color':
-				resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
+			'--file-bg-color': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
 		} as React.CSSProperties;
-	}, [
-		maxWidth,
-		gap,
-		direction,
-		minWidth,
-		padding,
-		iconSize,
-		resolvedBackgroundColor,
-	]);
+	}, [maxWidth, gap, direction, minWidth, padding, iconSize, resolvedBackgroundColor]);
 
 	// compose per-file CSS custom properties for progress and error state
 	const fileCSSVars = useCallback((progress: string, error?: string) => {
 		return {
 			'--file-progress': `${progress}`,
-			'--file-border-color': error
-				? 'var(--feedback-warning)'
-				: 'var(--core-outline-primary)',
+			'--file-border-color': error ? 'var(--feedback-warning)' : 'var(--core-outline-primary)',
 		} as React.CSSProperties;
 	}, []);
 
 	return (
-		<div
-			className={`${css.wrapper}${divClass}`}
-			style={{ ...divStyle, ...cssVars }}
-			id={divId}
-			{...rest}
-		>
+		<div className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} id={divId} {...rest}>
 			{displayList.map((i) => (
-				<div
-					key={i.key}
-					className={`${css.file} ${css[size]}`}
-					style={fileCSSVars(i.progress, i.error)}
-				>
+				<div key={i.key} className={`${css.file} ${css[size]}`} style={fileCSSVars(i.progress, i.error)}>
 					<div className={css.fileIcon}>
 						<FileIcon name={i.icon} size={iconSize} />
 					</div>
 					<div className={css.meta}>
 						<div className={css.fileName}>{i.name}</div>
-						{i.error && (
-							<div className={`${css.status} ${i.error ? css.error : ''}`}>
-								{i.error}
-							</div>
-						)}
+						{i.error && <div className={`${css.status} ${i.error ? css.error : ''}`}>{i.error}</div>}
 					</div>
 					<div className={css.icon} style={displayProgress(i.uploading)}>
 						<ProgressIndicator inline size={20} show={i.uploading} />
@@ -193,9 +166,7 @@ export const FileList = React.memo((props: FileListProps) => {
 							onFocus={handleMouseOver}
 							onBlur={handleMouseOut}
 							onClick={() => handleRemove(i.index)}
-							onKeyDown={(e) =>
-								accessibleKeyDown(e, () => handleRemove(i.index))
-							}
+							onKeyDown={(e) => accessibleKeyDown(e, () => handleRemove(i.index))}
 							tabIndex={0}
 						>
 							<Icon name={'x'} style={{ pointerEvents: 'none' }} />

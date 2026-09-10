@@ -3,12 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { Button } from '../../components/Button';
 import { FlexDiv } from '../../components/FlexDiv';
 import { Slider } from '../../components/Slider';
-import {
-	useMuted,
-	useStoredVolume,
-	useVolume,
-	useVolumeActions,
-} from './volumeStore';
+import { useMuted, useStoredVolume, useVolume, useVolumeActions } from './volumeStore';
 function VolumeStoreDemo() {
 	const volume = useVolume();
 	const storedVolume = useStoredVolume();
@@ -34,14 +29,7 @@ function VolumeStoreDemo() {
 	}, [actions, audioElement, feedbackElement]);
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'center'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
 			<FlexDiv
 				width={420}
 				height={'auto'}
@@ -68,18 +56,9 @@ function VolumeStoreDemo() {
 					}}
 				/>
 				<FlexDiv gap={8}>
-					<Button
-						label={muted ? 'Unmute' : 'Mute'}
-						onClick={() => (muted ? actions.unmute() : actions.mute())}
-					/>
-					<Button
-						label={'Set 25%'}
-						onClick={() => actions.setVolume(0.25, { playFeedback: true })}
-					/>
-					<Button
-						label={'Set 75%'}
-						onClick={() => actions.setVolume(0.75, { playFeedback: true })}
-					/>
+					<Button label={muted ? 'Unmute' : 'Mute'} onClick={() => (muted ? actions.unmute() : actions.mute())} />
+					<Button label={'Set 25%'} onClick={() => actions.setVolume(0.25, { playFeedback: true })} />
+					<Button label={'Set 75%'} onClick={() => actions.setVolume(0.75, { playFeedback: true })} />
 				</FlexDiv>
 				<span>Attached Media Elements: {audioElement ? '1' : '0'}</span>
 			</FlexDiv>

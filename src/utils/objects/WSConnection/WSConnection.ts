@@ -20,13 +20,9 @@ export type UnifiedMessageEvent<TMessage> =
 			event: ErrorEvent;
 	  };
 
-type WSStandardMessageCallback<TMessage> = (
-	data: WSParsedData<TMessage>,
-) => void;
+type WSStandardMessageCallback<TMessage> = (data: WSParsedData<TMessage>) => void;
 
-type WSUnifiedMessageCallback<TMessage> = (
-	message: UnifiedMessageEvent<TMessage>,
-) => void;
+type WSUnifiedMessageCallback<TMessage> = (message: UnifiedMessageEvent<TMessage>) => void;
 
 interface WSConnectionOptionsBase {
 	url: string;
@@ -42,14 +38,12 @@ interface WSConnectionOptionsBase {
 	onErrorCallback?: (error: ErrorEvent) => void;
 }
 
-interface WSConnectionUnifiedOptions<TMessage = unknown>
-	extends WSConnectionOptionsBase {
+interface WSConnectionUnifiedOptions<TMessage = unknown> extends WSConnectionOptionsBase {
 	unifiedMessages: true;
 	onMessageCallback?: WSUnifiedMessageCallback<TMessage>;
 }
 
-interface WSConnectionStandardOptions<TMessage = unknown>
-	extends WSConnectionOptionsBase {
+interface WSConnectionStandardOptions<TMessage = unknown> extends WSConnectionOptionsBase {
 	unifiedMessages?: false;
 	onMessageCallback?: WSStandardMessageCallback<TMessage>;
 }
@@ -71,9 +65,7 @@ export class WSConnection<TMessage = unknown> {
 	private readonly keepAliveInterval: number;
 	private readonly unifiedMessages: boolean;
 	private readonly token: string | (() => Promise<string>);
-	private readonly onMessageCallback?:
-		| WSStandardMessageCallback<TMessage>
-		| WSUnifiedMessageCallback<TMessage>;
+	private readonly onMessageCallback?: WSStandardMessageCallback<TMessage> | WSUnifiedMessageCallback<TMessage>;
 	private readonly onOpenCallback?: (event: Event) => void;
 	private readonly onCloseCallback?: (event: CloseEvent) => void;
 	private readonly onErrorCallback?: (error: ErrorEvent) => void;
@@ -129,8 +121,7 @@ export class WSConnection<TMessage = unknown> {
 	 * Send a string or JSON-serializable payload through the socket.
 	 */
 	public send(message: unknown) {
-		const data =
-			typeof message === 'string' ? message : JSON.stringify(message);
+		const data = typeof message === 'string' ? message : JSON.stringify(message);
 		this.socket?.send(data);
 	}
 
@@ -149,9 +140,7 @@ export class WSConnection<TMessage = unknown> {
 	 */
 	private emitParsedMessage(data: WSParsedData<TMessage>) {
 		if (this.unifiedMessages) return;
-		const callback = this.onMessageCallback as
-			| WSStandardMessageCallback<TMessage>
-			| undefined;
+		const callback = this.onMessageCallback as WSStandardMessageCallback<TMessage> | undefined;
 		callback?.(data);
 	}
 
@@ -160,9 +149,7 @@ export class WSConnection<TMessage = unknown> {
 	 */
 	private emitUnifiedMessage(message: UnifiedMessageEvent<TMessage>) {
 		if (!this.unifiedMessages) return;
-		const callback = this.onMessageCallback as
-			| WSUnifiedMessageCallback<TMessage>
-			| undefined;
+		const callback = this.onMessageCallback as WSUnifiedMessageCallback<TMessage> | undefined;
 		callback?.(message);
 	}
 
@@ -178,11 +165,7 @@ export class WSConnection<TMessage = unknown> {
 	 * Parse incoming message data, falling back to raw socket payloads when needed.
 	 */
 	private parseEventData(rawData: unknown) {
-		if (
-			rawData instanceof Blob ||
-			rawData instanceof ArrayBuffer ||
-			typeof rawData === 'string'
-		) {
+		if (rawData instanceof Blob || rawData instanceof ArrayBuffer || typeof rawData === 'string') {
 			if (typeof rawData !== 'string') return rawData;
 
 			try {
@@ -212,8 +195,7 @@ export class WSConnection<TMessage = unknown> {
 
 		if (this.token) {
 			try {
-				const token =
-					typeof this.token === 'string' ? this.token : await this.token();
+				const token = typeof this.token === 'string' ? this.token : await this.token();
 				if (token) {
 					this.send({ token });
 				} else {
@@ -330,10 +312,7 @@ export class WSConnection<TMessage = unknown> {
 	 * Open a new socket connection when one is not already active.
 	 */
 	private connect() {
-		if (
-			this.socket?.readyState === WebSocket.OPEN ||
-			this.socket?.readyState === WebSocket.CONNECTING
-		) {
+		if (this.socket?.readyState === WebSocket.OPEN || this.socket?.readyState === WebSocket.CONNECTING) {
 			return;
 		}
 		this.socket = new WebSocket(this.url);
@@ -373,11 +352,7 @@ export class WSConnection<TMessage = unknown> {
 	 * Decide whether a close event should trigger a reconnect attempt.
 	 */
 	private shouldReconnect(event: CloseEvent) {
-		if (
-			this.socket?.readyState === WebSocket.CONNECTING ||
-			this.socket?.readyState === WebSocket.OPEN
-		)
-			return false;
+		if (this.socket?.readyState === WebSocket.CONNECTING || this.socket?.readyState === WebSocket.OPEN) return false;
 		return this.autoReconnect && !this.manuallyClosed && !event.wasClean;
 	}
 
@@ -388,14 +363,8 @@ export class WSConnection<TMessage = unknown> {
 		if (!this.socket) return;
 		this.clearKeepAliveTimer();
 		this.detachEventListeners();
-		if (
-			this.socket.readyState !== WebSocket.CLOSED &&
-			this.socket.readyState !== WebSocket.CLOSING
-		) {
-			this.socket.close(
-				closeEvent.code || 1000,
-				closeEvent.reason || 'Clean shutdown',
-			);
+		if (this.socket.readyState !== WebSocket.CLOSED && this.socket.readyState !== WebSocket.CLOSING) {
+			this.socket.close(closeEvent.code || 1000, closeEvent.reason || 'Clean shutdown');
 		}
 		this.socket = null;
 		this.keepAliveTimer = null;

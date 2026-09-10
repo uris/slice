@@ -31,11 +31,7 @@ type TextAreaBaseProps = {
 	onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 };
 
-export type TextAreaProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof TextAreaBaseProps
-> &
-	TextAreaBaseProps;
+export type TextAreaProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof TextAreaBaseProps> & TextAreaBaseProps;
 
 export type Tip = {
 	icon?: string;

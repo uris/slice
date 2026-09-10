@@ -57,9 +57,7 @@ function UseAudioRecorderDemo(props: Readonly<UseAudioRecorderDemoProps>) {
 	}, []);
 
 	const selectedMicLabel = useMemo(() => {
-		const selected = microphones.find(
-			(microphone) => microphone.deviceId === selectedDeviceId,
-		);
+		const selected = microphones.find((microphone) => microphone.deviceId === selectedDeviceId);
 		return selected?.label || 'Default microphone';
 	}, [microphones, selectedDeviceId]);
 
@@ -68,9 +66,7 @@ function UseAudioRecorderDemo(props: Readonly<UseAudioRecorderDemoProps>) {
 			<FlexDiv direction={'row'} width={'fill'} gap={24} align={'start'}>
 				<FlexDiv width={420} padding={16} gap={12}>
 					<div>Select the default microphone or switch to another input.</div>
-					<label htmlFor={'audio-recorder-microphone-select'}>
-						Microphone device
-					</label>
+					<label htmlFor={'audio-recorder-microphone-select'}>Microphone device</label>
 					<select
 						id={'audio-recorder-microphone-select'}
 						value={selectedDeviceId}
@@ -90,10 +86,7 @@ function UseAudioRecorderDemo(props: Readonly<UseAudioRecorderDemoProps>) {
 					>
 						<option value={''}>Default microphone</option>
 						{microphones.map((device, index) => (
-							<option
-								key={`${device.deviceId}_${index}`}
-								value={device.deviceId}
-							>
+							<option key={`${device.deviceId}_${index}`} value={device.deviceId}>
 								{device.label || `Microphone ${device.deviceId.slice(0, 8)}`}
 							</option>
 						))}

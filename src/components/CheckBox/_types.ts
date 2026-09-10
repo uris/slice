@@ -9,8 +9,4 @@ type CheckBoxBaseProps = {
 	onChange?: (state: boolean) => void;
 };
 
-export type CheckBoxProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof CheckBoxBaseProps
-> &
-	CheckBoxBaseProps;
+export type CheckBoxProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof CheckBoxBaseProps> & CheckBoxBaseProps;

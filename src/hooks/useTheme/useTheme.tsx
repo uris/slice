@@ -31,9 +31,7 @@ export function useTheme() {
 			if (typeof newTheme === 'string') {
 				if (newTheme === 'system') {
 					system = true;
-					const darkModeMediaQuery = globalThis.matchMedia(
-						'(prefers-color-scheme: dark)',
-					);
+					const darkModeMediaQuery = globalThis.matchMedia('(prefers-color-scheme: dark)');
 					const isDark = darkModeMediaQuery.matches;
 					theme = isDark ? darkTheme : lightTheme;
 				} else {

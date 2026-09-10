@@ -13,10 +13,7 @@ import type { ColumnDefinition } from './_types';
  */
 export function createColumnHelper<T>() {
 	return {
-		accessor<V>(
-			accessor: (row: T) => V,
-			def: Omit<ColumnDefinition<T, V>, 'accessor'>,
-		): ColumnDefinition<T, V> {
+		accessor<V>(accessor: (row: T) => V, def: Omit<ColumnDefinition<T, V>, 'accessor'>): ColumnDefinition<T, V> {
 			return { accessor, ...def };
 		},
 	};

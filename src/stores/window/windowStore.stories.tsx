@@ -19,8 +19,7 @@ import {
 } from './windowStore';
 
 function WindowStoreDemo() {
-	const geolocationSupported =
-		typeof navigator !== 'undefined' && 'geolocation' in navigator;
+	const geolocationSupported = typeof navigator !== 'undefined' && 'geolocation' in navigator;
 	const initialize = useInitializeWindow();
 	const formFactor = useFormFactor();
 	const viewportWidth = useViewportWidth();
@@ -38,14 +37,7 @@ function WindowStoreDemo() {
 	useEffect(() => initialize(), [initialize]);
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'center'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
 			<FlexDiv
 				width={420}
 				height={'auto'}
@@ -64,26 +56,17 @@ function WindowStoreDemo() {
 				<span>IsAppleDevice: {isAppleDevice ? 'true' : 'false'}</span>
 				<span>Display Pixel Density: {dpr}</span>
 				<span>"True" height token: {height}</span>
-				<span>
-					(Geo)Location Supported: {geolocationSupported ? 'true' : 'false'}
-				</span>
+				<span>(Geo)Location Supported: {geolocationSupported ? 'true' : 'false'}</span>
 				{location && (
 					<span>
-						Geolocation:{' '}
-						{location
-							? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`
-							: '-'}
+						Geolocation: {location ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}` : '-'}
 					</span>
 				)}
-				{locationError && (
-					<span>Geolocation Error: {locationError?.message ?? '-'}</span>
-				)}
+				{locationError && <span>Geolocation Error: {locationError?.message ?? '-'}</span>}
 				<Button
 					label={'Request location'}
 					onClick={() => void getLocation().catch(() => {})}
-					state={
-						!geolocationSupported || gettingLocation ? 'disabled' : 'normal'
-					}
+					state={!geolocationSupported || gettingLocation ? 'disabled' : 'normal'}
 					working={gettingLocation}
 					progress={true}
 				/>

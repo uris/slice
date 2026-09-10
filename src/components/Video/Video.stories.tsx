@@ -36,14 +36,7 @@ export default meta;
 export const Default: StoryObj<typeof Video> = {
 	render: (args) => {
 		return (
-			<FlexDiv
-				absolute
-				preset={Preset.FillScroll}
-				direction={'column'}
-				scrollY={true}
-				scrollX={false}
-				padding={64}
-			>
+			<FlexDiv absolute preset={Preset.FillScroll} direction={'column'} scrollY={true} scrollX={false} padding={64}>
 				<FlexDiv height={'auto'} width={'fill'}>
 					<Video {...args} />
 				</FlexDiv>

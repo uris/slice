@@ -11,20 +11,11 @@ type UseLastUpdatedDemoProps = {
 
 function UseLastUpdatedDemo(props: Readonly<UseLastUpdatedDemoProps>) {
 	const { prefix, interval } = props;
-	const [timestamp, setTimestamp] = useState<string>(
-		new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-	);
+	const [timestamp, setTimestamp] = useState<string>(new Date(Date.now() - 5 * 60 * 1000).toISOString());
 	const { lastUpdated } = useLastUpdated(timestamp, prefix, interval);
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'center'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
 			<FlexDiv
 				width={420}
 				height={'auto'}
@@ -36,33 +27,17 @@ function UseLastUpdatedDemo(props: Readonly<UseLastUpdatedDemoProps>) {
 				align={'center'}
 			>
 				<span>Time: {timestamp}</span>
-				<FlexDiv
-					width={'auto'}
-					height={'auto'}
-					gap={8}
-					background={'none'}
-					align={'center'}
-				>
-					<Button
-						label={'Set Time Now'}
-						variant={'outline'}
-						onClick={() => setTimestamp(new Date().toISOString())}
-					/>
+				<FlexDiv width={'auto'} height={'auto'} gap={8} background={'none'} align={'center'}>
+					<Button label={'Set Time Now'} variant={'outline'} onClick={() => setTimestamp(new Date().toISOString())} />
 					<Button
 						label={'Set Time 10 mins ago'}
 						variant={'outline'}
-						onClick={() =>
-							setTimestamp(new Date(Date.now() - 10 * 60 * 1000).toISOString())
-						}
+						onClick={() => setTimestamp(new Date(Date.now() - 10 * 60 * 1000).toISOString())}
 					/>
 					<Button
 						label={'Set Time 2 days ago'}
 						variant={'outline'}
-						onClick={() =>
-							setTimestamp(
-								new Date(Date.now() - 60 * 1000 * 60 * 24 * 2).toISOString(),
-							)
-						}
+						onClick={() => setTimestamp(new Date(Date.now() - 60 * 1000 * 60 * 24 * 2).toISOString())}
 					/>
 					<strong>{lastUpdated}</strong>
 				</FlexDiv>

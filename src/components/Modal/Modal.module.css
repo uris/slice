@@ -17,8 +17,7 @@
 	padding: var(--modal-padding) !important;
 	width: 100%;
 	gap: 16px;
-	border-bottom: var(--modal-title-border-width) solid
-		var(--modal-title-border-color);
+	border-bottom: var(--modal-title-border-width) solid var(--modal-title-border-color);
 }
 
 .titleBlock {
@@ -69,8 +68,7 @@
 	width: 100%;
 	user-select: none;
 	-webkit-user-select: none;
-	border-top: var(--modal-actions-border-width) solid
-		var(--modal-actions-border-color);
+	border-top: var(--modal-actions-border-width) solid var(--modal-actions-border-color);
 }
 
 .leftActions {

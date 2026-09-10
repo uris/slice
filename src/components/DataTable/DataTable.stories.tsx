@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv';
+import { fn } from 'storybook/test';
 import { DataTable } from './DataTable';
 import { sampleTableColumnDefinitions, sampleTableData } from './_data';
 import type { SampleTableData } from './_data';
@@ -11,6 +12,12 @@ const TypedDataTable = DataTable<SampleTableData>;
 const meta: Meta<typeof TypedDataTable> = {
 	title: 'Components/DataTable',
 	component: TypedDataTable,
+	argTypes: {
+		borderStyle: {
+			control: { type: 'select' },
+			options: ['box', 'row', 'none'],
+		},
+	},
 	args: {
 		width: '100%',
 		height: 'auto',
@@ -22,6 +29,11 @@ const meta: Meta<typeof TypedDataTable> = {
 		borderColor: 'var(--core-outline-primary)',
 		columnDefinitions: sampleTableColumnDefinitions,
 		tableData: sampleTableData,
+		borderStyle: 'box',
+		onMouseOver: fn(),
+		onMouseOut: fn(),
+		onClick: fn(),
+		onDoubleClick: fn(),
 	},
 };
 
@@ -32,6 +44,22 @@ export const Default: StoryObj<typeof TypedDataTable> = {
 		return (
 			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
 				<TypedDataTable {...args} />
+			</FlexDiv>
+		);
+	},
+};
+
+const filter = (row: SampleTableData) => {
+	return row.country !== '';
+};
+export const FilteredNoCountry: StoryObj<typeof TypedDataTable> = {
+	render: (args) => {
+		return (
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={8}>
+				<code
+					style={{ padding: '4px 8px', borderRadius: 4, fontSize: 14 }}
+				>{`const filter = (row: SampleTableData) => row.country !== ''`}</code>
+				<TypedDataTable {...args} filter={filter} />
 			</FlexDiv>
 		);
 	},
@@ -53,10 +81,7 @@ export const WithPersistedViewState: StoryObj<typeof TypedDataTable> = {
 			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
 				<TypedDataTable
 					{...args}
-					columnDefinitions={applyDataTableViewState(
-						sampleTableColumnDefinitions,
-						savedViewState,
-					)}
+					columnDefinitions={applyDataTableViewState(sampleTableColumnDefinitions, savedViewState)}
 				/>
 			</FlexDiv>
 		);

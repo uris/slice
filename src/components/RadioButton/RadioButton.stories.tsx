@@ -41,11 +41,7 @@ export const Default: StoryObj<typeof RadioButton> = {
 				height={'fit'}
 				padding={64}
 			>
-				<RadioButton<RadioValue>
-					{...args}
-					value={value}
-					onChange={args.onChange}
-				/>
+				<RadioButton<RadioValue> {...args} value={value} onChange={args.onChange} />
 			</FlexDiv>
 		);
 	},

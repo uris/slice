@@ -45,9 +45,7 @@ function BaseLevel(props: Readonly<LevelProps>) {
 
 	// determine the number of active bars to display based on normalized intensity
 	const activeBars = useMemo(() => {
-		const scaledBars = Math.round(
-			minBars + normalizedIntensity * (totalBars - minBars),
-		);
+		const scaledBars = Math.round(minBars + normalizedIntensity * (totalBars - minBars));
 		return Math.max(minBars, Math.min(scaledBars, totalBars));
 	}, [minBars, normalizedIntensity, totalBars]);
 
@@ -111,16 +109,7 @@ function BaseLevel(props: Readonly<LevelProps>) {
 			'--level-color': colorActive,
 			'--level-bg-color': backgroundColor,
 		} as React.CSSProperties;
-	}, [
-		width,
-		height,
-		gap,
-		borderRadius,
-		borderColor,
-		borderWidth,
-		colorActive,
-		backgroundColor,
-	]);
+	}, [width, height, gap, borderRadius, borderColor, borderWidth, colorActive, backgroundColor]);
 
 	return (
 		<div

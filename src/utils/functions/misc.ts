@@ -12,11 +12,7 @@ export function setSizeStyle(size: string | number | undefined): string {
 /**
  * Remove scripts, invisible characters, and optional HTML tags from a string.
  */
-export function cleanString(
-	input: string,
-	removeInvisible = true,
-	removeHtml = true,
-) {
+export function cleanString(input: string, removeInvisible = true, removeHtml = true) {
 	let clean: string = input;
 	const scriptsRegEx = /<script\b[^>]*>[\s\S]*?<\/script>/gi;
 	clean = clean.replaceAll(scriptsRegEx, '');
@@ -99,11 +95,7 @@ export const hexToRgb = (hex: string | undefined, opacity?: number) => {
 /**
  * Trigger a click-like callback when one of the configured keys is pressed.
  */
-export function accessibleKeyDown(
-	e: React.KeyboardEvent<any>,
-	clickFunction: () => void,
-	keys?: string[],
-) {
+export function accessibleKeyDown(e: React.KeyboardEvent<any>, clickFunction: () => void, keys?: string[]) {
 	const activateWith = keys ?? ['Enter', ' '];
 	const match = activateWith.includes(e.key);
 	if (match) {
@@ -137,10 +129,7 @@ export function filterClasses(classNames: string[]): string {
 /**
  * Normalize a style value or fallback into a CSS-ready string.
  */
-export function setStyle(
-	value: string | number | undefined,
-	defaultVal: number | string | undefined = undefined,
-) {
+export function setStyle(value: string | number | undefined, defaultVal: number | string | undefined = undefined) {
 	const useValue = value ?? defaultVal;
 	if (!useValue) return 'unset';
 	if (typeof useValue === 'string') return useValue;

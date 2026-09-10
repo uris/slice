@@ -1,9 +1,5 @@
 import { DEFAULT_WATCHED_MARKERS } from './_defaults';
-import type {
-	MarkdownAutoCloseRule,
-	MarkdownStreamBufferOptions,
-	MarkdownStreamBufferSnapshot,
-} from './_types';
+import type { MarkdownAutoCloseRule, MarkdownStreamBufferOptions, MarkdownStreamBufferSnapshot } from './_types';
 
 interface TrailingInlineConstruct {
 	start: number;
@@ -43,9 +39,7 @@ export class MdBuffer {
 		this.onFlush = options?.onFlush;
 		this.requestFrame = options?.requestFrame ?? getRequestFrame();
 		this.cancelFrame = options?.cancelFrame ?? getCancelFrame();
-		this.watchedMarkers = sortRules(
-			options?.watchedMarkers ?? DEFAULT_WATCHED_MARKERS,
-		);
+		this.watchedMarkers = sortRules(options?.watchedMarkers ?? DEFAULT_WATCHED_MARKERS);
 	}
 
 	/**
@@ -193,10 +187,7 @@ export class MdBuffer {
 
 	private buildHealthyOutput() {
 		const healthyTail = this.buildHealthyTail(this.activeRaw);
-		return `${this.committedRaw}${this.applyHealthyEndMarker(
-			this.activeRaw,
-			healthyTail,
-		)}`;
+		return `${this.committedRaw}${this.applyHealthyEndMarker(this.activeRaw, healthyTail)}`;
 	}
 
 	private applyHealthyEndMarker(rawTail: string, healthyTail: string) {
@@ -209,8 +200,7 @@ export class MdBuffer {
 	}
 
 	private buildHealthyTail(value: string) {
-		const withHtmlHandling =
-			this.htmlHandling === 'strip' ? stripHtmlTags(value) : value;
+		const withHtmlHandling = this.htmlHandling === 'strip' ? stripHtmlTags(value) : value;
 		const withInlineSelects = this.closeTrailingInlineSelect(withHtmlHandling);
 		const withLinksAndImages = this.includeLinksAndImages
 			? this.closeLinksAndImages(withInlineSelects)
@@ -240,9 +230,7 @@ export class MdBuffer {
 			if (nextCharacter !== '$') {
 				if (cursor === value.length - 1) {
 					if (selectStart === -1) return value.slice(0, -1);
-					return lastCompleteBoundary === -1
-						? value.slice(0, selectStart)
-						: value.slice(0, lastCompleteBoundary);
+					return lastCompleteBoundary === -1 ? value.slice(0, selectStart) : value.slice(0, lastCompleteBoundary);
 				}
 				cursor += 1;
 				continue;
@@ -272,19 +260,14 @@ export class MdBuffer {
 		}
 
 		if (selectStart === -1) return value;
-		return lastCompleteBoundary === -1
-			? value.slice(0, selectStart)
-			: value.slice(0, lastCompleteBoundary);
+		return lastCompleteBoundary === -1 ? value.slice(0, selectStart) : value.slice(0, lastCompleteBoundary);
 	}
 
 	private closeInlineMarkdown(value: string) {
 		const pairedRules = this.getPairedRules();
 		const counts = countRuleOccurrences(value, pairedRules);
 		const withSymmetricClosers = this.closeSymmetricPairedMarkers(value);
-		const withAsymmetricClosers = this.closeAsymmetricPairedMarkers(
-			withSymmetricClosers,
-			counts,
-		);
+		const withAsymmetricClosers = this.closeAsymmetricPairedMarkers(withSymmetricClosers, counts);
 		return this.closeLineMarkers(withAsymmetricClosers);
 	}
 
@@ -305,17 +288,13 @@ export class MdBuffer {
 	}
 
 	private getPairedRules() {
-		return this.watchedMarkers.filter(
-			(rule) => (rule.mode ?? 'paired') === 'paired',
-		);
+		return this.watchedMarkers.filter((rule) => (rule.mode ?? 'paired') === 'paired');
 	}
 
 	private closeSymmetricPairedMarkers(value: string) {
 		let nextValue = value;
 		const suppressedCharacters = new Set<string>();
-		const symmetricRules = this.getPairedRules().filter(
-			(rule) => rule.open === rule.close,
-		);
+		const symmetricRules = this.getPairedRules().filter((rule) => rule.open === rule.close);
 
 		for (const rule of symmetricRules) {
 			const repeatedCharacter = getRepeatedTokenCharacter(rule.open);
@@ -323,32 +302,18 @@ export class MdBuffer {
 				continue;
 			}
 
-			const unmatchedOpenIndex = findLastUnmatchedSymmetricOpen(
-				nextValue,
-				rule.open,
-			);
+			const unmatchedOpenIndex = findLastUnmatchedSymmetricOpen(nextValue, rule.open);
 			if (unmatchedOpenIndex === -1) continue;
 
-			if (
-				!hasMeaningfulInlineContent(
-					nextValue.slice(unmatchedOpenIndex + rule.open.length),
-					repeatedCharacter,
-				)
-			) {
+			if (!hasMeaningfulInlineContent(nextValue.slice(unmatchedOpenIndex + rule.open.length), repeatedCharacter)) {
 				nextValue = nextValue.slice(0, unmatchedOpenIndex);
 				if (repeatedCharacter) suppressedCharacters.add(repeatedCharacter);
 				continue;
 			}
 
 			if (repeatedCharacter) {
-				const trailingRunLength = countTrailingRepeatedCharacter(
-					nextValue,
-					repeatedCharacter,
-				);
-				const remainingCharacters = Math.max(
-					rule.close.length - trailingRunLength,
-					0,
-				);
+				const trailingRunLength = countTrailingRepeatedCharacter(nextValue, repeatedCharacter);
+				const remainingCharacters = Math.max(rule.close.length - trailingRunLength, 0);
 				nextValue += repeatedCharacter.repeat(remainingCharacters);
 			} else {
 				nextValue += rule.close;
@@ -362,14 +327,9 @@ export class MdBuffer {
 		return nextValue;
 	}
 
-	private closeAsymmetricPairedMarkers(
-		value: string,
-		counts: Record<string, number>,
-	) {
+	private closeAsymmetricPairedMarkers(value: string, counts: Record<string, number>) {
 		let nextValue = value;
-		const asymmetricRules = this.getPairedRules().filter(
-			(rule) => rule.open !== rule.close,
-		);
+		const asymmetricRules = this.getPairedRules().filter((rule) => rule.open !== rule.close);
 
 		for (const rule of asymmetricRules) {
 			const openCount = counts[rule.open] ?? 0;
@@ -388,9 +348,7 @@ export class MdBuffer {
 		if (trailingLine.trim().length === 0) return nextValue;
 		const trailingLineStart = nextValue.length - trailingLine.length;
 
-		const lineRules = this.watchedMarkers.filter(
-			(rule) => (rule.mode ?? 'paired') === 'line',
-		);
+		const lineRules = this.watchedMarkers.filter((rule) => (rule.mode ?? 'paired') === 'line');
 
 		for (const rule of lineRules) {
 			if (rule.linePattern) {
@@ -399,8 +357,7 @@ export class MdBuffer {
 				break;
 			}
 
-			if (rule.requiresLineStart && !trailingLine.startsWith(rule.open))
-				continue;
+			if (rule.requiresLineStart && !trailingLine.startsWith(rule.open)) continue;
 
 			const remaining = trailingLine.slice(rule.open.length).trim();
 			const requiresContent = rule.requiresContent ?? true;
@@ -415,8 +372,7 @@ export class MdBuffer {
 				return nextValue.slice(0, trailingLineStart);
 			}
 
-			if (!rule.requiresLineStart || !trailingLine.startsWith(rule.open))
-				continue;
+			if (!rule.requiresLineStart || !trailingLine.startsWith(rule.open)) continue;
 			if (!(rule.requiresContent ?? true)) continue;
 
 			const remaining = trailingLine.slice(rule.open.length).trim();
@@ -445,10 +401,7 @@ export class MdBuffer {
 		return value;
 	}
 
-	private closeTrailingImage(
-		value: string,
-		construct: TrailingInlineConstruct,
-	) {
+	private closeTrailingImage(value: string, construct: TrailingInlineConstruct) {
 		if (!construct.labelClosed) {
 			return value.slice(0, construct.start);
 		}
@@ -493,8 +446,7 @@ export class MdBuffer {
 
 			const character = value[index];
 			if (character === '[') {
-				const isImage =
-					index > 0 && value[index - 1] === '!' && !isEscaped(value, index - 1);
+				const isImage = index > 0 && value[index - 1] === '!' && !isEscaped(value, index - 1);
 				stack.push({
 					start: isImage ? index - 1 : index,
 					isImage,
@@ -516,12 +468,7 @@ export class MdBuffer {
 			if (character === '(') {
 				const target = [...stack]
 					.reverse()
-					.find(
-						(item) =>
-							item.labelClosed &&
-							!item.parenOpened &&
-							item.labelEnd === index - 1,
-					);
+					.find((item) => item.labelClosed && !item.parenOpened && item.labelEnd === index - 1);
 				if (!target) continue;
 				target.parenOpened = true;
 				continue;
@@ -538,37 +485,26 @@ export class MdBuffer {
 			}
 		}
 
-		const trailingConstruct = stack.findLast(
-			(item) => item.isImage === isImage,
-		);
+		const trailingConstruct = stack.findLast((item) => item.isImage === isImage);
 		return trailingConstruct ?? null;
 	}
 }
 
 function getRequestFrame() {
-	if (
-		typeof globalThis !== 'undefined' &&
-		typeof globalThis.requestAnimationFrame === 'function'
-	) {
+	if (typeof globalThis !== 'undefined' && typeof globalThis.requestAnimationFrame === 'function') {
 		return globalThis.requestAnimationFrame.bind(globalThis);
 	}
 	return ((callback: FrameRequestCallback) =>
-		globalThis.setTimeout(
-			() => callback(Date.now()),
-			16,
-		) as unknown as number) as (callback: FrameRequestCallback) => number;
+		globalThis.setTimeout(() => callback(Date.now()), 16) as unknown as number) as (
+		callback: FrameRequestCallback,
+	) => number;
 }
 
 function getCancelFrame() {
-	if (
-		typeof globalThis !== 'undefined' &&
-		typeof globalThis.cancelAnimationFrame === 'function'
-	) {
+	if (typeof globalThis !== 'undefined' && typeof globalThis.cancelAnimationFrame === 'function') {
 		return globalThis.cancelAnimationFrame.bind(globalThis);
 	}
-	return ((handle: number) => globalThis.clearTimeout(handle)) as (
-		handle: number,
-	) => void;
+	return ((handle: number) => globalThis.clearTimeout(handle)) as (handle: number) => void;
 }
 
 function isEscaped(value: string, index: number) {
@@ -584,10 +520,7 @@ function sortRules(rules: MarkdownAutoCloseRule[]) {
 	return [...rules].sort((left, right) => right.open.length - left.open.length);
 }
 
-function countRuleOccurrences(
-	value: string,
-	rules: MarkdownAutoCloseRule[],
-): Record<string, number> {
+function countRuleOccurrences(value: string, rules: MarkdownAutoCloseRule[]): Record<string, number> {
 	const counts: Record<string, number> = {};
 	const tokens = new Set<string>();
 
@@ -596,16 +529,13 @@ function countRuleOccurrences(
 		tokens.add(rule.close);
 	}
 
-	const sortedTokens = [...tokens].sort(
-		(left, right) => right.length - left.length,
-	);
+	const sortedTokens = [...tokens].sort((left, right) => right.length - left.length);
 
 	for (let index = 0; index < value.length; index += 1) {
 		if (isEscaped(value, index)) continue;
 
 		const matchedToken = sortedTokens.find(
-			(token) =>
-				token.length > 0 && value.slice(index, index + token.length) === token,
+			(token) => token.length > 0 && value.slice(index, index + token.length) === token,
 		);
 		if (!matchedToken) continue;
 		if (shouldIgnoreSymmetricToken(value, matchedToken, index)) continue;
@@ -640,11 +570,7 @@ function countTrailingRepeatedCharacter(value: string, character: string) {
 	return count;
 }
 
-function shouldIgnoreSymmetricToken(
-	value: string,
-	token: string,
-	index: number,
-) {
+function shouldIgnoreSymmetricToken(value: string, token: string, index: number) {
 	if (!token.includes('_')) return false;
 	const previousCharacter = value[index - 1] ?? '';
 	const nextCharacter = value[index + token.length] ?? '';
@@ -672,15 +598,10 @@ function findLastUnmatchedSymmetricOpen(value: string, token: string) {
 	return lastIndex;
 }
 
-function hasMeaningfulInlineContent(
-	value: string,
-	repeatedCharacter: string | null,
-) {
+function hasMeaningfulInlineContent(value: string, repeatedCharacter: string | null) {
 	if (value.trim().length === 0) return false;
 	if (!repeatedCharacter) return true;
-	const withoutRepeatedCharacters = value
-		.replaceAll(repeatedCharacter, '')
-		.trim();
+	const withoutRepeatedCharacters = value.replaceAll(repeatedCharacter, '').trim();
 	return withoutRepeatedCharacters.length > 0;
 }
 

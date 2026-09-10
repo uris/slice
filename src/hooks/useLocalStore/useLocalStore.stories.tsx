@@ -15,14 +15,7 @@ function UseLocalStoreDemo(props: Readonly<UseLocalStoreDemoProps>) {
 	const [draft, setDraft] = useState(name);
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'center'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
 			<FlexDiv
 				width={420}
 				height={'auto'}
@@ -35,29 +28,10 @@ function UseLocalStoreDemo(props: Readonly<UseLocalStoreDemoProps>) {
 			>
 				<strong>Key: {storageKey}</strong>
 				<span>Persisted value: {name}</span>
-				<TextField
-					label={'Display Name:'}
-					name={'displayName'}
-					value={draft}
-					onChange={(v) => setDraft(v)}
-				/>
-				<FlexDiv
-					width={'auto'}
-					height={'auto'}
-					gap={8}
-					background={'none'}
-					direction={'row'}
-				>
-					<Button
-						label={'Save'}
-						variant={'outline'}
-						onClick={() => setName(draft)}
-					/>
-					<Button
-						label={'Reset'}
-						variant={'outline'}
-						onClick={() => setName('Jane Doe')}
-					/>
+				<TextField label={'Display Name:'} name={'displayName'} value={draft} onChange={(v) => setDraft(v)} />
+				<FlexDiv width={'auto'} height={'auto'} gap={8} background={'none'} direction={'row'}>
+					<Button label={'Save'} variant={'outline'} onClick={() => setName(draft)} />
+					<Button label={'Reset'} variant={'outline'} onClick={() => setName('Jane Doe')} />
 				</FlexDiv>
 			</FlexDiv>
 		</FlexDiv>

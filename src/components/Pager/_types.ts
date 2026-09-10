@@ -11,8 +11,4 @@ type PagerBaseProps = {
 	onChange?: (index: number) => void;
 };
 
-export type PagerProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof PagerBaseProps
-> &
-	PagerBaseProps;
+export type PagerProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof PagerBaseProps> & PagerBaseProps;

@@ -1,11 +1,6 @@
 'use client';
 
-import {
-	AnimatePresence,
-	type Transition,
-	motion,
-	useDragControls,
-} from 'motion/react';
+import { AnimatePresence, type Transition, motion, useDragControls } from 'motion/react';
 import React, { useRef } from 'react';
 import { useModal, useModalActions } from '../../stores';
 import { Overlay } from '../Overlay';
@@ -47,13 +42,7 @@ export function ModalController(props: Readonly<ModalControllerProps>) {
 
 	return (
 		<>
-			<Overlay
-				show={!!modal}
-				type={'dark'}
-				opacity={overlayOpacity}
-				color={overlayColor}
-				onClick={() => hide()}
-			/>
+			<Overlay show={!!modal} type={'dark'} opacity={overlayOpacity} color={overlayColor} onClick={() => hide()} />
 			<AnimatePresence>
 				{modal && ModalComponent && (
 					<div className={css.container} ref={ref}>

@@ -150,12 +150,8 @@
 	--core-outline-primary: var(--brand-grey-100);
 	--core-outline-special: var(--brand-sea-100);
 	--core-outline-tertiary: var(--brand-sea-500);
-	--core-surface-coverup-translucent: var(
-		--core-surface-coverup-translucent-light
-	);
-	--core-surface-overlay-translucent: var(
-		--core-surface-overlay-translucent-light
-	);
+	--core-surface-coverup-translucent: var(--core-surface-coverup-translucent-light);
+	--core-surface-overlay-translucent: var(--core-surface-overlay-translucent-light);
 	--core-surface-primary: var(--brand-white-0);
 	--core-surface-primary-tint: var(--surface-primary-tint-light);
 	--core-surface-secondary: var(--brand-grey-50);
@@ -230,12 +226,8 @@
 	--core-outline-primary: var(--brand-grey-700);
 	--core-outline-special: var(--brand-sky-300);
 	--core-outline-tertiary: var(--brand-sky-300);
-	--core-surface-coverup-translucent: var(
-		--core-surface-coverup-translucent-dark
-	);
-	--core-surface-overlay-translucent: var(
-		--core-surface-overlay-translucent-dark
-	);
+	--core-surface-coverup-translucent: var(--core-surface-coverup-translucent-dark);
+	--core-surface-overlay-translucent: var(--core-surface-overlay-translucent-dark);
 	--core-surface-primary: var(--brand-grey-950);
 	--core-surface-primary-tint: var(--surface-primary-tint-dark);
 	--core-surface-secondary: var(--brand-grey-900);

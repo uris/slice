@@ -55,9 +55,7 @@ function formatValue(value: unknown) {
 function WSStoreDemo() {
 	const { addConnection, removeConnection } = useWS();
 	const connections = useWSStore((state) => state.connections);
-	const connection = useWSStore((state) =>
-		state.connections.find((entry) => entry.name === CONNECTION_NAME),
-	);
+	const connection = useWSStore((state) => state.connections.find((entry) => entry.name === CONNECTION_NAME));
 	const isConnected = useIsConnected(CONNECTION_NAME);
 	const lastMessage = useMessage();
 	const [url, setUrl] = useState(DEFAULT_WS_TEST_URL);
@@ -95,9 +93,7 @@ function WSStoreDemo() {
 
 		const now = formatTimestamp(new Date());
 		const value =
-			lastMessage.type === 'open' ||
-			lastMessage.type === 'error' ||
-			lastMessage.type === 'close'
+			lastMessage.type === 'open' || lastMessage.type === 'error' || lastMessage.type === 'close'
 				? '[Event]'
 				: formatValue(lastMessage.data);
 
@@ -113,14 +109,7 @@ function WSStoreDemo() {
 	}, [lastMessage]);
 
 	return (
-		<FlexDiv
-			absolute
-			width={'fill'}
-			height={'fill'}
-			align={'center'}
-			justify={'start'}
-			padding={24}
-		>
+		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'start'} padding={24}>
 			<FlexDiv
 				width={640}
 				height={'auto'}
@@ -130,8 +119,7 @@ function WSStoreDemo() {
 				border={'1px solid var(--core-outline-primary)'}
 			>
 				<h1>{`WS Connection ${connections.length > 0 ? ': Active' : ''}`}</h1>
-				Slice does not provide a test websocket end point. You'll need to enter
-				your own websocket URL.
+				Slice does not provide a test websocket end point. You'll need to enter your own websocket URL.
 				<Spacer size={12} />
 				<TextField
 					label={'URL:'}

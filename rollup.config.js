@@ -13,10 +13,8 @@ import stripCode from 'rollup-plugin-strip-code';
 import preserveDirectivesPlugin from 'rollup-preserve-directives';
 
 const shouldMinify = process.env.MINIFY === 'true';
-const keepJsDocComments = (_node, comment) =>
-	comment.type === 'comment2' && comment.value.startsWith('*');
-const preserveDirectives =
-	preserveDirectivesPlugin.default ?? preserveDirectivesPlugin;
+const keepJsDocComments = (_node, comment) => comment.type === 'comment2' && comment.value.startsWith('*');
+const preserveDirectives = preserveDirectivesPlugin.default ?? preserveDirectivesPlugin;
 
 const buildInputs = () => {
 	const inputs = {
@@ -83,9 +81,7 @@ const buildInputs = () => {
 				path.join(workersDir, workerName, `${workerName}.worker.ts`),
 				path.join(workersDir, workerName, 'index.ts'),
 			];
-			const workerEntry = candidates.find((candidate) =>
-				fs.existsSync(candidate),
-			);
+			const workerEntry = candidates.find((candidate) => fs.existsSync(candidate));
 			if (!workerEntry) continue;
 			inputs[`workers/${workerName}/${workerName}`] = workerEntry;
 		}
@@ -113,14 +109,12 @@ const entryFileName = (format) => (chunkInfo) => {
 	if (chunkInfo.name === 'index') return `index${ext}`;
 	if (chunkInfo.name === 'utils') return `utils/index${ext}`;
 	if (chunkInfo.name === 'utils/objects') return `utils/objects/index${ext}`;
-	if (chunkInfo.name.startsWith('components/'))
-		return `${chunkInfo.name}/index${ext}`;
+	if (chunkInfo.name.startsWith('components/')) return `${chunkInfo.name}/index${ext}`;
 	if (chunkInfo.name.startsWith('workers/')) return `${chunkInfo.name}${ext}`;
 	return `[name]${ext}`;
 };
 
-const chunkFileName = (format) =>
-	`chunks/[name]-[hash]${format === 'esm' ? '.mjs' : '.js'}`;
+const chunkFileName = (format) => `chunks/[name]-[hash]${format === 'esm' ? '.mjs' : '.js'}`;
 
 // Dynamic import of rollup-plugin-visualizer to avoid bundling it in production
 const rollup = async () => {

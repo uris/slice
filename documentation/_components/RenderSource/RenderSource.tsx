@@ -11,13 +11,8 @@ export interface RenderSourceProps extends React.ComponentProps<typeof Source> {
  * Supports both string children and fenced markdown code blocks inside MDX.
  */
 function childrenToCode(children: React.ReactNode) {
-	const isTag = (
-		node: React.ReactNode,
-		tagName: string,
-	): node is React.ReactElement =>
-		React.isValidElement(node) &&
-		typeof node.type === 'string' &&
-		node.type === tagName;
+	const isTag = (node: React.ReactNode, tagName: string): node is React.ReactElement =>
+		React.isValidElement(node) && typeof node.type === 'string' && node.type === tagName;
 
 	const findFirstPre = (node: React.ReactNode): React.ReactElement | null => {
 		if (Array.isArray(node)) {

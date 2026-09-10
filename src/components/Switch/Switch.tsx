@@ -45,24 +45,11 @@ function SwitchComponent<T = string>(props: SwitchProps<T>) {
 			'--switch-padding': `${padding}px`,
 			'--switch-knob-size': `${height - padding * 2}px`,
 			'--switch-knob-color': knobColor,
-			'--switch-bg-color': on
-				? resolvedBackgroundColorOn
-				: resolvedBackgroundColorOff,
+			'--switch-bg-color': on ? resolvedBackgroundColorOn : resolvedBackgroundColorOff,
 		} as React.CSSProperties;
-	}, [
-		width,
-		height,
-		padding,
-		resolvedBackgroundColorOff,
-		resolvedBackgroundColorOn,
-		on,
-		knobColor,
-	]);
+	}, [width, height, padding, resolvedBackgroundColorOff, resolvedBackgroundColorOn, on, knobColor]);
 
-	const justify = useMemo(
-		() => ({ justifyContent: on ? 'flex-end' : 'flex-start' }),
-		[on],
-	);
+	const justify = useMemo(() => ({ justifyContent: on ? 'flex-end' : 'flex-start' }), [on]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Switch');
@@ -87,6 +74,4 @@ function SwitchComponent<T = string>(props: SwitchProps<T>) {
 
 SwitchComponent.displayName = 'Switch';
 
-export const Switch = React.memo(SwitchComponent) as <T = string>(
-	props: SwitchProps<T>,
-) => React.JSX.Element;
+export const Switch = React.memo(SwitchComponent) as <T = string>(props: SwitchProps<T>) => React.JSX.Element;

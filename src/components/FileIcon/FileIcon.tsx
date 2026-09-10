@@ -10,14 +10,7 @@ import { STATIC_FILE_ICONS } from './fileIconRegistry';
 export const FileIcon = React.memo((props: FileIconProps) => {
 	const { isDark } = useTheme();
 
-	const {
-		name = 'pdf',
-		size = 24,
-		pointer = false,
-		disabled = false,
-		onClick,
-		...svgAttributes
-	} = props;
+	const { name = 'pdf', size = 24, pointer = false, disabled = false, onClick, ...svgAttributes } = props;
 	const { id: svgId, className, style, ...rest } = svgAttributes;
 	const svgStyle = style ?? ({} as React.CSSProperties);
 
@@ -41,11 +34,7 @@ export const FileIcon = React.memo((props: FileIconProps) => {
 
 	// forward click and keyboard activation while respecting the disabled state
 	const handleClick = useCallback(
-		(
-			e:
-				| React.MouseEvent<SVGElement, MouseEvent>
-				| React.KeyboardEvent<SVGSVGElement>,
-		) => {
+		(e: React.MouseEvent<SVGElement, MouseEvent> | React.KeyboardEvent<SVGSVGElement>) => {
 			if (!disabled) onClick?.(e);
 		},
 		[onClick, disabled],

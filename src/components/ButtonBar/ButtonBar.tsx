@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
@@ -14,9 +8,7 @@ import type { ToolTip } from '../sharedTypes';
 import css from './ButtonBar.module.css';
 import type { BarButton as ButtonBarItem, ButtonBarProps } from './_types';
 
-export const ButtonBar = React.memo(function ButtonBar(
-	props: Readonly<ButtonBarProps>,
-) {
+export const ButtonBar = React.memo(function ButtonBar(props: Readonly<ButtonBarProps>) {
 	const {
 		buttons = [],
 		selected,
@@ -48,9 +40,7 @@ export const ButtonBar = React.memo(function ButtonBar(
 	const resolvedBackgroundColorHover = backgroundColorHover ?? bgColorHover;
 	const resolvedBackgroundColorActive = backgroundColorActive ?? bgColorActive;
 	const [hovered, setHovered] = useState<number>(-1);
-	const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
-		selected,
-	);
+	const [selectedIndex, setSelectedIndex] = useState<number | undefined>(selected);
 
 	// sync the selected button index from the controlled prop
 	useEffect(() => setSelectedIndex(selected), [selected]);
@@ -146,16 +136,7 @@ export const ButtonBar = React.memo(function ButtonBar(
 					iconColor={iconColor(index)}
 				/>
 			)),
-		[
-			buttons,
-			buttonClass,
-			handleMouseEnter,
-			handleMouseLeave,
-			handleClick,
-			onToolTip,
-			iconSize,
-			iconColor,
-		],
+		[buttons, buttonClass, handleMouseEnter, handleMouseLeave, handleClick, onToolTip, iconSize, iconColor],
 	);
 
 	/* START.DEBUG */
@@ -163,12 +144,7 @@ export const ButtonBar = React.memo(function ButtonBar(
 	/* END.DEBUG */
 
 	return (
-		<div
-			id={divId}
-			className={`${css.wrapper}${divClass}`}
-			style={{ ...cssVars, ...divStyle }}
-			{...rest}
-		>
+		<div id={divId} className={`${css.wrapper}${divClass}`} style={{ ...cssVars, ...divStyle }} {...rest}>
 			{barButtons}
 		</div>
 	);
@@ -186,20 +162,8 @@ interface ButtonProps {
 	onToolTip?: (tip: ToolTip | null) => void;
 }
 
-export const BarButton = React.memo(function BarButton(
-	props: Readonly<ButtonProps>,
-) {
-	const {
-		classNames,
-		icon,
-		iconSize,
-		iconColor,
-		toolTip,
-		onClick,
-		onMouseEnter,
-		onMouseLeave,
-		onToolTip,
-	} = props;
+export const BarButton = React.memo(function BarButton(props: Readonly<ButtonProps>) {
+	const { classNames, icon, iconSize, iconColor, toolTip, onClick, onMouseEnter, onMouseLeave, onToolTip } = props;
 	const ref = useRef<HTMLButtonElement>(null);
 
 	const handleMouseEnter = useCallback(

@@ -19,9 +19,7 @@ export type DataTableViewState = {
 
 /* A DataTableViewState reflecting the columns' natural, in-code order. Useful
  * as an initial value before the user has customized anything. */
-export function createDefaultViewState<T>(
-	columns: ColumnDefinition<T, any>[],
-): DataTableViewState {
+export function createDefaultViewState<T>(columns: ColumnDefinition<T, any>[]): DataTableViewState {
 	return { columnOrder: columns.map((column) => column.id) };
 }
 
@@ -60,7 +58,5 @@ export function applyDataTableViewState<T>(
 
 	if (!state.columnWidths) return ordered;
 	const widths = state.columnWidths;
-	return ordered.map((column) =>
-		column.id in widths ? { ...column, width: widths[column.id] } : column,
-	);
+	return ordered.map((column) => (column.id in widths ? { ...column, width: widths[column.id] } : column));
 }

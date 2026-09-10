@@ -49,10 +49,7 @@ export class AudioVisualizer {
 	private sourceNode: MediaStreamAudioSourceNode | null = null;
 	private timeDomainData: Uint8Array<ArrayBuffer> | null = null;
 
-	constructor(
-		source: AudioVisualizerSource,
-		options: AudioVisualizerOptions = {},
-	) {
+	constructor(source: AudioVisualizerSource, options: AudioVisualizerOptions = {}) {
 		this.source = source;
 		this.fftSize = options.fftSize ?? 512;
 		this.intensityMultiplier = options.intensityMultiplier ?? 2.2;
@@ -75,13 +72,9 @@ export class AudioVisualizer {
 			this.audioContext = new AudioContext();
 			this.analyser = this.audioContext.createAnalyser();
 			this.analyser.fftSize = this.fftSize;
-			this.sourceNode = this.audioContext.createMediaStreamSource(
-				toMediaStream(this.source),
-			);
+			this.sourceNode = this.audioContext.createMediaStreamSource(toMediaStream(this.source));
 			this.sourceNode.connect(this.analyser);
-			this.timeDomainData = new Uint8Array(
-				new ArrayBuffer(this.analyser.fftSize),
-			);
+			this.timeDomainData = new Uint8Array(new ArrayBuffer(this.analyser.fftSize));
 		}
 
 		void this.audioContext.resume();
@@ -114,9 +107,7 @@ export class AudioVisualizer {
 	}
 
 	public getScale() {
-		return (
-			this.minScale + this.currentIntensity * (this.maxScale - this.minScale)
-		);
+		return this.minScale + this.currentIntensity * (this.maxScale - this.minScale);
 	}
 
 	private readonly onFrame = (now: number) => {
@@ -131,22 +122,11 @@ export class AudioVisualizer {
 		}
 
 		const rms = Math.sqrt(sum / this.timeDomainData.length);
-		const targetIntensity = clamp(
-			(rms * this.intensityMultiplier) / this.peakIntensity,
-			0,
-			1,
-		);
+		const targetIntensity = clamp((rms * this.intensityMultiplier) / this.peakIntensity, 0, 1);
 		const deltaSeconds = Math.max((now - this.lastFrameTime) / 1000, 0);
-		const stepPerSecond =
-			targetIntensity > this.currentIntensity
-				? this.risePerSecond
-				: this.releasePerSecond;
+		const stepPerSecond = targetIntensity > this.currentIntensity ? this.risePerSecond : this.releasePerSecond;
 
-		this.currentIntensity = moveTowards(
-			this.currentIntensity,
-			targetIntensity,
-			stepPerSecond * deltaSeconds,
-		);
+		this.currentIntensity = moveTowards(this.currentIntensity, targetIntensity, stepPerSecond * deltaSeconds);
 		this.lastFrameTime = now;
 
 		this.onUpdate?.({

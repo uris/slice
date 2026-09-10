@@ -11,8 +11,4 @@ type DoneCheckBaseProps = {
 	didEnd?: () => void;
 };
 
-export type DoneCheckProps = Omit<
-	React.SVGAttributes<SVGSVGElement>,
-	keyof DoneCheckBaseProps
-> &
-	DoneCheckBaseProps;
+export type DoneCheckProps = Omit<React.SVGAttributes<SVGSVGElement>, keyof DoneCheckBaseProps> & DoneCheckBaseProps;

@@ -13,8 +13,5 @@ type ProgressIndicatorBaseProps = {
 	didStop?: () => void;
 };
 
-export type ProgressIndicatorProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof ProgressIndicatorBaseProps
-> &
+export type ProgressIndicatorProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof ProgressIndicatorBaseProps> &
 	ProgressIndicatorBaseProps;

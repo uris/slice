@@ -31,19 +31,13 @@ export function useThemeContext() {
 
 // set up a media query for system theme
 function getDarkModeMediaQuery() {
-	if (
-		typeof globalThis === 'undefined' ||
-		typeof globalThis.matchMedia !== 'function'
-	) {
+	if (typeof globalThis === 'undefined' || typeof globalThis.matchMedia !== 'function') {
 		return null;
 	}
 	return globalThis.matchMedia('(prefers-color-scheme: dark)');
 }
 
-function resolveTheme(
-	theme?: string,
-	system?: boolean,
-): SliceTheme | undefined {
+function resolveTheme(theme?: string, system?: boolean): SliceTheme | undefined {
 	if (system) return getDarkModeMediaQuery()?.matches ? darkTheme : lightTheme;
 	if (theme) return theme.includes('dark') ? darkTheme : lightTheme;
 
@@ -58,11 +52,8 @@ function setDocumentTheme(name: string, system: boolean) {
 }
 
 export function ThemeProvider(props: Readonly<ThemeProviderProps>) {
-	const { children, theme, system, global, initialTheme, initialSystem } =
-		props;
-	const [systemTheme, setSystemTheme] = useState<boolean>(
-		system ?? initialSystem ?? true,
-	);
+	const { children, theme, system, global, initialTheme, initialSystem } = props;
+	const [systemTheme, setSystemTheme] = useState<boolean>(system ?? initialSystem ?? true);
 
 	// keep local system-theme state aligned with controlled provider props
 	useEffect(() => {

@@ -3,9 +3,7 @@ import type { WindowGeolocation } from '../../hooks/useWindow/useWindow';
 import { FormFactor, type WindowStore, bootstrapBreakPoints } from './_types';
 
 // pre-ordered break points from larget to smallest
-const orderedBps = Object.entries(bootstrapBreakPoints).sort(
-	(a, b) => -b[1] - a[1],
-) as [FormFactor, number][];
+const orderedBps = Object.entries(bootstrapBreakPoints).sort((a, b) => -b[1] - a[1]) as [FormFactor, number][];
 
 // get form factor from break point and current viewport width
 const getFormFactor = (width: number | undefined): FormFactor => {
@@ -16,8 +14,7 @@ const getFormFactor = (width: number | undefined): FormFactor => {
 	return FormFactor.Mobile;
 };
 
-const isBrowser =
-	typeof globalThis !== 'undefined' && typeof navigator !== 'undefined';
+const isBrowser = typeof globalThis !== 'undefined' && typeof navigator !== 'undefined';
 const initialSize = processWindowSize();
 
 export const useWindowStore = create<WindowStore>((set, get) => ({
@@ -42,10 +39,7 @@ export const useWindowStore = create<WindowStore>((set, get) => ({
 		},
 		getLocation: async () => {
 			if (!supportsGeolocation()) {
-				const error = createLocationError(
-					'Geolocation is not supported in this browser.',
-					0,
-				);
+				const error = createLocationError('Geolocation is not supported in this browser.', 0);
 				set({ locationError: error, gettingLocation: false });
 				throw error;
 			}
@@ -91,9 +85,7 @@ function checkElectron() {
 
 function checkAppleDevice() {
 	if (!isBrowser) return false;
-	return (
-		navigator.platform.startsWith('Mac') || navigator.platform === 'iPhone'
-	);
+	return navigator.platform.startsWith('Mac') || navigator.platform === 'iPhone';
 }
 
 function checkTouchDevice() {
@@ -125,8 +117,7 @@ function getViewportWindow() {
 function handleResize() {
 	if (!isBrowser) return;
 	// process size
-	const { formFactor, viewportWidth, viewportHeight, height } =
-		processWindowSize();
+	const { formFactor, viewportWidth, viewportHeight, height } = processWindowSize();
 	// update store directly
 	useWindowStore.setState({
 		formFactor,
@@ -161,25 +152,17 @@ function processWindowSize(top = true) {
 
 // atomic hook exports for use in React components
 export const useFormFactor = () => useWindowStore((state) => state.formFactor);
-export const useViewportWidth = () =>
-	useWindowStore((state) => state.viewportWidth);
-export const useViewportHeight = () =>
-	useWindowStore((state) => state.viewportHeight);
-export const useIsAppleDevice = () =>
-	useWindowStore((state) => state.isAppleDevice);
-export const useIsTouchDevice = () =>
-	useWindowStore((state) => state.isTouchDevice);
+export const useViewportWidth = () => useWindowStore((state) => state.viewportWidth);
+export const useViewportHeight = () => useWindowStore((state) => state.viewportHeight);
+export const useIsAppleDevice = () => useWindowStore((state) => state.isAppleDevice);
+export const useIsTouchDevice = () => useWindowStore((state) => state.isTouchDevice);
 export const useIsElectron = () => useWindowStore((state) => state.isElectron);
 export const useDpr = () => useWindowStore((state) => state.dpr);
 export const useLocation = () => useWindowStore((state) => state.location);
-export const useLocationError = () =>
-	useWindowStore((state) => state.locationError);
-export const useGettingLocation = () =>
-	useWindowStore((state) => state.gettingLocation);
-export const useInitializeWindow = () =>
-	useWindowStore((state) => state.actions.initialize);
-export const useGetLocation = () =>
-	useWindowStore((state) => state.actions.getLocation);
+export const useLocationError = () => useWindowStore((state) => state.locationError);
+export const useGettingLocation = () => useWindowStore((state) => state.gettingLocation);
+export const useInitializeWindow = () => useWindowStore((state) => state.actions.initialize);
+export const useGetLocation = () => useWindowStore((state) => state.actions.getLocation);
 
 // non-reactive imperative exports for use outside the React context
 export const formFactor = () => useWindowStore.getState().formFactor;

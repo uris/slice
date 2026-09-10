@@ -61,24 +61,16 @@ export function IconSampler(props: Readonly<IconSamplerProps>) {
 					const categoryName = category as keyof typeof SliceIcons;
 					const categoryIcons = Object.keys(SliceIcons[categoryName]);
 					return (
-						<div
-							className={css.category}
-							style={cssVars}
-							key={`category_${category}`}
-						>
+						<div className={css.category} style={cssVars} key={`category_${category}`}>
 							<h3 className={css.categoryTitle}>{category}</h3>
 							<div className={css.container}>
 								{categoryIcons
 									//.toSorted((a, b) => a.localeCompare(b))
 									.map((iconKey) => {
-										const key =
-											iconKey as keyof (typeof SliceIcons)[typeof categoryName];
+										const key = iconKey as keyof (typeof SliceIcons)[typeof categoryName];
 										const icon = SliceIcons[categoryName][key];
 										return (
-											<div
-												className={`${css.wrapper} slice_icon`}
-												key={`slice_icon_${icon}`}
-											>
+											<div className={`${css.wrapper} slice_icon`} key={`slice_icon_${icon}`}>
 												<div className={css.icon}>
 													<Icon name={icon} size={iconSize} fill={showFill} />
 												</div>

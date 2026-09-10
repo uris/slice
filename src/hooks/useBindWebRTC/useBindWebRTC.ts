@@ -1,11 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-	getWebRTCConnections,
-	useWebRTC,
-	useWebRTCConnection,
-} from '../../stores/WebRTC';
+import { getWebRTCConnections, useWebRTC, useWebRTCConnection } from '../../stores/WebRTC';
 import type { WebRTCStoreConnectionOptions } from '../../stores/WebRTC';
 import { useProcessedMicStream } from '../../stores/microphone';
 import { useVolume } from '../../stores/volume';
@@ -25,9 +21,7 @@ export type UseBindWebRTCReturn = {
 	bound: boolean;
 };
 
-export function useBindWebRTC(
-	options: UseBindWebRTCOptions,
-): UseBindWebRTCReturn {
+export function useBindWebRTC(options: UseBindWebRTCOptions): UseBindWebRTCReturn {
 	const {
 		connectionName,
 		offerOptions,
@@ -43,13 +37,7 @@ export function useBindWebRTC(
 	} = options;
 	const processedMicStream = useProcessedMicStream();
 	const volume = useVolume();
-	const {
-		addConnection,
-		initializeConnection,
-		removeConnection,
-		setMicStream,
-		setVolume,
-	} = useWebRTC();
+	const { addConnection, initializeConnection, removeConnection, setMicStream, setVolume } = useWebRTC();
 	const connectionEntry = useWebRTCConnection(connectionName);
 	const [error, setError] = useState<Error | null>(null);
 	const [bound, setBound] = useState(false);
@@ -67,13 +55,9 @@ export function useBindWebRTC(
 	const bind = useCallback(async () => {
 		setError(null);
 
-		const existingConnection = getWebRTCConnections().find(
-			(connection) => connection.name === connectionName,
-		);
+		const existingConnection = getWebRTCConnections().find((connection) => connection.name === connectionName);
 		if (existingConnection) {
-			const nextError = new Error(
-				`WebRTC connection "${connectionName}" already exists`,
-			);
+			const nextError = new Error(`WebRTC connection "${connectionName}" already exists`);
 			setError(nextError);
 			return existingConnection.connection;
 		}
@@ -102,21 +86,14 @@ export function useBindWebRTC(
 			await initializeConnection(connectionName, offerOptions, bearerToken);
 			setBound(true);
 
-			return (
-				getWebRTCConnections().find(
-					(connection) => connection.name === connectionName,
-				)?.connection ?? null
-			);
+			return getWebRTCConnections().find((connection) => connection.name === connectionName)?.connection ?? null;
 		} catch (bindError) {
 			if (ownsConnectionRef.current) {
 				removeConnection(connectionName);
 			}
 			ownsConnectionRef.current = false;
 			setBound(false);
-			const nextError =
-				bindError instanceof Error
-					? bindError
-					: new Error('Failed to bind WebRTC connection');
+			const nextError = bindError instanceof Error ? bindError : new Error('Failed to bind WebRTC connection');
 			setError(nextError);
 			return null;
 		}
@@ -142,15 +119,9 @@ export function useBindWebRTC(
 	useEffect(() => {
 		if (!bound || !ownsConnectionRef.current) return;
 
-		void setMicStream(connectionName, processedMicStream.current).catch(
-			(streamError) => {
-				setError(
-					streamError instanceof Error
-						? streamError
-						: new Error('Failed to update WebRTC microphone stream'),
-				);
-			},
-		);
+		void setMicStream(connectionName, processedMicStream.current).catch((streamError) => {
+			setError(streamError instanceof Error ? streamError : new Error('Failed to update WebRTC microphone stream'));
+		});
 	}, [bound, connectionName, processedMicStream, setMicStream]);
 
 	useEffect(() => {

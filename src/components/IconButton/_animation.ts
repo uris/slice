@@ -58,27 +58,20 @@ export const animationVariants = (animations: ButtonAnimation | undefined) => {
 /**
  * Resolves presets and custom animations to motion variants
  */
-export const resolveVariants = (
-	presets: AnimationPreset | undefined,
-	custom: ButtonAnimation | undefined,
-) => {
+export const resolveVariants = (presets: AnimationPreset | undefined, custom: ButtonAnimation | undefined) => {
 	const animations: AnimationValue[] = [];
 	let transition: TransitionValue | undefined = undefined;
 	if (presets) {
 		const presetAnimations = presetAnimation[presets].animation;
 		const presetTransition = presetAnimation[presets].transition;
-		const animationEntries = Array.isArray(presetAnimations)
-			? presetAnimations
-			: [presetAnimations];
+		const animationEntries = Array.isArray(presetAnimations) ? presetAnimations : [presetAnimations];
 		animations.push(...animationEntries);
 		if (presetTransition) transition = presetTransition;
 	}
 	if (custom) {
 		const customAnimations = custom.animation;
 		const customTransition = custom.transition;
-		const customAnimationEntries = Array.isArray(customAnimations)
-			? customAnimations
-			: [customAnimations];
+		const customAnimationEntries = Array.isArray(customAnimations) ? customAnimations : [customAnimations];
 		animations.push(...customAnimationEntries);
 		if (customTransition) transition = customTransition;
 	}

@@ -46,11 +46,7 @@ type TextFieldBaseProps = {
 	noShow?: boolean;
 };
 
-export type TextFieldProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof TextFieldBaseProps
-> &
-	TextFieldBaseProps;
+export type TextFieldProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof TextFieldBaseProps> & TextFieldBaseProps;
 
 export const MOTION_CONFIG = {
 	variants: {

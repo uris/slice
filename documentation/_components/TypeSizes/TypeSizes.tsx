@@ -2,17 +2,10 @@ import { FlexDiv, Label } from 'src';
 import { typeStyles } from '../../../src/theme/type/type';
 import css from './TypeSizes.module.css';
 
-export function TypeSizes(
-	props: Readonly<{ filter: string; sample?: string }>,
-) {
-	const {
-		filter = '',
-		sample = 'It is not daily increase but daily decrease, hack away the unessential.',
-	} = props;
+export function TypeSizes(props: Readonly<{ filter: string; sample?: string }>) {
+	const { filter = '', sample = 'It is not daily increase but daily decrease, hack away the unessential.' } = props;
 	const types = [];
-	const matchingTypes = Object.keys(typeStyles).filter((key) =>
-		key.startsWith(filter),
-	);
+	const matchingTypes = Object.keys(typeStyles).filter((key) => key.startsWith(filter));
 	for (const type of matchingTypes) {
 		const typeStyle = type as keyof typeof typeStyles;
 		const cssProps = typeStyles[typeStyle];

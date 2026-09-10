@@ -59,10 +59,7 @@ function RadioButtonComponent<T = string>(props: RadioButtonProps<T>) {
 		return 'var(--core-text-primary)';
 	}, [iconColor]);
 
-	const iconName = useMemo(
-		() => (isSelected ? checkedIcon : icon),
-		[isSelected, checkedIcon, icon],
-	);
+	const iconName = useMemo(() => (isSelected ? checkedIcon : icon), [isSelected, checkedIcon, icon]);
 
 	const setFlex = useMemo(() => {
 		if (list) return 'unset';
@@ -74,10 +71,7 @@ function RadioButtonComponent<T = string>(props: RadioButtonProps<T>) {
 			'--rb-max-width': wrap ? '50%' : '100%',
 			'--rb-flex': setFlex,
 			'--rb-padding': noFrame ? '0' : '8px 16px 8px 10px',
-			'--rb-bg':
-				!noFrame && isSelected
-					? 'var(--core-surface-secondary)'
-					: 'transparent',
+			'--rb-bg': !noFrame && isSelected ? 'var(--core-surface-secondary)' : 'transparent',
 			'--rb-border': noFrame ? 'none' : '1px solid var(--core-outline-primary)',
 			'--rb-gap': setStyle(gap),
 		} as React.CSSProperties;

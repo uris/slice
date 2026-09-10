@@ -36,10 +36,7 @@ export const sampleTableData: SampleTableData[] = [
 
 const column = createColumnHelper<SampleTableData>();
 
-export const sampleTableColumnDefinitions: ColumnDefinition<
-	SampleTableData,
-	any
->[] = [
+export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData, any>[] = [
 	column.accessor((row) => row.name, {
 		id: 'col-1',
 		title: 'Full Name',

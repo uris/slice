@@ -62,15 +62,7 @@ export function ProgressIndicator(props: Readonly<ProgressIndicatorProps>) {
 
 	// derive the spinner SVG from the active visual configuration
 	const openCircle = useMemo(() => {
-		return OpenCircle(
-			size,
-			secondsPerSpin,
-			color,
-			stroke,
-			playing,
-			inset,
-			gradientId,
-		);
+		return OpenCircle(size, secondsPerSpin, color, stroke, playing, inset, gradientId);
 	}, [size, secondsPerSpin, color, stroke, playing, inset, gradientId]);
 
 	/* START.DEBUG */
@@ -134,25 +126,13 @@ export const OpenCircle = (
 		>
 			<title>Loading</title>
 			<defs>
-				<linearGradient
-					id={gradientId}
-					x1="0"
-					y1="0"
-					x2="20"
-					y2="0"
-					gradientUnits="userSpaceOnUse"
-				>
+				<linearGradient id={gradientId} x1="0" y1="0" x2="20" y2="0" gradientUnits="userSpaceOnUse">
 					<stop offset="0%" stopColor={color} stopOpacity={1} />
 					<stop offset="50%" stopColor={color} stopOpacity={1} />
 					<stop offset="100%" stopColor={color} stopOpacity={0} />
 				</linearGradient>
 			</defs>
-			<motion.path
-				d={path}
-				fill="transparent"
-				strokeWidth={stroke}
-				stroke={`url(#${gradientId})`}
-			/>
+			<motion.path d={path} fill="transparent" strokeWidth={stroke} stroke={`url(#${gradientId})`} />
 		</motion.svg>
 	);
 };

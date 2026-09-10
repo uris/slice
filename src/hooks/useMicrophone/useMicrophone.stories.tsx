@@ -79,9 +79,7 @@ function UseMicrophoneDemo(props: Readonly<UseMicrophoneDemoProps>) {
 
 	// set the microphone device name
 	const micDeviceLabel = useMemo(() => {
-		const selected = microphones.find(
-			(mic) => mic.deviceId === selectedDeviceId,
-		);
+		const selected = microphones.find((mic) => mic.deviceId === selectedDeviceId);
 		const label = selected?.label;
 		if (selected) return label === '' ? 'Default Microphone' : label;
 		return undefined;
@@ -91,16 +89,12 @@ function UseMicrophoneDemo(props: Readonly<UseMicrophoneDemoProps>) {
 		<FlexDiv width={'fill'} height={'fill'} padding={32} gap={24}>
 			<FlexDiv direction={'row'} width={'fill'} gap={24} align={'start'}>
 				<FlexDiv width={460} padding={16} gap={12}>
-					<div>
-						NOTE: This demo uses the hook refs to inspect the live microphone
-						stream and track.
-					</div>
+					<div>NOTE: This demo uses the hook refs to inspect the live microphone stream and track.</div>
 					<div>
 						Mic Device Supported: <Label>{String(isSupported)}</Label>
 					</div>
 					<div>
-						Requesting mic access:{' '}
-						<ProgressIndicator show={isRequesting} inline />
+						Requesting mic access: <ProgressIndicator show={isRequesting} inline />
 						{!isRequesting && <Label>false</Label>}
 					</div>
 					<div>
@@ -116,8 +110,7 @@ function UseMicrophoneDemo(props: Readonly<UseMicrophoneDemoProps>) {
 						Mic Stream ID: <Label>{micInfo.streamId ?? 'none'}</Label>
 					</div>
 					<div>
-						Processed Stream ID:{' '}
-						<Label>{micInfo.processedStreamId ?? 'none'}</Label>
+						Processed Stream ID: <Label>{micInfo.processedStreamId ?? 'none'}</Label>
 					</div>
 					<div>
 						Mic Track ID: <Label>{micInfo.trackId ?? 'none'}</Label>
@@ -160,10 +153,7 @@ function UseMicrophoneDemo(props: Readonly<UseMicrophoneDemoProps>) {
 					>
 						<option value={''}>Default microphone</option>
 						{microphones.map((device, index) => (
-							<option
-								key={`${device.deviceId}_${index}`}
-								value={device.deviceId}
-							>
+							<option key={`${device.deviceId}_${index}`} value={device.deviceId}>
 								{device.label || `Microphone ${device.deviceId.slice(0, 8)}`}
 							</option>
 						))}

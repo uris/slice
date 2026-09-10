@@ -63,21 +63,16 @@ export const Default: StoryObj<typeof FlexDiv> = {
 		return (
 			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
 				<FlexDiv {...args} background={'var(--core-surface-secondary)'}>
-					Here's the latest • War with Iran: There could be more US casualties
-					as part of the military operations against Iran, President Donald
-					Trump acknowledged Sunday. Three American troops have been killed so
-					far, according to the US military. Trump released a video touting the
-					scale of the campaign and provided new details on his rationale for
-					the attacks. • Uncertain future: Iranians are grappling with a
-					profound shift in the nation’s history after Supreme Leader Ali
-					Khamenei was killed in Saturday’s joint US-Israel attacks. Tehran
-					formed a transitional council and has indicated a new supreme leader
-					could be chosen soon. • Global impacts: The wave of violence has
-					hindered the flow of oil and disrupted air travel. Oil futures surged
-					Sunday in the first trades since the conflict began, while stock
-					futures fell sharply. • Mapping the strikes: Israel struck “in the
-					heart of Tehran” and Iran has attacked US bases, Israel and targets
-					across the Middle East. Here’s where the strikes are taking place.
+					Here's the latest • War with Iran: There could be more US casualties as part of the military operations
+					against Iran, President Donald Trump acknowledged Sunday. Three American troops have been killed so far,
+					according to the US military. Trump released a video touting the scale of the campaign and provided new
+					details on his rationale for the attacks. • Uncertain future: Iranians are grappling with a profound shift in
+					the nation’s history after Supreme Leader Ali Khamenei was killed in Saturday’s joint US-Israel attacks.
+					Tehran formed a transitional council and has indicated a new supreme leader could be chosen soon. • Global
+					impacts: The wave of violence has hindered the flow of oil and disrupted air travel. Oil futures surged Sunday
+					in the first trades since the conflict began, while stock futures fell sharply. • Mapping the strikes: Israel
+					struck “in the heart of Tehran” and Iran has attacked US bases, Israel and targets across the Middle East.
+					Here’s where the strikes are taking place.
 				</FlexDiv>
 			</FlexDiv>
 		);

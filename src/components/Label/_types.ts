@@ -25,8 +25,4 @@ type LabelBaseProps = {
 	onClick?: (e: React.MouseEvent<any>) => void;
 };
 
-export type LabelProps = Omit<
-	React.HTMLAttributes<HTMLElement>,
-	keyof LabelBaseProps
-> &
-	LabelBaseProps;
+export type LabelProps = Omit<React.HTMLAttributes<HTMLElement>, keyof LabelBaseProps> & LabelBaseProps;

@@ -27,33 +27,18 @@ function UseIntersectingDemo() {
 		margin: 0,
 	});
 
-	const enteredIds = listItems.entered
-		.map((result) => result.target.dataset.itemId)
-		.join(', ');
+	const enteredIds = listItems.entered.map((result) => result.target.dataset.itemId).join(', ');
 
-	const exitedIds = listItems.exited
-		.map((result) => result.target.dataset.itemId)
-		.join(', ');
+	const exitedIds = listItems.exited.map((result) => result.target.dataset.itemId).join(', ');
 
-	const onScreenIds = listItems.onScreen
-		.map((result) => result.target.dataset.itemId)
-		.join(', ');
+	const onScreenIds = listItems.onScreen.map((result) => result.target.dataset.itemId).join(', ');
 
-	const offScreenIds = listItems.offScreen
-		.map((result) => result.target.dataset.itemId)
-		.join(', ');
+	const offScreenIds = listItems.offScreen.map((result) => result.target.dataset.itemId).join(', ');
 
 	const items = Array.from({ length: 20 }, (_, index) => index + 1);
 
 	return (
-		<FlexDiv
-			align={'center'}
-			justify={'center'}
-			padding={24}
-			absolute
-			direction={'column'}
-			gap={12}
-		>
+		<FlexDiv align={'center'} justify={'center'} padding={24} absolute direction={'column'} gap={12}>
 			<FlexDiv direction={'column'} align={'center'} height={'auto'} gap={12}>
 				Change Threshold
 				<Slider
@@ -70,11 +55,7 @@ function UseIntersectingDemo() {
 					height={'auto'}
 					padding={'4px 12px'}
 					borderRadius={999}
-					background={
-						isVisible
-							? 'var(--core-surface-special)'
-							: 'var(--core-surface-secondary)'
-					}
+					background={isVisible ? 'var(--core-surface-special)' : 'var(--core-surface-secondary)'}
 				>
 					{isVisible ? 'Sentinel is intersecting' : 'Sentinel is off-screen'}
 				</FlexDiv>

@@ -56,12 +56,7 @@ export function fileIconName(extension: string) {
 /**
  * Create a clipboard-text file with a guaranteed `.clipboard` extension.
  */
-export function clipboardTextToFile(
-	content: string,
-	fileName = `clipboard-${Date.now()}.clipboard`,
-) {
-	const normalizedName = fileName.endsWith('.clipboard')
-		? fileName
-		: `${fileName}.clipboard`;
+export function clipboardTextToFile(content: string, fileName = `clipboard-${Date.now()}.clipboard`) {
+	const normalizedName = fileName.endsWith('.clipboard') ? fileName : `${fileName}.clipboard`;
 	return new File([content], normalizedName, { type: 'text/plain' });
 }

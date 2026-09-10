@@ -1,13 +1,6 @@
 'use client';
 
-import React, {
-	type RefObject,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useObserveResize, useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { pointerPosition } from '../../utils/functions/misc';
@@ -46,19 +39,12 @@ type DraggablePanelBaseProps = {
 	isTouchDevice?: boolean;
 };
 
-export type DraggablePanelProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof DraggablePanelBaseProps
-> &
+export type DraggablePanelProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DraggablePanelBaseProps> &
 	DraggablePanelBaseProps;
 
 const MIN_SIZE = 50;
 
-function normalizeConstraintValue(
-	value: number,
-	containerWidth: number | undefined,
-	fallback: number,
-) {
+function normalizeConstraintValue(value: number, containerWidth: number | undefined, fallback: number) {
 	let normalized = value;
 	if (normalized <= 1 && normalized >= 0) {
 		normalized = containerWidth ? containerWidth * normalized : fallback;
@@ -67,25 +53,10 @@ function normalizeConstraintValue(
 	return normalized;
 }
 
-function resolveConstraints(
-	sizeConstraints: Constraint,
-	containerWidth?: number,
-) {
-	const initial = normalizeConstraintValue(
-		sizeConstraints.initial,
-		containerWidth,
-		sizeConstraints.initial,
-	);
-	const min = normalizeConstraintValue(
-		sizeConstraints.min,
-		containerWidth,
-		initial,
-	);
-	const max = normalizeConstraintValue(
-		sizeConstraints.max,
-		containerWidth,
-		initial,
-	);
+function resolveConstraints(sizeConstraints: Constraint, containerWidth?: number) {
+	const initial = normalizeConstraintValue(sizeConstraints.initial, containerWidth, sizeConstraints.initial);
+	const min = normalizeConstraintValue(sizeConstraints.min, containerWidth, initial);
+	const max = normalizeConstraintValue(sizeConstraints.max, containerWidth, initial);
 	return {
 		initial,
 		min,
@@ -131,12 +102,8 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 	const [handleHighlight, setHandleHighlight] = useState(false);
 	const [lastWidth, setLastWidth] = useState<number | string | null>(null);
 	const [panelClosed, setPanelClosed] = useState<boolean>(isClosed);
-	const [constraints, setConstraints] = useState<Constraint>(() =>
-		resolveConstraints(sizeConstraints),
-	);
-	const [contWidth, setContWidth] = useState<number | undefined>(
-		resolveInitContWidth(),
-	);
+	const [constraints, setConstraints] = useState<Constraint>(() => resolveConstraints(sizeConstraints));
+	const [contWidth, setContWidth] = useState<number | undefined>(resolveInitContWidth());
 	const [mounted, setMounted] = useState<boolean>(false);
 	const timer = useRef<any>(null);
 	const closed = panelSize.width <= 1;
@@ -347,10 +314,7 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 				divHeight.current = div.current.offsetHeight;
 				deltaWidth.current = 0;
 				startX.current = pointerPosition(e);
-				startWidth.current = Number.parseInt(
-					document.defaultView.getComputedStyle(el).width,
-					10,
-				);
+				startWidth.current = Number.parseInt(document.defaultView.getComputedStyle(el).width, 10);
 				document.documentElement.addEventListener('mousemove', doDrag, false);
 				document.documentElement.addEventListener('mouseup', stopDrag, false);
 				document.documentElement.addEventListener('touchmove', doDrag, false);
@@ -482,15 +446,12 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 				{dragHandle && !closed && <DragHandle {...(dragHandleStyle ?? {})} />}
 				<div
 					style={{
-						backgroundColor: handleHighlight
-							? theme.current.colors['core-outline-primary']
-							: 'transparent',
+						backgroundColor: handleHighlight ? theme.current.colors['core-outline-primary'] : 'transparent',
 						flex: 1,
 						maxWidth: 3,
 						height: '100%',
 						pointerEvents: 'none',
-						transition:
-							'background-color var(--motion-water-duration) var(--motion-water)',
+						transition: 'background-color var(--motion-water-duration) var(--motion-water)',
 					}}
 				/>
 			</div>

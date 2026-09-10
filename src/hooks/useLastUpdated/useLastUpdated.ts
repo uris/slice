@@ -7,10 +7,7 @@ function getTimeDifference(date: Date | string, labelPrefix: string) {
 	if (Number.isNaN(compareDate.getTime())) return `${labelPrefix}Invalid date`;
 
 	// getTime = milliseconds since Jan 1 1970 UTC
-	const secondsDiff = Math.max(
-		0,
-		Math.floor((Date.now() - compareDate.getTime()) / 1000),
-	);
+	const secondsDiff = Math.max(0, Math.floor((Date.now() - compareDate.getTime()) / 1000));
 	const minutes = Math.floor(secondsDiff / 60);
 	const hours = Math.floor(minutes / 60);
 	const days = Math.floor(hours / 24);
@@ -29,14 +26,8 @@ function getTimeDifference(date: Date | string, labelPrefix: string) {
 	});
 }
 
-export function useLastUpdated(
-	timestamp: string | undefined,
-	prefix = '',
-	interval = 1,
-) {
-	const [lastUpdated, setLastUpdated] = useState<string>(
-		timestamp ? getTimeDifference(timestamp, prefix) : '',
-	);
+export function useLastUpdated(timestamp: string | undefined, prefix = '', interval = 1) {
+	const [lastUpdated, setLastUpdated] = useState<string>(timestamp ? getTimeDifference(timestamp, prefix) : '');
 	useEffect(() => {
 		if (!timestamp) {
 			setLastUpdated('');

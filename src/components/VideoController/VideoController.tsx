@@ -1,11 +1,6 @@
 'use client';
 
-import {
-	AnimatePresence,
-	type Transition,
-	motion,
-	useDragControls,
-} from 'motion/react';
+import { AnimatePresence, type Transition, motion, useDragControls } from 'motion/react';
 import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useVideo, useVideoActions } from '../../stores';
@@ -46,11 +41,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 	const video = useVideo();
 	const hide = useVideoActions().clear;
 	const VideoComponent = video?.component;
-	const {
-		onLoadedFrameData,
-		borderRadius: videoBorderRadius,
-		...videoProps
-	} = video?.props ?? {};
+	const { onLoadedFrameData, borderRadius: videoBorderRadius, ...videoProps } = video?.props ?? {};
 	const ref = useRef<HTMLDivElement>(null);
 	const constraints = dragConstraintsRef ?? ref;
 	const [ready, setReady] = useState(false);
@@ -85,13 +76,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 
 	return (
 		<>
-			<Overlay
-				show={!!video}
-				type={'dark'}
-				opacity={overlayOpacity}
-				color={overlayColor}
-				onClick={handleHide}
-			/>
+			<Overlay show={!!video} type={'dark'} opacity={overlayOpacity} color={overlayColor} onClick={handleHide} />
 			<AnimatePresence initial={false}>
 				{video && VideoComponent && (
 					<div className={css.container} ref={ref} style={cssVars}>

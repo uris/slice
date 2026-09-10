@@ -3,24 +3,10 @@ import type { FileItem } from '../FileList';
 
 export const imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'heic', 'heif'];
 export const videoTypes = ['mp4', 'avi', 'mov', 'wmv', 'flv'];
-export const documentTypes = [
-	'pdf',
-	'doc',
-	'docx',
-	'xls',
-	'xlsx',
-	'ppt',
-	'pptx',
-];
+export const documentTypes = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 export const audioTypes = ['mp3', 'wav', 'ogg', 'aac', 'flac'];
 export const textTypes = ['txt', 'rtf', 'md', 'csv', 'json', 'xml'];
-export const allTypes = [
-	...imageTypes,
-	...videoTypes,
-	...documentTypes,
-	...audioTypes,
-	...textTypes,
-];
+export const allTypes = [...imageTypes, ...videoTypes, ...documentTypes, ...audioTypes, ...textTypes];
 
 export enum FileTypes {
 	images = 'images',
@@ -64,8 +50,5 @@ type UploadAreaBaseProps = {
 	onUpload?: (files: File[]) => void;
 };
 
-export type UploadAreaProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof UploadAreaBaseProps
-> &
+export type UploadAreaProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof UploadAreaBaseProps> &
 	UploadAreaBaseProps;

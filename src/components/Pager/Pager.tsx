@@ -56,12 +56,7 @@ export const Pager = React.memo((props: PagerProps) => {
 	/* END.DEBUG */
 
 	return (
-		<div
-			id={divId}
-			style={{ ...divStyle, ...cssVars }}
-			className={`${css.wrapper}${divClass}`}
-			{...rest}
-		>
+		<div id={divId} style={{ ...divStyle, ...cssVars }} className={`${css.wrapper}${divClass}`} {...rest}>
 			{bullets.map((bulletId: number) => {
 				return (
 					<input

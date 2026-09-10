@@ -57,10 +57,7 @@ export const Icon = React.memo((props: IconProps) => {
 
 	// route keyboard activation through the same click callback
 	const handleKeyActivate = useMemo(
-		() => () =>
-			onClick?.(
-				undefined as unknown as React.MouseEvent<SVGElement, MouseEvent>,
-			),
+		() => () => onClick?.(undefined as unknown as React.MouseEvent<SVGElement, MouseEvent>),
 		[onClick],
 	);
 

@@ -147,8 +147,4 @@ type FlexDivBaseProps = {
 	scrollHandleHover?: string;
 };
 
-export type FlexDivProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof FlexDivBaseProps
-> &
-	FlexDivBaseProps;
+export type FlexDivProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof FlexDivBaseProps> & FlexDivBaseProps;

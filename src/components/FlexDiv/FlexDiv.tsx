@@ -21,11 +21,7 @@ function setBox(style: string | number) {
 	return style;
 }
 
-function setPaddingRight(
-	padding: string | number | undefined,
-	scrollBox: boolean | undefined,
-	pad = 4,
-) {
+function setPaddingRight(padding: string | number | undefined, scrollBox: boolean | undefined, pad = 4) {
 	if (padding) {
 		if (typeof padding === 'number') return `${padding}px`;
 		return padding;

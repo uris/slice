@@ -37,8 +37,4 @@ type BasePromptProps = {
 	onAttachmentsChange?: (attachments: FileItem[]) => void;
 };
 
-export type PromptProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof BasePromptProps
-> &
-	BasePromptProps;
+export type PromptProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof BasePromptProps> & BasePromptProps;

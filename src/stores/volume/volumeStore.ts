@@ -89,8 +89,7 @@ function adjustMediaVolume(media: Set<AudioElement>, volume: number) {
 
 async function playFeedbackSound(element: AudioElement | null, volume: number) {
 	if (element) {
-		const isPlaying =
-			!element.paused && !element.ended && element.readyState > 2;
+		const isPlaying = !element.paused && !element.ended && element.readyState > 2;
 		if (isPlaying) {
 			element.pause();
 			element.currentTime = 0; // avoid race between setting time to 0 and immediately playing
@@ -102,8 +101,7 @@ async function playFeedbackSound(element: AudioElement | null, volume: number) {
 
 // prefer atomic selectors
 export const useVolume = () => useVolumeStore((state) => state.volume);
-export const useStoredVolume = () =>
-	useVolumeStore((state) => state.storedVolume);
+export const useStoredVolume = () => useVolumeStore((state) => state.storedVolume);
 export const useMuted = () => useVolumeStore((state) => state.muted);
 export const useAttachedMedia = () => useVolumeStore((state) => state.elements);
 export const useVolumeActions = () => useVolumeStore((state) => state.actions);

@@ -1,25 +1,10 @@
 'use client';
 
-import {
-	AnimatePresence,
-	type Transition,
-	type Variants,
-	motion,
-} from 'motion/react';
-import React, {
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-	useMemo,
-} from 'react';
+import { AnimatePresence, type Transition, type Variants, motion } from 'motion/react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import {
-	accessibleKeyDown,
-	filterClasses,
-	setStyle,
-} from '../../utils/functions/misc';
+import { accessibleKeyDown, filterClasses, setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import { ProgressIndicator } from '../Progress';
 import css from './Toast.module.css';
@@ -129,10 +114,8 @@ const ToastBase = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
 
 	// resolve entry and exit variants from the toast position
 	const variants = useMemo(() => {
-		const positionShow =
-			position === 'bottom' ? { bottom: offset } : { top: offset };
-		const positionHide =
-			position === 'bottom' ? { bottom: -offset } : { top: -offset };
+		const positionShow = position === 'bottom' ? { bottom: offset } : { top: offset };
+		const positionHide = position === 'bottom' ? { bottom: -offset } : { top: -offset };
 		const transition: Transition = { ease: 'easeInOut', duration: 0.25 };
 		return {
 			initial: { opacity: 0, ...positionHide },

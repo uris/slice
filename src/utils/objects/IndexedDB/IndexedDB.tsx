@@ -96,16 +96,12 @@ export class IndexedDB<T> {
 	 * Get all keys in the store.
 	 */
 	public async getAllKeys(): Promise<IDBValidKey[]> {
-		return this.runRequest<IDBValidKey[]>('readonly', (store) =>
-			store.getAllKeys(),
-		);
+		return this.runRequest<IDBValidKey[]>('readonly', (store) => store.getAllKeys());
 	}
 
 	// Puts the key/value in the store. If the key already exists, its value will be overwritten.
 	public async set(key: IDBValidKey, value: T): Promise<IDBValidKey> {
-		return this.runRequest<IDBValidKey>('readwrite', (store) =>
-			store.put(value, key),
-		);
+		return this.runRequest<IDBValidKey>('readwrite', (store) => store.put(value, key));
 	}
 
 	/**
@@ -198,19 +194,11 @@ export class IndexedDB<T> {
 			};
 
 			transaction.onerror = () => {
-				reject(
-					transaction.error ??
-						request.error ??
-						new Error('IndexedDB transaction failed.'),
-				);
+				reject(transaction.error ?? request.error ?? new Error('IndexedDB transaction failed.'));
 			};
 
 			transaction.onabort = () => {
-				reject(
-					transaction.error ??
-						request.error ??
-						new Error('IndexedDB transaction was aborted.'),
-				);
+				reject(transaction.error ?? request.error ?? new Error('IndexedDB transaction was aborted.'));
 			};
 
 			transaction.oncomplete = () => {

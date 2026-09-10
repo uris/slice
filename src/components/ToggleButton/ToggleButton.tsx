@@ -76,12 +76,7 @@ export function ToggleButton(props: Readonly<ToggleButtonProps>) {
 				/>
 			)}
 			{(children || label) && (
-				<Label
-					textSize={textSize}
-					borderSize={0}
-					padding={0}
-					onClick={handleClick}
-				>
+				<Label textSize={textSize} borderSize={0} padding={0} onClick={handleClick}>
 					{children ?? label}
 				</Label>
 			)}

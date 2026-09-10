@@ -17,8 +17,5 @@ export type AudioBubbleBaseProps = {
 	ReleasePerSeconds?: number;
 };
 
-export type AudioBubbleProps = Omit<
-	React.HTMLAttributes<HTMLDivElement>,
-	keyof AudioBubbleBaseProps
-> &
+export type AudioBubbleProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof AudioBubbleBaseProps> &
 	AudioBubbleBaseProps;
