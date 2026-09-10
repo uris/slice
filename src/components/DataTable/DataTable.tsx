@@ -205,7 +205,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 													whiteSpace,
 												}}
 											>
-												{col.renderCell ? col.renderCell({ row, value, rowIndex }) : JSON.stringify(value ?? '')}
+												{col.renderCell ? col.renderCell({ row, value, rowIndex }) : (value?.toString() ?? '')}
 											</div>
 										</td>
 									);
