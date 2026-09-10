@@ -1,7 +1,8 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
+import { Icon } from '../Icon';
 import styles from './DataTable.module.css';
-import type { ColumnDefinition, DataTableProps } from './_types';
+import type { ColumnDefinition, DataTableProps, SortKey } from './_types';
 import { resolveAlignValue } from './columnHelper';
 
 export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
@@ -25,14 +26,17 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		onClick,
 		onMouseOut,
 		onMouseOver,
+		sort,
+		onSortChange,
 	} = props;
 	const [hScroll, setHScroll] = useState<boolean>(false);
 	const [vScroll, setVScroll] = useState<boolean>(false);
 	const [hoveredRow, setHoveredRow] = useState<number | null>(null);
+	const [sortKey, setSortKey] = useState<SortKey<T>>(sort);
 	const wrapperRef = React.useRef<HTMLDivElement>(null);
 
 	// resolve corner shadow
-	const cornerBoxShadow = useCallback(() => {
+	const cornerBoxShadow = useMemo(() => {
 		const shadows: string[] = [];
 		if (hScroll && freezeColumn) {
 			shadows.push('1px 0 0 var(--core-outline-primary)', '5px 0 0 rgba(0,0,0,0.1)');
@@ -106,11 +110,18 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		setVScroll(vScrollAmount > 0);
 	}, []);
 
-	// memo data based on any active filters
-	const rows = useMemo(
-		() => (filter ? tableData.filter((row, index, array) => filter(row, index, array)) : tableData),
-		[tableData, filter],
-	);
+	// memo data based on any active filters and sorts
+	const rows = useMemo(() => {
+		const sortFunction = (a: T, b: T) => {
+			if (!sortKey?.key) return 0;
+			const { key, dir } = sortKey;
+			if (a[key] === b[key]) return 0;
+			const isGreater = a[key] > b[key];
+			return (isGreater ? 1 : -1) * (dir === 'desc' ? -1 : 1);
+		};
+		const filtered = filter ? tableData.filter((row, index, array) => filter(row, index, array)) : tableData;
+		return [...filtered].sort(sortFunction);
+	}, [tableData, filter, sortKey]);
 
 	// set and emit hover states
 	const handleCellHover = useCallback(
@@ -149,6 +160,48 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		[hoveredRow, backgroundColorHoverRow, candyStripeBackgroundColor, backgroundColor],
 	);
 
+	// update sort state
+	const handleSort = useCallback(
+		(key?: keyof T) => {
+			if (!key) return;
+			const next: SortKey<T> =
+				sortKey?.key === key ? { key, dir: sortKey?.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' };
+			let didChange = true;
+			if (sortKey?.key === next?.key && sortKey?.dir === next?.dir) didChange = false;
+			if (didChange) {
+				setSortKey(next);
+				onSortChange?.(next);
+			}
+		},
+		[sortKey, onSortChange],
+	);
+
+	// render header with custom renderer or default renderer
+	const renderHeader = useCallback((col: ColumnDefinition<T, unknown>, sortKey: SortKey<T>) => {
+		if (col.renderHeader) return col.renderHeader({ column: col, sortKey });
+		return <DefaultHeaderRenderer col={col} sortKey={sortKey} />;
+	}, []);
+
+	// resolve area sort
+	const resolveAriaSort = useCallback(
+		(column: ColumnDefinition<T>) => {
+			const sortable = column.sort !== undefined;
+			const isSortedColumn = sortable && sortKey?.key === column.sort;
+			if (!sortable) return undefined;
+			if (isSortedColumn) return sortKey?.dir === 'asc' ? 'ascending' : 'descending';
+			return undefined;
+		},
+		[sortKey],
+	);
+
+	// update sort state
+	useEffect(() => {
+		setSortKey((prev) => {
+			if (prev?.key === sort?.key && prev?.dir === sort?.dir) return prev;
+			return sort;
+		});
+	}, [sort]);
+
 	return (
 		<div ref={wrapperRef} className={`${styles.tableWrapper} ${styles.scroll}`} style={cssVars} onScroll={handleScroll}>
 			<table className={styles.table}>
@@ -157,14 +210,22 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 					<tr>
 						{columnDefinitions.map((column: ColumnDefinition<T>) => {
 							const padding = setStyle(column.padding, 16);
+							const sortable = column.sort !== undefined;
+							const cursor = sortable ? 'pointer' : 'default';
 							return (
 								<th
 									key={column.id}
 									data-column-id={column.id}
 									className={`${styles.baseCell} ${styles.headerCell} ${styles.m}`}
+									onClick={() => handleSort(column.sort)}
+									onKeyDown={(e) => accessibleKeyDown(e, () => handleSort(column.sort))}
+									style={{ cursor }}
+									tabIndex={sortable ? 0 : undefined}
+									role={sortable ? 'columnheader' : undefined}
+									aria-sort={resolveAriaSort(column)}
 								>
 									<div className={styles.headerCellWrapper} style={{ padding }}>
-										{column.renderHeader ? column.renderHeader({ column }) : column.title}
+										{renderHeader(column, sortKey)}
 									</div>
 								</th>
 							);
@@ -215,6 +276,24 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 					})}
 				</tbody>
 			</table>
+		</div>
+	);
+}
+
+interface DefaultHeaderRendererProps<T> {
+	col: ColumnDefinition<T, unknown>;
+	sortKey: SortKey<T>;
+}
+export function DefaultHeaderRenderer<T>(props: Readonly<DefaultHeaderRendererProps<T>>) {
+	const { col, sortKey } = props;
+	const sortable = !!col.sort;
+	const sorted = !!(sortKey?.key && sortKey.key === col.sort);
+	const sortIcon = sortKey?.dir === 'asc' ? 'arrow up' : 'arrow down';
+	const justifyContent = sortable ? 'space-between' : resolveAlignValue(col.justify);
+	return (
+		<div style={{ display: 'flex', alignItems: 'center', justifyContent, width: '100%' }}>
+			<span style={{ fontWeight: 540 }}>{col.title}</span>
+			{sortable && <Icon name={sorted ? sortIcon : 'blank'} size={16} />}
 		</div>
 	);
 }

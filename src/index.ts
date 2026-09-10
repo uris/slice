@@ -215,10 +215,13 @@ export type {
 	ColumnDefinition,
 	CellContext,
 	HeaderContext,
+	SortKey,
 } from './components/DataTable';
 export {
 	createColumnHelper,
 	applyDataTableViewState,
 	createDefaultViewState,
+	resolveSortFromViewState,
+	captureSortToViewState,
 } from './components/DataTable';
 export type { DataTableViewState } from './components/DataTable';

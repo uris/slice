@@ -15,7 +15,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         `HTMLDivElement` (scroll wrapper) containing an `HTMLTableElement`.
 
         ## Typing
-        `DataTable` is generic over `T`, the shape of a single row. Specify it explicitly so `columnDefinitions` and `tableData` are checked against your row type: `<DataTable<Person> columnDefinitions={columns} tableData={people} />`.
+        `DataTable` is generic over `T`, the shape of a single row. Specify it explicitly so `columnDefinitions` and `tableData` are checked against your row type.
 
         ## Props
         <table style={{width: '100%'}}>
@@ -38,6 +38,8 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>tableData</code></td><td><code>T[]</code></td><td><code>[]</code></td><td>Row data to render, one <code>&lt;tr&gt;</code> per item, in array order.</td></tr>
             <tr><td><code>getRowId</code></td><td><code>{`(row: T, index: number) => string | number`}</code></td><td><code>-</code></td><td>Stable row identity used for React's <code>key</code>. Falls back to the row's array index when omitted - fine for static data, but pass this when rows can be reordered, filtered, or streamed in, so React doesn't misattribute state across rows.</td></tr>
             <tr><td><code>filter</code></td><td><code>{`(row: T, index: number, array: T[]) => boolean`}</code></td><td><code>-</code></td><td>Filters <code>tableData</code> before it's rendered - same signature as <code>Array.prototype.filter</code>, so an existing predicate (including a type-predicate one) can be passed straight through. Downstream <code>rowIndex</code> (in <code>getRowId</code>, the click/hover handlers, and <code>renderCell</code>) reflects position in the filtered rows, not the original array. See <a href="#filtering-rows">Filtering rows</a>.</td></tr>
+            <tr><td><code>sort</code></td><td><code>{`SortKey<T>`}</code></td><td><code>-</code></td><td>The table's active sort. Omit it and <code>DataTable</code> manages sort itself, seeded once from whatever you pass initially. Pass it alongside <code>onSortChange</code> to run sort as a controlled value instead - handy for persisting it. See <a href="#sorting">Sorting</a>.</td></tr>
+            <tr><td><code>onSortChange</code></td><td><code>{`(sort: SortKey<T>) => void`}</code></td><td><code>-</code></td><td>Fires whenever the user changes sort by clicking a sortable header, whether or not <code>sort</code> is controlled. See <a href="#sorting">Sorting</a>.</td></tr>
             <tr><td><code>caption</code></td><td><code>string</code></td><td><code>'Data Table'</code></td><td>Accessible name for the table. Rendered into a <code>&lt;caption&gt;</code> element that's visually hidden but present for screen readers.</td></tr>
             <tr><td><code>height</code></td><td><code>{`number | string`}</code></td><td><code>'auto'</code></td><td>Wrapper height.</td></tr>
             <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Wrapper width.</td></tr>
@@ -102,7 +104,8 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>nowrap</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Prevents cell content from wrapping. Applies to body cells only - header cells always wrap normally.</td></tr>
             <tr><td><code>justify</code></td><td><code>{`'start' | 'center' | 'end'`}</code></td><td><code>'center'</code></td><td>Horizontal alignment of cell content.</td></tr>
             <tr><td><code>align</code></td><td><code>{`'start' | 'center' | 'end'`}</code></td><td><code>'center'</code></td><td>Vertical alignment of cell content.</td></tr>
-            <tr><td><code>renderHeader</code></td><td><code>{`(ctx: { column }) => ReactNode`}</code></td><td><code>-</code></td><td>Custom header cell. Falls back to plain <code>title</code> text when omitted.</td></tr>
+            <tr><td><code>sort</code></td><td><code>{`keyof T`}</code></td><td><code>-</code></td><td>Makes the header clickable to sort ascending/descending by this row field. See <a href="#sorting">Sorting</a>.</td></tr>
+            <tr><td><code>renderHeader</code></td><td><code>{`(ctx: { column, sortKey }) => ReactNode`}</code></td><td><code>-</code></td><td>Custom header cell. Falls back to a default renderer that shows <code>title</code> plus a sort indicator on sortable columns. <code>sortKey</code> is the table's current sort, if any - read it to draw your own indicator. See <a href="#sorting">Sorting</a>.</td></tr>
             <tr><td><code>renderCell</code></td><td><code>{`(ctx: { row, value, rowIndex }) => ReactNode`}</code></td><td><code>-</code></td><td>Custom body cell. Falls back to <code>String(value)</code> when omitted. Receives the whole row, not just <code>value</code> - useful for fallbacks, see <a href="#cell-fallbacks">Cell fallbacks</a>.</td></tr>
           </tbody>
         </table>
@@ -136,6 +139,44 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
 
         `DataTable` doesn't manage filter state itself - `filter` is a plain predicate prop, so building a search box or a set of toggles on top of it is just component state feeding a new predicate in on every render. Because filtering happens before rendering, `rowIndex` everywhere downstream (`getRowId`, `onClick`/`onDoubleClick`/`onMouseOver`/`onMouseOut`, and `renderCell`'s `CellContext`) reflects the row's position in the filtered rows, not the original `tableData` array.
 
+        ## Sorting
+        Give a column a `sort` field - the row key to sort by - and its header becomes clickable: click once to sort ascending, click again to flip to descending, click a different sortable header to switch to that column instead. Only one column is sorted at a time.
+
+        <RenderSource>
+        ```
+        column.accessor(row => row.age, {
+            id: 'age',
+            title: 'Age',
+            align: 'end',
+            sort: 'age',
+            renderCell: ({ value }) => <span>{value} yrs</span>,
+        })
+        ```
+        </RenderSource>
+
+        The default header renderer shows a small up/down arrow next to the title of whichever column is currently sorted, and reserves that same space (rather than shifting the title around) on every other sortable column. A custom `renderHeader` gets the same information through `sortKey` on its context, so it can draw its own indicator instead:
+
+        <RenderSource>
+        ```
+        renderHeader: ({ column, sortKey }) => {
+            const sorted = sortKey?.key === column.sort;
+            return (
+                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                    <span>{column.title}</span>
+                    <Icon name={sorted ? (sortKey.dir === 'asc' ? 'arrow up' : 'arrow down') : 'blank'} size={16} />
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+
+        `sort` is optional on `DataTable` itself, and works two ways:
+
+        - Omit it and `DataTable` manages sort internally - clicking a header just works, with no state to wire up. This is enough for most tables.
+        - Pass it alongside `onSortChange` to run sort as a controlled value: clicking a header calls `onSortChange` with the next `SortKey<T>` instead of relying only on internal state, and it's on you to feed that value back in through `sort` - useful for driving sort from elsewhere in the app, or for persisting it (see <a href="#persisting-column-layout">Persisting column layout</a>).
+
+        Every sortable header is also a real keyboard target (Enter/Space activates it, matching a click) and carries the right `aria-sort` (`ascending`, `descending`, or `none`), so sorting doesn't depend on a mouse.
+
         ## Row hover and click events
         `onClick`, `onDoubleClick`, `onMouseOver`, and `onMouseOut` all fire per body cell with the same arguments - the cell's `ColumnDefinition`, its column index, the row, and the row's index - so a single handler can branch on `col.id` when it needs to know which column was involved:
 
@@ -154,7 +195,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         Hovering (or focusing, via keyboard) a cell also drives the row's background: `backgroundColorHoverRow` is applied to every cell in that row for as long as it's hovered, taking priority over `candyStripeBackgroundColor`'s alternating stripe. This is purely visual state internal to `DataTable` - `onMouseOver`/`onMouseOut` are how a consumer observes it, not how it's controlled.
 
         ## Persisting column layout
-        `columnDefinitions` always carries functions (`accessor`, `renderHeader`, `renderCell`), so it can't be saved as-is. What actually needs to survive a reload or sync to a backend is much smaller: which columns are visible, what order they're in, and how wide they are. `DataTableViewState` is that smaller, plain-data shape, referencing columns purely by `id`:
+        `columnDefinitions` always carries functions (`accessor`, `renderHeader`, `renderCell`), so it can't be saved as-is. What actually needs to survive a reload or sync to a backend is much smaller: which columns are visible, what order they're in, how wide they are, and which one is sorted. `DataTableViewState` is that smaller, plain-data shape, referencing columns purely by `id`:
 
         <RenderSource>
         ```
@@ -162,11 +203,14 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             columnOrder: string[];
             hiddenColumns?: string[];
             columnWidths?: Record<string, number | string>;
+            sort?: { columnId: string; dir: 'asc' | 'desc' };
         };
         ```
         </RenderSource>
 
         `applyDataTableViewState(columns, state)` reconciles a code-defined `columnDefinitions` array against a persisted `DataTableViewState`: it reorders to match `columnOrder`, drops `hiddenColumns`, applies `columnWidths`, appends any columns the state doesn't mention (for example a column added in code after the state was captured), and silently ignores ids in `columnOrder` that no longer exist (a deleted or renamed column) rather than breaking the table. It's a standalone function, not a `DataTable` prop - call it wherever `columnDefinitions` is assembled, before it reaches `DataTable`. `createDefaultViewState(columns)` gives you a starting `DataTableViewState` that reflects the columns' natural order, for when nothing's been saved yet.
+
+        `sort` on `DataTableViewState` references the sorted column by `id`, the same way `columnOrder` does, rather than by the row key it sorts on - that way a saved sort survives a column's `sort` field or accessor changing in code, as long as its `id` doesn't. Since `DataTable`'s own `sort` prop needs the actual row key (a `SortKey<T>`, not a column id), two helpers convert between the two shapes: `resolveSortFromViewState(columns, state)` turns a saved `DataTableViewState` into the `SortKey<T>` that `DataTable`'s `sort` prop expects, resolving to `undefined` - rather than throwing - if there's no saved sort, or the referenced column is gone or no longer marked sortable in code. `captureSortToViewState(columns, sort)` does the reverse: given the `SortKey<T>` from `onSortChange`, it finds the matching column and returns the `{ columnId, dir }` shape to write back into your view state. The second example below wires all four pieces together.
 
         ## Code examples
         </Unstyled>
@@ -191,12 +235,14 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
                 id: 'age',
                 title: 'Age',
                 align: 'end',
+                sort: 'age',
                 renderCell: ({ value }) => <span>{value} yrs</span>,
             }),
             column.accessor(row => row.compensation, {
                 id: 'salary',
                 title: 'Salary',
                 align: 'end',
+                sort: 'compensation',
                 renderCell: ({ value }) => <span>${value.toLocaleString()}</span>,
             }),
         ];
@@ -221,21 +267,35 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
 
         <RenderSource>
         ```
-        import { DataTable, applyDataTableViewState, type DataTableViewState } from '@apple-pie/slice';
+        import { useState } from 'react';
+        import {
+            DataTable,
+            applyDataTableViewState,
+            resolveSortFromViewState,
+            captureSortToViewState,
+            type DataTableViewState,
+        } from '@apple-pie/slice';
 
         // as if just read back from localStorage or a backend
         const savedViewState: DataTableViewState = {
             columnOrder: ['salary', 'name'],
             hiddenColumns: ['age'],
             columnWidths: { salary: '30%' },
+            sort: { columnId: 'salary', dir: 'desc' },
         };
 
         export function PeopleTableWithSavedLayoutExample() {
+            const [viewState, setViewState] = useState(savedViewState);
+
             return (
                 <DataTable<Person>
-                    columnDefinitions={applyDataTableViewState(columns, savedViewState)}
+                    columnDefinitions={applyDataTableViewState(columns, viewState)}
                     tableData={people}
                     getRowId={row => row.name}
+                    sort={resolveSortFromViewState(columns, viewState)}
+                    onSortChange={sort =>
+                        setViewState(prev => ({ ...prev, sort: captureSortToViewState(columns, sort) }))
+                    }
                 />
             );
         }
