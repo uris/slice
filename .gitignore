@@ -134,5 +134,5 @@ storybook-static
 *storybook.log
 
 # ide
-.idea/
+.idea
 .DS_Store
