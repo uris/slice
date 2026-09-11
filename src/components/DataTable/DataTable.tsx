@@ -3,7 +3,9 @@ import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import styles from './DataTable.module.css';
 import type { ColumnDefinition, DataTableProps, SortKey } from './_types';
-import { resolveAlignValue } from './columnHelper';
+import { useDragColumn } from './_useDragColumn';
+import type { DragColumnElement } from './_useDragColumn';
+import { resolveAlignValue, resolveDragHandleXPos } from './columnHelper';
 
 export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 	const {
@@ -11,10 +13,12 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		headerBackgroundColor = 'var(--core-surface-secondary)',
 		candyStripeBackgroundColor = 'var(--core-surface-primary-tint)',
 		backgroundColorHoverRow = 'var(--core-surface-primary-tint)',
+		handleHoverColor = 'var(--core-outline-special)',
 		freezeColumn = false,
 		headerSticky = true,
 		height = 'auto',
 		width = '100%',
+		colResize = true,
 		borderColor = 'var(--core-outline-primary)',
 		borderStyle = 'box',
 		columnDefinitions = [],
@@ -28,12 +32,30 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		onMouseOver,
 		sort,
 		onSortChange,
+		onColumnResize,
 	} = props;
 	const [hScroll, setHScroll] = useState<boolean>(false);
 	const [vScroll, setVScroll] = useState<boolean>(false);
 	const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 	const [sortKey, setSortKey] = useState<SortKey<T>>(sort);
+	const [draggingCol, setDraggingCol] = useState<DragColumnElement | null>(null);
+	const [columnWidths, setColumnWidths] = useState<Record<string, number | string>>({});
 	const wrapperRef = React.useRef<HTMLDivElement>(null);
+	const resizeBarRef = React.useRef<HTMLDivElement>(null);
+	const colRefs = React.useRef<Record<string, HTMLTableColElement | null>>({});
+
+	// handler for when resize ends
+	const handleResizeEnd = useCallback(
+		(id: string, width: number) => {
+			setColumnWidths((prev) => ({ ...prev, [id]: width }));
+			setDraggingCol(null); /* clean up listeners */
+			onColumnResize?.(id, width);
+		},
+		[onColumnResize],
+	);
+
+	// dragging logic
+	useDragColumn(draggingCol, handleResizeEnd);
 
 	// resolve corner shadow
 	const cornerBoxShadow = useMemo(() => {
@@ -86,6 +108,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 			'--table-corner-left': freezeColumn ? '0px' : 'unset',
 			'--table-border-width': borderStyle === 'none' ? '0' : '1px',
 			'--table-border-sides': borderStyle === 'box' ? '1px' : '0',
+			'--table-handle-hover-color': handleHoverColor,
 		} as React.CSSProperties;
 	}, [
 		backgroundColor,
@@ -100,6 +123,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		height,
 		borderColor,
 		borderStyle,
+		handleHoverColor,
 	]);
 
 	// scrolling state is used to set drop shadow and border styles for sticky cells
@@ -194,7 +218,37 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		[sortKey],
 	);
 
-	// update sort state
+	// trigger drag start
+	const handleStartDrag = useCallback(
+		(id: string, e: React.MouseEvent<HTMLDivElement>) => {
+			if (!colResize) return;
+			const cell = e.currentTarget.parentElement as HTMLElement | null;
+			const col = colRefs.current[id];
+			const handle = resizeBarRef.current;
+			const parent = wrapperRef.current;
+			if (cell && col && parent) setDraggingCol({ id, cell, col, handle, parent });
+		},
+		[colResize],
+	);
+
+	const handleHoverDragHandle = useCallback(
+		(show: boolean, e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
+			if (!colResize || draggingCol) return;
+			const cell = e.currentTarget.parentElement as HTMLElement | null;
+			const handle = resizeBarRef.current;
+			const parent = wrapperRef.current;
+			if (!show && handle) handle.style.left = '-500px';
+			else resolveDragHandleXPos({ cell, handle, parent });
+		},
+		[draggingCol, colResize],
+	);
+
+	// handler create col refs for each col in the colgroup
+	const handleCreateRefs = useCallback((el: HTMLTableColElement | null, id: string) => {
+		colRefs.current[id] = el;
+	}, []);
+
+	// update sort state on prop change
 	useEffect(() => {
 		setSortKey((prev) => {
 			if (prev?.key === sort?.key && prev?.dir === sort?.dir) return prev;
@@ -204,8 +258,20 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 
 	return (
 		<div ref={wrapperRef} className={`${styles.tableWrapper} ${styles.scroll}`} style={cssVars} onScroll={handleScroll}>
+			<div className={styles.resizeBar} ref={resizeBarRef} />
 			<table className={styles.table}>
 				<caption>{caption}</caption>
+				<colgroup>
+					{columnDefinitions.map((column: ColumnDefinition<T>) => {
+						return (
+							<col
+								key={column.id}
+								ref={(el) => handleCreateRefs(el, column.id)}
+								style={{ width: setStyle(columnWidths[column.id] ?? column.width) }}
+							/>
+						);
+					})}
+				</colgroup>
 				<thead>
 					<tr>
 						{columnDefinitions.map((column: ColumnDefinition<T>) => {
@@ -243,10 +309,11 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 									const padding = setStyle(col.padding, 16);
 									const whiteSpace = col.nowrap ? 'nowrap' : '';
 									const background = resolveCellBG(rowIndex);
+									const notLast = colIndex !== columnDefinitions.length - 1;
 									return (
 										<td
 											key={col.id}
-											data-column-id={`${col.id}.${rowIndex}`}
+											data-column-id={`${colIndex}.${rowIndex}`}
 											className={`${styles.baseCell} ${styles.m}`}
 											onClick={() => handleClick(col, colIndex, row, rowIndex, false)}
 											onDoubleClick={() => handleClick(col, colIndex, row, rowIndex, true)}
@@ -257,6 +324,16 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 											onBlur={() => handleCellHover(col, colIndex, row, rowIndex, false)}
 											style={{ background }}
 										>
+											{notLast && colResize && (
+												<div
+													className={styles.colResizeHandle}
+													onMouseDown={(e) => handleStartDrag(col.id, e)}
+													onMouseOver={(e) => handleHoverDragHandle(true, e)}
+													onFocus={(e) => handleHoverDragHandle(true, e)}
+													onMouseOut={(e) => handleHoverDragHandle(false, e)}
+													onBlur={(e) => handleHoverDragHandle(false, e)}
+												/>
+											)}
 											<div
 												className={styles.baseCellWrapper}
 												style={{

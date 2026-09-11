@@ -31,6 +31,7 @@ const meta: Meta<typeof TypedDataTable> = {
 		tableData: sampleTableData,
 		borderStyle: 'box',
 		sort: { key: 'started', dir: 'asc' },
+		colResize: true,
 		onMouseOver: fn(),
 		onMouseOut: fn(),
 		onClick: fn(),
