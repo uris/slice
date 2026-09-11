@@ -33,6 +33,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		sort,
 		onSortChange,
 		onColumnResize,
+		borderRadius= 8,
 	} = props;
 	const [hScroll, setHScroll] = useState<boolean>(false);
 	const [vScroll, setVScroll] = useState<boolean>(false);
@@ -109,6 +110,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 			'--table-border-width': borderStyle === 'none' ? '0' : '1px',
 			'--table-border-sides': borderStyle === 'box' ? '1px' : '0',
 			'--table-handle-hover-color': handleHoverColor,
+			'--table-border-radius': borderStyle==="box" ? setStyle(borderRadius) : 0,
 		} as React.CSSProperties;
 	}, [
 		backgroundColor,
@@ -124,6 +126,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		borderColor,
 		borderStyle,
 		handleHoverColor,
+		borderRadius
 	]);
 
 	// scrolling state is used to set drop shadow and border styles for sticky cells
@@ -200,12 +203,6 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		[sortKey, onSortChange],
 	);
 
-	// render header with custom renderer or default renderer
-	const renderHeader = useCallback((col: ColumnDefinition<T, unknown>, sortKey: SortKey<T>) => {
-		if (col.renderHeader) return col.renderHeader({ column: col, sortKey });
-		return <DefaultHeaderRenderer col={col} sortKey={sortKey} />;
-	}, []);
-
 	// resolve area sort
 	const resolveAriaSort = useCallback(
 		(column: ColumnDefinition<T>) => {
@@ -248,6 +245,37 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		colRefs.current[id] = el;
 	}, []);
 
+	// render resize handle to trigger resizing if this is active
+	const renderCellResizeHandle = useCallback(
+		(last: boolean, col: ColumnDefinition<T>) => {
+			if (last || !colResize) return null;
+			return (
+				<div
+					className={styles.colResizeHandle}
+					onMouseDown={(e) => handleStartDrag(col.id, e)}
+					onMouseOver={(e) => handleHoverDragHandle(true, e)}
+					onFocus={(e) => handleHoverDragHandle(true, e)}
+					onMouseOut={(e) => handleHoverDragHandle(false, e)}
+					onBlur={(e) => handleHoverDragHandle(false, e)}
+				/>
+			);
+		},
+		[colResize, handleStartDrag, handleHoverDragHandle],
+	);
+
+	// render header with custom renderer or default renderer
+	const renderHeader = useCallback((col: ColumnDefinition<T, unknown>, sortKey: SortKey<T>) => {
+		if (col.renderHeader) return col.renderHeader({ column: col, sortKey });
+		return <DefaultHeaderRenderer<T> col={col} sortKey={sortKey} />;
+	}, []);
+
+	// render body cells
+	const renderBodyCell = useCallback((col: ColumnDefinition<T>, row: T, rowIndex: number) => {
+		const value = col.accessor(row);
+		if (col.renderCell) return col.renderCell({ row, value, rowIndex });
+		return <DefaultCellRenderer<T> value={value} />;
+	}, []);
+
 	// update sort state on prop change
 	useEffect(() => {
 		setSortKey((prev) => {
@@ -258,7 +286,6 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 
 	return (
 		<div ref={wrapperRef} className={`${styles.tableWrapper} ${styles.scroll}`} style={cssVars} onScroll={handleScroll}>
-			<div className={styles.resizeBar} ref={resizeBarRef} />
 			<table className={styles.table}>
 				<caption>{caption}</caption>
 				<colgroup>
@@ -274,24 +301,26 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 				</colgroup>
 				<thead>
 					<tr>
-						{columnDefinitions.map((column: ColumnDefinition<T>) => {
-							const padding = setStyle(column.padding, 16);
-							const sortable = column.sort !== undefined;
+						{columnDefinitions.map((col: ColumnDefinition<T>, colIndex: number) => {
+							const padding = setStyle(col.padding, 16);
+							const sortable = col.sort !== undefined;
 							const cursor = sortable ? 'pointer' : 'default';
+							const last = colIndex === columnDefinitions.length - 1;
 							return (
 								<th
-									key={column.id}
-									data-column-id={column.id}
+									key={col.id}
+									data-column-id={col.id}
 									className={`${styles.baseCell} ${styles.headerCell} ${styles.m}`}
-									onClick={() => handleSort(column.sort)}
-									onKeyDown={(e) => accessibleKeyDown(e, () => handleSort(column.sort))}
+									onClick={() => handleSort(col.sort)}
+									onKeyDown={(e) => accessibleKeyDown(e, () => handleSort(col.sort))}
 									style={{ cursor }}
 									tabIndex={sortable ? 0 : undefined}
 									role={sortable ? 'columnheader' : undefined}
-									aria-sort={resolveAriaSort(column)}
+									aria-sort={resolveAriaSort(col)}
 								>
+									{renderCellResizeHandle(last, col)}
 									<div className={styles.headerCellWrapper} style={{ padding }}>
-										{renderHeader(column, sortKey)}
+										{renderHeader(col, sortKey)}
 									</div>
 								</th>
 							);
@@ -303,13 +332,12 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 						return (
 							<tr key={getRowId ? getRowId(row, rowIndex) : rowIndex}>
 								{columnDefinitions.map((col: ColumnDefinition<T>, colIndex: number) => {
-									const value = col.accessor(row);
 									const justifyContent = resolveAlignValue(col.justify);
 									const alignItems = resolveAlignValue(col.align);
 									const padding = setStyle(col.padding, 16);
 									const whiteSpace = col.nowrap ? 'nowrap' : '';
 									const background = resolveCellBG(rowIndex);
-									const notLast = colIndex !== columnDefinitions.length - 1;
+									const last = colIndex === columnDefinitions.length - 1;
 									return (
 										<td
 											key={col.id}
@@ -324,26 +352,12 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 											onBlur={() => handleCellHover(col, colIndex, row, rowIndex, false)}
 											style={{ background }}
 										>
-											{notLast && colResize && (
-												<div
-													className={styles.colResizeHandle}
-													onMouseDown={(e) => handleStartDrag(col.id, e)}
-													onMouseOver={(e) => handleHoverDragHandle(true, e)}
-													onFocus={(e) => handleHoverDragHandle(true, e)}
-													onMouseOut={(e) => handleHoverDragHandle(false, e)}
-													onBlur={(e) => handleHoverDragHandle(false, e)}
-												/>
-											)}
+											{renderCellResizeHandle(last, col)}
 											<div
 												className={styles.baseCellWrapper}
-												style={{
-													justifyContent,
-													alignItems,
-													padding,
-													whiteSpace,
-												}}
+												style={{ justifyContent, alignItems, padding, whiteSpace }}
 											>
-												{col.renderCell ? col.renderCell({ row, value, rowIndex }) : (value?.toString() ?? '')}
+												{renderBodyCell(col, row, rowIndex)}
 											</div>
 										</td>
 									);
@@ -353,6 +367,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 					})}
 				</tbody>
 			</table>
+			<div className={styles.resizeBar} ref={resizeBarRef} />
 		</div>
 	);
 }
@@ -366,11 +381,21 @@ export function DefaultHeaderRenderer<T>(props: Readonly<DefaultHeaderRendererPr
 	const sortable = !!col.sort;
 	const sorted = !!(sortKey?.key && sortKey.key === col.sort);
 	const sortIcon = sortKey?.dir === 'asc' ? 'arrow up' : 'arrow down';
-	const justifyContent = sortable ? 'space-between' : resolveAlignValue(col.justify);
 	return (
-		<div style={{ display: 'flex', alignItems: 'center', justifyContent, width: '100%' }}>
-			<span style={{ fontWeight: 540 }}>{col.title}</span>
-			{sortable && <Icon name={sorted ? sortIcon : 'blank'} size={16} />}
+		<div className={styles.header}>
+			<div className={styles.headerLeft} />
+			<div className={styles.headerTitle}>{col.title}</div>
+			<div className={styles.headerRight}>
+				{sortable && <Icon name={sorted ? sortIcon : 'blank'} pointerEvents={'none'} size={16} />}
+			</div>
 		</div>
 	);
+}
+
+interface DefaultCellRendererProps<T> {
+	value: unknown;
+}
+export function DefaultCellRenderer<T>(props: Readonly<DefaultCellRendererProps<T>>) {
+	const { value } = props;
+	return value?.toString() ?? '';
 }

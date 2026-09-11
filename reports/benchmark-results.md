@@ -5,48 +5,48 @@
 
 | Component | Rating | Mount (avg) | Re-render (avg) | Event (avg) | Memory Delta | Leak Suspected |
 |-----------|:------:|-------------|-----------------|-------------|--------------|:--------------:|
-| Avatar | ⚡ | 0.433ms | 0.123ms | - | 2.53KB | ✓ No |
-| AvatarGroup | ⚡ | 0.946ms | 0.407ms | - | 3.20KB | ✓ No |
-| AudioBubble | ⚡ | 0.640ms | 0.143ms | - | 2.41KB | ✓ No |
-| Badge | ⚡ | 0.534ms | 0.145ms | - | 2.96KB | ✓ No |
-| Camera | ✓✓ | 2.769ms | 0.391ms | - | 2.39KB | ✓ No |
-| CheckBox | ⚡ | 0.761ms | 0.661ms | 0.481ms | 2.19KB | ✓ No |
-| DivInput | ⚡ | 0.356ms | 0.240ms | 0.283ms | 2.96KB | ✓ No |
-| Dot | ⚡ | 0.430ms | 0.102ms | - | 2.98KB | ✓ No |
-| DraggablePanel | ⚡ | 1.190ms | 0.252ms | - | 2.75KB | ✓ No |
-| DropDown | ⚡ | 1.141ms | 0.350ms | 0.0729ms | 3.40KB | ✓ No |
-| DataTable | ✓✓ | 2.808ms | 0.856ms | - | 2.74KB | ✓ No |
-| ErrorSummary | ⚡ | 0.703ms | 0.524ms | - | 2.95KB | ✓ No |
-| FileIcon | ⚡ | 0.991ms | 0.163ms | - | 2.17KB | ✓ No |
-| FileList | ⚡ | 1.957ms | 1.082ms | - | 3.06KB | ✓ No |
-| FlexDiv | ⚡ | 1.744ms | 1.024ms | - | - | - |
-| Grouper | ⚡ | 0.364ms | 0.282ms | - | 3.33KB | ✓ No |
-| Icon | ⚡ | 0.589ms | 0.288ms | - | 2.48KB | ✓ No |
-| IconButton | ⚡ | 0.555ms | 0.321ms | 0.0312ms | 3.25KB | ✓ No |
-| Level | ⚡ | 0.958ms | 0.411ms | - | 2.72KB | ✓ No |
-| Modal | ⚡ | 1.619ms | 1.185ms | - | 3.29KB | ✓ No |
-| ModalController | ⚡ | 0.523ms | 0.239ms | - | 2.92KB | ✓ No |
-| PromptInput | ⚡ | 1.924ms | 1.238ms | - | 2.94KB | ✓ No |
-| Overlay | ⚡ | 0.256ms | 0.143ms | - | 2.64KB | ✓ No |
-| Pager | ⚡ | 0.340ms | 0.401ms | 0.101ms | 3.04KB | ✓ No |
-| Progress | ⚡ | 0.139ms | 0.0780ms | - | 3.20KB | ✓ No |
-| RadioButton | ⚡ | 0.470ms | 0.332ms | 0.535ms | 2.51KB | ✓ No |
-| RadioButtonList | ⚡ | 0.949ms | 0.706ms | 0.0484ms | 3.10KB | ✓ No |
-| Slider | ⚡ | 0.842ms | 0.356ms | 0.0398ms | 3.55KB | ✓ No |
-| Spacer | ⚡ | 0.287ms | 0.136ms | - | 2.61KB | ✓ No |
-| Switch | ⚡ | 0.670ms | 0.530ms | 0.384ms | 2.19KB | ✓ No |
-| TabBar | ⚡ | 0.854ms | 0.303ms | 0.0552ms | 2.92KB | ✓ No |
-| TextArea | ⚡ | 0.472ms | 0.119ms | 0.181ms | 2.49KB | ✓ No |
-| Tip | ⚡ | 0.565ms | 0.294ms | - | 2.78KB | ✓ No |
-| Toast | ⚡ | 0.510ms | 0.144ms | - | 2.86KB | ✓ No |
-| TextField | ⚡ | 0.841ms | 0.514ms | 0.384ms | 3.26KB | ✓ No |
-| Button | ⚡ | 1.250ms | 0.892ms | 0.0521ms | 2.68KB | ✓ No |
-| ButtonBar | ⚡ | 0.530ms | 0.147ms | 0.0320ms | 3.09KB | ✓ No |
-| Chip | ⚡ | 0.307ms | 0.0917ms | 0.0758ms | 3.01KB | ✓ No |
-| Label | ⚡ | 0.459ms | 0.120ms | - | 2.70KB | ✓ No |
-| ToggleButton | ⚡ | 0.493ms | 0.425ms | 0.0470ms | 3.25KB | ✓ No |
-| UploadArea | ⚡ | 0.964ms | 0.240ms | - | 3.43KB | ✓ No |
-| Video | ✓✓ | 2.734ms | 1.909ms | - | 2.91KB | ✓ No |
+| Avatar | ⚡ | 0.433ms | 0.118ms | - | 3.69KB | ✓ No |
+| AvatarGroup | ⚡ | 0.830ms | 0.358ms | - | 3.48KB | ✓ No |
+| AudioBubble | ⚡ | 0.562ms | 0.141ms | - | 3.30KB | ✓ No |
+| Badge | ⚡ | 0.385ms | 0.0786ms | - | 3.09KB | ✓ No |
+| Camera | ✓✓ | 2.512ms | 0.471ms | - | 3.17KB | ✓ No |
+| CheckBox | ⚡ | 0.588ms | 0.551ms | 0.496ms | 2.63KB | ✓ No |
+| DivInput | ⚡ | 0.447ms | 0.285ms | 0.328ms | 3.00KB | ✓ No |
+| Dot | ⚡ | 0.292ms | 0.105ms | - | 2.46KB | ✓ No |
+| DraggablePanel | ⚡ | 1.339ms | 0.293ms | - | 3.59KB | ✓ No |
+| DropDown | ⚡ | 1.088ms | 0.314ms | 0.0503ms | 2.15KB | ✓ No |
+| DataTable | ✓✓ | 2.838ms | 0.876ms | - | 2.78KB | ✓ No |
+| ErrorSummary | ⚡ | 0.302ms | 0.239ms | - | 2.78KB | ✓ No |
+| FileIcon | ⚡ | 0.984ms | 0.123ms | - | 2.93KB | ✓ No |
+| FileList | ⚡ | 1.811ms | 1.074ms | - | 2.88KB | ✓ No |
+| FlexDiv | ⚡ | 1.742ms | 1.020ms | - | - | - |
+| Grouper | ⚡ | 0.352ms | 0.252ms | - | 2.49KB | ✓ No |
+| Icon | ⚡ | 0.640ms | 0.260ms | - | 3.54KB | ✓ No |
+| IconButton | ⚡ | 0.813ms | 0.248ms | 0.0413ms | 3.24KB | ✓ No |
+| Level | ⚡ | 0.688ms | 0.366ms | - | 2.87KB | ✓ No |
+| Modal | ⚡ | 1.740ms | 1.310ms | - | 2.73KB | ✓ No |
+| ModalController | ⚡ | 0.358ms | 0.171ms | - | 3.01KB | ✓ No |
+| PromptInput | ⚡ | 1.976ms | 1.167ms | - | 3.18KB | ✓ No |
+| Overlay | ⚡ | 0.325ms | 0.123ms | - | 2.78KB | ✓ No |
+| Pager | ⚡ | 1.127ms | 0.617ms | 0.108ms | 3.36KB | ✓ No |
+| Progress | ⚡ | 0.479ms | 0.288ms | - | 2.83KB | ✓ No |
+| RadioButton | ⚡ | 0.690ms | 0.349ms | 0.480ms | 2.98KB | ✓ No |
+| RadioButtonList | ⚡ | 0.816ms | 0.765ms | 0.0587ms | 2.72KB | ✓ No |
+| Slider | ⚡ | 0.258ms | 0.196ms | 0.0586ms | 2.36KB | ✓ No |
+| Spacer | ⚡ | 0.425ms | 0.102ms | - | 2.36KB | ✓ No |
+| Switch | ⚡ | 0.410ms | 0.515ms | 0.361ms | 3.54KB | ✓ No |
+| TabBar | ⚡ | 0.723ms | 0.347ms | 0.0996ms | 2.84KB | ✓ No |
+| TextArea | ⚡ | 0.258ms | 0.156ms | 0.337ms | 2.51KB | ✓ No |
+| Tip | ⚡ | 0.575ms | 0.206ms | - | 2.53KB | ✓ No |
+| Toast | ⚡ | 0.453ms | 0.171ms | - | 3.13KB | ✓ No |
+| TextField | ⚡ | 0.474ms | 0.297ms | 0.288ms | 3.02KB | ✓ No |
+| Button | ⚡ | 0.547ms | 1.025ms | 0.0565ms | 2.73KB | ✓ No |
+| ButtonBar | ⚡ | 0.403ms | 0.136ms | 0.0229ms | 3.12KB | ✓ No |
+| Chip | ⚡ | 0.490ms | 0.164ms | 0.162ms | 2.60KB | ✓ No |
+| Label | ⚡ | 0.269ms | 0.115ms | - | 3.22KB | ✓ No |
+| ToggleButton | ⚡ | 0.514ms | 0.618ms | 0.0612ms | 2.74KB | ✓ No |
+| UploadArea | ⚡ | 0.711ms | 0.184ms | - | 2.57KB | ✓ No |
+| Video | ✓✓ | 2.063ms | 1.825ms | - | 3.12KB | ✓ No |
 
 
 

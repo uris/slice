@@ -3,6 +3,7 @@ import { Avatar } from '../Avatar';
 import type { ColumnDefinition } from './_types';
 import { createColumnHelper } from './columnHelper';
 
+// 1. define your data model for the table
 export type SampleTableData = {
 	name: string;
 	age: number;
@@ -12,6 +13,7 @@ export type SampleTableData = {
 	started: Date;
 };
 
+// 2. pull data for the data
 export const sampleTableData: SampleTableData[] = [
 	{
 		name: 'John Appleseed',
@@ -39,14 +41,24 @@ export const sampleTableData: SampleTableData[] = [
 	},
 ];
 
+// 3.  Create a column accessor based on your data model
 const column = createColumnHelper<SampleTableData>();
 
+// 4. define your column definitions using the accessor
 export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData, any>[] = [
 	column.accessor((row) => row.name, {
 		id: 'col-1',
-		title: 'Full Name',
+		title: 'Name',
 		justify: 'start',
 		sort: 'name',
+		renderCell: ({ row }) => {
+			return (
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+					<Avatar image={row.pic} name={row.name} />
+					{row.name}
+				</div>
+			);
+		},
 	}),
 	column.accessor((row) => row.age, {
 		id: 'col-2',
@@ -57,16 +69,10 @@ export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData, any
 		sort: 'age',
 		renderCell: ({ value }) => <span>{value} yrs</span>,
 	}),
-	column.accessor((row) => row.pic, {
-		id: 'col-3',
-		title: 'Profile Photo',
-		justify: 'center',
-		renderCell: ({ row }) => <Avatar image={row.pic} name={row.name} />,
-	}),
 	column.accessor((row) => row.country, {
 		id: 'col-4',
 		title: 'Country',
-		justify: 'start',
+		justify: 'center',
 		sort: 'country',
 		renderCell: ({ value }) => <span>{value || 'Unknown'}</span>,
 	}),

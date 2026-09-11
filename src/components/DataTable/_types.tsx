@@ -43,6 +43,7 @@ export interface DataTableProps<T> {
 	candyStripeBackgroundColor?: string;
 	handleHoverColor?: string;
 	borderStyle?: 'box' | 'row' | 'none';
+	borderRadius?: number |string;
 	borderColor?: string;
 	tableData?: T[];
 	colResize?: boolean;
