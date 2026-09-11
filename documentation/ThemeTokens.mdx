@@ -1,5 +1,6 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {useState} from 'react';
+import {addons} from 'storybook/preview-api';
 import {FlexDiv} from "../src/components/FlexDiv";
 import {ColorTileGroup} from "./_components/ColorTileGroup/ColorTileGroup";
 import {TabBar} from "../src/components/TabBar";
@@ -30,6 +31,16 @@ export function ThemeTokensPreview() {
                 selectedValue={theme.name.includes("dark") ? 'darkMode' : 'lightMode'}
                 onTabChange={(option) => {
                     manageTheme.set(option.value==="darkMode"? darkTheme : lightTheme)
+                    // Also push the change through Storybook's own `theme` global so the
+                    // docs frame follows this page's own tabs, not just the toolbar switcher.
+                    // DocsContainer's chrome (headings/code blocks, see preview.tsx) reads this
+                    // global directly, and .storybook/manager.ts mirrors it onto the manager
+                    // shell (sidebar/toolbar/docs page shell) via the GLOBALS_UPDATED channel
+                    // event it fires in response. 'updateGlobals' is the event *name* used to
+                    // request that update - like GLOBALS_UPDATED in manager.ts, it isn't part of
+                    // this Storybook version's public export surface (only available under the
+                    // unsupported 'storybook/internal/core-events'), so it's used as a literal.
+                    addons.getChannel().emit('updateGlobals', {globals: {theme: option.value}})
                 }}
             />
             

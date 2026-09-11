@@ -41,31 +41,20 @@ export interface DataTableProps<T> {
 	freezeColumnBackgroundColor?: string;
 	headerBackgroundColor?: string;
 	candyStripeBackgroundColor?: string;
+	handleHoverColor?: string;
 	borderStyle?: 'box' | 'row' | 'none';
 	borderColor?: string;
 	tableData?: T[];
+	colResize?: boolean;
+	/* Fires when a column resize drag ends, with its new width in px. Not persisted internally -
+	 * feed it into your own DataTableViewState (e.g. columnWidths: {...prev.columnWidths, [columnId]: width})
+	 * if the resize should survive a reload. */
+	onColumnResize?: (columnId: string, width: number) => void;
 	columnDefinitions: ColumnDefinition<T, any>[];
 	/* get a stable row identity for React keys. Falls back to row index when omitted. */
 	getRowId?: (row: T, index: number) => string | number;
-	/*
-	 * Filters tableData before it's rendered. Matches Array.prototype.filter's
-	 * own callback signature, so an existing predicate (including a type-predicate
-	 * one) can be passed straight through, and rowIndex downstream (getRowId,
-	 * onClick/onMouseOver/etc., hover-row matching) reflects position in the
-	 * filtered rows, not the original array.
-	 */
 	filter?: (row: T, index: number, array: T[]) => boolean;
-	/*
-	 * Optional sort. Pass this to run DataTable as a controlled component:
-	 * clicking a sortable header calls `onSortChange` with the next SortKey
-	 * instead of updating any state internally, so you're responsible for
-	 * feeding the new value back in (handy for persisting it alongside a
-	 * DataTableViewState). Omit it and DataTable manages sort itself,
-	 * seeded once from this prop's initial value.
-	 */
 	sort?: SortKey<T>;
-	/* Fires whenever the user changes sort by clicking a sortable header,
-	 * whether or not `sort` is controlled. */
 	onSortChange?: (sort: SortKey<T>) => void;
 	caption?: string;
 	onClick?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;

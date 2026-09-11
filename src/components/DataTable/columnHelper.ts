@@ -19,7 +19,7 @@ export function createColumnHelper<T>() {
 	};
 }
 
-/* resolve column alignement values to flex box values */
+/* resolve column alignment values to flex box values */
 export const resolveAlignValue = (value?: 'start' | 'center' | 'end') => {
 	switch (value) {
 		case 'start':
@@ -31,4 +31,18 @@ export const resolveAlignValue = (value?: 'start' | 'center' | 'end') => {
 		default:
 			return 'center';
 	}
+};
+
+// helper to resolve the position of the drag handle visual element
+export const resolveDragHandleXPos = (elements: {
+	cell?: HTMLElement | null;
+	handle?: HTMLDivElement | null;
+	parent?: HTMLDivElement | null;
+}) => {
+	const { cell, handle, parent } = elements ?? {};
+	if (!cell || !parent || !handle) return;
+	const { left, width } = cell.getBoundingClientRect();
+	const parentRect = parent.getBoundingClientRect();
+	const x = left - parentRect.left - parent.clientLeft + parent.scrollLeft;
+	handle.style.left = `${x + width}px`;
 };

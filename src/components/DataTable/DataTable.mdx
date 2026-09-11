@@ -45,6 +45,8 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Wrapper width.</td></tr>
             <tr><td><code>headerSticky</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Keeps the header row pinned to the top of the scroll area.</td></tr>
             <tr><td><code>freezeColumn</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Pins the first column while the rest of the table scrolls horizontally.</td></tr>
+            <tr><td><code>colResize</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Lets the user drag a column's right edge to resize it. See <a href="#resizing-columns">Resizing columns</a>.</td></tr>
+            <tr><td><code>onColumnResize</code></td><td><code>{`(columnId: string, width: number) => void`}</code></td><td><code>-</code></td><td>Fires once a column resize drag ends, with the column's new width in px. <code>DataTable</code> keeps the resized width itself for as long as it stays mounted - use this only if the width needs to survive a reload or sync elsewhere. See <a href="#resizing-columns">Resizing columns</a>.</td></tr>
             <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary)'</code></td><td>Table body background color.</td></tr>
             <tr><td><code>backgroundColorHoverRow</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary-tint)'</code></td><td>Body cell background color for the currently hovered row. See <a href="#row-hover-and-click-events">Row hover and click events</a>.</td></tr>
             <tr><td><code>headerBackgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Header row background color.</td></tr>
@@ -194,6 +196,17 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
 
         Hovering (or focusing, via keyboard) a cell also drives the row's background: `backgroundColorHoverRow` is applied to every cell in that row for as long as it's hovered, taking priority over `candyStripeBackgroundColor`'s alternating stripe. This is purely visual state internal to `DataTable` - `onMouseOver`/`onMouseOut` are how a consumer observes it, not how it's controlled.
 
+        ## Resizing columns
+        Every column except the last gets a draggable edge on its right side, on by default. Drag it to resize that column; hovering (or focusing) the edge shows a vertical line as a preview before you commit to a drag. Set `colResize={false}` to turn this off entirely.
+
+        <RenderSource>
+        ```
+        <DataTable<Person> columnDefinitions={columns} tableData={people} colResize={false} />
+        ```
+        </RenderSource>
+
+        A resized width is kept internally for as long as `DataTable` stays mounted, so it survives sorting, filtering, and re-renders without any extra wiring. It does *not* survive on its own past a remount, a page reload, or the table being given a fresh `columnDefinitions` array from a saved `DataTableViewState` - for that, listen for `onColumnResize` and fold the result into your own state, the same way `onSortChange` works for sort. See the next section for how that fits into `DataTableViewState`.
+
         ## Persisting column layout
         `columnDefinitions` always carries functions (`accessor`, `renderHeader`, `renderCell`), so it can't be saved as-is. What actually needs to survive a reload or sync to a backend is much smaller: which columns are visible, what order they're in, how wide they are, and which one is sorted. `DataTableViewState` is that smaller, plain-data shape, referencing columns purely by `id`:
 
@@ -205,6 +218,23 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             columnWidths?: Record<string, number | string>;
             sort?: { columnId: string; dir: 'asc' | 'desc' };
         };
+        ```
+        </RenderSource>
+
+        A live resize is captured the same way a live sort change is: `onColumnResize(columnId, width)` fires whenever a drag ends, and you fold that into `columnWidths` yourself - there's no `captureColumnWidthsToViewState` helper, since the merge is just one key:
+
+        <RenderSource>
+        ```
+        <DataTable<Person>
+            columnDefinitions={applyDataTableViewState(columns, viewState)}
+            tableData={people}
+            onColumnResize={(columnId, width) =>
+                setViewState(prev => ({
+                    ...prev,
+                    columnWidths: { ...prev.columnWidths, [columnId]: width },
+                }))
+            }
+        />
         ```
         </RenderSource>
 
@@ -295,6 +325,12 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
                     sort={resolveSortFromViewState(columns, viewState)}
                     onSortChange={sort =>
                         setViewState(prev => ({ ...prev, sort: captureSortToViewState(columns, sort) }))
+                    }
+                    onColumnResize={(columnId, width) =>
+                        setViewState(prev => ({
+                            ...prev,
+                            columnWidths: { ...prev.columnWidths, [columnId]: width },
+                        }))
                     }
                 />
             );
