@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv';
 import { fn } from 'storybook/test';
 import { DataTable } from './DataTable';
-import { sampleTableColumnDefinitions, sampleTableData } from './_data';
+import { moreSampleData, sampleTableColumnDefinitions, sampleTableData } from './_data';
 import type { SampleTableData } from './_data';
 import { type DataTableViewState, applyDataTableViewState } from './viewState';
 
@@ -21,17 +21,20 @@ const meta: Meta<typeof TypedDataTable> = {
 	args: {
 		width: '100%',
 		height: 'auto',
-		backgroundColor: 'var(--core-surface-primary)',
-		headerBackgroundColor: 'var(--core-surface-secondary)',
-		candyStripeBackgroundColor: 'var(--core-surface-primary-tint)',
 		freezeColumn: true,
 		headerSticky: true,
+		colResize: true,
+		backgroundColor: 'var(--core-surface-primary)',
+		backgroundColorHoverRow: 'var(--core-surface-primary-tint)',
+		headerBackgroundColor: 'var(--core-surface-secondary)',
+		candyStripeBackgroundColor: 'var(--core-surface-primary-tint)',
+		handleHoverColor: 'var(--core-outline-special)',
+		borderStyle: 'box',
 		borderColor: 'var(--core-outline-primary)',
+		borderRadius: 8,
 		columnDefinitions: sampleTableColumnDefinitions,
 		tableData: sampleTableData,
-		borderStyle: 'box',
 		sort: { key: 'started', dir: 'asc' },
-		colResize: true,
 		onMouseOver: fn(),
 		onMouseOut: fn(),
 		onClick: fn(),

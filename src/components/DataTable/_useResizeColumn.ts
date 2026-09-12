@@ -1,13 +1,19 @@
+import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { resolveDragHandleXPos } from './columnHelper';
 
-export type DragColumnElement = {
+export type ResizeVisualElements = {
+	handle?: React.RefObject<HTMLDivElement | null> | null /* element for the visual drag affordance */;
+	parent?: React.RefObject<HTMLDivElement | null> | null /* parent wrapper for calculations */;
+};
+
+export type ResizeColElements = {
 	id: string;
 	cell: HTMLElement /* the cell the drag started from to compute the starting x position */;
 	col: HTMLTableColElement /* the <col> element that owns this column's width in colgroup */;
-	handle?: HTMLDivElement | null /* element for the visual drag affordance */;
-	parent?: HTMLDivElement | null /* parent wrapper for calcs */;
 };
+
+export type ColRefs = React.RefObject<Record<string, HTMLTableColElement | null>>;
 
 // resolve touch or mouse event to client position
 const resolveClientPos = (e: MouseEvent | TouchEvent) => {
@@ -19,9 +25,15 @@ const resolveClientPos = (e: MouseEvent | TouchEvent) => {
 	return { x: mouseEvent.clientX, y: mouseEvent.clientY };
 };
 
-export function useDragColumn(element: DragColumnElement | null, onResizeEnd?: (id: string, width: number) => void) {
+export function useResizeColumn(
+	elements: ResizeVisualElements,
+	colResize: boolean,
+	setColumnWidths: (value: React.SetStateAction<Record<string, string | number>>) => void,
+	onColumnResize: ((columnId: string, width: number) => void) | undefined,
+) {
+	const [resizeCol, setResizeCol] = useState<ResizeColElements | null>(null);
 	const [client, setClient] = useState<{ x: number; y: number } | null>(null);
-	const [dragging, setDragging] = useState(false);
+	const [resizing, setResizing] = useState(false);
 	const didSetListenersRef = useRef<boolean>(false);
 	const colStartX = useRef<number>(0);
 	const lastWidthRef = useRef<number>(0);
@@ -29,30 +41,32 @@ export function useDragColumn(element: DragColumnElement | null, onResizeEnd?: (
 
 	// resolve the starting x position of the column from the origin cell's rect
 	const resolveStartingXPos = useCallback(() => {
-		if (!element?.cell) return 0;
-		return element.cell.getBoundingClientRect().left;
-	}, [element]);
+		if (!resizeCol?.cell) return 0;
+		return resizeCol.cell.getBoundingClientRect().left;
+	}, [resizeCol]);
 
 	// update the position visual drag handle affordance
 	const applyHandlePos = useCallback(
 		(show?: boolean) => {
-			const { cell, handle, parent } = element ?? {};
+			const { cell } = resizeCol ?? {};
+			const handle = elements.handle?.current;
+			const parent = elements.parent?.current;
 			if (!show && handle) handle.style.left = '-500px';
 			else resolveDragHandleXPos({ cell, handle, parent });
 		},
-		[element],
+		[resizeCol, elements],
 	);
 
 	// write the new width straight to the <col> element
 	const applyWidth = useCallback(
 		(clientX: number) => {
-			if (!element?.col) return;
+			if (!resizeCol?.col) return;
 			const newWidth = Math.max(0, clientX - colStartX.current);
-			element.col.style.width = `${newWidth}px`;
+			resizeCol.col.style.width = `${newWidth}px`;
 			lastWidthRef.current = newWidth;
 			hasMovedRef.current = true;
 		},
-		[element],
+		[resizeCol],
 	);
 
 	// mouse move handler
@@ -60,7 +74,7 @@ export function useDragColumn(element: DragColumnElement | null, onResizeEnd?: (
 		(e: MouseEvent | TouchEvent) => {
 			e.stopPropagation();
 			e.preventDefault();
-			setDragging(true);
+			setResizing(true);
 			const nextClientPos = resolveClientPos(e);
 			setClient(nextClientPos);
 			applyWidth(nextClientPos.x);
@@ -69,23 +83,27 @@ export function useDragColumn(element: DragColumnElement | null, onResizeEnd?: (
 		[applyWidth, applyHandlePos],
 	);
 
-	// mouse up handler
+	// mouse up handler - set widths and clean up
 	const handleMouseUp = useCallback(
 		(e: MouseEvent | TouchEvent) => {
 			e.stopPropagation();
 			e.preventDefault();
-			setDragging(false);
-			setClient(null);
-			if (element && hasMovedRef.current) {
-				onResizeEnd?.(element.id, lastWidthRef.current);
+			// set col width using state callback and emit event
+			if (resizeCol && hasMovedRef.current) {
+				const colId = resizeCol.id;
+				const width = lastWidthRef.current;
+				setColumnWidths((prev) => ({ ...prev, [colId]: width }));
+				onColumnResize?.(colId, width);
 			}
+			setResizing(false);
+			setClient(null);
 			applyHandlePos(false);
-			clearListeners();
+			setResizeCol(null);
 		},
-		[element, onResizeEnd, applyHandlePos],
+		[resizeCol, applyHandlePos, setColumnWidths, onColumnResize],
 	);
 
-	// listen to move or up
+	// install listeners for move/up
 	const initListeners = useCallback(() => {
 		if (!didSetListenersRef.current) {
 			document.documentElement.addEventListener('mousemove', handleMouseMove, false);
@@ -121,11 +139,37 @@ export function useDragColumn(element: DragColumnElement | null, onResizeEnd?: (
 		}
 	}, [handleMouseMove, handleMouseUp]);
 
+	// handler to trigger resize start
+	const dragResize = useCallback(
+		(id: string, e: React.MouseEvent<HTMLDivElement>, colRefs: ColRefs) => {
+			e.stopPropagation();
+			e.preventDefault();
+			if (!colResize) return;
+			const cell = e.currentTarget.parentElement as HTMLElement | null;
+			const col = colRefs.current[id];
+			if (cell && col) setResizeCol({ id, cell, col });
+		},
+		[colResize],
+	);
+
+	// handler to show handle on hover of drag area
+	const hoverResize = useCallback(
+		(show: boolean, e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
+			if (!colResize || resizeCol) return;
+			const cell = e.currentTarget.parentElement as HTMLElement | null;
+			const handle = elements.handle?.current;
+			const parent = elements.parent?.current;
+			if (!show && handle) handle.style.left = '-500px';
+			else resolveDragHandleXPos({ cell, handle, parent });
+		},
+		[resizeCol, colResize, elements],
+	);
+
 	useEffect(() => {
-		if (element) initListeners();
+		if (resizeCol) initListeners();
 		else clearListeners();
 		return () => clearListeners();
-	}, [element, initListeners, clearListeners]);
+	}, [resizeCol, initListeners, clearListeners]);
 
-	return { client, dragging };
+	return { clientX: client?.x, clientY: client?.y, resizing, dragResize, hoverResize };
 }

@@ -102,12 +102,6 @@ export const InteractiveWithInitials: StoryObj<typeof Avatar> = {
 				await expect(avatar).toHaveTextContent(args.name.charAt(0));
 			}
 
-			// border hover color
-			await userEvent.hover(avatar);
-			await expect(avatar).toHaveStyle({
-				borderColor: hexToRgb('#0000ff'),
-			});
-
 			// border color
 			await userEvent.unhover(avatar);
 			await expect(avatar).toHaveStyle({

@@ -3,10 +3,7 @@ import type { ColumnDefinition, SortKey } from './_types';
 /*
  * DataTableViewState is the part of a table's configuration that's safe to
  * persist: plain strings and numbers, no accessor/render functions. It
- * references columns purely by `id`, so it can be written to localStorage,
- * sent to a backend, or round-tripped through JSON without touching the
- * code-defined ColumnDefinition objects (which always carry closures and
- * were never serializable, regardless of how the column's value is read).
+ * references columns purely by `id`, so it can be serialized to storage if needed
  */
 export type DataTableViewState = {
 	/* Column ids, in the order they should be displayed. */
@@ -15,15 +12,7 @@ export type DataTableViewState = {
 	hiddenColumns?: string[];
 	/* Per-column width overrides, keyed by column id. */
 	columnWidths?: Record<string, number | string>;
-	/*
-	 * The active sort, if any. References the sorted column by `id`
-	 * rather than by the row field it sorts on, so it stays consistent
-	 * with columnOrder/hiddenColumns/columnWidths above and survives a
-	 * column's accessor or `sort` key changing in code, as long as its
-	 * `id` doesn't. Resolve it into the SortKey<T> DataTable's `sort`
-	 * prop expects with resolveSortFromViewState; capture a live
-	 * SortKey back into this shape with captureSortToViewState.
-	 */
+	/* The active sort, if any. References the sorted column by `id` */
 	sort?: { columnId: string; dir: 'asc' | 'desc' };
 };
 
@@ -74,11 +63,7 @@ export function applyDataTableViewState<T>(
 /*
  * Resolves a persisted DataTableViewState's sort into the SortKey<T> that
  * DataTable's `sort` prop expects, by looking up the referenced column's
- * `sort` field (the actual row key) via `sort.columnId`. Returns undefined
- * - rather than throwing - when there's no saved sort, the referenced
- * column no longer exists, or that column is no longer marked sortable in
- * code, so a stale or hand-edited view state degrades to "unsorted" instead
- * of breaking the table.
+ * `sort` field (the actual row key) via `sort.columnId`.
  */
 export function resolveSortFromViewState<T>(
 	columns: ColumnDefinition<T, any>[],
@@ -93,10 +78,7 @@ export function resolveSortFromViewState<T>(
 /*
  * The inverse of resolveSortFromViewState - captures a live SortKey<T>
  * (e.g. from DataTable's onSortChange) back into the persistable shape, by
- * finding the column whose `sort` field matches the sorted key. Feed the
- * result straight into a DataTableViewState's `sort` field. Returns
- * undefined when `sort` itself is undefined (no active sort) or when no
- * column in `columns` sorts on that key.
+ * finding the column whose `sort` field matches the sorted key.
  */
 export function captureSortToViewState<T>(
 	columns: ColumnDefinition<T, any>[],

@@ -9,6 +9,7 @@ const meta: Meta<typeof Overlay> = {
 	component: Overlay,
 	args: {
 		opacity: 1,
+		show: true,
 		color: '#00000080',
 		type: 'dark',
 		global: false,
@@ -49,7 +50,7 @@ export const HiddenGlobal: StoryObj<typeof Overlay> = {
 	args: {
 		...meta.args,
 		global: true,
-		overlay: false,
+		show: false,
 	},
 	render: Default.render,
 	play: async ({ canvasElement }) => {

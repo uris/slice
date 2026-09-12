@@ -1,8 +1,8 @@
 import React from 'react';
 import { Avatar } from '../Avatar';
 import type { ColumnDefinition } from './_types';
-import { createColumnHelper } from './columnHelper';
 
+// 1. define your data model for the table
 export type SampleTableData = {
 	name: string;
 	age: number;
@@ -12,6 +12,7 @@ export type SampleTableData = {
 	started: Date;
 };
 
+// 2. pull data for the data
 export const sampleTableData: SampleTableData[] = [
 	{
 		name: 'John Appleseed',
@@ -39,49 +40,65 @@ export const sampleTableData: SampleTableData[] = [
 	},
 ];
 
-const column = createColumnHelper<SampleTableData>();
+export const moreSampleData = (): SampleTableData[] => {
+	let runs = 0;
+	const data: SampleTableData[] = [];
+	while (runs < 100) {
+		data.push(...sampleTableData);
+		runs++;
+	}
+	return data;
+};
 
-export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData, any>[] = [
-	column.accessor((row) => row.name, {
+// 3. define your columns - `key` reads straight off SampleTableData and
+export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData>[] = [
+	{
 		id: 'col-1',
-		title: 'Full Name',
+		key: 'name',
+		title: 'Name',
 		justify: 'start',
 		sort: 'name',
-	}),
-	column.accessor((row) => row.age, {
+		renderCell: ({ row }) => {
+			return (
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+					<Avatar image={row.pic} name={row.name} />
+					{row.name}
+				</div>
+			);
+		},
+	},
+	{
 		id: 'col-2',
+		key: 'age',
 		title: 'Age',
 		align: 'end',
 		justify: 'center',
 		nowrap: true,
 		sort: 'age',
 		renderCell: ({ value }) => <span>{value} yrs</span>,
-	}),
-	column.accessor((row) => row.pic, {
-		id: 'col-3',
-		title: 'Profile Photo',
-		justify: 'center',
-		renderCell: ({ row }) => <Avatar image={row.pic} name={row.name} />,
-	}),
-	column.accessor((row) => row.country, {
+	},
+	{
 		id: 'col-4',
+		key: 'country',
 		title: 'Country',
-		justify: 'start',
+		justify: 'center',
 		sort: 'country',
 		renderCell: ({ value }) => <span>{value || 'Unknown'}</span>,
-	}),
-	column.accessor((row) => row.compensation, {
+	},
+	{
 		id: 'col-5',
+		key: 'compensation',
 		title: 'Salary',
 		justify: 'end',
 		sort: 'compensation',
 		renderCell: ({ value }) => <span>${value.toLocaleString()}</span>,
-	}),
-	column.accessor((row) => row.started, {
+	},
+	{
 		id: 'col-6',
+		key: 'started',
 		title: 'Start Date',
 		justify: 'end',
 		sort: 'started',
 		renderCell: ({ value }) => <span>{value.toLocaleDateString()}</span>,
-	}),
+	},
 ];

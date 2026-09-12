@@ -13,18 +13,19 @@
 	border: var(--table-border-width) solid var(--table-border-color);
 	border-left-width: var(--table-border-sides);
 	border-right-width: var(--table-border-sides);
+	border-radius: var(--table-border-radius);
 }
 
 .resizeBar {
 	position: absolute;
-	top: 0;
-	bottom: 0;
+	box-sizing: border-box;
+	display: flex;
+	height: 100%;
 	left: -500px;
 	width: 3px;
 	min-width: 2px;
 	max-width: 2px;
 	background: var(--table-handle-hover-color);
-	cursor: col-resize;
 	z-index: 20;
 	pointer-events: none;
 }
@@ -113,6 +114,7 @@
 .baseCellWrapper,
 .headerCellWrapper {
 	box-sizing: border-box;
+	display: flex;
 	position: relative;
 	height: 100%;
 	width: 100%;
@@ -127,6 +129,38 @@
 	background-color: rgba(255, 255, 255, 0);
 	cursor: col-resize;
 	z-index: 10;
+}
+
+.header {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	gap: 8px;
+}
+
+.headerRight,
+.headerLeft {
+	box-sizing: border-box;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 16px;
+	max-width: 16px;
+	overflow: hidden;
+}
+
+.headerTitle {
+	box-sizing: border-box;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+	font-weight: 540;
 }
 
 .xs {
