@@ -1,5 +1,6 @@
 export { copyToClipboard, hexToRgb } from './functions/misc';
 export { debounce } from './functions/debounce';
+export { rafThrottle } from './functions/rafThrottle';
 export * from './functions/colors';
 export {
 	AudioVisualizer,

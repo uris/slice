@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type React from 'react';
+import { useState } from 'react';
 import { FlexDiv } from 'src/components/FlexDiv';
 import { fn } from 'storybook/test';
 import { DataTable } from './DataTable';
-import { moreSampleData, sampleTableColumnDefinitions, sampleTableData } from './_data';
+import { manyRows, sampleTableColumnDefinitions, sampleTableData } from './_data';
 import type { SampleTableData } from './_data';
 import { type DataTableViewState, applyDataTableViewState } from './viewState';
 
@@ -92,4 +94,50 @@ export const WithPersistedViewState: StoryObj<typeof TypedDataTable> = {
 			</FlexDiv>
 		);
 	},
+};
+
+// note: open devtools > Elements panel while scrolling Virtualized10kRows to
+// see the mounted <tr> count stay flat regardless of total row count.
+type BigDatasetArgs = Omit<React.ComponentProps<typeof TypedDataTable>, 'tableData'>;
+
+function VirtualizedDemo(props: Readonly<{ args: BigDatasetArgs; rowCount: number; caption: string }>) {
+	const { args, rowCount, caption } = props;
+	const [tableData] = useState(() => manyRows(rowCount));
+	return (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={8}>
+			<code style={{ padding: '4px 8px', borderRadius: 4, fontSize: 14 }}>{caption}</code>
+			<TypedDataTable {...args} tableData={tableData} />
+		</FlexDiv>
+	);
+}
+
+// `virtualizeRows` is deliberately absent from args here - it's left unset,
+// so DataTable decides for itself. 500 rows is past the default
+// virtualizeRowThreshold (200), so it auto-enables with no prop needed;
+export const AutoVirtualized1KRows: StoryObj<typeof TypedDataTable> = {
+	args: {
+		height: 600,
+		sort: undefined,
+	},
+	render: (args) => (
+		<VirtualizedDemo args={args} rowCount={1000} caption={'1K rows, virtualizeRows auto-enabled - No Slugishness'} />
+	),
+};
+
+// Same row count than the story above: this one mounts
+// every row as a real <tr> at once (that's the point of the comparison), and
+// a full unvirtualized 500 rows feels much more slugich that the auto virutalizaed
+export const Unvirtualized1kRows: StoryObj<typeof TypedDataTable> = {
+	args: {
+		height: 600,
+		virtualizeRows: false,
+		sort: undefined,
+	},
+	render: (args) => (
+		<VirtualizedDemo
+			args={args}
+			rowCount={1000}
+			caption={'1K rows, virtualizeRows set as off - every row mounts at once. Sluggishness should be noticeable'}
+		/>
+	),
 };
