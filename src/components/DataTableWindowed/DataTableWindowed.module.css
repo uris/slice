@@ -1,0 +1,184 @@
+.tableWrapper {
+	position: relative;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	width: var(--table-width);
+	height: var(--table-height);
+	overflow-x: auto;
+	overflow-y: auto;
+	padding: 0;
+	margin: 0;
+	border: var(--table-border-width) solid var(--table-border-color);
+	border-left-width: var(--table-border-sides);
+	border-right-width: var(--table-border-sides);
+	border-radius: var(--table-border-radius);
+}
+
+.resizeBar {
+	position: absolute;
+	box-sizing: border-box;
+	display: flex;
+	height: 100%;
+	left: -500px;
+	width: 3px;
+	min-width: 2px;
+	max-width: 2px;
+	background: var(--table-handle-hover-color);
+	z-index: 20;
+	pointer-events: none;
+}
+
+.table {
+	table-layout: fixed; /* stop auto-recalculating from content */
+	flex-shrink: 0; /* stop flexbox squeezing the table */
+	box-sizing: border-box;
+	border-collapse: collapse;
+	min-width: 100%;
+	padding: 0;
+	margin: 0;
+	color: var(--core-text-primary);
+}
+
+/* hide caption - in code for accessibility */
+.table caption {
+	display: none;
+}
+
+/* each table header cell is sticky by default */
+.table thead tr th {
+	position: var(--table-header-sticky-position);
+	top: 0;
+	z-index: 1;
+	border-right: var(--table-border-width) solid var(--table-border-color);
+	border-right-width: var(--table-border-sides);
+	border-bottom: var(--table-border-width) solid var(--table-border-color);
+	box-shadow: var(--table-header-box-shadow);
+	background: var(--table-header-background-color);
+}
+
+/* last th of the header row, remove the right border */
+.table thead tr th:last-child {
+	border-right: 0;
+}
+
+/* border bot and right to all body cells */
+.table tbody tr td {
+	border-right: var(--table-border-width) solid var(--table-border-color);
+	border-right-width: var(--table-border-sides);
+	border-bottom: var(--table-border-width) solid var(--table-border-color);
+}
+
+/* candy stripe all even body rows */
+.table tbody tr:nth-child(even) td {
+	background-color: var(--table-candy-stripe-background-color);
+}
+
+/* remove right border from last cell of each body row */
+.table tbody tr td:last-child {
+	border-right: 0;
+}
+
+/* remove the bottom border from every td in the last tr of the body */
+.table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+/* style first cell in each row of the body */
+.table tbody tr td:nth-child(1) {
+	position: var(--table-freeze-column-position);
+	left: 0;
+	z-index: 2;
+	box-shadow: var(--table-column-box-shadow);
+}
+
+/* style first cell in the header row */
+.table thead tr th:nth-child(1) {
+	position: var(--table-corner-position);
+	left: var(--table-corner-left);
+	top: 0;
+	z-index: 3;
+	box-shadow: var(--table-corner-box-shadow);
+}
+
+.baseCell {
+	box-sizing: border-box;
+	position: relative;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background-color: var(--table-background-color);
+}
+
+.baseCellWrapper,
+.headerCellWrapper {
+	box-sizing: border-box;
+	display: flex;
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+.colResizeHandle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 5px;
+	background-color: rgba(255, 255, 255, 0);
+	cursor: col-resize;
+	z-index: 10;
+}
+
+.header {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	gap: 8px;
+}
+
+.headerRight,
+.headerLeft {
+	box-sizing: border-box;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 16px;
+	max-width: 16px;
+	overflow: hidden;
+}
+
+.headerTitle {
+	box-sizing: border-box;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+	font-weight: 540;
+}
+
+.xs {
+	composes: body-xs-regular from "../../utils/styling/type.module.css";
+}
+
+.m {
+	composes: body-m-regular from "../../utils/styling/type.module.css";
+}
+
+.l {
+	composes: body-l-regular from "../../utils/styling/type.module.css";
+}
+
+.s {
+	composes: body-s-regular from "../../utils/styling/type.module.css";
+}
+
+.scroll {
+	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
+}
