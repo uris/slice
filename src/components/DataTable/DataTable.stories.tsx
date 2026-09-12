@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv';
 import { fn } from 'storybook/test';
 import { DataTable } from './DataTable';
-import { sampleTableColumnDefinitions, sampleTableData } from './_data';
+import { moreSampleData, sampleTableColumnDefinitions, sampleTableData } from './_data';
 import type { SampleTableData } from './_data';
 import { type DataTableViewState, applyDataTableViewState } from './viewState';
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Avatar } from '../Avatar';
 import type { ColumnDefinition } from './_types';
-import { createColumnHelper } from './columnHelper';
 
 // 1. define your data model for the table
 export type SampleTableData = {
@@ -41,13 +40,21 @@ export const sampleTableData: SampleTableData[] = [
 	},
 ];
 
-// 3.  Create a column accessor based on your data model
-const column = createColumnHelper<SampleTableData>();
+export const moreSampleData = (): SampleTableData[] => {
+	let runs = 0;
+	const data: SampleTableData[] = [];
+	while (runs < 100) {
+		data.push(...sampleTableData);
+		runs++;
+	}
+	return data;
+};
 
-// 4. define your column definitions using the accessor
-export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData, any>[] = [
-	column.accessor((row) => row.name, {
+// 3. define your columns - `key` reads straight off SampleTableData and
+export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData>[] = [
+	{
 		id: 'col-1',
+		key: 'name',
 		title: 'Name',
 		justify: 'start',
 		sort: 'name',
@@ -59,35 +66,39 @@ export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData, any
 				</div>
 			);
 		},
-	}),
-	column.accessor((row) => row.age, {
+	},
+	{
 		id: 'col-2',
+		key: 'age',
 		title: 'Age',
 		align: 'end',
 		justify: 'center',
 		nowrap: true,
 		sort: 'age',
 		renderCell: ({ value }) => <span>{value} yrs</span>,
-	}),
-	column.accessor((row) => row.country, {
+	},
+	{
 		id: 'col-4',
+		key: 'country',
 		title: 'Country',
 		justify: 'center',
 		sort: 'country',
 		renderCell: ({ value }) => <span>{value || 'Unknown'}</span>,
-	}),
-	column.accessor((row) => row.compensation, {
+	},
+	{
 		id: 'col-5',
+		key: 'compensation',
 		title: 'Salary',
 		justify: 'end',
 		sort: 'compensation',
 		renderCell: ({ value }) => <span>${value.toLocaleString()}</span>,
-	}),
-	column.accessor((row) => row.started, {
+	},
+	{
 		id: 'col-6',
+		key: 'started',
 		title: 'Start Date',
 		justify: 'end',
 		sort: 'started',
 		renderCell: ({ value }) => <span>{value.toLocaleDateString()}</span>,
-	}),
+	},
 ];

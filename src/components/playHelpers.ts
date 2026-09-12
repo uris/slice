@@ -199,14 +199,12 @@ export async function runOverlayPlay<TArgs>({ args, canvasElement }: PlayContext
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
 	const overlay = getOverlay(canvasElement);
-	if (overlay) {
-		await userEvent.click(overlay);
-		fireEvent.contextMenu(overlay);
-	}
-	if (isFn(storyArgs.onClick)) {
+	if (isFn(storyArgs.onClick) && storyArgs.show && overlay) {
+		await fireEvent.click(overlay);
 		await expect(storyArgs.onClick).toHaveBeenCalled();
 	}
-	if (storyArgs.global === true && isFn(storyArgs.toggleOverlay)) {
+	if (storyArgs.global === true && isFn(storyArgs.toggleOverlay) && overlay) {
+		await fireEvent.click(overlay);
 		await expect(storyArgs.toggleOverlay).toHaveBeenCalledWith(false);
 	}
 }

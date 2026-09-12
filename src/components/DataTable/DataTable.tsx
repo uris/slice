@@ -1,11 +1,12 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import styles from './DataTable.module.css';
-import type { ColumnDefinition, DataTableProps, SortKey } from './_types';
-import { useDragColumn } from './_useDragColumn';
-import type { DragColumnElement } from './_useDragColumn';
-import { resolveAlignValue, resolveDragHandleXPos } from './columnHelper';
+import type { CellContext, ColumnDefinition, DataTableProps, HeaderContext, SortKey } from './_types';
+import { useReorderColumns } from './_useReorderColumns';
+import { useResizeColumn } from './_useResizeColumn';
+import { resolveAlignValue, resolveColumnValue } from './columnHelper';
 
 export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 	const {
@@ -33,30 +34,20 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		sort,
 		onSortChange,
 		onColumnResize,
-		borderRadius= 8,
+		onColumnReorder,
+		borderRadius = 8,
 	} = props;
 	const [hScroll, setHScroll] = useState<boolean>(false);
 	const [vScroll, setVScroll] = useState<boolean>(false);
 	const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 	const [sortKey, setSortKey] = useState<SortKey<T>>(sort);
-	const [draggingCol, setDraggingCol] = useState<DragColumnElement | null>(null);
 	const [columnWidths, setColumnWidths] = useState<Record<string, number | string>>({});
+	const [columnOrder, setColumnOrder] = useState<string[] | null>(null);
+	const [draggedColId, setDraggedColId] = useState<string | null>(null);
 	const wrapperRef = React.useRef<HTMLDivElement>(null);
 	const resizeBarRef = React.useRef<HTMLDivElement>(null);
 	const colRefs = React.useRef<Record<string, HTMLTableColElement | null>>({});
-
-	// handler for when resize ends
-	const handleResizeEnd = useCallback(
-		(id: string, width: number) => {
-			setColumnWidths((prev) => ({ ...prev, [id]: width }));
-			setDraggingCol(null); /* clean up listeners */
-			onColumnResize?.(id, width);
-		},
-		[onColumnResize],
-	);
-
-	// dragging logic
-	useDragColumn(draggingCol, handleResizeEnd);
+	const elements = { handle: resizeBarRef, parent: wrapperRef };
 
 	// resolve corner shadow
 	const cornerBoxShadow = useMemo(() => {
@@ -110,7 +101,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 			'--table-border-width': borderStyle === 'none' ? '0' : '1px',
 			'--table-border-sides': borderStyle === 'box' ? '1px' : '0',
 			'--table-handle-hover-color': handleHoverColor,
-			'--table-border-radius': borderStyle==="box" ? setStyle(borderRadius) : 0,
+			'--table-border-radius': borderStyle === 'box' ? setStyle(borderRadius) : 0,
 		} as React.CSSProperties;
 	}, [
 		backgroundColor,
@@ -126,8 +117,35 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		borderColor,
 		borderStyle,
 		handleHoverColor,
-		borderRadius
+		borderRadius,
 	]);
+
+	// handler create col refs for each col in the colgroup
+	const handleCreateRefs = useCallback((el: HTMLTableColElement | null, id: string) => {
+		colRefs.current[id] = el;
+	}, []);
+
+	// live drag-and-drop column order, falling back to columnDefinitions natural order.
+	const orderedColumns = useMemo(() => {
+		if (!columnOrder) return columnDefinitions;
+		const byId = new Map(columnDefinitions.map((column) => [column.id, column]));
+		const ordered = columnOrder.map((id) => byId.get(id)).filter((column): column is ColumnDefinition<T> => !!column);
+		const seen = new Set(columnOrder);
+		const appended = columnDefinitions.filter((column) => !seen.has(column.id));
+		return [...ordered, ...appended];
+	}, [columnDefinitions, columnOrder]);
+
+	// resize column logic and handlers
+	const { dragResize, hoverResize } = useResizeColumn(elements, colResize, setColumnWidths, onColumnResize);
+
+	// reorder column logic and handlers
+	const { dragStart, dragOver, dragDrop } = useReorderColumns<T>(
+		columnDefinitions,
+		setColumnOrder,
+		setDraggedColId,
+		onColumnReorder,
+		freezeColumn,
+	);
 
 	// scrolling state is used to set drop shadow and border styles for sticky cells
 	const handleScroll = useCallback(() => {
@@ -203,7 +221,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		[sortKey, onSortChange],
 	);
 
-	// resolve area sort
+	// resolve Aria sort
 	const resolveAriaSort = useCallback(
 		(column: ColumnDefinition<T>) => {
 			const sortable = column.sort !== undefined;
@@ -215,36 +233,6 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		[sortKey],
 	);
 
-	// trigger drag start
-	const handleStartDrag = useCallback(
-		(id: string, e: React.MouseEvent<HTMLDivElement>) => {
-			if (!colResize) return;
-			const cell = e.currentTarget.parentElement as HTMLElement | null;
-			const col = colRefs.current[id];
-			const handle = resizeBarRef.current;
-			const parent = wrapperRef.current;
-			if (cell && col && parent) setDraggingCol({ id, cell, col, handle, parent });
-		},
-		[colResize],
-	);
-
-	const handleHoverDragHandle = useCallback(
-		(show: boolean, e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
-			if (!colResize || draggingCol) return;
-			const cell = e.currentTarget.parentElement as HTMLElement | null;
-			const handle = resizeBarRef.current;
-			const parent = wrapperRef.current;
-			if (!show && handle) handle.style.left = '-500px';
-			else resolveDragHandleXPos({ cell, handle, parent });
-		},
-		[draggingCol, colResize],
-	);
-
-	// handler create col refs for each col in the colgroup
-	const handleCreateRefs = useCallback((el: HTMLTableColElement | null, id: string) => {
-		colRefs.current[id] = el;
-	}, []);
-
 	// render resize handle to trigger resizing if this is active
 	const renderCellResizeHandle = useCallback(
 		(last: boolean, col: ColumnDefinition<T>) => {
@@ -252,27 +240,33 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 			return (
 				<div
 					className={styles.colResizeHandle}
-					onMouseDown={(e) => handleStartDrag(col.id, e)}
-					onMouseOver={(e) => handleHoverDragHandle(true, e)}
-					onFocus={(e) => handleHoverDragHandle(true, e)}
-					onMouseOut={(e) => handleHoverDragHandle(false, e)}
-					onBlur={(e) => handleHoverDragHandle(false, e)}
+					onMouseDown={(e) => dragResize(col.id, e, colRefs)}
+					onMouseOver={(e) => hoverResize(true, e)}
+					onFocus={(e) => hoverResize(true, e)}
+					onMouseOut={(e) => hoverResize(false, e)}
+					onBlur={(e) => hoverResize(false, e)}
 				/>
 			);
 		},
-		[colResize, handleStartDrag, handleHoverDragHandle],
+		[colResize, dragResize, hoverResize],
 	);
 
-	// render header with custom renderer or default renderer
+	// render header
 	const renderHeader = useCallback((col: ColumnDefinition<T, unknown>, sortKey: SortKey<T>) => {
-		if (col.renderHeader) return col.renderHeader({ column: col, sortKey });
+		if (col.renderHeader) {
+			const renderFn = col.renderHeader as (ctx: HeaderContext<T, unknown>) => ReactNode;
+			return renderFn({ column: col, sortKey });
+		}
 		return <DefaultHeaderRenderer<T> col={col} sortKey={sortKey} />;
 	}, []);
 
-	// render body cells
+	// render body cells. Same reasoning as renderHeader above for the cast.
 	const renderBodyCell = useCallback((col: ColumnDefinition<T>, row: T, rowIndex: number) => {
-		const value = col.accessor(row);
-		if (col.renderCell) return col.renderCell({ row, value, rowIndex });
+		const value = resolveColumnValue(col, row);
+		if (col.renderCell) {
+			const renderFn = col.renderCell as (ctx: CellContext<T, unknown>) => ReactNode;
+			return renderFn({ row, value, rowIndex });
+		}
 		return <DefaultCellRenderer<T> value={value} />;
 	}, []);
 
@@ -289,7 +283,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 			<table className={styles.table}>
 				<caption>{caption}</caption>
 				<colgroup>
-					{columnDefinitions.map((column: ColumnDefinition<T>) => {
+					{orderedColumns.map((column: ColumnDefinition<T>) => {
 						return (
 							<col
 								key={column.id}
@@ -301,11 +295,12 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 				</colgroup>
 				<thead>
 					<tr>
-						{columnDefinitions.map((col: ColumnDefinition<T>, colIndex: number) => {
+						{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
 							const padding = setStyle(col.padding, 16);
 							const sortable = col.sort !== undefined;
 							const cursor = sortable ? 'pointer' : 'default';
-							const last = colIndex === columnDefinitions.length - 1;
+							const last = colIndex === orderedColumns.length - 1;
+							const opacity = draggedColId === col.id ? 0.2 : 1;
 							return (
 								<th
 									key={col.id}
@@ -313,10 +308,20 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 									className={`${styles.baseCell} ${styles.headerCell} ${styles.m}`}
 									onClick={() => handleSort(col.sort)}
 									onKeyDown={(e) => accessibleKeyDown(e, () => handleSort(col.sort))}
-									style={{ cursor }}
+									style={{ cursor, opacity }}
 									tabIndex={sortable ? 0 : undefined}
 									role={sortable ? 'columnheader' : undefined}
 									aria-sort={resolveAriaSort(col)}
+									draggable={!(freezeColumn && colIndex === 0)}
+									onDragStart={(e) => dragStart(col, e)}
+									onDragOver={(e) => dragOver(col, colIndex, e)}
+									onDrop={(e) => dragDrop(e)}
+									/* dragend always fires, drop doesn't (e.g. released outside the browser
+									 * window, or the drag was cancelled) - route both through dragDrop so the
+									 * ghosted column and the global listeners always get cleaned up. Safe to
+									 * fire after a real onDrop already ran: dragDrop is idempotent once its
+									 * refs are cleared. */
+									onDragEnd={(e) => dragDrop(e, true)}
 								>
 									{renderCellResizeHandle(last, col)}
 									<div className={styles.headerCellWrapper} style={{ padding }}>
@@ -331,13 +336,14 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 					{rows.map((row, rowIndex: number) => {
 						return (
 							<tr key={getRowId ? getRowId(row, rowIndex) : rowIndex}>
-								{columnDefinitions.map((col: ColumnDefinition<T>, colIndex: number) => {
+								{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
 									const justifyContent = resolveAlignValue(col.justify);
 									const alignItems = resolveAlignValue(col.align);
 									const padding = setStyle(col.padding, 16);
 									const whiteSpace = col.nowrap ? 'nowrap' : '';
 									const background = resolveCellBG(rowIndex);
-									const last = colIndex === columnDefinitions.length - 1;
+									const last = colIndex === orderedColumns.length - 1;
+									const opacity = draggedColId === col.id ? 0.2 : 1;
 									return (
 										<td
 											key={col.id}
@@ -350,7 +356,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 											onFocus={() => handleCellHover(col, colIndex, row, rowIndex, true)}
 											onMouseOut={() => handleCellHover(col, colIndex, row, rowIndex, false)}
 											onBlur={() => handleCellHover(col, colIndex, row, rowIndex, false)}
-											style={{ background }}
+											style={{ background, opacity }}
 										>
 											{renderCellResizeHandle(last, col)}
 											<div
