@@ -3,9 +3,11 @@ import type { ReactNode } from 'react';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import styles from './DataTable.module.css';
+import { resolveVirtualizeRows } from './_resolveVirtualizeRows';
 import type { CellContext, ColumnDefinition, DataTableProps, HeaderContext, SortKey } from './_types';
 import { useReorderColumns } from './_useReorderColumns';
 import { useResizeColumn } from './_useResizeColumn';
+import { useRowWindow } from './_useRowWindow';
 import { resolveAlignValue, resolveColumnValue } from './columnHelper';
 
 export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
@@ -36,6 +38,10 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		onColumnResize,
 		onColumnReorder,
 		borderRadius = 8,
+		virtualizeRows,
+		virtualizeRowThreshold = 200,
+		rowHeight = 44,
+		overscanRows,
 	} = props;
 	const [hScroll, setHScroll] = useState<boolean>(false);
 	const [vScroll, setVScroll] = useState<boolean>(false);
@@ -147,14 +153,6 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		freezeColumn,
 	);
 
-	// scrolling state is used to set drop shadow and border styles for sticky cells
-	const handleScroll = useCallback(() => {
-		const hScrollAmount = wrapperRef.current?.scrollLeft ?? 0;
-		const vScrollAmount = wrapperRef.current?.scrollTop ?? 0;
-		setHScroll(hScrollAmount > 0);
-		setVScroll(vScrollAmount > 0);
-	}, []);
-
 	// memo data based on any active filters and sorts
 	const rows = useMemo(() => {
 		const sortFunction = (a: T, b: T) => {
@@ -167,6 +165,45 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		const filtered = filter ? tableData.filter((row, index, array) => filter(row, index, array)) : tableData;
 		return [...filtered].sort(sortFunction);
 	}, [tableData, filter, sortKey]);
+
+	// virtualizeRows left unset auto-enables once rows.length passes virtualizeRowThreshold - an
+	// explicit true/false always overrides that regardless of row count
+	const shouldVirtualize = resolveVirtualizeRows(virtualizeRows, rows.length, virtualizeRowThreshold);
+
+	// compute which rows should actually mount, given shouldVirtualize/rowHeight/overscanRows
+	const rowWindow = useRowWindow(wrapperRef, rows.length, {
+		enabled: shouldVirtualize,
+		rowHeight,
+		overscan: overscanRows,
+	});
+
+	// dev-time guardrails - both are silent no-ops in production builds
+	useEffect(() => {
+		if (process.env.NODE_ENV === 'production') return;
+		if (shouldVirtualize && height === 'auto') {
+			console.warn(
+				'[DataTable] `virtualizeRows` needs a bounded `height` (e.g. a fixed px or vh value) to create a ' +
+					'scrollable viewport smaller than the full row count - with height="auto" the wrapper grows to fit every row ' +
+					"and there's nothing to trim.",
+			);
+		}
+		if (shouldVirtualize && !getRowId) {
+			console.warn(
+				'[DataTable] `virtualizeRows` is on without `getRowId`. Rows fall back to index-based keys, which ' +
+					'can misattach hover/focus state to the wrong row as the window scrolls - pass `getRowId` for stable identity.',
+			);
+		}
+	}, [shouldVirtualize, height, getRowId]);
+
+	// scrolling state is used to set drop shadow and border styles for sticky cells, and (when
+	// virtualizeRows is on) to recompute which rows should be mounted
+	const handleScroll = useCallback(() => {
+		const hScrollAmount = wrapperRef.current?.scrollLeft ?? 0;
+		const vScrollAmount = wrapperRef.current?.scrollTop ?? 0;
+		setHScroll(hScrollAmount > 0);
+		setVScroll(vScrollAmount > 0);
+		rowWindow.handleScroll(vScrollAmount);
+	}, [rowWindow.handleScroll]);
 
 	// set and emit hover states
 	const handleCellHover = useCallback(
@@ -280,7 +317,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 
 	return (
 		<div ref={wrapperRef} className={`${styles.tableWrapper} ${styles.scroll}`} style={cssVars} onScroll={handleScroll}>
-			<table className={styles.table}>
+			<table className={styles.table} aria-rowcount={rowWindow.enabled ? rows.length + 1 : undefined}>
 				<caption>{caption}</caption>
 				<colgroup>
 					{orderedColumns.map((column: ColumnDefinition<T>) => {
@@ -300,7 +337,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 							const sortable = col.sort !== undefined;
 							const cursor = sortable ? 'pointer' : 'default';
 							const last = colIndex === orderedColumns.length - 1;
-							const opacity = draggedColId === col.id ? 0.2 : 1;
+							const background = draggedColId === col.id ? backgroundColor : headerBackgroundColor;
 							return (
 								<th
 									key={col.id}
@@ -308,7 +345,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 									className={`${styles.baseCell} ${styles.headerCell} ${styles.m}`}
 									onClick={() => handleSort(col.sort)}
 									onKeyDown={(e) => accessibleKeyDown(e, () => handleSort(col.sort))}
-									style={{ cursor, opacity }}
+									style={{ cursor, background }}
 									tabIndex={sortable ? 0 : undefined}
 									role={sortable ? 'columnheader' : undefined}
 									aria-sort={resolveAriaSort(col)}
@@ -316,11 +353,6 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 									onDragStart={(e) => dragStart(col, e)}
 									onDragOver={(e) => dragOver(col, colIndex, e)}
 									onDrop={(e) => dragDrop(e)}
-									/* dragend always fires, drop doesn't (e.g. released outside the browser
-									 * window, or the drag was cancelled) - route both through dragDrop so the
-									 * ghosted column and the global listeners always get cleaned up. Safe to
-									 * fire after a real onDrop already ran: dragDrop is idempotent once its
-									 * refs are cleared. */
 									onDragEnd={(e) => dragDrop(e, true)}
 								>
 									{renderCellResizeHandle(last, col)}
@@ -333,44 +365,72 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 					</tr>
 				</thead>
 				<tbody>
-					{rows.map((row, rowIndex: number) => {
-						return (
-							<tr key={getRowId ? getRowId(row, rowIndex) : rowIndex}>
-								{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
-									const justifyContent = resolveAlignValue(col.justify);
-									const alignItems = resolveAlignValue(col.align);
-									const padding = setStyle(col.padding, 16);
-									const whiteSpace = col.nowrap ? 'nowrap' : '';
-									const background = resolveCellBG(rowIndex);
-									const last = colIndex === orderedColumns.length - 1;
-									const opacity = draggedColId === col.id ? 0.2 : 1;
-									return (
-										<td
-											key={col.id}
-											data-column-id={`${colIndex}.${rowIndex}`}
-											className={`${styles.baseCell} ${styles.m}`}
-											onClick={() => handleClick(col, colIndex, row, rowIndex, false)}
-											onDoubleClick={() => handleClick(col, colIndex, row, rowIndex, true)}
-											onKeyDown={(e) => accessibleKeyDown(e, () => handleClick(col, colIndex, row, rowIndex, false))}
-											onMouseOver={() => handleCellHover(col, colIndex, row, rowIndex, true)}
-											onFocus={() => handleCellHover(col, colIndex, row, rowIndex, true)}
-											onMouseOut={() => handleCellHover(col, colIndex, row, rowIndex, false)}
-											onBlur={() => handleCellHover(col, colIndex, row, rowIndex, false)}
-											style={{ background, opacity }}
-										>
-											{renderCellResizeHandle(last, col)}
-											<div
-												className={styles.baseCellWrapper}
-												style={{ justifyContent, alignItems, padding, whiteSpace }}
+					{rowWindow.enabled && rowWindow.topSpacerHeight > 0 && (
+						<tr>
+							<td
+								colSpan={orderedColumns.length}
+								style={{ height: rowWindow.topSpacerHeight, padding: 0, border: 0, background: backgroundColor }}
+							/>
+						</tr>
+					)}
+					{(rowWindow.enabled ? rows.slice(rowWindow.startIndex, rowWindow.endIndex) : rows).map(
+						(row, localIndex: number) => {
+							const rowIndex = rowWindow.enabled ? rowWindow.startIndex + localIndex : localIndex;
+							const isLastRow = rowIndex === rows.length - 1;
+							return (
+								<tr
+									key={getRowId ? getRowId(row, rowIndex) : rowIndex}
+									aria-rowindex={rowWindow.enabled ? rowIndex + 2 : undefined}
+								>
+									{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
+										const justifyContent = resolveAlignValue(col.justify);
+										const alignItems = resolveAlignValue(col.align);
+										const padding = setStyle(col.padding, 16);
+										const whiteSpace = col.nowrap ? 'nowrap' : '';
+										const background = resolveCellBG(rowIndex);
+										const last = colIndex === orderedColumns.length - 1;
+										const opacity = draggedColId === col.id ? 0.2 : 1;
+										// once a bottom spacer row exists, the true last row is no longer the DOM's
+										// `:last-child`, so the CSS rule dropping its bottom border no longer matches it -
+										// reproduce that explicitly here instead
+										const borderBottom =
+											rowWindow.enabled && isLastRow && rowWindow.bottomSpacerHeight > 0 ? 0 : undefined;
+										return (
+											<td
+												key={col.id}
+												data-column-id={`${colIndex}.${rowIndex}`}
+												className={`${styles.baseCell} ${styles.m}`}
+												onClick={() => handleClick(col, colIndex, row, rowIndex, false)}
+												onDoubleClick={() => handleClick(col, colIndex, row, rowIndex, true)}
+												onKeyDown={(e) => accessibleKeyDown(e, () => handleClick(col, colIndex, row, rowIndex, false))}
+												onMouseOver={() => handleCellHover(col, colIndex, row, rowIndex, true)}
+												onFocus={() => handleCellHover(col, colIndex, row, rowIndex, true)}
+												onMouseOut={() => handleCellHover(col, colIndex, row, rowIndex, false)}
+												onBlur={() => handleCellHover(col, colIndex, row, rowIndex, false)}
+												style={{ background, opacity, borderBottom }}
 											>
-												{renderBodyCell(col, row, rowIndex)}
-											</div>
-										</td>
-									);
-								})}
-							</tr>
-						);
-					})}
+												{renderCellResizeHandle(last, col)}
+												<div
+													className={styles.baseCellWrapper}
+													style={{ justifyContent, alignItems, padding, whiteSpace }}
+												>
+													{renderBodyCell(col, row, rowIndex)}
+												</div>
+											</td>
+										);
+									})}
+								</tr>
+							);
+						},
+					)}
+					{rowWindow.enabled && rowWindow.bottomSpacerHeight > 0 && (
+						<tr>
+							<td
+								colSpan={orderedColumns.length}
+								style={{ height: rowWindow.bottomSpacerHeight, padding: 0, border: 0, background: backgroundColor }}
+							/>
+						</tr>
+					)}
 				</tbody>
 			</table>
 			<div className={styles.resizeBar} ref={resizeBarRef} />

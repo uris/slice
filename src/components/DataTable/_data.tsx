@@ -50,6 +50,22 @@ export const moreSampleData = (): SampleTableData[] => {
 	return data;
 };
 
+// generates `count` synthetic rows for exercising virtualizeRows at scale
+// distinct field values (rather than repeating the 3-row sample) so sorting
+// and filtering stay meaningful even at 10k+ rows
+const countries = ['Portugal', 'Spain', 'France', 'Germany', 'Italy', 'Ireland', '', 'Netherlands'];
+
+export const manyRows = (count: number): SampleTableData[] => {
+	return Array.from({ length: count }, (_, i) => ({
+		name: `Person ${i + 1}`,
+		age: 20 + (i % 45),
+		pic: '',
+		country: countries[i % countries.length],
+		compensation: 60000 + ((i * 137) % 140000),
+		started: new Date(2000, i % 12, (i % 28) + 1),
+	}));
+};
+
 // 3. define your columns - `key` reads straight off SampleTableData and
 export const sampleTableColumnDefinitions: ColumnDefinition<SampleTableData>[] = [
 	{

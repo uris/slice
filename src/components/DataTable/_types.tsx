@@ -85,6 +85,26 @@ export interface DataTableProps<T> {
 	onDoubleClick?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
 	onMouseOver?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
 	onMouseOut?: (col: ColumnDefinition<T>, colId: number, row: T, rowIndex: number) => void;
+	/* Row windowing: only mount the rows near the current scroll position (plus `overscanRows` on
+	 * each side) instead of every row in `tableData`, cutting DOM node count and per-scroll work at
+	 * large row counts. Needs a bounded `height` (not `'auto'`) - with `'auto'` the wrapper grows to
+	 * fit every row and there's no smaller viewport to window against.
+	 *
+	 * Left unset (the default), this is auto-decided from `tableData`'s size: datasets bigger than
+	 * `virtualizeRowThreshold` rows are windowed automatically, smaller ones aren't. Pass `true` or
+	 * `false` explicitly to override that auto-detection in either direction regardless of row count. */
+	virtualizeRows?: boolean;
+	/* Row count above which `virtualizeRows` auto-enables when left unset. Has no effect once
+	 * `virtualizeRows` is passed explicitly. Defaults to 200. */
+	virtualizeRowThreshold?: number;
+	/* Fixed px height every rendered row is expected to have. Only read when row windowing is
+	 * active. Must match (or closely approximate) each row's real rendered height - too small leaves
+	 * gaps, too large causes overlap. Defaults to 44. */
+	rowHeight?: number;
+	/* Extra rows kept mounted past each edge of the visible viewport, so fast scrolling and keyboard
+	 * paging don't flash blank space before new rows mount. Only read when row windowing is active.
+	 * Defaults to 6. */
+	overscanRows?: number;
 }
 
 export type SortKey<T> = { key?: keyof T; dir: 'asc' | 'desc' } | undefined;
