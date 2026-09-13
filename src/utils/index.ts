@@ -7,6 +7,7 @@ export {
 	BrowserChannel,
 	IndexedDB,
 	MdBuffer,
+	MessageType,
 	SSEConnection,
 	WebRTCConnection,
 	WSConnection,
@@ -14,6 +15,7 @@ export {
 export type {
 	AudioVisualizerOptions,
 	AudioVisualizerSource,
+	BrowserChannelMessage,
 	ChannelConfig,
 	IndexedDBOptions,
 	MarkdownAutoCloseRule,

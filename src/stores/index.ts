@@ -20,4 +20,4 @@ export {
 	getLastBrowserChannelMessage,
 	getMessage as getBrowserChannelMessage,
 } from './browserChannel';
-export type { BrowserChannelsStore } from './browserChannel';
+export type { BrowserChannelConfig, BrowserChannelsStore } from './browserChannel';

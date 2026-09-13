@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { BrowserChannel } from './broadcastChannel';
+import { BrowserChannel, MessageType } from './broadcastChannel';
 
 type Listener = (event: MessageEvent) => void;
 
@@ -87,6 +87,42 @@ describe('BrowserChannel', () => {
 		expect(channel.name).toBe('test-channel');
 	});
 
+	it('generates a unique origin per instance, always with a "." separator, even with no label', () => {
+		const first = new BrowserChannel({
+			name: 'test-channel',
+			onMessageCallback: vi.fn(),
+			onErrorCallback: vi.fn(),
+		});
+		const second = new BrowserChannel({
+			name: 'test-channel',
+			onMessageCallback: vi.fn(),
+			onErrorCallback: vi.fn(),
+		});
+
+		expect(first.origin).not.toBe(second.origin);
+		// no label given, so origin is just '.' + a generated UUID
+		expect(first.origin.startsWith('.')).toBe(true);
+
+		const [label, uuid] = first.origin.split('.');
+		expect(label).toBe('');
+		expect(uuid.length).toBeGreaterThan(0);
+	});
+
+	it('prefixes the generated origin with the optional origin label, still splittable on "."', () => {
+		const channel = new BrowserChannel({
+			name: 'test-channel',
+			origin: 'tab-1',
+			onMessageCallback: vi.fn(),
+			onErrorCallback: vi.fn(),
+		});
+
+		expect(channel.origin.startsWith('tab-1.')).toBe(true);
+
+		const [label, uuid] = channel.origin.split('.');
+		expect(label).toBe('tab-1');
+		expect(uuid.length).toBeGreaterThan(0);
+	});
+
 	it('routes incoming messages to onMessageCallback', () => {
 		const onMessageCallback = vi.fn();
 		new BrowserChannel<{ ok: boolean }>({
@@ -96,29 +132,58 @@ describe('BrowserChannel', () => {
 		});
 		const channel = latestChannel();
 
-		channel.dispatch('message', messageEvent({ ok: true }));
+		channel.dispatch('message', messageEvent({ content: { ok: true }, type: MessageType.Data, origin: 'other.uuid' }));
 
-		expect(onMessageCallback).toHaveBeenCalledWith({ ok: true });
+		expect(onMessageCallback).toHaveBeenCalledWith({
+			content: { ok: true },
+			type: MessageType.Data,
+			origin: 'other.uuid',
+		});
 	});
 
-	it('routes messageerror events to onErrorCallback', () => {
+	it('routes messageerror events to both onErrorCallback and onMessageCallback, as a type: Error message', () => {
 		const onErrorCallback = vi.fn();
-		new BrowserChannel({
+		const onMessageCallback = vi.fn();
+		const channel = new BrowserChannel({
 			name: 'test-channel',
-			onMessageCallback: vi.fn(),
+			origin: 'my-tab',
+			onMessageCallback,
 			onErrorCallback,
 		});
-		const channel = latestChannel();
-		const event = messageEvent(undefined);
+		const rawChannel = latestChannel();
+		const event = {
+			type: 'messageerror',
+			origin: 'https://example.com',
+			lastEventId: '42',
+			data: null,
+		} as MessageEvent;
 
-		channel.dispatch('messageerror', event);
+		rawChannel.dispatch('messageerror', event);
 
+		// the raw event still reaches the low-level onErrorCallback, unchanged
 		expect(onErrorCallback).toHaveBeenCalledWith(event);
+
+		// and it also flows through the unified onMessageCallback as a { type: Error } message
+		expect(onMessageCallback).toHaveBeenCalledTimes(1);
+		const [message] = onMessageCallback.mock.calls[0];
+		expect(message.type).toBe(MessageType.Error);
+		expect(message.origin).toBe(channel.origin);
+
+		// content is a JSON string carrying the event's own fields, since those
+		// live on the prototype and JSON.stringify(event) alone would drop them
+		expect(typeof message.content).toBe('string');
+		expect(JSON.parse(message.content)).toEqual({
+			type: 'messageerror',
+			origin: 'https://example.com',
+			lastEventId: '42',
+			data: null,
+		});
 	});
 
-	it('posts messages through the underlying channel', () => {
+	it("posts messages wrapped with this instance's origin and type: Data", () => {
 		const browserChannel = new BrowserChannel<{ a: number }>({
 			name: 'test-channel',
+			origin: 'sender',
 			onMessageCallback: vi.fn(),
 			onErrorCallback: vi.fn(),
 		});
@@ -126,7 +191,8 @@ describe('BrowserChannel', () => {
 
 		browserChannel.post({ a: 1 });
 
-		expect(channel.posted).toEqual([{ a: 1 }]);
+		expect(channel.posted).toEqual([{ content: { a: 1 }, type: MessageType.Data, origin: browserChannel.origin }]);
+		expect(browserChannel.origin.startsWith('sender.')).toBe(true);
 	});
 
 	it('closes the underlying channel and removes its listeners', () => {
@@ -142,7 +208,7 @@ describe('BrowserChannel', () => {
 
 		expect(channel.closed).toBe(true);
 
-		channel.dispatch('message', messageEvent({ ok: true }));
+		channel.dispatch('message', messageEvent({ content: { ok: true }, type: MessageType.Data, origin: 'x' }));
 		expect(onMessageCallback).not.toHaveBeenCalled();
 	});
 });

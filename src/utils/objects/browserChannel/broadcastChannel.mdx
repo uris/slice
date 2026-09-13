@@ -15,14 +15,16 @@ import NoteSection from '../../../../documentation/_components/Notice/Notice';
         # BrowserChannel Class
         Typed wrapper around the browser `BroadcastChannel` API. It supports:
         - a typed `post` method for sending messages to every other same-origin context on the channel
-        - a single `onMessageCallback` for incoming messages, already unwrapped from the raw `MessageEvent`
-        - a separate `onErrorCallback` for `messageerror` events (payloads that failed to deserialize)
+        - every instance getting a unique `origin` identifier, sent with every message so receivers can tell which instance a message came from
+        - a single `onMessageCallback` for every incoming message - both real `message` events and, since `messageerror` events are also forwarded to it as a synthesized `{ content, type: MessageType.Error, origin }` message, deserialization failures too - so a consumer who only wires one callback still sees everything
+        - a separate `onErrorCallback`, still called with the raw `MessageEvent` on `messageerror`, for callers who want the untouched event alongside the unified stream
         - `close()` to tear down the channel and remove its listeners in one call
 
         ## Import
         <RenderSource>
 ```
-import { BrowserChannel } from '@apple-pie/slice/utils/objects';
+import { BrowserChannel, MessageType } from '@apple-pie/slice/utils/objects';
+import type { BrowserChannelMessage, ChannelConfig } from '@apple-pie/slice/utils/objects';
 ```
 </RenderSource>
 
@@ -62,8 +64,59 @@ import { BrowserChannel } from '@apple-pie/slice/utils/objects';
           </thead>
           <tbody>
             <tr><td><code>name</code></td><td><code>string</code></td><td>Channel name. Only same-origin contexts that open a channel with the same name receive each other's messages.</td></tr>
-            <tr><td><code>onMessageCallback</code></td><td><code>{`(message: T) => void`}</code></td><td>Called with the unwrapped <code>data</code> of every incoming <code>message</code> event.</td></tr>
-            <tr><td><code>onErrorCallback</code></td><td><code>{`(event: MessageEvent) => void`}</code></td><td>Called on <code>messageerror</code>, when an incoming message could not be deserialized.</td></tr>
+            <tr><td><code>origin</code></td><td><code>string</code></td><td>Optional human-readable label for this instance's <code>origin</code> (see below). When omitted, <code>origin</code> is still joined with a leading dot before the generated UUID.</td></tr>
+            <tr><td><code>onMessageCallback</code></td><td><code>{`(message: BrowserChannelMessage<T>) => void`}</code></td><td>Called with the <code>{'{ content, type, origin }'}</code> envelope of every incoming <code>message</code> event (<code>type: MessageType.Data</code>), and also called with a synthesized <code>type: MessageType.Error</code> envelope whenever a <code>messageerror</code> occurs.</td></tr>
+            <tr><td><code>onErrorCallback</code></td><td><code>{`(event: MessageEvent) => void`}</code></td><td>Called on <code>messageerror</code> with the raw event, when an incoming message could not be deserialized. Fires alongside <code>onMessageCallback</code>'s synthesized error message, not instead of it.</td></tr>
+          </tbody>
+        </table>
+
+        ## Messages: data and errors
+        Every message delivered to `onMessageCallback` - whether it came from a real `message` event or was synthesized from a `messageerror` event - shares one envelope shape:
+        <RenderSource>
+```
+type BrowserChannelMessage<T> = {
+	content: T | string;
+	type: MessageType; // MessageType.Data | MessageType.Error
+	origin: string;
+};
+```
+</RenderSource>
+
+        For a `MessageType.Data` message, `content` is `T` - whatever payload was passed to `post()`. For a `MessageType.Error` message, `content` is a JSON string: since a `MessageEvent`'s properties (`type`, `origin`, `lastEventId`, `data`) are getters on the prototype rather than own-enumerable fields, `BrowserChannel` reads them explicitly and serializes the result, so `JSON.parse(message.content)` gives you something to actually diagnose rather than `"{}"`.
+
+        Check `message.type` to tell the two apart:
+        <RenderSource>
+```
+onMessageCallback: (message) => {
+	if (message.type === MessageType.Error) {
+		console.error('deserialization failed:', JSON.parse(message.content as string));
+		return;
+	}
+	console.log(message.content); // typed as T here
+},
+```
+</RenderSource>
+
+        ## Origin
+        Every `BrowserChannel` instance gets a unique `origin` identifier, generated when it's constructed and exposed as `channel.origin`. `post()` attaches it to every outgoing message, so a receiver's `onMessageCallback` can tell which instance sent a given message - useful once more than one sender shares a channel name, since `BroadcastChannel` alone gives you no way to distinguish them.
+
+        `origin` is always unique per instance, even between two instances created with the same `name` or the same `origin` label. It always has the shape `<label>.<uuid>` - the label is joined with a generated UUID by a dot, which is present even when no label is given - so `origin.split('.')` reliably gives you `[label, uuid]` in every case:
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '30%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Config</th>
+              <th className={'left'}>Resulting <code>channel.origin</code></th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>{`{ name: 'chat' }`}</code></td><td><code>'.a1b2c3d4-...'</code></td><td>No <code>origin</code> label given - the dot is still there, so <code>split('.')</code> yields <code>['', uuid]</code>.</td></tr>
+            <tr><td><code>{`{ name: 'chat', origin: 'tab-1' }`}</code></td><td><code>'tab-1.a1b2c3d4-...'</code></td><td>The label is joined with a generated UUID, separated by a dot, giving <code>['tab-1', uuid]</code>.</td></tr>
           </tbody>
         </table>
 
@@ -77,15 +130,22 @@ type ChatMessage = {
 
 const channel = new BrowserChannel<ChatMessage>({
 	name: 'chat',
+	origin: 'tab-1',
 	onMessageCallback: (message) => {
-		console.log(message.text);
+		// message: { content: ChatMessage | string, type: MessageType, origin: string }
+		if (message.type === MessageType.Error) {
+			console.error('failed to deserialize message', JSON.parse(message.content as string));
+			return;
+		}
+		console.log(message.content.text, 'from', message.origin);
 	},
 	onErrorCallback: (event) => {
-		console.error('failed to deserialize message', event);
+		console.error('raw messageerror event', event);
 	},
 });
 
-// sent to every other same-origin tab/window/worker listening on 'chat'
+// sent to every other same-origin tab/window/worker listening on 'chat',
+// wrapped as { content: { id: '1', text: 'hello' }, type: MessageType.Data, origin: channel.origin }
 channel.post({ id: '1', text: 'hello' });
 ```
 </RenderSource>
