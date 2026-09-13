@@ -41,3 +41,11 @@ export {
 	type ResolvedEntries,
 	defaultOptions as defaultIntersectingOptions,
 } from './useIntersecting/useIntersecting';
+export {
+	useClipboard,
+	type ClipboardPermissionState,
+	type ClipboardPasteResult,
+	type UseClipboardOptions,
+	type UseClipboardReturn,
+	type UseClipboardTarget,
+} from './useClipboard/useClipboard';

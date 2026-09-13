@@ -8,6 +8,7 @@ export type Toast = {
 	close?: boolean;
 	position?: 'top' | 'bottom';
 	progress?: boolean;
+	container?: 'parent' | 'window';
 };
 export interface ToastStore {
 	toast: Toast | null;

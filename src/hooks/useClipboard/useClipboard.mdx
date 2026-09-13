@@ -1,0 +1,130 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../components/FlexDiv';
+
+<Meta title="Hooks/useClipboard" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        # useClipboard
+        Reads from and writes to the system clipboard, observes native `paste` events, and reports live `clipboard-read`/`clipboard-write` permission state. Upgrades the write-only `copyToClipboard` util into a full hook: `copy()` still falls back to the legacy `execCommand` approach when the async Clipboard API is unavailable or denied.
+
+        ## Behavior
+        `copy()` prefers `navigator.clipboard.writeText()` and transparently falls back to a hidden-textarea `execCommand('copy')` when the Clipboard API is missing or the write is rejected (e.g. an insecure context, or a browser that requires a permission the user hasn't granted). `read()` requires the async Clipboard API and, in most browsers, a user gesture or granted `clipboard-read` permission — it resolves to `null` rather than throwing when unsupported or denied.
+
+        Separately, the hook always listens for native `paste` events on `target` (a ref, an element, or `document` by default) so consumers get pasted text and files without needing clipboard-read permission at all — this is the same mechanism the browser already uses for paste-into-input behavior, just observed rather than requiring an explicit read.
+
+        Permission state is queried once on mount via the Permissions API (`clipboard-read` and `clipboard-write`) and kept live via `PermissionStatus`'s `change` event, when the browser supports it. Firefox and other browsers without Permissions API support for these names report `unsupported` rather than throwing.
+
+        ## Signature
+        `useClipboard(options?)`
+
+        ## Options
+        <table style={{width: '100%'}}>
+          <colgroup>
+              <col style={{width: '1%'}} />
+              <col style={{width: 'auto'}} />
+              <col style={{width: '1%'}} />
+              <col style={{width: '50%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>target</code></td><td><code>{`RefObject<HTMLElement | null> | Document | HTMLElement`}</code></td><td><code>document</code></td><td>Where to listen for native <code>paste</code> events. Pass a ref to scope pasting to one element instead of the whole document.</td></tr>
+            <tr><td><code>onPaste</code></td><td><code>{`(result: ClipboardPasteResult) => void`}</code></td><td><code>undefined</code></td><td>Called on every observed paste with the pasted plain text, any pasted <code>File</code>s, and the raw <code>DataTransferItem</code>s.</td></tr>
+            <tr><td><code>copiedResetDelay</code></td><td><code>number</code></td><td><code>2000</code></td><td>Milliseconds before <code>isCopied</code> resets to <code>false</code> after a successful <code>copy()</code>. Pass <code>0</code> to disable the auto-reset.</td></tr>
+            <tr><td><code>watchPermissions</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When <code>true</code>, queries and subscribes to live <code>clipboard-read</code>/<code>clipboard-write</code> permission state on mount.</td></tr>
+          </tbody>
+        </table>
+
+        ## Returns
+        <table style={{width: '100%'}}>
+          <colgroup>
+              <col style={{width: '1%'}} />
+              <col style={{width: 'auto'}} />
+              <col style={{width: '50%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Return</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>text</code></td><td><code>string | null</code></td><td>Most recently read or pasted clipboard text.</td></tr>
+            <tr><td><code>isSupported</code></td><td><code>boolean</code></td><td>Whether the async Clipboard API (<code>navigator.clipboard</code>) is available.</td></tr>
+            <tr><td><code>isCopied</code></td><td><code>boolean</code></td><td>Briefly <code>true</code> after a successful <code>copy()</code>, useful for "Copied!" affordances.</td></tr>
+            <tr><td><code>isRequesting</code></td><td><code>boolean</code></td><td>Whether a <code>copy()</code> or <code>read()</code> call is currently in flight.</td></tr>
+            <tr><td><code>error</code></td><td><code>Error | null</code></td><td>Last error raised by <code>copy()</code> or <code>read()</code>.</td></tr>
+            <tr><td><code>readPermission</code></td><td><code>{`'granted' | 'denied' | 'prompt' | 'unsupported'`}</code></td><td>Current <code>clipboard-read</code> permission state.</td></tr>
+            <tr><td><code>writePermission</code></td><td><code>{`'granted' | 'denied' | 'prompt' | 'unsupported'`}</code></td><td>Current <code>clipboard-write</code> permission state.</td></tr>
+            <tr><td><code>copy</code></td><td><code>{`(value: string) => Promise<boolean>`}</code></td><td>Writes text to the clipboard, falling back to <code>execCommand</code> when needed. Resolves to whether the copy succeeded.</td></tr>
+            <tr><td><code>read</code></td><td><code>{`() => Promise<string | null>`}</code></td><td>Reads text from the clipboard. Resolves to <code>null</code> on unsupported browsers or denied permission.</td></tr>
+          </tbody>
+        </table>
+
+        ## Notes
+        - `copy()` never throws — a failed write (from both the Clipboard API and the fallback) surfaces through `error` and a `false` return value instead.
+        - `read()` and the live `readPermission`/`writePermission` values depend on the Permissions API supporting the `clipboard-read`/`clipboard-write` names, which is not universal (notably Firefox). Both report `unsupported` rather than misrepresenting state.
+        - Listening for `paste` does not call `preventDefault()`, so default paste behavior (e.g. into a focused native input) keeps working alongside `onPaste`.
+        - `target` defaults to `document`, so a bare `useClipboard()` call observes paste anywhere on the page. Pass a ref to scope it to one drop zone or editor.
+        - **Safari caveat:** WebKit only dispatches `paste` when the cursor sits inside an editable context (a focused `<input>`/`<textarea>`, a `contentEditable` element) or there's an active text selection — clicking a plain, non-editable element doesn't create that context, so ⌘V silently does nothing there. Chrome and Firefox are more lenient and will still dispatch `paste` in that case. If `target` is a custom container rather than a real form control, make it `contentEditable` (see the scoped example below) so Safari has somewhere to place the cursor.
+
+        ## Basic example
+        </Unstyled>
+
+        <RenderSource language={"tsx"}>
+        ```
+        import { useClipboard } from '@apple-pie/slice';
+
+        function CopyButton() {
+            const { copy, isCopied, error } = useClipboard();
+
+            return (
+                <div>
+                    <button type="button" onClick={() => copy('Hello from Slice')}>
+                        {isCopied ? 'Copied!' : 'Copy'}
+                    </button>
+                    {error ? <span>{error.message}</span> : null}
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+
+        <Unstyled>
+        ## Scoped paste example
+
+        <RenderSource language={"tsx"}>
+        ```
+        import { useRef } from 'react';
+        import { useClipboard } from '@apple-pie/slice';
+
+        function PasteZone() {
+            const zoneRef = useRef<HTMLDivElement>(null);
+            const { readPermission } = useClipboard({
+                target: zoneRef,
+                onPaste: (result) => console.log(result.text, result.files),
+            });
+
+            // contentEditable gives the browser somewhere to place the cursor. Without it,
+            // Safari never dispatches `paste` here — clicking a plain div isn't an editable context.
+            return (
+                <div ref={zoneRef} contentEditable suppressContentEditableWarning>
+                    Paste here (read permission: {readPermission})
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+        </Unstyled>
+    </FlexDiv>
+</FlexDiv>
