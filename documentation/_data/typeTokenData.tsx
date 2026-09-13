@@ -1,6 +1,6 @@
 import type React from 'react';
 import type { ColumnDefinition } from 'src';
-import {fontSizes, fontWeights, letterSpacings, lineHeights, typeStyles} from '../../src/theme/type/type';
+import { fontSizes, fontWeights, letterSpacings, lineHeights, typeStyles } from '../../src/theme/type/type';
 
 // 1. define your data model for the table - one row per raw design token
 export type TypeTokenRow = {
@@ -51,8 +51,8 @@ export const typeTokenColumnDefinitions: ColumnDefinition<TypeTokenRow>[] = [
 		title: 'Name',
 		justify: 'start',
 		width: 220,
-		renderHeader: () => <span style={typeStyles["body-l-medium"]}>Name</span>,
-		renderCell: ({ row }) => <div style={{color: "var(--core-text-special)"}}>{row.name}</div>
+		renderHeader: () => <span style={typeStyles['body-l-medium']}>Name</span>,
+		renderCell: ({ row }) => <div style={{ color: 'var(--core-text-special)' }}>{row.name}</div>,
 	},
 	{
 		id: 'col-2',
@@ -67,8 +67,12 @@ export const typeTokenColumnDefinitions: ColumnDefinition<TypeTokenRow>[] = [
 		justify: 'center',
 		renderCell: ({ row }) => (
 			<div style={usageWrapperStyle}>
-				<code><span style={cssUsageStyle}>CSS: {row.cssUsage}</span></code>
-				<code><span style={jsUsageStyle}>JSX: {row.jsUsage}</span></code>
+				<code>
+					<span style={cssUsageStyle}>CSS: {row.cssUsage}</span>
+				</code>
+				<code>
+					<span style={jsUsageStyle}>JSX: {row.jsUsage}</span>
+				</code>
 			</div>
 		),
 	},

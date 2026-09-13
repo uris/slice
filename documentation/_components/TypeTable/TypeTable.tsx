@@ -1,5 +1,5 @@
 import { DataTable } from 'src';
-import {headingStyles, bodyStyles, typeDataColumnDefinitions} from '../../_data/typeData';
+import { bodyStyles, headingStyles, typeDataColumnDefinitions } from '../../_data/typeData';
 import type { TypeDataRow } from '../../_data/typeData';
 
 // storybook/mdx needs the typed table to render properly
