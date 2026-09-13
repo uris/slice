@@ -9,3 +9,15 @@ export * from './volume';
 export * from './WebRTC';
 export * from './window';
 export * from './video';
+export {
+	useBrowserChannelsStore,
+	useBrowserChannels,
+	useBrowserChannelActions,
+	useIsActiveChannel,
+	useMessage as useBrowserChannelMessage,
+	browserChannelActions,
+	getBrowserChannels,
+	getLastBrowserChannelMessage,
+	getMessage as getBrowserChannelMessage,
+} from './browserChannel';
+export type { BrowserChannelsStore } from './browserChannel';

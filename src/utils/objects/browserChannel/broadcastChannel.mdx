@@ -1,0 +1,140 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../../components/FlexDiv';
+import NoteSection from '../../../../documentation/_components/Notice/Notice';
+
+<Meta title="Utils/Browser Channel Class" />
+
+<FlexDiv width={'fill'} height={'fill'} align={'center'}>
+    <FlexDiv width={'fill'} maxWidth={760} height={'auto'}>
+        <Unstyled>
+        <NoteSection>
+            `BrowserChannel` is a low-level browser utility around the native `BroadcastChannel` API. Use it directly when you want to post typed messages between same-origin tabs, windows, or workers without wiring up the raw event listeners yourself.
+        </NoteSection>
+
+        # BrowserChannel Class
+        Typed wrapper around the browser `BroadcastChannel` API. It supports:
+        - a typed `post` method for sending messages to every other same-origin context on the channel
+        - a single `onMessageCallback` for incoming messages, already unwrapped from the raw `MessageEvent`
+        - a separate `onErrorCallback` for `messageerror` events (payloads that failed to deserialize)
+        - `close()` to tear down the channel and remove its listeners in one call
+
+        ## Import
+        <RenderSource>
+```
+import { BrowserChannel } from '@apple-pie/slice/utils/objects';
+```
+</RenderSource>
+
+        ## Generic type parameters
+        `BrowserChannel` accepts one generic type parameter:
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '25%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Generic</th>
+              <th className={'left'}>Default</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>T</code></td><td>&mdash;</td><td>Type of the message payload sent and received over the channel.</td></tr>
+          </tbody>
+        </table>
+
+        ## Channel options
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '24%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Option</th>
+              <th className={'left'}>Type</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>name</code></td><td><code>string</code></td><td>Channel name. Only same-origin contexts that open a channel with the same name receive each other's messages.</td></tr>
+            <tr><td><code>onMessageCallback</code></td><td><code>{`(message: T) => void`}</code></td><td>Called with the unwrapped <code>data</code> of every incoming <code>message</code> event.</td></tr>
+            <tr><td><code>onErrorCallback</code></td><td><code>{`(event: MessageEvent) => void`}</code></td><td>Called on <code>messageerror</code>, when an incoming message could not be deserialized.</td></tr>
+          </tbody>
+        </table>
+
+        ## Basic usage
+        <RenderSource>
+```
+type ChatMessage = {
+	id: string;
+	text: string;
+};
+
+const channel = new BrowserChannel<ChatMessage>({
+	name: 'chat',
+	onMessageCallback: (message) => {
+		console.log(message.text);
+	},
+	onErrorCallback: (event) => {
+		console.error('failed to deserialize message', event);
+	},
+});
+
+// sent to every other same-origin tab/window/worker listening on 'chat'
+channel.post({ id: '1', text: 'hello' });
+```
+</RenderSource>
+
+        ## Same-origin only
+        `BroadcastChannel` only delivers messages between browsing contexts on the same origin (scheme, host, and port). Use it for cross-tab or cross-worker communication within your app, not for cross-origin messaging — for that, look at `window.postMessage` instead.
+
+        ## Unsupported environments
+        `BrowserChannel` throws a `TypeError` at construction time if `BroadcastChannel` is not available, such as during server-side rendering or in older browsers:
+
+        <RenderSource>
+```
+// throws: "BroadcastChannel is not supported in this environment."
+new BrowserChannel({
+	name: 'chat',
+	onMessageCallback: () => {},
+	onErrorCallback: () => {},
+});
+```
+</RenderSource>
+
+        Guard construction with a feature check if you need to run in an environment where `BroadcastChannel` may be unavailable:
+        <RenderSource>
+```
+if (typeof BroadcastChannel !== 'undefined') {
+	const channel = new BrowserChannel({
+		name: 'chat',
+		onMessageCallback: (message) => console.log(message),
+		onErrorCallback: (event) => console.error(event),
+	});
+}
+```
+</RenderSource>
+
+        ## Cleanup
+        Always call `close()` when you are done with the channel. This closes the underlying `BroadcastChannel` and removes its listeners.
+
+        <RenderSource>
+```
+const channel = new BrowserChannel({
+	name: 'chat',
+	onMessageCallback: (message) => console.log(message),
+	onErrorCallback: (event) => console.error(event),
+});
+
+// later
+channel.close();
+```
+</RenderSource>
+        </Unstyled>
+    </FlexDiv>
+</FlexDiv>

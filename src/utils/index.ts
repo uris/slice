@@ -4,6 +4,7 @@ export { rafThrottle } from './functions/rafThrottle';
 export * from './functions/colors';
 export {
 	AudioVisualizer,
+	BrowserChannel,
 	IndexedDB,
 	MdBuffer,
 	SSEConnection,
@@ -13,6 +14,7 @@ export {
 export type {
 	AudioVisualizerOptions,
 	AudioVisualizerSource,
+	ChannelConfig,
 	IndexedDBOptions,
 	MarkdownAutoCloseRule,
 	MarkdownStreamBufferOptions,

@@ -28,3 +28,5 @@ export type {
 } from './WSConnection/WSConnection';
 export { WebRTCConnection } from './WebRTCConnection/WebRTCConnection';
 export type { WebRTCConnectionOptions } from './WebRTCConnection/_types';
+export { BrowserChannel } from './browserChannel/broadcastChannel';
+export type { ChannelConfig } from './browserChannel/broadcastChannel';
