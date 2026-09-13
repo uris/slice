@@ -1,0 +1,233 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../components/FlexDiv';
+import NoteSection from '../../../documentation/_components/Notice/Notice';
+
+<Meta title="Stores/Browser Channel Store" />
+
+<FlexDiv width={'fill'} height={'fill'} align={'center'}>
+    <FlexDiv width={'fill'} maxWidth={760} height={'auto'}>
+        <Unstyled>
+        <NoteSection>
+            Slice stores uses a module-level singleton pattern: each store is created once when the module is loaded - every import of the module shares the same store instance.
+        </NoteSection>
+
+        # BrowserChannelsStore
+        Global store for managing one or more named `BrowserChannel` instances, built with Zustand. The store keeps a named registry of channels, tracks the latest message seen per channel (as well as a shared snapshot of the latest message from any channel), and exposes both reactive hooks and imperative helpers to manage channels and read messages.
+
+        The Slice browser channel store has a narrow goal: provide a singleton global registry of `BroadcastChannel`-backed channels and the latest message observed on each of them. Storing, persisting, or accumulating message history is left to the consuming app.
+
+        ## Adding a channel
+        `addChannel(config, replace?)` creates a new `BrowserChannel` and saves it to state under `config.name`. `config` is a `BrowserChannelConfig<T>` - the same options `BrowserChannel` takes, minus `onMessageCallback` and `onErrorCallback`: the store supplies its own internally, so every incoming message (data or synthesized error alike) is recorded on state before anything else sees it.
+
+        There's no escape hatch to supply your own callbacks here - the store's goal is to simplify. If you need full control over message handling, use the `BrowserChannel` class directly, or the underlying `BroadcastChannel` API.
+
+        `replace` defaults to `true`: if a channel with the same name already exists, the store closes the old channel before replacing it, and clears that name's entry in `messages` - the new instance hasn't received anything yet, so `useMessage`/`getMessage` return `null` again until it does. Pass `replace: false` to skip all of that when a channel with the same name is already registered - the existing channel, its config, and its last recorded message are left completely untouched, and `addChannel` becomes a no-op.
+
+        <RenderSource language={'tsx'}>
+        ```
+        import { useEffect } from 'react';
+        import {
+            useBrowserChannelActions,
+            useIsActiveChannel,
+            useMessage,
+        } from '@apple-pie/slice/stores/browserChannel';
+        import { MessageType } from '@apple-pie/slice/utils';
+
+        type ChatMessage = { id: string; text: string };
+
+        function AppChannel() {
+            const { addChannel, removeChannel } = useBrowserChannelActions();
+            const active = useIsActiveChannel('chat');
+            const lastMessage = useMessage<ChatMessage>('chat');
+
+            useEffect(() => {
+                addChannel({ name: 'chat', origin: 'chat-tab' });
+                return () => removeChannel('chat');
+            }, [addChannel, removeChannel]);
+
+            const text =
+                lastMessage?.type === MessageType.Error
+                    ? `error: ${lastMessage.content}`
+                    : lastMessage?.content.text;
+
+            return (
+                <div>
+                    active: {active ? 'yes' : 'no'} - last message: {text ?? 'waiting...'}
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+
+        Note: Slice stores are singletons, which means you can safely import `useMessage` anywhere in your app and subscribe to the latest matching message. If you plan to make channels available globally to your app, make sure to place your channel cleanup where it makes sense.
+
+        ## Adding several channels at once
+        `addChannels(configs, replace?)` accepts a list of channel configs and registers each one the same way `addChannel` does, passing the same `replace` value through to every one of them.
+
+        <RenderSource language={'tsx'}>
+        ```
+        useBrowserChannelActions().addChannels([{ name: 'chat' }, { name: 'notifications' }]);
+
+        // skip any channel that is already registered instead of replacing it
+        useBrowserChannelActions().addChannels([{ name: 'chat' }, { name: 'notifications' }], false);
+        ```
+        </RenderSource>
+
+        ## Removing channels
+        Removing a channel always closes it first, then removes it from the store, along with its recorded entry in `messages`. Once the last channel is removed, both `channels` and `messages` reset to `null`.
+
+        <RenderSource language={'tsx'}>
+        ```
+        import { browserChannelActions } from '@apple-pie/slice/stores/browserChannel';
+
+        browserChannelActions.removeChannel('chat');
+
+        // or close and clear every managed channel at once
+        browserChannelActions.removeChannels();
+        ```
+        </RenderSource>
+
+        ## Sending messages
+        `post(channelName, message)` sends `message` through the named channel's underlying `BrowserChannel`, the same as calling `channel.post(message)` directly - except you never need to hold on to the channel instance to do it. Returns `false` (and sends nothing) if no channel is registered under that name; otherwise returns `true`.
+
+        <RenderSource language={'tsx'}>
+        ```
+        import { browserChannelActions } from '@apple-pie/slice/stores/browserChannel';
+
+        type ChatMessage = { id: string; text: string };
+
+        browserChannelActions.addChannel({ name: 'chat', origin: 'chat-tab' });
+
+        // delivered to every other same-origin BrowserChannel/BroadcastChannel
+        // listening on 'chat' - wrapped as { content, type: MessageType.Data, origin }
+        // exactly as calling the BrowserChannel instance's own post() would
+        const sent = browserChannelActions.post<ChatMessage>('chat', { id: '1', text: 'hello' });
+        ```
+        </RenderSource>
+
+        This is the point of the store: you register a channel once with `addChannel`, then send and receive through the store alone - `post` for sending, `useMessage`/`getMessage` for receiving - without ever reaching for the `BrowserChannel` instance itself. It's still there in `channels[name]` if you need it, but the store's actions are meant to cover the common case entirely.
+
+        ## React exports (reactive)
+        React exports are reactive subscriptions for components updating automatically as channel state changes.
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '25%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Export</th>
+              <th className={'left'}>Type</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>useBrowserChannelsStore</code></td><td><code>Zustand store hook</code></td><td>Main store hook for custom selector usage.</td></tr>
+            <tr><td><code>useBrowserChannels</code></td><td><code>{`() => Record<string, BrowserChannel<any>> | null`}</code></td><td>Atomic hook selecting the full channel registry.</td></tr>
+            <tr><td><code>useBrowserChannelActions</code></td><td><code>{`() => { addChannel, removeChannel, addChannels, removeChannels, post, isActiveChannel }`}</code></td><td>Atomic hook selecting only the channel actions object. See <code>addChannel</code> / <code>addChannels</code> above for their <code>replace</code> parameter.</td></tr>
+            <tr><td><code>useIsActiveChannel</code></td><td><code>{`(channelName: string) => boolean`}</code></td><td>Returns whether a named channel is currently tracked by the store.</td></tr>
+            <tr><td><code>useMessage</code></td><td><code>{`<T = unknown>(channelName: string, type?: MessageType) => BrowserChannelMessage<T> | null`}</code></td><td>Returns the <code>{'{ content, type, origin }'}</code> envelope of the latest message recorded on the named channel, with <code>content</code> typed as <code>T</code>. Strictly scoped to that channel - it never reflects a message received on any other channel. Pass <code>type</code> to return <code>null</code> unless the latest message is that <code>MessageType</code> - see below for why there's only one slot to filter.</td></tr>
+          </tbody>
+        </table>
+
+        ## Imperative exports (non-reactive)
+        These APIs call the same singleton store instance directly. Use them for bootstrapping, service layers, and other non-React code paths.
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '25%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Export</th>
+              <th className={'left'}>Type</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>browserChannelActions</code></td><td><code>{`{ addChannel, removeChannel, addChannels, removeChannels, post, isActiveChannel }`}</code></td><td>Imperative actions for creating, removing, and querying named channels.</td></tr>
+            <tr><td><code>getBrowserChannels</code></td><td><code>{`() => Record<string, BrowserChannel<any>> | null`}</code></td><td>Imperative snapshot read of the current channel registry.</td></tr>
+            <tr><td><code>getMessage</code></td><td><code>{`<T = unknown>(channelName: string, type?: MessageType) => BrowserChannelMessage<T> | null`}</code></td><td>Imperative, non-reactive counterpart to <code>useMessage</code>: snapshot-reads the latest message envelope for one named channel, optionally filtered to one <code>MessageType</code>.</td></tr>
+            <tr><td><code>getLastBrowserChannelMessage</code></td><td><code>{`() => unknown`}</code></td><td>Imperative snapshot read of the latest message observed from any managed channel, regardless of which one.</td></tr>
+          </tbody>
+        </table>
+
+        ## Store state shape
+        The store keeps three main pieces of state:
+
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '25%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={'left'}>Field</th>
+              <th className={'left'}>Type</th>
+              <th className={'left'}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>channels</code></td><td><code>{`Record<string, BrowserChannel<any>> | null`}</code></td><td>Named registry of active channels managed by the store. <code>null</code> whenever no channel is currently tracked.</td></tr>
+            <tr><td><code>messages</code></td><td><code>{`Record<string, BrowserChannelMessage<unknown>> | null`}</code></td><td>The latest <code>{'{ content, type, origin }'}</code> envelope received on each named channel - one slot per channel, holding whichever message (data or error) arrived most recently. <code>null</code> whenever no channel has ever received a message.</td></tr>
+            <tr><td><code>message</code></td><td><code>unknown</code></td><td>The latest message observed from any managed channel, regardless of which one produced it. Prefer <code>messages</code> / <code>useMessage</code> when you need to know which channel a message came from.</td></tr>
+          </tbody>
+        </table>
+
+        ## Notes: post
+        `post` is the store-level counterpart to `BrowserChannel.post()`: it looks up the live channel by name and posts through it, so sending a message never requires reaching into `channels[name]` yourself. It fails soft - posting to a name nothing is registered under returns `false` instead of throwing - so callers don't need to guard with `isActiveChannel` first unless they want to react to that case explicitly.
+
+        ## Notes: isActiveChannel
+        `isActiveChannel` lives on the actions object for imperative checks (for example, guarding a call to `addChannel` in a service layer). For React components, prefer the reactive `useIsActiveChannel` hook instead, which subscribes to changes in the channel registry.
+
+        ## Notes: origin
+        Every `BrowserChannel` the store creates gets a unique `origin` identifier (see the `BrowserChannel` docs), attached to every message it posts. Pass an optional `origin` label in `config` to make that identifier more readable - the store passes it straight through to `BrowserChannel`, which joins it with a generated UUID (`'chat-tab.<uuid>'`), rather than a bare UUID.
+
+        This is what lets `useMessage` / `getMessage` return the sender's identity alongside the payload: the stored value for each channel is the full `{ content, type, origin }` envelope, not just `content`. Use `message.origin` to tell messages from different senders on the same channel name apart - for example, ignoring a channel's own messages when multiple tabs each register a channel with the same `name`.
+
+        ## Notes: one shared message slot per channel
+        A channel's entry in `messages` is a single slot, not one for data and a separate one for errors. Whatever arrives most recently - a real message or a synthesized `messageerror` - overwrites that slot, exactly as `BrowserChannel` itself treats an error as just another message on the same `onMessageCallback` stream. Calling `useMessage('chat')` / `getMessage('chat')` with no `type` always returns whatever is in that slot right now, whichever kind it is.
+
+        Passing a `type` doesn't add a second slot - it filters the existing one: `useMessage('chat', MessageType.Data)` returns the slot's contents only while its `type` is `MessageType.Data`, and `null` the moment an error overwrites it (and vice versa for `MessageType.Error`). If you need to know both "did an error ever happen" and "what's the latest data" independently and simultaneously, track that yourself in your component or service layer - the store deliberately keeps one shared slot per channel to stay consistent with how `BrowserChannel` delivers messages.
+
+        ## Notes: the replace parameter
+        Use `replace: false` when you want registration to be idempotent - for example, calling `addChannel` from a component that can mount more than once, or re-running setup code without tearing down an already-connected channel. With `replace: false` and a channel already registered under that name, `addChannel` does nothing: the existing `BrowserChannel` instance, the config it was created with, and its last recorded message in `messages` are all left exactly as they were.
+
+        With the default `replace: true`, calling `addChannel` again under the same name always closes the previous channel and creates a fresh one - useful when you deliberately want to reconnect with a different `origin` label.
+
+        ## Importing from the root `stores` package
+        `useMessage` and `getMessage` are common export names shared with other Slice connection stores (for example the SSE store also exports its own `useMessage`). Importing directly from `@apple-pie/slice/stores/browserChannel` always gives you this store's `useMessage`. Importing from the combined `@apple-pie/slice/stores` barrel instead exposes them under `useBrowserChannelMessage` and `getBrowserChannelMessage` to avoid colliding with the other stores' exports of the same name.
+
+        <RenderSource language={'tsx'}>
+        ```
+        // scoped import - use the short names
+        import { useMessage } from '@apple-pie/slice/stores/browserChannel';
+
+        // combined barrel import - names are prefixed to avoid collisions
+        import { useBrowserChannelMessage } from '@apple-pie/slice/stores';
+        ```
+        </RenderSource>
+
+        ## Imperative usage outside React
+        <RenderSource language={'tsx'}>
+        ```
+        import { browserChannelActions, getMessage } from '@apple-pie/slice/stores/browserChannel';
+        import { MessageType } from '@apple-pie/slice/utils';
+
+        type UserMessage = { id: string };
+
+        browserChannelActions.addChannel({ name: 'user', origin: 'worker' });
+
+        export function getLatestUserMessage() {
+            const message = getMessage<UserMessage>('user', MessageType.Data);
+            return message?.content ?? null;
+        }
+        ```
+        </RenderSource>
+        </Unstyled>
+    </FlexDiv>
+</FlexDiv>
