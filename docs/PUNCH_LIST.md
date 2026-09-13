@@ -16,7 +16,7 @@ Already wrapped today, for reference (don't re-add): `localStorage` (`useLocalSt
 |---|---|---|---|
 | Page Visibility API | `usePageVisibility` (or `useActiveTab`) | P0 | Explicitly requested. `document.visibilityState` + `visibilitychange`. |
 | BroadcastChannel | `useBroadcastChannel` | P0 | Explicitly requested. Cross-tab messaging; pairs well with the existing store pattern. |
-| Clipboard API (read + write) | `useClipboard` | P0 | Upgrades the existing write-only `copyToClipboard` util (`src/utils/functions/misc.ts`) into a real hook with read support, paste events, and permission state. |
+| Clipboard API (read + write) | `useClipboard` | ✅ Done | Implemented in `src/hooks/useClipboard/useClipboard.ts` — wraps `navigator.clipboard` read/write with an `execCommand` fallback, observes native `paste` events, and tracks live `clipboard-read`/`clipboard-write` permission state via the Permissions API. Covered by `useClipboard.test.ts`, a Storybook demo, and `useClipboard.mdx`. |
 | Fullscreen API | `useFullscreen` | P1 | Currently inlined ad hoc in `Video.tsx` (`video.requestFullscreen()`); worth extracting into a reusable hook so any element can use it. |
 | Online/offline status | `useOnlineStatus` | P1 | `navigator.onLine` + `online`/`offline` events. |
 | IntersectionObserver | `useIntersectionObserver` / `useInView` | P0 | Natural sibling to `useObserveResize`. Bumped to P0 — it's the detection mechanism the new Infinite Scroll component (below) should be built on, rather than scroll-event polling. |

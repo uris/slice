@@ -30,6 +30,11 @@ export {
 	type UseBindWebRTCReturn,
 	type UseMDStreamBufferOptions,
 	type UseMicrophoneReturn,
+	type ClipboardPermissionState,
+	type ClipboardPasteResult,
+	type UseClipboardOptions,
+	type UseClipboardReturn,
+	type UseClipboardTarget,
 	useBindWebRTC,
 	useKeyboardShortcuts,
 	useTheme,
@@ -43,6 +48,7 @@ export {
 	useWindow,
 	useDoubleClick,
 	useObserveResize,
+	useClipboard,
 } from './hooks';
 
 export { AudioBubble } from './components/AudioBubble/index';

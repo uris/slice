@@ -23,6 +23,7 @@ const meta: Meta<typeof Toast> = {
 		size: 'm',
 		close: true,
 		type: ToastType.Info,
+		container: 'parent',
 	},
 };
 
@@ -58,6 +59,7 @@ export const Demo: StoryObj<typeof Toast> = {
 					close={toast?.close ?? args.close}
 					duration={toast?.duration ?? args.duration}
 					didHide={toastActions.clear}
+					container={'window'}
 				/>
 			</FlexDiv>
 		);
