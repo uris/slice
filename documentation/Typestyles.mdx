@@ -1,0 +1,32 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {FlexDiv, Spacer} from "../src";
+import {TypeTableHeadings, TypeTableBody} from "./_components/TypeTable/TypeTable";
+
+<Meta title="Typography/Slice Type Styles" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+            # Type Styles
+            The Slice theme uses a concise range of type sizes that can be applied across form factors.
+            
+            Note: All slice font sizes are expressed in `rem` units (root element), which means that they scale with the root font size of the document. For web documents that is typically set to a default of 16px (so 1rem = 16px).
+            
+            Using `rem` as the unit of measure supports accessibility (users can change the browser default text size) and makes it easier to scale the type styles across different devices and form factors. 
+
+            There are two basic groups of type styles: body (for all body text, buttons, etc.) and header (for titles and headings). This makes the type model simple yet flexible and powerful.
+
+            #### Header
+            <TypeTableHeadings />
+
+            #### Body
+            <TypeTableBody />
+
+            #### Notes
+            Slice components like buttons, tabs, etc., do not have a single fixed type style (as does for example MUI). Instead, they expose a `textSize` prop can be used to control the size of the text ranging from `body-xs` to `body-xl`.
+            
+            In most situations, the default `textSize` prop value for these components, is set as `body-l-medium`.
+        </Unstyled>
+        <Spacer size={64}/>
+    </FlexDiv>
+</FlexDiv>

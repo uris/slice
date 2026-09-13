@@ -14,12 +14,10 @@ export type Type = {
 	'body-xl-regular': string;
 	'body-xl-medium': string;
 	'body-xl-bold': string;
-	'heading-s-bold': string;
-	'heading-s-medium': string;
-	'heading-m-bold': string;
-	'heading-m-medium': string;
-	'heading-l-bold': string;
-	'heading-l-medium': string;
-	'heading-xl-bold': string;
-	'heading-xl-medium': string;
+	h1: string;
+	h2: string;
+	h3: string;
+	h4: string;
+	h5: string;
+	h6: string;
 };
