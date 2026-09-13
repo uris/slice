@@ -1,7 +1,7 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from "../src/components/FlexDiv";
-import {FunnelSans} from "./_components/FunnelSans/FunnelSans";
-import {TypeSizes} from "./_components/TypeSizes/TypeSizes";
+import {FlexDiv, Spacer} from "../src";
+import {TypeTokenTable} from "./_components/TypeTokenTable/TypeTokenTable";
+import {fontWeightTokens, fontSizeTokens, lineHeightTokens, letterSpacingTokens} from "./_data/typeTokenData";
 
 <Meta title="Typography/Slice Type Sizes" />
 
@@ -9,41 +9,20 @@ import {TypeSizes} from "./_components/TypeSizes/TypeSizes";
     <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
             # Type Sizes
-            The Slice theme uses a concise range of type sizes that can be applied across form factors.
+            Every ready-made style on the [Type Styles](/docs/typography-slice-type-styles--docs) page is built from a small set of granular tokens - font weight, font size, line height, and letter spacing. Each one is exposed as its own CSS custom property, so you can mix and match them to compose a custom type style without starting from scratch.
+
+            #### Font Size
+            <TypeTokenTable tokens={fontSizeTokens} />
+
+            #### Font Weight
+            <TypeTokenTable tokens={fontWeightTokens} />
             
-            There are two basic groups of type sizes: body (for all body text, buttons, etx) and heading (for titles, etc.). This makes the type model simple yet flexible and powerful.
+            #### Line Height
+            <TypeTokenTable tokens={lineHeightTokens} />
 
-            ### Body
-            
-            #### Extra Small
-            <TypeSizes filter="body-xs" sample={"I’m not in this world to live up to your expectations and you’re not in this world to live up to mine."}/>
-
-            #### Small
-            <TypeSizes filter="body-s" sample={"Empty your cup so that it may be filled; become devoid to gain totality."}/>
-
-            #### Medium
-            <TypeSizes filter="body-m" smaple={"A wise man can learn more from a foolish question than a fool can learn from a wise answer."}/>
-
-            #### Large
-            <TypeSizes filter="body-l" sample={"A goal is not always meant to be reached, it often serves simply as something to aim at."}/>
-
-            #### Extra Large
-            <TypeSizes filter="body-xl" sample={"Do not pray for an easy life, pray for the strength to endure a difficult one"}/>
-
-            ### Heading
-            
-            #### Small
-            <TypeSizes filter="heading-s" sample={"Mistakes are always forgivable, if one has the courage to admit them."}/>
-            
-            #### Medium
-            <TypeSizes filter="heading-m" sample={"If you love life, don't waste time, for time is what life is made up of."}/>
-
-            #### Large
-            <TypeSizes filter="heading-l" sample={"Be happy, but never satisfied."}/>
-
-            #### Extra Large
-            <TypeSizes filter="heading-xl" sample={"Be happy, but never satisfied."}/>
-            
-        </Unstyled>   
+            #### Letter Spacing
+            <TypeTokenTable tokens={letterSpacingTokens} />
+        </Unstyled>
+        <Spacer size={64}/>
     </FlexDiv>
 </FlexDiv>

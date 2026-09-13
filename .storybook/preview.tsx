@@ -58,7 +58,7 @@ const preview: Preview = {
 				return (
 					<DocsContainer context={context} theme={docsTheme}>
 						<ThemeProvider theme={theme} system={true} global={true}>
-							<FlexDiv padding={'64px 88px'} absolute={true} centerSelf={true} scrollY={true}>
+							<FlexDiv padding={'64px 88px'} absolute={true} centerSelf={true} scrollY={true} background={'var(--core-surface-primary)'}>
 								{children}
 							</FlexDiv>
 						</ThemeProvider>
@@ -80,7 +80,7 @@ const preview: Preview = {
 					'Colors',
 					['Core Colors', '*'],
 					'Typography',
-					['Funnel Sans', '*'],
+					['Funnel Sans', 'Slice Type Styles','*'],
 					'Icons',
 					'Motion',
 					'Hooks',
