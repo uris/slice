@@ -102,6 +102,7 @@
 	"scripts": {
 		"lint": "biome format --write . && biome check .",
 		"lint:fix": "biome format --write . && biome check --write .",
+		"lint:ci": "biome ci .",
 		"format": "biome format --write .",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
@@ -109,7 +110,7 @@
 		"benchmark:raw": "vitest bench --project benchmarks --run",
 		"benchmark:watch": "vitest bench --project benchmarks",
 		"benchmark:ui": "vitest bench --project benchmarks --ui",
-		"coverage": "NODE_OPTIONS=--max-old-space-size=8192 npx vitest run --project storybook --coverage",
+		"coverage": "NODE_OPTIONS=--max-old-space-size=8192 npx vitest run --project=storybook --project=unit --coverage",
 		"pack:tarball": "npm pack && ./scripts/copy-tgz.sh",
 		"prepack": "npm run build",
 		"prebuild": "rm -rf dist",

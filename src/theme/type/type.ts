@@ -157,13 +157,13 @@ export const type: Type = {
       font-family: ${fontFamily};
       font-weight: ${fontWeights.extra};
       font-size: ${fontSizes.h1};
-      line-height: ${lineHeights.s};
+      line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 	h2: `
       font-family: ${fontFamily};
       font-weight: ${fontWeights.bold};
       font-size: ${fontSizes.h2};
-      line-height: ${lineHeights.s};
+      line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 	h3: `
       font-family: ${fontFamily};
@@ -175,19 +175,19 @@ export const type: Type = {
       font-family: ${fontFamily};
       font-weight: ${fontWeights.bold};
       font-size: ${fontSizes.h4};
-      line-height: ${lineHeights.l};
+      line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 	h5: `
       font-family: ${fontFamily};
       font-weight: ${fontWeights.bold};
       font-size: ${fontSizes.h5};
-      line-height: ${lineHeights.l};
+      line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 	h6: `
       font-family: ${fontFamily};
       font-weight: ${fontWeights.bold};
       font-size: ${fontSizes.h6};
-      line-height: ${lineHeights.l};
+      line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 };
 
@@ -340,14 +340,14 @@ export const typeStyles: Record<keyof Type, React.CSSProperties> = {
 		fontFamily: `${fontFamily}`,
 		fontWeight: `${fontWeights.extra}`,
 		fontSize: `${fontSizes.h1}`,
-		lineHeight: `${lineHeights.s}`,
+		lineHeight: `${lineHeights.xs}`,
 		letterSpacing: `${letterSpacings.m}`,
 	},
 	h2: {
 		fontFamily: `${fontFamily}`,
 		fontWeight: `${fontWeights.extra}`,
 		fontSize: `${fontSizes.h2}`,
-		lineHeight: `${lineHeights.s}`,
+		lineHeight: `${lineHeights.xs}`,
 		letterSpacing: `${letterSpacings.m}`,
 	},
 	h3: {
@@ -361,21 +361,21 @@ export const typeStyles: Record<keyof Type, React.CSSProperties> = {
 		fontFamily: `${fontFamily}`,
 		fontWeight: `${fontWeights.extra}`,
 		fontSize: `${fontSizes.h4}`,
-		lineHeight: `${lineHeights.l}`,
+		lineHeight: `${lineHeights.xs}`,
 		letterSpacing: `${letterSpacings.m}`,
 	},
 	h5: {
 		fontFamily: `${fontFamily}`,
 		fontWeight: `${fontWeights.extra}`,
 		fontSize: `${fontSizes.h5}`,
-		lineHeight: `${lineHeights.l}`,
+		lineHeight: `${lineHeights.xs}`,
 		letterSpacing: `${letterSpacings.m}`,
 	},
 	h6: {
 		fontFamily: `${fontFamily}`,
 		fontWeight: `${fontWeights.extra}`,
 		fontSize: `${fontSizes.h6}`,
-		lineHeight: `${lineHeights.l}`,
+		lineHeight: `${lineHeights.xs}`,
 		letterSpacing: `${letterSpacings.m}`,
 	},
 };

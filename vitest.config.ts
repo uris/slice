@@ -36,6 +36,22 @@ export default defineConfig({
 			reporter: ['text', 'json', 'html'],
 			include: coverageInclude,
 			exclude: coverageExclude,
+			thresholds: {
+				// Ratcheting coverage floor. CI runs `npm run coverage` and fails the
+				// build if coverage drops below these numbers - this is a floor, not
+				// a target. When coverage genuinely goes up, running `npm run coverage`
+				// locally (autoUpdate) rewrites these numbers upward automatically;
+				// commit that diff alongside your change. Never hand-edit them down.
+				//
+				// NOTE: these start at 0 as a placeholder. Run `npm run coverage`
+				// once locally after this merges to bootstrap them to the real
+				// current numbers, then commit the resulting diff.
+				statements: 0,
+				branches: 0,
+				functions: 0,
+				lines: 0,
+				autoUpdate: true,
+			},
 		},
 		projects: [
 			{
