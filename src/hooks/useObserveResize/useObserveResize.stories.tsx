@@ -58,6 +58,7 @@ const meta: Meta<typeof UseObserveResizeDemo> = {
 	title: 'Hooks/useObserveResize',
 	component: UseObserveResizeDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 	args: {

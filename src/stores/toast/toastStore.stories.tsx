@@ -7,6 +7,9 @@ import { Toast, ToastType } from '../../components/Toast';
 const meta: Meta<typeof Toast> = {
 	title: 'Stores/Toast Store',
 	component: Toast,
+	parameters: {
+		a11y: { test: 'todo' },
+	},
 	argTypes: {
 		type: {
 			control: { type: 'radio' }, // Dropdown selection

@@ -68,6 +68,7 @@ const meta: Meta<typeof UseClipboardDemo> = {
 	title: 'Hooks/useClipboard',
 	component: UseClipboardDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

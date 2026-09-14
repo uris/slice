@@ -17,6 +17,7 @@ const meta: Meta<typeof UseObserveThemeDemo> = {
 	title: 'Hooks/useObserveTheme',
 	component: UseObserveThemeDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

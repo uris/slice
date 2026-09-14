@@ -10,15 +10,14 @@ CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other 
 
 ## Operational notes (things that aren't obvious from the docs alone)
 
-- **`vitest.config.ts`'s coverage thresholds are a deliberate floor, not the last measured
-  number.** They're set ~1.5 points below a confirmed-stable baseline on purpose — v8/browser-mode
-  coverage has run-to-run measurement noise, so an exact-matched threshold fails intermittently
-  with no real regression. `autoUpdate` is intentionally off. Don't turn it back on and don't
-  tighten the numbers to match a single run.
-- **If you do run a tool that rewrites `vitest.config.ts` wholesale** (e.g. `autoUpdate: true`,
-  or any codemod), diff the *entire* file before committing, not just the lines you expect to
-  change — this kind of rewrite reformats the whole file (spaces instead of tabs) and can silently
-  drop unrelated comments elsewhere in it. Run `npm run lint` afterward to restore formatting.
+- **`autoUpdate` on `vitest.config.ts`'s coverage thresholds is intentionally off** — see
+  [CONTRIBUTING.md](./CONTRIBUTING.md#coverage-gate) for why the thresholds are a deliberate
+  floor rather than the last measured number. It caused real problems when it was on: it
+  rewrites the file on every run, and that kind of rewrite reformats the whole file (spaces
+  instead of tabs) and can silently drop unrelated comments elsewhere in it. If any tool
+  (a codemod, an editor action, flipping `autoUpdate` back to `true`) rewrites this file
+  wholesale, diff the *entire* file before committing, not just the lines you expect to have
+  changed, and run `npm run lint` afterward to restore formatting.
 - **`npm run coverage` requires a working Playwright Chromium install.** If it's missing, the run
   aborts but still prints a full coverage table showing every file at 0% — that table is not a
   real signal, it means the browser never launched. Check the actual error above it before
@@ -33,5 +32,18 @@ CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other 
   `npm run coverage`). A hook or store with no `.test.ts` shows as uncovered even if a component
   that uses it has a story with a `play:` function — rendering a component doesn't exercise every
   branch of what it calls into. Don't treat "it's used in a story" as "it's tested."
+- **Accessibility gating defaults to strict, not opt-in.** `.storybook/preview.tsx` sets
+  `parameters.a11y.test: 'error'` globally, so any new story — including a new file under
+  `src/hooks/**` or `src/stores/**` — is a11y-gated by default and can fail `npm run coverage`
+  on an axe violation. Existing hooks/stores demo stories carry an explicit
+  `parameters: { a11y: { test: 'todo' } }` override in their own meta; a *new* one needs that
+  override added by hand or it'll be unexpectedly gated. See
+  [CONTRIBUTING.md](./CONTRIBUTING.md#accessibility-gate).
+- **A green `npm run coverage` run gives you zero accessibility visibility, pass or fail.**
+  Nothing about axe's violations/passes/incomplete is written to the terminal, `reports/`, or
+  CI logs — pass/fail on the gated assertion is the only signal that exists outside the
+  interactive Storybook UI. If you actually want to see results (not just "did it fail"), run
+  `npm run storybook` and use the Accessibility panel / testing widget. Don't read a green
+  pipeline as "reviewed" — see [CONTRIBUTING.md](./CONTRIBUTING.md#accessibility-gate).
 - **`main` is branch-protected**: PR required, three status checks required (`Lint`,
   `Test & Coverage`, `Build`). Always work on a feature branch, never push directly to `main`.

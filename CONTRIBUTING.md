@@ -48,11 +48,53 @@ Vitest runs two projects side by side. `npm test` runs both during local dev; `n
 - **Everything non-visual — hooks, stores, `src/utils` objects and functions, API/browser abstractions:** write plain Vitest unit tests colocated with the source as `<name>.test.ts` (the `unit` project, `jsdom` environment). These do not belong in stories.
 - Both projects feed the same coverage report. A hook or store with no accompanying `.test.ts` will show as uncovered even if it's used inside a story — rendering a component doesn't exercise every branch of the store it happens to call into. Write the unit test.
 
+### Accessibility gate
+
+`@storybook/addon-a11y` runs axe-core checks against every story as part of the `storybook`
+Vitest project. `.storybook/preview.tsx` sets `parameters.a11y.test: 'error'` as the global
+default, so every `Components/*` and `Providers/*` story — including new ones — is gated: an
+accessibility violation fails that story's test, `npm run coverage`, and the `Test & Coverage`
+CI check.
+
+`src/hooks/**` and `src/stores/**` stories exist to demo a hook or store's behavior, not to
+test the components they compose — those components already have their own gated story. Every
+existing file under those two directories overrides the default with
+`parameters: { a11y: { test: 'todo' } }` in its meta: checks still run and violations still
+show up in the Accessibility panel, they just don't fail the build.
+
+**New story files under `src/hooks` or `src/stores` do not inherit that override.** They pick
+up the global `'error'` default like everything else and will be gated unless you add the
+`parameters: { a11y: { test: 'todo' } }` override yourself. New `src/components/*.stories.tsx`
+files need no extra step — they're gated automatically.
+
+**BTW: a green `npm run coverage` run does not mean anyone has seen the accessibility
+results.** The Vitest/`storybookTest` integration only surfaces a11y as a pass/fail assertion —
+no violation, pass, or incomplete detail is written to the terminal, `reports/coverage`, or CI
+logs, whether a story is gated (`'error'`) or non-blocking (`'todo'`). The only place that
+detail actually shows up is the interactive Accessibility panel: run `npm run storybook`, open
+the testing widget in the sidebar, check "Accessibility," and click "Run tests" (or just open
+any story — the panel updates live as you browse). Treat a green coverage run as "nothing
+failed," not "someone reviewed this."
+
 ### Coverage gate
 
-`vitest.config.ts` defines `coverage.thresholds` (statements/branches/functions/lines) with `autoUpdate: true`. CI runs `npm run coverage` and fails the build if coverage drops below the committed thresholds — it's a floor, not a target, so it can only ratchet up.
+`vitest.config.ts` defines `coverage.thresholds` (statements/branches/functions/lines) as a
+manual floor, not an auto-generated target. `autoUpdate` is intentionally off — it caused
+several problems when it was on (silently rewriting the file on every run, including
+reformatting it wholesale) — so the threshold numbers only change when a contributor hand-edits
+them. CI runs `npm run coverage` and fails the build if coverage drops below the committed
+thresholds.
 
-When you genuinely raise coverage, run `npm run coverage` locally: `autoUpdate` rewrites the threshold numbers to match, and you commit that diff alongside your change. Never hand-edit the numbers down to make a PR pass.
+The committed numbers are set roughly 1.5 points below the last confirmed-stable full-suite
+measurement, on purpose: v8/browser-mode coverage has run-to-run measurement noise (a few
+hundredths of a percent), so a threshold matched exactly to one run fails intermittently with
+no real regression.
+
+To raise the floor after you've genuinely increased coverage: run `npm run coverage` locally a
+few times to find a stable current number, hand-set the threshold values in
+`vitest.config.ts` to roughly 1.5 points below that, and run `npm run lint` to fix formatting
+before committing. Never set the numbers to exactly the last measured run, and never lower them
+to make a failing PR pass.
 
 ### Lint gate
 

@@ -175,6 +175,7 @@ const meta: Meta<typeof BroadcastChannelDemo> = {
 	title: 'Stores/Browser Channel Store',
 	component: BroadcastChannelDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 };

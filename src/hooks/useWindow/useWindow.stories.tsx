@@ -50,6 +50,7 @@ const meta: Meta<typeof UseWindowDemo> = {
 	title: 'Hooks/useWindow',
 	component: UseWindowDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

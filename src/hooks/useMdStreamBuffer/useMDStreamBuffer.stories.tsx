@@ -298,6 +298,7 @@ const meta: Meta<typeof MDStreamBufferHookDemo> = {
 	title: 'Hooks/useMdStreamBuffer',
 	component: MDStreamBufferHookDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 	args: {

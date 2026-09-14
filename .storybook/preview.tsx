@@ -43,6 +43,7 @@ const preview: Preview = {
 		},
 	],
 	parameters: {
+		a11y: { test: 'error' },
 		layout: 'fullscreen',
 		docs: {
 			container: ({ children, context }: { children: any; context: any }) => {

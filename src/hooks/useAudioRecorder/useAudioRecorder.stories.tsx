@@ -180,6 +180,7 @@ const meta: Meta<typeof UseAudioRecorderDemo> = {
 	title: 'Hooks/useAudioRecorder',
 	component: UseAudioRecorderDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 	args: {

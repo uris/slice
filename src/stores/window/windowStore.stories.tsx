@@ -79,6 +79,7 @@ const meta: Meta<typeof WindowStoreDemo> = {
 	title: 'Stores/Window Store',
 	component: WindowStoreDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

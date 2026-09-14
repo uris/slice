@@ -9,6 +9,9 @@ import { useToolTip } from '../../hooks';
 const meta: Meta<typeof Tip> = {
 	title: 'Stores/Tip Store',
 	component: Tip,
+	parameters: {
+		a11y: { test: 'todo' },
+	},
 	args: {
 		tip: undefined,
 		bgColor: undefined,

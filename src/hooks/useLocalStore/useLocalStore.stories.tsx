@@ -42,6 +42,7 @@ const meta: Meta<typeof UseLocalStoreDemo> = {
 	title: 'Hooks/useLocalStore',
 	component: UseLocalStoreDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 	args: {
