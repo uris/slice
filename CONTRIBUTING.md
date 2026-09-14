@@ -6,7 +6,7 @@ This repository contains the source for the `@apple-pie/slice` package, Storyboo
 
 Requirements:
 
-- Node.js 18+ recommended
+- Node.js 20+ (CI runs Node 20; see `.github/workflows/ci.yml`)
 - npm
 
 Install dependencies:
@@ -60,6 +60,7 @@ Run `npm run lint` locally before opening a PR — it formats the codebase and r
 
 ## Contribution Rules
 
+- Component style props must follow the naming standard in [contributor-docs/style-prop-naming.md](./contributor-docs/style-prop-naming.md) (e.g. `backgroundColor`/`backgroundColorHover`, not `bgColor`/`bgColorHover`). New components must use only the standard names; existing components get renamed to match only as part of an intentional breaking change.
 - Keep public exports intentional. New files are not automatically public unless they are wired into the relevant entrypoints and `package.json` `exports`.
 - Put Storybook examples in `*.stories.ts(x)` or `documentation/**`.
 - Do not import story files into production source. That can leak story typings into `dist/types`.

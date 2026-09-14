@@ -212,7 +212,9 @@ For `src/components/<Name>/...`:
 1. Add `src/components/<Name>/index.ts`.
 2. Export the component and public types from that `index.ts`.
 3. Re-export from `src/index.ts` if the component should be available from the package root.
-4. Keep Storybook files named `*.stories.tsx`.
+4. Keep Storybook files named `*.stories.tsx`, with a `play:` function covering the component's
+   interaction behavior. See [Testing Strategy](../CONTRIBUTING.md#testing-strategy) in
+   CONTRIBUTING.md for the full component-vs-hook/store/util testing split.
 5. Add or update benchmark coverage:
    - `benchmarks/components/<Name>.bench.tsx`
    - the component config in `benchmarks/configs/all-configs.tsx`
@@ -223,6 +225,8 @@ For `src/components/<Name>/...`:
    - `dist/esm/components/<Name>/index.mjs`
    - `dist/cjs/components/<Name>/index.js`
    - `dist/types/components/<Name>/index.d.ts`
+9. Run `npm run lint` and `npm run coverage`. Both are required by CI before merge — see
+   [Coverage gate and Lint gate](../CONTRIBUTING.md#coverage-gate) in CONTRIBUTING.md.
 
 ### Hooks
 
@@ -317,3 +321,4 @@ Before publishing:
 6. Confirm `package.json` `exports` includes any new public import path.
 7. Run `npm run benchmark` when benchmark coverage or performance-sensitive component behavior changed.
 8. If the benchmark report changed intentionally, confirm `reports/benchmark-results.md` still renders in Storybook docs.
+9. Confirm `npm run lint` and `npm run coverage` pass. CI blocks merges on both — see CONTRIBUTING.md.
