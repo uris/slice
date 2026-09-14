@@ -23,6 +23,11 @@ lib-cov
 coverage
 *.lcov
 
+# Coverage report output (reports/benchmark-results.md and
+# reports/package-size-visualizer.html are committed intentionally; only the
+# generated coverage report under reports/ is excluded)
+/reports/coverage/
+
 # nyc test coverage
 .nyc_output
 
