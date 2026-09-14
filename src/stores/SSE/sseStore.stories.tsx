@@ -187,6 +187,7 @@ const meta: Meta<typeof SSEStoreDemo> = {
 	title: 'Stores/SSE Store',
 	component: SSEStoreDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 };

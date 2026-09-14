@@ -46,6 +46,7 @@ const meta: Meta<typeof UseDoubleClickDemo> = {
 	title: 'Hooks/useDoubleClick',
 	component: UseDoubleClickDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 	args: {

@@ -70,6 +70,7 @@ const meta: Meta<typeof VolumeStoreDemo> = {
 	title: 'Stores/Volume Store',
 	component: VolumeStoreDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

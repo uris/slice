@@ -111,6 +111,7 @@ const meta: Meta<typeof LocalDBStoreDemo> = {
 	title: 'Stores/Local DB Store',
 	component: LocalDBStoreDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 };

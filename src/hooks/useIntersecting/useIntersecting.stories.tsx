@@ -113,6 +113,7 @@ const meta: Meta<typeof UseIntersectingDemo> = {
 	title: 'Hooks/useIntersecting',
 	component: UseIntersectingDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

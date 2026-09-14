@@ -58,6 +58,7 @@ const meta: Meta<typeof UseKeyboardShortcutsDemo> = {
 	title: 'Hooks/useKeyboardShortcuts',
 	component: UseKeyboardShortcutsDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

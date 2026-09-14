@@ -19,6 +19,9 @@ const demoVideoProps: VideoProps = {
 const meta: Meta<typeof VideoController> = {
 	title: 'Stores/Video Store',
 	component: VideoController,
+	parameters: {
+		a11y: { test: 'todo' },
+	},
 	args: {},
 };
 

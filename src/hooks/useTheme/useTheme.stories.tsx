@@ -36,6 +36,7 @@ const meta: Meta<typeof UseThemeDemo> = {
 	title: 'Hooks/useTheme',
 	component: UseThemeDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

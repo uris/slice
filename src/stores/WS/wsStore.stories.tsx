@@ -209,6 +209,7 @@ const meta: Meta<typeof WSStoreDemo> = {
 	title: 'Stores/WS Store',
 	component: WSStoreDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 };

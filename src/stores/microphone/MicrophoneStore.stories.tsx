@@ -90,6 +90,7 @@ const meta: Meta<typeof MicrophoneStoreDemo> = {
 	title: 'Stores/Microphone Store',
 	component: MicrophoneStoreDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 };

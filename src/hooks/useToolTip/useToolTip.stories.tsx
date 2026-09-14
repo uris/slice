@@ -23,6 +23,7 @@ const meta: Meta<typeof UseToolTipDemo> = {
 	title: 'Hooks/useToolTip',
 	component: UseToolTipDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 };

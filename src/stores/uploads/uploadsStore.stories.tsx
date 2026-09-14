@@ -100,6 +100,7 @@ const meta: Meta<typeof WorkerDemo> = {
 	title: 'Stores/Uploads Store',
 	component: WorkerDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 };

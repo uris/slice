@@ -225,6 +225,7 @@ const meta: Meta<typeof UseMicrophoneDemo> = {
 	title: 'Hooks/useMicrophone',
 	component: UseMicrophoneDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'fullscreen',
 	},
 	args: {

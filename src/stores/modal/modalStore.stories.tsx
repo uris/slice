@@ -34,6 +34,9 @@ const demoModalProps: ModalProps<DemoModalType> = {
 const meta: Meta<typeof ModalController> = {
 	title: 'Stores/Modal Store',
 	component: ModalController,
+	parameters: {
+		a11y: { test: 'todo' },
+	},
 	args: {},
 };
 

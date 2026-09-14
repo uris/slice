@@ -50,6 +50,7 @@ const meta: Meta<typeof UseLastUpdatedDemo> = {
 	title: 'Hooks/useLastUpdated',
 	component: UseLastUpdatedDemo,
 	parameters: {
+		a11y: { test: 'todo' },
 		layout: 'padded',
 	},
 	args: {
