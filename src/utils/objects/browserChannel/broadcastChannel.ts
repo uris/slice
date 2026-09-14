@@ -27,7 +27,8 @@ export interface ChannelConfig<T> {
  * tell messages from different senders on the same channel name apart.
  */
 export type BrowserChannelMessage<T> = {
-	content: T | string;
+	content?: T;
+	error?: string;
 	type: MessageType;
 	origin: string;
 };
@@ -104,7 +105,8 @@ export class BrowserChannel<T> {
 	private onError = (event: MessageEvent) => {
 		this.onErrorCallback(event);
 		this.onMessageCallback({
-			content: serializeMessageEvent(event),
+			content: undefined,
+			error: serializeMessageEvent(event),
 			origin: this.origin,
 			type: MessageType.Error,
 		} satisfies BrowserChannelMessage<T>);

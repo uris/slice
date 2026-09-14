@@ -168,11 +168,11 @@ describe('BrowserChannel', () => {
 		const [message] = onMessageCallback.mock.calls[0];
 		expect(message.type).toBe(MessageType.Error);
 		expect(message.origin).toBe(channel.origin);
+		expect(typeof message.message).toBe("undefined")
 
 		// content is a JSON string carrying the event's own fields, since those
 		// live on the prototype and JSON.stringify(event) alone would drop them
-		expect(typeof message.content).toBe('string');
-		expect(JSON.parse(message.content)).toEqual({
+		expect(JSON.parse(message.error)).toEqual({
 			type: 'messageerror',
 			origin: 'https://example.com',
 			lastEventId: '42',

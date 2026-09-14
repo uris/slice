@@ -258,8 +258,9 @@ describe('browserChannelsStore', () => {
 
 		const message = getMessage('chat');
 		expect(message?.type).toBe(MessageType.Error);
+		expect(typeof message?.content).toBe("undefined");
 		expect(message?.origin).toBe(sender?.origin);
-		expect(typeof message?.content).toBe('string');
+		expect(typeof message?.error).toBe('string');
 	});
 
 	it('useMessage() scopes messages strictly to the named channel, not any other channel', () => {
