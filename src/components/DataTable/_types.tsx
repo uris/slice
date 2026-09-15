@@ -53,6 +53,8 @@ export type ColumnDefinition<T, V = unknown> = KeyColumn<T> | AccessorColumn<T, 
 export interface DataTableProps<T> {
 	height: number | string;
 	width: number | string;
+	maxWidth?: number | string;
+	margin?: number | string;
 	headerSticky: boolean;
 	freezeColumn: boolean;
 	backgroundColor?: string;

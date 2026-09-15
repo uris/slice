@@ -21,6 +21,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		headerSticky = true,
 		height = 'auto',
 		width = '100%',
+		maxWidth,
 		colResize = true,
 		borderColor = 'var(--core-outline-primary)',
 		borderStyle = 'box',
@@ -42,6 +43,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		virtualizeRowThreshold = 200,
 		rowHeight = 44,
 		overscanRows,
+		margin,
 	} = props;
 	const [hScroll, setHScroll] = useState<boolean>(false);
 	const [vScroll, setVScroll] = useState<boolean>(false);
@@ -92,7 +94,9 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 	const cssVars = useMemo(() => {
 		return {
 			'--table-width': setStyle(width),
+			'--table-max-width': maxWidth ? setStyle(maxWidth) : 'unset',
 			'--table-height': setStyle(height),
+			'--table-margin': margin ? setStyle(margin) : '0',
 			'--table-background-color': backgroundColor,
 			'--table-column-box-shadow': columnBoxShadow,
 			'--table-header-box-shadow': headerBoxShadow,
@@ -124,6 +128,8 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		borderStyle,
 		handleHoverColor,
 		borderRadius,
+		maxWidth,
+		margin,
 	]);
 
 	// handler create col refs for each col in the colgroup
