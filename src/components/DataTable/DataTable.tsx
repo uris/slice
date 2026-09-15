@@ -21,6 +21,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		headerSticky = true,
 		height = 'auto',
 		width = '100%',
+		maxWidth,
 		colResize = true,
 		borderColor = 'var(--core-outline-primary)',
 		borderStyle = 'box',
@@ -92,6 +93,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 	const cssVars = useMemo(() => {
 		return {
 			'--table-width': setStyle(width),
+			'--table-max-width': maxWidth ? setStyle(maxWidth) : "unset",
 			'--table-height': setStyle(height),
 			'--table-background-color': backgroundColor,
 			'--table-column-box-shadow': columnBoxShadow,
@@ -124,6 +126,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		borderStyle,
 		handleHoverColor,
 		borderRadius,
+		maxWidth,
 	]);
 
 	// handler create col refs for each col in the colgroup
