@@ -5,11 +5,12 @@
 	justify-content: flex-start;
 	align-items: flex-start;
 	width: var(--table-width);
+	max-width: var(--table-max-width);
 	height: var(--table-height);
 	overflow-x: auto;
 	overflow-y: auto;
 	padding: 0;
-	margin: 0;
+	margin: var(--table-margin);
 	border: var(--table-border-width) solid var(--table-border-color);
 	border-left-width: var(--table-border-sides);
 	border-right-width: var(--table-border-sides);
