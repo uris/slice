@@ -98,7 +98,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 			'--table-height': setStyle(height),
 			'--table-margin': margin ? setStyle(margin) : '0',
 			'--table-background-color': backgroundColor,
-			'--table-column-box-shadow': columnBoxShadow,s
+			'--table-column-box-shadow': columnBoxShadow,
 			'--table-header-box-shadow': headerBoxShadow,
 			'--table-corner-box-shadow': cornerBoxShadow,
 			'--table-header-background-color': headerBackgroundColor,
