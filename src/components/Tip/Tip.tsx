@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { filterClasses } from '../../utils/functions/misc';
 import css from './Tip.module.css';
 import { type PosCoords, type ToolTipProps, tipBasePos } from './_types';
@@ -13,7 +14,6 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
 		tip,
 		textSize = 's',
 		backgroundColor,
-		bgColor,
 		textColor,
 		color,
 		border = true,
@@ -35,7 +35,7 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
 	const [ready, setReady] = useState<boolean>(false);
 	const [animate, setAnimate] = useState<boolean>(false);
 	const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
+	const resolvedBackgroundColor = backgroundColor;
 	const resolvedTextColor = textColor ?? color;
 	const resolvedBorderRadius = borderRadius ?? radius;
 
@@ -74,7 +74,7 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
 			'--tooltip-background': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
 			'--tooltip-color': resolvedTextColor ?? 'var(--core-text-primary)',
 			'--tooltip-border': border ? `1px solid ${borderColor ?? 'var(--core-outline-primary)'}` : 'unset',
-			'--tooltip-border-radius': resolvedBorderRadius ?? '4px',
+			'--tooltip-border-radius': resolvedBorderRadius ?? `${corners['corner-xs']}px`,
 		} as React.CSSProperties;
 	}, [padding, resolvedBackgroundColor, resolvedTextColor, border, borderColor, resolvedBorderRadius]);
 

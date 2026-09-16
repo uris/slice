@@ -3,6 +3,7 @@
 import type React from 'react';
 import { useCallback, useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import css from './Label.module.css';
 import { LabelBackground, type LabelProps } from './_types';
@@ -18,12 +19,11 @@ export function Label(props: Readonly<LabelProps>) {
 	const {
 		children,
 		label,
-		backgroundColor,
+		backgroundColor = 'transparent',
 		borderWidth,
 		borderSize = 1,
 		borderColor = 'var(--core-outline-primary)',
-		bgColor = 'transparent',
-		borderRadius = 4,
+		borderRadius = corners['corner-xs'],
 		padding,
 		textColor = 'var(--core-text-primary)',
 		textSize = 's',
@@ -34,7 +34,7 @@ export function Label(props: Readonly<LabelProps>) {
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
 	const isInteractive = Boolean(onClick);
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
+	const resolvedBackgroundColor = backgroundColor;
 	const resolvedBorderWidth = borderWidth ?? borderSize;
 
 	const handleClick = useCallback(

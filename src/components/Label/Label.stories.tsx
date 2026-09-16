@@ -10,7 +10,7 @@ const meta: Meta<typeof Label> = {
 	args: {
 		label: 'Label',
 		textSize: 'm',
-		bgColor: 'red',
+		backgroundColor: 'red',
 		padding: undefined,
 		borderSize: 1,
 	},

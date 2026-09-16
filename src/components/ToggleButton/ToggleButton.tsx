@@ -17,9 +17,9 @@ export function ToggleButton(props: Readonly<ToggleButtonProps>) {
 		iconColor = 'var(--core-text-primary)',
 		iconColorOn = 'var(--core-surface-primary)',
 		iconColorHover = 'var(--core-text-primary)',
-		bgColor = 'var(--core-surface-secondary)',
-		bgColorHover = 'var(--core-surface-secondary)',
-		bgColorOn = 'var(--core-text-special)',
+		backgroundColor = 'var(--core-surface-secondary)',
+		backgroundColorHover = 'var(--core-surface-secondary)',
+		backgroundColorOn = 'var(--core-text-special)',
 		iconSize = 20,
 		buttonSize = 'm',
 		tooltip,
@@ -59,9 +59,9 @@ export function ToggleButton(props: Readonly<ToggleButtonProps>) {
 					tooltip={tooltip}
 					toggle={!selected}
 					isToggled={selected}
-					bgColorOn={bgColorOn}
-					bgColorHover={bgColorHover}
-					bgColor={bgColor}
+					backgroundColorOn={backgroundColorOn}
+					backgroundColorHover={backgroundColorHover}
+					backgroundColor={backgroundColor}
 					iconColor={iconColor}
 					iconColorOn={iconColorOn}
 					iconColorHover={iconColorHover}

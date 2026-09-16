@@ -44,7 +44,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>dragHandleStyle</code></td><td><code>{`{ width?: number; height?: number; radius?: number; stroke?: number; strokeColor?: string; color?: string }`}</code></td><td><code>{`{ width: 9, height: 24, color: 'var(--core-surface-primary-tint)', strokeColor: 'var(--core-outline-secondary)' }`}</code></td><td>Style overrides for the grip dots.</td></tr>
             <tr><td><code>borderRight</code></td><td><code>string</code></td><td><code>'1px solid var(--core-outline-secondary)'</code></td><td>Right border applied when panel is open and draggable.</td></tr>
             <tr><td><code>borderLeft</code></td><td><code>string | null</code></td><td><code>'1px solid var(--core-outline-secondary)'</code></td><td>Left border applied when panel is open and draggable.</td></tr>
-            <tr><td><code>bgColor</code></td><td><code>string</code></td><td><code>'transparent'</code></td><td>Panel background color.</td></tr>
+            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'transparent'</code></td><td>Panel background color.</td></tr>
             <tr><td><code>disableOnContext</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Prevents browser context menu on the panel.</td></tr>
             <tr><td><code>isTouchDevice</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Expands touch hit area and removes hover delay for handle highlight.</td></tr>
             <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native <code>div</code> props pass through (for example <code>id</code>, <code>data-testid</code>, <code>className</code>, <code>style</code>, <code>aria-*</code>).</td></tr>
@@ -92,7 +92,7 @@ export function DraggablePanelExample() {
                 // > 1 => pixels
                 sizeConstraints={{ initial: 320, min: 240, max: 560 }}
                 drags="right"
-                bgColor="var(--core-surface-secondary)"
+                backgroundColor="var(--core-surface-secondary)"
                 id="draggablepanel-example"
                 data-testid="draggablepanel-example"
                 className="custom-wrapper"

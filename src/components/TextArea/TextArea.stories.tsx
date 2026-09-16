@@ -21,7 +21,6 @@ const meta: Meta<typeof TextArea> = {
 		hasSend: false,
 		sendOffset: { bottom: 10, right: 10 },
 		sendSize: 36,
-		bgColor: undefined,
 		border: undefined,
 		returnSubmits: false,
 		textSize: 'm',

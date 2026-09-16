@@ -390,8 +390,8 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 											iconFill={true}
 											buttonSize={'m'}
 											iconSize={18}
-											bgColor={'rgba(255,255,255,0.05)'}
-											bgColorHover={'rgba(0,0,0,0.7)'}
+											backgroundColor={'rgba(255,255,255,0.05)'}
+											backgroundColorHover={'rgba(0,0,0,0.7)'}
 											iconColor={'var(--core-text-light)'}
 											iconColorHover={'var(--core-text-light)'}
 											onClick={() => handleFullScreen(true)}
@@ -405,9 +405,9 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 											iconFill={true}
 											buttonSize={'m'}
 											iconSize={20}
-											bgColor={'rgba(255,255,255,0.05)'}
-											bgColorHover={'rgba(0,0,0,0.7)'}
-											bgColorOn={'rgba(0,0,0,0.5)'}
+											backgroundColor={'rgba(255,255,255,0.05)'}
+											backgroundColorHover={'rgba(0,0,0,0.7)'}
+											backgroundColorOn={'rgba(0,0,0,0.5)'}
 											iconColor={'var(--core-text-light)'}
 											iconColorHover={'var(--core-text-light)'}
 											onClick={() => handleMute()}
@@ -433,9 +433,9 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 										iconOn={'pause'}
 										iconSize={48}
 										buttonSize={'xl'}
-										bgColor={'rgba(0,0,0,0.5)'}
-										bgColorHover={'rgba(0,0,0,0.7)'}
-										bgColorOn={'rgba(0,0,0,0.5)'}
+										backgroundColor={'rgba(0,0,0,0.5)'}
+										backgroundColorHover={'rgba(0,0,0,0.7)'}
+										backgroundColorOn={'rgba(0,0,0,0.5)'}
 										iconColor={'var(--core-text-light)'}
 										iconColorOn={'var(--core-text-light)'}
 										iconColorHover={'var(--core-text-light)'}
@@ -452,9 +452,9 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 											iconOn={'pause'}
 											buttonSize={'m'}
 											iconSize={28}
-											bgColor={'rgba(255,255,255,0.05)'}
-											bgColorHover={'rgba(0,0,0,0.7)'}
-											bgColorOn={'rgba(255,255,255,0.05)'}
+											backgroundColor={'rgba(255,255,255,0.05)'}
+											backgroundColorHover={'rgba(0,0,0,0.7)'}
+											backgroundColorOn={'rgba(255,255,255,0.05)'}
 											iconColor={'var(--core-text-light)'}
 											iconColorHover={'var(--core-text-light)'}
 											iconColorOn={'var(--core-text-light)'}
@@ -476,9 +476,9 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 												toggle={false}
 												icon={'x'}
 												buttonSize={'m'}
-												bgColor={'rgba(255,255,255,0.05)'}
-												bgColorHover={'rgba(0,0,0,0.7)'}
-												bgColorOn={'rgba(255,255,255,0.05)'}
+												backgroundColor={'rgba(255,255,255,0.05)'}
+												backgroundColorHover={'rgba(0,0,0,0.7)'}
+												backgroundColorOn={'rgba(255,255,255,0.05)'}
 												iconColor={'var(--core-text-light)'}
 												iconColorHover={'var(--core-text-light)'}
 												iconColorOn={'var(--core-text-light)'}

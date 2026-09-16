@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import styles from './DataTable.module.css';
@@ -38,7 +39,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		onSortChange,
 		onColumnResize,
 		onColumnReorder,
-		borderRadius = 8,
+		borderRadius = corners['corner-m'],
 		virtualizeRows,
 		virtualizeRowThreshold = 200,
 		rowHeight = 44,

@@ -20,7 +20,6 @@ type DropDownBaseProps<T = string> = {
 	validate?: boolean;
 	iconColor?: string;
 	backgroundColor?: string;
-	bgColor?: string;
 	textColor?: string;
 	borderColor?: string;
 	borderWidth?: number;

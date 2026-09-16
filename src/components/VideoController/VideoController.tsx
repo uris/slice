@@ -4,6 +4,7 @@ import { AnimatePresence, type Transition, motion, useDragControls } from 'motio
 import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useVideo, useVideoActions } from '../../stores';
+import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { IconButton } from '../IconButton';
 import { Overlay } from '../Overlay';
@@ -33,7 +34,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 		overlayOpacity = 0.7,
 		overlayColor = 'rgb(0,0,0)',
 		padding = 64,
-		borderRadius = 8,
+		borderRadius = corners['corner-m'],
 		quit = 'inline',
 		onQuit,
 	} = props;
@@ -70,7 +71,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 		return {
 			'--overlay-padding': setStyle(padding, 64),
 			'--video-visibility': ready ? 'visible' : 'hidden',
-			'--video-border-radius': setStyle(borderRadius, 8),
+			'--video-border-radius': setStyle(borderRadius, corners['corner-m']),
 		} as React.CSSProperties;
 	}, [padding, ready, borderRadius]);
 
@@ -112,8 +113,8 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 										icon={'x'}
 										buttonSize={'l'}
 										onClick={handleHide}
-										bgColor={'rgba(255,255,255,0.05)'}
-										bgColorHover={'rgba(255,255,255,0.25)'}
+										backgroundColor={'rgba(255,255,255,0.05)'}
+										backgroundColorHover={'rgba(255,255,255,0.25)'}
 										iconColor={'var(--core-text-light)'}
 										iconColorHover={'var(--core-text-light)'}
 									/>

@@ -14,8 +14,6 @@ type ChipBaseProps = {
 	iconColorHover?: string;
 	backgroundColor?: string;
 	backgroundColorHover?: string;
-	bgColor?: string;
-	bgColorHover?: string;
 	disabled?: boolean;
 	focused?: boolean;
 	tooltip?: string;

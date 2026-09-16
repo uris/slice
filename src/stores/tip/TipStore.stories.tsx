@@ -14,7 +14,6 @@ const meta: Meta<typeof Tip> = {
 	},
 	args: {
 		tip: undefined,
-		bgColor: undefined,
 		border: undefined,
 		borderColor: undefined,
 		radius: undefined,

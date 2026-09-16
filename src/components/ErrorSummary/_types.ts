@@ -10,7 +10,6 @@ type ErrorSummaryBaseProps = {
 	textColor?: string;
 	autoNumber?: boolean;
 	backgroundColor?: string;
-	bgColor?: string;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 };
 

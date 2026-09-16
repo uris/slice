@@ -32,7 +32,7 @@ const meta: Meta<typeof DraggablePanel> = {
 		},
 		borderRight: undefined,
 		borderLeft: undefined,
-		bgColor: undefined,
+		backgroundColor: undefined,
 		drags: 'right',
 		isTouchDevice: false,
 		containerRef: undefined,
@@ -86,7 +86,7 @@ function DraggablePanelWithChildren(args: Readonly<DraggablePanelProps>) {
 				{...args}
 				containerRef={containerRef}
 				isClosed={closed}
-				bgColor={'var(--core-surface-primary-tint)'}
+				backgroundColor={'var(--core-surface-primary-tint)'}
 			/>
 			<FlexDiv width={'auto'} height={'fill'} justify={'start'} padding={24}>
 				<IconButton icon={closed ? 'arrow right' : 'arrow left'} iconSize={20} onClick={() => setClosed(!closed)} />

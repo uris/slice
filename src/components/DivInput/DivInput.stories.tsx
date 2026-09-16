@@ -23,7 +23,6 @@ const meta: Meta<typeof DivInput> = {
 		textAlign: 'left',
 		clamp: 3,
 		padding: '16px',
-		bgColor: undefined,
 		radius: 4,
 		onChange: fn(),
 		onSubmit: fn(),

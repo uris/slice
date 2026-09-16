@@ -16,7 +16,6 @@ const meta: Meta<typeof Avatar> = {
 		borderColorHover: undefined,
 		outerBorderSize: undefined,
 		outerBorderColor: undefined,
-		bgColor: undefined,
 		fontSize: undefined,
 		onClick: fn(),
 		onKeyDown: fn(),

@@ -12,8 +12,6 @@ const meta: Meta<typeof Switch> = {
 		height: 22,
 		width: 44,
 		padding: 3,
-		bgColorOn: undefined,
-		bgColorOff: undefined,
 		knobColor: undefined,
 		onChange: fn(),
 	},

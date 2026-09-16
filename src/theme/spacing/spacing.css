@@ -1,0 +1,10 @@
+[data-slice-theme-scope] {
+    --spacing-single: 1.12em;
+    --spacing-s: 1.2em;
+    --spacing-m: 1.4em;
+    --spacing-l: 1.6em;
+    --spacing-xl: 1.8em;
+    --spacing-double: 2em;
+    --spacing-paragraph: 1.4em;
+    --spacing-label: 1.12em;
+}

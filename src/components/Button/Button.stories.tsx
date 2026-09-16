@@ -32,8 +32,6 @@ const meta: Meta<typeof Button> = {
 		underline: false,
 		borderRadius: undefined,
 		iconColor: undefined,
-		bgColor: undefined,
-		bgColorDisabled: undefined,
 		labelColor: undefined,
 		transition: undefined,
 		variants: undefined,

@@ -31,8 +31,6 @@ const meta: Meta<typeof UploadArea> = {
 		borderColorHover: undefined,
 		radius: 8,
 		padding: 32,
-		bgColor: undefined,
-		bgColorHover: undefined,
 		acceptedTypes: allTypes,
 		multiple: true,
 		busy: false,

@@ -16,15 +16,14 @@ export const ErrorSummary = React.memo((props: ErrorSummaryProps) => {
 		entries,
 		textSize = 'm',
 		textColor = warning,
-		backgroundColor,
-		bgColor = bg,
+		backgroundColor = bg,
 		autoNumber = true,
 		...divAttributes
 	} = props;
 	const { id: divId, className, style, ...rest } = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
+	const resolvedBackgroundColor = backgroundColor;
 
 	// define the open and close animation states for the summary panel
 	const variants = useMemo(

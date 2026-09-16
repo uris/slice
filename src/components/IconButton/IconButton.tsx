@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import { Icon } from '../Icon';
@@ -18,15 +19,15 @@ export const IconButton = React.memo((props: IconButtonProps) => {
 		iconSize = 20,
 		round = true,
 		icon = 'more',
-		borderRadius = 4,
+		borderRadius = corners['corner-xs'],
 		border = false,
 		tooltip = undefined,
 		color = undefined,
 		colorOn = undefined,
 		iconFill = false,
-		bgColor = 'var(--core-surface-secondary)',
-		bgColorHover = 'var(--core-outline-primary)',
-		bgColorOn = 'var(--core-outline-primary)',
+		backgroundColor = 'var(--core-surface-secondary)',
+		backgroundColorHover = 'var(--core-outline-primary)',
+		backgroundColorOn = 'var(--core-outline-primary)',
 		iconColor = 'var(--core-text-primary)',
 		iconColorOn = 'var(--core-text-primary)',
 		iconColorHover = 'var(--core-text-primary)',
@@ -96,16 +97,16 @@ export const IconButton = React.memo((props: IconButtonProps) => {
 
 	// resolve the resting background color
 	const bgColorNormal = useMemo(() => {
-		if (on) return bgColorOn;
-		return bgColor ?? 'var(--core-surface-secondary)';
-	}, [bgColorOn, bgColor, on]);
+		if (on) return backgroundColorOn;
+		return backgroundColor ?? 'var(--core-surface-secondary)';
+	}, [backgroundColorOn, backgroundColor, on]);
 
 	// resolve the hover background color
 	const bgHoverColor = useMemo(() => {
-		if (hover && on) return bgColorOn;
-		if (hover) return bgColorHover;
-		return bgColor ?? 'transparent';
-	}, [hover, bgColor, bgColorOn, bgColorHover, on]);
+		if (hover && on) return backgroundColorOn;
+		if (hover) return backgroundColorHover;
+		return backgroundColor ?? 'transparent';
+	}, [hover, backgroundColor, backgroundColorOn, backgroundColorHover, on]);
 
 	// resolve the label color for toggled and untoggled states
 	const textColor = useMemo(() => {

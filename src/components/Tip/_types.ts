@@ -8,7 +8,6 @@ type ToolTipBaseProps = {
 	tip?: ToolTip | null;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	backgroundColor?: string;
-	bgColor?: string;
 	textColor?: string;
 	color?: string;
 	border?: boolean;

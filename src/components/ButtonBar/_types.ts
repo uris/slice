@@ -21,9 +21,6 @@ type ButtonBarBaseProps = {
 	backgroundColor?: string;
 	backgroundColorHover?: string;
 	backgroundColorActive?: string;
-	bgColor?: string;
-	bgColorHover?: string;
-	bgColorActive?: string;
 	labelColor?: string;
 	buttonSize?: 's' | 'm' | 'l' | 'xl';
 	onClick?: (button: BarButton) => void;

@@ -31,7 +31,7 @@ type DraggablePanelBaseProps = {
 	resizeHandle?: Partial<ResizeHandle>;
 	borderRight?: any;
 	borderLeft?: any;
-	bgColor?: string;
+	backgroundColor?: string;
 	drags?: 'left' | 'right' | false;
 	dragHandle?: boolean;
 	dragHandleStyle?: DragHandleProps;
@@ -77,7 +77,7 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 		},
 		borderRight = '1px solid var(--core-outline-secondary)',
 		borderLeft = '1px solid var(--core-outline-secondary)',
-		bgColor = 'transparent',
+		backgroundColor = 'transparent',
 		drags = 'right',
 		isTouchDevice = false,
 		disableOnContext = false,
@@ -388,9 +388,9 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 	// compose CSS custom properties for the panel background
 	const cssVars = useMemo(() => {
 		return {
-			'--panel-bg': bgColor ?? 'transparent',
+			'--panel-bg': backgroundColor ?? 'transparent',
 		} as React.CSSProperties;
-	}, [bgColor]);
+	}, [backgroundColor]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'DraggableDiv');

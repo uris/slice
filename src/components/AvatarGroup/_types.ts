@@ -10,7 +10,6 @@ export type AvatarInfo = {
 	textColor?: string;
 	color?: string;
 	backgroundColor?: string;
-	bgColor?: string;
 };
 
 export type AvatarGroupBaseProps = {
