@@ -59,6 +59,10 @@
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
 
+.xl {
+	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+
 .chevron {
 	composes: rowStart from "../../utils/styling/flexBox.module.css";
 	min-height: var(--dd-icon-size);

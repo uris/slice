@@ -184,7 +184,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 					<FileList
 						files={files}
 						bgColor={'var(--core-surface-primary)'}
-						size={'m'}
+						textSize={'m'}
 						direction={'column'}
 						gap={8}
 						iconSize={24}

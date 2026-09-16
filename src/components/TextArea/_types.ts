@@ -20,7 +20,7 @@ type TextAreaBaseProps = {
 	bgColor?: string;
 	borderRadius?: number;
 	returnSubmits?: boolean;
-	textSize?: 'xs' | 's' | 'm' | 'l';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	disabled?: boolean;
 	submitClears?: boolean;
 	maxLength?: number;

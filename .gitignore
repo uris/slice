@@ -141,3 +141,6 @@ storybook-static
 # ide
 .idea
 .DS_Store
+# Figma component-generation manifests (exploratory, WIP)
+/figma/
+**/*.figma.ts

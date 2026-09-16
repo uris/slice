@@ -21,7 +21,7 @@ const meta: Meta<typeof Tip> = {
 		color: undefined,
 		coords: { x: 0, y: 0 },
 		padding: undefined,
-		size: 'm',
+		textSize: 'm',
 	},
 };
 

@@ -11,7 +11,7 @@ type ErrorSummaryBaseProps = {
 	autoNumber?: boolean;
 	backgroundColor?: string;
 	bgColor?: string;
-	textSize?: 'xs' | 's' | 'm' | 'l';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 };
 
 export type ErrorSummaryProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof ErrorSummaryBaseProps> &

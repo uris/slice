@@ -5,7 +5,7 @@ import type { ToolTip } from '../sharedTypes';
 export interface ToggleButtonProps {
 	children?: React.ReactNode;
 	label?: string;
-	textSize?: 's' | 'm' | 'l';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	buttonSize?: 's' | 'm' | 'l' | 'xl';
 	frameSize?: number;
 	icon?: string;

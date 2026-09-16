@@ -12,7 +12,7 @@ type FileListBaseProps = {
 	files?: FileItem[];
 	direction?: 'row' | 'column';
 	gap?: number;
-	size?: 'xs' | 's' | 'm' | 'l' | 'xl';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	maxWidth?: number | string;
 	minWidth?: number | string;
 	padding?: number | string;

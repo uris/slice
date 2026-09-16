@@ -87,7 +87,7 @@ Do not introduce:
 ## Text and typography props
 For text and text-adjacent sizing props, use this token set:
 
-`'xs' | 's' | 'm' | 'l'`
+`'xs' | 's' | 'm' | 'l' | 'xl'`
 
 Use:
 
@@ -96,13 +96,21 @@ Use:
 - `helperTextSize`
 - `errorTextSize`
 
+When a component has more than one independent typography-size prop for different
+sub-elements (for example a title and a body), name each one `<qualifier>TextSize` —
+qualifier first, matching `helperTextSize`/`errorTextSize`. Example: a modal's title and
+content sizes are `titleTextSize` and `contentTextSize`, not `textSizeTitle` /
+`textSizeContent`.
+
 Do not introduce:
 
 - `'small' | 'medium' | 'large'`
 - `'sm' | 'md' | 'lg'`
-- mixed text size sets that omit `xs`
+- mixed text size sets that omit `xs` or `xl`
+- a bare `size` prop for what is actually a typography size (use `textSize`, or a
+  qualified `<qualifier>TextSize`, instead)
 
-If a size prop controls typography, it must use `xs | s | m | l`.
+If a size prop controls typography, it must use `xs | s | m | l | xl`.
 
 ## Content-specific color props
 Use specialized color names only when the prop styles a distinct non-primary element.

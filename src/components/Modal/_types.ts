@@ -31,8 +31,8 @@ type ModalBaseProps<T = string> = {
 	titleBorderWidth?: number;
 	titleIcon?: string;
 	titleIconFill?: boolean;
-	titleSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
-	contentSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
+	titleTextSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
+	contentTextSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	close?: boolean;
 	actions?: ModalAction<T>[];
 	actionsBorderColor?: string;

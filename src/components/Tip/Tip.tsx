@@ -11,7 +11,7 @@ import { type PosCoords, type ToolTipProps, tipBasePos } from './_types';
 const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
 	const {
 		tip,
-		size = 's',
+		textSize = 's',
 		backgroundColor,
 		bgColor,
 		textColor,
@@ -89,8 +89,8 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
 
 	// compose wrapper class names for size and caller overrides
 	const classNames = useMemo(() => {
-		return filterClasses([css.wrapper, css[size], divClass]);
-	}, [size, divClass]);
+		return filterClasses([css.wrapper, css[textSize], divClass]);
+	}, [textSize, divClass]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Tip');

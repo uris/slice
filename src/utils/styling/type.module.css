@@ -137,21 +137,21 @@
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h1);
-	line-height: var(--line-height-s);
+	line-height: var(--line-height-xs);
 	letter-spacing: var(--letter-spacing-m);
 }
 
 .h2 {
 	font-family: var(--font-family), sans-serif;
-	font-weight: var(--font-weight-bold);
+	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h2);
-	line-height: var(--line-height-s);
+	line-height: var(--line-height-xs);
 	letter-spacing: var(--letter-spacing-m);
 }
 
 .h3 {
 	font-family: var(--font-family), sans-serif;
-	font-weight: var(--font-weight-bold);
+	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h3);
 	line-height: var(--line-height-xs);
 	letter-spacing: var(--letter-spacing-m);
@@ -159,24 +159,24 @@
 
 .h4 {
 	font-family: var(--font-family), sans-serif;
-	font-weight: var(--font-weight-bold);
+	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h4);
-	line-height: var(--line-height-l);
+	line-height: var(--line-height-xs);
 	letter-spacing: var(--letter-spacing-m);
 }
 
 .h5 {
 	font-family: var(--font-family), sans-serif;
-	font-weight: var(--font-weight-bold);
+	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h5);
-	line-height: var(--line-height-l);
+	line-height: var(--line-height-xs);
 	letter-spacing: var(--letter-spacing-m);
 }
 
 .h6 {
 	font-family: var(--font-family), sans-serif;
-	font-weight: var(--font-weight-bold);
+	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h6);
-	line-height: var(--line-height-l);
+	line-height: var(--line-height-xs);
 	letter-spacing: var(--letter-spacing-m);
 }

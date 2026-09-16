@@ -36,7 +36,7 @@ type DropDownBaseProps<T = string> = {
 	error?: boolean;
 	gap?: number;
 	inline?: boolean;
-	size?: 'xs' | 's' | 'm' | 'l';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	onChange?: (index: number, option: DropDownOption<T>) => void;
 	onOption?: (option: DropDownOption<T>) => void;
 };

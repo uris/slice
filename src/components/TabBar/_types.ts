@@ -7,7 +7,6 @@ export type TabOption = {
 	icon?: string | null;
 	toolTip?: string;
 	count?: number;
-	component?: any;
 };
 
 export const placeholderOptions: TabOption[] = [
@@ -43,11 +42,18 @@ type TabBarBaseProps = {
 
 export type TabBarProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof TabBarBaseProps> & TabBarBaseProps;
 
+// Render props for TabBar's internal, unexported Option sub-component. Field names
+// mirror TabOption's directly where they carry that same data through unchanged
+// (name, toolTip); `index` is deliberately its own name rather than `value` — it's
+// the option's render position (used for click/keyboard handling), a different
+// concept from TabOption.value (arbitrary consumer data used for selectedValue
+// matching), and the two must not share a prop name. See figma-manifest-punchlist.md
+// #1 for the reconciliation this followed.
 export interface TabOptionProps {
-	label?: string;
-	value?: number;
+	name?: string;
+	index?: number;
 	icon?: string | null;
-	showToolTip?: string | null;
+	toolTip?: string | null;
 	selected?: boolean;
 	padding?: number | string;
 	iconSize?: number;
@@ -57,8 +63,8 @@ export interface TabOptionProps {
 	iconFill?: boolean;
 	tabWidth?: 'compact' | 'fill' | number;
 	underline?: boolean;
-	onClick?: (value: number) => void;
-	onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>, value: number) => void;
+	onClick?: (index: number) => void;
+	onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => void;
 	onToolTip?: (tip: ToolTip | null) => void;
 	buttonRef?: (element: HTMLButtonElement | null) => void;
 	borderColor?: string;

@@ -55,7 +55,7 @@ export const FileList = React.memo((props: FileListProps) => {
 		direction = 'row',
 		padding,
 		gap = 10,
-		size = 's',
+		textSize = 's',
 		iconSize = 24,
 		backgroundColor,
 		bgColor,
@@ -144,7 +144,7 @@ export const FileList = React.memo((props: FileListProps) => {
 	return (
 		<div className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} id={divId} {...rest}>
 			{displayList.map((i) => (
-				<div key={i.key} className={`${css.file} ${css[size]}`} style={fileCSSVars(i.progress, i.error)}>
+				<div key={i.key} className={`${css.file} ${css[textSize]}`} style={fileCSSVars(i.progress, i.error)}>
 					<div className={css.fileIcon}>
 						<FileIcon name={i.icon} size={iconSize} />
 					</div>

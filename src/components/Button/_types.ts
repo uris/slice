@@ -25,7 +25,7 @@ type ButtonBaseProps = {
 	bgColor?: string;
 	bgColorDisabled?: string;
 	labelColor?: string;
-	labelSize?: 'xs' | 's' | 'm' | 'l';
+	labelSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	transition?: Transition;
 	variants?: Variants;
 	initial?: string;

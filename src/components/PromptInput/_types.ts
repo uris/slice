@@ -28,7 +28,7 @@ type BasePromptProps = {
 	toolbarGap?: number;
 	attachmentsDisabled?: boolean;
 	submitWorking?: boolean;
-	textSize?: 's' | 'm' | 'l';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	onChange?: (value: string | undefined, attachments?: FileItem[]) => void;
 	onSubmit?: (value: string | undefined, attachments?: FileItem[]) => void;
 	onBlur?: (value: string | undefined, attachments?: FileItem[]) => void;
