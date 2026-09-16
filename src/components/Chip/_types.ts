@@ -4,7 +4,7 @@ import type { ToolTip } from '../sharedTypes';
 type ChipBaseProps = {
 	children?: React.ReactNode;
 	label?: string;
-	labelSize?: 'xs' | 's' | 'm' | 'l';
+	labelSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	labelColor?: string;
 	labelColorHover?: string;
 	icon?: string;

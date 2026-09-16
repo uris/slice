@@ -1,5 +1,5 @@
 {
 	"extends": "./tsconfig.json",
 	"include": ["src/**/*"],
-	"exclude": ["**/*.stories.ts", "**/*.stories.tsx", "documentation/**"]
+	"exclude": ["**/*.stories.ts", "**/*.stories.tsx", "documentation/**", "**/*.figma.ts"]
 }

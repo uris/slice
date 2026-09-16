@@ -37,7 +37,7 @@ type UploadAreaBaseProps = {
 	borderColor?: string | null;
 	borderColorHover?: string | null;
 	borderStyle?: string;
-	textSize?: 'xs' | 's' | 'm' | 'l';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	padding?: number | string;
 	borderRadius?: number | string;
 	radius?: number | string;

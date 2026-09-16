@@ -38,7 +38,7 @@ const meta: Meta<typeof DropDown> = {
 		iconSize: 20,
 		disabled: false,
 		error: false,
-		size: 'm',
+		textSize: 'm',
 		onChange: fn(),
 		onOption: fn(),
 	},

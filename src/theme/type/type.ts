@@ -161,31 +161,31 @@ export const type: Type = {
       letter-spacing: ${letterSpacings.m}`,
 	h2: `
       font-family: ${fontFamily};
-      font-weight: ${fontWeights.bold};
+      font-weight: ${fontWeights.extra};
       font-size: ${fontSizes.h2};
       line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 	h3: `
       font-family: ${fontFamily};
-      font-weight: ${fontWeights.bold};
+      font-weight: ${fontWeights.extra};
       font-size: ${fontSizes.h3};
       line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 	h4: `
       font-family: ${fontFamily};
-      font-weight: ${fontWeights.bold};
+      font-weight: ${fontWeights.extra};
       font-size: ${fontSizes.h4};
       line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 	h5: `
       font-family: ${fontFamily};
-      font-weight: ${fontWeights.bold};
+      font-weight: ${fontWeights.extra};
       font-size: ${fontSizes.h5};
       line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,
 	h6: `
       font-family: ${fontFamily};
-      font-weight: ${fontWeights.bold};
+      font-weight: ${fontWeights.extra};
       font-size: ${fontSizes.h6};
       line-height: ${lineHeights.xs};
       letter-spacing: ${letterSpacings.m}`,

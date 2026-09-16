@@ -14,7 +14,7 @@ const ToastBase = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
 	const {
 		notifId,
 		message = null,
-		size = 'm',
+		textSize = 'm',
 		border = true,
 		padding,
 		radius = 8,
@@ -126,8 +126,8 @@ const ToastBase = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
 
 	// compose wrapper class names from size and caller overrides
 	const classNames = useMemo(() => {
-		return filterClasses([css.wrapper, css[size], divClass]);
-	}, [size, divClass]);
+		return filterClasses([css.wrapper, css[textSize], divClass]);
+	}, [textSize, divClass]);
 
 	// dismiss the toast immediately when the close affordance is used
 	const handleClose = useCallback(() => {

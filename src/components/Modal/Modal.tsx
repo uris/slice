@@ -21,8 +21,8 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 		padding,
 		close = true,
 		title,
-		titleSize = 'l',
-		contentSize = 'm',
+		titleTextSize = 'l',
+		contentTextSize = 'm',
 		actions,
 		titleIcon,
 		titleIconFill = true,
@@ -166,7 +166,7 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 	return (
 		<div id={id} className={`${css.wrapper}${modalClass}`} style={{ ...modalStyle, ...cssVars }} {...(rest as any)}>
 			{(title || close) && (
-				<div className={`${css.title} ${css[titleSize]}`} onPointerDown={onDragPointerDown}>
+				<div className={`${css.title} ${css[titleTextSize]}`} onPointerDown={onDragPointerDown}>
 					<div className={css.titleBlock}>
 						{titleIcon && (
 							<div className={css.titleIcon}>
@@ -185,7 +185,7 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 				</div>
 			)}
 			<div className={css.contentWrapper} ref={contentWrapperRef}>
-				<div className={`${css.content} ${css[contentSize]}`}>{children}</div>
+				<div className={`${css.content} ${css[contentTextSize]}`}>{children}</div>
 			</div>
 			{actions && actions.length > 0 && (
 				<div className={css.actions} onPointerDown={onDragPointerDown}>

@@ -22,7 +22,7 @@ const meta: Meta<typeof Toast> = {
 		offset: undefined,
 		position: 'bottom',
 		progress: undefined,
-		size: 'm',
+		textSize: 'm',
 		close: true,
 		type: ToastType.Info,
 	},

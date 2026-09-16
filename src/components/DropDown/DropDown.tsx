@@ -17,7 +17,7 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 		name = 'drop-down-select',
 		label,
 		labelColor = 'var(--core-text-primary)',
-		size = 'm',
+		textSize = 'm',
 		width = '100%',
 		height = 'auto',
 		inline = false,
@@ -223,8 +223,8 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 
 	return (
 		<span id={divId} className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} {...rest}>
-			{label && <span className={`${css.label} ${css[size]}`}>{label}</span>}
-			<span className={`${css.face} ${css[size]}`}>
+			{label && <span className={`${css.label} ${css[textSize]}`}>{label}</span>}
+			<span className={`${css.face} ${css[textSize]}`}>
 				<span className={css.faceText}>{displayText}</span>
 			</span>
 			<span className={css.chevron}>

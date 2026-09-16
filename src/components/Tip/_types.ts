@@ -6,7 +6,7 @@ export type PosCoords = { left: number; top: number };
 
 type ToolTipBaseProps = {
 	tip?: ToolTip | null;
-	size?: 'xs' | 's' | 'm' | 'l';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	backgroundColor?: string;
 	bgColor?: string;
 	textColor?: string;

@@ -5,8 +5,8 @@ type TextFieldBaseProps = {
 	value?: string;
 	name?: string;
 	label?: string;
-	labelSize?: 'xs' | 's' | 'm' | 'l';
-	textSize?: 'xs' | 's' | 'm' | 'l';
+	labelSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	placeholder?: string;
 	focused?: boolean;
 	editable?: boolean;

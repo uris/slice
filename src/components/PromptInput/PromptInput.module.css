@@ -106,6 +106,10 @@
 	}
 }
 
+.xs {
+	composes: body-xs-regular from "../../utils/styling/type.module.css";
+}
+
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
@@ -116,4 +120,8 @@
 
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
+}
+
+.xl {
+	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }

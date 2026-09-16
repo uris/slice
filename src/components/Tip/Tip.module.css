@@ -23,3 +23,7 @@
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
+
+.xl {
+	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}

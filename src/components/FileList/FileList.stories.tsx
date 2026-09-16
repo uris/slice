@@ -17,7 +17,7 @@ const meta: Meta<typeof FileList> = {
 			{ file: 'video.mp4' },
 			{ file: 'audio.mp3' },
 		],
-		size: 's',
+		textSize: 's',
 		maxWidth: undefined,
 		minWidth: undefined,
 		direction: 'row',

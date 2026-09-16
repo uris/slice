@@ -116,9 +116,9 @@ export const TabBar = React.memo((props: TabBarProps) => {
 			options.map((option: TabOption, i: number) => (
 				<Option
 					key={`${i}_option_${option.name}`}
-					label={option.name}
-					value={i}
-					showToolTip={option.toolTip}
+					name={option.name}
+					index={i}
+					toolTip={option.toolTip}
 					selected={i === index}
 					padding={padding}
 					icon={option.icon}
@@ -204,8 +204,8 @@ const Option = React.memo(
 	(props: TabOptionProps) => {
 		const theme = useTheme();
 		const {
-			label = 'Option',
-			value = 0,
+			name = 'Option',
+			index = 0,
 			icon = null,
 			selected = false,
 			onClick = () => null,
@@ -214,7 +214,7 @@ const Option = React.memo(
 			iconSize = 20,
 			iconGap = 6,
 			disabled = false,
-			showToolTip = null,
+			toolTip = null,
 			underline = true,
 			tabWidth = 'fill',
 			borderColor = 'var(--core-outline-secondary)',
@@ -237,23 +237,23 @@ const Option = React.memo(
 		const handleMouseOver = useCallback(
 			(e: React.MouseEvent) => {
 				onToolTip(null);
-				if (showToolTip && ref.current) {
+				if (toolTip && ref.current) {
 					const tip: ToolTip = {
 						type: ToolTipType.button,
-						payload: { label: showToolTip },
+						payload: { label: toolTip },
 						event: e,
 						ref,
 					};
 					onToolTip(tip);
 				}
 			},
-			[showToolTip, onToolTip],
+			[toolTip, onToolTip],
 		);
 
 		// clear tooltip state when the pointer leaves the option
 		const handleMouseLeave = useCallback(() => {
-			if (showToolTip) onToolTip(null);
-		}, [showToolTip, onToolTip]);
+			if (toolTip) onToolTip(null);
+		}, [toolTip, onToolTip]);
 
 		// resolve the option text color from selection and disabled state
 		const textColor = useMemo(() => {
@@ -314,15 +314,15 @@ const Option = React.memo(
 				tabIndex={selected ? 0 : -1}
 				onMouseEnter={handleMouseOver}
 				onMouseLeave={handleMouseLeave}
-				onClick={() => onClick(value)}
-				onKeyDown={(e) => onKeyDown(e, value)}
+				onClick={() => onClick(index)}
+				onKeyDown={(e) => onKeyDown(e, index)}
 			>
 				{icon && (
 					<div className={css.icon}>
 						<Icon name={icon} fill={iconFill} size={iconSize} strokeColor={strokeColor} />
 					</div>
 				)}
-				{label}
+				{name}
 				{count !== 0 && <Badge variant={'light'} hideNull={false} count={count} />}
 			</button>
 		);
@@ -337,11 +337,12 @@ const Option = React.memo(
 			prevProps.iconGap === nextProps.iconGap &&
 			prevProps.iconSize === nextProps.iconSize &&
 			prevProps.count === nextProps.count &&
-			prevProps.label === nextProps.label &&
 			prevProps.icon === nextProps.icon &&
 			prevProps.borderColor === nextProps.borderColor &&
 			prevProps.textSize === nextProps.textSize &&
-			prevProps.padding === nextProps.padding
+			prevProps.padding === nextProps.padding &&
+			prevProps.name === nextProps.name &&
+			prevProps.index === nextProps.index
 		);
 	},
 );

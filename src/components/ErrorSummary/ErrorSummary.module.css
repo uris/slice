@@ -56,3 +56,8 @@
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 	font-size: var(--font-size-l) !important;
 }
+
+.xl {
+	composes: body-xl-regular from "../../utils/styling/type.module.css";
+	font-size: var(--font-size-xl) !important;
+}

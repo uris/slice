@@ -21,7 +21,7 @@ type LabelBaseProps = {
 	borderRadius?: number;
 	padding?: number | string;
 	textColor?: string;
-	textSize?: 'xs' | 's' | 'm' | 'l';
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	onClick?: (e: React.MouseEvent<any>) => void;
 };
 
