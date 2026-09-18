@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { Button } from '../Button';
 import { Icon } from '../Icon';
@@ -34,7 +35,7 @@ export const TextField = React.memo(
 			maxLength = undefined,
 			size = { width: '100%', height: 'auto' },
 			padding,
-			borderRadius = 8,
+			borderRadius = corners['corner-m'],
 			editable = true,
 			textAlign = 'left',
 			inline = false,

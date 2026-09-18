@@ -3,13 +3,14 @@
 import { motion } from 'motion/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { cleanString } from '../../utils/functions/misc';
 import css from './DivInput.module.css';
 import type { DivInputProps } from './_types';
 
 export const DivInput = React.memo((props: DivInputProps) => {
 	const {
-		value = '',
+		value: valueProp = '',
 		name = 'Input Field',
 		placeholder = 'Placeholder',
 		isEditable = true,
@@ -26,9 +27,8 @@ export const DivInput = React.memo((props: DivInputProps) => {
 		onDblClick = () => null,
 		onClick = () => null,
 		borderRadius,
-		radius = 4,
-		backgroundColor,
-		bgColor = 'var(--core-surface-secondary)',
+		radius = corners['corner-xs'],
+		backgroundColor = 'var(--core-surface-secondary)',
 		...divAttributes
 	} = props;
 	const { id: divId, className, style, ...rest } = divAttributes;
@@ -36,12 +36,13 @@ export const DivInput = React.memo((props: DivInputProps) => {
 	const divClass = className ? ` ${className}` : '';
 
 	const ref = useRef<HTMLDivElement>(null);
+	const value = valueProp ?? '';
 	const innerText = useRef<string>(value === '' ? cleanString(placeholder) : cleanString(value));
 	const [isFocused, setIsFocused] = useState(focus);
 	const [text, setText] = useState(innerText.current);
 	const [isPlaceholder, setIsPlaceholder] = useState<boolean>(false);
 	const resolvedBorderRadius = borderRadius ?? radius;
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
+	const resolvedBackgroundColor = backgroundColor;
 
 	// place the text cursor at the requested edge of the editable content
 	const setCursor = useCallback((to: 'start' | 'end', length = 1) => {
@@ -214,7 +215,7 @@ export const DivInput = React.memo((props: DivInputProps) => {
 			'--div-input-white-space': isEditable && wrap ? 'wrap' : 'no-wrap',
 			'--div-input-line-clamp': isEditable && isFocused ? 'none' : (clamp ?? 'none'),
 			'--div-input-cursor': isEditable ? 'text' : 'default',
-			'--div-input-bg': isEditable ? (bgColor ?? 'var(--core-surface-secondary)') : 'transparent',
+			'--div-input-bg': isEditable ? (resolvedBackgroundColor ?? 'var(--core-surface-secondary)') : 'transparent',
 			'--div-input-wrapper-bg':
 				isEditable && isFocused ? (resolvedBackgroundColor ?? 'var(--core-surface-secondary)') : 'transparent',
 			'--div-input-border-radius': `${resolvedBorderRadius}px`,
@@ -231,7 +232,6 @@ export const DivInput = React.memo((props: DivInputProps) => {
 		setWidth,
 		resolvedBackgroundColor,
 		resolvedBorderRadius,
-		bgColor,
 	]);
 
 	/* START.DEBUG */
@@ -256,7 +256,7 @@ export const DivInput = React.memo((props: DivInputProps) => {
 				role={'textbox'}
 				aria-label={name}
 			>
-				{value ?? placeholder}
+				{valueProp ?? placeholder}
 			</motion.div>
 		</div>
 	);

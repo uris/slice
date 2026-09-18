@@ -58,7 +58,6 @@ export const FileList = React.memo((props: FileListProps) => {
 		textSize = 's',
 		iconSize = 24,
 		backgroundColor,
-		bgColor,
 		canRemove = true,
 		...divAttributes
 	} = props;
@@ -66,7 +65,7 @@ export const FileList = React.memo((props: FileListProps) => {
 	const { id: divId, className, style, ...rest } = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
+	const resolvedBackgroundColor = backgroundColor;
 
 	// derive display metadata from the raw file name
 	const fileNameToFileItem = useCallback((fileName: string) => {

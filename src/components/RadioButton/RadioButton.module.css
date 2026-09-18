@@ -6,7 +6,7 @@
 	border: var(--rb-border);
 	background: var(--rb-bg);
 	gap: var(--rb-gap);
-	border-radius: 8px;
+	border-radius: var(--corner-m);
 	cursor: pointer;
 	transition: all var(--motion-water-duration) var(--motion-water) 0s;
 	user-select: none;

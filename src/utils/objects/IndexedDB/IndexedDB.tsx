@@ -82,7 +82,11 @@ export class IndexedDB<T> {
 	 * Get a single DB value by key.
 	 */
 	public async get(key: IDBValidKey): Promise<T | null> {
-		return this.runRequest<T | null>('readonly', (store) => store.get(key));
+		// IDBObjectStore.get() resolves `undefined` (not `null`) when the key
+		// is not found. Normalize that here so the return type's `T | null`
+		// contract actually holds for callers.
+		const value = await this.runRequest<T | undefined>('readonly', (store) => store.get(key));
+		return value ?? null;
 	}
 
 	/**
@@ -100,17 +104,25 @@ export class IndexedDB<T> {
 	}
 
 	// Puts the key/value in the store. If the key already exists, its value will be overwritten.
+	//
+	// IndexedDB rejects an explicit key argument on a store that has an
+	// in-line key path (a "keyPath", configured here via the `key` option) -
+	// the key must instead be extracted from the value itself. Only pass the
+	// key through for stores using out-of-line keys (no `key` option).
 	public async set(key: IDBValidKey, value: T): Promise<IDBValidKey> {
-		return this.runRequest<IDBValidKey>('readwrite', (store) => store.put(value, key));
+		return this.runRequest<IDBValidKey>('readwrite', (store) => (this.key ? store.put(value) : store.put(value, key)));
 	}
 
 	/**
 	 * Adds a new value to the store with or without a key.
 	 * If a key already exists it will error.
+	 *
+	 * As with `set()`, a store configured with an in-line key path must never
+	 * be given an explicit key - it is always derived from the value.
 	 */
 	public async add(value: T, key?: IDBValidKey): Promise<IDBValidKey> {
 		return this.runRequest<IDBValidKey>('readwrite', (store) =>
-			key === undefined ? store.add(value) : store.add(value, key),
+			this.key || key === undefined ? store.add(value) : store.add(value, key),
 		);
 	}
 

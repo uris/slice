@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import type { ToolTip } from '../sharedTypes';
@@ -18,14 +19,11 @@ export const ButtonBar = React.memo(function ButtonBar(props: Readonly<ButtonBar
 		iconSize = 20,
 		borderWidth,
 		borderSize = 0,
-		borderRadius = 100,
+		borderRadius = corners['corner-round'],
 		borderColor = 'var(--core-outline-primary)',
-		backgroundColor,
-		backgroundColorHover,
-		backgroundColorActive,
-		bgColor = 'var(--core-surface-secondary)',
-		bgColorHover = 'var(--core-outline-primary)',
-		bgColorActive = 'var(--core-outline-primary)',
+		backgroundColor = 'var(--core-surface-secondary)',
+		backgroundColorHover = 'var(--core-outline-primary)',
+		backgroundColorActive = 'var(--core-outline-primary)',
 		labelColor = 'var(--core-text-primary)',
 		onClick = (button?: ButtonBarItem) => null,
 		onChange = (button?: ButtonBarItem) => null,
@@ -36,9 +34,9 @@ export const ButtonBar = React.memo(function ButtonBar(props: Readonly<ButtonBar
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
 	const resolvedBorderWidth = borderWidth ?? borderSize;
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
-	const resolvedBackgroundColorHover = backgroundColorHover ?? bgColorHover;
-	const resolvedBackgroundColorActive = backgroundColorActive ?? bgColorActive;
+	const resolvedBackgroundColor = backgroundColor;
+	const resolvedBackgroundColorHover = backgroundColorHover;
+	const resolvedBackgroundColorActive = backgroundColorActive;
 	const [hovered, setHovered] = useState<number>(-1);
 	const [selectedIndex, setSelectedIndex] = useState<number | undefined>(selected);
 

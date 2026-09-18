@@ -85,4 +85,34 @@ describe('useDoubleClick', () => {
 		vi.advanceTimersByTime(200);
 		expect(onClick).not.toHaveBeenCalled();
 	});
+
+	it('calling the cleanup function when there is no pending timer is a no-op', () => {
+		const onClick = vi.fn();
+		const onDblClick = vi.fn();
+		const { result } = renderHook(() => useDoubleClick(onClick, onDblClick));
+		const [didClick] = result.current;
+
+		const cleanup = didClick('payload');
+		cleanup();
+		// timer.current is already null at this point (cleared above) - calling
+		// cleanup a second time exercises the `if (timer.current)` false branch
+		expect(() => cleanup()).not.toThrow();
+
+		vi.advanceTimersByTime(200);
+		expect(onClick).not.toHaveBeenCalled();
+	});
+
+	it('didDblClick with no pending click still fires onDblClick (no timer to clear)', () => {
+		const onClick = vi.fn();
+		const onDblClick = vi.fn();
+		const { result } = renderHook(() => useDoubleClick(onClick, onDblClick));
+		const [, didDblClick] = result.current;
+
+		// no prior didClick() call, so timer.current is null - exercises
+		// didDblClick's `if (timer.current)` false branch
+		didDblClick('double');
+
+		expect(onDblClick).toHaveBeenCalledWith('double');
+		expect(onClick).not.toHaveBeenCalled();
+	});
 });

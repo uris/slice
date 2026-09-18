@@ -1,4 +1,5 @@
 @import "./theme/colors/colors.css";
+@import "./theme/corners/corners.css";
 @import "./theme/elevations/elevation.css";
 @import "./theme/type/type.css";
 @import "./theme/breakpoints/custom-media.css";

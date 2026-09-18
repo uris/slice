@@ -53,7 +53,7 @@ export const AvatarGroup = React.memo((props: AvatarGroupProps) => {
 					outerBorderSize={outerBorderSize}
 					outerBorderColor={outerBorderColor}
 					textColor={avatar.textColor ?? avatar.color}
-					backgroundColor={avatar.backgroundColor ?? avatar.bgColor}
+					backgroundColor={avatar.backgroundColor}
 					onToolTip={onToolTip}
 				/>
 			</div>

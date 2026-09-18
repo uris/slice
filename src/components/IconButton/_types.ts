@@ -60,9 +60,9 @@ type IconButtonBaseProps = {
 	colorOn?: string;
 	fillColor?: number;
 	disabled?: boolean;
-	bgColor?: string;
-	bgColorOn?: string;
-	bgColorHover?: string;
+	backgroundColor?: string;
+	backgroundColorOn?: string;
+	backgroundColorHover?: string;
 	toggle?: boolean;
 	hover?: boolean;
 	toggleIcon?: boolean;

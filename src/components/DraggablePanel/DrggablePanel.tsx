@@ -31,12 +31,24 @@ type DraggablePanelBaseProps = {
 	resizeHandle?: Partial<ResizeHandle>;
 	borderRight?: any;
 	borderLeft?: any;
-	bgColor?: string;
+	backgroundColor?: string;
 	drags?: 'left' | 'right' | false;
 	dragHandle?: boolean;
 	dragHandleStyle?: DragHandleProps;
 	disableOnContext?: boolean;
 	isTouchDevice?: boolean;
+	/**
+	 * Overrides the CSS transition duration used only for the panel's very
+	 * first open (its initial mount, when it animates from a closed/zero
+	 * width to its settled starting width). A number is treated as
+	 * milliseconds; a string is used as-is (e.g. `'0.5s'`). Pass `0` to have
+	 * the panel appear already open at its starting width, with no reveal
+	 * animation. Leave `undefined` (the default) to use the same
+	 * `--motion-water-duration` timing as every other width transition.
+	 * Any transition *after* that first open (drags, later `isClosed`
+	 * toggles, constraint changes) always uses the normal duration.
+	 */
+	transitionDurationOnInit?: string | number;
 };
 
 export type DraggablePanelProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DraggablePanelBaseProps> &
@@ -77,12 +89,13 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 		},
 		borderRight = '1px solid var(--core-outline-secondary)',
 		borderLeft = '1px solid var(--core-outline-secondary)',
-		bgColor = 'transparent',
+		backgroundColor = 'transparent',
 		drags = 'right',
 		isTouchDevice = false,
 		disableOnContext = false,
 		dragHandle = true,
 		dragHandleStyle = { height: 24, width: 9 },
+		transitionDurationOnInit,
 		containerRef,
 		onResize = () => null,
 		onResizeStart = () => null,
@@ -233,14 +246,9 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 	// enforce min and max width constraints during drag
 	const canDrag = useCallback(
 		(newWidth: number, clientX: number) => {
-			if (constraints?.min) {
-				if (newWidth <= constraints.min) return false;
-				if (newWidth < constraints.min) return false;
-			}
-			if (constraints?.max) {
-				if (newWidth >= constraints.max) {
-					if (clientX - startX.current > 0) return false;
-				}
+			if (constraints?.min && newWidth < constraints.min) return false;
+			if (constraints?.max && newWidth > constraints.max) {
+				if (clientX - startX.current > 0) return false;
 			}
 			return true;
 		},
@@ -299,10 +307,28 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 		if (!isOver.current) setHighlight(false);
 	}, [doDrag, onResizeEnd, onResize, setHighlight]);
 
+	// the panel's very first open (mount -> settled starting width, per
+	// `normalizeWidth`'s `!mounted` guard above) can use its own transition
+	// duration via `transitionDurationOnInit`, instead of the normal
+	// `--motion-water-duration` used for every subsequent width change
+	// (drags, later `isClosed` toggles, constraint changes). Track whether
+	// that first open has already happened with state (not a ref) so the
+	// `transition` memo below correctly re-derives once it has.
+	const [initialOpenSettled, setInitialOpenSettled] = useState(false);
+	useEffect(() => {
+		if (mounted) setInitialOpenSettled(true);
+	}, [mounted]);
+
 	// resolve the width transition
 	const transition = useMemo(() => {
+		const usingInitDuration = mounted && !initialOpenSettled && transitionDurationOnInit !== undefined;
+		if (usingInitDuration) {
+			const duration =
+				typeof transitionDurationOnInit === 'number' ? `${transitionDurationOnInit}ms` : transitionDurationOnInit;
+			return `width ${duration} var(--motion-water)`;
+		}
 		return 'width var(--motion-water-duration) var(--motion-water)';
-	}, []);
+	}, [mounted, initialOpenSettled, transitionDurationOnInit]);
 
 	// capture the starting drag measurements and attach drag listeners
 	const initDrag = useCallback(
@@ -388,9 +414,9 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 	// compose CSS custom properties for the panel background
 	const cssVars = useMemo(() => {
 		return {
-			'--panel-bg': bgColor ?? 'transparent',
+			'--panel-bg': backgroundColor ?? 'transparent',
 		} as React.CSSProperties;
-	}, [bgColor]);
+	}, [backgroundColor]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'DraggableDiv');
@@ -409,6 +435,15 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 				...divStyle,
 				...cssVars,
 				overflow: 'visible',
+				// without this, a plain flex-row ancestor's default
+				// `flex-shrink: 1` can silently collapse the panel's real
+				// rendered width far below both `width` and the declared
+				// `sizeConstraints.min` floor whenever the row runs short on
+				// space (especially with no children giving it an intrinsic
+				// minimum content size) - the panel already manages its own
+				// width via drag constraints, so it shouldn't be at the
+				// mercy of ordinary flexbox shrinking too
+				flexShrink: 0,
 				width: width,
 				height: '100%',
 				maxWidth: drags ? constraints.max : 'unset',

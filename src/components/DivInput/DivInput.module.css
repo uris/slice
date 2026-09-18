@@ -16,7 +16,7 @@
 	text-align: var(--div-input-text-align);
 	pointer-events: all;
 	background: transparent;
-	border-radius: 4px;
+	border-radius: var(--corner-xs);
 	border: 0;
 	outline: none;
 	text-overflow: ellipsis;

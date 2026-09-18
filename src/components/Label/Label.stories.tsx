@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { Label } from 'src/components/Label/Label';
-import { runLabelPlay } from 'src/components/playHelpers';
+import { LabelBackground } from 'src/components/Label/_types';
+import { runLabelBackgroundVariantsPlay, runLabelPlay } from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
 
 const meta: Meta<typeof Label> = {
@@ -10,7 +11,7 @@ const meta: Meta<typeof Label> = {
 	args: {
 		label: 'Label',
 		textSize: 'm',
-		bgColor: 'red',
+		backgroundColor: 'red',
 		padding: undefined,
 		borderSize: 1,
 	},
@@ -55,5 +56,28 @@ export const ButtonLabel: StoryObj<typeof Label> = {
 	},
 	play: async ({ canvasElement, args }) => {
 		await runLabelPlay({ canvasElement, args });
+	},
+};
+
+export const SemanticBackgroundVariants: StoryObj<typeof Label> = {
+	tags: ['tests'],
+	render: () => {
+		return (
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={8} wrap>
+				<Label backgroundColor={LabelBackground.green}>Green</Label>
+				<Label backgroundColor={LabelBackground.yellow}>Yellow</Label>
+				<Label backgroundColor={LabelBackground.grey}>Grey</Label>
+				<Label backgroundColor={LabelBackground.lightGrey}>Light Grey</Label>
+				<Label backgroundColor={LabelBackground.white}>White</Label>
+				<Label backgroundColor={LabelBackground.blue}>Blue</Label>
+				<Label backgroundColor={''} className={'label-empty-bg-test'}>
+					Empty
+				</Label>
+				<Label padding={12}>Padded</Label>
+			</FlexDiv>
+		);
+	},
+	play: async ({ canvasElement }) => {
+		await runLabelBackgroundVariantsPlay({ canvasElement });
 	},
 };

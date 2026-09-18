@@ -1,7 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { TextArea } from 'src/components/TextArea/TextArea';
-import { runTextAreaPlay } from 'src/components/playHelpers';
+import {
+	runTextAreaNoClearOnSubmitPlay,
+	runTextAreaPlay,
+	runTextAreaSendButtonPlay,
+	runTextAreaWithoutHandlersPlay,
+} from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
 
 const meta: Meta<typeof TextArea> = {
@@ -21,7 +26,6 @@ const meta: Meta<typeof TextArea> = {
 		hasSend: false,
 		sendOffset: { bottom: 10, right: 10 },
 		sendSize: 36,
-		bgColor: undefined,
 		border: undefined,
 		returnSubmits: false,
 		textSize: 'm',
@@ -78,6 +82,112 @@ export const WithSendButton: StoryObj<typeof TextArea> = {
 		hasSend: true,
 		value: 'Send this',
 	},
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaSendButtonPlay({ canvasElement, args });
+	},
+};
+
+export const SendButtonWithoutClearing: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	args: {
+		...meta.args,
+		hasSend: true,
+		submitClears: false,
+	},
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaNoClearOnSubmitPlay({ canvasElement, args });
+	},
+};
+
+export const WithoutHandlers: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	args: {
+		...meta.args,
+		onChange: undefined,
+		onFocus: undefined,
+		onBlur: undefined,
+		onSubmit: undefined,
+		onKeyDown: undefined,
+		returnSubmits: true,
+	},
+	render: Default.render,
+	play: async ({ canvasElement }) => {
+		await runTextAreaWithoutHandlersPlay({ canvasElement });
+	},
+};
+
+export const CustomClassName: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	args: { ...meta.args, className: 'ta-custom-class' },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaPlay({ canvasElement, args });
+	},
+};
+
+export const InitiallyFocused: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	args: { ...meta.args, focused: true },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaPlay({ canvasElement, args });
+	},
+};
+
+export const NumericDimensions: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	// numeric width/height/minWidth - exercises setStyleValue's number branch
+	// and the `height === 'auto'` false branch
+	args: { ...meta.args, width: 320, height: 200, minWidth: 240 },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaPlay({ canvasElement, args });
+	},
+};
+
+export const NoBorder: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	args: { ...meta.args, border: false },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaPlay({ canvasElement, args });
+	},
+};
+
+export const ErrorState: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	// border true (default) + error true, exercises setBorderColor's
+	// `border && error` branch on the initial (unfocused) render
+	args: { ...meta.args, border: true, error: true },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaPlay({ canvasElement, args });
+	},
+};
+
+export const SmallText: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	args: { ...meta.args, textSize: 's' },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaPlay({ canvasElement, args });
+	},
+};
+
+export const ExtraSmallText: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	args: { ...meta.args, textSize: 'xs' },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runTextAreaPlay({ canvasElement, args });
+	},
+};
+
+export const LargeText: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	args: { ...meta.args, textSize: 'l' },
 	render: Default.render,
 	play: async ({ canvasElement, args }) => {
 		await runTextAreaPlay({ canvasElement, args });

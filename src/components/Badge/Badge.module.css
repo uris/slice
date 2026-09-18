@@ -7,6 +7,6 @@
 	padding: 2px 8px;
 	min-width: 24px;
 	width: min-content;
-	border-radius: 8px;
+	border-radius: var(--corner-m);
 	white-space: nowrap;
 }

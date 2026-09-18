@@ -3,7 +3,7 @@
 	padding: var(--switch-padding) !important;
 	width: var(--switch-width);
 	height: var(--switch-height);
-	border-radius: 100px;
+	border-radius: var(--corner-round);
 	cursor: pointer;
 	background: var(--switch-bg-color);
 	transition: background var(--motion-water-duration) var(--motion-water) 0s;

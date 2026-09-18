@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
+import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { Button } from '../Button';
 import { type FileItem, FileList } from '../FileList';
@@ -25,7 +26,7 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((props, re
 		borderColorOn,
 		borderAnimate = true,
 		borderWidth = 1,
-		borderRadius = 8,
+		borderRadius = corners['corner-m'],
 		focused = false,
 		placeholder = 'Ask me anything ...',
 		placeholderWorking = 'Working ...',
@@ -224,7 +225,7 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((props, re
 						<FileList
 							files={attachments}
 							onChange={handleAttachmentsChange}
-							bgColor={'var(--core-surface-primary)'}
+							backgroundColor={'var(--core-surface-primary)'}
 							textSize={'s'}
 							direction={'row'}
 							gap={8}
@@ -270,7 +271,7 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((props, re
 								iconLeft={stopEnabled ? 'stop' : 'arrow up'}
 								iconSize={stopEnabled ? 16 : 20}
 								state={sendButtonState}
-								bgColorDisabled={'var(--core-outline-primary)'}
+								backgroundColorDisabled={'var(--core-outline-primary)'}
 								progress={!stopEnabled}
 								working={submitWorking && working}
 								onMouseDown={handleClickSend}

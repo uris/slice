@@ -14,7 +14,6 @@ type LabelBaseProps = {
 	children?: React.ReactNode;
 	label?: string;
 	backgroundColor?: LabelBackground | string;
-	bgColor?: LabelBackground | string;
 	borderWidth?: number;
 	borderSize?: number;
 	borderColor?: string;

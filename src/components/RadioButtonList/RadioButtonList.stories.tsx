@@ -2,7 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import type { RadioButtonOption } from 'src/components/RadioButton';
 import { RadioButtonList } from 'src/components/RadioButtonList/RadioButtonList';
-import { runRadioButtonListPlay } from 'src/components/playHelpers';
+import {
+	runRadioButtonListDeselectPlay,
+	runRadioButtonListLayoutVariantsPlay,
+	runRadioButtonListMultiSelectTogglePlay,
+	runRadioButtonListPlay,
+	runRadioButtonListSelectedOptionsEffectPlay,
+} from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
 
 const options: RadioButtonOption[] = [
@@ -79,4 +85,48 @@ export const MultiSelect: StoryObj<typeof RadioButtonList> = {
 	play: async ({ canvasElement, args }) => {
 		await runRadioButtonListPlay({ canvasElement, args });
 	},
+};
+
+export const DeselectToggle: StoryObj<typeof RadioButtonList> = {
+	tags: ['tests'],
+	render: Default.render,
+	play: runRadioButtonListDeselectPlay,
+};
+
+export const MultiSelectToggle: StoryObj<typeof RadioButtonList> = {
+	tags: ['tests'],
+	args: {
+		...meta.args,
+		multiSelect: true,
+	},
+	render: Default.render,
+	play: runRadioButtonListMultiSelectTogglePlay,
+};
+
+export const SelectedOptionsEffect: StoryObj<typeof RadioButtonList> = {
+	tags: ['tests'],
+	args: {
+		...meta.args,
+		label: 'Pick one',
+		selectedOptions: ['option'],
+	},
+	render: Default.render,
+	play: runRadioButtonListSelectedOptionsEffectPlay,
+};
+
+export const LayoutVariants: StoryObj<typeof RadioButtonList> = {
+	tags: ['tests'],
+	args: {
+		...meta.args,
+		multiSelect: true,
+		tabIndexSeed: 5,
+		wrap: true,
+		hideRadio: true,
+		spacer: 'custom',
+		custom: 24,
+		noFrame: false,
+		width: '200px',
+	},
+	render: Default.render,
+	play: runRadioButtonListLayoutVariantsPlay,
 };

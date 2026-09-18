@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { Button } from '../Button';
 import { Icon } from '../Icon';
@@ -42,7 +43,7 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 		scrollHandleColorHover = 'var(--core-text-disabled)',
 		titleColor = 'var(--core-text-special)',
 		borderColor = 'var(--core-outline-primary)',
-		borderRadius = 8,
+		borderRadius = corners['corner-m'],
 		borderWidth = 1,
 		...rest
 	} = props;
@@ -178,7 +179,13 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 					{close && (
 						<div className={css.close}>
 							<div className={css.titleIcon}>
-								<IconButton tooltip={'close'} icon={'x'} onClick={handleClose} onToolTip={(tip) => onToolTip?.(tip)} />
+								<IconButton
+									tooltip={'close'}
+									aria-label={'close'}
+									icon={'x'}
+									onClick={handleClose}
+									onToolTip={(tip) => onToolTip?.(tip)}
+								/>
 							</div>
 						</div>
 					)}

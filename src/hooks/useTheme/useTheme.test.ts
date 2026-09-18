@@ -73,6 +73,18 @@ describe('useTheme', () => {
 		expect(document.documentElement.dataset.sliceTheme).toBe(darkTheme.name);
 	});
 
+	it('set() applies a theme by a name that is not the dark theme, falling back to lightTheme', async () => {
+		const { result } = renderHook(() => useTheme(), {
+			wrapper: wrapper({ initialTheme: darkTheme.name }),
+		});
+
+		// any string other than darkTheme.name (including lightTheme.name, or an
+		// arbitrary unknown name) takes the `theme = ... : lightTheme` branch
+		await actAndFlush(() => result.current.set(lightTheme.name));
+
+		expect(document.documentElement.dataset.sliceTheme).toBe(lightTheme.name);
+	});
+
 	it('set("system") resolves from the OS preference', async () => {
 		stubMatchMedia(true); // system prefers dark
 		const { result } = renderHook(() => useTheme(), {
@@ -85,7 +97,19 @@ describe('useTheme', () => {
 		expect(document.documentElement.dataset.sliceTheme).toBe(darkTheme.name);
 	});
 
-	it('toggle() flips between light and dark', async () => {
+	it('set("system") resolves to lightTheme when the OS prefers light', async () => {
+		stubMatchMedia(false); // system prefers light
+		const { result } = renderHook(() => useTheme(), {
+			wrapper: wrapper({ initialTheme: darkTheme.name }),
+		});
+
+		await actAndFlush(() => result.current.set('system'));
+
+		expect(result.current.systemTheme).toBe(true);
+		expect(document.documentElement.dataset.sliceTheme).toBe(lightTheme.name);
+	});
+
+	it('toggle() flips between light and dark in both directions', async () => {
 		const { result } = renderHook(() => useTheme(), {
 			wrapper: wrapper({ initialTheme: lightTheme.name }),
 		});
@@ -93,7 +117,25 @@ describe('useTheme', () => {
 		expect(result.current.current.name).toBe(lightTheme.name);
 
 		await actAndFlush(() => result.current.toggle());
-
 		expect(document.documentElement.dataset.sliceTheme).toBe(darkTheme.name);
+
+		// toggling a second time, now starting from dark, exercises the
+		// `lightMode ? darkTheme : lightTheme` false branch
+		await actAndFlush(() => result.current.toggle());
+		expect(document.documentElement.dataset.sliceTheme).toBe(lightTheme.name);
+	});
+
+	it('set()/toggle() no-op the document update when document is unavailable (SSR safety)', () => {
+		const { result } = renderHook(() => useTheme(), {
+			wrapper: wrapper({ initialTheme: lightTheme.name }),
+		});
+
+		const originalDocument = globalThis.document;
+		// @ts-expect-error - simulate an SSR environment with no DOM
+		delete globalThis.document;
+
+		expect(() => result.current.set(darkTheme)).not.toThrow();
+
+		globalThis.document = originalDocument;
 	});
 });

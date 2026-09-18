@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { corners } from '../../theme/corners/corners';
 import { AudioVisualizer, type AudioVisualizerOptions } from '../../utils';
 import { setStyle } from '../../utils/functions/misc';
 import css from './Level.module.css';
@@ -20,7 +21,7 @@ function BaseLevel(props: Readonly<LevelProps>) {
 		risePerSeconds = 4,
 		releasePerSeconds,
 		ReleasePerSeconds = 1.5,
-		borderRadius = 4,
+		borderRadius = corners['corner-xs'],
 		borderColor = 'transparent',
 		borderWidth = 0,
 		colorActive = 'var(--feedback-positive)',

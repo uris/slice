@@ -7,8 +7,6 @@ type SwitchBaseProps<T = string> = {
 	width?: number;
 	backgroundColorOff?: string;
 	backgroundColorOn?: string;
-	bgColorOff?: string;
-	bgColorOn?: string;
 	knobColor?: string;
 	padding?: number;
 	value?: T;

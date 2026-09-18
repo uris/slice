@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import { Icon } from '../Icon';
@@ -35,8 +36,6 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((props, buttonRef:
 		iconColor = undefined,
 		backgroundColor = undefined,
 		backgroundColorDisabled = undefined,
-		bgColor = undefined,
-		bgColorDisabled = undefined,
 		labelColor = undefined,
 		transition = undefined,
 		variants = undefined,
@@ -59,8 +58,8 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((props, buttonRef:
 	const { id: divId, className, style, ...rest } = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
-	const resolvedBackgroundColorDisabled = backgroundColorDisabled ?? bgColorDisabled;
+	const resolvedBackgroundColor = backgroundColor;
+	const resolvedBackgroundColorDisabled = backgroundColorDisabled;
 
 	const [btnState, setBtnState] = useState<'normal' | 'hover' | 'disabled'>(state);
 	const [lockedWidth, setLockedWidth] = useState<number | undefined>(undefined);
@@ -239,7 +238,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((props, buttonRef:
 				paddingRight: setPadding('right'),
 				paddingTop: 0,
 				paddingBottom: 0,
-				borderRadius: borderRadius ?? '500px',
+				borderRadius: borderRadius ?? corners['corner-round'],
 			},
 			medium: {
 				height: 36,
@@ -249,7 +248,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((props, buttonRef:
 				paddingRight: setPadding('right'),
 				paddingTop: 0,
 				paddingBottom: 0,
-				borderRadius: borderRadius ?? '500px',
+				borderRadius: borderRadius ?? corners['corner-round'],
 			},
 			small: {
 				height: 'auto',
@@ -259,7 +258,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((props, buttonRef:
 				paddingRight: setPadding('right'),
 				paddingTop: 4,
 				paddingBottom: 4,
-				borderRadius: borderRadius ?? '500px',
+				borderRadius: borderRadius ?? corners['corner-round'],
 			},
 		};
 	}, [iconSize, borderRadius, setPadding]);

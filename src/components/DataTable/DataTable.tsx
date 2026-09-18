@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import styles from './DataTable.module.css';
@@ -38,7 +39,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 		onSortChange,
 		onColumnResize,
 		onColumnReorder,
-		borderRadius = 8,
+		borderRadius = corners['corner-m'],
 		virtualizeRows,
 		virtualizeRowThreshold = 200,
 		rowHeight = 44,
@@ -55,7 +56,13 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 	const wrapperRef = React.useRef<HTMLDivElement>(null);
 	const resizeBarRef = React.useRef<HTMLDivElement>(null);
 	const colRefs = React.useRef<Record<string, HTMLTableColElement | null>>({});
-	const elements = { handle: resizeBarRef, parent: wrapperRef };
+	// stable identity across renders (resizeBarRef/wrapperRef never change) - an inline
+	// object literal here would give useResizeColumn's callbacks a new `elements`
+	// reference on every render, cascading into new applyHandlePos/handleMouseMove/
+	// handleMouseUp identities and causing the hook's document-level drag listeners to be
+	// torn down and re-attached (with mismatched closures failing to actually remove the
+	// old ones) on every re-render while a drag is in progress, not just when it starts.
+	const elements = useMemo(() => ({ handle: resizeBarRef, parent: wrapperRef }), []);
 
 	// resolve corner shadow
 	const cornerBoxShadow = useMemo(() => {

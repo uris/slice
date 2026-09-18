@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useId, useMemo, useRef, useState } from 'react';
+import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { FileList } from '../FileList';
 import { Icon } from '../Icon';
@@ -26,12 +27,10 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 		borderColor = 'var(--core-outline-primary)',
 		borderColorHover = 'var(--core-outline-special)',
 		borderRadius,
-		radius = 8,
+		radius = corners['corner-m'],
 		padding = 32,
-		backgroundColor,
-		backgroundColorHover,
-		bgColor = 'var(--core-surface-secondary)',
-		bgColorHover = 'var(--core-surface-special)',
+		backgroundColor = 'var(--core-surface-secondary)',
+		backgroundColorHover = 'var(--core-surface-special)',
 		acceptedTypes = allTypes,
 		multiple = true,
 		busy = false,
@@ -49,8 +48,8 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 	const isInteractive = !busy && files.length < 1;
 	const resolvedBorderWidth = borderWidth ?? border;
 	const resolvedBorderRadius = borderRadius ?? radius;
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
-	const resolvedBackgroundColorHover = backgroundColorHover ?? bgColorHover;
+	const resolvedBackgroundColor = backgroundColor;
+	const resolvedBackgroundColorHover = backgroundColorHover;
 
 	// open the native file picker when the area is idle
 	const handleClickUpload = useCallback(() => {
@@ -109,7 +108,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 			if (busy) return;
 			dragDepth.current = 0;
 			setHovered(false);
-			const files = Array.from(e.dataTransfer.files ?? []);
+			const files = Array.from(e.dataTransfer?.files ?? []);
 			onUpload?.(files);
 		},
 		[busy, onUpload],
@@ -183,7 +182,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 				<div className={css.files}>
 					<FileList
 						files={files}
-						bgColor={'var(--core-surface-primary)'}
+						backgroundColor={'var(--core-surface-primary)'}
 						textSize={'m'}
 						direction={'column'}
 						gap={8}

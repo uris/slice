@@ -30,8 +30,6 @@ type UploadAreaBaseProps = {
 	busyMessage?: string;
 	backgroundColor?: string;
 	backgroundColorHover?: string;
-	bgColor?: string;
-	bgColorHover?: string;
 	borderWidth?: number;
 	border?: number;
 	borderColor?: string | null;

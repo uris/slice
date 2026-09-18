@@ -20,7 +20,6 @@ export const Avatar = React.memo((props: AvatarProps) => {
 		outerBorderSize,
 		outerBorderColor,
 		backgroundColor,
-		bgColor = undefined,
 		onClick = undefined,
 		onKeyDown = undefined,
 		fontSize = undefined,
@@ -37,7 +36,7 @@ export const Avatar = React.memo((props: AvatarProps) => {
 	const [textSize, setTextSize] = useState<number | string>('inherit');
 	const resolvedTextColor = textColor ?? color;
 	const resolvedBorderWidth = borderWidth ?? borderSize;
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
+	const resolvedBackgroundColor = backgroundColor;
 
 	// derive the fallback initials shown when no image is rendered
 	const initials = useMemo(() => {

@@ -1,0 +1,10 @@
+[data-slice-theme-scope] {
+	--corner-none: 0;
+	--corner-xs: 4px;
+	--corner-s: 6px;
+	--corner-m: 8px;
+	--corner-l: 12px;
+	--corner-xl: 16px;
+	--corner-xxl: 32px;
+	--corner-round: 1000px;
+}

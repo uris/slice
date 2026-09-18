@@ -15,9 +15,9 @@ export interface ToggleButtonProps {
 	iconColor?: string;
 	iconColorOn?: string;
 	iconColorHover?: string;
-	bgColor?: string;
-	bgColorHover?: string;
-	bgColorOn?: string;
+	backgroundColor?: string;
+	backgroundColorHover?: string;
+	backgroundColorOn?: string;
 	onChange?: (state: boolean) => void;
 	onSelect?: () => void;
 	onToolTip?: (tip: ToolTip | null) => void;

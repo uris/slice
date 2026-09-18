@@ -2,6 +2,7 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import { type ToolTip, ToolTipType } from '../sharedTypes';
@@ -24,16 +25,14 @@ export const Chip = React.memo((props: ChipProps) => {
 		labelColorHover = variant === 'normal' ? labelColor : 'var(--core-text-special)',
 		iconColor = 'var(--core-text-primary)',
 		iconColorHover = variant === 'normal' ? iconColor : 'var(--core-text-special)',
-		backgroundColor,
-		backgroundColorHover,
+		backgroundColor = 'transparent',
+		backgroundColorHover = variant === 'normal' ? backgroundColor : 'var(--core-surface-secondary)',
 		borderWidth,
 		borderSize = 1,
 		borderColor = 'var(--core-text-primary)',
 		borderColorHover = variant === 'normal' ? borderColor : 'var(--core-text-special)',
 		borderColorDisabled = 'var(--core-text-disabled)',
-		bgColor = 'transparent',
-		bgColorHover = variant === 'normal' ? bgColor : 'var(--core-surface-secondary)',
-		borderRadius = 8,
+		borderRadius = corners['corner-m'],
 		paddingTop,
 		paddingTops = 8,
 		paddingSides = 16,
@@ -46,8 +45,8 @@ export const Chip = React.memo((props: ChipProps) => {
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
 	const [isHovered, setIsHovered] = useState<boolean>(false);
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
-	const resolvedBackgroundColorHover = backgroundColorHover ?? bgColorHover;
+	const resolvedBackgroundColor = backgroundColor;
+	const resolvedBackgroundColorHover = backgroundColorHover;
 	const resolvedBorderWidth = borderWidth ?? borderSize;
 	const resolvedPaddingTop = paddingTop ?? paddingTops;
 

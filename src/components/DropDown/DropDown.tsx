@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import css from './DropDown.module.css';
@@ -26,9 +27,8 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 		valueKey,
 		options = [],
 		placeholder = true,
-		borderRadius = 8,
+		borderRadius = corners['corner-m'],
 		backgroundColor = 'var(--core-surface-secondary)',
-		bgColor = 'var(--core-surface-secondary)',
 		iconColor = 'var(--core-text-primary)',
 		textColor = 'var(--core-text-primary)',
 		borderWidth,
@@ -50,7 +50,7 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 	const { id: divId, className, style, ...rest } = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
+	const resolvedBackgroundColor = backgroundColor;
 	const resolvedBorderWidth = borderWidth ?? borderSize;
 
 	const [index, setIndex] = useState<number>(selectedIndex ?? 0);

@@ -14,7 +14,6 @@ export type AvatarBaseProps = {
 	borderColor?: string;
 	borderColorHover?: string;
 	backgroundColor?: string;
-	bgColor?: string;
 	fontSize?: number | string;
 	onToolTip?: (tip: ToolTip | null) => void;
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;

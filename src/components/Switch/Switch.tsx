@@ -14,10 +14,8 @@ function SwitchComponent<T = string>(props: SwitchProps<T>) {
 		height = 22,
 		width = 44,
 		padding = 3,
-		backgroundColorOn,
-		backgroundColorOff,
-		bgColorOn = 'var(--feedback-positive)',
-		bgColorOff = 'var(--core-text-disabled)',
+		backgroundColorOn = 'var(--feedback-positive)',
+		backgroundColorOff = 'var(--core-text-disabled)',
 		knobColor = 'var(--core-surface-primary)',
 		onChange = () => null,
 		...divAttributes
@@ -26,8 +24,8 @@ function SwitchComponent<T = string>(props: SwitchProps<T>) {
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
 	const [on, setOn] = useState<boolean>(state);
-	const resolvedBackgroundColorOn = backgroundColorOn ?? bgColorOn;
-	const resolvedBackgroundColorOff = backgroundColorOff ?? bgColorOff;
+	const resolvedBackgroundColorOn = backgroundColorOn;
+	const resolvedBackgroundColorOff = backgroundColorOff;
 
 	useEffect(() => {
 		setOn(state);

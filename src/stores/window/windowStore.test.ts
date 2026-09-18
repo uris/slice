@@ -72,12 +72,10 @@ describe('windowStore', () => {
 	});
 
 	it('getLocation() rejects when geolocation is unsupported', async () => {
-		await expect(
-			useWindowStore.getState().actions.getLocation(),
-		).rejects.toThrow('Geolocation is not supported in this browser.');
-		expect(useWindowStore.getState().locationError?.message).toBe(
+		await expect(useWindowStore.getState().actions.getLocation()).rejects.toThrow(
 			'Geolocation is not supported in this browser.',
 		);
+		expect(useWindowStore.getState().locationError?.message).toBe('Geolocation is not supported in this browser.');
 	});
 
 	it('getLocation() resolves and updates state when geolocation succeeds', async () => {
@@ -100,25 +98,92 @@ describe('windowStore', () => {
 
 		const location = await useWindowStore.getState().actions.getLocation();
 
-		expect(location).toEqual(
-			expect.objectContaining({ latitude: 1, longitude: 2 }),
-		);
+		expect(location).toEqual(expect.objectContaining({ latitude: 1, longitude: 2 }));
 		expect(useWindowStore.getState().gettingLocation).toBe(false);
 	});
 
 	it('getLocation() rejects and sets locationError when geolocation fails', async () => {
 		setNavigatorProp('geolocation', {
-			getCurrentPosition: (
-				_success: PositionCallback,
-				error: PositionErrorCallback,
-			) => {
+			getCurrentPosition: (_success: PositionCallback, error: PositionErrorCallback) => {
 				error({ code: 1, message: 'denied' } as GeolocationPositionError);
 			},
 		});
 
-		await expect(
-			useWindowStore.getState().actions.getLocation(),
-		).rejects.toThrow('denied');
+		await expect(useWindowStore.getState().actions.getLocation()).rejects.toThrow('denied');
 		expect(useWindowStore.getState().gettingLocation).toBe(false);
+	});
+});
+
+describe('window public accessors and server initialization', () => {
+	it('imperative getters expose the latest store snapshot', async () => {
+		const store = await import('./windowStore');
+		const error = new Error('Location denied');
+		const position = {
+			latitude: 10,
+			longitude: 20,
+			accuracy: 5,
+			altitude: null,
+			altitudeAccuracy: null,
+			heading: null,
+			speed: null,
+			timestamp: 123,
+		};
+		store.useWindowStore.setState({
+			formFactor: FormFactor.Mobile,
+			viewportWidth: 390,
+			viewportHeight: 844,
+			isAppleDevice: true,
+			isTouchDevice: true,
+			isElectron: false,
+			dpr: 3,
+			location: position,
+			locationError: error,
+			gettingLocation: true,
+		});
+		expect(store.formFactor()).toBe(FormFactor.Mobile);
+		expect(store.viewportWidth()).toBe(390);
+		expect(store.viewportHeight()).toBe(844);
+		expect(store.isAppleDevice()).toBe(true);
+		expect(store.isTouchDevice()).toBe(true);
+		expect(store.isElectron()).toBe(false);
+		expect(store.dpr()).toBe(3);
+		expect(store.location()).toEqual(position);
+		expect(store.locationError()).toBe(error);
+		expect(store.gettingLocation()).toBe(true);
+	});
+
+	it('initializes safely without browser globals', async () => {
+		vi.resetModules();
+		vi.stubGlobal('navigator', undefined);
+		vi.stubGlobal('window', undefined);
+		try {
+			const { useWindowStore: serverStore } = await import('./windowStore');
+			expect(serverStore.getState()).toMatchObject({
+				formFactor: FormFactor.Mobile,
+				viewportWidth: -1,
+				viewportHeight: -1,
+				height: '100vh',
+				isAppleDevice: false,
+				isTouchDevice: false,
+				isElectron: false,
+				dpr: 1,
+			});
+			expect(() => serverStore.getState().actions.initialize()()).not.toThrow();
+			await expect(serverStore.getState().actions.getLocation()).rejects.toThrow('Geolocation is not supported');
+		} finally {
+			vi.unstubAllGlobals();
+			vi.resetModules();
+		}
+	});
+
+	it('treats a zero-width viewport as mobile', () => {
+		setViewport(0, 600);
+		const cleanup = useWindowStore.getState().actions.initialize();
+		try {
+			expect(useWindowStore.getState().formFactor).toBe(FormFactor.Mobile);
+			expect(useWindowStore.getState().viewportWidth).toBe(0);
+		} finally {
+			cleanup();
+		}
 	});
 });

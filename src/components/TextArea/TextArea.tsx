@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { Button } from '../Button';
 import css from './TextArea.module.css';
 import type { TextAreaProps } from './_types';
@@ -16,7 +17,7 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 		placeholder = 'Enter text here...',
 		rows = 6,
 		border = true,
-		borderRadius = 4,
+		borderRadius = corners['corner-xs'],
 		padding = '16px 4px 16px 16px',
 		error = false,
 		resizable = true,
@@ -25,7 +26,6 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 		sendSize = 36,
 		returnSubmits = false,
 		backgroundColor,
-		bgColor = undefined,
 		minWidth = undefined,
 		textSize = 'm',
 		disabled = false,
@@ -41,7 +41,7 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 	const { id: divId, className, style, ...rest } = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
-	const resolvedBackgroundColor = backgroundColor ?? bgColor;
+	const resolvedBackgroundColor = backgroundColor;
 
 	const [isFocused, setIsFocused] = useState<boolean>(focused);
 	const [text, setText] = useState<string>(value);
@@ -98,8 +98,10 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 			e?.preventDefault();
 			handleFocus();
 			onSubmit(text);
-			if (submitClears) setText('');
-			if (ref?.current) ref.current.value = '';
+			if (submitClears) {
+				setText('');
+				if (ref.current) ref.current.value = '';
+			}
 			handleResize();
 		},
 		[handleFocus, onSubmit, text, submitClears, handleResize],

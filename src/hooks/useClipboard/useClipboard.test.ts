@@ -1,4 +1,5 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
+import type { RefObject } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useClipboard } from './useClipboard';
 
@@ -96,6 +97,52 @@ describe('useClipboard', () => {
 		vi.useRealTimers();
 	});
 
+	it('does not auto-reset isCopied when copiedResetDelay is 0', async () => {
+		const { result } = renderHook(() => useClipboard({ copiedResetDelay: 0 }));
+
+		await act(async () => {
+			await result.current.copy('hello');
+		});
+		expect(result.current.isCopied).toBe(true);
+
+		// give any (incorrectly) scheduled reset a chance to run
+		await act(async () => {
+			await Promise.resolve();
+		});
+		expect(result.current.isCopied).toBe(true);
+	});
+
+	it('clears a stale reset timer when the reset-effect re-runs while still copied', async () => {
+		// After the effect's own cleanup runs (clearing the previous timer), it
+		// doesn't null out resetTimer.current - so re-running the effect while
+		// isCopied is still true finds a truthy (already-cleared) ref, exercising
+		// that guard's true branch.
+		vi.useFakeTimers();
+		const { result, rerender } = renderHook(
+			({ delay }: { delay: number }) => useClipboard({ copiedResetDelay: delay }),
+			{ initialProps: { delay: 1000 } },
+		);
+
+		await act(async () => {
+			await result.current.copy('hello');
+		});
+		expect(result.current.isCopied).toBe(true);
+
+		rerender({ delay: 3000 });
+
+		act(() => {
+			vi.advanceTimersByTime(2999);
+		});
+		expect(result.current.isCopied).toBe(true);
+
+		act(() => {
+			vi.advanceTimersByTime(1);
+		});
+		expect(result.current.isCopied).toBe(false);
+
+		vi.useRealTimers();
+	});
+
 	it('copy() falls back to execCommand when the Clipboard API rejects', async () => {
 		writeText.mockRejectedValue(new DOMException('denied', 'NotAllowedError'));
 		document.execCommand = vi.fn().mockReturnValue(true);
@@ -128,6 +175,57 @@ describe('useClipboard', () => {
 		expect(result.current.error?.message).toBe('Permission to write the clipboard was denied');
 	});
 
+	it('copy() reports a permission-denied message for a SecurityError too', async () => {
+		// permissionErrorMessage() checks NotAllowedError OR SecurityError; every
+		// other test only exercises the first, leaving the OR's second operand
+		// unevaluated.
+		writeText.mockRejectedValue(new DOMException('denied', 'SecurityError'));
+		document.execCommand = vi.fn().mockImplementation(() => {
+			throw new Error('execCommand unavailable');
+		});
+
+		const { result } = renderHook(() => useClipboard());
+
+		await act(async () => {
+			const ok = await result.current.copy('hello');
+			expect(ok).toBe(false);
+		});
+
+		expect(result.current.error?.message).toBe('Permission to write the clipboard was denied');
+	});
+
+	it("copy() reports \"isn't supported\" when there is no Clipboard API and the fallback also fails", async () => {
+		setClipboard(undefined);
+		document.execCommand = vi.fn().mockImplementation(() => {
+			throw new Error('execCommand unavailable');
+		});
+
+		const { result } = renderHook(() => useClipboard());
+
+		await act(async () => {
+			const ok = await result.current.copy('hello');
+			expect(ok).toBe(false);
+		});
+
+		expect(result.current.isCopied).toBe(false);
+		expect(result.current.error?.message).toBe(`Copying to the clipboard isn't supported`);
+	});
+
+	it('copy() succeeds via the execCommand fallback when there is no Clipboard API', async () => {
+		setClipboard(undefined);
+		document.execCommand = vi.fn().mockReturnValue(true);
+
+		const { result } = renderHook(() => useClipboard());
+
+		await act(async () => {
+			const ok = await result.current.copy('hello');
+			expect(ok).toBe(true);
+		});
+
+		expect(result.current.isCopied).toBe(true);
+		expect(result.current.error).toBeNull();
+	});
+
 	it('read() populates text on success', async () => {
 		const { result } = renderHook(() => useClipboard());
 
@@ -150,6 +248,21 @@ describe('useClipboard', () => {
 		});
 
 		expect(result.current.error?.message).toBe('Permission to read the clipboard was denied');
+	});
+
+	it('read() reports a generic failure message for a non-permission error', async () => {
+		// exercises permissionErrorMessage's overall condition being false (the
+		// error isn't a DOMException at all), falling through to the generic
+		// "Failed to ..." message rather than the permission-denied one.
+		readText.mockRejectedValue(new Error('boom'));
+		const { result } = renderHook(() => useClipboard());
+
+		await act(async () => {
+			const value = await result.current.read();
+			expect(value).toBeNull();
+		});
+
+		expect(result.current.error?.message).toBe('Failed to read the clipboard');
 	});
 
 	it('read() reports unsupported when navigator.clipboard is missing', async () => {
@@ -237,6 +350,68 @@ describe('useClipboard', () => {
 		document.body.removeChild(container);
 	});
 
+	it('resolves a RefObject target to its current element', async () => {
+		const onPaste = vi.fn();
+		const container = document.createElement('div');
+		document.body.appendChild(container);
+		const ref = { current: container };
+
+		renderHook(() =>
+			useClipboard({ target: ref as unknown as RefObject<HTMLElement | null>, onPaste }),
+		);
+		await act(async () => {});
+
+		const clipboardData = {
+			getData: vi.fn().mockReturnValue('via ref'),
+			items: [] as unknown as DataTransferItemList,
+		};
+		const event = new Event('paste') as ClipboardEvent;
+		Object.defineProperty(event, 'clipboardData', { value: clipboardData });
+
+		act(() => {
+			container.dispatchEvent(event);
+		});
+
+		expect(onPaste).toHaveBeenCalledWith(expect.objectContaining({ text: 'via ref' }));
+
+		document.body.removeChild(container);
+	});
+
+	it('does not attach a paste listener when a RefObject target has no current element', async () => {
+		const onPaste = vi.fn();
+		const ref = { current: null };
+
+		renderHook(() =>
+			useClipboard({ target: ref as unknown as RefObject<HTMLElement | null>, onPaste }),
+		);
+		await act(async () => {});
+
+		const clipboardData = {
+			getData: vi.fn().mockReturnValue('should be ignored'),
+			items: [] as unknown as DataTransferItemList,
+		};
+		const event = new Event('paste') as ClipboardEvent;
+		Object.defineProperty(event, 'clipboardData', { value: clipboardData });
+
+		act(() => {
+			document.dispatchEvent(event);
+		});
+
+		expect(onPaste).not.toHaveBeenCalled();
+	});
+
+	it('ignores paste events that carry no clipboardData', async () => {
+		const onPaste = vi.fn();
+		renderHook(() => useClipboard({ onPaste }));
+		await act(async () => {});
+
+		act(() => {
+			document.dispatchEvent(new Event('paste'));
+		});
+
+		expect(onPaste).not.toHaveBeenCalled();
+	});
+
 	it('extracts files from pasted clipboard items', async () => {
 		const onPaste = vi.fn();
 		const file = new File(['content'], 'note.txt', { type: 'text/plain' });
@@ -255,5 +430,26 @@ describe('useClipboard', () => {
 		});
 
 		expect(onPaste).toHaveBeenCalledWith(expect.objectContaining({ files: [file] }));
+	});
+
+	it('treats a missing clipboardData.items as no pasted items', async () => {
+		const onPaste = vi.fn();
+		renderHook(() => useClipboard({ onPaste }));
+		await act(async () => {});
+
+		const clipboardData = {
+			getData: vi.fn().mockReturnValue('text only'),
+			items: undefined as unknown as DataTransferItemList,
+		};
+		const event = new Event('paste') as ClipboardEvent;
+		Object.defineProperty(event, 'clipboardData', { value: clipboardData });
+
+		act(() => {
+			document.dispatchEvent(event);
+		});
+
+		expect(onPaste).toHaveBeenCalledWith(
+			expect.objectContaining({ text: 'text only', files: [], items: [] }),
+		);
 	});
 });

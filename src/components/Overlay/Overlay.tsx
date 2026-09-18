@@ -16,7 +16,7 @@ export const Overlay = React.memo((props: OverlayProps) => {
 		global = false,
 		overlay,
 		color = 'rgb(0,0,0)',
-		opacity = 0,
+		opacity = undefined,
 		transition = defaultTransition,
 		onClick = () => null,
 		toggleOverlay = () => null,

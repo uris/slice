@@ -20,7 +20,6 @@ type DivInputBaseProps = {
 	borderRadius?: number;
 	radius?: number;
 	backgroundColor?: string;
-	bgColor?: string;
 };
 
 export type DivInputProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DivInputBaseProps> & DivInputBaseProps;
