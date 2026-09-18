@@ -16,7 +16,7 @@ import {
 	runDraggablePanelPlay,
 	runDraggablePanelTouchPlay,
 } from 'src/components/playHelpers';
-import { expect, fn } from 'storybook/test';
+import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
 
 const meta: Meta<typeof DraggablePanel> = {
 	title: 'Components/DraggablePanel',
@@ -237,3 +237,42 @@ function DraggablePanelWithCustomColor(args: Readonly<DraggablePanelProps>) {
 		</FlexDiv>
 	);
 }
+
+export const HandleFeedbackAndDefaultCallbacks: StoryObj<typeof DraggablePanel> = {
+	tags: ['tests'],
+	args: {
+		...fixedConstraintsArgs,
+		onResize: undefined,
+		onResizeStart: undefined,
+		onResizeEnd: undefined,
+		transitionDurationOnInit: 0,
+		className: 'feedback-panel',
+		backgroundColor: null as unknown as string,
+	},
+	render: (args) => <DraggablePanel {...args} data-testid="feedback-panel" />,
+	play: async ({ canvasElement }) => {
+		const panel = within(canvasElement).getByTestId('feedback-panel');
+		// The resize handle has no semantic role; identify it by its public cursor affordance.
+		const handle = Array.from(panel.querySelectorAll('div')).find((node) => node.style.cursor === 'col-resize');
+		if (!handle) throw new Error('Resize handle not found');
+		const highlight = handle.lastElementChild as HTMLElement;
+		await waitFor(() => expect(panel.getBoundingClientRect().width).toBe(250));
+		await expect(panel).toHaveClass('feedback-panel');
+		await expect(panel.style.getPropertyValue('--panel-bg')).toBe('transparent');
+		await userEvent.hover(handle);
+		await waitFor(() => expect(highlight.style.backgroundColor).not.toBe('transparent'));
+		await userEvent.unhover(handle);
+		await waitFor(() => expect(highlight.style.backgroundColor).toBe('transparent'));
+		fireEvent.focusIn(handle);
+		await waitFor(() => expect(highlight.style.backgroundColor).not.toBe('transparent'));
+		fireEvent.focusOut(handle);
+		await waitFor(() => expect(highlight.style.backgroundColor).toBe('transparent'));
+		fireEvent.mouseDown(handle, { clientX: 250 });
+		fireEvent.mouseMove(document.documentElement, { clientX: 300 });
+		await waitFor(() => expect(panel.getBoundingClientRect().width).toBe(300));
+		fireEvent.mouseUp(document.documentElement);
+		await waitFor(() => expect(panel.getBoundingClientRect().width).toBe(300));
+		fireEvent(window, new Event('resize'));
+		await expect(panel.getBoundingClientRect().width).toBe(300);
+	},
+};

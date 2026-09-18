@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { fn } from 'storybook/test';
+import { createRef, useCallback, useEffect, useRef, useState } from 'react';
+import { expect, fn, spyOn, within } from 'storybook/test';
 import { Button } from '../Button';
 import { FlexDiv } from '../FlexDiv';
 import { Label } from '../Label';
@@ -131,6 +131,9 @@ function CameraDemo(args: any) {
 }
 
 export const Demo: StoryObj<typeof Camera> = {
+	// Start manually after play installs its media mock; an in-flight native
+	// request from mount could otherwise overwrite the successful test stream.
+	args: { startCameraOff: true },
 	render: (args) => <CameraDemo {...args} />,
 	play: async ({ canvasElement, args }) => {
 		await runCameraDemoPlay({ canvasElement, args });
@@ -139,6 +142,7 @@ export const Demo: StoryObj<typeof Camera> = {
 
 export const KeyboardAndHoverInteractions: StoryObj<typeof Camera> = {
 	tags: ['tests'],
+	args: { startCameraOff: true },
 	render: (args) => <CameraDemo {...args} />,
 	play: async ({ canvasElement, args }) => {
 		await runCameraKeyboardAndHoverPlay({ canvasElement, args });
@@ -156,6 +160,7 @@ export const StreamLifecycleEdgeCases: StoryObj<typeof Camera> = {
 
 export const NoAudioTrack: StoryObj<typeof Camera> = {
 	tags: ['tests'],
+	args: { startCameraOff: true },
 	render: (args) => <CameraDemo {...args} />,
 	play: async ({ canvasElement, args }) => {
 		await runCameraNoAudioTrackPlay({ canvasElement, args });
@@ -212,5 +217,91 @@ export const ImperativeRefControls: StoryObj<typeof Camera> = {
 	render: (args) => <CameraImperativeRefDemo {...args} />,
 	play: async ({ canvasElement, args }) => {
 		await runCameraImperativeRefControlsPlay({ canvasElement, args });
+	},
+};
+
+const guardRef = createRef<CameraElement>();
+export const ControlsWithoutStream: StoryObj<typeof Camera> = {
+	tags: ['tests'],
+	args: { startCameraOff: true, autoHideControlBar: false },
+	render: (args) => <Camera {...args} ref={guardRef} />,
+	play: async ({ canvasElement }) => {
+		await expect(guardRef.current).not.toBeNull();
+		const camera = guardRef.current;
+		if (!camera) throw new Error('Camera ref was not attached');
+		await expect(camera.muteMic?.()).toEqual(new Error('No audio track found'));
+		await expect(camera.unmuteMic?.()).toEqual(new Error('No audio track found'));
+		await expect(camera.snapshot?.()).toBeUndefined();
+		await expect(await camera.stopCamera?.()).toEqual(new Error('No media stream to stop'));
+		await expect(within(canvasElement).getByRole('button', { name: 'Photo' })).toHaveAttribute('aria-disabled', 'true');
+		await expect(camera.container?.style.getPropertyValue('--camera-controls-transform')).toBe('translateY(0%)');
+	},
+};
+
+const missingVideoRef = createRef<CameraElement>();
+export const MissingVideoTrack: StoryObj<typeof Camera> = {
+	tags: ['tests'],
+	args: { startCameraOff: true, showControlBar: false },
+	render: (args) => <Camera {...args} ref={missingVideoRef} />,
+	play: async ({ args }) => {
+		const stream = new MediaStream();
+		const request = spyOn(navigator.mediaDevices, 'getUserMedia').mockResolvedValue(stream);
+		try {
+			await expect(await missingVideoRef.current?.startCamera?.()).toEqual(new Error('No video track available'));
+			await expect(args.onNoVideo).toHaveBeenCalledWith('No video track available');
+			await expect(missingVideoRef.current?.stream).toBeUndefined();
+			await expect(missingVideoRef.current?.container?.style.getPropertyValue('--camera-controls-transform')).toBe(
+				'translateY(100%)',
+			);
+		} finally {
+			request.mockRestore();
+		}
+	},
+};
+
+const rejectedRef = createRef<CameraElement>();
+export const DeviceConstraintFallback: StoryObj<typeof Camera> = {
+	tags: ['tests'],
+	args: { startCameraOff: true, sessionSettings: { videoDeviceId: 'missing-camera', micDeviceId: 'missing-mic' } },
+	render: (args) => <Camera {...args} ref={rejectedRef} />,
+	play: async ({ canvasElement, args }) => {
+		const request = spyOn(navigator.mediaDevices, 'getUserMedia')
+			.mockRejectedValueOnce(new DOMException('Device missing', 'NotFoundError'))
+			.mockRejectedValueOnce('permission denied');
+		try {
+			const result = await rejectedRef.current?.startCamera?.();
+			await expect(result).toEqual(new Error('Could not access the camera. Ensure permissions are correct'));
+			await expect(request).toHaveBeenNthCalledWith(1, {
+				video: { deviceId: { exact: 'missing-camera' } },
+				audio: { deviceId: { exact: 'missing-mic' } },
+			});
+			await expect(request).toHaveBeenNthCalledWith(2, { video: true, audio: true });
+			await expect(args.onNoVideo).toHaveBeenCalledWith(result);
+			await expect(args.onNoAudio).toHaveBeenCalledWith(result);
+			await expect(
+				await within(canvasElement).findByText('Could not access the camera. Ensure permissions are correct'),
+			).toBeVisible();
+		} finally {
+			request.mockRestore();
+		}
+	},
+};
+
+export const AutoStartPermissionDenied: StoryObj<typeof Camera> = {
+	tags: ['tests'],
+	args: { startCameraOff: false },
+	beforeEach: () => {
+		const request = spyOn(navigator.mediaDevices, 'getUserMedia').mockRejectedValue(
+			new DOMException('Camera permission denied', 'NotAllowedError'),
+		);
+		return () => request.mockRestore();
+	},
+	render: (args) => <Camera {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		await expect(await canvas.findByText('Camera permission denied')).toBeVisible();
+		await expect(args.onNoVideo).toHaveBeenCalledWith(expect.objectContaining({ name: 'NotAllowedError' }));
+		await expect(args.onNoAudio).toHaveBeenCalledWith(expect.objectContaining({ name: 'NotAllowedError' }));
+		await expect(canvas.getByRole('button', { name: 'Photo' })).toHaveAttribute('aria-disabled', 'true');
 	},
 };

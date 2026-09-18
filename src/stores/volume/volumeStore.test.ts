@@ -78,9 +78,7 @@ describe('volumeStore', () => {
 		const feedback = document.createElement('audio');
 		useVolumeStore.getState().actions.attachFeedbackElement(feedback);
 
-		await useVolumeStore
-			.getState()
-			.actions.setVolume(0.6, { playFeedback: true });
+		await useVolumeStore.getState().actions.setVolume(0.6, { playFeedback: true });
 
 		expect(feedback.play).toHaveBeenCalled();
 	});
@@ -141,5 +139,66 @@ describe('volumeStore', () => {
 
 		useVolumeStore.getState().actions.detachFeedbackElement(feedback);
 		expect(useVolumeStore.getState().feedbackElement).toBeNull();
+	});
+});
+
+describe('volume feedback and public accessors', () => {
+	it('preserves the last audible volume at zero and restores attached media on unmute', async () => {
+		const audio = document.createElement('audio');
+		const video = document.createElement('video');
+		const actions = useVolumeStore.getState().actions;
+		actions.attachMedia([audio, video]);
+		await actions.setVolume(0.65);
+		await actions.setVolume(0);
+		expect(useVolumeStore.getState().storedVolume).toBe(0.65);
+		await actions.setVolume(0.65);
+		await actions.mute();
+		await actions.unmute();
+		expect(audio.volume).toBe(0.65);
+		expect(video.volume).toBe(0.65);
+		actions.detachMedia([audio, video]);
+		expect(useVolumeStore.getState().elements.size).toBe(0);
+	});
+
+	it('restarts playing feedback and tolerates playback rejection', async () => {
+		const feedback = document.createElement('audio');
+		Object.defineProperties(feedback, {
+			paused: { value: false },
+			ended: { value: false },
+			readyState: { value: 4 },
+		});
+		feedback.currentTime = 3;
+		vi.mocked(feedback.play).mockRejectedValue(new DOMException('Playback blocked', 'NotAllowedError'));
+		const actions = useVolumeStore.getState().actions;
+		actions.attachFeedbackElement(feedback);
+		await expect(actions.playFeedback(0.456)).resolves.toBeUndefined();
+		expect(feedback.pause).toHaveBeenCalledOnce();
+		expect(feedback.currentTime).toBe(0);
+		expect(feedback.volume).toBe(0.46);
+	});
+
+	it('plays feedback at the current volume and safely skips missing feedback', async () => {
+		const actions = useVolumeStore.getState().actions;
+		await expect(actions.playFeedback()).resolves.toBeUndefined();
+		const feedback = document.createElement('audio');
+		actions.attachFeedbackElement(feedback);
+		await actions.setVolume(0.25, { playFeedback: false });
+		expect(feedback.play).not.toHaveBeenCalled();
+		await actions.playFeedback();
+		expect(feedback.volume).toBe(0.25);
+		expect(feedback.play).toHaveBeenCalledOnce();
+	});
+
+	it('imperative getters reflect changes made through the public actions', async () => {
+		const { volumeActions, getVolume, getStoredVolume, getMuted, getAttachedMedia } = await import('./volumeStore');
+		const audio = document.createElement('audio');
+		volumeActions.attachMedia(audio);
+		await volumeActions.setVolume(0.4);
+		expect(getVolume()).toBe(0.4);
+		expect(getStoredVolume()).toBe(0.4);
+		await volumeActions.mute();
+		expect(getMuted()).toBe(true);
+		expect(getVolume()).toBe(0);
+		expect(getAttachedMedia()).toEqual(new Set([audio]));
 	});
 });

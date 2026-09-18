@@ -98,8 +98,10 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 			e?.preventDefault();
 			handleFocus();
 			onSubmit(text);
-			if (submitClears) setText('');
-			if (ref?.current) ref.current.value = '';
+			if (submitClears) {
+				setText('');
+				if (ref.current) ref.current.value = '';
+			}
 			handleResize();
 		},
 		[handleFocus, onSubmit, text, submitClears, handleResize],

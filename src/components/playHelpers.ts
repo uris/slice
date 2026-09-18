@@ -90,7 +90,7 @@ export async function runAvatarGroupWithoutHandlerPlay({ canvasElement }: { canv
 export async function runAvatarGroupCustomClassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
 	await expectCanvas(canvasElement);
 	// exercises the wrapper's `className ? ... : ''` true branch
-	const wrapper = canvasElement.firstElementChild as HTMLElement | null;
+	const wrapper = within(canvasElement).getByTestId('avatar-group');
 	await expect(wrapper).toHaveClass('story-avatargroup-class');
 }
 
@@ -99,10 +99,10 @@ export async function runAvatarGroupNullableSpacingPlay({ canvasElement }: { can
 	// gap/margin forced to `null` (not `undefined`, which the destructured
 	// defaults already absorb) exercises cssVars' `?? 0` fallbacks; overlap<=0
 	// exercises the `overlap > 0 ? -overlap : 0` false branch
-	const wrapper = canvasElement.firstElementChild as HTMLElement | null;
-	await expect(wrapper?.style.getPropertyValue('--ag-gap')).toBe('0px');
-	await expect(wrapper?.style.getPropertyValue('--ag-margin')).toBe('0px');
-	await expect(wrapper?.style.getPropertyValue('--ag-overlap')).toBe('0px');
+	const wrapper = within(canvasElement).getByTestId('avatar-group');
+	await expect(wrapper.style.getPropertyValue('--ag-gap')).toBe('0px');
+	await expect(wrapper.style.getPropertyValue('--ag-margin')).toBe('0px');
+	await expect(wrapper.style.getPropertyValue('--ag-overlap')).toBe('0px');
 }
 
 export async function runAvatarGroupNoAvatarsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
@@ -263,9 +263,8 @@ export async function runDivInputNumericWidthPlay({ canvasElement }: { canvasEle
 
 export async function runDivInputNullableValuePlay({ canvasElement }: { canvasElement: HTMLElement }) {
 	await expectCanvas(canvasElement);
-	// value forced to `null` exercises the render's `{value ?? placeholder}`
-	// fallback, distinct from the `value === ''` branch used to seed
-	// `innerText`/effects elsewhere in the component.
+	// A runtime null value must show the placeholder without reaching
+	// cleanString as null, both on initial render and in the syncing effect.
 	const canvas = within(canvasElement);
 	const textbox = canvas.getByRole('textbox');
 	await expect(textbox).toHaveTextContent('Placeholder');
@@ -1175,8 +1174,8 @@ export async function runButtonBarWithoutHandlersPlay({ canvasElement }: { canva
 export async function runButtonBarCustomClassPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	// exercises `className ? ... : ''`'s true branch
 	await runButtonBarPlay({ args, canvasElement });
-	const wrapper = canvasElement.querySelector('div');
-	await expect(wrapper?.className).toContain('bb-custom-class');
+	const wrapper = within(canvasElement).getAllByRole('button')[0].parentElement;
+	await expect(wrapper).toHaveClass('bb-custom-class');
 }
 
 export async function runButtonBarSizeEdgeCasesPlay({ canvasElement }: { canvasElement: HTMLElement }) {
@@ -1582,9 +1581,12 @@ export async function runPromptInputWorkingPlay<TArgs>({ canvasElement, args }: 
 	}
 }
 
-export async function runPromptInputRendersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
+export async function runPromptInputRendersPlay({
+	canvasElement,
+	expectedCount = 1,
+}: { canvasElement: HTMLElement; expectedCount?: number }) {
 	await expectCanvas(canvasElement);
-	await expect(canvasElement.querySelector('[role="textbox"]')).toBeInTheDocument();
+	await expect(within(canvasElement).getAllByRole('textbox')).toHaveLength(expectedCount);
 }
 
 export async function runPromptInputFocusedOnMountPlay({ canvasElement }: { canvasElement: HTMLElement }) {
@@ -1709,12 +1711,9 @@ export async function runCameraDemoPlay<TArgs>({ canvasElement }: PlayContext<TA
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 
-	// the real getUserMedia call on mount fails in this headless browser (no
-	// camera device, no permission granted) — that's a genuine pass through
-	// startCamera's catch branch, left alone. Mocking it only from here lets
-	// the interactions below drive the success path too, and the mock's first
-	// (rejecting) call exercises the OverconstrainedError retry branch in
-	// requestMediaStream on the very first click below.
+	// The story starts with the camera off so no native permission request
+	// can race this mock. The first click exercises the OverconstrainedError
+	// retry before attaching a real synthetic stream.
 	const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
 	let mockedCallCount = 0;
 	navigator.mediaDevices.getUserMedia = (async () => {

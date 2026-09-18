@@ -42,7 +42,7 @@ export const Default: StoryObj<typeof AvatarGroup> = {
 	render: (args) => {
 		return (
 			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-				<AvatarGroup {...args} />
+				<AvatarGroup {...args} data-testid="avatar-group" />
 			</FlexDiv>
 		);
 	},

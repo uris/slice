@@ -10,7 +10,7 @@ import type { DivInputProps } from './_types';
 
 export const DivInput = React.memo((props: DivInputProps) => {
 	const {
-		value = '',
+		value: valueProp = '',
 		name = 'Input Field',
 		placeholder = 'Placeholder',
 		isEditable = true,
@@ -36,6 +36,7 @@ export const DivInput = React.memo((props: DivInputProps) => {
 	const divClass = className ? ` ${className}` : '';
 
 	const ref = useRef<HTMLDivElement>(null);
+	const value = valueProp ?? '';
 	const innerText = useRef<string>(value === '' ? cleanString(placeholder) : cleanString(value));
 	const [isFocused, setIsFocused] = useState(focus);
 	const [text, setText] = useState(innerText.current);
@@ -255,7 +256,7 @@ export const DivInput = React.memo((props: DivInputProps) => {
 				role={'textbox'}
 				aria-label={name}
 			>
-				{value ?? placeholder}
+				{valueProp ?? placeholder}
 			</motion.div>
 		</div>
 	);

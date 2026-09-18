@@ -262,7 +262,7 @@ export const SolidBorderWorking: StoryObj<typeof PromptInput> = {
 		);
 	},
 	play: async ({ canvasElement }) => {
-		await runPromptInputRendersPlay({ canvasElement });
+		await runPromptInputRendersPlay({ canvasElement, expectedCount: 2 });
 	},
 };
 
@@ -283,7 +283,7 @@ export const SolidBorderFocused: StoryObj<typeof PromptInput> = {
 		);
 	},
 	play: async ({ canvasElement }) => {
-		await runPromptInputRendersPlay({ canvasElement });
+		await runPromptInputRendersPlay({ canvasElement, expectedCount: 2 });
 	},
 };
 
@@ -304,6 +304,6 @@ export const SolidBorderIdle: StoryObj<typeof PromptInput> = {
 		);
 	},
 	play: async ({ canvasElement }) => {
-		await runPromptInputRendersPlay({ canvasElement });
+		await runPromptInputRendersPlay({ canvasElement, expectedCount: 2 });
 	},
 };

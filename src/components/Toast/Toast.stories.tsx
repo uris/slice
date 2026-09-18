@@ -172,7 +172,7 @@ export const NoBorderNoClose: StoryObj<typeof Toast> = {
 	tags: ['tests'],
 	render: () => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-			<Toast message={'Plain toast'} showDelay={0} duration={'Infinite'} border={false} close={false} />
+			<Toast message={'Plain toast'} showDelay={0} duration={5000} border={false} close={false} />
 		</FlexDiv>
 	),
 	play: async ({ canvasElement }) => {

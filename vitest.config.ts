@@ -40,10 +40,10 @@ export default defineConfig({
 			thresholds: {
 				// Coverage floor. CI runs `npm run coverage` and fails the build if
 				// coverage drops below these numbers.
-				statements: 90.0,
-				branches: 80.0,
-				functions: 90.0,
-				lines: 90.0,
+				statements: 95.0,
+				branches: 85.0,
+				functions: 95.0,
+				lines: 95.0,
 			},
 		},
 		projects: [
