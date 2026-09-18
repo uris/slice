@@ -12,6 +12,8 @@ class MockMediaStreamTrack {
 	muted = false;
 	private readonly listeners = new Map<string, Listener[]>();
 
+	constructor(private readonly deviceId = 'device-1') {}
+
 	addEventListener(type: string, listener: Listener) {
 		const current = this.listeners.get(type) ?? [];
 		current.push(listener);
@@ -36,7 +38,7 @@ class MockMediaStreamTrack {
 	}
 
 	getSettings() {
-		return { deviceId: 'device-1' };
+		return { deviceId: this.deviceId };
 	}
 }
 
@@ -66,6 +68,7 @@ class MockGainNode extends MockAudioNode {
 }
 
 class MockAudioContext {
+	static instances: MockAudioContext[] = [];
 	createMediaStreamSource = vi.fn(() => new MockAudioNode());
 	createGain = vi.fn(() => new MockGainNode());
 	createMediaStreamDestination = vi.fn(() => ({
@@ -73,6 +76,10 @@ class MockAudioContext {
 		stream: new MockMediaStream(),
 	}));
 	close = vi.fn().mockResolvedValue(undefined);
+
+	constructor() {
+		MockAudioContext.instances.push(this);
+	}
 }
 
 function mockDevice(deviceId: string, label = `Mic ${deviceId}`) {
@@ -86,6 +93,7 @@ function mockDevice(deviceId: string, label = `Mic ${deviceId}`) {
 
 let getUserMedia: ReturnType<typeof vi.fn>;
 let enumerateDevices: ReturnType<typeof vi.fn>;
+let deviceChangeHandler: (() => void) | undefined;
 
 function setMediaDevices(value: unknown) {
 	Object.defineProperty(navigator, 'mediaDevices', {
@@ -95,12 +103,16 @@ function setMediaDevices(value: unknown) {
 }
 
 beforeEach(() => {
+	deviceChangeHandler = undefined;
+	MockAudioContext.instances = [];
 	getUserMedia = vi.fn().mockResolvedValue(new MockMediaStream());
 	enumerateDevices = vi.fn().mockResolvedValue([mockDevice('device-1')]);
 	setMediaDevices({
 		getUserMedia,
 		enumerateDevices,
-		addEventListener: vi.fn(),
+		addEventListener: vi.fn((event: string, handler: () => void) => {
+			if (event === 'devicechange') deviceChangeHandler = handler;
+		}),
 		removeEventListener: vi.fn(),
 	});
 	vi.stubGlobal('AudioContext', MockAudioContext);
@@ -213,5 +225,218 @@ describe('useMicrophone', () => {
 
 		expect(getUserMedia).toHaveBeenCalled();
 		expect(result.current.isActive).toBe(true);
+	});
+
+	it('setInputVolume() falls back to 1 for a non-finite value', async () => {
+		const { result } = renderHook(() => useMicrophone(false, undefined, true));
+		await waitFor(() => expect(result.current.isActive).toBe(true));
+
+		act(() => {
+			result.current.setInputVolume(Number.NaN);
+		});
+		expect(result.current.inputVolume).toBe(1);
+	});
+
+	it('toggleMute() is a safe no-op when there is no active microphone track', () => {
+		const { result } = renderHook(() => useMicrophone(true, undefined, false));
+		expect(() => result.current.toggleMute()).not.toThrow();
+	});
+
+	describe('prioritizeDefaultMicrophone (exercised through refreshMicrophones)', () => {
+		it('moves a "default" device to the front when it is not already first', async () => {
+			enumerateDevices.mockResolvedValue([mockDevice('device-1'), mockDevice('default')]);
+			const { result } = renderHook(() => useMicrophone(true, undefined, false));
+
+			await waitFor(() => expect(result.current.micOptions).toHaveLength(2));
+			expect(result.current.micOptions[0]?.value?.id).toBe('default');
+		});
+
+		it('leaves the list alone when "default" is already first', async () => {
+			enumerateDevices.mockResolvedValue([mockDevice('default'), mockDevice('device-1')]);
+			const { result } = renderHook(() => useMicrophone(true, undefined, false));
+
+			await waitFor(() => expect(result.current.micOptions).toHaveLength(2));
+			expect(result.current.micOptions[0]?.value?.id).toBe('default');
+		});
+
+		it('reprioritizes the active device to the front when there is no "default" device', async () => {
+			getUserMedia.mockImplementation((constraints?: MediaStreamConstraints) => {
+				const audio = constraints?.audio as { deviceId?: { exact?: string } } | undefined;
+				const deviceId = audio?.deviceId?.exact ?? 'device-1';
+				return Promise.resolve(new MockMediaStream([new MockMediaStreamTrack(deviceId)]));
+			});
+			enumerateDevices.mockResolvedValue([mockDevice('device-1'), mockDevice('device-2')]);
+
+			const { result } = renderHook(() => useMicrophone(false, undefined, false));
+			await waitFor(() => expect(result.current.micOptions.length).toBe(2));
+
+			await act(async () => {
+				await result.current.setMicrophone('device-2');
+			});
+
+			await waitFor(() => expect(result.current.micOptions[0]?.value?.id).toBe('device-2'));
+		});
+	});
+
+	describe('audio processing setup', () => {
+		it('falls back to the raw stream when no AudioContext constructor is available', async () => {
+			vi.stubGlobal('AudioContext', undefined);
+			const { result } = renderHook(() => useMicrophone(false, undefined, true));
+
+			await waitFor(() => expect(result.current.isActive).toBe(true));
+			expect(result.current.processedMicStream.current).toBe(result.current.micStream.current);
+		});
+
+		it('closes the previous AudioContext before creating a new one for a second request', async () => {
+			// the default beforeEach mock resolves to the SAME MockMediaStream
+			// instance on every call, so the second setMicrophone() below would see
+			// the first call's already-`.stop()`-ed track and hang forever waiting
+			// for a live/unmuted state that can never happen - give each call a
+			// fresh stream/track instead, matching what a real second getUserMedia()
+			// call actually returns
+			getUserMedia.mockImplementation(() => Promise.resolve(new MockMediaStream()));
+			const { result } = renderHook(() => useMicrophone(false, undefined, false));
+			await waitFor(() => expect(result.current.micOptions.length).toBeGreaterThan(0));
+
+			await act(async () => {
+				await result.current.setMicrophone('device-1');
+			});
+			expect(MockAudioContext.instances).toHaveLength(1);
+
+			await act(async () => {
+				await result.current.setMicrophone('device-1');
+			});
+			expect(MockAudioContext.instances).toHaveLength(2);
+			expect(MockAudioContext.instances[0]?.close).toHaveBeenCalled();
+		});
+	});
+
+	it('waits for a live-but-muted track to report unmute before marking active', async () => {
+		const track = new MockMediaStreamTrack();
+		track.muted = true;
+		getUserMedia.mockResolvedValue(new MockMediaStream([track]));
+		// isRequesting flips true synchronously, well before the hook's chain of
+		// awaits (waitForPaint's rAF, getUserMedia, setupAudioProcessing, ...)
+		// actually reaches waitForTrackToBecomeActive and registers the 'unmute'
+		// listener - so isRequesting can't be used to time the dispatch. Spy on
+        // addEventListener instead and wait for that specific registration.
+		const addEventListenerSpy = vi.spyOn(track, 'addEventListener');
+
+		const { result } = renderHook(() => useMicrophone(false, undefined, false));
+		await waitFor(() => expect(result.current.micOptions.length).toBeGreaterThan(0));
+
+		let pending: Promise<MediaStream | null>;
+		act(() => {
+			pending = result.current.requestMicrophone();
+		});
+
+		await waitFor(() => expect(result.current.isRequesting).toBe(true));
+		await waitFor(() =>
+			expect(addEventListenerSpy).toHaveBeenCalledWith('unmute', expect.any(Function), expect.anything()),
+		);
+
+		track.dispatch('unmute');
+
+		await act(async () => {
+			await pending;
+		});
+
+		expect(result.current.isActive).toBe(true);
+	});
+
+	describe('requestMicrophone() failure handling', () => {
+		it('fails when the granted stream has no audio track', async () => {
+			getUserMedia.mockResolvedValueOnce(new MockMediaStream([]));
+			const { result } = renderHook(() => useMicrophone(true, undefined, false));
+
+			await expect(
+				act(async () => {
+					await result.current.requestMicrophone();
+				}),
+			).rejects.toThrow('Failed to access microphone');
+		});
+
+		it('surfaces a permission-denied message for NotAllowedError', async () => {
+			// a plain Error with `.name` set, not a DOMException - jsdom's own
+			// DOMException implementation doesn't subclass the global Error, so
+			// `error instanceof Error` (what the source checks here) is false for
+			// one, even though it's true in a real browser
+			const permissionError = new Error('not allowed');
+			permissionError.name = 'NotAllowedError';
+			getUserMedia.mockRejectedValueOnce(permissionError);
+			const { result } = renderHook(() => useMicrophone(true, undefined, false));
+
+			await expect(
+				act(async () => {
+					await result.current.requestMicrophone();
+				}),
+			).rejects.toThrow('Permission to access the microphone was denied');
+		});
+
+		it('retries with generic constraints on OverconstrainedError', async () => {
+			getUserMedia
+				.mockRejectedValueOnce(new DOMException('nope', 'OverconstrainedError'))
+				.mockResolvedValueOnce(new MockMediaStream());
+			const { result } = renderHook(() => useMicrophone(true, 'device-9', false));
+
+			await act(async () => {
+				await result.current.requestMicrophone();
+			});
+
+			expect(getUserMedia).toHaveBeenCalledTimes(2);
+			expect(result.current.isActive).toBe(true);
+		});
+	});
+
+	it('setMicrophone() surfaces an error when the stream request fails', async () => {
+		getUserMedia.mockRejectedValueOnce(new Error('device busy'));
+		const { result } = renderHook(() => useMicrophone(false, undefined, false));
+		await waitFor(() => expect(result.current.micOptions.length).toBeGreaterThan(0));
+
+		await act(async () => {
+			await result.current.setMicrophone('device-1');
+		});
+
+		expect(result.current.isActive).toBe(false);
+		expect(result.current.error?.message).toBe('device busy');
+	});
+
+	describe('device-change effect', () => {
+		it('does nothing when there is no selected device to check', async () => {
+			const { result } = renderHook(() => useMicrophone(false, undefined, false));
+			await waitFor(() => expect(result.current.micOptions.length).toBeGreaterThan(0));
+			expect(deviceChangeHandler).toBeDefined();
+
+			act(() => {
+				deviceChangeHandler?.();
+			});
+
+			await waitFor(() => expect(enumerateDevices.mock.calls.length).toBeGreaterThanOrEqual(2));
+			expect(getUserMedia).not.toHaveBeenCalled();
+		});
+
+		it('leaves the current device alone when it is still present', async () => {
+			const { result } = renderHook(() => useMicrophone(false, 'device-1', false));
+			await waitFor(() => expect(result.current.micOptions.length).toBeGreaterThan(0));
+
+			act(() => {
+				deviceChangeHandler?.();
+			});
+
+			await waitFor(() => expect(enumerateDevices.mock.calls.length).toBeGreaterThanOrEqual(2));
+			expect(getUserMedia).not.toHaveBeenCalled();
+		});
+
+		it('re-requests the microphone when the selected device disappears', async () => {
+			const { result } = renderHook(() => useMicrophone(false, 'device-1', false));
+			await waitFor(() => expect(result.current.micOptions.length).toBeGreaterThan(0));
+
+			enumerateDevices.mockResolvedValue([mockDevice('device-2')]);
+			act(() => {
+				deviceChangeHandler?.();
+			});
+
+			await waitFor(() => expect(getUserMedia).toHaveBeenCalled());
+		});
 	});
 });

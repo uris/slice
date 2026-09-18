@@ -48,6 +48,10 @@ Vitest runs two projects side by side. `npm test` runs both during local dev; `n
 - **Everything non-visual — hooks, stores, `src/utils` objects and functions, API/browser abstractions:** write plain Vitest unit tests colocated with the source as `<name>.test.ts` (the `unit` project, `jsdom` environment). These do not belong in stories.
 - Both projects feed the same coverage report. A hook or store with no accompanying `.test.ts` will show as uncovered even if it's used inside a story — rendering a component doesn't exercise every branch of the store it happens to call into. Write the unit test.
 
+For the `tests` tag convention, why to prefer several small isolated stories over one long
+sequential `play:` function, and how to reset module-level store state (Zustand) at the top of a
+story's `play:` function, see [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md).
+
 ### Accessibility gate
 
 `@storybook/addon-a11y` runs axe-core checks against every story as part of the `storybook`

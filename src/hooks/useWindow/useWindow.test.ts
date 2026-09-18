@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { FormFactor, useWindow } from './useWindow';
 
 function setViewport(width: number, height: number) {
@@ -39,6 +39,12 @@ afterEach(() => {
 	delete (navigator as unknown as Record<string, unknown>).userAgent;
 	delete (navigator as unknown as Record<string, unknown>).platform;
 	setNavigatorProp('maxTouchPoints', 0);
+	// window.top is jsdom's own getter by default; restore it if a test
+	// overrode it with an own property.
+	Object.defineProperty(window, 'top', {
+		configurable: true,
+		value: window,
+	});
 });
 
 describe('useWindow', () => {
@@ -54,6 +60,16 @@ describe('useWindow', () => {
 
 	it('falls back to the mobile form factor below the smallest breakpoint', () => {
 		setViewport(400, 700);
+		const { result } = renderHook(() => useWindow());
+
+		expect(result.current.formFactor).toBe(FormFactor.Mobile);
+	});
+
+	it('falls back to the mobile form factor immediately when width is zero', () => {
+		// exercises getFormFactor's own `!width || width <= 0` guard, rather
+		// than falling through the breakpoint loop and hitting its final
+		// `return FormFactor.Mobile` like the case above does.
+		setViewport(0, 700);
 		const { result } = renderHook(() => useWindow());
 
 		expect(result.current.formFactor).toBe(FormFactor.Mobile);
@@ -154,5 +170,68 @@ describe('useWindow', () => {
 
 		expect(result.current.locationError?.message).toBe('denied');
 		expect(result.current.gettingLocation).toBe(false);
+	});
+
+	it('uses window.innerWidth/innerHeight directly when top is false, ignoring window.top', () => {
+		// exercises the `top ? ... : window.innerWidth` ternary's false branch,
+		// which every other test in this file leaves untaken since they all use
+		// the default `top = true`.
+		setViewport(600, 500);
+		Object.defineProperty(window, 'top', {
+			configurable: true,
+			value: { innerWidth: 999, innerHeight: 999 },
+		});
+
+		const { result } = renderHook(() => useWindow(undefined, false));
+
+		expect(result.current.viewportWidth).toBe(600);
+		expect(result.current.viewportHeight).toBe(500);
+	});
+
+	it('falls back to window.innerWidth/innerHeight when window.top is unavailable', () => {
+		// exercises `window.top?.innerWidth ?? window.innerWidth`'s nullish
+		// fallback: every other test leaves window.top as jsdom's default
+		// (itself), which always has a truthy innerWidth/innerHeight.
+		setViewport(700, 600);
+		Object.defineProperty(window, 'top', {
+			configurable: true,
+			value: null,
+		});
+
+		const { result } = renderHook(() => useWindow());
+
+		expect(result.current.viewportWidth).toBe(700);
+		expect(result.current.viewportHeight).toBe(600);
+	});
+
+	it('no-ops every browser-only feature outside of a browser environment (SSR)', async () => {
+		// isBrowser is computed once at module load from `typeof window` /
+		// `typeof navigator`, so the only way to exercise its false branch is to
+		// force a fresh module evaluation with both globals absent.
+		vi.resetModules();
+		const originalWindow = globalThis.window;
+		const originalNavigator = globalThis.navigator;
+		// @ts-expect-error - simulate an SSR environment with no DOM globals
+		delete globalThis.window;
+		// @ts-expect-error - simulate an SSR environment with no DOM globals
+		delete globalThis.navigator;
+
+		const ssrModule = await import('./useWindow');
+
+		// restore immediately so renderHook (which needs a DOM) keeps working
+		globalThis.window = originalWindow;
+		globalThis.navigator = originalNavigator;
+
+		const { result } = renderHook(() => ssrModule.useWindow());
+
+		expect(result.current.isElectron).toBe(false);
+		expect(result.current.isAppleDevice).toBe(false);
+		expect(result.current.isTouchDevice).toBe(false);
+		expect(result.current.dpr).toBe(1);
+		expect(result.current.viewportWidth).toBeNull();
+		expect(result.current.viewportHeight).toBeNull();
+		expect(result.current.formFactor).toBe(ssrModule.FormFactor.Desktop);
+
+		vi.resetModules();
 	});
 });

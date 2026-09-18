@@ -65,29 +65,7 @@ Already covered, functionally equivalent to an M3 component (naming differs — 
 
 ## 3. Unit Tests — path to ~80% coverage
 
-**Correction to the working assumption:** hooks and stores are *not* uniformly untested — most already have `.test.ts` files (11 of 14 hooks, 11 of 12 store groups). The real gaps are narrower than "hooks/stores have no tests":
-
-| Area | Missing test file | Priority |
-|---|---|---|
-| Hooks | `useBindWebRTC`, `useObserveResize`, `useTrackRenders` | P0 |
-| Stores | `LocalDB` | P0 |
-| `utils/objects` | `IndexedDB`, `WebRTCConnection`, `MDStreamBuffer` (siblings `audioVisualizer`, `SSEConnection`, `WSConnection` already have tests) | P1 |
-| `theme/*` | No tests at all for `colors`, `corners`, `elevations`, `motion`, `type`, `themes` (pure functions — cheap to cover) | P1 |
-| `providers` | `ThemeProvider`, `themeServer` — zero test coverage | P1 |
-| Components | Currently covered only via Storybook interaction/render tests through stories — no separate unit tests. Fine as a strategy, but confirm it's actually wired into the coverage number (see below). | — |
-
-**Failing interaction tests (3):** `TODO` — needs the component/story names filled in. Run `npm run storybook` or the storybook Vitest project and paste the failures here; they'll get triaged into P0 since regressions block the coverage push.
-
-**Plan to reach 80%:**
-1. **P0** — Fix the 3 failing interaction tests first; a red suite makes coverage numbers unreliable and blocks CI adoption.
-2. **P0** — Run `npm run coverage` to get a real baseline number (this session couldn't run it — see note at bottom) and confirm the storybook project's browser tests are actually included in the coverage merge.
-3. **P0** — Add tests for the 4 zero-coverage hook/store gaps above; highest coverage-per-effort since they're isolated units.
-4. **P1** — Add tests for the 3 `utils/objects` gaps and the pure `theme/*` functions.
-5. **P1** — Add `ThemeProvider`/`themeServer` tests.
-6. **P1** — Add a CI workflow that runs `npm run test` and `npm run coverage` on PRs (today `.github/workflows/` only has `deploy-site.yml` — there's no automated test gate at all). Wire an 80% threshold check.
-7. **P2** — Once the baseline is real, revisit whether story-based "coverage via demos" is actually asserting behavior (interaction tests) vs. just rendering (which inflates coverage without verifying correctness).
-
----
+**Superseded by [UNIT_TEST_COVERAGE_PLAN.md](./UNIT_TEST_COVERAGE_PLAN.md), 2026-09-16.** This section was written without a real coverage run (see "How this list was built" below) and used file-existence checks as a rough proxy. The linked doc is built from an actual `npm run coverage` run (`reports/coverage/coverage-final.json`) with a tiered, per-file punch list. This section's other finding — hooks/stores mostly already have tests, gaps are narrower than "nothing is tested" — held up against the real data.
 
 ## 4. Accessibility
 

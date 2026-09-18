@@ -3,7 +3,8 @@
 Read [CONTRIBUTING.md](./CONTRIBUTING.md) first — it's the source of truth for setup, the
 component lifecycle, testing strategy, and the lint/coverage/build gates CI enforces. For
 build/publish pipeline detail, read [contributor-docs/build-architecture.md](./contributor-docs/build-architecture.md);
-for component prop naming, [contributor-docs/style-prop-naming.md](./contributor-docs/style-prop-naming.md).
+for component prop naming, [contributor-docs/style-prop-naming.md](./contributor-docs/style-prop-naming.md);
+for how to actually write a component test vs. a regular one, [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md).
 
 Do not duplicate guidance from those docs into this file. If something here and something in
 CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other way around.
@@ -45,5 +46,11 @@ CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other 
   interactive Storybook UI. If you actually want to see results (not just "did it fail"), run
   `npm run storybook` and use the Accessibility panel / testing widget. Don't read a green
   pipeline as "reviewed" — see [CONTRIBUTING.md](./CONTRIBUTING.md#accessibility-gate).
+- **The `tests` story tag does not skip or de-prioritize anything.** It only filters what shows
+  up in Storybook's sidebar — a `tags: ['tests']` story's `play:` function still runs under
+  `npm run coverage` and still counts toward the coverage report. See
+  [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md) for the full
+  convention: isolated single-purpose stories instead of one long sequential `play:` function, and
+  resetting module-level Zustand store state at the top of `play` when a component reads from one.
 - **`main` is branch-protected**: PR required, three status checks required (`Lint`,
   `Test & Coverage`, `Build`). Always work on a feature branch, never push directly to `main`.

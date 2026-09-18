@@ -84,6 +84,18 @@ describe('useToolTip', () => {
 		expect(result.current?.x).toBe(10);
 	});
 
+	it('clamps y to the top edge of the viewport when the target sits above it', () => {
+		// parentY is negative enough that y = parentY + parentHeight + 10 < 10,
+		// exercising adjustY's `if (y < 10) return 10` branch before it ever
+		// reaches the tipElement/getComputedStyle-dependent logic below it
+		const tipElement = stubTip(40, 20, 40);
+		const toolTip = makeToolTip(rect({ x: 100, y: -50, width: 20, height: 10 }));
+
+		const { result } = renderHook(() => useToolTip(toolTip, tipElement));
+
+		expect(result.current?.y).toBe(10);
+	});
+
 	it('shifts the tooltip left when it would overflow the right edge', () => {
 		const tipElement = stubTip(200, 20, 200);
 		const toolTip = makeToolTip(

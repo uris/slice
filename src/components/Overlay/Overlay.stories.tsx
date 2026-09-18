@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { Overlay } from 'src/components/Overlay/Overlay';
-import { runOverlayPlay } from 'src/components/playHelpers';
+import { runOverlayOpacityVariantsPlay, runOverlayPlay } from 'src/components/playHelpers';
 import { expect, fn } from 'storybook/test';
 
 const meta: Meta<typeof Overlay> = {
@@ -57,4 +57,16 @@ export const HiddenGlobal: StoryObj<typeof Overlay> = {
 		const overlay = canvasElement.querySelector('[class*="overlay"]');
 		await expect(overlay).not.toBeInTheDocument();
 	},
+};
+
+export const OpacityVariants: StoryObj<typeof Overlay> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv direction={'column'} gap={24}>
+			<Overlay className="clear-overlay" show type="clear" opacity={1} transition={{ duration: 0 }} />
+			<Overlay className="dark-default-overlay" show type="dark" transition={{ duration: 0 }} />
+			<Overlay className="dark-explicit-overlay" show type="dark" opacity={0.3} transition={{ duration: 0 }} />
+		</FlexDiv>
+	),
+	play: runOverlayOpacityVariantsPlay,
 };

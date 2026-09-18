@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Dot } from 'src/components/Dot/Dot';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
-import { runDotPlay } from 'src/components/playHelpers';
+import { runDotPlay, runDotVariantsPlay } from 'src/components/playHelpers';
 
 const meta: Meta<typeof Dot> = {
 	title: 'Components/Dot',
@@ -39,4 +39,25 @@ export const Default: StoryObj<typeof Dot> = {
 	play: async ({ canvasElement, args }) => {
 		await runDotPlay({ canvasElement, args });
 	},
+};
+
+export const Variants: StoryObj<typeof Dot> = {
+	tags: ['tests'],
+	// exercise position/color/state/motion branches together, one Dot per
+	// branch, distinguished by an extra className that lands in `rest`
+	render: () => (
+		<FlexDiv direction={'column'} gap={12}>
+			<Dot show className="corner" position="corner" state="blue" />
+			<Dot show className="explicit-color" color="#ff0000" state="blue" />
+			<Dot show className="state-red" state="red" />
+			<Dot show className="state-yellow" state="yellow" />
+			<Dot show className="state-green" state="green" />
+			<Dot show className="state-grey" state="grey" />
+			<Dot show className="no-state" />
+			<Dot show className="motion-values" motionValues={{ initial: { opacity: 0 } }} />
+			<Dot show className="custom-transition" transition={{ duration: 0.5 }} />
+			<Dot show={false} className="hidden" />
+		</FlexDiv>
+	),
+	play: runDotVariantsPlay,
 };

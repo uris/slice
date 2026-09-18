@@ -179,7 +179,13 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 					{close && (
 						<div className={css.close}>
 							<div className={css.titleIcon}>
-								<IconButton tooltip={'close'} icon={'x'} onClick={handleClose} onToolTip={(tip) => onToolTip?.(tip)} />
+								<IconButton
+									tooltip={'close'}
+									aria-label={'close'}
+									icon={'x'}
+									onClick={handleClose}
+									onToolTip={(tip) => onToolTip?.(tip)}
+								/>
 							</div>
 						</div>
 					)}

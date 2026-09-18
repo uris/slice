@@ -1,7 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { RadioButton } from 'src/components/RadioButton/RadioButton';
-import { runRadioButtonPlay } from 'src/components/playHelpers';
+import {
+	runRadioButtonNoDeselectPlay,
+	runRadioButtonNoLabelPlay,
+	runRadioButtonPlay,
+	runRadioButtonWithoutHandlerPlay,
+} from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
 
 type RadioValue = { id: string; name: string };
@@ -66,5 +71,124 @@ export const RadioButtonTest: StoryObj<typeof RadioButton> = {
 	},
 	play: async ({ canvasElement, args }) => {
 		await runRadioButtonPlay({ canvasElement, args: { ...args, value } });
+	},
+};
+
+export const WithoutHandler: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { onChange: undefined },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		await runRadioButtonWithoutHandlerPlay({ canvasElement });
+	},
+};
+
+export const CustomClassName: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { className: 'rb-custom-class' },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement, args }) => {
+		await runRadioButtonPlay({ canvasElement, args: { ...args, value } });
+	},
+};
+
+export const AlreadySelectedNoDeselect: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { selected: true, deselect: false },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement, args }) => {
+		await runRadioButtonNoDeselectPlay({ canvasElement, args });
+	},
+};
+
+export const CustomIconColor: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { iconColor: 'var(--core-text-special)' },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement, args }) => {
+		await runRadioButtonPlay({ canvasElement, args: { ...args, value } });
+	},
+};
+
+export const NotListItem: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { list: false },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement, args }) => {
+		await runRadioButtonPlay({ canvasElement, args: { ...args, value } });
+	},
+};
+
+export const WrapLayout: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { wrap: true },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement, args }) => {
+		await runRadioButtonPlay({ canvasElement, args: { ...args, value } });
+	},
+};
+
+export const WithFrame: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { noFrame: false },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement, args }) => {
+		await runRadioButtonPlay({ canvasElement, args: { ...args, value } });
+	},
+};
+
+export const WithoutLabelStringChildren: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { label: undefined },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value}>
+				String Children
+			</RadioButton>
+		</FlexDiv>
+	),
+	play: async ({ canvasElement, args }) => {
+		await runRadioButtonNoLabelPlay({ canvasElement, args: { ...args, value } });
+	},
+};
+
+export const WithoutLabelOrChildren: StoryObj<typeof RadioButton> = {
+	tags: ['tests'],
+	args: { label: undefined },
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<RadioButton<RadioValue> {...args} value={value} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement, args }) => {
+		await runRadioButtonNoLabelPlay({ canvasElement, args: { ...args, value } });
 	},
 };

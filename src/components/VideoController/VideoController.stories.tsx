@@ -1,19 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { VideoController } from 'src/components/VideoController/VideoController';
-import { useVideoActions } from '../../stores';
+import { fn } from 'storybook/test';
+import { useVideoActions, videoActions } from '../../stores';
 import { Button } from '../Button';
 import { Video, type VideoProps } from '../Video';
-// import {fn} from "storybook/test";
+import { runVideoControllerQuitOutsidePlay, runVideoControllerShowAndHidePlay } from '../playHelpers';
 
+// a small, local, always-decodable, muted clip (see public/video/sample.mp4)
+// instead of a remote demo URL - removes a network dependency from CI and,
+// combined with muted: true, sidesteps Chromium's autoplay-gesture policy
+// entirely (see contributor-docs/writing-tests.md).
 const demoVideoProps: VideoProps = {
-	src: 'https://player.vimeo.com/progressive_redirect/playback/481754051/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&log_user=0&signature=ee67f15d70122bb1a1e900e51e60e3c5384450a3c256412e15fe188ef841a6d2',
+	src: '/public/video/sample.mp4',
 	height: 'auto',
 	width: '100%',
 	playing: true,
 	objectFit: 'cover',
 	controls: 'simple',
-	muted: false,
+	muted: true,
 	borderRadius: 16,
 	customControls: {
 		play: false,
@@ -26,18 +31,56 @@ const demoVideoProps: VideoProps = {
 const meta: Meta<typeof VideoController> = {
 	title: 'Components/VideoController',
 	component: VideoController,
-	args: {},
+	args: {
+		onQuit: fn(),
+	},
 };
 
 export default meta;
 
 export const Default: StoryObj<typeof VideoController> = {
-	render: () => {
-		return <VideoControllerDemo />;
+	render: (args) => {
+		return <VideoControllerDemo {...args} />;
 	},
 };
 
-function VideoControllerDemo() {
+export const ShowAndHide: StoryObj<typeof VideoController> = {
+	tags: ['tests'],
+	render: (args) => {
+		return <VideoControllerDemo {...args} />;
+	},
+	play: async ({ canvasElement, args }) => {
+		// the video store is a module-level singleton shared across every story
+		// in this file - reset it before this one runs so a previous story's
+		// leftover shown video can never bleed into this run
+		videoActions.clear();
+		await runVideoControllerShowAndHidePlay({ canvasElement, args });
+	},
+};
+
+export const QuitOutside: StoryObj<typeof VideoController> = {
+	tags: ['tests'],
+	render: (args) => {
+		return <VideoControllerDemo {...args} quit={'outside'} />;
+	},
+	play: async ({ canvasElement }) => {
+		videoActions.clear();
+		await runVideoControllerQuitOutsidePlay({ canvasElement });
+	},
+};
+
+export const NotDraggable: StoryObj<typeof VideoController> = {
+	tags: ['tests'],
+	render: (args) => {
+		return <VideoControllerDemo {...args} draggable={false} />;
+	},
+	play: async ({ canvasElement, args }) => {
+		videoActions.clear();
+		await runVideoControllerShowAndHidePlay({ canvasElement, args });
+	},
+};
+
+function VideoControllerDemo(args: any) {
 	const show = useVideoActions().show;
 
 	// await the modal response value
@@ -55,7 +98,7 @@ function VideoControllerDemo() {
 			<Button iconRight={'arrow right'} onClick={handleShowVideo}>
 				Show Video
 			</Button>
-			<VideoController quit={'inside'} />
+			<VideoController {...args} quit={args.quit ?? 'inside'} />
 		</FlexDiv>
 	);
 }

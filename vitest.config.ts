@@ -40,23 +40,10 @@ export default defineConfig({
 			thresholds: {
 				// Coverage floor. CI runs `npm run coverage` and fails the build if
 				// coverage drops below these numbers.
-				//
-				// Set ~1.5 points below the last confirmed-stable full-suite
-				// run on purpose, not matched exactly to it. v8/browser-mode coverage
-				// has small run-to-run measurement noise (a few hundredths of a
-				// percent), so an exact-matched threshold fails intermittently
-				//
-				// autoUpdate is intentionally OFF: it rewrites this file on every run
-				//
-				// To raise the floor: run `npm run coverage` locally a few times to
-				// find a stable current number, then hand-set these values to roughly
-				// 1.5 points below that, and run `npm run lint` to fix formatting
-				// before committing. Never set them to exactly the last measured
-				// number, and never lower them to make a failing PR pass.
-				statements: 69.4,
-				branches: 61.8,
-				functions: 65.2,
-				lines: 71.7,
+				statements: 90.0,
+				branches: 80.0,
+				functions: 90.0,
+				lines: 90.0,
 			},
 		},
 		projects: [

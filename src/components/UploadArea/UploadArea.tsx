@@ -108,7 +108,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 			if (busy) return;
 			dragDepth.current = 0;
 			setHovered(false);
-			const files = Array.from(e.dataTransfer.files ?? []);
+			const files = Array.from(e.dataTransfer?.files ?? []);
 			onUpload?.(files);
 		},
 		[busy, onUpload],

@@ -2,10 +2,18 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type React from 'react';
 import { useState } from 'react';
 import { FlexDiv } from 'src/components/FlexDiv';
+import {
+	runDataTableColumnResizeAndReorderPlay,
+	runDataTablePlainAndCustomHeaderColumnPlay,
+	runDataTableScrollShadowsPlay,
+	runDataTableSortAndCellInteractionPlay,
+	runDataTableVirtualizedScrollPlay,
+} from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
 import { DataTable } from './DataTable';
 import { manyRows, sampleTableColumnDefinitions, sampleTableData } from './_data';
 import type { SampleTableData } from './_data';
+import type { ColumnDefinition } from './_types';
 import { type DataTableViewState, applyDataTableViewState } from './viewState';
 
 // storybook needs the typed table to render properly
@@ -42,6 +50,8 @@ const meta: Meta<typeof TypedDataTable> = {
 		onClick: fn(),
 		onDoubleClick: fn(),
 		onSortChange: fn(),
+		onColumnResize: fn(),
+		onColumnReorder: fn(),
 	},
 };
 
@@ -54,6 +64,85 @@ export const Default: StoryObj<typeof TypedDataTable> = {
 				<TypedDataTable {...args} />
 			</FlexDiv>
 		);
+	},
+	play: async ({ canvasElement, args }) => {
+		await runDataTableSortAndCellInteractionPlay({ canvasElement, args });
+	},
+};
+
+// drag-resize a column boundary and drag-and-drop reorder two headers - the
+// two interactions Default never touches (sorting/clicking cells doesn't
+// exercise useResizeColumn's or useReorderColumns' drag handlers at all).
+export const ColumnResizeAndReorder: StoryObj<typeof TypedDataTable> = {
+	tags: ['tests'],
+	render: (args) => {
+		return (
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+				<TypedDataTable {...args} />
+			</FlexDiv>
+		);
+	},
+	play: async ({ canvasElement, args }) => {
+		await runDataTableColumnResizeAndReorderPlay({ canvasElement, args });
+	},
+};
+
+// a purely presentational column (no key/accessor/sort) and a column with a
+// custom renderHeader - neither exists in the shared sample columns, so
+// resolveColumnValue's "neither" branch, DefaultCellRenderer's undefined-value
+// fallback, the non-sortable header branch, and the renderHeader escape hatch
+// are all otherwise unreachable.
+const plainAndCustomHeaderColumns: ColumnDefinition<SampleTableData>[] = [
+	{
+		id: 'plain',
+		title: 'Actions',
+	},
+	{
+		id: 'custom-header',
+		key: 'name',
+		title: 'Name',
+		renderHeader: () => <span>Custom Header</span>,
+	},
+];
+
+export const PlainAndCustomHeaderColumn: StoryObj<typeof TypedDataTable> = {
+	tags: ['tests'],
+	args: {
+		columnDefinitions: plainAndCustomHeaderColumns,
+		sort: undefined,
+	},
+	render: (args) => {
+		return (
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+				<TypedDataTable {...args} />
+			</FlexDiv>
+		);
+	},
+	play: async ({ canvasElement, args }) => {
+		await runDataTablePlainAndCustomHeaderColumnPlay({ canvasElement, args });
+	},
+};
+
+// a small fixed height/width against 30 rows forces real horizontal and
+// vertical overflow, which is what actually drives hScroll/vScroll (and the
+// corner/column/header drop-shadow branches derived from them) - Default's
+// width:100%/height:auto never overflows, so those branches never fire there.
+export const ScrollShadows: StoryObj<typeof TypedDataTable> = {
+	tags: ['tests'],
+	args: {
+		width: 320,
+		height: 200,
+		tableData: manyRows(30),
+	},
+	render: (args) => {
+		return (
+			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+				<TypedDataTable {...args} />
+			</FlexDiv>
+		);
+	},
+	play: async ({ canvasElement, args }) => {
+		await runDataTableScrollShadowsPlay({ canvasElement, args });
 	},
 };
 
@@ -122,6 +211,24 @@ export const AutoVirtualized1KRows: StoryObj<typeof TypedDataTable> = {
 	render: (args) => (
 		<VirtualizedDemo args={args} rowCount={1000} caption={'1K rows, virtualizeRows auto-enabled - No Slugishness'} />
 	),
+};
+
+// tests-tagged sibling of the story above: scrolls partway down the
+// virtualized list so a top spacer row, a bottom spacer row, and the
+// aria-rowindex/aria-rowcount attributes all exist simultaneously - none of
+// which the un-scrolled AutoVirtualized1KRows story above ever reaches.
+export const VirtualizedScroll: StoryObj<typeof TypedDataTable> = {
+	tags: ['tests'],
+	args: {
+		height: 600,
+		sort: undefined,
+	},
+	render: (args) => (
+		<VirtualizedDemo args={args} rowCount={1000} caption={'Scrolled partway through 1K virtualized rows'} />
+	),
+	play: async ({ canvasElement, args }) => {
+		await runDataTableVirtualizedScrollPlay({ canvasElement, args });
+	},
 };
 
 // Same row count than the story above: this one mounts

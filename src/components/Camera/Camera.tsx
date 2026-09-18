@@ -534,7 +534,7 @@ export const Camera = React.memo(
 					onMouseEnter={handleControlsMouseEnter}
 					onMouseLeave={handleControlsMouseLeave}
 					onClick={handleControlsClick}
-					onKeyDown={(e) => accessibleKeyDown(e, () => handleControlsClick)}
+					onKeyDown={(e) => accessibleKeyDown(e, () => handleControlsClick(e))}
 				>
 					<div className={css.controlsLeft}>
 						<ToolbarButton

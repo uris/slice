@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv';
 import { TextField } from 'src/components/Textfield';
-import { runTextFieldPlay } from 'src/components/playHelpers';
+import {
+	runTextFieldClearButtonRefocusPlay,
+	runTextFieldDisabledGuardsPlay,
+	runTextFieldPasswordTogglePlay,
+	runTextFieldPlay,
+	runTextFieldStyleVariantsPlay,
+} from 'src/components/playHelpers';
 import { expect, fn } from 'storybook/test';
 
 const meta: Meta<typeof TextField> = {
@@ -68,4 +74,71 @@ export const PasswordWithAction: StoryObj<typeof TextField> = {
 		const translate = canvasElement.textContent ?? '';
 		await expect(translate).toContain('Translate');
 	},
+};
+
+export const DisabledFieldGuards: StoryObj<typeof TextField> = {
+	tags: ['tests'],
+	args: {
+		...meta.args,
+		disabled: true,
+		value: 'existing text',
+	},
+	render: Default.render,
+	play: runTextFieldDisabledGuardsPlay,
+};
+
+export const ClearButtonRefocus: StoryObj<typeof TextField> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv direction={'column'} gap={24}>
+			<TextField className="refocus-keep" name="keep" value="hello" onChange={() => null} />
+			<TextField className="refocus-blurs" name="blurs" value="hello" clearBlurs onChange={() => null} />
+		</FlexDiv>
+	),
+	play: runTextFieldClearButtonRefocusPlay,
+};
+
+export const PasswordToggle: StoryObj<typeof TextField> = {
+	tags: ['tests'],
+	args: {
+		inputType: 'password',
+		value: 'secret',
+	},
+	render: (args) => (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<TextField {...args} />
+		</FlexDiv>
+	),
+	play: runTextFieldPasswordTogglePlay,
+};
+
+export const StyleVariants: StoryObj<typeof TextField> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv direction={'column'} gap={24}>
+			<TextField className="underline-border" name="underline" borderType="underline" onChange={() => null} />
+			<TextField className="none-border" name="none-border" borderType="none" onChange={() => null} />
+			<TextField className="error-state" name="error" error onChange={() => null} />
+			<TextField className="icon-left" name="icon-left" iconLeft={{ name: 'search', size: 18 }} onChange={() => null} />
+			<TextField className="empty-label" name="empty-label" label="" onChange={() => null} />
+			<TextField className="no-label" name="no-label" onChange={() => null} />
+			<TextField
+				className="auto-width"
+				name="auto-width"
+				size={{ width: 'auto', height: 'auto' }}
+				onChange={() => null}
+			/>
+			<TextField
+				className="unset-width"
+				name="unset-width"
+				size={{ width: 'unset', height: 'auto' }}
+				onChange={() => null}
+			/>
+			<TextField className="padding-multi" name="padding-multi" padding="10px 20px" onChange={() => null} />
+			<TextField className="padding-single" name="padding-single" padding="10px" onChange={() => null} />
+			<TextField className="padding-invalid" name="padding-invalid" padding="abc" onChange={() => null} />
+			<TextField className="padding-number" name="padding-number" padding={30} onChange={() => null} />
+		</FlexDiv>
+	),
+	play: runTextFieldStyleVariantsPlay,
 };
