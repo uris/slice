@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlexDiv } from '../../../src/components/FlexDiv';
+import { FlexDiv } from '../../../src';
 
 const NoteSection = React.memo((props: { children: React.ReactNode }) => {
 	const { children } = props;

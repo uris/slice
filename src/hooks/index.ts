@@ -49,3 +49,4 @@ export {
 	type UseClipboardReturn,
 	type UseClipboardTarget,
 } from './useClipboard/useClipboard';
+export { useActiveTab, type UseActiveTabReturn } from './useActiveTab/useActiveTab';

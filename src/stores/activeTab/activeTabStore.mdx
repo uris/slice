@@ -1,0 +1,142 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../components/FlexDiv';
+import NoteSection from '../../../documentation/_components/Notice/Notice';
+
+<Meta title="Stores/activeTab" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        <NoteSection>Slice stores use a module-level singleton pattern: each store is created once when the module is loaded, and every import shares the same store instance.</NoteSection>
+
+        # ActiveTabStore
+        Global document visibility and focus state built with Zustand. It mirrors `useActiveTab` while exposing atomic selector hooks for React and imperative reads for non-React code.
+
+        ## Initialization
+        Call `initialize()` in an app-level effect and return its cleanup. Multiple initializers share one set of visibility, focus, and blur listeners; the final cleanup removes them. Cleanup is safe to call more than once. Reinitializing synchronizes immediately, and the store retains its last state after cleanup.
+
+        ## SSR behavior
+        The store is safe to import during SSR. State defaults to `isActiveTab: false`, `isTabFocused: false`, and `visibilityState: 'hidden'` until initialized in the browser. Without a document, initialization returns a no-op cleanup. Importing the store does not attach browser listeners.
+
+        ## React exports (reactive)
+        React exports are reactive subscriptions for components that should re-render when the selected state changes.
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '25%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={"left"}>Export</th>
+              <th className={"left"}>Type</th>
+              <th className={"left"}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>{`useActiveTabStore`}</code></td><td><code>{`Zustand store hook`}</code></td><td>Main store hook for custom selectors over <code>ActiveTabStore</code>.</td></tr>
+            <tr><td><code>{`useIsActiveTab`}</code></td><td><code>{`() => boolean`}</code></td><td>Atomic selector for whether the document is visible.</td></tr>
+            <tr><td><code>{`useIsTabFocused`}</code></td><td><code>{`() => boolean`}</code></td><td>Atomic selector for whether the document has focus.</td></tr>
+            <tr><td><code>{`useTabVisibilityState`}</code></td><td><code>{`() => DocumentVisibilityState`}</code></td><td>Atomic selector for the browser-reported <code>visible</code> or <code>hidden</code> state.</td></tr>
+            <tr><td><code>{`useInitializeActiveTab`}</code></td><td><code>{`() => (() => (() => void))`}</code></td><td>Returns the initialize action, which attaches listeners and returns cleanup.</td></tr>
+          </tbody>
+        </table>
+
+        ## Imperative exports (non-reactive)
+        Imperative helpers read the same singleton store outside React without subscribing.
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '25%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={"left"}>Export</th>
+              <th className={"left"}>Type</th>
+              <th className={"left"}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>{`isActiveTab`}</code></td><td><code>{`() => boolean`}</code></td><td>Read whether the document is visible.</td></tr>
+            <tr><td><code>{`isTabFocused`}</code></td><td><code>{`() => boolean`}</code></td><td>Read whether the document has focus.</td></tr>
+            <tr><td><code>{`tabVisibilityState`}</code></td><td><code>{`() => DocumentVisibilityState`}</code></td><td>Read the browser-reported visibility state.</td></tr>
+            <tr><td><code>{`activeTabActions`}</code></td><td><code>{`ActiveTabStore['actions']`}</code></td><td>Access the initialize action outside React.</td></tr>
+          </tbody>
+        </table>
+
+        ## Actions
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '25%'}} />
+            <col style={{width: '98%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={"left"}>Action</th>
+              <th className={"left"}>Type</th>
+              <th className={"left"}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>{`initialize`}</code></td><td><code>{`() => () => void`}</code></td><td>Synchronizes visibility and focus, attaches shared listeners, and returns cleanup for this caller. The final cleanup removes the listeners.</td></tr>
+          </tbody>
+        </table>
+
+        ## Notes
+        Active means visible; focus is tracked separately. Combine `isActiveTab` and `isTabFocused` when both are required. Full window occlusion may be reported as hidden depending on browser/OS support and is not a reliable measure of window coverage or user attention.
+
+        ## Example from `useActiveTab` to `ActiveTabStore`
+        Initialize at the app level, then read the same values through atomic selectors anywhere in the app.
+        </Unstyled>
+        <RenderSource language={"tsx"}>
+        ```
+        import { useEffect } from 'react';
+        import { useInitializeActiveTab, useIsActiveTab, useIsTabFocused, useTabVisibilityState } from '@apple-pie/slice/stores/activeTab';
+
+        function App() {
+            const initialize = useInitializeActiveTab();
+            useEffect(() => initialize(), [initialize]);
+            const active = useIsActiveTab();
+            const focused = useIsTabFocused();
+            const visibility = useTabVisibilityState();
+            return (
+                <div>
+                    <span>Visibility: {visibility}</span>
+                    <br />
+                    <span>Focused: {String(focused)}</span>
+                    <br />
+                    <span>Visible and focused: {String(active && focused)}</span>
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+        <Unstyled>
+        ## Imperative usage outside React
+
+        `isActiveTab()`, `isTabFocused()`, and `tabVisibilityState()` read the latest values without subscribing. Subscribe to the store for
+        changes; unsubscribe when finished. If the app already initializes the store, only the
+        subscription is needed here. Importing the store does not attach browser listeners.
+        </Unstyled>
+        <RenderSource language={"ts"}>
+        ```
+        import { activeTabActions, isActiveTab, useActiveTabStore } from '@apple-pie/slice/stores/activeTab';
+
+        const dispose = activeTabActions.initialize();
+        console.log(isActiveTab());
+        const unsubscribe = useActiveTabStore.subscribe((state, previous) => {
+            if (state.isActiveTab !== previous.isActiveTab || state.isTabFocused !== previous.isTabFocused) {
+                console.log('Active:', state.isActiveTab, 'Focused:', state.isTabFocused);
+            }
+        });
+
+        // When this consumer is finished:
+        unsubscribe();
+        dispose();
+        ```
+        </RenderSource>
+    </FlexDiv>
+</FlexDiv>

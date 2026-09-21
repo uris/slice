@@ -49,6 +49,8 @@ export {
 	useDoubleClick,
 	useObserveResize,
 	useClipboard,
+	useActiveTab,
+	type UseActiveTabReturn,
 } from './hooks';
 
 export { AudioBubble } from './components/AudioBubble/index';
