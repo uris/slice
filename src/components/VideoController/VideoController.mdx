@@ -45,6 +45,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>overlayColor</code></td><td><code>string</code></td><td><code>'rgb(0,0,0)'</code></td><td>Background color for the overlay behind the active video.</td></tr>
             <tr><td><code>overlayOpacity</code></td><td><code>number</code></td><td><code>0.7</code></td><td>Opacity applied to the overlay.</td></tr>
             <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>64</code></td><td>Viewport padding used to keep the controller away from the screen edges.</td></tr>
+            <tr><td><code>showProgressIndicator</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Controls the rendered video's loading indicator. Overrides <code>showProgressIndicator</code> in the active video descriptor's props.</td></tr>
             <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>{`{ ease: 'easeOut', duration: 0.25, delay: 0.1 }`}</code></td><td>Motion transition applied to the controller wrapper.</td></tr>
             <tr><td><code>variants</code></td><td><code>Variants</code></td><td><code>{`{ initial, animate, exit }`}</code></td><td>Motion variants applied to the controller wrapper.</td></tr>
           </tbody>
@@ -53,9 +54,14 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         ## Behavior
         `VideoController` reads the current video descriptor from the video store and renders its `component` with the provided `props`.
 
-        It also injects two controller-owned props into the rendered video component:
+        Controller-owned props include:
         - `borderRadius`, unless the active video already provides one
+        - `showProgressIndicator`, which defaults to `true` and overrides the active video's setting
         - `onLoadedFrameData`, which is used internally to reveal the controller once the first frame is ready, and then forwards to any caller-provided `onLoadedFrameData`
+
+        The controller keeps its contents, including the video's spinner, hidden until `onLoadedFrameData` fires. Once revealed, the built-in `Video` keeps its spinner mounted until `canplay`. Set `showProgressIndicator={false}` on the controller to disable the spinner.
+
+        To receive readiness notifications, pass `onCanPlay` in the video descriptor's `props`. The controller forwards it to the video component.
 
         ## Code Examples
         </Unstyled>
@@ -80,13 +86,14 @@ export function VideoControllerExample() {
                             muted: false,
                             width: '100%',
                             height: 'auto',
+                            onCanPlay: () => console.log('Ready to play'),
                         },
                     })
                 }
             >
                 Open Video
             </Button>
-            <VideoController />
+            <VideoController showProgressIndicator={false} />
         </FlexDiv>
     );
 }

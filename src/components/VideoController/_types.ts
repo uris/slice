@@ -15,6 +15,7 @@ export type VideoControllerProps = {
 	padding?: number | string;
 	borderRadius?: number | string;
 	customControls?: CustomVideoControls;
+	showProgressIndicator?: boolean;
 	quit?: 'inside' | 'outside' | 'none';
 	onQuit?: () => void;
 };
