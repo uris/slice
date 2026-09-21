@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { BrowserChannel, type BrowserChannelMessage, type MessageType } from '../../utils';
+import { BrowserChannel, type BrowserChannelMessage, MessageType } from '../../utils';
 import type { BrowserChannelConfig, BrowserChannelsStore } from './_types';
 
 export const useBrowserChannelsStore = create<BrowserChannelsStore>((set, get) => ({
@@ -123,6 +123,21 @@ export function useMessage<T = unknown>(channelName: string, type?: MessageType)
 	});
 }
 
+// returns the latest message from the named channel for a specific originID
+export function useParentMessage<T = unknown>(
+	channelName: string | null,
+	originId: string | null,
+): BrowserChannelMessage<T> | null {
+	return useBrowserChannelsStore((state) => {
+		if (!channelName || !originId) return null;
+		const message = state.messages?.[channelName] as BrowserChannelMessage<T> | undefined;
+		if (!message) return null;
+		if (message.type !== MessageType.Data) return null;
+		if (!message.origin.includes(originId)) return null;
+		return message;
+	});
+}
+
 // non-reactive imperative exports for use outside the React context
 export const browserChannelActions = useBrowserChannelsStore.getState().actions;
 export const getBrowserChannels = () => useBrowserChannelsStore.getState().channels;
@@ -139,5 +154,17 @@ export function getMessage<T = unknown>(channelName: string, type?: MessageType)
 	const message = useBrowserChannelsStore.getState().messages?.[channelName] as BrowserChannelMessage<T> | undefined;
 	if (!message) return null;
 	if (type && message.type !== type) return null;
+	return message;
+}
+
+export function getParentMessage<T = unknown>(
+	channelName: string | null,
+	originId: string | null,
+): BrowserChannelMessage<T> | null {
+	if (!channelName || !originId) return null;
+	const message = useBrowserChannelsStore.getState().messages?.[channelName] as BrowserChannelMessage<T> | undefined;
+	if (!message) return null;
+	if (message.type !== MessageType.Data) return null;
+	if (!message.origin.includes(originId)) return null;
 	return message;
 }

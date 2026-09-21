@@ -15,6 +15,8 @@ const coverageExclude = [
 	'public/**',
 	'**/*.bench.{ts,tsx}',
 	'**/*.stories.{ts,tsx}',
+	'**/*.figma.ts',
+	'src/components/playHelpers.ts',
 	'**/*.css',
 	'.storybook/**',
 ];
@@ -53,7 +55,13 @@ export default defineConfig({
 					environment: 'jsdom',
 					globals: true,
 					include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'],
-					exclude: ['**/*.stories.{ts,tsx}', '**/*.bench.{ts,tsx}', '**/*.mdx'],
+					exclude: [
+						'**/*.stories.{ts,tsx}',
+						'**/*.bench.{ts,tsx}',
+						'**/*.mdx',
+						'**/*.figma.ts',
+						'src/components/playHelpers.ts',
+					],
 				},
 			},
 			{
