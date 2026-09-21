@@ -14,7 +14,7 @@ Already wrapped today, for reference (don't re-add): `localStorage` (`useLocalSt
 
 | API | Proposed export | Priority | Notes |
 |---|---|---|---|
-| Page Visibility API | `usePageVisibility` (or `useActiveTab`) | P0 | Explicitly requested. `document.visibilityState` + `visibilitychange`. |
+| Page Visibility API | `useActiveTab`, `useActiveTabStore` | ✅ Done | Standalone hook and shared `activeTab` store observe visibility and document focus via `visibilitychange`, `focus`, and `blur`, with SSR defaults, listener cleanup, unit tests, Storybook demos, and usage docs. |
 | BroadcastChannel | `useBroadcastChannel` | P0 | Explicitly requested. Cross-tab messaging; pairs well with the existing store pattern. |
 | Clipboard API (read + write) | `useClipboard` | ✅ Done | Implemented in `src/hooks/useClipboard/useClipboard.ts` — wraps `navigator.clipboard` read/write with an `execCommand` fallback, observes native `paste` events, and tracks live `clipboard-read`/`clipboard-write` permission state via the Permissions API. Covered by `useClipboard.test.ts`, a Storybook demo, and `useClipboard.mdx`. |
 | Fullscreen API | `useFullscreen` | P1 | Currently inlined ad hoc in `Video.tsx` (`video.requestFullscreen()`); worth extracting into a reusable hook so any element can use it. |

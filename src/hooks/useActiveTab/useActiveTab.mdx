@@ -1,0 +1,78 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../components/FlexDiv';
+import {Spacer} from '../../components/Spacer';
+import Notice from '../../../documentation/_components/Notice/Notice';
+
+<Meta title="Hooks/useActiveTab" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        # useActiveTab
+
+        Tracks document visibility and focus independently, updating on visibility changes and window focus or blur events.
+
+        ## Signature
+        `useActiveTab(): UseActiveTabReturn`
+
+        ## Parameters
+        This hook does not take parameters.
+
+        ## Returns
+        Returns a `UseActiveTabReturn` object with the following fields.
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Return</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>{`isActiveTab`}</code></td><td><code>{`boolean`}</code></td><td><code>{`false`}</code></td><td>Whether <code>document.visibilityState</code> is <code>visible</code>. A visible document can be unfocused.</td></tr>
+            <tr><td><code>{`isTabFocused`}</code></td><td><code>{`boolean`}</code></td><td><code>{`false`}</code></td><td>Whether <code>document.hasFocus()</code> reports focus within the document.</td></tr>
+            <tr><td><code>{`visibilityState`}</code></td><td><code>{`DocumentVisibilityState`}</code></td><td><code>{`'hidden'`}</code></td><td>The browser-reported visibility state: <code>visible</code> or <code>hidden</code>.</td></tr>
+          </tbody>
+        </table>
+
+        ## SSR Notes
+        The server and initial client render use the defaults above. After mounting, the hook synchronizes with the document and attaches its listeners. All listeners are removed on unmount.
+
+        ## Notes
+        Use `isActiveTab && isTabFocused` when visibility and focus are both required. A fully covered window may be reported as hidden depending on browser/OS support; visibility does not measure how much of a window is covered or whether the user is paying attention.
+
+        ## Code Examples
+        </Unstyled>
+        <RenderSource language={"tsx"}>
+        ```
+        import { useActiveTab } from '@apple-pie/slice';
+
+        function Status() {
+            const { isActiveTab, isTabFocused, visibilityState } = useActiveTab();
+            return (
+                <div>
+                    <span>Visibility: {visibilityState}</span>
+                    <br />
+                    <span>Focused: {String(isTabFocused)}</span>
+                    <br />
+                    <span>Visible and focused: {String(isActiveTab && isTabFocused)}</span>
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+        <Spacer size={32} />
+        <Unstyled>
+            <Notice><span>Slice also provides an optional [ActiveTabStore](/docs/stores-activetab--docs) backed by Zustand for shared state throughout your application. Each standalone hook instance manages its own listeners.</span></Notice>
+        </Unstyled>
+    <Spacer size={64} />
+    </FlexDiv>
+</FlexDiv>
