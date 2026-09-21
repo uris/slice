@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { VideoController } from 'src/components/VideoController/VideoController';
-import { fn } from 'storybook/test';
+import { expect, fireEvent, fn, waitFor, within } from 'storybook/test';
 import { useVideoActions, videoActions } from '../../stores';
 import { Button } from '../Button';
 import { Video, type VideoProps } from '../Video';
@@ -102,3 +102,49 @@ function VideoControllerDemo(args: any) {
 		</FlexDiv>
 	);
 }
+
+const playLoadingIndicator: NonNullable<StoryObj<typeof VideoController>['play']> = async ({ canvasElement, args }) => {
+	videoActions.clear();
+	const canvas = within(canvasElement);
+	try {
+		videoActions.show({
+			id: 'loading-video',
+			component: Video,
+			// An opposing descriptor value verifies the controller owns this option.
+			props: { playing: false, showProgressIndicator: args.showProgressIndicator === false },
+		});
+		await waitFor(() => expect(canvasElement.querySelector('video')).toBeInTheDocument());
+		const video = canvasElement.querySelector('video');
+		if (!video) throw new Error('Expected a video element');
+		// The controller hides its contents until the first frame is available.
+		fireEvent.loadedData(video);
+		if (args.showProgressIndicator !== false) {
+			await waitFor(() => expect(canvas.getByRole('img', { name: 'Loading spinner' })).toBeVisible());
+		} else {
+			await expect(canvas.queryByRole('img', { name: 'Loading spinner', hidden: true })).not.toBeInTheDocument();
+		}
+		fireEvent.canPlay(video);
+		await waitFor(() =>
+			expect(canvas.queryByRole('img', { name: 'Loading spinner', hidden: true })).not.toBeInTheDocument(),
+		);
+	} finally {
+		videoActions.clear();
+		await waitFor(() => expect(canvasElement.querySelector('video')).not.toBeInTheDocument());
+	}
+};
+
+export const LoadingIndicatorDefault: StoryObj<typeof VideoController> = {
+	tags: ['tests'],
+	render: (args) => <VideoController {...args} />,
+	play: playLoadingIndicator,
+};
+
+export const LoadingIndicatorEnabled: StoryObj<typeof VideoController> = {
+	...LoadingIndicatorDefault,
+	args: { showProgressIndicator: true },
+};
+
+export const LoadingIndicatorDisabled: StoryObj<typeof VideoController> = {
+	...LoadingIndicatorDefault,
+	args: { showProgressIndicator: false },
+};

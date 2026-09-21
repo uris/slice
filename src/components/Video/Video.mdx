@@ -46,6 +46,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>playRate</code></td><td><code>number</code></td><td><code>1</code></td><td>Playback speed. Values are clamped internally between <code>0.5</code> and <code>3</code>.</td></tr>
             <tr><td><code>controls</code></td><td><code>{`'default' | 'simple' | 'custom' | 'none'`}</code></td><td><code>'simple'</code></td><td>Selects native browser controls, built-in slice controls, caller-supplied custom controls, or no controls.</td></tr>
             <tr><td><code>customControls</code></td><td><code>CustomVideoControls</code></td><td><code>{`{ play: false, progress: true, volume: true, fullscreen: true }`}</code></td><td>Toggles which built-in simple controls are rendered.</td></tr>
+            <tr><td><code>showProgressIndicator</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Shows a loading spinner until the first <code>canplay</code> event. Set to <code>false</code> to disable it.</td></tr>
             <tr><td><code>poster</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Poster image shown before playback starts.</td></tr>
             <tr><td><code>captionsSrc</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Optional captions track source passed to the rendered <code>&lt;track&gt;</code> element.</td></tr>
             <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Outer width of the component.</td></tr>
@@ -81,6 +82,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>onProgress</code></td><td><code>{`(progress: number) => void`}</code></td><td>Fires during playback time updates with progress normalized from <code>0</code> to <code>1</code>.</td></tr>
             <tr><td><code>onLoadProgress</code></td><td><code>{`(progress: number) => void`}</code></td><td>Fires as media buffering advances, normalized from <code>0</code> to <code>1</code>.</td></tr>
             <tr><td><code>onPlaybackRateChange</code></td><td><code>{`(rate: number) => void`}</code></td><td>Fires when the underlying video playback rate changes.</td></tr>
+            <tr><td><code>onCanPlay</code></td><td><code>{`() => void`}</code></td><td>Fires on each native <code>canplay</code> event when enough data is available to start playback. Also dismisses the loading indicator, and fires even when the indicator is disabled.</td></tr>
             <tr><td><code>onCanPlayThrough</code></td><td><code>{`() => void`}</code></td><td>Fires when the browser estimates the media can play through without interruption.</td></tr>
             <tr><td><code>onPlayStateChange</code></td><td><code>{`(state: PlayState) => void`}</code></td><td>Fires normalized playback states: <code>'playing'</code>, <code>'paused'</code>, <code>'stopped'</code>, or <code>'ended'</code>.</td></tr>
             <tr><td><code>onLoadMetaData</code></td><td><code>{`(duration: number) => void`}</code></td><td>Fires when metadata loads and provides the media duration in seconds.</td></tr>
@@ -89,6 +91,11 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>onVolumeChange</code></td><td><code>{`(volume: number) => void`}</code></td><td>Fires when volume is updated through the component API or built-in controls.</td></tr>
           </tbody>
         </table>
+
+        ## Loading and readiness
+        The loading indicator is enabled by default. It stays mounted until the video emits `canplay`; loading metadata or the first frame alone does not dismiss it. Set `showProgressIndicator={false}` when providing your own loading UI.
+
+        `onCanPlay` signals that playback can begin. `onCanPlayThrough` separately reports the browser's estimate that playback can finish without further buffering. The indicator covers initial readiness for the mounted component; it does not reappear during later buffering or reset when `src` changes on the same instance.
 
         ## Imperative Ref Methods
         <table style={{width: '100%'}}>
@@ -141,6 +148,8 @@ export function VideoExample() {
                 volume: true,
                 fullscreen: true,
             }}
+            showProgressIndicator
+            onCanPlay={() => console.log('Ready to play')}
             onPlayStateChange={(state) => console.log('state', state)}
             onFullScreenChange={(fullScreen) => console.log('fullscreen', fullScreen)}
             onVolumeChange={(volume) => console.log('volume', volume)}

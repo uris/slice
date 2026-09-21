@@ -36,6 +36,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 		padding = 64,
 		borderRadius = corners['corner-m'],
 		quit = 'inline',
+		showProgressIndicator = true,
 		onQuit,
 	} = props;
 	const controls = useDragControls();
@@ -99,6 +100,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 								<div className={css.video}>
 									<VideoComponent
 										{...videoProps}
+										showProgressIndicator={showProgressIndicator}
 										borderRadius={borderRadius ?? videoBorderRadius}
 										onLoadedFrameData={handleDidLoadFrame}
 										customControls={{

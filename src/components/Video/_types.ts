@@ -45,6 +45,7 @@ type VideoBaseProps = {
 	borderColor?: string;
 	backgroundColor?: string;
 	objectFit?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
+	showProgressIndicator?: boolean;
 	onPlay?: () => void;
 	onPause?: () => void;
 	onEnd?: () => void;
@@ -58,6 +59,7 @@ type VideoBaseProps = {
 	onVolumeChange?: (volume: number) => void;
 	onLoadedFrameData?: () => void;
 	onQuit?: () => void;
+	onCanPlay?: () => void;
 	captionsSrc?: string;
 };
 

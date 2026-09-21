@@ -3,6 +3,7 @@
 import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { setStyle } from '../../utils/functions/misc';
 import { IconButton } from '../IconButton';
+import { ProgressIndicator } from '../Progress';
 import { Slider } from '../Slider';
 import { ToggleButton } from '../ToggleButton';
 import css from './Video.module.css';
@@ -34,6 +35,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 			volume: true,
 			fullscreen: true,
 		},
+		showProgressIndicator = true,
 		onPlay,
 		onPause,
 		onEnd,
@@ -41,6 +43,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		onLoadProgress,
 		onPlaybackRateChange,
 		onCanPlayThrough,
+		onCanPlay,
 		onPlayStateChange,
 		onLoadMetaData,
 		onFullScreenChange,
@@ -62,6 +65,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 	const [currentVolume, setCurrentVolume] = useState<number>(volume ?? 1);
 	const [currentProgress, setCurrentProgress] = useState<number>(0);
 	const [hovered, setHovered] = useState<boolean>(false);
+	const [canPlay, setCanPlay] = useState<boolean>(false);
 	const timer = useRef<NodeJS.Timeout | null>(null);
 
 	// get the percent loaded from the video element via buffer
@@ -119,9 +123,16 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		onCanPlayThrough?.();
 	}, [onCanPlayThrough]);
 
+	// mark the video ready and notify the consumer
+	const handleCanPlay = useCallback(() => {
+		setCanPlay(true);
+		onCanPlay?.();
+	}, [onCanPlay]);
+
 	// handle playing event
 	const handlePlay = useCallback(() => {
-		if (videoRef.current?.paused) videoRef.current.play().then(() => null);
+		// Observe the event without restarting playback: a pause may already
+		// have happened by the time this queued event is delivered.
 		onPlay?.();
 		setIsPlaying(true);
 		const isAtEnd = videoRef.current?.currentTime === videoRef.current?.duration;
@@ -234,8 +245,8 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		if (!videoRef.current) return;
 		videoRef.current.pause();
 		videoRef.current.currentTime = 0;
-		videoRef.current.play().then(() => null);
-	}, []);
+		handlePlayClick(true);
+	}, [handlePlayClick]);
 
 	// set volume
 	const handleVolumeChange = useCallback(
@@ -503,6 +514,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 				controls={controls === 'default'}
 				poster={poster}
 				onCanPlayThrough={handleCanPlayThrough}
+				onCanPlay={handleCanPlay}
 				onPlay={handlePlay}
 				onPause={handlePause}
 				onEnded={handleEnd}
@@ -514,6 +526,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 			>
 				<track kind="captions" src={captionsSrc} />
 			</video>
+			{!canPlay && showProgressIndicator && <ProgressIndicator show />}
 		</div>
 	);
 });

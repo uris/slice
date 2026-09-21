@@ -13,7 +13,7 @@ import {
 	runVideoPlaybackLifecyclePlay,
 	runVideoUndefinedControlledPropsPlay,
 } from 'src/components/playHelpers';
-import { fn } from 'storybook/test';
+import { expect, fireEvent, fn, spyOn, waitFor, within } from 'storybook/test';
 import { Preset } from '../FlexDiv';
 import { Video } from './Video';
 import type { VideoElement } from './_types';
@@ -37,6 +37,7 @@ const meta: Meta<typeof Video> = {
 		objectFit: 'cover',
 		controls: 'simple',
 		muted: false,
+		showProgressIndicator: false,
 		customControls,
 		onPlayStateChange: fn(),
 		onFullScreenChange: fn(),
@@ -51,6 +52,7 @@ const meta: Meta<typeof Video> = {
 		onLoadMetaData: fn(),
 		onLoadedFrameData: fn(),
 		onQuit: fn(),
+		onCanPlay: fn(),
 	},
 };
 
@@ -293,5 +295,108 @@ export const LoadProgressZeroDuration: StoryObj<typeof Video> = {
 	render: (args) => <VideoDemo {...args} />,
 	play: async ({ canvasElement }) => {
 		await runVideoLoadProgressZeroDurationPlay({ canvasElement });
+	},
+};
+
+// No source means readiness cannot race the assertions; dispatch media events
+// explicitly to cover the loading UI independently of network/decoder timing.
+const playLoadingIndicator: NonNullable<StoryObj<typeof Video>['play']> = async ({ canvasElement, args }) => {
+	const canvas = within(canvasElement);
+	const video = canvasElement.querySelector('video');
+	if (!video) throw new Error('Expected a video element');
+	const spinner = () => canvas.queryByRole('img', { name: 'Loading spinner' });
+	if (args.showProgressIndicator !== false) {
+		await expect(spinner()).toBeInTheDocument();
+	} else {
+		await expect(spinner()).not.toBeInTheDocument();
+	}
+	await expect(args.onCanPlay).not.toHaveBeenCalled();
+	fireEvent.loadedData(video);
+	if (args.showProgressIndicator !== false) {
+		await expect(spinner()).toBeInTheDocument();
+	}
+	fireEvent.canPlay(video);
+	await waitFor(() => expect(spinner()).not.toBeInTheDocument());
+	await expect(args.onCanPlay).toHaveBeenCalledTimes(1);
+	await expect(args.onCanPlayThrough).not.toHaveBeenCalled();
+};
+
+export const LoadingIndicatorDefault: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, showProgressIndicator: undefined },
+	render: (args) => <VideoDemo {...args} />,
+	play: playLoadingIndicator,
+};
+
+export const LoadingIndicatorEnabled: StoryObj<typeof Video> = {
+	...LoadingIndicatorDefault,
+	args: { src: undefined, showProgressIndicator: true },
+};
+
+export const LoadingIndicatorDisabled: StoryObj<typeof Video> = {
+	...LoadingIndicatorDefault,
+	args: { src: undefined, showProgressIndicator: false },
+};
+
+export const CanPlayWithoutCallback: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, showProgressIndicator: true, onCanPlay: undefined },
+	render: (args) => <VideoDemo {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('img', { name: 'Loading spinner' })).toBeInTheDocument();
+		const video = canvasElement.querySelector('video');
+		if (!video) throw new Error('Expected a video element');
+		fireEvent.canPlay(video);
+		await waitFor(() => expect(canvas.queryByRole('img', { name: 'Loading spinner' })).not.toBeInTheDocument());
+	},
+};
+
+export const InterruptedRestart: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, muted: true },
+	render: (args) => <VideoWithRefControls {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const video = canvasElement.querySelector('video');
+		if (!video) throw new Error('Expected a video element');
+		let rejectPlay: (reason: DOMException) => void = () => undefined;
+		const play = spyOn(video, 'play').mockImplementation(
+			() =>
+				new Promise<void>((_, reject) => {
+					rejectPlay = reject;
+				}),
+		);
+		try {
+			fireEvent.click(canvas.getByRole('button', { name: 'ref-restart' }));
+			await expect(play).toHaveBeenCalledTimes(1);
+			fireEvent.click(canvas.getByRole('button', { name: 'ref-stop' }));
+			rejectPlay(new DOMException('The play() request was interrupted by a call to pause().', 'AbortError'));
+			// Let the browser report any unhandled rejection to the test runner.
+			await new Promise((resolve) => setTimeout(resolve, 0));
+			await expect(video.paused).toBe(true);
+		} finally {
+			play.mockRestore();
+		}
+	},
+};
+
+export const PlayEventAfterPause: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined },
+	render: (args) => <VideoDemo {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const video = canvasElement.querySelector('video');
+		if (!video) throw new Error('Expected a video element');
+		const play = spyOn(video, 'play').mockResolvedValue(undefined);
+		try {
+			// A queued play event can arrive after a synchronous pause.
+			await expect(video.paused).toBe(true);
+			fireEvent.play(video);
+			await expect(args.onPlay).toHaveBeenCalledTimes(1);
+			await expect(play).not.toHaveBeenCalled();
+		} finally {
+			play.mockRestore();
+		}
 	},
 };
