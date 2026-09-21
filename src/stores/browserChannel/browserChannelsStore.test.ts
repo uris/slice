@@ -1,15 +1,17 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { MessageType } from '../../utils';
+import { BrowserChannel, MessageType } from '../../utils';
 import {
 	browserChannelActions,
 	getBrowserChannels,
 	getLastBrowserChannelMessage,
 	getMessage,
+	getParentMessage,
 	useBrowserChannelActions,
 	useBrowserChannelsStore,
 	useIsActiveChannel,
 	useMessage,
+	useParentMessage,
 } from './browserChannelsStore';
 
 type Listener = (event: MessageEvent) => void;
@@ -347,5 +349,121 @@ describe('browserChannelsStore', () => {
 		const { result } = renderHook(() => useBrowserChannelActions());
 		expect(result.current).toBe(useBrowserChannelsStore.getState().actions);
 		expect(browserChannelActions).toBe(useBrowserChannelsStore.getState().actions);
+	});
+});
+
+describe('parent message selectors', () => {
+	it.each([
+		[null, 'window-a'],
+		['editor', null],
+		[null, null],
+		['', 'window-a'],
+		['editor', ''],
+	])('returns null for missing channel or origin (%s, %s)', (channelName, originId) => {
+		browserChannelActions.addChannel({ name: 'editor' });
+		rawChannelOf('editor').dispatch('message', dataEvent('ready', 'window-a.sender'));
+		const { result } = renderHook(() => useParentMessage(channelName, originId));
+		expect(result.current).toBeNull();
+		expect(getParentMessage(channelName, originId)).toBeNull();
+	});
+
+	it.each(['missing', 'editor'])('returns null before channel %s has received a message', (name) => {
+		browserChannelActions.addChannel({ name: 'editor' });
+		const { result } = renderHook(() => useParentMessage(name, 'window-a'));
+		expect(result.current).toBeNull();
+		expect(getParentMessage(name, 'window-a')).toBeNull();
+	});
+
+	it('accepts an iframe sender sharing the window ID and rejects a different window on the same channel', () => {
+		const windowA = crypto.randomUUID();
+		const windowB = crypto.randomUUID();
+		browserChannelActions.addChannel({ name: 'editor', origin: windowA });
+		const sender = new BrowserChannel<{ saved: boolean }>({
+			name: 'editor',
+			origin: windowA,
+			onMessageCallback: vi.fn(),
+			onErrorCallback: vi.fn(),
+		});
+		const otherSender = new BrowserChannel<{ saved: boolean }>({
+			name: 'editor',
+			origin: windowB,
+			onMessageCallback: vi.fn(),
+			onErrorCallback: vi.fn(),
+		});
+		const { result } = renderHook(() => useParentMessage<{ saved: boolean }>('editor', windowA));
+		const deliver = (channel: BrowserChannel<{ saved: boolean }>, saved: boolean) => {
+			channel.post({ saved });
+			const raw = channel.channel as unknown as MockBroadcastChannel;
+			// Deliver the real outgoing envelope to the receiving store.
+			act(() => rawChannelOf('editor').dispatch('message', { data: raw.posted.at(-1) } as MessageEvent));
+		};
+
+		deliver(sender, true);
+		expect(result.current).toEqual({ content: { saved: true }, type: MessageType.Data, origin: sender.origin });
+		expect(getParentMessage<{ saved: boolean }>('editor', windowA)).toBe(result.current);
+		expect(result.current?.content?.saved).toBe(true);
+
+		deliver(otherSender, false);
+		expect(result.current).toBeNull();
+		expect(getParentMessage('editor', windowA)).toBeNull();
+		expect(getMessage('editor')?.origin).toBe(otherSender.origin);
+
+		deliver(sender, true);
+		expect(result.current?.content?.saved).toBe(true);
+		expect(getParentMessage('editor', windowA)).toBe(result.current);
+		sender.close();
+		otherSender.close();
+	});
+
+	it('rejects errors even when their origin matches', () => {
+		browserChannelActions.addChannel({ name: 'editor', origin: 'window-a' });
+		const { result } = renderHook(() => useParentMessage('editor', 'window-a'));
+		act(() => rawChannelOf('editor').dispatch('message', dataEvent('ready', 'window-a.sender')));
+		expect(result.current?.content).toBe('ready');
+		act(() => rawChannelOf('editor').dispatch('messageerror', rawErrorEvent()));
+		expect(getMessage('editor')?.origin).toContain('window-a');
+		expect(result.current).toBeNull();
+		expect(getParentMessage('editor', 'window-a')).toBeNull();
+	});
+
+	it('stays scoped to the named channel and updates when selector arguments change', () => {
+		browserChannelActions.addChannels([{ name: 'editor' }, { name: 'preview' }]);
+		rawChannelOf('editor').dispatch('message', dataEvent('saved', 'window-a.sender'));
+		rawChannelOf('preview').dispatch('message', dataEvent('ready', 'window-b.sender'));
+		const { result, rerender } = renderHook(
+			({ name, origin }: { name: string | null; origin: string | null }) => useParentMessage(name, origin),
+			{ initialProps: { name: 'editor', origin: 'window-a' } as { name: string | null; origin: string | null } },
+		);
+		expect(result.current?.content).toBe('saved');
+		rerender({ name: 'preview', origin: 'window-a' });
+		expect(result.current).toBeNull();
+		expect(getParentMessage('preview', 'window-a')).toBeNull();
+		rerender({ name: 'preview', origin: 'window-b' });
+		expect(result.current?.content).toBe('ready');
+		expect(getParentMessage('preview', 'window-b')).toBe(result.current);
+		rerender({ name: null, origin: null });
+		expect(result.current).toBeNull();
+	});
+
+	it('matches origin IDs as substrings, including inside a longer label', () => {
+		browserChannelActions.addChannel({ name: 'editor' });
+		rawChannelOf('editor').dispatch('message', dataEvent('ready', 'iframe.window-a.child.sender'));
+		const { result } = renderHook(() => useParentMessage('editor', 'window-a'));
+		expect(result.current?.content).toBe('ready');
+		expect(getParentMessage('editor', 'window-a')).toBe(result.current);
+	});
+
+	it.each(['replace', 'remove', 'removeAll'])('clears the selected message on %s', (operation) => {
+		browserChannelActions.addChannel({ name: 'editor' });
+		rawChannelOf('editor').dispatch('message', dataEvent('ready', 'window-a.sender'));
+		const { result } = renderHook(() => useParentMessage('editor', 'window-a'));
+		expect(result.current).not.toBeNull();
+		act(() => {
+			if (operation === 'replace') browserChannelActions.addChannel({ name: 'editor' });
+			else if (operation === 'remove') browserChannelActions.removeChannel('editor');
+			else browserChannelActions.removeChannels();
+		});
+		expect(result.current).toBeNull();
+		expect(getParentMessage('editor', 'window-a')).toBeNull();
 	});
 });

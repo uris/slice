@@ -15,9 +15,11 @@ export {
 	useBrowserChannelActions,
 	useIsActiveChannel,
 	useMessage as useBrowserChannelMessage,
+	useParentMessage,
 	browserChannelActions,
 	getBrowserChannels,
 	getLastBrowserChannelMessage,
 	getMessage as getBrowserChannelMessage,
+	getParentMessage,
 } from './browserChannel';
 export type { BrowserChannelConfig, BrowserChannelsStore } from './browserChannel';
