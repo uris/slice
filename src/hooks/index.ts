@@ -50,3 +50,9 @@ export {
 	type UseClipboardTarget,
 } from './useClipboard/useClipboard';
 export { useActiveTab, type UseActiveTabReturn } from './useActiveTab/useActiveTab';
+export {
+	useInfiniteScroll,
+	type InfiniteScrollLoader,
+	type UseInfiniteScrollOptions,
+	type UseInfiniteScrollReturn,
+} from './useInfiniteScroll/useInfiniteScroll';

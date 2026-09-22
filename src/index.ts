@@ -233,3 +233,10 @@ export {
 	captureSortToViewState,
 } from './components/DataTable';
 export type { DataTableViewState } from './components/DataTable';
+
+export {
+	useInfiniteScroll,
+	type InfiniteScrollLoader,
+	type UseInfiniteScrollOptions,
+	type UseInfiniteScrollReturn,
+} from './hooks/useInfiniteScroll/useInfiniteScroll';
