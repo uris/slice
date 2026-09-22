@@ -1,0 +1,130 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import {FlexDiv} from '../../components/FlexDiv';
+
+<Meta title="Hooks/useInfiniteScroll" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        # useInfiniteScroll
+        Loads paginated data through an async callback, accumulates the returned items, and requests the next page when a sentinel approaches the viewport. The item type is inferred from the loader’s return type.
+
+        ## Behavior
+        The first batch loads on mount when enabled and hasMore are true. After each successful request, items are appended and the sentinel is observed again so short lists continue filling the scroll container. The caller manages pagination and passes `hasMore: false` when there are no more results.
+
+        Repeated load triggers are ignored while the current request is running. Failed requests preserve the loaded items and pause automatic loading until `retry()` or `reset()`. Reset, dataset changes, and unmount invalidate pending results. The hook does not cancel the client’s network request or prevent state updates inside the loader; cancellation and external state belong to the caller.
+
+        ## Signature
+        `useInfiniteScroll<T>(loader, options)`
+
+        ## Parameters
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr><th>Param</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>{`loader`}</code></td><td><code>{`InfiniteScrollLoader<T>`}</code></td><td><code>{`Required`}</code></td><td>Zero-argument async callback returning Promise&lt;T[]&gt;. Capture page numbers, filters, or other request parameters from your component.</td></tr>
+            <tr><td><code>{`options.enabled`}</code></td><td><code>{`boolean`}</code></td><td><code>{`true`}</code></td><td>Allows initial, automatic, and manual requests. Disabling prevents new requests; an in-flight request may finish.</td></tr>
+            <tr><td><code>{`options.hasMore`}</code></td><td><code>{`boolean`}</code></td><td><code>{`Required`}</code></td><td>Caller-controlled flag indicating whether loading is allowed to fetch more results.</td></tr>
+            <tr><td><code>{`options.resetKey`}</code></td><td><code>{`unknown`}</code></td><td><code>{`undefined`}</code></td><td>Dataset identity, compared with Object.is. Change it with filters or sorting; prefer a stable primitive value.</td></tr>
+            <tr><td><code>{`options.root`}</code></td><td><code>{`Element | Document | null`}</code></td><td><code>{`null`}</code></td><td>Scroll container. Null uses the browser viewport. Use a callback ref stored in state for a custom container.</td></tr>
+            <tr><td><code>{`options.rootMargin`}</code></td><td><code>{`string`}</code></td><td><code>{`'0px'`}</code></td><td>Margin around the scroll container. By default, loading starts when the sentinel intersects the container. Set a positive bottom margin, such as <code>{`'0px 0px 300px 0px'`}</code>, to prefetch before reaching the bottom.</td></tr>
+          </tbody>
+        </table>
+
+        ## Returns
+        `useInfiniteScroll` returns an object — destructure the fields you need.
+
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr><th>Return</th><th>Type/Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>{`items`}</code></td><td><code>{`T[]`}</code><br/><code>{`[]`}</code></td><td>All accumulated items in server order. T is inferred from the loader’s return type.</td></tr>
+            <tr><td><code>{`sentinelRef`}</code></td><td><code>{`RefCallback<HTMLElement>`}</code><br/><code>{`—`}</code></td><td>Stable callback ref for the element placed after the list.</td></tr>
+            <tr><td><code>{`isLoading`}</code></td><td><code>{`boolean`}</code><br/><code>{`false`}</code></td><td>Whether a page request is running.</td></tr>
+            <tr><td><code>{`hasMore`}</code></td><td><code>{`boolean`}</code><br/><code>{`options.hasMore`}</code></td><td>Reflects the caller’s hasMore option.</td></tr>
+            <tr><td><code>{`error`}</code></td><td><code>{`Error | null`}</code><br/><code>{`null`}</code></td><td>Last request error, normalized to Error. Automatic loading pauses until retry or reset.</td></tr>
+            <tr><td><code>{`loadMore`}</code></td><td><code>{`() => Promise<void>`}</code><br/><code>{`—`}</code></td><td>Manually requests the next page. Resolves after handling success or failure; does nothing while loading, disabled, exhausted, or in an error state.</td></tr>
+            <tr><td><code>{`retry`}</code></td><td><code>{`() => Promise<void>`}</code><br/><code>{`—`}</code></td><td>Calls the latest loader again while preserving loaded items. Subject to the same loading, enabled, and completion guards.</td></tr>
+            <tr><td><code>{`reset`}</code></td><td><code>{`() => void`}</code><br/><code>{`—`}</code></td><td>Invalidates pending results, clears items and errors, and reloads when enabled and hasMore are true. Does not reset caller-owned pagination.</td></tr>
+          </tbody>
+        </table>
+
+        ## Code Examples
+        Define the loader in your component so it can use your page state and request parameters. Return only the new items; the hook accumulates them. `Promise<Product[]>` infers `items` as `Product[]`, or specify `useInfiniteScroll<Product>` explicitly.
+        </Unstyled>
+
+        <RenderSource language={"tsx"}>
+        ```
+        import { useState } from 'react';
+        import { useInfiniteScroll } from '@apple-pie/slice';
+
+        type Product = { id: string; name: string };
+
+        function Products() {
+            const [page, setPage] = useState(1);
+            const [hasMore, setHasMore] = useState(true);
+            const [root, setRoot] = useState<HTMLDivElement | null>(null);
+
+            const loadProducts = async (): Promise<Product[]> => {
+                const response = await fetch(`/api/products?page=${page}`);
+                if (!response.ok) throw new Error('Could not load products');
+                const result: { products: Product[]; hasMore: boolean } = await response.json();
+                setPage(current => current + 1);
+                setHasMore(result.hasMore);
+                return result.products;
+            };
+
+            const { items, sentinelRef, isLoading, error, retry, reset } =
+                useInfiniteScroll<Product>(loadProducts, { root, hasMore });
+
+            const startAgain = () => {
+                setPage(1);
+                setHasMore(true);
+                reset();
+                root?.scrollTo({ top: 0 });
+            };
+
+            return (
+                <div>
+                    <button type="button" disabled={isLoading} onClick={startAgain}>
+                        Start again
+                    </button>
+                    <div ref={setRoot} style={{ overflowY: 'auto', height: 320 }}>
+                        {items.map(product => <p key={product.id}>{product.name}</p>)}
+                        <div ref={sentinelRef} style={{ height: 1 }} />
+                        {isLoading && <p role="status">Loading…</p>}
+                        {error && <button type="button" onClick={() => retry()}>Retry</button>}
+                        {!hasMore && <p>You’ve reached the end.</p>}
+                    </div>
+                </div>
+            );
+        }
+        ```
+        </RenderSource>
+
+        <Unstyled>
+        ## Notes
+        - The loader receives no arguments. It owns request parameters, pagination state, and any network cancellation.
+        - Changing the loader alone does not reset the list. Subsequent requests use the latest committed loader, so it can read the updated page state without useCallback.
+        - Change `resetKey` when the dataset changes. Update your external page state, hasMore, and filters together. If an old loader is still running, cancel it or guard its external state updates yourself.
+        - `reset()` only resets the hook’s state. Reset caller-owned pagination in the same event, as shown above. A reset may start a new request while an invalidated request is still running.
+        - Items are appended without deduplication. Empty results do not automatically stop loading; the caller must update hasMore.
+        - Without IntersectionObserver, the first request and manual `loadMore()` still work. A Load more button can provide a keyboard-accessible alternative to scrolling.
+        - TypeScript types describe the expected response; they do not validate server JSON. This hook does not virtualize rendered rows.
+        </Unstyled>
+    </FlexDiv>
+</FlexDiv>
