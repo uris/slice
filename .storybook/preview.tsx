@@ -88,6 +88,8 @@ const preview: Preview = {
 					['Core Colors', '*'],
 					'Typography',
 					['Funnel Sans', 'Slice Type Styles', '*'],
+					'Other Styles',
+					['Spacing', 'Corners', 'Elevations'],
 					'Icons',
 					'Motion',
 					'Hooks',

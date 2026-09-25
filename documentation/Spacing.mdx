@@ -1,0 +1,46 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {FlexDiv, Spacer} from "../src";
+import {StyleTokenTable} from "./_components/StyleTokenTable/StyleTokenTable";
+import {spacingTokens, spacingColumnDefinitions} from "./_data/otherStyleData";
+
+<Meta title="Other Styles/Spacing" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+            # Spacing
+            Slice uses a single spacing grid for padding, gaps, and insets so components line up with each other. Every step is exposed as a CSS custom property (`--spacing-*`) and as a value on the `spacing` token object. Use the tokens instead of raw pixel values so a theme can retune the grid in one place.
+
+            #### The Grid
+            The grid follows a 2x size rhythm: start at `2px`, and each step doubles the one before it - `2`, `2 x 2 = 4`, `2 x 4 = 8`, `2 x 8 = 16`, and so on up through `32`, `64`, and `128`. The one exception, kept for flexibility, is `24px` (`--spacing-l`), which sits between `16` and `32` where a full doubling would be too big a jump.
+
+            <StyleTokenTable tokens={spacingTokens} columnDefinitions={spacingColumnDefinitions} />
+
+            #### Using the Grid
+            - **Standard fields** use `8px` vertical / `16px` horizontal padding (`--spacing-s` / `--spacing-m`). Buttons keep their size-specific `16px` or `24px` horizontal baseline.
+            - **Compact components** may use `2px` / `4px` (`--spacing-xxs` / `--spacing-xs`). This is reserved for intentionally compact components like file chips and tooltips, and for mechanical insets like a switch track.
+            - **Never add a new `12px` or `20px` token.** If an edge needs to be tighter, use optical compensation instead.
+            - **Geometry is exempt.** Values derived from geometry - slider head padding, border-width insets, avatar overlap, switch knob size - do not snap to the grid.
+
+            #### Optical Compensation for Icons
+            An icon carries some built-in visual padding, so an edge that ends in an icon looks too roomy at the full grid value. Reduce an icon-bearing edge by `4px` for standard controls and `2px` for compact controls, and express it with a token-based `calc()` such as `calc(var(--spacing-m) - var(--spacing-xs))` rather than a hard-coded `12px`.
+
+            Do not reduce an edge whose outermost content is text or a labeled button. When a reserved icon slot is temporarily empty (like the clear icon on an empty field), keep the spacing as if the icon were there so content does not shift on focus or while typing.
+
+            #### Overriding Padding
+            Optical compensation only applies to built-in defaults. When a caller passes an explicit padding prop it is applied exactly - including `0` - with no silent subtraction. Numbers become pixels, and strings such as `var()`, `calc()`, and one-to-four value shorthands pass through untouched.
+
+            #### Examples
+            | Component | Padding |
+            | --- | --- |
+            | TextField | `8px` vertical / `16px` horizontal, `12px` on an edge that ends in an icon |
+            | Toast | `8px` vertical / `16px` horizontal, `4px` less on the close-icon side |
+            | Tip | `4px` vertical / `8px` horizontal (`--spacing-xs` / `--spacing-s`), a compact exception |
+            | Switch | `44x22px` track with a `2px` inset (`--spacing-xxs`) |
+            | TextArea | `16px` content inset on all sides |
+
+            The full rulebook, including every component and the deliberate exceptions, lives in `contributor-docs/spacing.md`.
+        </Unstyled>
+        <Spacer size="xxl"/>
+    </FlexDiv>
+</FlexDiv>
