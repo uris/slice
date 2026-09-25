@@ -47,7 +47,7 @@
 	flex: 1;
 	overflow: hidden;
 	overflow-y: auto;
-	margin-right: 4px !important;
+	margin-right: var(--spacing-xs) !important;
 	/* keeps scrollHandleColor/scrollHandleColorHover props working as before */
 	--scrollbar-bg: var(--modal-background-color);
 	--scrollbar-thumb: var(--modal-scroll-handle);

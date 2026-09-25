@@ -202,6 +202,12 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((props, re
 		setTextValue(value);
 	}, [value]);
 
+	// keep the inner radius 1px smaller than the outer radius so the border animation lines up
+	const innerBorderRadius = useMemo(() => {
+		if (typeof borderRadius === 'number') return `${Math.max(borderRadius - 1, 0)}px`;
+		return `calc(${setStyle(borderRadius)} - 1px)`;
+	}, [borderRadius]);
+
 	// compose CSS custom properties for border treatment and sizing
 	const cssVars = useMemo(() => {
 		return {
@@ -212,10 +218,21 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((props, re
 			'--prompt-max-height': maxHeight ? `${maxHeight}px` : 'unset',
 			'--prompt-border-width': borderWidth ? `${borderWidth}px` : '0',
 			'--prompt-state': working && borderAnimate ? 'running' : 'paused',
-			'--prompt-border-radius': borderRadius ? `${borderRadius}px` : '8px',
-			'--prompt-inner-border-radius': borderRadius ? `${borderRadius - 1}px` : '7px',
+			'--prompt-border-radius': setStyle(borderRadius),
+			'--prompt-inner-border-radius': innerBorderRadius,
 		} as React.CSSProperties;
-	}, [working, borderAnimate, setBorderColor, borderWidth, borderRadius, maxHeight, width, maxWidth, minWidth]);
+	}, [
+		working,
+		borderAnimate,
+		setBorderColor,
+		borderWidth,
+		borderRadius,
+		innerBorderRadius,
+		maxHeight,
+		width,
+		maxWidth,
+		minWidth,
+	]);
 
 	return (
 		<div className={css.wrapperBg} ref={ref} style={cssVars}>

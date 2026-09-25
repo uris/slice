@@ -93,9 +93,10 @@ export function Label(props: Readonly<LabelProps>) {
 	}, [resolvedBackgroundColor, borderColor]);
 
 	const setPadding = useMemo(() => {
-		if (padding) return setStyle(padding);
-		return '2px 4px';
-	}, [padding]);
+		if (padding != null) return typeof padding === 'number' ? `${padding}px` : padding;
+		const sides = textSize === 'xs' || textSize === 's' ? 'var(--spacing-xs)' : 'var(--spacing-s)';
+		return `var(--spacing-xxs) ${sides}`;
+	}, [padding, textSize]);
 
 	const cssVars = useMemo(() => {
 		return {

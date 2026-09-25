@@ -4,6 +4,7 @@ import { AnimatePresence, type Transition, type Variants, motion } from 'motion/
 import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, filterClasses, setStyle } from '../../utils/functions/misc';
 import { Icon } from '../Icon';
 import { ProgressIndicator } from '../Progress';
@@ -17,7 +18,7 @@ const ToastBase = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
 		textSize = 'm',
 		border = true,
 		padding,
-		radius = 8,
+		radius = corners['corner-m'],
 		container = 'window',
 		showDelay = 0,
 		duration = 5000,
@@ -67,7 +68,9 @@ const ToastBase = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
 
 	// resolve the default padding based on whether the close affordance is shown
 	const defaultPadding = useMemo(() => {
-		return close ? '10px 12px 10px 16px' : '10px 16px';
+		return close
+			? 'var(--spacing-s) calc(var(--spacing-m) - var(--spacing-xs)) var(--spacing-s) var(--spacing-m)'
+			: 'var(--spacing-s) var(--spacing-m)';
 	}, [close]);
 
 	// resolve toast colors from the selected toast type
@@ -103,11 +106,11 @@ const ToastBase = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
 	// compose CSS custom properties for spacing and color treatment
 	const cssVars = useMemo(() => {
 		return {
-			'--toast-padding': setStyle(padding, defaultPadding),
+			'--toast-padding': padding === 0 ? '0px' : setStyle(padding, defaultPadding),
 			'--toast-background': colorScheme.bg,
 			'--toast-color': colorScheme.text,
 			'--toast-border': border ? `1px solid ${colorScheme.border}` : 'unset',
-			'--toast-border-radius': setStyle(radius, 4),
+			'--toast-border-radius': setStyle(radius, corners['corner-xs']),
 			'--toast-position': container === 'window' ? 'fixed' : 'absolute',
 		} as React.CSSProperties;
 	}, [padding, border, colorScheme, radius, defaultPadding, container]);

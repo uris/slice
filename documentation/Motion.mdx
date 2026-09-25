@@ -19,13 +19,13 @@ import { RenderSource } from './_components/RenderSource/RenderSource';
             curve. It works well for most UI state transitions like hover state colors.
             This is the main transition used by Slice like hover colors, etc.
             <MotionSimulation easing={"water"} duration={0.25} />
-            <Spacer size={24} />
+            <Spacer size="l" />
 
             #### "Magnet"
             Magnet is an ease-out curve with a "snap into place" feel. It's used for
             elements that move over longer distances, such as panels and drawers. It's default duration is longer than water, but it feels "snappier".
             <MotionSimulation easing={"magnet"} duration={0.5} />
-            <Spacer size={24} />
+            <Spacer size="l" />
 
             #### "Spring"
             Spring has a "bounce" effect and is used sparingly - mostly for emphasis. An example is the [done checkmark](/story/components-donecheck--default). 
@@ -33,7 +33,7 @@ import { RenderSource } from './_components/RenderSource/RenderSource';
 
             Note: Spring uses a scale value so the smaller the difference in the from/to animated values, the less exaggerated the effect will seem.
             <MotionSimulation placeholder={"Short spring"} width={250} easing={"spring"} duration={1} />
-            <Spacer size={24} />
+            <Spacer size="l" />
 
             #### Slice Motion Values
             These are the motion values currently used by the theme.
@@ -78,7 +78,7 @@ export const motion: SliceMotion = {
             For building and testing easing curves, [Easing Wizard](https://easingwizard.com)
             is still one of the best lightweight tools.
 
-            <Spacer size={64} />
+            <Spacer size="xxl" />
         </Unstyled>
     </FlexDiv>
 </FlexDiv>

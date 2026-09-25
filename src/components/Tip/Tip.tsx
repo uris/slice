@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { filterClasses } from '../../utils/functions/misc';
+import { filterClasses, setStyle } from '../../utils/functions/misc';
 import css from './Tip.module.css';
 import { type PosCoords, type ToolTipProps, tipBasePos } from './_types';
 
@@ -70,11 +70,11 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
 	// compose CSS custom properties for tooltip styling
 	const cssVars = useMemo(() => {
 		return {
-			'--tooltip-padding': padding ?? '3px 6px',
+			'--tooltip-padding': padding === 0 ? '0px' : setStyle(padding, 'var(--spacing-xs) var(--spacing-s)'),
 			'--tooltip-background': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
 			'--tooltip-color': resolvedTextColor ?? 'var(--core-text-primary)',
 			'--tooltip-border': border ? `1px solid ${borderColor ?? 'var(--core-outline-primary)'}` : 'unset',
-			'--tooltip-border-radius': resolvedBorderRadius ?? `${corners['corner-xs']}px`,
+			'--tooltip-border-radius': setStyle(resolvedBorderRadius, corners['corner-xs']),
 		} as React.CSSProperties;
 	}, [padding, resolvedBackgroundColor, resolvedTextColor, border, borderColor, resolvedBorderRadius]);
 

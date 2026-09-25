@@ -72,7 +72,7 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 				const parts = padding.split(' ');
 				return parts[0];
 			}
-			return setStyle(padding, '16px');
+			return setStyle(padding, 'var(--spacing-m)');
 		}
 		return '0';
 	}, [scrolls, padding, autoBorderBottom]);
@@ -88,7 +88,7 @@ const BaseModal = <T = string>(props: ModalProps<T>) => {
 			'--modal-title-color': titleColor,
 			'--modal-border-radius': setStyle(borderRadius),
 			'--modal-border-width': setStyle(borderWidth),
-			'--modal-padding': setStyle(padding, '16px 24px'),
+			'--modal-padding': setStyle(padding, 'var(--spacing-m) var(--spacing-l)'),
 			'--modal-background-color': backgroundColor,
 			'--modal-title-border-color': titleBorderColor,
 			'--modal-title-border-width': setStyle(titleBorderWidth),

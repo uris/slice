@@ -3,6 +3,7 @@ import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { VideoController } from 'src/components/VideoController/VideoController';
 import { expect, fireEvent, fn, waitFor, within } from 'storybook/test';
 import { useVideoActions, videoActions } from '../../stores';
+import { corners } from '../../theme/corners/corners';
 import { Button } from '../Button';
 import { Video, type VideoProps } from '../Video';
 import { runVideoControllerQuitOutsidePlay, runVideoControllerShowAndHidePlay } from '../playHelpers';
@@ -19,7 +20,7 @@ const demoVideoProps: VideoProps = {
 	objectFit: 'cover',
 	controls: 'simple',
 	muted: true,
-	borderRadius: 16,
+	borderRadius: corners['corner-xl'],
 	customControls: {
 		play: false,
 		progress: true,

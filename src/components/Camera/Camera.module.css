@@ -20,7 +20,7 @@
 	left: 0;
 	right: 0;
 	composes: rowBetween from "../../utils/styling/flexBox.module.css";
-	padding: 16px !important;
+	padding: var(--spacing-m) !important;
 	gap: 16px;
 	background-color: var(--camera-controls-bg);
 	transform: var(--camera-controls-transform);

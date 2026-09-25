@@ -19,6 +19,7 @@ import {
 	runIconButtonWithoutHandlersPlay,
 } from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
+import { corners } from '../../theme/corners/corners';
 
 const customAnimation: ButtonAnimation = {
 	animation: [{ type: AnimationType.Rotate, value: { off: 0, on: 135 } }],
@@ -34,6 +35,8 @@ const meta: Meta<typeof IconButton> = {
 	title: 'Components/IconButton',
 	component: IconButton,
 	argTypes: {
+		backgroundColor: { type: 'string', control: 'text' },
+		iconColor: { type: 'string', control: 'text' },
 		icon: {
 			control: { type: 'select' }, // Dropdown selection
 			options: icons, // Enum values as options
@@ -43,11 +46,11 @@ const meta: Meta<typeof IconButton> = {
 		frameSize: 36,
 		iconSize: 20,
 		icon: 'plus',
-		borderRadius: 4,
+		borderRadius: corners['corner-xs'],
 		tooltip: undefined,
-		color: undefined,
+		color: 'transparent',
 		colorOn: undefined,
-		backgroundColor: undefined,
+		backgroundColor: 'transparent',
 		backgroundColorHover: undefined,
 		backgroundColorOn: undefined,
 		transition: undefined,
@@ -55,7 +58,6 @@ const meta: Meta<typeof IconButton> = {
 		initial: undefined,
 		animate: undefined,
 		exit: undefined,
-		fillColor: undefined,
 		label: undefined,
 		hover: true,
 		count: 0,

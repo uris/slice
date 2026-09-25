@@ -5,11 +5,22 @@ import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import type { SpacerProps } from './_types';
 
 export const Spacer = React.memo((props: SpacerProps) => {
-	const { size = 8, ...divAttributes } = props;
+	const { size = 's', ...divAttributes } = props;
 	const { id: divId, className, style, ...rest } = divAttributes;
 
 	// derive the fixed spacer dimensions from the configured size
-	const spacerStyle = useMemo(() => ({ height: size, minHeight: size, maxHeight: size }), [size]);
+	const spacerStyle = useMemo(() => {
+		const dimension = `var(--spacing-${size})`;
+		return {
+			width: dimension,
+			minWidth: dimension,
+			maxWidth: dimension,
+			height: dimension,
+			minHeight: dimension,
+			maxHeight: dimension,
+			flexShrink: 0,
+		};
+	}, [size]);
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
 

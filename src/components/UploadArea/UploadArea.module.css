@@ -35,7 +35,7 @@
 
 .files {
 	composes: column from "../../utils/styling/flexBox.module.css";
-	margin-top: 16px !important;
+	margin-top: var(--spacing-m) !important;
 	width: 100%;
 }
 

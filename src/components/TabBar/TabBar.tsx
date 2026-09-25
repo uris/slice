@@ -21,7 +21,7 @@ export const TabBar = React.memo((props: TabBarProps) => {
 		height = '100%',
 		width = '100%',
 		tabWidth = 'fill',
-		padding = 8,
+		padding = 'var(--spacing-s)',
 		iconFill = false,
 		iconSize = 20,
 		iconGap = 8,
@@ -167,7 +167,7 @@ export const TabBar = React.memo((props: TabBarProps) => {
 			'--tab-bar-border-color': borderColor,
 			'--tab-bar-justify': justify,
 			'--tab-bar-close-width': `${closeWidth}px`,
-			'--tab-bar-close-padding': setStyle(padding, '8px'),
+			'--tab-bar-close-padding': setStyle(padding, 'var(--spacing-s)'),
 		} as React.CSSProperties;
 	}, [tabGap, height, width, border, closeWidth, padding, borderColor, justify]);
 
@@ -210,7 +210,7 @@ const Option = React.memo(
 			selected = false,
 			onClick = () => null,
 			onToolTip = () => null,
-			padding = 8,
+			padding = 'var(--spacing-s)',
 			iconSize = 20,
 			iconGap = 6,
 			disabled = false,
@@ -286,7 +286,7 @@ const Option = React.memo(
 			return {
 				'--tab-bar-option-border': setUnderline,
 				'--tab-bar-option-border-color': borderColor,
-				'--tab-bar-option-padding': setStyle(padding, '8px'),
+				'--tab-bar-option-padding': setStyle(padding, 'var(--spacing-s)'),
 				'--tab-bar-option-icon-size': `${iconSize}px`,
 				'--tab-bar-option-cursor': disabled ? 'default' : 'pointer',
 				'--tab-bar-option-gap': `${iconGap ?? 0}px`,

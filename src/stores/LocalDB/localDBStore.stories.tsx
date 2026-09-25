@@ -100,7 +100,7 @@ function LocalDBStoreDemo() {
 						))
 					)}
 				</FlexDiv>
-				<Spacer size={24} />
+				<Spacer size="l" />
 				<Button label={'Destroy Store'} destructive={true} onClick={() => void destroyStore(STORE_NAME)} />
 			</FlexDiv>
 		</FlexDiv>

@@ -11,8 +11,10 @@ const meta: Meta<typeof Switch> = {
 		state: false,
 		height: 22,
 		width: 44,
-		padding: 3,
-		knobColor: undefined,
+		padding: undefined,
+		backgroundColorOn: 'var(--feedback-positive)',
+		backgroundColorOff: 'var(--core-text-disabled)',
+		knobColor: 'var(--core-surface-primary)',
 		onChange: fn(),
 	},
 };

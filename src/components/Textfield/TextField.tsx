@@ -202,18 +202,15 @@ export const TextField = React.memo(
 			return '0.5';
 		}, [inputType, isFocused]);
 
-		const setPaddingRight = useMemo(() => {
-			const defaultPadding = clearButton ? 8 : 16;
-			if (!padding) return defaultPadding;
-			if (typeof padding === 'string') {
-				const paddingParts = padding.split(' ');
-				const isSingleValue = paddingParts.length === 1;
-				const sidePadding = paddingParts[isSingleValue ? 0 : 1];
-				const sideAsNumber = Number.parseFloat(sidePadding.replace('px', ''));
-				return Number.isNaN(sideAsNumber) ? defaultPadding : sideAsNumber - 4;
-			}
-			return clearButton ? padding - 4 : padding;
-		}, [padding, clearButton]);
+		// Only built-in padding receives optical compensation; custom CSS stays exact.
+		const resolvedPadding = useMemo(() => {
+			if (padding != null) return typeof padding === 'number' ? `${padding}px` : padding;
+			const iconInset = 'calc(var(--spacing-m) - var(--spacing-xs))';
+			const left = iconLeft && !label ? iconInset : 'var(--spacing-m)';
+			const trailingIcon = (inputType === 'password' && !noShow) || (!actionButton && clearButton);
+			const right = trailingIcon ? iconInset : 'var(--spacing-m)';
+			return `var(--spacing-s) ${right} var(--spacing-s) ${left}`;
+		}, [padding, iconLeft, label, inputType, noShow, actionButton, clearButton]);
 
 		// compose CSS custom properties for layout, color, and interaction states
 		const cssVars = useMemo(() => {
@@ -222,8 +219,7 @@ export const TextField = React.memo(
 				'--tf-field-size': size.width === 'auto' ? 'content' : 'unset',
 				'--tf-width': setStyle(size.width),
 				'--tf-height': setStyle(size.height),
-				'--tf-padding': setStyle(padding, '8px 10px'),
-				'--tf-padding-right': `${setPaddingRight}px`,
+				'--tf-padding': resolvedPadding,
 				'--tf-padding-label-left': label === '' ? 'unset' : '0',
 				'--tf-border-radius': setStyle(borderRadius),
 				'--tf-bg-color': setBackgroundColor,
@@ -236,7 +232,6 @@ export const TextField = React.memo(
 			} as React.CSSProperties;
 		}, [
 			size,
-			padding,
 			label,
 			borderRadius,
 			setBackgroundColor,
@@ -248,7 +243,7 @@ export const TextField = React.memo(
 			textColorDisabled,
 			labelColor,
 			disabled,
-			setPaddingRight,
+			resolvedPadding,
 		]);
 
 		/* START.DEBUG */
@@ -360,6 +355,10 @@ export const TextField = React.memo(
 			prevProps.inputType === nextProps.inputType &&
 			prevProps.textSize === nextProps.textSize &&
 			prevProps.padding === nextProps.padding &&
+			prevProps.iconLeft === nextProps.iconLeft &&
+			prevProps.clearButton === nextProps.clearButton &&
+			prevProps.actionButton === nextProps.actionButton &&
+			prevProps.noShow === nextProps.noShow &&
 			prevProps.textAlign === nextProps.textAlign &&
 			prevProps.placeholder === nextProps.placeholder
 		);

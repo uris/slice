@@ -18,7 +18,7 @@ type ButtonBaseProps = {
 	round?: boolean;
 	tooltip?: string;
 	iconSize?: number;
-	borderRadius?: number;
+	borderRadius?: number | string;
 	iconColor?: string;
 	backgroundColor?: string;
 	backgroundColorDisabled?: string;

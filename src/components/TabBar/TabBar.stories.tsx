@@ -43,7 +43,7 @@ const meta: Meta<typeof TabBar> = {
 		underline: true,
 		height: 44,
 		width: '100%',
-		padding: 8,
+		padding: 'var(--spacing-s)',
 		iconSize: 20,
 		iconGap: 4,
 		tabGap: 0,

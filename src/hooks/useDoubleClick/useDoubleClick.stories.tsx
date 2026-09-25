@@ -33,7 +33,7 @@ function UseDoubleClickDemo(props: Readonly<UseDoubleClickDemoProps>) {
 				onClick={click}
 				onDoubleClick={doubleClick}
 			/>
-			<Spacer size={16} />
+			<Spacer size="m" />
 			<div style={{ display: 'flex', gap: 16 }}>
 				<span>Single: {singleCount}</span>
 				<span>Double: {doubleCount}</span>

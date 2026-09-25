@@ -17,8 +17,8 @@ type DivInputBaseProps = {
 	textAlign?: 'left' | 'center' | 'right';
 	clamp?: number;
 	padding?: string;
-	borderRadius?: number;
-	radius?: number;
+	borderRadius?: number | string;
+	radius?: number | string;
 	backgroundColor?: string;
 };
 

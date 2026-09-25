@@ -17,12 +17,16 @@ import {
 	runDraggablePanelTouchPlay,
 } from 'src/components/playHelpers';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
+import { corners } from '../../theme/corners/corners';
 
 const meta: Meta<typeof DraggablePanel> = {
 	title: 'Components/DraggablePanel',
 	component: DraggablePanel,
 	parameters: {
 		layout: 'fullscreen',
+	},
+	argTypes: {
+		backgroundColor: { type: 'string', control: 'text' },
 	},
 	args: {
 		children: undefined,
@@ -37,14 +41,14 @@ const meta: Meta<typeof DraggablePanel> = {
 		dragHandleStyle: {
 			width: 6,
 			height: 6,
-			radius: 100,
+			radius: corners['corner-round'],
 			stroke: 1,
 			color: 'var(--core-surface-primary-tint)',
 			strokeColor: 'var(--core-outline-secondary)',
 		},
 		borderRight: undefined,
 		borderLeft: undefined,
-		backgroundColor: undefined,
+		backgroundColor: 'transparent',
 		drags: 'right',
 		isTouchDevice: false,
 		containerRef: undefined,

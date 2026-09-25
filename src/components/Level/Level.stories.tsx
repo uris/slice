@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { useMicrophone } from '../../hooks';
+import { corners } from '../../theme/corners/corners';
 import { Button } from '../Button';
 import { FlexDiv } from '../FlexDiv';
 import { Label } from '../Label';
@@ -25,7 +26,7 @@ const meta: Meta<typeof Level> = {
 		peakIntensity: 0.5,
 		risePerSeconds: 4,
 		releasePerSeconds: 1.5,
-		borderRadius: 100,
+		borderRadius: corners['corner-round'],
 	},
 };
 

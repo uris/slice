@@ -17,7 +17,7 @@ type TextAreaBaseProps = {
 	sendOffset?: { bottom: number; right: number };
 	sendSize?: number;
 	backgroundColor?: string;
-	borderRadius?: number;
+	borderRadius?: number | string;
 	returnSubmits?: boolean;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	disabled?: boolean;

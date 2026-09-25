@@ -22,7 +22,7 @@ type ChipBaseProps = {
 	borderColor?: string;
 	borderColorHover?: string;
 	borderColorDisabled?: string;
-	borderRadius?: number;
+	borderRadius?: number | string;
 	gap?: number;
 	paddingTop?: number;
 	paddingTops?: number;

@@ -6,17 +6,21 @@ import { runTipHiddenAtOriginPlay, runTipShowsAndHidesPlay, runTipStyleVariantsP
 import { ToolTipType } from 'src/components/sharedTypes';
 import { useToolTip } from 'src/hooks';
 import { useTip, useTipActions } from 'src/stores/tip';
+import { corners } from '../../theme/corners/corners';
 import { Tip } from './Tip';
+import type { ToolTipProps as TipProps } from './_types';
 
 const meta: Meta<typeof Tip> = {
 	title: 'Components/Tip',
 	component: Tip,
 	args: {
 		tip: undefined,
-		border: undefined,
-		borderColor: undefined,
+		border: true,
+		borderColor: 'var(--core-outline-primary)',
 		radius: undefined,
-		color: undefined,
+		backgroundColor: 'var(--core-surface-secondary)',
+		textColor: 'var(--core-text-primary)',
+		color: 'var(--core-text-primary)',
 		coords: { x: 0, y: 0 },
 		padding: undefined,
 		textSize: 'm',
@@ -25,21 +29,23 @@ const meta: Meta<typeof Tip> = {
 
 export default meta;
 
-export const Demo: StoryObj<typeof Tip> = {
-	render: (args) => {
-		const tip = useTip();
-		const actions = useTipActions();
-		const tipRef = useRef<HTMLDivElement>(null);
-		const coords = useToolTip(tip, tipRef);
+function TipDemo(props: Readonly<TipProps>) {
+	const tip = useTip();
+	const actions = useTipActions();
+	const tipRef = useRef<HTMLDivElement>(null);
+	const coords = useToolTip(tip, tipRef);
 
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
-				Hover me!
-				<IconButton icon={'home'} tooltip={'Home Button'} onToolTip={actions.push} toggle={false} hover={true} />
-				<Tip {...args} coords={coords} tip={tip} ref={tipRef} />
-			</FlexDiv>
-		);
-	},
+	return (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
+			Hover me!
+			<IconButton icon={'home'} tooltip={'Home Button'} onToolTip={actions.push} toggle={false} hover={true} />
+			<Tip {...props} coords={coords} tip={tip} ref={tipRef} />
+		</FlexDiv>
+	);
+}
+
+export const Demo: StoryObj<typeof Tip> = {
+	render: (args) => <TipDemo {...args} />,
 };
 
 export const ShowsAndHidesOnCoords: StoryObj<typeof Tip> = {
@@ -76,8 +82,13 @@ export const StyleVariants: StoryObj<typeof Tip> = {
 			<Tip className="custom-border-color" coords={{ x: 0, y: 0 }} borderColor="#ff0000" />
 			<Tip className="text-color-priority" coords={{ x: 0, y: 0 }} textColor="#00ff00" color="#0000ff" />
 			<Tip className="color-fallback" coords={{ x: 0, y: 0 }} color="#0000ff" />
-			<Tip className="border-radius-priority" coords={{ x: 0, y: 0 }} borderRadius={12} radius={4} />
-			<Tip className="radius-fallback" coords={{ x: 0, y: 0 }} radius={4} />
+			<Tip
+				className="border-radius-priority"
+				coords={{ x: 0, y: 0 }}
+				borderRadius={corners['corner-l']}
+				radius={corners['corner-xs']}
+			/>
+			<Tip className="radius-fallback" coords={{ x: 0, y: 0 }} radius={corners['corner-xs']} />
 			<Tip className="custom-padding" coords={{ x: 0, y: 0 }} padding="10px 20px" />
 			<Tip className="custom-bg" coords={{ x: 0, y: 0 }} backgroundColor="#123456" />
 		</FlexDiv>

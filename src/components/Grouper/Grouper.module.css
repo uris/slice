@@ -22,7 +22,7 @@
 	composes: rowBetween from "../../utils/styling/flexBox.module.css";
 	user-select: none;
 	-webkit-user-select: none;
-	padding: 0 24px !important;
+	padding: 0 var(--spacing-l) !important;
 	width: 100%;
 	gap: 6px;
 	height: var(--grouper-height);

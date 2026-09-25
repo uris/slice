@@ -54,10 +54,10 @@ import {Spacer} from "../Spacer";
             <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Border color in the default state.</td></tr>
             <tr><td><code>borderColorHover</code></td><td><code>string</code></td><td><code>'var(--core-text-special)'</code></td><td>Border color while the chip is hovered.</td></tr>
             <tr><td><code>borderColorDisabled</code></td><td><code>string</code></td><td><code>'var(--core-text-disabled)'</code></td><td>Border color used when <code>disabled</code> is true.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number</code></td><td><code>8</code></td><td>Corner radius in pixels.</td></tr>
+            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>8</code></td><td>Corner radius in pixels.</td></tr>
             <tr><td><code>gap</code></td><td><code>number</code></td><td><code>4</code></td><td>Spacing between the icon and label in pixels.</td></tr>
-            <tr><td><code>paddingTop</code></td><td><code>number</code></td><td><code>8</code></td><td>Vertical padding in pixels.</td></tr>
-            <tr><td><code>paddingSides</code></td><td><code>number</code></td><td><code>16</code></td><td>Horizontal padding in pixels.</td></tr>
+            <tr><td><code>paddingTop</code></td><td><code>number</code></td><td><code>4 for xs/s; 8 otherwise</code></td><td>Top and bottom padding in pixels. Defaults follow spacing-xs for xs/s labels and spacing-s otherwise; explicit overrides take precedence.</td></tr>
+            <tr><td><code>paddingSides</code></td><td><code>number</code></td><td><code>4 for xs/s; 16 otherwise</code></td><td>Exact horizontal padding override in pixels. Defaults use spacing-xs for xs/s labels (minus spacing-xxs on the icon side), or spacing-m otherwise (minus spacing-xs on the icon side).</td></tr>
             <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
           </tbody>
         </table>
@@ -96,6 +96,6 @@ import {Spacer} from "../Spacer";
             }
             ```
         </RenderSource>
-    <Spacer size={64} />
+    <Spacer size="xxl" />
     </FlexDiv>
 </FlexDiv>

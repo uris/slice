@@ -2,7 +2,6 @@
 	position: relative;
 	composes: rowStart from "../../utils/styling/flexBox.module.css";
 	padding: var(--tf-padding) !important;
-	padding-right: var(--tf-padding-right) !important;
 	gap: 8px;
 	overflow: visible;
 	width: var(--tf-width);

@@ -57,14 +57,22 @@ afterEach(() => {
 });
 
 describe('useClipboard', () => {
-	it('reports support based on navigator.clipboard', () => {
+	it('reports support based on navigator.clipboard', async () => {
 		const { result } = renderHook(() => useClipboard());
+		await waitFor(() => {
+			expect(result.current.readPermission).toBe('prompt');
+			expect(result.current.writePermission).toBe('prompt');
+		});
 		expect(result.current.isSupported).toBe(true);
 	});
 
-	it('reports unsupported when navigator.clipboard is missing', () => {
+	it('reports unsupported when navigator.clipboard is missing', async () => {
 		setClipboard(undefined);
 		const { result } = renderHook(() => useClipboard());
+		await waitFor(() => {
+			expect(result.current.readPermission).toBe('prompt');
+			expect(result.current.writePermission).toBe('prompt');
+		});
 		expect(result.current.isSupported).toBe(false);
 	});
 

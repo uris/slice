@@ -25,7 +25,7 @@ const meta: Meta<typeof RadioButton> = {
 		list: true,
 		hideRadio: false,
 		noFrame: true,
-		iconColor: undefined,
+		iconColor: 'var(--core-text-primary)',
 		checkedIcon: 'check circle',
 		onChange: fn(),
 	},

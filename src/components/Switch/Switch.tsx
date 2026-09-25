@@ -13,7 +13,7 @@ function SwitchComponent<T = string>(props: SwitchProps<T>) {
 		value,
 		height = 22,
 		width = 44,
-		padding = 3,
+		padding,
 		backgroundColorOn = 'var(--feedback-positive)',
 		backgroundColorOff = 'var(--core-text-disabled)',
 		knobColor = 'var(--core-surface-primary)',
@@ -40,8 +40,8 @@ function SwitchComponent<T = string>(props: SwitchProps<T>) {
 		return {
 			'--switch-width': `${width}px`,
 			'--switch-height': `${height}px`,
-			'--switch-padding': `${padding}px`,
-			'--switch-knob-size': `${height - padding * 2}px`,
+			'--switch-padding': padding === undefined ? 'var(--spacing-xxs)' : `${padding}px`,
+			'--switch-knob-size': 'calc(var(--switch-height) - var(--switch-padding) * 2)',
 			'--switch-knob-color': knobColor,
 			'--switch-bg-color': on ? resolvedBackgroundColorOn : resolvedBackgroundColorOff,
 		} as React.CSSProperties;

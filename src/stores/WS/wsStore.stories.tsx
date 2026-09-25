@@ -120,7 +120,7 @@ function WSStoreDemo() {
 			>
 				<h1>{`WS Connection ${connections.length > 0 ? ': Active' : ''}`}</h1>
 				Slice does not provide a test websocket end point. You'll need to enter your own websocket URL.
-				<Spacer size={12} />
+				<Spacer size="m" />
 				<TextField
 					label={'URL:'}
 					name={'ws-url'}

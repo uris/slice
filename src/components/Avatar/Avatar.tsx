@@ -121,7 +121,7 @@ export const Avatar = React.memo((props: AvatarProps) => {
 			'--avatar-border-color-hover': borderColorHover ?? 'var(--core-outline-special)',
 			'--avatar-bg-image': `${bgImage}`,
 			'--avatar-font-size': setStyle(textSize),
-			'--avatar-outer-border-size': setStyle(outerBorderSize),
+			'--avatar-outer-border-size': `${outerBorderSize ?? 0}px`,
 			'--avatar-outer-border-color': outerBorderColor ?? 'var(--core-surface-primary)',
 		} as React.CSSProperties;
 	}, [

@@ -67,19 +67,13 @@
 
 .attachments {
 	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	padding: 16px 16px 0 16px !important;
+	padding: var(--spacing-m) var(--spacing-m) 0 var(--spacing-m) !important;
 	width: 100%;
-}
-
-.clear {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	padding: 12px 8px 0 0 !important;
-	display: var(--prompt-clear) !important;
 }
 
 .buttonBar {
 	composes: rowBetween from "../../utils/styling/flexBox.module.css";
-	padding: 8px 16px 16px 16px !important;
+	padding: var(--spacing-s) var(--spacing-m) var(--spacing-m) var(--spacing-m) !important;
 	width: 100%;
 	cursor: text;
 }
@@ -91,7 +85,7 @@
 }
 
 .textarea {
-	padding: 16px !important;
+	padding: var(--spacing-m) !important;
 	box-sizing: border-box;
 	field-sizing: content;
 	width: 100%;

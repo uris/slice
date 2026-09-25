@@ -63,9 +63,9 @@ export const ErrorSummary = React.memo((props: ErrorSummaryProps) => {
 			const number = addNumbers ? `${index + 1}. ` : '';
 			return (
 				<div className={css.error} key={`${error.title}_${index}`}>
-					<p className={`${css.p} ${css[textSize]}`}>
+					<span className={`${css.p} ${css[textSize]}`}>
 						<strong>{`${number}${error.title}`}</strong>
-					</p>
+					</span>
 					{messages && <ul className={css.ul}>{renderMessages(messages)}</ul>}
 				</div>
 			);

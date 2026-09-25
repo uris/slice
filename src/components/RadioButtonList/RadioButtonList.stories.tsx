@@ -42,9 +42,9 @@ const meta: Meta<typeof RadioButtonList> = {
 		hideRadio: false,
 		noFrame: true,
 		toggleIcon: true,
-		iconColor: undefined,
+		iconColor: 'var(--core-text-primary)',
 		checkedIcon: 'check circle',
-		iconSelectedColor: undefined,
+		iconSelectedColor: 'var(--core-text-primary)',
 		onChange: fn(),
 	},
 };

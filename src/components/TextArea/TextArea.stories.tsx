@@ -20,7 +20,7 @@ const meta: Meta<typeof TextArea> = {
 		focused: false,
 		placeholder: 'Enter your text here',
 		rows: 6,
-		padding: '16px 4px 16px 16px',
+		padding: 'var(--spacing-m)',
 		error: false,
 		resizable: false,
 		hasSend: false,

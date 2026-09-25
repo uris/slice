@@ -12,7 +12,7 @@ const meta: Meta<typeof ProgressIndicator> = {
 		inset: true,
 		secondsPerSpin: 1,
 		show: true,
-		color: undefined,
+		color: 'var(--core-text-primary)',
 		stroke: 1.5,
 		inline: false,
 		duration: undefined,

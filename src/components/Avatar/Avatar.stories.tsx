@@ -11,11 +11,11 @@ const meta: Meta<typeof Avatar> = {
 		name: 'John Doe',
 		email: 'john.doe@example.com',
 		image: 'https://www.slice-uikit.com/public/images/profile-male-02.jpg',
-		borderSize: 1,
-		borderColor: undefined,
+		borderSize: 0,
+		borderColor: 'transparent',
 		borderColorHover: undefined,
-		outerBorderSize: undefined,
-		outerBorderColor: undefined,
+		outerBorderSize: 0,
+		outerBorderColor: 'transparent',
 		fontSize: undefined,
 		onClick: fn(),
 		onKeyDown: fn(),
@@ -295,5 +295,25 @@ export const ZeroSizeAutoFontSize: StoryObj<typeof Avatar> = {
 		// a zero-size avatar renders with zero offsetHeight, exercising the
 		// font-size sync effect's `if (!parentHeight)` true branch
 		await expect(avatar).toBeInTheDocument();
+	},
+};
+
+export const ImageCoverage: StoryObj<typeof Avatar> = {
+	args: {
+		size: 80,
+		image: `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="160" height="80"><rect width="160" height="80" fill="#2670cc"/></svg>')}`,
+	},
+	render: (args) => <Avatar {...args} />,
+	play: async ({ canvasElement }) => {
+		const avatar = within(canvasElement).getByRole('button');
+		const image = avatar.firstElementChild as HTMLElement;
+		const style = getComputedStyle(image);
+		await expect(style.backgroundSize).toBe('cover');
+		await expect(style.backgroundPosition).toBe('50% 50%');
+		await expect(style.backgroundRepeat).toBe('no-repeat');
+		await expect(style.backgroundOrigin).toBe('border-box');
+		await expect(image.getBoundingClientRect().width).toBe(80);
+		await expect(image.getBoundingClientRect().height).toBe(80);
+		await expect(getComputedStyle(avatar).borderTopWidth).toBe('0px');
 	},
 };

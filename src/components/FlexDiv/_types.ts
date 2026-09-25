@@ -142,7 +142,7 @@ type FlexDivBaseProps = {
 	transition?: Transition;
 	variants?: any;
 	gap?: number;
-	borderRadius?: number;
+	borderRadius?: number | string;
 	scrollHandle?: string;
 	scrollHandleHover?: string;
 };

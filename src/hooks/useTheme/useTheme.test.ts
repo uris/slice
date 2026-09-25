@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react';
+import { act, cleanup, renderHook } from '@testing-library/react';
 import { createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ThemeProvider } from '../../providers/ThemeProvider';
@@ -37,16 +37,19 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+	// Disconnect theme observers before resetting the observed document attribute.
+	cleanup();
 	vi.unstubAllGlobals();
 	delete document.documentElement.dataset.sliceTheme;
 });
 
 describe('useTheme', () => {
-	it('reports the initial theme and isDark flag', () => {
+	it('reports the initial theme and isDark flag', async () => {
 		const { result } = renderHook(() => useTheme(), {
 			wrapper: wrapper({ initialTheme: lightTheme.name }),
 		});
 
+		await actAndFlush(() => {});
 		expect(result.current.current.name).toBe(lightTheme.name);
 		expect(result.current.isDark).toBe(false);
 		expect(result.current.darkTheme).toBe(darkTheme);
@@ -125,17 +128,21 @@ describe('useTheme', () => {
 		expect(document.documentElement.dataset.sliceTheme).toBe(lightTheme.name);
 	});
 
-	it('set()/toggle() no-op the document update when document is unavailable (SSR safety)', () => {
+	it('set()/toggle() no-op the document update when document is unavailable (SSR safety)', async () => {
 		const { result } = renderHook(() => useTheme(), {
 			wrapper: wrapper({ initialTheme: lightTheme.name }),
 		});
 
-		const originalDocument = globalThis.document;
-		// @ts-expect-error - simulate an SSR environment with no DOM
-		delete globalThis.document;
-
-		expect(() => result.current.set(darkTheme)).not.toThrow();
-
-		globalThis.document = originalDocument;
+		await actAndFlush(() => {
+			const originalDocument = globalThis.document;
+			try {
+				// @ts-expect-error - simulate an SSR environment with no DOM
+				delete globalThis.document;
+				expect(() => result.current.set(darkTheme)).not.toThrow();
+				expect(() => result.current.toggle()).not.toThrow();
+			} finally {
+				globalThis.document = originalDocument;
+			}
+		});
 	});
 });

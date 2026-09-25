@@ -3,7 +3,8 @@
 import React, { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useObserveResize, useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import { pointerPosition } from '../../utils/functions/misc';
+import { corners } from '../../theme/corners/corners';
+import { pointerPosition, setStyle } from '../../utils/functions/misc';
 import css from './DraggablePanel.module.css';
 import type { Constraint } from './_types';
 
@@ -498,7 +499,7 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 export type DragHandleProps = {
 	width?: number;
 	height?: number;
-	radius?: number;
+	radius?: number | string;
 	stroke?: number;
 	strokeColor?: string;
 	color?: string;
@@ -507,7 +508,7 @@ export const DragHandle = React.memo((props: Readonly<DragHandleProps>) => {
 	const {
 		width = 6,
 		height = 6,
-		radius = 100,
+		radius = corners['corner-round'],
 		stroke = 1,
 		color = 'var(--core-surface-primary-tint)',
 		strokeColor = 'var(--core-outline-secondary)',
@@ -517,7 +518,7 @@ export const DragHandle = React.memo((props: Readonly<DragHandleProps>) => {
 		return {
 			'--drag-handle-width': `${width}px`,
 			'--drag-handle-height': `${height}px`,
-			'--drag-handle-radius': `${radius}px`,
+			'--drag-handle-radius': setStyle(radius),
 			'--drag-handle-border': `${stroke}px`,
 			'--drag-handle-border-color': `${strokeColor}`,
 			'--drag-handle-bg': `${color}`,

@@ -6,6 +6,8 @@ import type { Elevations } from './elevations/_types';
 import { elevations } from './elevations/elevations';
 import type { SliceMotion } from './motion/_types';
 import { motion } from './motion/motion';
+import type { SpacingGrid } from './spacing/_types';
+import { spacing } from './spacing/spacing';
 import { type } from './type/type';
 import type { Type } from './type/types';
 
@@ -16,6 +18,7 @@ export type SliceTheme = {
 	type: Type;
 	corners: Corners;
 	elevations: Elevations;
+	spacing: SpacingGrid;
 	motion: SliceMotion;
 };
 
@@ -26,6 +29,7 @@ export const lightTheme: SliceTheme = {
 	type,
 	corners,
 	elevations,
+	spacing,
 	motion,
 };
 
@@ -36,5 +40,6 @@ export const darkTheme: SliceTheme = {
 	type,
 	corners,
 	elevations,
+	spacing,
 	motion,
 };

@@ -100,9 +100,10 @@
 	"files": ["dist", "README.md", "scripts/copy-assets.mjs"],
 	"sideEffects": ["**/*.css"],
 	"scripts": {
-		"lint": "biome format --write . && biome check .",
-		"lint:fix": "biome format --write . && biome check --write .",
-		"lint:ci": "biome ci .",
+		"lint": "biome format --write . && biome check . && npm run typecheck",
+		"lint:fix": "biome format --write . && biome check --write . && npm run typecheck",
+		"lint:ci": "biome ci . && npm run typecheck",
+		"typecheck": "tsc --noEmit -p tsconfig.json",
 		"format": "biome format --write .",
 		"test": "vitest",
 		"test:ui": "vitest --ui",

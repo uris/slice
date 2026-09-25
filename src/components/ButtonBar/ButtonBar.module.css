@@ -8,7 +8,7 @@
 .label {
 	composes: rowStart from "../../utils/styling/flexBox.module.css";
 	color: var(--bb-label-color);
-	padding-right: 4px;
+	padding-right: var(--spacing-xs);
 }
 
 .button {
@@ -26,11 +26,11 @@
 	appearance: none;
 	-webkit-appearance: none;
 	&:first-child {
-		padding-left: 4px;
+		padding-left: var(--spacing-xs);
 	}
 	&:last-child {
 		border-right: none;
-		padding-right: 4px;
+		padding-right: var(--spacing-xs);
 	}
 	&:hover {
 		background: var(--bb-bg-color-hover);

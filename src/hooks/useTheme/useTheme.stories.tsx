@@ -11,14 +11,14 @@ function UseThemeDemo() {
 		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} direction={'column'}>
 			<h3>{theme.current.name.includes('light') ? 'Light theme' : 'Dark Theme'} Selected</h3>
 			<span>IsDark? {theme.isDark ? 'True' : 'False'}</span>
-			<Spacer size={24} />
+			<Spacer size="l" />
 			<FlexDiv width={'fill'} height={'auto'} direction={'column'} align={'center'} justify={'center'} gap={12}>
 				<Button label={'Set Light'} onClick={() => theme.set(theme.lightTheme)} />
 				<Button label={'Set Dark'} onClick={() => theme.set(theme.darkTheme)} />
 				<Button label={'Set System'} onClick={() => theme.set('system')} />
 				<Button label={'Toggle'} onClick={() => theme.toggle()} />
 			</FlexDiv>
-			<Spacer size={24} />
+			<Spacer size="l" />
 			<strong style={{ color: theme.colors['core-link-primary'] }}>
 				{`Var: '${theme.colors['core-link-primary']}'`}
 			</strong>

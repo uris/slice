@@ -557,8 +557,8 @@ export async function runIconButtonNoRoundNoBorderRadiusPlay({ canvasElement }: 
 	await expectCanvas(canvasElement);
 	const button = canvasElement.querySelector('button') as HTMLElement | null;
 	// round=false exercises `round ? '100%' : ...`'s false branch; borderRadius
-	// forced to `null` exercises the nested `borderRadius ?? 0` fallback
-	await expect(button?.style.getPropertyValue('--ib-border-radius')).toBe('0px');
+	// forced to `null` exercises setStyle's fallback to corner-none (0 resolves to `unset`)
+	await expect(button?.style.getPropertyValue('--ib-border-radius')).toBe('unset');
 }
 
 export async function runIconButtonBorderedPlay({ canvasElement }: { canvasElement: HTMLElement }) {
@@ -827,8 +827,13 @@ export async function runSpacerPlay<TArgs>({ args, canvasElement }: PlayContext<
 	const storyArgs = asArgs(args);
 	const spacer = canvasElement.querySelector('[style*="min-height"]') as HTMLElement | null;
 	await expect(spacer).toBeInTheDocument();
-	if (spacer && typeof storyArgs.size === 'number') {
-		await expect(spacer).toHaveStyle({ minHeight: `${storyArgs.size}px` });
+	if (spacer) {
+		const token = `--spacing-${storyArgs.size ?? 's'}`;
+		const computed = getComputedStyle(spacer);
+		const expected = computed.getPropertyValue(token).trim();
+		await expect(expected).not.toBe('');
+		await expect(computed.width).toBe(expected);
+		await expect(computed.height).toBe(expected);
 	}
 }
 
@@ -2740,7 +2745,7 @@ export async function runDotVariantsPlay({ canvasElement }: { canvasElement: HTM
 
 	// no color and no state falls through the switch to the default color
 	const noState = canvasElement.querySelector('[class*="no-state"]') as HTMLElement | null;
-	await expect(noState?.style.getPropertyValue('--dot-bg')).toBe('var(--core-text-special)');
+	await expect(noState?.style.getPropertyValue('--dot-bg')).toBe('var(--core-gp-logo-primary)');
 
 	// custom motionValues/transition just need to merge without throwing
 	await expect(canvasElement.querySelector('[class*="motion-values"]')).toBeInTheDocument();
@@ -2875,10 +2880,10 @@ export async function runTipStyleVariantsPlay({ canvasElement }: { canvasElement
 	await expect(colorFallback?.style.getPropertyValue('--tooltip-color')).toBe('#0000ff');
 
 	const radiusPriority = canvasElement.querySelector('[class*="border-radius-priority"]') as HTMLElement | null;
-	await expect(radiusPriority?.style.getPropertyValue('--tooltip-border-radius')).toBe('12');
+	await expect(radiusPriority?.style.getPropertyValue('--tooltip-border-radius')).toBe('12px');
 
 	const radiusFallback = canvasElement.querySelector('[class*="radius-fallback"]') as HTMLElement | null;
-	await expect(radiusFallback?.style.getPropertyValue('--tooltip-border-radius')).toBe('4');
+	await expect(radiusFallback?.style.getPropertyValue('--tooltip-border-radius')).toBe('4px');
 
 	const customPadding = canvasElement.querySelector('[class*="custom-padding"]') as HTMLElement | null;
 	await expect(customPadding?.style.getPropertyValue('--tooltip-padding')).toBe('10px 20px');
@@ -3231,14 +3236,14 @@ export async function runTextFieldStyleVariantsPlay({ canvasElement }: { canvasE
 	await expect(unsetWidth?.style.getPropertyValue('--tf-input-width')).not.toBe('100%');
 
 	const paddingChecks: Array<[string, string]> = [
-		['padding-multi', '16px'],
-		['padding-single', '6px'],
-		['padding-invalid', '8px'],
-		['padding-number', '26px'],
+		['padding-multi', '10px 20px'],
+		['padding-single', '10px'],
+		['padding-token', 'var(--spacing-m)'],
+		['padding-number', '30px'],
 	];
 	for (const [testClass, expected] of paddingChecks) {
 		const node = canvasElement.querySelector(`[class*="${testClass}"]`) as HTMLElement | null;
-		await expect(node?.style.getPropertyValue('--tf-padding-right')).toBe(expected);
+		await expect(node?.style.getPropertyValue('--tf-padding')).toBe(expected);
 	}
 }
 

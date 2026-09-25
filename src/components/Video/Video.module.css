@@ -6,7 +6,7 @@
 	align-items: center;
 	width: var(--video-width, 100%);
 	height: var(--video-height, auto);
-	border-radius: var(--video-border-radius, 16px);
+	border-radius: var(--video-border-radius, var(--corner-xl));
 	border-width: var(--video-border-size, 0);
 	border-style: solid;
 	border-color: var(--video-border-color, transparent);
@@ -43,7 +43,7 @@
 	flex-direction: row;
 	gap: 24px;
 	width: 100%;
-	padding: 16px;
+	padding: var(--spacing-m);
 }
 
 .controlsFooter {
@@ -54,7 +54,7 @@
 	gap: 24px;
 	width: 100%;
 	box-sizing: border-box;
-	padding: 16px;
+	padding: var(--spacing-m);
 }
 
 .controlsBody {
@@ -64,7 +64,7 @@
 	flex-direction: column;
 	width: 100%;
 	flex: 1;
-	padding: 16px;
+	padding: var(--spacing-m);
 }
 
 .right {
@@ -74,7 +74,7 @@
 	gap: 8px;
 	border-radius: var(--corner-round);
 	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
-	padding: 8px 16px 8px 8px;
+	padding: var(--spacing-s) var(--spacing-m) var(--spacing-s) var(--spacing-s);
 	box-sizing: border-box;
 }
 
@@ -85,7 +85,7 @@
 	gap: 8px;
 	border-radius: var(--corner-round);
 	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
-	padding: 8px;
+	padding: var(--spacing-s);
 	box-sizing: border-box;
 }
 
@@ -96,7 +96,7 @@
 	gap: 8px;
 	border-radius: var(--corner-round);
 	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
-	padding: 8px var(--video-progress-padding-left) 8px 8px;
+	padding: var(--spacing-s) var(--video-progress-padding-left) var(--spacing-s) var(--spacing-s);
 	box-sizing: border-box;
 	width: 50%;
 }
