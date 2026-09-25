@@ -1,0 +1,23 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {FlexDiv, Spacer} from "../src";
+import {StyleTokenTable} from "./_components/StyleTokenTable/StyleTokenTable";
+import {cornerTokens, cornerColumnDefinitions} from "./_data/otherStyleData";
+
+<Meta title="Other Styles/Corners" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+            # Corners
+            Corner tokens set the border radius used across Slice components. Each one is exposed as a CSS custom property (`--corner-*`) and as a value on the `corners` token object, so rounding stays consistent and can be changed from the theme.
+
+            #### Corner Radii
+            <StyleTokenTable tokens={cornerTokens} columnDefinitions={cornerColumnDefinitions} />
+
+            #### Notes
+            - `corner-none` is `0` and is unitless in CSS, which is valid anywhere a radius is accepted.
+            - `corner-round` is `1000px`, a deliberately huge value that fully rounds any element into a pill (or a circle when the element is square) regardless of its size.
+        </Unstyled>
+        <Spacer size="xxl"/>
+    </FlexDiv>
+</FlexDiv>

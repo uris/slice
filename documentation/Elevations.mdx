@@ -1,0 +1,28 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {FlexDiv, Spacer} from "../src";
+import {StyleTokenTable} from "./_components/StyleTokenTable/StyleTokenTable";
+import {ElevationStack} from "./_components/ElevationStack/ElevationStack";
+import {elevationTokens, elevationColumnDefinitions} from "./_data/otherStyleData";
+
+<Meta title="Other Styles/Elevations" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+            # Elevations
+            Elevation tokens are named `z-index` layers. Instead of picking arbitrary numbers, choose the level that matches what the element is - a toast sits at `status`, a tooltip at `describe` - and stacking stays predictable across components. Each level is exposed as a CSS custom property (`--elevation-*`) and as a value on the `elevations` token object.
+
+            #### Levels
+            <StyleTokenTable tokens={elevationTokens} columnDefinitions={elevationColumnDefinitions} />
+
+            #### Stacking Order
+            Each card below uses its own elevation token as its `z-index`. The higher the level, the closer to the front.
+            <ElevationStack />
+
+            #### Notes
+            - Levels are spaced `100` apart, leaving room to slot in a custom level between two tokens if you ever need one.
+            - Elevation only orders elements within the same stacking context. If a positioned ancestor creates its own context, a token inside it cannot escape above elements outside of it.
+        </Unstyled>
+        <Spacer size="xxl"/>
+    </FlexDiv>
+</FlexDiv>
