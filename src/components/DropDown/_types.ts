@@ -15,7 +15,7 @@ type DropDownBaseProps<T = string> = {
 	selectedValue?: T;
 	valueKey?: string;
 	placeholder?: boolean;
-	borderRadius?: number;
+	borderRadius?: number | string;
 	borderStyle?: 'bottom' | 'box' | 'none';
 	validate?: boolean;
 	iconColor?: string;

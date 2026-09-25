@@ -1,6 +1,7 @@
 'use client';
 
 import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { IconButton } from '../IconButton';
 import { ProgressIndicator } from '../Progress';
@@ -330,14 +331,14 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
 		return {
 			'--video-width': setStyle(width, 'unset'),
 			'--video-height': setStyle(height, 'unset'),
-			'--video-border-radius': setStyle(borderRadius, 0),
+			'--video-border-radius': setStyle(borderRadius, corners['corner-none']),
 			'--video-border-size': setStyle(borderSize, 0),
 			'--video-border-color': setStyle(borderColor, 'transparent'),
 			'--video-bg-color': setStyle(backgroundColor, 'transparent'),
 			'--video-object-fit': objectFit ?? 'contain',
 			'--video-controls-pointer-events': hovered ? 'auto' : 'none',
 			'--video-controls-opacity': hovered ? 1 : 0,
-			'--video-progress-padding-left': customControls.quit ? '8px' : '16px',
+			'--video-progress-padding-left': customControls.quit ? 'var(--spacing-s)' : 'var(--spacing-m)',
 		} as React.CSSProperties;
 	}, [width, height, borderRadius, borderSize, borderColor, backgroundColor, objectFit, hovered, customControls.quit]);
 

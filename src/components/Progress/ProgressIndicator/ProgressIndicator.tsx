@@ -15,7 +15,7 @@ export function ProgressIndicator(props: Readonly<ProgressIndicatorProps>) {
 		inset = true,
 		secondsPerSpin = 1,
 		show = false,
-		color = theme.current.colors['core-icon-primary'],
+		color = theme.current.colors['core-text-primary'],
 		stroke = 1.5,
 		inline = false,
 		duration = undefined,

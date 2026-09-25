@@ -4,6 +4,7 @@ import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { useTip, useTipActions } from 'src/stores/tip';
 import { IconButton } from '../../components/IconButton';
 import { Tip } from '../../components/Tip';
+import type { ToolTipProps as TipProps } from '../../components/Tip/_types';
 import { useToolTip } from '../../hooks';
 
 const meta: Meta<typeof Tip> = {
@@ -14,10 +15,12 @@ const meta: Meta<typeof Tip> = {
 	},
 	args: {
 		tip: undefined,
-		border: undefined,
-		borderColor: undefined,
+		border: true,
+		borderColor: 'var(--core-outline-primary)',
 		radius: undefined,
-		color: undefined,
+		backgroundColor: 'var(--core-surface-secondary)',
+		textColor: 'var(--core-text-primary)',
+		color: 'var(--core-text-primary)',
 		coords: { x: 0, y: 0 },
 		padding: undefined,
 		textSize: 'm',
@@ -26,19 +29,21 @@ const meta: Meta<typeof Tip> = {
 
 export default meta;
 
-export const Demo: StoryObj<typeof Tip> = {
-	render: (args) => {
-		const tip = useTip();
-		const actions = useTipActions();
-		const tipRef = useRef<HTMLDivElement>(null);
-		const coords = useToolTip(tip, tipRef);
+function TipDemo(props: Readonly<TipProps>) {
+	const tip = useTip();
+	const actions = useTipActions();
+	const tipRef = useRef<HTMLDivElement>(null);
+	const coords = useToolTip(tip, tipRef);
 
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
-				Hover me!
-				<IconButton icon={'home'} tooltip={'Home Button'} onToolTip={actions.push} toggle={false} hover={true} />
-				<Tip {...args} coords={coords} tip={tip} ref={tipRef} />
-			</FlexDiv>
-		);
-	},
+	return (
+		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
+			Hover me!
+			<IconButton icon={'home'} tooltip={'Home Button'} onToolTip={actions.push} toggle={false} hover={true} />
+			<Tip {...props} coords={coords} tip={tip} ref={tipRef} />
+		</FlexDiv>
+	);
+}
+
+export const Demo: StoryObj<typeof Tip> = {
+	render: (args) => <TipDemo {...args} />,
 };

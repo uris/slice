@@ -15,11 +15,13 @@ import {
 	runDivInputWithoutHandlersPlay,
 } from 'src/components/playHelpers';
 import { expect, fn } from 'storybook/test';
+import { corners } from '../../theme/corners/corners';
 
 const meta: Meta<typeof DivInput> = {
 	title: 'Components/DivInput',
 	component: DivInput,
 	argTypes: {
+		backgroundColor: { type: 'string', control: 'text' },
 		textAlign: {
 			control: { type: 'radio' }, // Dropdown selection
 			options: ['left', 'center', 'right', undefined], // Enum values as options
@@ -34,8 +36,8 @@ const meta: Meta<typeof DivInput> = {
 		width: 'auto',
 		textAlign: 'left',
 		clamp: 3,
-		padding: '16px',
-		radius: 4,
+		padding: '0px',
+		radius: corners['corner-xs'],
 		onChange: fn(),
 		onSubmit: fn(),
 		onFocus: fn(),

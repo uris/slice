@@ -17,7 +17,7 @@ type LabelBaseProps = {
 	borderWidth?: number;
 	borderSize?: number;
 	borderColor?: string;
-	borderRadius?: number;
+	borderRadius?: number | string;
 	padding?: number | string;
 	textColor?: string;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';

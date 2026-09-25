@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { cleanString } from '../../utils/functions/misc';
+import { cleanString, setStyle } from '../../utils/functions/misc';
 import css from './DivInput.module.css';
 import type { DivInputProps } from './_types';
 
@@ -218,7 +218,7 @@ export const DivInput = React.memo((props: DivInputProps) => {
 			'--div-input-bg': isEditable ? (resolvedBackgroundColor ?? 'var(--core-surface-secondary)') : 'transparent',
 			'--div-input-wrapper-bg':
 				isEditable && isFocused ? (resolvedBackgroundColor ?? 'var(--core-surface-secondary)') : 'transparent',
-			'--div-input-border-radius': `${resolvedBorderRadius}px`,
+			'--div-input-border-radius': setStyle(resolvedBorderRadius),
 		} as React.CSSProperties;
 	}, [
 		clamp,

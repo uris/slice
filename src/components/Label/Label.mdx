@@ -48,8 +48,8 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
                 <tr><td><code>backgroundColor</code></td><td><code>LabelBackground | string</code></td><td><code>'transparent'</code></td><td>Background token or raw CSS color. Semantic enum values map to theme colors.</td></tr>
                 <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>1</code></td><td>Border width in pixels.</td></tr>
                 <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'transparent'</code></td><td>Custom border color. Semantic <code>backgroundColor</code> values override this with matching theme borders.</td></tr>
-                <tr><td><code>borderRadius</code></td><td><code>number</code></td><td><code>4</code></td><td>Border radius in pixels.</td></tr>
-                <tr><td><code>padding</code></td><td><code>number | string</code></td><td><code>'4px 6px'</code></td><td>Custom padding. Number values are converted to pixel units.</td></tr>
+                <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>4</code></td><td>Border radius in pixels.</td></tr>
+                <tr><td><code>padding</code></td><td><code>number | string</code></td><td><code>2px vertical; 4px sides for xs/s, 8px sides for m/l/xl</code></td><td>Custom padding. Number values are converted to pixel units.</td></tr>
                 <tr><td><code>textColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Text color override.</td></tr>
                 <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Typography size token.</td></tr>
                 <tr><td><code>onClick</code></td><td><code>{`(e: React.MouseEvent<any>) => void`}</code></td><td><code>-</code></td><td>When supplied, the label becomes interactive and renders as a button.</td></tr>

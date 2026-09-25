@@ -34,10 +34,10 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 		borderWidth,
 		borderSize = 1,
 		borderColor = 'var(--core-outline-primary)',
-		paddingLeft = '10px',
-		paddingRight = '8px',
-		paddingTop = '8px',
-		paddingBottom = '8px',
+		paddingLeft = 'var(--spacing-m)',
+		paddingRight = 'calc(var(--spacing-m) - var(--spacing-xs))',
+		paddingTop = 'var(--spacing-s)',
+		paddingBottom = 'var(--spacing-s)',
 		borderStyle = 'box',
 		iconSize = 20,
 		disabled = false,
@@ -163,8 +163,8 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 	// set padding based on border style
 	const setPadding = useMemo(() => {
 		if (borderStyle === 'box')
-			return `${setStyle(paddingTop)} ${setStyle(paddingRight)} ${setStyle(paddingBottom)} ${setStyle(paddingLeft)}`;
-		return `0 0 ${setStyle(paddingBottom)} 0`;
+			return `${paddingTop === 0 ? '0px' : setStyle(paddingTop)} ${paddingRight === 0 ? '0px' : setStyle(paddingRight)} ${paddingBottom === 0 ? '0px' : setStyle(paddingBottom)} ${paddingLeft === 0 ? '0px' : setStyle(paddingLeft)}`;
+		return `0 0 ${paddingBottom === 0 ? '0px' : setStyle(paddingBottom)} 0`;
 	}, [paddingTop, paddingRight, paddingBottom, paddingLeft, borderStyle]);
 
 	// set border
@@ -182,7 +182,7 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 	// set border radius
 	const setBorderRadius = useMemo(() => {
 		if (borderStyle !== 'box') return 0;
-		return `${borderRadius}px`;
+		return setStyle(borderRadius);
 	}, [borderStyle, borderRadius]);
 
 	// compose CSS custom properties for layout, spacing, and visual state
@@ -191,7 +191,7 @@ function DropDownComponent<T = string>(props: DropDownProps<T>) {
 			'--dd-gap': setStyle(gap),
 			'--dd-height': setStyle(height),
 			'--dd-width': setStyle(width),
-			'--dd-margin': inline ? '0 4px' : '0',
+			'--dd-margin': inline ? '0 var(--spacing-xs)' : '0',
 			'--dd-border-radius': setBorderRadius,
 			'--dd-border': setBorder,
 			'--dd-border-bottom': setBorderBottom,

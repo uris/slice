@@ -217,12 +217,10 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((props, buttonRef:
 	const setPadding = useCallback(
 		(side: 'left' | 'right') => {
 			if (round) return 0;
-			let padding = 20;
-			if (variant === 'text') padding = 0;
-			if (size === 'small') padding = 12;
-			if (side === 'left' && iconLeft) return padding;
-			if (side === 'right' && iconRight) return padding;
-			return padding + 4;
+			const padding =
+				variant === 'text' ? 'var(--spacing-xs)' : size === 'small' ? 'var(--spacing-m)' : 'var(--spacing-l)';
+			const hasIcon = side === 'left' ? iconLeft : iconRight;
+			return hasIcon ? `calc(${padding} - var(--spacing-xs))` : padding;
 		},
 		[round, variant, size, iconLeft, iconRight],
 	);
@@ -256,8 +254,8 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((props, buttonRef:
 				iconSize,
 				paddingLeft: setPadding('left'),
 				paddingRight: setPadding('right'),
-				paddingTop: 4,
-				paddingBottom: 4,
+				paddingTop: 'var(--spacing-xs)',
+				paddingBottom: 'var(--spacing-xs)',
 				borderRadius: borderRadius ?? corners['corner-round'],
 			},
 		};

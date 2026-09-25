@@ -61,7 +61,7 @@ export const Dot = React.memo((props: DotProps) => {
 					break;
 			}
 		}
-		return 'var(--core-text-special)';
+		return 'var(--core-gp-logo-primary)';
 	}, [state, color]);
 
 	// compose CSS custom properties for dot layout and color

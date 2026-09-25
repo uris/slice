@@ -4,6 +4,7 @@ Read [CONTRIBUTING.md](./CONTRIBUTING.md) first — it's the source of truth for
 component lifecycle, testing strategy, and the lint/coverage/build gates CI enforces. For
 build/publish pipeline detail, read [contributor-docs/build-architecture.md](./contributor-docs/build-architecture.md);
 for component prop naming, [contributor-docs/style-prop-naming.md](./contributor-docs/style-prop-naming.md);
+for padding and the theme spacing grid, [contributor-docs/spacing.md](./contributor-docs/spacing.md);
 for how to actually write a component test vs. a regular one, [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md).
 
 Do not duplicate guidance from those docs into this file. If something here and something in

@@ -7,6 +7,9 @@ import { expect, fireEvent, fn, userEvent, within } from 'storybook/test';
 const meta: Meta<typeof Overlay> = {
 	title: 'Components/Overlay',
 	component: Overlay,
+	argTypes: {
+		color: { type: 'string', control: 'text' },
+	},
 	args: {
 		opacity: 1,
 		show: true,

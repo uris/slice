@@ -27,6 +27,9 @@
 	color: var(--avatar-color);
 	background-image: var(--avatar-bg-image);
 	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-origin: border-box;
 	cursor: pointer;
 	user-select: none;
 	-webkit-user-select: none;

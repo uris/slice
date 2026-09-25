@@ -70,12 +70,16 @@ function RadioButtonComponent<T = string>(props: RadioButtonProps<T>) {
 		return {
 			'--rb-max-width': wrap ? '50%' : '100%',
 			'--rb-flex': setFlex,
-			'--rb-padding': noFrame ? '0' : '8px 16px 8px 10px',
+			'--rb-padding': noFrame
+				? '0'
+				: hideRadio
+					? 'var(--spacing-s) var(--spacing-m)'
+					: 'var(--spacing-s) var(--spacing-m) var(--spacing-s) calc(var(--spacing-m) - var(--spacing-xs))',
 			'--rb-bg': !noFrame && isSelected ? 'var(--core-surface-secondary)' : 'transparent',
 			'--rb-border': noFrame ? 'none' : '1px solid var(--core-outline-primary)',
 			'--rb-gap': setStyle(gap),
 		} as React.CSSProperties;
-	}, [setFlex, isSelected, wrap, noFrame, gap]);
+	}, [setFlex, isSelected, wrap, noFrame, hideRadio, gap]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Radio Button');

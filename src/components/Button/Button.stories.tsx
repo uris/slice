@@ -18,6 +18,8 @@ const meta: Meta<typeof Button> = {
 	title: 'Components/Button',
 	component: Button,
 	argTypes: {
+		labelColor: { type: 'string', control: 'text' },
+		iconColor: { type: 'string', control: 'text' },
 		children: {
 			table: {
 				disable: true,
@@ -41,8 +43,6 @@ const meta: Meta<typeof Button> = {
 		width: 'min-content',
 		underline: false,
 		borderRadius: undefined,
-		iconColor: undefined,
-		labelColor: undefined,
 		transition: undefined,
 		variants: undefined,
 		initial: undefined,

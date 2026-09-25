@@ -14,6 +14,11 @@ import { fn } from 'storybook/test';
 const meta: Meta<typeof Slider> = {
 	title: 'Components/Slider',
 	component: Slider,
+	argTypes: {
+		headColor: { type: 'string', control: 'text' },
+		progressColor: { type: 'string', control: 'text' },
+		trackColor: { type: 'string', control: 'text' },
+	},
 	args: {
 		value: 25,
 		scaleMin: 0,
@@ -22,10 +27,12 @@ const meta: Meta<typeof Slider> = {
 		height: 2,
 		touchHeight: 24,
 		trackHeadSize: 12,
+		trackHeadBorderSize: 1,
+		trackHeadBorderColor: 'var(--core-outline-secondary)',
 		cursor: 'default',
-		headColor: undefined,
-		progressColor: undefined,
-		trackColor: undefined,
+		headColor: 'var(--core-text-light)',
+		progressColor: 'var(--core-text-tertiary)',
+		trackColor: 'var(--core-surface-secondary)',
 		onChange: fn(),
 		onDragChange: fn(),
 	},

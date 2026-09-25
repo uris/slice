@@ -123,8 +123,10 @@ afterEach(() => {
 });
 
 describe('useMicrophone', () => {
-	it('reports media support based on navigator.mediaDevices', () => {
+	it('reports media support based on navigator.mediaDevices', async () => {
 		const { result } = renderHook(() => useMicrophone(true, undefined, false));
+		// Mount still enumerates devices asynchronously when autoRequest is disabled.
+		await waitFor(() => expect(result.current.micOptions).toHaveLength(1));
 		expect(result.current.isSupported).toBe(true);
 	});
 
@@ -237,8 +239,9 @@ describe('useMicrophone', () => {
 		expect(result.current.inputVolume).toBe(1);
 	});
 
-	it('toggleMute() is a safe no-op when there is no active microphone track', () => {
+	it('toggleMute() is a safe no-op when there is no active microphone track', async () => {
 		const { result } = renderHook(() => useMicrophone(true, undefined, false));
+		await waitFor(() => expect(result.current.micOptions).toHaveLength(1));
 		expect(() => result.current.toggleMute()).not.toThrow();
 	});
 

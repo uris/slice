@@ -8,6 +8,7 @@ import {
 	runUploadAreaPlay,
 } from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
+import { corners } from '../../theme/corners/corners';
 import { UploadArea } from './UploadArea';
 import { allTypes } from './_types';
 
@@ -23,8 +24,8 @@ const meta: Meta<typeof UploadArea> = {
 	component: UploadArea,
 	args: {
 		icon: 'upload',
-		iconColor: undefined,
-		iconColorHover: undefined,
+		iconColor: 'var(--core-text-primary)',
+		iconColorHover: 'var(--core-text-special)',
 		width: '100%',
 		height: 'auto',
 		title: 'Upload Files',
@@ -34,10 +35,12 @@ const meta: Meta<typeof UploadArea> = {
 		textSize: 'm',
 		border: 1,
 		borderStyle: 'dashed',
-		borderColor: undefined,
-		borderColorHover: undefined,
-		radius: 8,
-		padding: 32,
+		borderColor: 'var(--core-outline-primary)',
+		borderColorHover: 'var(--core-outline-special)',
+		backgroundColor: 'var(--core-surface-secondary)',
+		backgroundColorHover: 'var(--core-surface-special)',
+		radius: corners['corner-m'],
+		padding: 'var(--spacing-xl)',
 		acceptedTypes: allTypes,
 		multiple: true,
 		busy: false,

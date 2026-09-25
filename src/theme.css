@@ -4,4 +4,5 @@
 @import "./theme/type/type.css";
 @import "./theme/breakpoints/custom-media.css";
 @import "./theme/motion/motion.css";
+@import "./theme/spacing/spacing.css";
 @import "./theme/global/global.css";

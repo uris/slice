@@ -7,6 +7,7 @@ const meta: Meta<typeof Dot> = {
 	title: 'Components/Dot',
 	component: Dot,
 	argTypes: {
+		color: { type: 'string', control: 'text' },
 		state: {
 			control: { type: 'radio' },
 			options: ['red', 'yellow', 'green', 'blue', 'grey', undefined],
@@ -18,7 +19,6 @@ const meta: Meta<typeof Dot> = {
 		rightOffset: 2,
 		border: 3,
 		position: 'inline',
-		color: undefined,
 		motion: undefined,
 		motionValues: undefined,
 		show: true,

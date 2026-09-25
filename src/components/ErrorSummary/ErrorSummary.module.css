@@ -4,60 +4,61 @@
 	background: var(--error-bg-color);
 	border: 1px solid var(--error-text-color);
 	border-radius: var(--corner-xs);
-	padding: 16px !important;
 	overflow: hidden;
 	gap: 0;
+}
+
+.errorBox.errorBox {
+	padding: var(--spacing-m) !important;
 }
 
 .error {
 	composes: columnStart from "../../utils/styling/flexBox.module.css";
 	width: 100%;
-	margin: 0 !important;
-	padding: 0 !important;
-	margin-bottom: 4px !important;
 	&:last-child {
-		margin-bottom: 0 !important;
+		margin-bottom: 0;
 	}
 }
 
+.error.error {
+	margin-bottom: var(--spacing-xs) !important;
+}
+
 .p {
-	margin: 0 !important;
-	padding: 0 !important;
-	color: var(--error-text-color) !important;
+	margin: 0;
+	padding: 0;
+	color: var(--error-text-color);
 }
 
 .ul {
-	padding: 0 !important;
-	margin: 0 !important;
+	padding: 0;
+	margin: 0;
 }
 
 .li {
-	color: var(--error-text-color) !important;
-	line-height: 1.5em !important;
-	padding: 0;
+	color: var(--error-text-color);
+	line-height: 1.5em;
+}
+.li.li {
+	margin: 0 0 0 1.2em;
 }
 
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
-	font-size: var(--font-size-xs) !important;
 }
 
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
-	font-size: var(--font-size-s) !important;
 }
 
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
-	font-size: var(--font-size-m) !important;
 }
 
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
-	font-size: var(--font-size-l) !important;
 }
 
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
-	font-size: var(--font-size-xl) !important;
 }

@@ -28,7 +28,7 @@ function ThemeProviderChildDemo() {
 			<h3>{theme.current.name.includes('light') ? 'Light theme' : 'Dark theme'} selected</h3>
 			<span>Current: {theme.current.name}</span>
 			<span>isDark: {theme.isDark ? 'true' : 'false'}</span>
-			<Spacer size={8} />
+			<Spacer size="s" />
 			<FlexDiv direction={'row'} gap={8} width={'auto'} height={'auto'}>
 				<Button label={'Set Light'} onClick={() => theme.set('lightMode')} />
 				<Button label={'Set Dark'} onClick={() => theme.set('darkMode')} />

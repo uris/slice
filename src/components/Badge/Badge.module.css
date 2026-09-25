@@ -4,9 +4,12 @@
 	line-height: 1em;
 	color: var(--badge-color);
 	background: var(--badge-bg);
-	padding: 2px 8px;
 	min-width: 24px;
 	width: min-content;
 	border-radius: var(--corner-m);
 	white-space: nowrap;
+}
+
+.badge.badge {
+	padding: var(--spacing-xxs) var(--spacing-xxs);
 }

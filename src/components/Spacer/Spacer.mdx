@@ -9,7 +9,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
     <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # Spacer
-        Renders empty layout space with configurable width/height to separate UI elements consistently.
+        Renders a fixed square of empty space using the theme spacing grid.
 
         ## Base element
         `HTMLDivElement`
@@ -34,7 +34,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>size</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `size`.</td></tr>
+            <tr><td><code>size</code></td><td><code>xxs | xs | s | m | l | xl | xxl | h</code></td><td><code>s</code></td><td>Theme spacing token for both width and height (2, 4, 8, 16, 24, 32, 64, 128px by default). Numeric sizes are no longer supported.</td></tr>
             <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
           </tbody>
         </table>
@@ -66,7 +66,7 @@ import { Spacer } from '@apple-pie/slice';
 export function SpacerExample() {
     return (
         <Spacer
-            size={24}
+            size="l"
             id="spacer-example"
             data-testid="spacer-example"
             className="custom-wrapper"

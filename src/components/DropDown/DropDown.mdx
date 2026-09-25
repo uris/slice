@@ -72,7 +72,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>height</code></td><td><code>string</code></td><td><code>'auto'</code></td><td>Wrapper height.</td></tr>
             <tr><td><code>gap</code></td><td><code>number</code></td><td><code>8</code></td><td>Wrapper gap token passed through CSS vars.</td></tr>
             <tr><td><code>inline</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Renders the wrapper as an inline control with inline-flex layout and compact horizontal margin so it can sit naturally inside flowing text or compact toolbars.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number</code></td><td><code>8</code></td><td>Border radius in pixels.</td></tr>
+            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>8</code></td><td>Border radius in pixels.</td></tr>
             <tr><td><code>borderStyle</code></td><td><code>{`'bottom' | 'box' | 'none'`}</code></td><td><code>'box'</code></td><td>Controls whether the dropdown renders a full border, bottom-only border, or no border.</td></tr>
             <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>1</code></td><td>Border thickness.</td></tr>
             <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Normal border color.</td></tr>
@@ -80,10 +80,10 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>iconColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Chevron icon color.</td></tr>
             <tr><td><code>textColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Selected text color when the control is not disabled and not showing the placeholder state.</td></tr>
             <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>20</code></td><td>Chevron icon size in pixels.</td></tr>
-            <tr><td><code>paddingLeft</code></td><td><code>{`number | string`}</code></td><td><code>'10px'</code></td><td>Left padding.</td></tr>
-            <tr><td><code>paddingRight</code></td><td><code>{`number | string`}</code></td><td><code>'8px'</code></td><td>Right padding.</td></tr>
-            <tr><td><code>paddingTop</code></td><td><code>{`number | string`}</code></td><td><code>'8px'</code></td><td>Top padding token used by the component CSS vars.</td></tr>
-            <tr><td><code>paddingBottom</code></td><td><code>{`number | string`}</code></td><td><code>'8px'</code></td><td>Bottom padding token used by the component CSS vars.</td></tr>
+            <tr><td><code>paddingLeft</code></td><td><code>{`number | string`}</code></td><td><code>var(--spacing-m)</code></td><td>Left padding.</td></tr>
+            <tr><td><code>paddingRight</code></td><td><code>{`number | string`}</code></td><td><code>calc(var(--spacing-m) - var(--spacing-xs))</code></td><td>Right padding.</td></tr>
+            <tr><td><code>paddingTop</code></td><td><code>{`number | string`}</code></td><td><code>var(--spacing-s)</code></td><td>Top padding token used by the component CSS vars.</td></tr>
+            <tr><td><code>paddingBottom</code></td><td><code>{`number | string`}</code></td><td><code>var(--spacing-s)</code></td><td>Bottom padding token used by the component CSS vars.</td></tr>
             <tr><td><code>validate</code></td><td><code>boolean</code></td><td><code>undefined</code></td><td>Declared prop type; not currently used by the component implementation.</td></tr>
             <tr><td><code>...spanAttributes</code></td><td><code>{`HTMLAttributes<HTMLSpanElement>`}</code></td><td><code>-</code></td><td>Native wrapper <code>span</code> props such as <code>id</code>, <code>className</code>, <code>style</code>, and <code>aria-*</code>.</td></tr>
           </tbody>

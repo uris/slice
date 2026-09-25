@@ -6,8 +6,14 @@ import { runSpacerPlay } from 'src/components/playHelpers';
 const meta: Meta<typeof Spacer> = {
 	title: 'Components/Spacer',
 	component: Spacer,
+	argTypes: {
+		size: {
+			control: { type: 'select' },
+			options: ['xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', 'h'],
+		},
+	},
 	args: {
-		size: 8,
+		size: 's',
 	},
 };
 

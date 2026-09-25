@@ -136,7 +136,7 @@ export const StyleVariants: StoryObj<typeof TextField> = {
 			/>
 			<TextField className="padding-multi" name="padding-multi" padding="10px 20px" onChange={() => null} />
 			<TextField className="padding-single" name="padding-single" padding="10px" onChange={() => null} />
-			<TextField className="padding-invalid" name="padding-invalid" padding="abc" onChange={() => null} />
+			<TextField className="padding-token" name="padding-token" padding="var(--spacing-m)" onChange={() => null} />
 			<TextField className="padding-number" name="padding-number" padding={30} onChange={() => null} />
 		</FlexDiv>
 	),

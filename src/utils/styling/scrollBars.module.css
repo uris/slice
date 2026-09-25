@@ -27,13 +27,13 @@
 
 	&::-webkit-scrollbar-thumb {
 		background-color: var(--scrollbar-thumb);
-		border-radius: 20px;
+		border-radius: var(--corner-round);
 		border: 1px solid var(--scrollbar-bg);
 	}
 
 	&::-webkit-scrollbar-thumb:hover {
 		background-color: var(--scrollbar-thumb-hover);
-		border-radius: 20px;
+		border-radius: var(--corner-round);
 		border: 1px solid var(--scrollbar-bg);
 	}
 

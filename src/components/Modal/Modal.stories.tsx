@@ -32,9 +32,9 @@ const meta: Meta<typeof Modal> = {
 	args: {
 		minWidth: 350,
 		minHeight: 200,
-		titleBorderColor: undefined,
+		titleBorderColor: 'transparent',
 		titleBorderWidth: undefined,
-		actionsBorderColor: undefined,
+		actionsBorderColor: 'transparent',
 		actionsBorderWidth: undefined,
 		onAction: fn(),
 		onReject: fn(),

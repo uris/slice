@@ -13,8 +13,8 @@ type ToolTipBaseProps = {
 	border?: boolean;
 	borderColor?: string;
 	padding?: number | string;
-	borderRadius?: number;
-	radius?: number;
+	borderRadius?: number | string;
+	radius?: number | string;
 	coords?: { x: number; y: number };
 	showDelay?: number;
 	hideDelay?: number;

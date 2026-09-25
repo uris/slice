@@ -46,6 +46,7 @@ export const Default: StoryObj<typeof ButtonBar> = {
 };
 
 export const SmallSize: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
 	args: { buttonSize: 's' },
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
@@ -58,6 +59,7 @@ export const SmallSize: StoryObj<typeof ButtonBar> = {
 };
 
 export const LargeSize: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
 	args: { buttonSize: 'l' },
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
@@ -70,6 +72,7 @@ export const LargeSize: StoryObj<typeof ButtonBar> = {
 };
 
 export const ExtraLargeSize: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
 	args: { buttonSize: 'xl' },
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
@@ -82,6 +85,7 @@ export const ExtraLargeSize: StoryObj<typeof ButtonBar> = {
 };
 
 export const SizeEdgeCases: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={24}>
 			{/* a falsy buttonSize at runtime falls back to frameSize, bypassing the typed 's' | 'm' | 'l' | 'xl' union */}
@@ -96,6 +100,7 @@ export const SizeEdgeCases: StoryObj<typeof ButtonBar> = {
 };
 
 export const NoToggle: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
 	args: { toggle: false },
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
@@ -108,6 +113,7 @@ export const NoToggle: StoryObj<typeof ButtonBar> = {
 };
 
 export const WithoutHandlers: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
 	args: { onClick: undefined, onChange: undefined, onToolTip: undefined },
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
@@ -120,6 +126,7 @@ export const WithoutHandlers: StoryObj<typeof ButtonBar> = {
 };
 
 export const CustomClassName: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
 	args: { className: 'bb-custom-class' },
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
@@ -132,6 +139,7 @@ export const CustomClassName: StoryObj<typeof ButtonBar> = {
 };
 
 export const MissingTipFallback: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
 	args: {
 		buttons: [{ icon: 'home', action: 'gallery' } as unknown as BarButton, ...listView],
 	},

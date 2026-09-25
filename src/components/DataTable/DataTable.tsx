@@ -118,7 +118,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 			'--table-border-width': borderStyle === 'none' ? '0' : '1px',
 			'--table-border-sides': borderStyle === 'box' ? '1px' : '0',
 			'--table-handle-hover-color': handleHoverColor,
-			'--table-border-radius': borderStyle === 'box' ? setStyle(borderRadius) : 0,
+			'--table-border-radius': borderStyle === 'box' ? setStyle(borderRadius) : corners['corner-none'],
 		} as React.CSSProperties;
 	}, [
 		backgroundColor,
@@ -346,7 +346,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 				<thead>
 					<tr>
 						{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
-							const padding = setStyle(col.padding, 16);
+							const padding = setStyle(col.padding, 'var(--spacing-m)');
 							const sortable = col.sort !== undefined;
 							const cursor = sortable ? 'pointer' : 'default';
 							const last = colIndex === orderedColumns.length - 1;
@@ -398,7 +398,7 @@ export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
 									{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
 										const justifyContent = resolveAlignValue(col.justify);
 										const alignItems = resolveAlignValue(col.align);
-										const padding = setStyle(col.padding, 16);
+										const padding = setStyle(col.padding, 'var(--spacing-m)');
 										const whiteSpace = col.nowrap ? 'nowrap' : '';
 										const background = resolveCellBG(rowIndex);
 										const last = colIndex === orderedColumns.length - 1;

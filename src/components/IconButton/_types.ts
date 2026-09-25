@@ -76,7 +76,7 @@ type IconButtonBaseProps = {
 	initial?: string;
 	animate?: string;
 	exit?: string;
-	borderRadius?: number;
+	borderRadius?: number | string;
 	onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 	onToolTip?: (tip: ToolTip | null) => void;
 	buttonSize?: 's' | 'm' | 'l' | 'xl';

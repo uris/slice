@@ -34,8 +34,8 @@ export const Chip = React.memo((props: ChipProps) => {
 		borderColorDisabled = 'var(--core-text-disabled)',
 		borderRadius = corners['corner-m'],
 		paddingTop,
-		paddingTops = 8,
-		paddingSides = 16,
+		paddingTops,
+		paddingSides,
 		gap = 4,
 		onToolTip = () => null,
 		onClick = () => null,
@@ -82,11 +82,17 @@ export const Chip = React.memo((props: ChipProps) => {
 
 	// resolve chip padding adjusting for side icon is on
 	const padding = useMemo(() => {
-		if (!label || !icon) return `${resolvedPaddingTop}px ${paddingSides}px`;
-		const paddingLeft = iconPosition === 'right' ? paddingSides - 4 : paddingSides;
-		const paddingRight = iconPosition === 'right' ? paddingSides : paddingSides - 4;
-		return `${resolvedPaddingTop}px ${paddingLeft}px ${resolvedPaddingTop}px ${paddingRight}px`;
-	}, [icon, iconPosition, resolvedPaddingTop, paddingSides, label]);
+		const compact = labelSize === 's' || labelSize === 'xs';
+		const defaultVertical = compact ? 'var(--spacing-xs)' : 'var(--spacing-s)';
+		const vertical = resolvedPaddingTop === undefined ? defaultVertical : `${resolvedPaddingTop}px`;
+		const defaultHorizontal = compact ? 'var(--spacing-s)' : 'var(--spacing-m)';
+		const horizontal = paddingSides === undefined ? defaultHorizontal : `${paddingSides}px`;
+		if (!label || !icon || paddingSides !== undefined) return `${vertical} ${horizontal}`;
+		const iconPadding = `calc(${horizontal} - var(--spacing-${compact ? 'xxs' : 'xs'}))`;
+		const paddingRight = iconPosition === 'right' ? iconPadding : horizontal;
+		const paddingLeft = iconPosition === 'right' ? horizontal : iconPadding;
+		return `${vertical} ${paddingRight} ${vertical} ${paddingLeft}`;
+	}, [icon, iconPosition, resolvedPaddingTop, paddingSides, label, labelSize]);
 
 	// resolve the current icon color from theme and interaction state
 	const computedIconColor = useMemo(() => {

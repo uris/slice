@@ -104,9 +104,14 @@ to make a failing PR pass.
 
 Run `npm run lint` locally before opening a PR — it formats the codebase and reports remaining issues. CI runs `npm run lint:ci` (`biome ci .`), which checks formatting, lint rules, and import order without writing anything; any issue fails the build.
 
+### Typecheck gate
+
+Biome does not type-check. `npm run typecheck` (`tsc --noEmit -p tsconfig.json`) does, and it covers `src/**/*` including `*.stories.tsx` files and `documentation/**/*` — the build configs exclude stories, so this is the only place story typings are checked. It is also part of `npm run lint`, `lint:fix` and `lint:ci`, so the `Lint` check in CI fails on type errors.
+
 ## Contribution Rules
 
 - Component style props must follow the naming standard in [contributor-docs/style-prop-naming.md](./contributor-docs/style-prop-naming.md) (e.g. `backgroundColor`/`backgroundColorHover`, not `bgColor`/`bgColorHover`). New components must use only the standard names; existing components get renamed to match only as part of an intentional breaking change.
+- Component padding and insets must follow the spacing standard in [contributor-docs/spacing.md](./contributor-docs/spacing.md): use the `--spacing-*` tokens, express icon-side reductions with token-based `calc()`, and apply explicit padding overrides exactly (including zero).
 - Keep public exports intentional. New files are not automatically public unless they are wired into the relevant entrypoints and `package.json` `exports`.
 - Put Storybook examples in `*.stories.ts(x)` or `documentation/**`.
 - Do not import story files into production source. That can leak story typings into `dist/types`.
@@ -132,7 +137,7 @@ When adding a new component or making a material change to an existing one:
 6. Re-run the generated benchmark report with `npm run benchmark` when benchmark coverage changes.
 7. If the benchmark report changed intentionally, verify the Storybook benchmarks page still renders the updated `reports/benchmark-results.md`.
 8. Run `npm run build` and verify the component output exists in `dist/cjs`, `dist/esm`, and `dist/types`.
-9. Run `npm run lint` and `npm run coverage` and confirm both pass — CI enforces both and will block the merge otherwise.
+9. Run `npm run lint` (Biome + typecheck) and `npm run coverage` and confirm both pass — CI enforces both and will block the merge otherwise.
 
 ## Build and Package Validation
 

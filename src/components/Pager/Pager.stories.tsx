@@ -10,7 +10,7 @@ const meta: Meta<typeof Pager> = {
 	args: {
 		size: 8,
 		index: 0,
-		color: undefined,
+		color: 'var(--core-text-disabled)',
 		colorHover: undefined,
 		colorOn: undefined,
 		pages: 2,

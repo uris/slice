@@ -117,7 +117,7 @@ function SSEStoreDemo() {
 				<h1>{`SEE Connection ${connections.length > 0 ? ': Active' : ''}`}</h1>
 				Slice does not provide a test SSE end point. You'll need to enter own custom SSE enabled URL. If your endpoint
 				supports it, you can also provide 1 (one) optional custom event to listen for (event names are case sensitive).
-				<Spacer size={12} />
+				<Spacer size="m" />
 				<TextField
 					label={'URL:'}
 					name={'sse-url'}

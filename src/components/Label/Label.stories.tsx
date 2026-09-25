@@ -8,6 +8,12 @@ import { fn } from 'storybook/test';
 const meta: Meta<typeof Label> = {
 	title: 'Components/Label',
 	component: Label,
+	argTypes: {
+		textSize: {
+			control: { type: 'select' },
+			options: ['xs', 's', 'm', 'l', 'xl'],
+		},
+	},
 	args: {
 		label: 'Label',
 		textSize: 'm',

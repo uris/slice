@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from 'src/components/Button/Button';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { runFlexDivPlay } from 'src/components/playHelpers';
-import { lightTheme } from 'src/theme/themes';
 import { Preset } from './_types';
 
 const loremIpsum =
@@ -34,7 +33,7 @@ const meta: Meta<typeof FlexDiv> = {
 		preset: Preset.FillScroll,
 		scrollY: undefined,
 		scrollX: undefined,
-		background: lightTheme.colors['core-surface-secondary'],
+		background: 'transparent',
 		direction: undefined,
 		align: undefined,
 		justify: undefined,
@@ -42,7 +41,7 @@ const meta: Meta<typeof FlexDiv> = {
 		width: undefined,
 		wrap: false,
 		reverse: false,
-		padding: 44,
+		padding: 0,
 		margin: 0,
 		absolute: false,
 		flex: undefined,
@@ -62,7 +61,7 @@ export const Default: StoryObj<typeof FlexDiv> = {
 	render: (args) => {
 		return (
 			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-				<FlexDiv {...args} background={'var(--core-surface-secondary)'}>
+				<FlexDiv {...args}>
 					Here's the latest • War with Iran: There could be more US casualties as part of the military operations
 					against Iran, President Donald Trump acknowledged Sunday. Three American troops have been killed so far,
 					according to the US military. Trump released a video touting the scale of the campaign and provided new

@@ -13,7 +13,11 @@
 .file {
 	position: relative;
 	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	padding: var(--file-padding) !important;
+	padding: var(
+		--file-padding,
+		var(--file-row-vertical, var(--spacing-xs)) var(--file-row-right) var(--file-row-vertical, var(--spacing-xs))
+			calc(var(--file-row-horizontal, var(--spacing-xs)) - var(--file-row-adjustment, var(--spacing-xxs)))
+	) !important;
 	border: 1px solid var(--file-border-color);
 	border-radius: var(--corner-xs);
 	overflow: hidden;
@@ -80,7 +84,7 @@
 
 .icon {
 	composes: row from "../../utils/styling/flexBox.module.css";
-	margin-left: 4px !important;
+	margin-left: var(--spacing-xs) !important;
 	min-width: 20px;
 	min-height: 20px;
 	max-width: 20px;

@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
+import { setStyle } from '../../utils/functions/misc';
 import { Button } from '../Button';
 import css from './TextArea.module.css';
 import type { TextAreaProps } from './_types';
@@ -18,7 +19,7 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 		rows = 6,
 		border = true,
 		borderRadius = corners['corner-xs'],
-		padding = '16px 4px 16px 16px',
+		padding = 'var(--spacing-m)',
 		error = false,
 		resizable = true,
 		hasSend = false,
@@ -144,7 +145,7 @@ export const TextArea = React.memo((props: TextAreaProps) => {
 	// compose CSS custom properties for layout, colors, and send button placement
 	const cssVars = useMemo(() => {
 		return {
-			'--ta-border-radius': `${borderRadius}px`,
+			'--ta-border-radius': setStyle(borderRadius),
 			'--ta-width': `${setStyleValue(width)}`,
 			'--ta-min-width': minWidth ? `${minWidth}px` : 'unset',
 			'--ta-height': `${setStyleValue(height)}`,

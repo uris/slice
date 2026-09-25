@@ -22,7 +22,7 @@ const meta: Meta<typeof CheckBox> = {
 		size: 20,
 		checked: false,
 		disabled: false,
-		color: undefined,
+		color: 'var(--core-text-primary)',
 		children: 'Checkbox label' as string,
 		onChange: fn(),
 	},

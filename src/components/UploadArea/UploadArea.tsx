@@ -28,7 +28,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 		borderColorHover = 'var(--core-outline-special)',
 		borderRadius,
 		radius = corners['corner-m'],
-		padding = 32,
+		padding = 'var(--spacing-xl)',
 		backgroundColor = 'var(--core-surface-secondary)',
 		backgroundColorHover = 'var(--core-surface-special)',
 		acceptedTypes = allTypes,
@@ -126,7 +126,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 			'--ua-border': `${resolvedBorderWidth}px`,
 			'--ua-border-style': borderStyle,
 			'--ua-border-color': hovered || busy ? borderColorHover : borderColor,
-			'--ua-radius': `${resolvedBorderRadius}px`,
+			'--ua-radius': setStyle(resolvedBorderRadius),
 			'--ua-padding': setStyle(padding),
 			'--ua-bg-color': hovered ? resolvedBackgroundColorHover : resolvedBackgroundColor,
 			'--ua-icon-size': `${iconSize}px`,
@@ -187,7 +187,13 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props,
 						direction={'column'}
 						gap={8}
 						iconSize={24}
-						padding={'10px'}
+						style={
+							{
+								'--file-row-vertical': 'var(--spacing-s)',
+								'--file-row-horizontal': 'var(--spacing-m)',
+								'--file-row-adjustment': 'var(--spacing-xs)',
+							} as React.CSSProperties
+						}
 						canRemove={canRemove}
 					/>
 				</div>

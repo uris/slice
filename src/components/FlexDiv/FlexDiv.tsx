@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react';
 import React, { useCallback, useMemo } from 'react';
+import { setStyle } from '../../utils/functions/misc';
 import css from './FlexDiv.module.css';
 import { type FlexDivProps, layoutSets } from './_types';
 
@@ -21,12 +22,12 @@ function setBox(style: string | number) {
 	return style;
 }
 
-function setPaddingRight(padding: string | number | undefined, scrollBox: boolean | undefined, pad = 4) {
+function setPaddingRight(padding: string | number | undefined, scrollBox: boolean | undefined) {
 	if (padding) {
 		if (typeof padding === 'number') return `${padding}px`;
 		return padding;
 	}
-	if (scrollBox) return `${pad}px`;
+	if (scrollBox) return 'var(--spacing-xs)';
 	return 'unset';
 }
 
@@ -121,7 +122,7 @@ export const FlexDiv = React.memo(
 				overflow: presets.overflow,
 				overflowY: setScroll(presets.scrollY),
 				overflowX: setScroll(presets.scrollX),
-				borderRadius: borderRadius ? `${borderRadius}px` : 'unset',
+				borderRadius: setStyle(borderRadius),
 				color: 'var(--core-text-primary)',
 				'--flex-div-scroll-border': `${background ?? 'transparent'}`,
 				'--flex-div-scroll-handle': `${scrollHandle ?? 'var(--scroll-bar)'}`,

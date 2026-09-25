@@ -330,11 +330,13 @@ export const LoadingIndicatorDefault: StoryObj<typeof Video> = {
 
 export const LoadingIndicatorEnabled: StoryObj<typeof Video> = {
 	...LoadingIndicatorDefault,
+	tags: ['tests'],
 	args: { src: undefined, showProgressIndicator: true },
 };
 
 export const LoadingIndicatorDisabled: StoryObj<typeof Video> = {
 	...LoadingIndicatorDefault,
+	tags: ['tests'],
 	args: { src: undefined, showProgressIndicator: false },
 };
 

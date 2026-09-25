@@ -38,7 +38,7 @@ const meta: Meta<typeof DropDown> = {
 		valueKey: 'id',
 		selectedValue: { id: 0 },
 		options: optionsWPlace,
-		iconColor: undefined,
+		iconColor: 'var(--core-text-primary)',
 		borderStyle: 'box',
 		iconSize: 20,
 		disabled: false,

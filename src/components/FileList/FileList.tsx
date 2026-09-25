@@ -125,7 +125,7 @@ export const FileList = React.memo((props: FileListProps) => {
 			'--file-gap': setStyle(gap),
 			'--file-direction': direction,
 			'--file-wrap': direction === 'column' ? 'nowrap' : 'wrap',
-			'--file-padding': padding ? setStyle(padding) : '4px 4px 4px 2px',
+			'--file-padding': padding != null ? (typeof padding === 'number' ? `${padding}px` : padding) : undefined,
 			'--file-icon-size': setStyle(iconSize),
 			'--file-overflow': direction === 'column' ? 'unset' : 'hidden',
 			'--file-bg-color': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
@@ -133,17 +133,28 @@ export const FileList = React.memo((props: FileListProps) => {
 	}, [maxWidth, gap, direction, minWidth, padding, iconSize, resolvedBackgroundColor]);
 
 	// compose per-file CSS custom properties for progress and error state
-	const fileCSSVars = useCallback((progress: string, error?: string) => {
-		return {
-			'--file-progress': `${progress}`,
-			'--file-border-color': error ? 'var(--feedback-warning)' : 'var(--core-outline-primary)',
-		} as React.CSSProperties;
-	}, []);
+	const fileCSSVars = useCallback(
+		(progress: string, uploading: boolean, error?: string) => {
+			return {
+				'--file-progress': `${progress}`,
+				'--file-row-right':
+					canRemove && !uploading
+						? 'calc(var(--file-row-horizontal, var(--spacing-xs)) - var(--file-row-adjustment, var(--spacing-xxs)))'
+						: 'var(--file-row-horizontal, var(--spacing-xs))',
+				'--file-border-color': error ? 'var(--feedback-warning)' : 'var(--core-outline-primary)',
+			} as React.CSSProperties;
+		},
+		[canRemove],
+	);
 
 	return (
 		<div className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} id={divId} {...rest}>
 			{displayList.map((i) => (
-				<div key={i.key} className={`${css.file} ${css[textSize]}`} style={fileCSSVars(i.progress, i.error)}>
+				<div
+					key={i.key}
+					className={`${css.file} ${css[textSize]}`}
+					style={fileCSSVars(i.progress, i.uploading, i.error)}
+				>
 					<div className={css.fileIcon}>
 						<FileIcon name={i.icon} size={iconSize} />
 					</div>

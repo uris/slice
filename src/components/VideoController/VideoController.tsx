@@ -33,7 +33,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 		draggable = true,
 		overlayOpacity = 0.7,
 		overlayColor = 'rgb(0,0,0)',
-		padding = 64,
+		padding = 'var(--spacing-xxl)',
 		borderRadius = corners['corner-m'],
 		quit = 'inline',
 		showProgressIndicator = true,
@@ -70,7 +70,7 @@ export function VideoController(props: Readonly<VideoControllerProps>) {
 	// memo CSS vars
 	const cssVars = useMemo(() => {
 		return {
-			'--overlay-padding': setStyle(padding, 64),
+			'--overlay-padding': setStyle(padding, 'var(--spacing-xxl)'),
 			'--video-visibility': ready ? 'visible' : 'hidden',
 			'--video-border-radius': setStyle(borderRadius, corners['corner-m']),
 		} as React.CSSProperties;

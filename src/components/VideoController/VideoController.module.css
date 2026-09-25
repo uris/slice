@@ -23,8 +23,8 @@
 .wrapper {
 	position: absolute;
 	box-sizing: border-box;
-	left: var(--overlay-padding, 64px);
-	right: var(--overlay-padding, 64px);
+	left: var(--overlay-padding, var(--spacing-xxl));
+	right: var(--overlay-padding, var(--spacing-xxl));
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -33,12 +33,12 @@
 	z-index: var(--elevation-confirm);
 	pointer-events: all;
 	visibility: var(--video-visibility, hidden);
-	border-radius: var(--video-border-radius, 16px);
+	border-radius: var(--video-border-radius, var(--corner-xl));
 	overflow: visible;
 }
 
 .video {
 	overflow: visible;
 	box-shadow: var(--surface-shadow-soft);
-	border-radius: var(--video-border-radius, 16px);
+	border-radius: var(--video-border-radius, var(--corner-xl));
 }

@@ -46,7 +46,7 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
                 <tr><td><code>rows</code></td><td><code>number</code></td><td><code>6</code></td><td>Initial visible row count before auto-resizing.</td></tr>
                 <tr><td><code>focused</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Programmatically focuses or blurs the textarea.</td></tr>
                 <tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>'Enter text here...'</code></td><td>Placeholder text shown when empty.</td></tr>
-                <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>'16px 4px 16px 16px'</code></td><td>Inner padding for the textarea area.</td></tr>
+                <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>var(--spacing-m)</code></td><td>Inner padding for the textarea area.</td></tr>
                 <tr><td><code>error</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the warning border state when not focused.</td></tr>
                 <tr><td><code>border</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the standard outline border when there is no error and the field is not focused.</td></tr>
                 <tr><td><code>resizable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Controls whether the textarea can be manually resized.</td></tr>
@@ -54,7 +54,7 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
                 <tr><td><code>sendOffset</code></td><td><code>{`{ bottom: number; right: number }`}</code></td><td><code>{`{ bottom: 6, right: 6 }`}</code></td><td>Offsets the send button from the bottom-right corner.</td></tr>
                 <tr><td><code>sendSize</code></td><td><code>number</code></td><td><code>36</code></td><td>Size of the send button container.</td></tr>
                 <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Background color override.</td></tr>
-                <tr><td><code>borderRadius</code></td><td><code>number</code></td><td><code>4</code></td><td>Wrapper border radius in pixels.</td></tr>
+                <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>4</code></td><td>Wrapper border radius in pixels.</td></tr>
                 <tr><td><code>returnSubmits</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Submits on Enter instead of inserting a newline.</td></tr>
                 <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Textarea text size token.</td></tr>
                 <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables editing and submit interaction.</td></tr>

@@ -1,0 +1,10 @@
+[data-slice-theme-scope] {
+	--spacing-xxs: 2px; /* padding sizes on smaller components */
+	--spacing-xs: 4px; /* padding sizes on smaller components */
+	--spacing-s: 8px;
+	--spacing-m: 16px;
+	--spacing-l: 24px;
+	--spacing-xl: 32px;
+	--spacing-xxl: 64px;
+	--spacing-h: 128px;
+}

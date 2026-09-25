@@ -14,6 +14,7 @@ import {
 	runPromptInputWorkingPlay,
 } from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
+import { corners } from '../../theme/corners/corners';
 import { PromptInput } from './PromptInput';
 
 const attachments = [{ file: 'document.doc' }, { file: 'presentation.ppt' }, { file: 'spreadsheet.xls' }];
@@ -28,11 +29,11 @@ const meta: Meta<typeof PromptInput> = {
 		attachments: [],
 		working: false,
 		borderStyle: 'gradient',
-		borderColor: undefined,
+		borderColor: 'transparent',
 		borderColorOn: undefined,
 		borderAnimate: true,
 		borderWidth: 1,
-		borderRadius: 8,
+		borderRadius: corners['corner-m'],
 		focused: false,
 		placeholder: 'Ask me anything ...',
 		placeholderWorking: 'Working ...',
@@ -62,9 +63,6 @@ export const Default: StoryObj<typeof PromptInput> = {
 			</FlexDiv>
 		);
 	},
-	play: async ({ canvasElement, args }) => {
-		await runPromptInputPlay({ canvasElement, args });
-	},
 };
 
 export const Prompt: StoryObj<typeof PromptInput> = {
@@ -74,9 +72,6 @@ export const Prompt: StoryObj<typeof PromptInput> = {
 				<PromptInput {...args} value={'This is my question to you ...'} attachments={attachments} />
 			</FlexDiv>
 		);
-	},
-	play: async ({ canvasElement, args }) => {
-		await runPromptInputAttachmentsPlay({ canvasElement, args });
 	},
 };
 
@@ -88,6 +83,27 @@ export const Working: StoryObj<typeof PromptInput> = {
 			</FlexDiv>
 		);
 	},
+};
+
+export const DefaultTest: StoryObj<typeof PromptInput> = {
+	tags: ['tests'],
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		await runPromptInputPlay({ canvasElement, args });
+	},
+};
+
+export const PromptTest: StoryObj<typeof PromptInput> = {
+	tags: ['tests'],
+	render: Prompt.render,
+	play: async ({ canvasElement, args }) => {
+		await runPromptInputAttachmentsPlay({ canvasElement, args });
+	},
+};
+
+export const WorkingTest: StoryObj<typeof PromptInput> = {
+	tags: ['tests'],
+	render: Working.render,
 	play: async ({ canvasElement, args }) => {
 		await runPromptInputWorkingPlay({ canvasElement, args });
 	},
@@ -231,7 +247,7 @@ export const ZeroBorderRadius: StoryObj<typeof PromptInput> = {
 	tags: ['tests'],
 	args: {
 		...meta.args,
-		borderRadius: 0,
+		borderRadius: corners['corner-none'],
 	},
 	render: Default.render,
 	play: async ({ canvasElement }) => {

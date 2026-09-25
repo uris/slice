@@ -15,7 +15,7 @@ type BasePromptProps = {
 	borderColor?: string | number;
 	borderColorOn?: string | number;
 	borderAnimate?: boolean;
-	borderRadius?: number;
+	borderRadius?: number | string;
 	placeholder?: string;
 	placeholderWorking?: string;
 	focused?: boolean;

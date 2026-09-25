@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
+import { setStyle } from '../../utils/functions/misc';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import { Icon } from '../Icon';
@@ -136,7 +137,7 @@ export const IconButton = React.memo((props: IconButtonProps) => {
 			'--ib-bg-color-hover': disabled ? bgColorNormal : bgHoverColor,
 			'--ib-icon-size': `${iconSize ?? 0}px`,
 			'--ib-button-size': `${size ?? 0}px`,
-			'--ib-border-radius': round ? '100%' : `${borderRadius ?? 0}px`,
+			'--ib-border-radius': round ? '100%' : setStyle(borderRadius, corners['corner-none']),
 			'--ib-border': border ? '1px' : 0,
 			'--ib-color': textColor,
 			'--ib-cursor': disabled ? 'default' : 'pointer',

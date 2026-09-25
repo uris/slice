@@ -10,6 +10,7 @@ import {
 	runDataTableVirtualizedScrollPlay,
 } from 'src/components/playHelpers';
 import { fn } from 'storybook/test';
+import { corners } from '../../theme/corners/corners';
 import { DataTable } from './DataTable';
 import { manyRows, sampleTableColumnDefinitions, sampleTableData } from './_data';
 import type { SampleTableData } from './_data';
@@ -41,7 +42,7 @@ const meta: Meta<typeof TypedDataTable> = {
 		handleHoverColor: 'var(--core-outline-special)',
 		borderStyle: 'box',
 		borderColor: 'var(--core-outline-primary)',
-		borderRadius: 8,
+		borderRadius: corners['corner-m'],
 		columnDefinitions: sampleTableColumnDefinitions,
 		tableData: sampleTableData,
 		sort: { key: 'started', dir: 'asc' },
@@ -154,7 +155,7 @@ export const FilteredNoCountry: StoryObj<typeof TypedDataTable> = {
 		return (
 			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={8}>
 				<code
-					style={{ padding: '4px 8px', borderRadius: 4, fontSize: 14 }}
+					style={{ padding: '4px 8px', borderRadius: corners['corner-xs'], fontSize: 14 }}
 				>{`const filter = (row: SampleTableData) => row.country !== ''`}</code>
 				<TypedDataTable {...args} filter={filter} />
 			</FlexDiv>
@@ -194,7 +195,7 @@ function VirtualizedDemo(props: Readonly<{ args: BigDatasetArgs; rowCount: numbe
 	const [tableData] = useState(() => manyRows(rowCount));
 	return (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={8}>
-			<code style={{ padding: '4px 8px', borderRadius: 4, fontSize: 14 }}>{caption}</code>
+			<code style={{ padding: '4px 8px', borderRadius: corners['corner-xs'], fontSize: 14 }}>{caption}</code>
 			<TypedDataTable {...args} tableData={tableData} />
 		</FlexDiv>
 	);
