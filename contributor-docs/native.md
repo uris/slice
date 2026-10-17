@@ -96,7 +96,7 @@ parity, variants, wrapper props, fill opacity, and disabled behavior. They do no
 on a device, prove native accessibility, or replace iOS/Android smoke tests when visual or
 interaction behavior changes. Do not apply browser-only Storybook conventions to native.
 
-CI runs a separate **Native Icons** job on Node 24. It installs root tooling and native
+CI runs a separate **Slice Native Lint, Build, Test** job on Node 24. It installs root tooling and native
 dependencies, runs `npm run lint:ci --prefix native` (checks without formatting writes,
 plus native typechecking), runs native tests, builds, and inspects the package with
 `npm pack --dry-run --ignore-scripts` from `native/`. The pack step reuses the build already

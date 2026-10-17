@@ -57,5 +57,7 @@ CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other 
   [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md) for the full
   convention: isolated single-purpose stories instead of one long sequential `play:` function, and
   resetting module-level Zustand store state at the top of `play` when a component reads from one.
-- **`main` is branch-protected**: PR required, three status checks required (`Lint`,
-  `Test & Coverage`, `Build`). Always work on a feature branch, never push directly to `main`.
+- **`main` is branch-protected**: work on a feature branch and open a PR; never push directly
+  to `main`. See [CONTRIBUTING.md](./CONTRIBUTING.md#typecheck-gate) for current CI check
+  names. Required checks live in GitHub branch protection/rulesets and must be kept in
+  sync when workflow jobs are renamed; do not infer those settings from workflow YAML.

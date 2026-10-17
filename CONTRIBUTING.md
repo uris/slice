@@ -83,7 +83,7 @@ accessibility correctness; see [native validation](./contributor-docs/native.md#
 `@storybook/addon-a11y` runs axe-core checks against every story as part of the `storybook`
 Vitest project. `.storybook/preview.tsx` sets `parameters.a11y.test: 'error'` as the global
 default, so every `Components/*` and `Providers/*` story — including new ones — is gated: an
-accessibility violation fails that story's test, `npm run coverage`, and the `Test & Coverage`
+accessibility violation fails that story's test, `npm run coverage`, and the `Slice Web Test & Coverage`
 CI check.
 
 `src/hooks/**` and `src/stores/**` stories exist to demo a hook or store's behavior, not to
@@ -132,16 +132,21 @@ Run `npm run lint` locally before opening a PR — it formats the codebase and r
 
 ### Typecheck gate
 
-Biome does not type-check. `npm run typecheck` (`tsc --noEmit -p tsconfig.json`) does, and it covers `src/**/*` including `*.stories.tsx` files and `documentation/**/*` — the build configs exclude stories, so this is the only place story typings are checked. It is also part of `npm run lint`, `lint:fix` and `lint:ci`, so the `Lint` check in CI fails on type errors.
+Biome does not type-check. `npm run typecheck` (`tsc --noEmit -p tsconfig.json`) does, and it covers `src/**/*` including `*.stories.tsx` files and `documentation/**/*` — the build configs exclude stories, so this is the only place story typings are checked. It is also part of `npm run lint`, `lint:fix` and `lint:ci`, so the `Slice Web Lint` check in CI fails on type errors.
 
 The root typecheck does **not** include `native/`. For native changes, also run
 `npm run lint --prefix native` (Biome formatting/checks plus native typecheck) and
 `npm run build --prefix native`. Root Biome checks do include native source files, using
 the same config; test/spec files remain excluded by that config.
 
-The separate **Native Icons** CI job installs native dependencies on Node 24, runs
+The separate **Slice Native Lint, Build, Test** CI job installs native dependencies on Node 24, runs
 `npm run lint:ci --prefix native`, native tests, the native build, and package inspection.
 It does not add native code to core Slice's coverage gate.
+
+The workflow reports four checks: `Slice Web Lint`, `Slice Web Test & Coverage`,
+`Slice Web Build`, and `Slice Native Lint, Build, Test`. Required status checks are
+configured separately in GitHub branch protection/rulesets. When job names change,
+update those settings to match; editing workflow YAML does not update them automatically.
 
 ## Contribution Rules
 
