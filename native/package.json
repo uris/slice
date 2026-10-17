@@ -21,7 +21,9 @@
 	"files": ["dist"],
 	"sideEffects": false,
 	"scripts": {
+		"test": "vitest run --config vitest.config.mts",
 		"lint": "biome format --write . && biome check . && npm run typecheck",
+		"lint:ci": "biome ci . && npm run typecheck",
 		"build": "npm run generate && node scripts/build.mjs",
 		"prepack": "npm run build",
 		"generate": "node scripts/generate-icons.mjs",
@@ -33,7 +35,8 @@
 	"keywords": ["react-native", "icons", "svg", "apple-pie"],
 	"devDependencies": {
 		"rollup": "^4.32.0",
-		"typescript": "^5.7.3"
+		"typescript": "^5.7.3",
+		"vitest": "^4.0.18"
 	},
 	"peerDependencies": {
 		"react": "^18.0.0 || ^19.0.0",

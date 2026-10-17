@@ -83,20 +83,25 @@ From the repository root:
 
 ```sh
 npm run lint --prefix native
-npx vitest run --project unit native/components/Icon/NativeIcon.test.tsx
+npm test --prefix native
 npm run build --prefix native
 ```
 
-Root Vitest discovers native component tests in the unit project and includes native
-component sources in coverage. Current tests mock native dependencies and check artwork
+`native/vitest.config.mts` discovers native component tests in an independent Node test
+environment. Install native dependencies before running them: Vite must resolve the modules
+even when tests mock their implementations. Root test discovery and coverage exclude all
+native code, so core Slice CI does not require React Native dependencies.
+Current tests mock native dependencies and check artwork
 parity, variants, wrapper props, fill opacity, and disabled behavior. They do not render
 on a device, prove native accessibility, or replace iOS/Android smoke tests when visual or
 interaction behavior changes. Do not apply browser-only Storybook conventions to native.
 
-Current CI installs root dependencies and runs root lint/typecheck, coverage, and web build
-commands. There is no dedicated native dependency install, typecheck, build, or device
-validation job. Test discovery alone does not establish a complete native CI gate; verify
-native changes with the commands above and report any missing validation.
+CI runs a separate **Native Icons** job on Node 24. It installs root tooling and native
+dependencies, runs `npm run lint:ci --prefix native` (checks without formatting writes,
+plus native typechecking), runs native tests, builds, and inspects the package with
+`npm pack --dry-run --ignore-scripts` from `native/`. The pack step reuses the build already
+produced in that job. Core Slice jobs and coverage remain separate. Native CI uses mocked
+unit tests; it does not perform device rendering or native accessibility validation.
 
 ## Publishing
 

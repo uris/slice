@@ -48,12 +48,17 @@ From the repository root:
 ```sh
 npm install --prefix native
 npm run lint --prefix native
+npm test --prefix native
 npm run build --prefix native
 ```
 
 The build refreshes generated icons, checks types, and produces `dist/cjs/index.js`,
 `dist/esm/index.mjs`, and declarations under `dist/types`. React, React Native, and
 react-native-svg stay external peer dependencies. The web build is independent.
+
+Native tests use their own `vitest.config.mts` and mocked native components. Install native
+dependencies before running them. Root tests and coverage do not include the native package;
+passing the native unit tests does not replace device rendering checks.
 
 Run `npm pack --dry-run` from `native/` to inspect the publishable files, or
 `npm pack` to create a tarball. The `prepack` hook builds automatically. Build and

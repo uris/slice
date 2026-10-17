@@ -19,6 +19,7 @@ const coverageExclude = [
 	'src/components/playHelpers.ts',
 	'**/*.css',
 	'.storybook/**',
+	'native/**',
 ];
 
 // Browser-mode (v8) coverage captures EVERYTHING that executes in the page -
@@ -27,7 +28,7 @@ const coverageExclude = [
 // maps, which can make the report-merge step throw and silently produce no
 // report at all. Scoping to an explicit include is more reliable than trying
 // to exclude every virtual/internal module by name.
-const coverageInclude = ['src/**/*.{ts,tsx}', 'native/components/**/*.{ts,tsx}'];
+const coverageInclude = ['src/**/*.{ts,tsx}'];
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
@@ -54,7 +55,7 @@ export default defineConfig({
 					name: 'unit',
 					environment: 'jsdom',
 					globals: true,
-					include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}', 'native/components/**/*.test.{ts,tsx}'],
+					include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'],
 					exclude: [
 						'**/*.stories.{ts,tsx}',
 						'**/*.bench.{ts,tsx}',

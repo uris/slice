@@ -72,8 +72,9 @@ For the `tests` tag convention, why to prefer several small isolated stories ove
 sequential `play:` function, and how to reset module-level store state (Zustand) at the top of a
 story's `play:` function, see [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md).
 
-**Native exception:** colocated `native/components/**/*.test.tsx` tests run in the unit
-project with mocked native dependencies. Do not put native components into web Storybook
+**Native exception:** colocated `native/components/**/*.test.tsx` tests run separately via
+`npm test --prefix native`, using `native/vitest.config.mts` and mocked native dependencies.
+Root test discovery and coverage exclude native code. Do not put native components into web Storybook
 to satisfy the web component rule. These tests do not establish device rendering or native
 accessibility correctness; see [native validation](./contributor-docs/native.md#validation).
 
@@ -137,6 +138,10 @@ The root typecheck does **not** include `native/`. For native changes, also run
 `npm run lint --prefix native` (Biome formatting/checks plus native typecheck) and
 `npm run build --prefix native`. Root Biome checks do include native source files, using
 the same config; test/spec files remain excluded by that config.
+
+The separate **Native Icons** CI job installs native dependencies on Node 24, runs
+`npm run lint:ci --prefix native`, native tests, the native build, and package inspection.
+It does not add native code to core Slice's coverage gate.
 
 ## Contribution Rules
 
