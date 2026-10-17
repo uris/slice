@@ -35,6 +35,12 @@ npm run benchmark:raw
 
 Results are saved to `reports/benchmark-results.md` in the project root.
 
+`npm test` and `npm run test:ui` select only unit and Storybook tests. Run benchmarks
+explicitly using the commands above. The report runner uses regular `it()` tests;
+component `.bench.tsx` suites use `bench()` and must run with `vitest bench`, not
+`vitest run`. The benchmark project's test and benchmark discovery patterns keep
+these two modes separate.
+
 ---
 
 ## Available Commands

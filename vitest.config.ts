@@ -70,9 +70,10 @@ export default defineConfig({
 					environment: 'jsdom',
 					globals: true,
 					setupFiles: ['./benchmarks/setup.tsx'],
-					include: ['**/*.bench.{ts,tsx}'],
+					// The report runner uses it(); component suites use bench() and require benchmark mode.
+					include: ['benchmarks/run-with-report.bench.ts'],
 					benchmark: {
-						include: ['**/*.bench.{ts,tsx}'],
+						include: ['benchmarks/components/*.bench.tsx'],
 						exclude: ['node_modules', 'dist'],
 					},
 				},
