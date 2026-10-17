@@ -1,0 +1,46 @@
+{
+	"name": "@apple-pie/slice-native",
+	"version": "0.1.0",
+	"description": "SVG icons for React Native",
+	"author": "Uris Dacosta",
+	"license": "ISC",
+	"type": "commonjs",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.mjs",
+	"react-native": "./dist/esm/index.mjs",
+	"types": "./dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"react-native": "./dist/esm/index.mjs",
+			"import": "./dist/esm/index.mjs",
+			"require": "./dist/cjs/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": ["dist"],
+	"sideEffects": false,
+	"scripts": {
+		"test": "vitest run --config vitest.config.mts",
+		"lint": "biome format --write . && biome check . && npm run typecheck",
+		"lint:ci": "biome ci . && npm run typecheck",
+		"build": "npm run generate && node scripts/build.mjs",
+		"prepack": "npm run build",
+		"generate": "node scripts/generate-icons.mjs",
+		"typecheck": "tsc --noEmit -p tsconfig.json"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": ["react-native", "icons", "svg", "apple-pie"],
+	"devDependencies": {
+		"rollup": "^4.32.0",
+		"typescript": "^5.7.3",
+		"vitest": "^4.0.18"
+	},
+	"peerDependencies": {
+		"react": "^18.0.0 || ^19.0.0",
+		"react-native": ">=0.80.0 <1.0.0",
+		"react-native-svg": "^15.16.0"
+	}
+}

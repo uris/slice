@@ -11,8 +11,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  native:
+    name: Slice Native Lint, Build, Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Native dependencies have a newer Node requirement than the web package.
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            native/package-lock.json
+      - name: Install repository tooling
+        run: npm ci
+      - name: Install native dependencies
+        run: npm ci --prefix native
+      - name: Lint and typecheck
+        run: npm run lint:ci --prefix native
+      - name: Run native tests
+        run: npm test --prefix native
+      - name: Build native package
+        run: npm run build --prefix native
+      - name: Validate native package contents
+        working-directory: native
+        # The preceding step already built the package; avoid repeating prepack.
+        run: npm pack --dry-run --ignore-scripts
+
   lint:
-    name: Lint
+    name: Slice Web Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,7 +52,7 @@ jobs:
       - run: npm run lint:ci
 
   test:
-    name: Test & Coverage
+    name: Slice Web Test & Coverage
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +79,7 @@ jobs:
           retention-days: 14
 
   build:
-    name: Build
+    name: Slice Web Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

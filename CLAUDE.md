@@ -7,6 +7,10 @@ for component prop naming, [contributor-docs/style-prop-naming.md](./contributor
 for padding and the theme spacing grid, [contributor-docs/spacing.md](./contributor-docs/spacing.md);
 for how to actually write a component test vs. a regular one, [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md).
 
+For experimental, icons-only `@apple-pie/slice-native` work, read
+[contributor-docs/native.md](./contributor-docs/native.md) before editing. It defines the
+separate package boundary, generation workflow, and future shared theme-data direction.
+
 Do not duplicate guidance from those docs into this file. If something here and something in
 CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other way around.
 
