@@ -27,7 +27,7 @@ const coverageExclude = [
 // maps, which can make the report-merge step throw and silently produce no
 // report at all. Scoping to an explicit include is more reliable than trying
 // to exclude every virtual/internal module by name.
-const coverageInclude = ['src/**/*.{ts,tsx}'];
+const coverageInclude = ['src/**/*.{ts,tsx}', 'native/components/**/*.{ts,tsx}'];
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
@@ -54,7 +54,7 @@ export default defineConfig({
 					name: 'unit',
 					environment: 'jsdom',
 					globals: true,
-					include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'],
+					include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}', 'native/components/**/*.test.{ts,tsx}'],
 					exclude: [
 						'**/*.stories.{ts,tsx}',
 						'**/*.bench.{ts,tsx}',

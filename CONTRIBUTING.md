@@ -1,6 +1,24 @@
 # Contributing to Slice
 
-This repository contains the source for the `@apple-pie/slice` package, Storybook docs, and benchmark tooling.
+This repository contains core web `@apple-pie/slice`, Storybook docs, benchmark tooling,
+and the separate experimental `@apple-pie/slice-native` package under `native/`.
+Slice Native currently supports **icons only**, not the full UIKit.
+
+## Package Boundaries
+
+- Core Slice lives in `src/` and uses the root manifest, build, and release workflow.
+- Slice Native lives in `native/`, with its own manifest, lockfile, entrypoint, build, and version.
+- Keep production imports and exports separate in both directions. Native must not depend
+  on core Slice, CSS, DOM utilities, web hooks, or web providers. Core Slice must not acquire
+  React Native dependencies or exports.
+- Artwork is shared through build-time generation, not runtime imports across packages.
+- Shared plain TypeScript color constants and light/dark theme data are a future direction,
+  not an existing native API. Keep platform-specific rendering and providers separate when
+  that extraction is undertaken.
+
+Read [the native contributor guide](./contributor-docs/native.md) for source-of-truth rules,
+commands, testing, and releases. The web component lifecycle below applies to core Slice;
+native changes follow that guide.
 
 ## Local Setup
 
@@ -36,6 +54,8 @@ npm run lint
 - `src/workers` publishable worker entrypoints
 - `src/theme` theme tokens, presets, and typed theme utilities
 - `src/utils` package utilities and low-level objects
+- `native` experimental Slice Native metadata, entrypoint, tooling, and build output
+- `native/components/Icon` native wrapper, generated artwork, types, and unit tests
 - `documentation` Storybook docs pages and doc-only helpers
 - `benchmarks` Vitest benchmark suite
 - `contributor-docs` contributor-specific implementation notes
@@ -51,6 +71,11 @@ Vitest runs two projects side by side. `npm test` runs both during local dev; `n
 For the `tests` tag convention, why to prefer several small isolated stories over one long
 sequential `play:` function, and how to reset module-level store state (Zustand) at the top of a
 story's `play:` function, see [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md).
+
+**Native exception:** colocated `native/components/**/*.test.tsx` tests run in the unit
+project with mocked native dependencies. Do not put native components into web Storybook
+to satisfy the web component rule. These tests do not establish device rendering or native
+accessibility correctness; see [native validation](./contributor-docs/native.md#validation).
 
 ### Accessibility gate
 
@@ -108,6 +133,11 @@ Run `npm run lint` locally before opening a PR — it formats the codebase and r
 
 Biome does not type-check. `npm run typecheck` (`tsc --noEmit -p tsconfig.json`) does, and it covers `src/**/*` including `*.stories.tsx` files and `documentation/**/*` — the build configs exclude stories, so this is the only place story typings are checked. It is also part of `npm run lint`, `lint:fix` and `lint:ci`, so the `Lint` check in CI fails on type errors.
 
+The root typecheck does **not** include `native/`. For native changes, also run
+`npm run lint --prefix native` (Biome formatting/checks plus native typecheck) and
+`npm run build --prefix native`. Root Biome checks do include native source files, using
+the same config; test/spec files remain excluded by that config.
+
 ## Contribution Rules
 
 - Component style props must follow the naming standard in [contributor-docs/style-prop-naming.md](./contributor-docs/style-prop-naming.md) (e.g. `backgroundColor`/`backgroundColorHover`, not `bgColor`/`bgColorHover`). New components must use only the standard names; existing components get renamed to match only as part of an intentional breaking change.
@@ -154,7 +184,9 @@ Build architecture details: [contributor-docs/build-architecture.md](./contribut
 
 ## Publishing Notes
 
-- The package name is `@apple-pie/slice`.
-- The current package metadata is defined in `package.json`.
+- Core Slice is `@apple-pie/slice`; its metadata is defined in root `package.json`.
+- Experimental Slice Native is `@apple-pie/slice-native`; its metadata is defined in
+  `native/package.json`. Build and publish it separately from within `native/`; see
+  [native publishing](./contributor-docs/native.md#publishing).
 - `README.md` is part of the published package, so public-facing usage and install guidance should stay current.
 - This repo is preparing for public GitHub visibility, so contributor docs should avoid private-only assumptions.

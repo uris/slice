@@ -6,6 +6,11 @@ the conventions and gotchas you'll actually hit while writing either kind.
 
 ## Which kind of test does this need?
 
+The component rules below apply to **web Slice**. Experimental native icons use colocated
+`native/components/Icon/*.test.tsx` tests in the unit project with mocked React Native and
+SVG components. Keep them out of web Storybook. See [native validation](./native.md#validation)
+for commands and the limits of this coverage.
+
 - **Renders something?** It's a component test: a `play:` function in the component's own
   `src/components/<Name>/<Name>.stories.tsx`, run by `@storybook/addon-vitest` (the `storybook`
   Vitest project, real Chromium via Playwright). There is no separate `<Name>.test.tsx` — the

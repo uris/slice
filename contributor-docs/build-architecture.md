@@ -4,6 +4,11 @@ This document describes the current publish pipeline for `@apple-pie/slice` and 
 
 ## Build Command
 
+This guide's commands build and pack core Slice only. The experimental icons-only
+`@apple-pie/slice-native` package has an independent pipeline under `native/`; see the
+[Native Package Guide](./native.md). Do not add native entrypoints to the root Rollup inputs
+or export map.
+
 `npm run build` runs these steps in order:
 
 1. `prebuild`: `rm -rf dist`
