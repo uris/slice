@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   native:
-    name: Native Icons
+    name: Slice Native Lint, Build, Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
         run: npm pack --dry-run --ignore-scripts
 
   lint:
-    name: Lint
+    name: Slice Web Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
       - run: npm run lint:ci
 
   test:
-    name: Test & Coverage
+    name: Slice Web Test & Coverage
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
           retention-days: 14
 
   build:
-    name: Build
+    name: Slice Web Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
