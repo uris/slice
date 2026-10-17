@@ -46,6 +46,7 @@ dependencies installed and TypeScript available from the repository.
 From the repository root:
 
 ```sh
+npm install
 npm install --prefix native
 npm run lint --prefix native
 npm test --prefix native
@@ -59,6 +60,11 @@ react-native-svg stay external peer dependencies. The web build is independent.
 Native tests use their own `vitest.config.mts` and mocked native components. Install native
 dependencies before running them. Root tests and coverage do not include the native package;
 passing the native unit tests does not replace device rendering checks.
+
+CI runs these checks independently in **Slice Native Lint, Build, Test** on Node 24.
+It uses `npm run lint:ci --prefix native` to check formatting and types without writing
+fixes, then runs native tests, builds, and inspects the package contents. Root dependencies
+provide shared tooling such as Biome; native dependencies are installed separately.
 
 Run `npm pack --dry-run` from `native/` to inspect the publishable files, or
 `npm pack` to create a tarball. The `prepack` hook builds automatically. Build and
