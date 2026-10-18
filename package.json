@@ -97,14 +97,8 @@
 			"require": "./dist/cjs/components/*/index.js"
 		}
 	},
-	"files": [
-		"dist",
-		"README.md",
-		"scripts/copy-assets.mjs"
-	],
-	"sideEffects": [
-		"**/*.css"
-	],
+	"files": ["dist", "README.md", "scripts/copy-assets.mjs"],
+	"sideEffects": ["**/*.css"],
 	"scripts": {
 		"lint": "biome format --write . && biome check . && npm run typecheck",
 		"lint:fix": "biome format --write . && biome check --write . && npm run typecheck",
