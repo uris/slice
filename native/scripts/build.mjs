@@ -31,7 +31,10 @@ try {
 	check(program.emit().diagnostics);
 
 	const bundle = await rollup({
-		input: fileURLToPath(new URL('index.js', temporary)),
+		input: {
+			index: fileURLToPath(new URL('native/index.js', temporary)),
+			theme: fileURLToPath(new URL('native/theme/index.js', temporary)),
+		},
 		external: (id) => peers.some((peer) => id === peer || id.startsWith(`${peer}/`)),
 		plugins: [
 			{
@@ -54,12 +57,22 @@ try {
 		},
 	});
 	try {
-		await bundle.write({ file: fileURLToPath(new URL('cjs/index.js', dist)), format: 'cjs', exports: 'named' });
-		await bundle.write({ file: fileURLToPath(new URL('esm/index.mjs', dist)), format: 'es' });
+		await bundle.write({
+			dir: fileURLToPath(new URL('cjs/', dist)),
+			entryFileNames: '[name].js',
+			format: 'cjs',
+			exports: 'named',
+		});
+		await bundle.write({
+			dir: fileURLToPath(new URL('esm/', dist)),
+			entryFileNames: '[name].mjs',
+			chunkFileNames: '[name]-[hash].mjs',
+			format: 'es',
+		});
 	} finally {
 		await bundle.close();
 	}
-	console.log('Built native icons: dist/cjs, dist/esm, dist/types');
+	console.log('Built native icons and themes: dist/cjs, dist/esm, dist/types');
 } catch (error) {
 	rmSync(dist, { recursive: true, force: true });
 	throw error;

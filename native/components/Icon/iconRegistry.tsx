@@ -695,7 +695,13 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 								<Use href="#a1000z" />
 							</ClipPath>
 						</Defs>
-						<Use href="#a1000z" fill="transparent" clipPath="url(#a1001z)" strokeWidth="3.1" stroke={strokeColor} />
+						<Use
+							href="#a1000z"
+							fill="transparent"
+							clipPath="url(#a1001z)"
+							strokeWidth="3.1"
+							stroke={strokeColor}
+						/>
 					</G>
 					<G transform="translate(7 9.25)">
 						<Path d="M 0 1.5 L 4.5 1.5 L 4.5 0 L 0 0 Z" fill={strokeColor} />

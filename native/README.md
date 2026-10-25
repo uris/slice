@@ -1,8 +1,8 @@
 # @apple-pie/slice-native
 
 Experimental React Native SVG icons, with the same names and artwork as the web UIKit.
-Currently **icons only**: this package does not provide the rest of Slice's components,
-theme provider, or shared light/dark palettes. It is built and published independently
+Includes native light/dark theme tokens; other Slice components and a theme provider
+are not included. It is built and published independently
 of `@apple-pie/slice` and does not require that package at runtime.
 
 ```tsx
@@ -70,6 +70,51 @@ Run `npm pack --dry-run` from `native/` to inspect the publishable files, or
 `npm pack` to create a tarball. The `prepack` hook builds automatically. Build and
 pack from this repository: generation uses the web artwork in `src/components/Icon`.
 
-Contributor architecture and future theme-data extraction are documented in
-`contributor-docs/native.md` in the source repository. Shared plain TypeScript color
-constants are planned; the current system light/dark defaults are only icon defaults.
+## Theme tokens
+
+```tsx
+import { Text, View, useColorScheme } from 'react-native';
+import { lightTheme, darkTheme } from '@apple-pie/slice-native/theme';
+
+function Card() {
+  const theme = useColorScheme() === 'dark' ? darkTheme : lightTheme;
+  return (
+    <View style={{
+      backgroundColor: theme.colors['core-surface-primary'],
+      padding: theme.spacing.m,
+      borderRadius: theme.corners['corner-m'],
+      ...theme.shadows['surface-shadow-soft'],
+    }}>
+      <Text style={{ ...theme.type['body-m-regular'], color: theme.colors['core-text-primary'] }}>
+        Hello Slice
+      </Text>
+    </View>
+  );
+}
+```
+
+`lightTheme`, `darkTheme`, `createTypography`, and the `SliceNativeTheme` type are
+also available from the package root. `SliceTheme` aliases the native theme type.
+The dedicated `/theme` entry has no runtime React Native, React, or SVG imports.
+It also exports `coreColors`, `corners`, `spacing`, `elevations`, `type`, and `motion`.
+
+Colors, spacing, corners, and stacking levels are sourced from the web tokens at
+build time and bundled into this package. No web package is needed in an app.
+CSS shadow strings are removed from `colors` and `coreColors`; use `theme.shadows`
+instead. Shadows use native `boxShadow` arrays, which require the New Architecture
+and supported Android versions (outset shadows require Android 9+).
+
+Typography uses a fixed 16dp base for rem conversion and numeric line heights and
+letter spacing. Load Funnel Sans in your app, or replace `theme.type` with
+`createTypography('YourLoadedFontName')`. Exact font weights depend on the font
+and platform; test your loaded font on devices. This package does not load fonts.
+
+Motion durations are milliseconds. Curve tokens are easing functions suitable for
+`Animated.timing`'s `easing` option; the CSS spring is interpolated from its original
+samples, preserving overshoot. They are ordinary JavaScript functions, not Reanimated
+worklets. `elevations` retains the web stacking levels for `zIndex`; do not pass these
+values to Android's `elevation` property.
+
+Build from the repository so shared source tokens are available. All generated
+JavaScript and declarations are included under `dist/`, including declarations for
+shared source types. Changes to web tokens are picked up by the next native build.

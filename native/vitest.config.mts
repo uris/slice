@@ -7,6 +7,6 @@ export default defineConfig({
 	test: {
 		name: 'native',
 		environment: 'node',
-		include: ['components/**/*.test.{ts,tsx}'],
+		include: ['components/**/*.test.{ts,tsx}', 'theme/**/*.test.ts'],
 	},
 });
