@@ -1,14 +1,14 @@
 # @apple-pie/slice-native
 
 Experimental React Native SVG icons, with the same names and artwork as the web UIKit.
-Includes native light/dark theme tokens; other Slice components and a theme provider
-are not included. It is built and published independently
+Includes native light/dark theme tokens and a theme provider.
+It is built and published independently
 of `@apple-pie/slice` and does not require that package at runtime.
 
 ```tsx
-import { Icon, SliceIcons } from '@apple-pie/slice-native';
+import { SliceIcon, SliceIcons } from '@apple-pie/slice-native';
 
-<Icon
+<SliceIcon
   name={SliceIcons.ui.home}
   size={24}
   strokeColor="#334155"
@@ -17,7 +17,7 @@ import { Icon, SliceIcons } from '@apple-pie/slice-native';
 />
 ```
 
-`NativeIcon` is also exported as an alias of `Icon`. Supply native SVG props and
+Supply native SVG props and
 native `style` objects; use `onPress` instead of `onClick`. CSS classes, cursor
 styling (`pointer`), and browser keyboard handlers are not part of this API.
 Use an enclosing React Native `Pressable` when you need a larger touch target or
@@ -36,7 +36,7 @@ the native SVG dependency in the consuming app using its normal native/Expo setu
 ## Development
 
 The package manifest and entry point live in `native/`. Icon components, types,
-generated artwork, and tests live in `native/components/Icon/`.
+generated artwork, and tests live in `native/components/SliceIcon/`.
 
 From this directory, run `npm run generate` after changing the web icon registry
 or `SliceIcons` constants. Generated files contain native SVG components and have
@@ -61,6 +61,25 @@ Native tests use their own `vitest.config.mts` and mocked native components. Ins
 dependencies before running them. Root tests and coverage do not include the native package;
 passing the native unit tests does not replace device rendering checks.
 
+### Native coverage
+
+From the repository root, run:
+
+```sh
+npm run coverage --prefix native
+```
+
+This runs only the native tests and measures runtime TypeScript in native components,
+providers, theme modules, and the package entry point, including generated icon artwork.
+Tests and type-only files are excluded. Shared web sources, build scripts, and dependencies
+are outside this report. Files without tests are included in the coverage calculation.
+
+Open `native/coverage/index.html` for the interactive report. The command also prints
+a terminal summary and writes `native/coverage/lcov.info` and
+`native/coverage/coverage-summary.json` for tooling. Reports are ignored by Git.
+The coverage provider comes from the repository's existing `@vitest/coverage-v8`
+development dependency; install both root and native dependencies as described above.
+
 CI runs these checks independently in **Slice Native Lint, Build, Test** on Node 24.
 It uses `npm run lint:ci --prefix native` to check formatting and types without writing
 fixes, then runs native tests, builds, and inspects the package contents. Root dependencies
@@ -71,6 +90,42 @@ Run `npm pack --dry-run` from `native/` to inspect the publishable files, or
 pack from this repository: generation uses the web artwork in `src/components/Icon`.
 
 ## Theme tokens
+
+### Buttons
+
+`SliceButton` uses the shared theme provider.
+It supports `primary` and `secondary` variants, optional left/right icons, disabled
+state, native Pressable props, and Reanimated layout/enter/exit animations.
+Reanimated 4 and its compatible Worklets setup are required in the consuming app.
+Supply an `accessibilityLabel` for icon-only buttons; button icons are decorative.
+
+```tsx
+import { SliceButton, SliceThemeProvider } from '@apple-pie/slice-native';
+
+<SliceThemeProvider>
+  <SliceButton icon="home" onPress={() => navigation.navigate('Home')}>
+    Go home
+  </SliceButton>
+</SliceThemeProvider>
+```
+
+Wrap the app in `SliceThemeProvider` and read its theme with `useSliceTheme`:
+
+```tsx
+import { SliceThemeProvider, useSliceTheme } from '@apple-pie/slice-native';
+
+function App() {
+  return <SliceThemeProvider>{/* app content */}</SliceThemeProvider>;
+}
+```
+
+The provider follows the system appearance by default. Pass `preference="light"`
+or `preference="dark"` to override it. For an app-controlled preference, pass
+`preference` and `onPreferenceChange`; the app owns updating and persisting that
+value. `useSliceContext` exposes `theme`, `mode`, `preference`, and the optional
+`setPreference` callback. Both hooks require a surrounding `SliceThemeProvider`.
+Use this exported provider and its hooks together so app and library components
+share the same context.
 
 ```tsx
 import { Text, View, useColorScheme } from 'react-native';

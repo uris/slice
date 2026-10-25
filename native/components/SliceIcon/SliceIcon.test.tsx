@@ -2,12 +2,14 @@ import { Children, isValidElement, type ReactElement, type ReactNode } from 'rea
 import type { SvgProps } from 'react-native-svg';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { STATIC_ICON_REGISTRY as webRegistry } from '../../../src/components/Icon/iconRegistry';
+import { SliceIcon as PublicSliceIcon, StyledText, SliceThemeProvider, useSliceTheme } from '../../index';
 import type { IconProps } from './_types';
-import { NativeIcon } from './NativeIcon';
+import { SliceIcon } from './SliceIcon';
 import { STATIC_ICON_REGISTRY } from './iconRegistry';
 
 const state = vi.hoisted(() => ({ scheme: 'light' }));
-vi.mock('react-native', () => ({ useColorScheme: () => state.scheme }));
+vi.mock('react-native-reanimated', () => ({ default: { View: () => null } }));
+vi.mock('react-native', () => ({ useColorScheme: () => state.scheme, StyleSheet: { create: (styles: unknown) => styles } }));
 vi.mock('react-native-svg', () => {
 	const component = (tag: string) => Object.assign(() => null, { svgTag: tag });
 	return {
@@ -22,7 +24,7 @@ vi.mock('react-native-svg', () => {
 });
 
 // Inspect the wrapper output with native dependencies mocked; no DOM renderer is used.
-const render = (NativeIcon as unknown as { type: (props: IconProps) => ReactElement<SvgProps> | null }).type;
+const render = (SliceIcon as unknown as { type: (props: IconProps) => ReactElement<SvgProps> | null }).type;
 const shapeProps = { stroke: 1.5, strokeColor: '#123456', fillColor: 0.2, coverUp: '#ffffff' };
 
 function normalize(node: ReactNode, native: boolean): unknown {
@@ -38,7 +40,13 @@ function normalize(node: ReactNode, native: boolean): unknown {
 	};
 }
 
-describe('NativeIcon', () => {
+describe('SliceIcon', () => {
+	it('exports the renamed component and themed components from the package root', () => {
+		expect(PublicSliceIcon).toBe(SliceIcon);
+		expect(StyledText).toBeTypeOf('function');
+		expect(SliceThemeProvider).toBeTypeOf('function');
+		expect(useSliceTheme).toBeTypeOf('function');
+	});
 	beforeEach(() => { state.scheme = 'light'; });
 
 	it('preserves every icon and variant without browser elements', () => {

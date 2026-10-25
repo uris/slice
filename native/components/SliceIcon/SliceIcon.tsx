@@ -4,7 +4,7 @@ import Svg from 'react-native-svg';
 import type { IconProps } from './_types';
 import { STATIC_ICON_REGISTRY } from './iconRegistry';
 
-export const NativeIcon = memo((props: IconProps) => {
+export const SliceIcon = memo((props: IconProps) => {
 	const dark = useColorScheme() === 'dark';
 	const {
 		name = 'home',
@@ -50,4 +50,4 @@ export const NativeIcon = memo((props: IconProps) => {
 	);
 });
 
-NativeIcon.displayName = 'NativeIcon';
+SliceIcon.displayName = 'SliceIcon';

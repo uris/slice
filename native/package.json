@@ -28,6 +28,7 @@
 	"sideEffects": false,
 	"scripts": {
 		"test": "vitest run --config vitest.config.mts",
+		"coverage": "vitest run --config vitest.config.mts --coverage",
 		"lint": "biome format --write . && biome check . && npm run typecheck",
 		"lint:ci": "biome ci . && npm run typecheck",
 		"build": "npm run generate && node scripts/build.mjs",
@@ -47,6 +48,7 @@
 	"peerDependencies": {
 		"react": "^18.0.0 || ^19.0.0",
 		"react-native": ">=0.80.0 <1.0.0",
-		"react-native-svg": "^15.0.0"
+		"react-native-svg": "^15.0.0",
+		"react-native-reanimated": "^4.0.0"
 	}
 }

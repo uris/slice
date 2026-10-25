@@ -1,4 +1,10 @@
-export { Icon, NativeIcon, SliceIcons } from './components/Icon';
-export type { IconProps } from './components/Icon';
+export { SliceIcon, SliceIcons } from './components/SliceIcon';
+export type { IconProps, SliceIconProps } from './components/SliceIcon';
 export { lightTheme, darkTheme, createTypography } from './theme';
 export type { SliceNativeTheme, SliceTheme } from './theme';
+export { SliceThemeProvider, useSliceTheme, useSliceContext } from './providers/SliceThemeProvider';
+export type { ThemePreference, ThemeContextValue } from './providers/SliceThemeProvider';
+export { StyledText } from './components/SliceText/SliceText';
+export type { StyledTextProps } from './components/SliceText/_types';
+export { SliceButton } from './components/SliceButton/SliceButton';
+export type { SliceButtonProps } from './components/SliceButton/_types';
