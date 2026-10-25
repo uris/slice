@@ -44,6 +44,10 @@ jobs:
             services=()
             for service in uikit uikit-react uikit-native; do
               if printf '%s\n' "$configured" | grep -Fxq "$service"; then
+                if [ "$service" = "uikit-native" ] && ! grep -Eq '"build-storybook:native"[[:space:]]*:' "$HOME/projects/uikit/package.json"; then
+                  echo "Skipping uikit-native: native Storybook is not configured yet."
+                  continue
+                fi
                 services+=("$service")
               fi
             done

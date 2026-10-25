@@ -1,0 +1,17 @@
+# syntax=docker/dockerfile:1
+# Separate Dockerfile prevents legacy builders from running native stages when
+# building the landing page or React docs.
+FROM node:24-alpine AS native-build
+WORKDIR /app
+COPY package*.json ./
+RUN node -e "if (!require('./package.json').scripts['build-storybook:native']) { console.error('Native docs are not configured: add build-storybook:native before deploying react-native-docs.'); process.exit(1); }"
+RUN npm ci
+COPY native/package*.json ./native/
+RUN npm ci --prefix native
+COPY . .
+RUN npm run build-storybook:native -- --output-dir /app/storybook-native-static
+
+FROM nginx:alpine AS react-native-docs
+COPY --from=native-build /app/storybook-native-static/ /usr/share/nginx/html/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
