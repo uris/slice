@@ -234,3 +234,57 @@ const label = lineHeightTextStyle({ fontSize: 20, color: '#123456' }, 1.5);
 
 The defaults are a 16 font size and a 1.2 multiplier. The multiplier must be a
 finite number from 0 through 2. Existing line height is replaced; the input is unchanged.
+
+## Text input
+
+`SliceTextInput` and `SliceTextInputProps` are exported from the package root.
+Use it within `SliceThemeProvider` and give each field an accessible name that
+identifies its purpose, rather than relying on a placeholder alone:
+
+```tsx
+<SliceTextInput
+  accessibilityLabel="Email address"
+  accessibilityHint="Used to send your receipt"
+  placeholder="you@example.com"
+  keyboardType="email-address"
+  autoCapitalize="none"
+  value={email}
+  onChangeText={setEmail}
+/>
+```
+
+Native TextInput props and styles are forwarded. Icons are decorative and hidden
+from accessibility focus. Font scaling remains enabled by default, and the field
+uses a minimum height rather than a fixed height. Check large text and multiline
+layouts on devices with VoiceOver/TalkBack enabled.
+
+`focused` optionally requests native focus or blur; omit it for normal native
+focus handling. `didFocus` reports focus changes alongside `onFocus`/`onBlur`.
+Icons hide on actual focus unless `hideIconOnFocus={false}`. `blurClears` defaults
+to false; when enabled, blur clears the native input and calls `onChangeText('')`
+so controlled consumers can update their value. Initial values are never cleared
+on mount.
+
+## Package entry points and tree shaking
+
+The base barrels under `native/src` are public package entry points:
+
+```tsx
+import { SliceButton, SliceTextInput } from '@apple-pie/slice-native/components';
+import { useCreateThemedStyles } from '@apple-pie/slice-native/hooks';
+import { SliceThemeProvider } from '@apple-pie/slice-native/providers';
+import { lineHeightTextStyle } from '@apple-pie/slice-native/utils';
+import { lightTheme, darkTheme } from '@apple-pie/slice-native/theme';
+```
+
+Root imports remain supported. Each entry provides ESM, CommonJS, and TypeScript
+declarations. The build preserves individual modules and the package declares
+`sideEffects: false` so compatible consuming bundlers can remove unused exports.
+Actual tree shaking depends on the consuming app's bundler and configuration;
+CommonJS consumers should not assume the same elimination as ESM consumers.
+The theme and utility entry points do not import React, SVG, or Reanimated at runtime.
+
+Run `npm run test:package --prefix native` to build and verify export targets and
+representative ESM consumer bundles. These checks verify that selecting only the
+line-height utility removes other package code and that hooks do not pull in SVG
+or Reanimated.

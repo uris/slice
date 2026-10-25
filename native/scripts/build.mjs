@@ -33,7 +33,12 @@ try {
 	const bundle = await rollup({
 		input: {
 			index: fileURLToPath(new URL('native/index.js', temporary)),
-			theme: fileURLToPath(new URL('native/src/theme/index.js', temporary)),
+			...Object.fromEntries(
+				['components', 'hooks', 'providers', 'utils', 'theme'].map((name) => [
+					name,
+					fileURLToPath(new URL(`native/src/${name}/index.js`, temporary)),
+				]),
+			),
 		},
 		external: (id) => peers.some((peer) => id === peer || id.startsWith(`${peer}/`)),
 		plugins: [
@@ -60,6 +65,8 @@ try {
 		await bundle.write({
 			dir: fileURLToPath(new URL('cjs/', dist)),
 			entryFileNames: '[name].js',
+			preserveModules: true,
+			preserveModulesRoot: fileURLToPath(new URL('native/', temporary)),
 			format: 'cjs',
 			exports: 'named',
 		});
@@ -67,6 +74,8 @@ try {
 			dir: fileURLToPath(new URL('esm/', dist)),
 			entryFileNames: '[name].mjs',
 			chunkFileNames: '[name]-[hash].mjs',
+			preserveModules: true,
+			preserveModulesRoot: fileURLToPath(new URL('native/', temporary)),
 			format: 'es',
 		});
 	} finally {

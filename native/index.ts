@@ -1,12 +1,14 @@
-export { SliceIcon, SliceIcons } from './src/components/SliceIcon';
-export type { IconProps, SliceIconProps } from './src/components/SliceIcon';
+export { SliceIcon, SliceIcons, StyledText, SliceButton, SliceTextInput } from './src/components';
+export type {
+	IconProps,
+	SliceIconProps,
+	StyledTextProps,
+	SliceButtonProps,
+	SliceTextInputProps,
+} from './src/components';
 export { lightTheme, darkTheme, createTypography } from './src/theme';
 export type { SliceNativeTheme, SliceTheme } from './src/theme';
-export { SliceThemeProvider, useSliceTheme, useSliceContext } from './src/providers/SliceThemeProvider';
-export type { ThemePreference, ThemeContextValue } from './src/providers/SliceThemeProvider';
-export { StyledText } from './src/components/SliceText/SliceText';
-export type { StyledTextProps } from './src/components/SliceText/_types';
-export { SliceButton } from './src/components/SliceButton/SliceButton';
-export type { SliceButtonProps } from './src/components/SliceButton/_types';
-export { useCreateThemedStyles } from './src/hooks/useCreateThemedStyles/useCreateThemedStyles';
-export { lineHeightTextStyle } from './src/utils/typography/typography';
+export { SliceThemeProvider, useSliceTheme, useSliceContext } from './src/providers';
+export type { ThemePreference, ThemeContextValue } from './src/providers';
+export { useCreateThemedStyles } from './src/hooks';
+export { lineHeightTextStyle } from './src/utils';
