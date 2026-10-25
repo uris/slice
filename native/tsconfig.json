@@ -5,6 +5,6 @@
 		"emitDeclarationOnly": false,
 		"lib": ["ESNext"]
 	},
-	"include": ["index.ts", "components/**/*.ts", "components/**/*.tsx", "theme/**/*.ts"],
+	"include": ["index.ts", "src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["**/*.test.ts", "**/*.test.tsx", "dist", "node_modules"]
 }

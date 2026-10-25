@@ -1,0 +1,1 @@
+export { lineHeightTextStyle } from './typography';

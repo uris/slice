@@ -1,9 +1,13 @@
-name: Deploy Slice UIKit Site
+name: Deploy Slice UIKit Sites
 
 on:
   push:
     branches:
       - main
+
+concurrency:
+  group: slice-sites-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -17,17 +21,39 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+            bash -se <<'DEPLOY'
+            set -euo pipefail
+            export DOCKER_BUILDKIT=1
+            export COMPOSE_DOCKER_CLI_BUILD=1
+            export GIT_SSH_COMMAND='ssh -i ~/.ssh/github_actions -o StrictHostKeyChecking=yes'
 
             if [ -d ~/projects/uikit/.git ]; then
-              cd ~/projects/uikit
-              git config pull.rebase false
-              GIT_SSH_COMMAND='ssh -i ~/.ssh/github_actions -o StrictHostKeyChecking=no' git pull origin main
+              git -C ~/projects/uikit pull --ff-only origin main
             else
-              rm -rf ~/projects/uikit
-              GIT_SSH_COMMAND='ssh -i ~/.ssh/github_actions -o StrictHostKeyChecking=no' git clone git@github.com:uris/uikit.git ~/projects/uikit
+              git clone git@github.com:uris/uikit.git ~/projects/uikit
             fi
 
-            cd ~/projects/uikit
-            docker-compose up -d --build uikit
-            docker image prune -f
+            cd ~/projects
+            if docker compose version >/dev/null 2>&1; then
+              compose() { docker compose -f "$HOME/projects/docker-compose.yml" "$@"; }
+            else
+              compose() { docker-compose -f "$HOME/projects/docker-compose.yml" "$@"; }
+            fi
+
+            configured=$(compose config --services)
+            services=()
+            for service in uikit uikit-react uikit-native; do
+              if printf '%s\n' "$configured" | grep -Fxq "$service"; then
+                services+=("$service")
+              fi
+            done
+            if [ "${#services[@]}" -eq 0 ]; then
+              echo "No Slice services found in ~/projects/docker-compose.yml" >&2
+              exit 1
+            fi
+
+            # Build every selected image before replacing any running site.
+            compose build "${services[@]}"
+            compose up -d --no-deps --no-build "${services[@]}"
+            compose ps "${services[@]}"
+            DEPLOY
