@@ -7,7 +7,7 @@ Docker targets:
 
 - `react-docs`: existing web Storybook, also the default Docker build target.
 - `landing`: static platform chooser from `deployment/landing/`.
-- `react-native-docs`: native Storybook. Not ready until a root `build-storybook:native`
+- `react-native-docs` in `Dockerfile.react-native`: native Storybook. Not ready until a root `build-storybook:native`
   script and its configuration are implemented. It must accept Storybook's
   `--output-dir` option. Do not enable this service before that work is complete.
 
@@ -44,6 +44,7 @@ Once native Storybook is implemented, add:
   uikit-native:
     build:
       context: ./uikit
+      dockerfile: Dockerfile.react-native
       target: react-native-docs
     container_name: uikit-native
     ports:
@@ -54,7 +55,7 @@ Once native Storybook is implemented, add:
 The GitHub deployment workflow discovers only these three Slice service names
 from the VM Compose file. It builds all selected images before replacing
 containers, without starting dependencies or touching the other application
-services. Keep native absent until it builds successfully. Existing GitHub host
+services. The workflow skips native while its build script is missing; keep native absent until it builds successfully. Existing GitHub host
 keys must be present in the VM deployment user's `~/.ssh/known_hosts`.
 
 To deploy manually from the VM after editing Compose:
