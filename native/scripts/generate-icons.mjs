@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 const root = new URL('../', import.meta.url);
 const source = new URL('../src/components/Icon/', root);
-const output = new URL('components/SliceIcon/', root);
+const output = new URL('src/components/SliceIcon/', root);
 const elements = {
 	circle: 'Circle',
 	clipPath: 'ClipPath',

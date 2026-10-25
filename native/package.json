@@ -18,7 +18,7 @@
 		},
 		"./package.json": "./package.json",
 		"./theme": {
-			"types": "./dist/types/native/theme/index.d.ts",
+			"types": "./dist/types/native/src/theme/index.d.ts",
 			"react-native": "./dist/esm/theme.mjs",
 			"import": "./dist/esm/theme.mjs",
 			"require": "./dist/cjs/theme.js"
@@ -32,6 +32,8 @@
 		"lint": "biome format --write . && biome check . && npm run typecheck",
 		"lint:ci": "biome ci . && npm run typecheck",
 		"build": "npm run generate && node scripts/build.mjs",
+		"pack:tarball": "node scripts/pack.mjs",
+		"pack": "node scripts/pack.mjs",
 		"prepack": "npm run build",
 		"generate": "node scripts/generate-icons.mjs",
 		"typecheck": "tsc --noEmit -p tsconfig.json"

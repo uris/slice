@@ -11,6 +11,6 @@
 		"outDir": "./.build",
 		"types": ["react"]
 	},
-	"include": ["index.ts", "components/**/*.ts", "components/**/*.tsx", "theme/**/*.ts", "providers/**/*.tsx"],
+	"include": ["index.ts", "src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["**/*.test.ts", "**/*.test.tsx", "dist", ".build", "node_modules"]
 }

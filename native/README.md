@@ -36,7 +36,7 @@ the native SVG dependency in the consuming app using its normal native/Expo setu
 ## Development
 
 The package manifest and entry point live in `native/`. Icon components, types,
-generated artwork, and tests live in `native/components/SliceIcon/`.
+generated artwork, and tests live in `native/src/components/SliceIcon/`.
 
 From this directory, run `npm run generate` after changing the web icon registry
 or `SliceIcons` constants. Generated files contain native SVG components and have
@@ -88,6 +88,24 @@ provide shared tooling such as Biome; native dependencies are installed separate
 Run `npm pack --dry-run` from `native/` to inspect the publishable files, or
 `npm pack` to create a tarball. The `prepack` hook builds automatically. Build and
 pack from this repository: generation uses the web artwork in `src/components/Icon`.
+
+To build a local installable tarball without publishing to npm, run from the repository root:
+
+```sh
+npm run pack:tarball --prefix native
+```
+
+The archive is written to `native/pack/apple-pie-slice-native-<version>.tgz`.
+The `pack/` directory is ignored by Git. Install the archive in another project:
+
+```sh
+npm install /absolute/path/to/uikit/native/pack/apple-pie-slice-native-<version>.tgz
+```
+
+Then import from `@apple-pie/slice-native` normally. The consuming app must have
+compatible React, React Native, SVG, and Reanimated peer dependencies configured.
+After library changes, regenerate the tarball and reinstall it in the consuming
+project. Increment the native package version for each shared build to distinguish archives.
 
 ## Theme tokens
 
@@ -173,3 +191,46 @@ values to Android's `elevation` property.
 Build from the repository so shared source tokens are available. All generated
 JavaScript and declarations are included under `dist/`, including declarations for
 shared source types. Changes to web tokens are picked up by the next native build.
+
+## Themed styles hook
+
+Define the style factory outside the component so its identity stays stable:
+
+```tsx
+import { StyleSheet, View } from 'react-native';
+import { useCreateThemedStyles, type SliceNativeTheme } from '@apple-pie/slice-native';
+
+const createStyles = (theme: SliceNativeTheme) => StyleSheet.create({
+  container: {
+    backgroundColor: theme.colors['core-surface-primary'],
+    padding: theme.spacing.m,
+  },
+  divider: { height: 1 }, // Styles do not have to use the theme.
+});
+
+function Card() {
+  const styles = useCreateThemedStyles(createStyles);
+  return <View style={styles.container} />;
+}
+```
+
+The component must be inside `SliceThemeProvider`. Style keys and property types
+are inferred from the factory return value. The hook recalculates when the theme
+or factory changes; an inline factory works but is recreated every render. If
+styles depend on component props, wrap the factory in `useCallback` with those
+props in its dependency list. The hook accepts ordinary native style objects too;
+calling `StyleSheet.create` inside the factory is optional.
+
+## Typography utility
+
+`lineHeightTextStyle` derives an absolute line height and returns a new style object:
+
+```tsx
+import { lineHeightTextStyle } from '@apple-pie/slice-native';
+
+const label = lineHeightTextStyle({ fontSize: 20, color: '#123456' }, 1.5);
+// { fontSize: 20, color: '#123456', lineHeight: 30 }
+```
+
+The defaults are a 16 font size and a 1.2 multiplier. The multiplier must be a
+finite number from 0 through 2. Existing line height is replaced; the input is unchanged.

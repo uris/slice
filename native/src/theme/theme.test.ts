@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { lightTheme as webLight, darkTheme as webDark } from '../../src/theme/themes';
+import { lightTheme as webLight, darkTheme as webDark } from '../../../src/theme/themes';
 import { createTypography, darkTheme, lightTheme, motion } from './index';
 
 describe('native themes', () => {

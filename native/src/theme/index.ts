@@ -1,11 +1,11 @@
 import type { TextStyle, ViewStyle } from 'react-native';
-import { dark, light, coreColors as webCore } from '../../src/theme/colors/colors';
-import { corners } from '../../src/theme/corners/corners';
+import { dark, light, coreColors as webCore } from '../../../src/theme/colors/colors';
+import { corners } from '../../../src/theme/corners/corners';
 // Import token modules directly: web barrel exports can initialize browser stores.
-import { elevations } from '../../src/theme/elevations/elevations';
-import { motion as webMotion } from '../../src/theme/motion/motion';
-import { spacing } from '../../src/theme/spacing/spacing';
-import { type as webType } from '../../src/theme/type/type';
+import { elevations } from '../../../src/theme/elevations/elevations';
+import { motion as webMotion } from '../../../src/theme/motion/motion';
+import { spacing } from '../../../src/theme/spacing/spacing';
+import { type as webType } from '../../../src/theme/type/type';
 import { easing } from './motion';
 
 export { corners, spacing, elevations };

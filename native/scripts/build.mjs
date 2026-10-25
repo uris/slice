@@ -33,7 +33,7 @@ try {
 	const bundle = await rollup({
 		input: {
 			index: fileURLToPath(new URL('native/index.js', temporary)),
-			theme: fileURLToPath(new URL('native/theme/index.js', temporary)),
+			theme: fileURLToPath(new URL('native/src/theme/index.js', temporary)),
 		},
 		external: (id) => peers.some((peer) => id === peer || id.startsWith(`${peer}/`)),
 		plugins: [
@@ -72,7 +72,7 @@ try {
 	} finally {
 		await bundle.close();
 	}
-	console.log('Built native icons and themes: dist/cjs, dist/esm, dist/types');
+	console.log('Built slice native: dist/cjs, dist/esm, dist/types');
 } catch (error) {
 	rmSync(dist, { recursive: true, force: true });
 	throw error;

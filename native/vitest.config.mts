@@ -8,12 +8,12 @@ export default defineConfig({
 	test: {
 		name: 'native',
 		environment: 'node',
-		include: ['components/**/*.test.{ts,tsx}', 'theme/**/*.test.ts', 'providers/**/*.test.tsx'],
+		include: ['src/**/*.test.{ts,tsx}'],
 		coverage: {
 			provider: 'v8',
 			reportsDirectory: './coverage',
 			reporter: ['text', 'html', 'lcov', 'json-summary'],
-			include: ['index.ts', 'components/**/*.{ts,tsx}', 'providers/**/*.{ts,tsx}', 'theme/**/*.ts'],
+			include: ['index.ts', 'src/**/*.{ts,tsx}'],
 			exclude: ['**/*.test.{ts,tsx}', '**/*.d.ts', '**/_types.ts'],
 		},
 	},
