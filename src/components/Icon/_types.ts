@@ -46,6 +46,7 @@ export const SliceIcons = {
 		inbox: 'inbox',
 		like: 'like',
 		unlike: 'unlike',
+		at: '@',
 	},
 	media: {
 		camera: 'camera',
