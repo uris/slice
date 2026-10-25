@@ -7,10 +7,10 @@
 		"emitDeclarationOnly": false,
 		"declaration": true,
 		"declarationDir": "./dist/types",
-		"rootDir": ".",
+		"rootDir": "..",
 		"outDir": "./.build",
 		"types": ["react"]
 	},
-	"include": ["index.ts", "components/**/*.ts", "components/**/*.tsx"],
+	"include": ["index.ts", "components/**/*.ts", "components/**/*.tsx", "theme/**/*.ts"],
 	"exclude": ["**/*.test.ts", "**/*.test.tsx", "dist", ".build", "node_modules"]
 }
