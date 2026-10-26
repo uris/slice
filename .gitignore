@@ -148,3 +148,5 @@ storybook-static
 
 # reactive-native package ignores
 /native/.build/
+
+/storybook-native-static/

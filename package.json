@@ -119,7 +119,10 @@
 		"build:min": "MINIFY=true NODE_ENV=production rollup -c --bundleConfigAsCjs && tsc -p tsconfig.build.json && node ./scripts/finalize-styles.mjs && ./scripts/copy-css.sh",
 		"dev": "vite",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"storybook:native": "storybook dev --config-dir .storybook-native -p 6007",
+		"build-storybook:native": "storybook build --config-dir .storybook-native --output-dir storybook-native-static",
+		"typecheck:storybook:native": "tsc --noEmit -p .storybook-native/tsconfig.json"
 	},
 	"keywords": [],
 	"author": "Uris Dacosta",
@@ -143,6 +146,7 @@
 		"@storybook/addon-onboarding": "^10.6.3",
 		"@storybook/addon-vitest": "^10.6.3",
 		"@storybook/react": "^10.6.3",
+		"@storybook/react-native-web-vite": "^10.6.3",
 		"@storybook/react-vite": "^10.6.3",
 		"@svgr/rollup": "^8.1.0",
 		"@testing-library/react": "^16.3.2",
@@ -161,6 +165,7 @@
 		"postcss-custom-media": "^11.0.6",
 		"postcss-import": "^16.1.1",
 		"postcss-nested": "^9.0.0",
+		"react-native-web": "^0.21.4",
 		"rollup": "^4.32.0",
 		"rollup-plugin-json": "^4.0.0",
 		"rollup-plugin-peer-deps-external": "^2.2.4",

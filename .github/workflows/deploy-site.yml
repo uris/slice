@@ -2,62 +2,79 @@ name: Deploy Slice UIKit Sites
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
   group: slice-sites-production
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  validate:
+    name: Validate documentation builds
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
+    timeout-minutes: 20
     steps:
-      - name: Deploy to VM over SSH
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            native/package-lock.json
+      - run: npm ci
+      - run: npm ci --prefix native
+      - run: npm run lint:ci
+      - run: npm run lint:ci --prefix native
+      - run: npm run typecheck:storybook:native
+      - run: npm test --prefix native
+      - name: Test deployment orchestration
+        run: python3 deployment/test_deploy.py
+      - name: Build React documentation
+        run: npm run build-storybook
+      - name: Build React Native documentation
+        run: npm run build-storybook:native
+
+  deploy:
+    name: Deploy all three sites
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Deploy validated commit to VM
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: DEPLOY_SHA
+          command_timeout: 35m
           script: |
             bash -se <<'DEPLOY'
             set -euo pipefail
-            export DOCKER_BUILDKIT=1
-            export COMPOSE_DOCKER_CLI_BUILD=1
             export GIT_SSH_COMMAND='ssh -i ~/.ssh/github_actions -o StrictHostKeyChecking=yes'
+            [[ "$DEPLOY_SHA" =~ ^[0-9a-f]{40}$ ]] || exit 1
 
-            if [ -d ~/projects/uikit/.git ]; then
-              git -C ~/projects/uikit pull --ff-only origin main
-            else
+            if [ ! -d ~/projects/uikit/.git ]; then
               git clone git@github.com:uris/uikit.git ~/projects/uikit
             fi
-
-            cd ~/projects
-            if docker compose version >/dev/null 2>&1; then
-              compose() { docker compose -f "$HOME/projects/docker-compose.yml" "$@"; }
-            else
-              compose() { docker-compose -f "$HOME/projects/docker-compose.yml" "$@"; }
-            fi
-
-            configured=$(compose config --services)
-            services=()
-            for service in uikit uikit-react uikit-native; do
-              if printf '%s\n' "$configured" | grep -Fxq "$service"; then
-                if [ "$service" = "uikit-native" ] && ! grep -Eq '"build-storybook:native"[[:space:]]*:' "$HOME/projects/uikit/package.json"; then
-                  echo "Skipping uikit-native: native Storybook is not configured yet."
-                  continue
-                fi
-                services+=("$service")
-              fi
-            done
-            if [ "${#services[@]}" -eq 0 ]; then
-              echo "No Slice services found in ~/projects/docker-compose.yml" >&2
+            cd ~/projects/uikit
+            if [ -n "$(git status --porcelain --untracked-files=normal)" ]; then
+              echo "VM checkout contains local changes; commit or move them before deploying." >&2
               exit 1
             fi
-
-            # Build every selected image before replacing any running site.
-            compose build "${services[@]}"
-            compose up -d --no-deps --no-build "${services[@]}"
-            compose ps "${services[@]}"
+            git fetch origin main
+            if [ "$(git rev-parse origin/main)" != "$DEPLOY_SHA" ]; then
+              echo "Skipping superseded deployment: main has advanced beyond $DEPLOY_SHA."
+              exit 0
+            fi
+            git checkout --detach "$DEPLOY_SHA"
+            bash deployment/deploy-sites.sh "$HOME/projects/docker-compose.yml"
             DEPLOY

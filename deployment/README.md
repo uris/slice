@@ -1,69 +1,74 @@
-# Slice documentation deployment
+# Slice site deployment
 
-The VM's host Nginx handles TLS and routes to these loopback ports. The shared
-Compose file remains at `~/projects/docker-compose.yml` on the VM.
+Pushes to `main` trigger `.github/workflows/deploy-site.yml`. The workflow can also
+be started manually from GitHub Actions using **Run workflow** on `main`.
 
-Docker targets:
+## Pipeline
 
-- `react-docs`: existing web Storybook, also the default Docker build target.
-- `landing`: static platform chooser from `deployment/landing/`.
-- `react-native-docs` in `Dockerfile.react-native`: native Storybook. Not ready until a root `build-storybook:native`
-  script and its configuration are implemented. It must accept Storybook's
-  `--output-dir` option. Do not enable this service before that work is complete.
+1. Install root and native dependencies on Node 24.
+2. Run lint, typechecks, native unit tests, and deployment orchestration tests.
+3. Build the React and React Native Storybooks.
+4. Connect to the VM, fetch `main`, and check out the exact validated commit.
+   A superseded commit is skipped; local checkout changes cause a clear failure.
+5. Build all three Docker images before replacing running Slice containers.
+6. Restart only `uikit`, `uikit-react`, and `uikit-native` without dependencies.
+7. Verify local HTTP responses on ports 8090, 8091, and 8092.
 
-For the first migration step, keep the existing `uikit` service unchanged and
-add this service to the VM Compose file:
+Build failures leave running containers alone. A failure after replacement is
+reported with container status/logs; automatic rollback is not implemented.
+Deployments are serialized. The checkout on the VM is left at a detached commit;
+future deployments fetch and check out their own validated commit.
 
-```yaml
-  uikit-react:
-    build:
-      context: ./uikit
-      target: react-docs
-    container_name: uikit-react
-    ports:
-      - "127.0.0.1:8091:80"
-    restart: unless-stopped
-```
+## One-time VM setup
 
-Verify React docs at https://react.slice-uikit.com before changing `uikit` to:
+Keep the shared Compose file at `~/projects/docker-compose.yml` and the repository
+at `~/projects/uikit`. Merge the services from `compose.sites.example.yml` into the
+shared file. Preserve your website, API, database, and volume definitions.
 
-```yaml
-  uikit:
-    build:
-      context: ./uikit
-      target: landing
-    container_name: uikit
-    ports:
-      - "127.0.0.1:8090:80"
-    restart: unless-stopped
-```
+| Service | Dockerfile | Target | Loopback port |
+| --- | --- | --- | --- |
+| uikit | Dockerfile | landing | 8090 |
+| uikit-react | Dockerfile | react-docs | 8091 |
+| uikit-native | Dockerfile.react-native | react-native-docs | 8092 |
 
-Once native Storybook is implemented, add:
+Host Nginx terminates TLS and routes each domain to its loopback port. The pipeline
+does not edit Nginx, DNS, certificates, or the shared Compose file.
 
-```yaml
-  uikit-native:
-    build:
-      context: ./uikit
-      dockerfile: Dockerfile.react-native
-      target: react-native-docs
-    container_name: uikit-native
-    ports:
-      - "127.0.0.1:8092:80"
-    restart: unless-stopped
-```
+The workflow uses existing repository secrets `VM_HOST`, `VM_USER`, and
+`SSH_PRIVATE_KEY`. The VM user needs Docker access, Git, Bash, and curl, plus the
+existing `~/.ssh/github_actions` key for fetching this repository. GitHub host keys
+must already be trusted in that user's `~/.ssh/known_hosts`. Docker Compose v2 is
+preferred; the deploy script falls back to `docker-compose` when necessary.
+The SSH action timeout is 35 minutes to allow initial image builds.
 
-The GitHub deployment workflow discovers only these three Slice service names
-from the VM Compose file. It builds all selected images before replacing
-containers, without starting dependencies or touching the other application
-services. The workflow skips native while its build script is missing; keep native absent until it builds successfully. Existing GitHub host
-keys must be present in the VM deployment user's `~/.ssh/known_hosts`.
-
-To deploy manually from the VM after editing Compose:
+Before the first deployment, validate the shared file on the VM:
 
 ```sh
 cd ~/projects
-docker compose build uikit uikit-react
-docker compose up -d --no-deps --no-build uikit uikit-react
+docker compose config --quiet
 ```
 
-The landing page's Native link will be usable once native docs are deployed.
+Once the validated commit is present, a manual rollout uses:
+
+```sh
+cd ~/projects/uikit
+bash deployment/deploy-sites.sh "$HOME/projects/docker-compose.yml"
+```
+
+A successful rollout verifies local container endpoints. Verify the public routes
+as well after the first deployment:
+
+- https://www.slice-uikit.com
+- https://react.slice-uikit.com
+- https://react-native.slice-uikit.com
+
+## Local checks
+
+```sh
+bash -n deployment/deploy-sites.sh
+python3 deployment/test_deploy.py
+```
+
+The orchestration tests use fake Docker and HTTP commands, covering successful
+ordering, missing services, build failure, and a failed post-deployment check.
+They do not replace real container builds or verification on the VM.

@@ -12,5 +12,5 @@
 		"types": ["react"]
 	},
 	"include": ["index.ts", "src/**/*.ts", "src/**/*.tsx"],
-	"exclude": ["**/*.test.ts", "**/*.test.tsx", "dist", ".build", "node_modules"]
+	"exclude": ["**/*.test.ts", "**/*.test.tsx", "dist", ".build", "node_modules", "**/*.stories.ts", "**/*.stories.tsx"]
 }
