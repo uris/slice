@@ -1,0 +1,30 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Welcome" />
+
+# Slice for React Native
+
+Components, themes, hooks, and utilities from `@apple-pie/slice-native`.
+These previews render the actual native component source through React Native Web.
+Keyboard behavior, native gestures, animations, font rendering, and screen reader
+behavior still need verification on iOS and Android.
+
+## Get started
+
+Install the package or a locally generated `.tgz` archive, and configure the React
+Native SVG and Reanimated peer dependencies in your application.
+
+```tsx
+import { SliceThemeProvider } from '@apple-pie/slice-native/providers';
+import { SliceButton } from '@apple-pie/slice-native/components';
+
+<SliceThemeProvider>
+  <SliceButton onPress={saveChanges}>Save changes</SliceButton>
+</SliceThemeProvider>
+```
+
+Use the theme toolbar to preview light and dark appearances. Component docs include
+controls and examples. The `/hooks`, `/utils`, and `/theme` entry points provide
+`useCreateThemedStyles`, `lineHeightTextStyle`, and the native theme tokens.
+
+[React documentation](https://react.slice-uikit.com) · [Slice home](https://www.slice-uikit.com)

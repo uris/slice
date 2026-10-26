@@ -288,3 +288,23 @@ Run `npm run test:package --prefix native` to build and verify export targets an
 representative ESM consumer bundles. These checks verify that selecting only the
 line-height utility removes other package code and that hooks do not pull in SVG
 or Reanimated.
+
+## Native Storybook (browser documentation)
+
+From the repository root, after installing both root and native dependencies:
+
+```sh
+npm run storybook:native
+npm run typecheck:storybook:native
+npm run build-storybook:native
+```
+
+The development server uses port 6007. The static build goes to
+`storybook-native-static/`, independently of the existing React Storybook.
+Stories live in `native/stories/`; configuration lives in `.storybook-native/`.
+The theme toolbar uses the native provider. React Native Web, SVG's web rendering,
+and Reanimated's web implementation render the actual components; these are not
+native-platform screenshots. Browser stories supplement device testing.
+
+Deploy with `Dockerfile.react-native` and target `react-native-docs`, as described
+in `deployment/README.md` at the repository root.
