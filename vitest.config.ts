@@ -20,6 +20,7 @@ const coverageExclude = [
 	'**/*.css',
 	'.storybook/**',
 	'native/**',
+	'deployment/landing/**',
 ];
 
 // Browser-mode (v8) coverage captures EVERYTHING that executes in the page -

@@ -90,6 +90,7 @@ export const SliceIcons = {
 		github: 'github',
 		npm: 'npm',
 		openAI: 'openAI',
+		android: 'android',
 	},
 	edit: {
 		edit: 'edit',

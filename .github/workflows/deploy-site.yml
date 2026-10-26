@@ -33,8 +33,8 @@ jobs:
       - run: npm run lint:ci --prefix native
       - run: npm run typecheck:storybook:native
       - run: npm test --prefix native
-      - name: Test deployment orchestration
-        run: python3 deployment/test_deploy.py
+      - name: Build React landing page
+        run: npm run build:landing
       - name: Build React documentation
         run: npm run build-storybook
       - name: Build React Native documentation

@@ -1,6 +1,6 @@
 {
 	"name": "@apple-pie/slice-native",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "React Native icons and design tokens for Slice",
 	"author": "Uris Dacosta",
 	"license": "ISC",

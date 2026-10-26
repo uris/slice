@@ -3,13 +3,17 @@ FROM nginx:alpine AS static-server
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
-FROM static-server AS landing
-COPY deployment/landing/ /usr/share/nginx/html/
-
 FROM node:24-alpine AS dependencies
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
+
+FROM dependencies AS landing-build
+COPY . .
+RUN npm run build:landing
+
+FROM static-server AS landing
+COPY --from=landing-build /app/deployment/landing/dist/ /usr/share/nginx/html/
 
 FROM dependencies AS react-build
 COPY . .

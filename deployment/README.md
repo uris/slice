@@ -1,29 +1,18 @@
-# Slice site deployment
+# Deployment
 
-Pushes to `main` trigger `.github/workflows/deploy-site.yml`. The workflow can also
-be started manually from GitHub Actions using **Run workflow** on `main`.
+This folder contains the landing page and support files for the production pipeline:
 
-## Pipeline
+| File | Purpose |
+| --- | --- |
+| `landing/` | React/Vite app using Slice web components, served at www.slice-uikit.com by the Docker `landing` target. |
+| `deploy-sites.sh` | Called by GitHub Actions on the VM to build, restart, and check the three sites. |
 
-1. Install root and native dependencies on Node 24.
-2. Run lint, typechecks, native unit tests, and deployment orchestration tests.
-3. Build the React and React Native Storybooks.
-4. Connect to the VM, fetch `main`, and check out the exact validated commit.
-   A superseded commit is skipped; local checkout changes cause a clear failure.
-5. Build all three Docker images before replacing running Slice containers.
-6. Restart only `uikit`, `uikit-react`, and `uikit-native` without dependencies.
-7. Verify local HTTP responses on ports 8090, 8091, and 8092.
+The workflow is `.github/workflows/deploy-site.yml`. Pushes to `main`, or manual
+runs on `main`, validate both Storybooks and deploy the validated commit. All images
+build before containers are replaced. Post-deployment failures report status and
+logs; automatic rollback is not implemented.
 
-Build failures leave running containers alone. A failure after replacement is
-reported with container status/logs; automatic rollback is not implemented.
-Deployments are serialized. The checkout on the VM is left at a detached commit;
-future deployments fetch and check out their own validated commit.
-
-## One-time VM setup
-
-Keep the shared Compose file at `~/projects/docker-compose.yml` and the repository
-at `~/projects/uikit`. Merge the services from `compose.sites.example.yml` into the
-shared file. Preserve your website, API, database, and volume definitions.
+The actual Compose configuration lives on the VM at `~/projects/docker-compose.yml`:
 
 | Service | Dockerfile | Target | Loopback port |
 | --- | --- | --- | --- |
@@ -31,44 +20,32 @@ shared file. Preserve your website, API, database, and volume definitions.
 | uikit-react | Dockerfile | react-docs | 8091 |
 | uikit-native | Dockerfile.react-native | react-native-docs | 8092 |
 
-Host Nginx terminates TLS and routes each domain to its loopback port. The pipeline
-does not edit Nginx, DNS, certificates, or the shared Compose file.
+The build context for each service is `./uikit`. Host Nginx handles domains and TLS.
+The deploy script operates only on these three services.
 
-The workflow uses existing repository secrets `VM_HOST`, `VM_USER`, and
-`SSH_PRIVATE_KEY`. The VM user needs Docker access, Git, Bash, and curl, plus the
-existing `~/.ssh/github_actions` key for fetching this repository. GitHub host keys
-must already be trusted in that user's `~/.ssh/known_hosts`. Docker Compose v2 is
-preferred; the deploy script falls back to `docker-compose` when necessary.
-The SSH action timeout is 35 minutes to allow initial image builds.
+The workflow uses `VM_HOST`, `VM_USER`, and `SSH_PRIVATE_KEY` repository secrets.
+The VM needs Docker/Compose, Git, Bash, curl, the repository key at
+`~/.ssh/github_actions`, and trusted GitHub host keys in `~/.ssh/known_hosts`.
+The VM checkout must be clean and is left at a detached commit after deployment.
 
-Before the first deployment, validate the shared file on the VM:
-
-```sh
-cd ~/projects
-docker compose config --quiet
-```
-
-Once the validated commit is present, a manual rollout uses:
+For a manual rollout of the current VM checkout:
 
 ```sh
 cd ~/projects/uikit
 bash deployment/deploy-sites.sh "$HOME/projects/docker-compose.yml"
 ```
 
-A successful rollout verifies local container endpoints. Verify the public routes
-as well after the first deployment:
+## Landing page development
 
-- https://www.slice-uikit.com
-- https://react.slice-uikit.com
-- https://react-native.slice-uikit.com
-
-## Local checks
+The React app lives in `deployment/landing/src`. It uses the repository's dependencies;
+there is no separate install or lockfile. Package-style Slice imports resolve to local
+web sources through the Vite configuration and TypeScript paths.
 
 ```sh
-bash -n deployment/deploy-sites.sh
-python3 deployment/test_deploy.py
+npm run dev:landing
+npm run build:landing
 ```
 
-The orchestration tests use fake Docker and HTTP commands, covering successful
-ordering, missing services, build failure, and a failed post-deployment check.
-They do not replace real container builds or verification on the VM.
+Development uses port 6008. The build typechecks the app and writes static files to
+`deployment/landing/dist/` (ignored by Git). The Docker `landing` target builds this app
+and serves its output with Nginx. Existing Compose target and port remain unchanged.
