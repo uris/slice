@@ -16,5 +16,5 @@
 			"@apple-pie/slice/providers": ["src/providers/index.ts"]
 		}
 	},
-	"include": ["src/**/*.tsx", "vite.config.ts"]
+	"include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"]
 }

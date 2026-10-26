@@ -7,6 +7,9 @@ const repository = fileURLToPath(new URL('../../', import.meta.url));
 
 export default defineConfig({
 	root: fileURLToPath(new URL('.', import.meta.url)),
+	server: {
+		open: true,
+	},
 	plugins: [
 		react({
 			babel: {

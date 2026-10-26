@@ -1,6 +1,6 @@
 {
 	"name": "@apple-pie/slice",
-	"version": "0.1.59",
+	"version": "0.1.60",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.mjs",
 	"exports": {
@@ -100,9 +100,9 @@
 	"files": ["dist", "README.md", "scripts/copy-assets.mjs"],
 	"sideEffects": ["**/*.css"],
 	"scripts": {
-		"lint": "biome format --write . && biome check . && npm run typecheck",
-		"lint:fix": "biome format --write . && biome check --write . && npm run typecheck",
-		"lint:ci": "biome ci . && npm run typecheck",
+		"lint": "biome format --write . && biome check . && npm run typecheck && npm run typecheck:landing",
+		"lint:fix": "biome format --write . && biome check --write . && npm run typecheck && npm run typecheck:landing",
+		"lint:ci": "biome ci . && npm run typecheck && npm run typecheck:landing",
 		"typecheck": "tsc --noEmit -p tsconfig.json",
 		"format": "biome format --write .",
 		"test": "vitest --project unit --project storybook",
@@ -124,7 +124,8 @@
 		"build-storybook:native": "storybook build --config-dir .storybook-native --output-dir storybook-native-static",
 		"typecheck:storybook:native": "tsc --noEmit -p .storybook-native/tsconfig.json",
 		"dev:landing": "vite --config deployment/landing/vite.config.ts --port 6008",
-		"build:landing": "tsc --noEmit -p deployment/landing/tsconfig.json && vite build --config deployment/landing/vite.config.ts"
+		"build:landing": "npm run typecheck:landing && vite build --config deployment/landing/vite.config.ts",
+		"typecheck:landing": "tsc --noEmit -p deployment/landing/tsconfig.json"
 	},
 	"keywords": [],
 	"author": "Uris Dacosta",
