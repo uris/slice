@@ -122,7 +122,9 @@
 		"build-storybook": "storybook build",
 		"storybook:native": "storybook dev --config-dir .storybook-native -p 6007",
 		"build-storybook:native": "storybook build --config-dir .storybook-native --output-dir storybook-native-static",
-		"typecheck:storybook:native": "tsc --noEmit -p .storybook-native/tsconfig.json"
+		"typecheck:storybook:native": "tsc --noEmit -p .storybook-native/tsconfig.json",
+		"dev:landing": "vite --config deployment/landing/vite.config.ts --port 6008",
+		"build:landing": "tsc --noEmit -p deployment/landing/tsconfig.json && vite build --config deployment/landing/vite.config.ts"
 	},
 	"keywords": [],
 	"author": "Uris Dacosta",

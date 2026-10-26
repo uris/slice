@@ -1,0 +1,20 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"rootDir": "../..",
+		"emitDeclarationOnly": false,
+		"declaration": false,
+		"declarationDir": null,
+		"types": ["vite/client"],
+		"paths": {
+			"@apple-pie/slice": ["src/index.ts"],
+			"@apple-pie/slice/components/*": ["src/components/*/index.ts"],
+			"@apple-pie/slice/hooks": ["src/hooks/index.ts"],
+			"@apple-pie/slice/utils": ["src/utils/index.ts"],
+			"@apple-pie/slice/theme": ["src/theme/index.ts"],
+			"@apple-pie/slice/providers": ["src/providers/index.ts"]
+		}
+	},
+	"include": ["src/**/*.tsx", "vite.config.ts"]
+}
