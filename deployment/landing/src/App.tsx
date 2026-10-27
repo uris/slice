@@ -15,15 +15,14 @@ export function App() {
 				<FlexDiv direction={'row'} width={'auto'} gap={24}>
 					<Button variant={'solid'} link={'https://react.slice-uikit.com'} target={'_blank'} paddingLeft={16}>
 						<FlexDiv direction={'row'} align={'center'} justify={'center'} gap={4}>
-							<Icon name={'globe location'} />
-							<span style={{ marginLeft: 4 }}>React Web</span>
+							<span style={{ marginLeft: 4 }}>Web Apps</span>
 						</FlexDiv>
 					</Button>
 					<Button variant={'solid'} link={'https://react-native.slice-uikit.com'} target={'_blank'} paddingLeft={16}>
 						<FlexDiv direction={'row'} align={'center'} justify={'center'} gap={4}>
 							<Icon name={'apple'} />
 							<Icon name={'android'} />
-							<span style={{ marginLeft: 4 }}>React Native</span>
+							<span style={{ marginLeft: 4 }}>Native Apps</span>
 						</FlexDiv>
 					</Button>
 				</FlexDiv>
