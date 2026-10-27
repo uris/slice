@@ -1,0 +1,22 @@
+buildscript {
+  repositories { google(); mavenCentral() }
+  dependencies { classpath 'com.android.tools.build:gradle:8.7.3' }
+}
+apply plugin: 'com.android.library'
+apply plugin: 'com.facebook.react'
+
+react {
+  jsRootDir = file('../../src')
+  libraryName = 'SliceNativeSpec'
+  codegenJavaPackageName = 'com.slice'
+}
+android {
+  namespace 'com.slice'
+  compileSdkVersion rootProject.ext.has('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 35
+  defaultConfig {
+    minSdkVersion 24
+    targetSdkVersion rootProject.ext.has('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 35
+  }
+}
+repositories { google(); mavenCentral() }
+dependencies { implementation 'com.facebook.react:react-android' }

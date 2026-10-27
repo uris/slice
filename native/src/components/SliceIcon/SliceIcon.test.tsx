@@ -2,7 +2,7 @@ import { Children, isValidElement, type ReactElement, type ReactNode } from 'rea
 import type { SvgProps } from 'react-native-svg';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { STATIC_ICON_REGISTRY as webRegistry } from '../../../../src/components/Icon/iconRegistry';
-import { SliceIcon as PublicSliceIcon, StyledText, SliceThemeProvider, useSliceTheme } from '../../../index';
+import { SliceIcon as PublicSliceIcon, StyledText, SliceThemeProvider, useSliceTheme } from '../../index';
 import type { IconProps } from './_types';
 import { SliceIcon } from './SliceIcon';
 import { STATIC_ICON_REGISTRY } from './iconRegistry';

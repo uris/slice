@@ -1,4 +1,4 @@
-import { readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { rollup } from 'rollup';
 import ts from 'typescript';
@@ -30,9 +30,22 @@ try {
 	check(ts.getPreEmitDiagnostics(program));
 	check(program.emit().diagnostics);
 
+	// Metro needs extensionless imports and platform siblings (.ios.js / .js).
+	// Keep shared token modules emitted by TypeScript inside this package too.
+	const metro = new URL('react-native/', dist);
+	cpSync(temporary, metro, { recursive: true });
+	const metroSpecs = new URL('native/src/specs/', metro);
+	mkdirSync(metroSpecs, { recursive: true });
+	// Babel's Codegen transform needs the original prop types, not tsc's JS output.
+	for (const name of readdirSync(new URL('src/specs/', root))) {
+		if (!name.endsWith('.ts')) continue;
+		rmSync(new URL(name.replace(/\.ts$/, '.js'), metroSpecs), { force: true });
+		cpSync(new URL(`src/specs/${name}`, root), new URL(name, metroSpecs));
+	}
+
 	const bundle = await rollup({
 		input: {
-			index: fileURLToPath(new URL('native/index.js', temporary)),
+			index: fileURLToPath(new URL('native/src/index.js', temporary)),
 			...Object.fromEntries(
 				['components', 'hooks', 'providers', 'utils', 'theme'].map((name) => [
 					name,

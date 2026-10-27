@@ -1,9 +1,12 @@
 import { useMemo } from 'react';
 import { Pressable, type StyleProp, StyleSheet, type ViewStyle } from 'react-native';
 import Reanimated from 'react-native-reanimated';
-import { useSliceTheme } from '../../providers/SliceThemeProvider';
+import { useDeviceCapabilities } from '../../hooks';
+import { useSliceTheme } from '../../providers';
+import { borderRadiusToNumber, sizeToNumber } from '../../utils';
 import { SliceIcon } from '../SliceIcon';
-import { StyledText } from '../SliceText/SliceText';
+import { SliceLiquidGlassView } from '../SliceLiquidGlassView';
+import { StyledText } from '../SliceText';
 import type { SliceButtonProps } from './_types';
 
 /**
@@ -11,6 +14,7 @@ import type { SliceButtonProps } from './_types';
  */
 export function SliceButton(props: Readonly<SliceButtonProps>) {
 	const { colors, name } = useSliceTheme();
+	const { supportsLiquidGlass } = useDeviceCapabilities();
 	const isLightTheme = name.includes('light');
 	const {
 		children,
@@ -19,17 +23,24 @@ export function SliceButton(props: Readonly<SliceButtonProps>) {
 		icon,
 		iconPosition = 'left',
 		iconSize = 24,
+		size = 'm',
 		animatedStyle,
 		variant = 'primary',
 		layout,
 		presence,
 		accessibilityState,
+		liquidGlassBackground,
+		borderRadius = 'pill',
+		borderWidth,
+		borderColor = colors['core-outline-secondary'],
+		backgroundColor,
 		...pressableProps
 	} = props;
+	const { fallbackColor, glassTintColor, glassStyle } = liquidGlassBackground ?? {};
+	const applyLiquidGlass = Boolean(liquidGlassBackground) && supportsLiquidGlass;
 
 	const hasLabel = children !== undefined && children !== null && children !== false && children !== '';
 
-	// adjust padding for the visual discrepancy because of the intrinsic padding of each icon
 	const pressableStyle = useMemo((): StyleProp<ViewStyle> => {
 		if (!hasLabel) return StyleSheet.compose(styles.pressable, styles.pressableNoLabel);
 		if (icon && iconPosition === 'left') return StyleSheet.compose(styles.pressable, styles.pressableIconLeft);
@@ -37,15 +48,13 @@ export function SliceButton(props: Readonly<SliceButtonProps>) {
 		return styles.pressable;
 	}, [icon, iconPosition, hasLabel]);
 
-	// create a round button when the button has no label
-	const wrapperStyle = useMemo((): StyleProp<ViewStyle> => {
-		if (!hasLabel) return StyleSheet.compose(styles.wrapper, styles.roundWrapper);
-		return styles.wrapper;
-	}, [hasLabel]);
+	const bgColor = useMemo(() => {
+		if (applyLiquidGlass) return 'transparent';
+		const baseBGColor = variant === 'primary' ? colors['core-button-primary'] : colors['core-surface-primary'];
+		return backgroundColor ?? fallbackColor ?? baseBGColor;
+	}, [applyLiquidGlass, backgroundColor, fallbackColor, colors, variant]);
 
-	// memoize the color styles to apply to the button/label based on variant and disabled state
 	const colorStyles = useMemo(() => {
-		const bgColor = variant === 'primary' ? colors['core-button-primary'] : colors['core-surface-primary'];
 		const disabledBGColor = disabled ? colors['core-surface-secondary'] : undefined;
 		const color = colors['core-text-primary'];
 		const disabledColor = disabled ? colors['core-text-disabled'] : undefined;
@@ -56,7 +65,7 @@ export function SliceButton(props: Readonly<SliceButtonProps>) {
 				: colors['core-link-primary'];
 		return StyleSheet.create({
 			backgroundColor: {
-				backgroundColor: disabledBGColor ?? bgColor,
+				backgroundColor: applyLiquidGlass ? 'transparent' : (disabledBGColor ?? bgColor),
 			},
 			textColor: {
 				color: disabledColor ?? color,
@@ -68,17 +77,18 @@ export function SliceButton(props: Readonly<SliceButtonProps>) {
 				color: iconColor,
 			},
 		});
-	}, [variant, disabled, colors, isLightTheme]);
+	}, [applyLiquidGlass, disabled, colors, isLightTheme, bgColor]);
 
-	// primary buttons are full color and have no border
+	// Preserve variant defaults while allowing an explicit zero-width border.
 	const borderStyles = useMemo(() => {
+		const width = borderWidth ?? (variant === 'primary' ? 0 : 1);
 		return StyleSheet.create({
 			border: {
-				borderWidth: variant === 'primary' ? 0 : 1,
-				borderColor: colors['core-outline-secondary'],
+				borderWidth: Number.isFinite(width) ? Math.max(0, width) : 0,
+				borderColor,
 			},
 		});
-	}, [variant, colors]);
+	}, [variant, borderColor, borderWidth]);
 
 	// disable touch events when button is disabled
 	const pointerEvents = useMemo(() => {
@@ -89,12 +99,48 @@ export function SliceButton(props: Readonly<SliceButtonProps>) {
 		});
 	}, [disabled]);
 
+	// set the button size
+	const buttonSize = useMemo(() => {
+		return StyleSheet.create({
+			size: {
+				minHeight: sizeToNumber(size),
+				width: hasLabel ? 'auto' : sizeToNumber(size),
+			},
+		});
+	}, [size, hasLabel]);
+
+	// set the button border radius
+	const cornerRadius = useMemo(() => {
+		return StyleSheet.create({
+			borderRadius: {
+				borderRadius: borderRadiusToNumber(borderRadius),
+			},
+		});
+	}, [borderRadius]);
+
 	return (
 		<Reanimated.View layout={layout}>
 			<Reanimated.View entering={presence?.entering} exiting={presence?.exiting}>
 				<Reanimated.View
-					style={[wrapperStyle, pointerEvents.pointer, colorStyles.backgroundColor, borderStyles.border, animatedStyle]}
+					style={[
+						styles.wrapper,
+						pointerEvents.pointer,
+						colorStyles.backgroundColor,
+						buttonSize.size,
+						borderStyles.border,
+						cornerRadius.borderRadius,
+						animatedStyle,
+					]}
 				>
+					{applyLiquidGlass && (
+						<SliceLiquidGlassView
+							cornerRadius={borderRadiusToNumber(borderRadius)}
+							fallbackColor={fallbackColor}
+							glassTintColor={glassTintColor}
+							glassStyle={glassStyle}
+							style={styles.background}
+						/>
+					)}
 					<Pressable
 						{...pressableProps}
 						accessibilityRole={pressableProps.accessibilityRole ?? 'button'}
@@ -145,17 +191,15 @@ export function SliceButton(props: Readonly<SliceButtonProps>) {
  */
 const styles = StyleSheet.create({
 	wrapper: {
-		borderRadius: 100,
+		position: 'relative',
 		overflow: 'hidden',
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: 48,
 		width: 'auto',
 	},
-	roundWrapper: {
-		borderRadius: 24,
-		width: 48,
-		height: 48,
+	background: {
+		position: 'absolute',
+		inset: 0,
 	},
 	pressable: {
 		flex: 1,
