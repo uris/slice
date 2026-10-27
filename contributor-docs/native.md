@@ -11,7 +11,7 @@ this guide describes the native-specific workflow.
 | --- | --- | --- |
 | npm name | `@apple-pie/slice` | `@apple-pie/slice-native` |
 | Manifest and lockfile | Repository root | `native/` |
-| Public entrypoint | `src/index.ts` | `native/index.ts` |
+| Public entrypoint | `src/index.ts` | `native/src/index.ts` |
 | Component source | `src/components/` | `native/components/Icon/` |
 | Build output | `dist/` | `native/dist/` |
 | Rendering | React DOM, browser SVG, CSS | React Native and `react-native-svg` |
@@ -24,7 +24,7 @@ make these packages one runtime library.
 
 The allowed cross-package reads today are build-time icon generation and test-only artwork
 comparisons. Generated native files must be self-contained at runtime. Keep native public
-exports in `native/components/Icon/index.ts` and `native/index.ts`; export-map changes belong
+exports in `native/components/Icon/index.ts` and `native/src/index.ts`; export-map changes belong
 in `native/package.json`, not the root manifest.
 
 ## Icon source of truth

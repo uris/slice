@@ -30,14 +30,16 @@ jobs:
         run: npm ci --prefix native
       - name: Lint and typecheck
         run: npm run lint:ci --prefix native
-      - name: Run native tests
-        run: npm test --prefix native
+      - name: Run native tests with coverage thresholds
+        run: npm run coverage --prefix native
       - name: Typecheck native Storybook
         run: npm run typecheck:storybook:native
       - name: Build native Storybook
         run: npm run build-storybook:native
       - name: Build native package
         run: npm run build --prefix native
+      - name: Verify native exports and Codegen specification
+        run: node native/scripts/check-package.mjs
       - name: Validate native package contents
         working-directory: native
         # The preceding step already built the package; avoid repeating prepack.
