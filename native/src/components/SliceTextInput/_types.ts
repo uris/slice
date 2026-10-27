@@ -1,5 +1,6 @@
-import type { TextInputProps } from 'react-native';
+import type { ColorValue, TextInputProps } from 'react-native';
 import type { BaseAnimationBuilder, LayoutAnimationFunction } from 'react-native-reanimated';
+import type { BorderRadius, Size } from '../../types/sharedTypes';
 
 export interface SliceTextInputProps extends TextInputProps {
 	/**
@@ -34,4 +35,25 @@ export interface SliceTextInputProps extends TextInputProps {
 	 * Expose a way to set focus on input from external events
 	 */
 	focused?: boolean;
+	/**
+	 * Element size in terms of height
+	 */
+	size?: Size;
+	/**
+	 * Define a default border radius name or amount
+	 */
+	borderRadius?: BorderRadius;
+	/**
+	 * Border width in points. Negative/non-finite values become 0.
+	 * Defaults to 1.
+	 */
+	borderWidth?: number;
+	/**
+	 * Border color. Defaults to the theme’s core-outline-secondary color.
+	 */
+	borderColor?: ColorValue;
+	/**
+	 * Optional background color override
+	 */
+	backgroundColor?: ColorValue;
 }

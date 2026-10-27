@@ -1,54 +1,54 @@
 {
 	"name": "@apple-pie/slice-native",
-	"version": "0.1.6",
-	"description": "React Native icons and design tokens for Slice",
+	"version": "0.1.7",
+	"description": "React Native components, icons and design tokens for Slice",
 	"author": "Uris Dacosta",
 	"license": "ISC",
 	"type": "commonjs",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.mjs",
-	"react-native": "./dist/esm/index.mjs",
-	"types": "./dist/types/native/index.d.ts",
+	"react-native": "./dist/react-native/native/src/index.js",
+	"types": "./dist/types/native/src/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/types/native/index.d.ts",
-			"react-native": "./dist/esm/index.mjs",
+			"types": "./dist/types/native/src/index.d.ts",
+			"react-native": "./dist/react-native/native/src/index.js",
 			"import": "./dist/esm/index.mjs",
 			"require": "./dist/cjs/index.js"
 		},
 		"./package.json": "./package.json",
 		"./theme": {
 			"types": "./dist/types/native/src/theme/index.d.ts",
-			"react-native": "./dist/esm/theme.mjs",
+			"react-native": "./dist/react-native/native/src/theme/index.js",
 			"import": "./dist/esm/theme.mjs",
 			"require": "./dist/cjs/theme.js"
 		},
 		"./components": {
 			"types": "./dist/types/native/src/components/index.d.ts",
-			"react-native": "./dist/esm/components.mjs",
+			"react-native": "./dist/react-native/native/src/components/index.js",
 			"import": "./dist/esm/components.mjs",
 			"require": "./dist/cjs/components.js"
 		},
 		"./hooks": {
 			"types": "./dist/types/native/src/hooks/index.d.ts",
-			"react-native": "./dist/esm/hooks.mjs",
+			"react-native": "./dist/react-native/native/src/hooks/index.js",
 			"import": "./dist/esm/hooks.mjs",
 			"require": "./dist/cjs/hooks.js"
 		},
 		"./providers": {
 			"types": "./dist/types/native/src/providers/index.d.ts",
-			"react-native": "./dist/esm/providers.mjs",
+			"react-native": "./dist/react-native/native/src/providers/index.js",
 			"import": "./dist/esm/providers.mjs",
 			"require": "./dist/cjs/providers.js"
 		},
 		"./utils": {
 			"types": "./dist/types/native/src/utils/index.d.ts",
-			"react-native": "./dist/esm/utils.mjs",
+			"react-native": "./dist/react-native/native/src/utils/index.js",
 			"import": "./dist/esm/utils.mjs",
 			"require": "./dist/cjs/utils.js"
 		}
 	},
-	"files": ["dist"],
+	"files": ["dist", "platform", "src/specs", "SliceNative.podspec", "react-native.config.js"],
 	"sideEffects": false,
 	"scripts": {
 		"test": "vitest run --config vitest.config.mts",
@@ -60,7 +60,7 @@
 		"pack:tarball": "node scripts/pack.mjs",
 		"pack": "node scripts/pack.mjs",
 		"prepack": "npm run build",
-		"generate": "node scripts/generate-icons.mjs",
+		"generate": "node scripts/generate-icons.mjs && biome format --write src/components/SliceIcon/iconRegistry.tsx src/components/SliceIcon/icons.ts",
 		"typecheck": "tsc --noEmit -p tsconfig.json"
 	},
 	"publishConfig": {
@@ -77,5 +77,22 @@
 		"react-native": ">=0.80.0 <1.0.0",
 		"react-native-svg": "^15.0.0",
 		"react-native-reanimated": "^4.0.0"
+	},
+	"codegenConfig": {
+		"name": "SliceNativeSpec",
+		"type": "all",
+		"jsSrcsDir": "src/specs",
+		"ios": {
+			"componentProvider": {
+				"SliceLiquidGlassView": "RCTLiquidGlassView",
+				"SliceBackgroundBlur": "RCTBackgroundBlurView"
+			},
+			"modulesProvider": {
+				"SliceDeviceCapabilities": "SliceDeviceCapabilities"
+			}
+		},
+		"android": {
+			"javaPackageName": "com.slice"
+		}
 	}
 }

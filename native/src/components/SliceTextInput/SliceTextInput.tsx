@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, TextInput, type TextInputInstance, View } from 'react-native';
 import Reanimated from 'react-native-reanimated';
-import { useCreateThemedStyles } from '../../hooks/useCreateThemedStyles/useCreateThemedStyles';
+import { useCreateThemedStyles } from '../../hooks';
+import { useSliceTheme } from '../../providers';
 import type { SliceNativeTheme } from '../../theme';
-import { lineHeightTextStyle } from '../../utils/typography/typography';
+import { borderRadiusToNumber, lineHeightTextStyle, sizeToNumber } from '../../utils';
 import { SliceIcon } from '../SliceIcon';
 import type { SliceTextInputProps } from './_types';
 
 export function SliceTextInput(props: Readonly<SliceTextInputProps>) {
 	const themedStyles = useCreateThemedStyles(styles);
+	const { colors } = useSliceTheme();
 	const {
 		didFocus,
 		layout,
@@ -24,6 +26,11 @@ export function SliceTextInput(props: Readonly<SliceTextInputProps>) {
 		onBlur,
 		onChangeText,
 		accessibilityState,
+		borderRadius = 'pill',
+		borderWidth = 1,
+		borderColor = colors['core-outline-secondary'],
+		backgroundColor,
+		size = 'm',
 		...rest
 	} = props;
 	const inputRef = useRef<TextInputInstance>(null);
@@ -53,8 +60,48 @@ export function SliceTextInput(props: Readonly<SliceTextInputProps>) {
 		});
 	}, [showIcon]);
 
+	const inputSize = useMemo(() => {
+		return StyleSheet.create({
+			size: {
+				minHeight: sizeToNumber(size),
+			},
+		});
+	}, [size]);
+
+	const borderStyles = useMemo(() => {
+		return StyleSheet.create({
+			border: {
+				borderWidth: Number.isFinite(borderWidth) ? Math.max(0, borderWidth) : 0,
+				borderColor,
+			},
+		});
+	}, [borderColor, borderWidth]);
+
+	const cornerRadius = useMemo(() => {
+		return StyleSheet.create({
+			borderRadius: {
+				borderRadius: borderRadiusToNumber(borderRadius),
+			},
+		});
+	}, [borderRadius]);
+
+	const bgColor = useMemo(() => {
+		return StyleSheet.create({
+			backgroundColor: { backgroundColor: backgroundColor ?? colors['core-surface-primary'] },
+		});
+	}, [backgroundColor, colors]);
+
 	return (
-		<Reanimated.View style={themedStyles.inputWrapper} layout={layout}>
+		<Reanimated.View
+			style={[
+				themedStyles.inputWrapper,
+				inputSize.size,
+				cornerRadius.borderRadius,
+				borderStyles.border,
+				bgColor.backgroundColor,
+			]}
+			layout={layout}
+		>
 			{showIcon && (
 				<View style={[themedStyles.icon, { height: iconSize, width: iconSize }]}>
 					<SliceIcon
@@ -107,11 +154,6 @@ const styles = (theme: SliceNativeTheme) =>
 			alignItems: 'center',
 			justifyContent: 'flex-start',
 			gap: 8,
-			borderWidth: 1,
-			borderColor: theme.colors['core-outline-secondary'],
-			borderRadius: 100,
-			minHeight: 48,
-			backgroundColor: theme.colors['core-surface-primary'],
 			zIndex: 2,
 		},
 		inputFieldView: {
@@ -119,9 +161,8 @@ const styles = (theme: SliceNativeTheme) =>
 			color: theme.colors['core-text-primary'],
 			flex: 1,
 			zIndex: 2,
-			minHeight: 48,
 		},
 		placeHolder: {
-			color: theme.colors['core-text-secondary'],
+			color: theme.colors['core-text-tertiary'],
 		},
 	});
