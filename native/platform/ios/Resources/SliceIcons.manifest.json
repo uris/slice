@@ -1,0 +1,746 @@
+[
+  {
+    "name": "android",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-616e64726f6964-normal"
+  },
+  {
+    "name": "@",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-40-normal"
+  },
+  {
+    "name": "fullscreen",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66756c6c73637265656e-normal"
+  },
+  {
+    "name": "pause",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-7061757365-normal"
+  },
+  {
+    "name": "pause circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-706175736520636972636c65-normal"
+  },
+  {
+    "name": "pause circle",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-706175736520636972636c65-normal-filled"
+  },
+  {
+    "name": "play",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-706c6179-normal"
+  },
+  {
+    "name": "play circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-706c617920636972636c65-normal"
+  },
+  {
+    "name": "play circle",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-706c617920636972636c65-normal-filled"
+  },
+  {
+    "name": "npm",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6e706d-normal"
+  },
+  {
+    "name": "github",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-676974687562-normal"
+  },
+  {
+    "name": "openAI",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6f70656e4149-normal"
+  },
+  {
+    "name": "talk",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74616c6b-normal"
+  },
+  {
+    "name": "talk",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-74616c6b-normal-filled"
+  },
+  {
+    "name": "speaker",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-737065616b6572-normal"
+  },
+  {
+    "name": "speaker",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-737065616b6572-normal-filled"
+  },
+  {
+    "name": "speaker muted",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-737065616b6572206d75746564-normal"
+  },
+  {
+    "name": "speaker muted",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-737065616b6572206d75746564-normal-filled"
+  },
+  {
+    "name": "speaker high",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-737065616b65722068696768-normal"
+  },
+  {
+    "name": "speaker high",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-737065616b65722068696768-normal-filled"
+  },
+  {
+    "name": "speaker low",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-737065616b6572206c6f77-normal"
+  },
+  {
+    "name": "speaker low",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-737065616b6572206c6f77-normal-filled"
+  },
+  {
+    "name": "laptop",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6c6170746f70-normal"
+  },
+  {
+    "name": "laptop",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-6c6170746f70-normal-filled"
+  },
+  {
+    "name": "moon full",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6f6f6e2066756c6c-normal"
+  },
+  {
+    "name": "moon full",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-6d6f6f6e2066756c6c-normal-filled"
+  },
+  {
+    "name": "sun",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73756e-normal"
+  },
+  {
+    "name": "sun",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-73756e-normal-filled"
+  },
+  {
+    "name": "keyboard",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6b6579626f617264-normal"
+  },
+  {
+    "name": "sidebar",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73696465626172-normal"
+  },
+  {
+    "name": "sidebar",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-73696465626172-normal-filled"
+  },
+  {
+    "name": "sidebar split",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-736964656261722073706c6974-normal"
+  },
+  {
+    "name": "sidebar split",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-736964656261722073706c6974-normal-filled"
+  },
+  {
+    "name": "target",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-746172676574-normal"
+  },
+  {
+    "name": "video off",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-766964656f206f6666-normal"
+  },
+  {
+    "name": "video",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-766964656f-normal"
+  },
+  {
+    "name": "mic",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6963-normal"
+  },
+  {
+    "name": "mic",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-6d6963-normal-filled"
+  },
+  {
+    "name": "mic muted",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6963206d75746564-normal"
+  },
+  {
+    "name": "camera",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616d657261-normal"
+  },
+  {
+    "name": "highlight",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-686967686c69676874-normal"
+  },
+  {
+    "name": "like",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6c696b65-normal"
+  },
+  {
+    "name": "unlike",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-756e6c696b65-normal"
+  },
+  {
+    "name": "stop",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73746f70-normal"
+  },
+  {
+    "name": "copy",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636f7079-normal"
+  },
+  {
+    "name": "font smaller",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6e7420736d616c6c6572-normal"
+  },
+  {
+    "name": "font larger",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6e74206c6172676572-normal"
+  },
+  {
+    "name": "bar chart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-626172206368617274-normal"
+  },
+  {
+    "name": "briefcase",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-627269656663617365-normal"
+  },
+  {
+    "name": "globe location",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-676c6f6265206c6f636174696f6e-normal"
+  },
+  {
+    "name": "focus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f637573-normal"
+  },
+  {
+    "name": "chart arrow",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6368617274206172726f77-normal"
+  },
+  {
+    "name": "document editor",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e7420656469746f72-normal"
+  },
+  {
+    "name": "settings",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73657474696e6773-normal"
+  },
+  {
+    "name": "light bulb",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6c696768742062756c62-normal"
+  },
+  {
+    "name": "issue",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6973737565-normal"
+  },
+  {
+    "name": "chart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6368617274-normal"
+  },
+  {
+    "name": "chat",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63686174-normal"
+  },
+  {
+    "name": "exclamation",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6578636c616d6174696f6e-normal"
+  },
+  {
+    "name": "undo",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-756e646f-normal"
+  },
+  {
+    "name": "character beam",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861726163746572206265616d-normal"
+  },
+  {
+    "name": "edit",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-65646974-normal"
+  },
+  {
+    "name": "text document",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-7465787420646f63756d656e74-normal"
+  },
+  {
+    "name": "mail",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d61696c-normal"
+  },
+  {
+    "name": "concise",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636f6e63697365-normal"
+  },
+  {
+    "name": "moderate",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6f646572617465-normal"
+  },
+  {
+    "name": "expanded",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-657870616e646564-normal"
+  },
+  {
+    "name": "open circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6f70656e20636972636c65-normal"
+  },
+  {
+    "name": "view",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-76696577-normal"
+  },
+  {
+    "name": "view",
+    "state": "on",
+    "filled": false,
+    "asset": "slice-icon-76696577-on"
+  },
+  {
+    "name": "apple",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6170706c65-normal"
+  },
+  {
+    "name": "linkedin",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6c696e6b6564696e-normal"
+  },
+  {
+    "name": "google",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-676f6f676c65-normal"
+  },
+  {
+    "name": "google mono",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-676f6f676c65206d6f6e6f-normal"
+  },
+  {
+    "name": "dollar",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f6c6c6172-normal"
+  },
+  {
+    "name": "trash bin",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74726173682062696e-normal"
+  },
+  {
+    "name": "recent",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-726563656e74-normal"
+  },
+  {
+    "name": "refresh",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-72656672657368-normal"
+  },
+  {
+    "name": "document",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74-normal"
+  },
+  {
+    "name": "navigate right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6e61766967617465207269676874-normal"
+  },
+  {
+    "name": "navigate left",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6e61766967617465206c656674-normal"
+  },
+  {
+    "name": "arrow right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77207269676874-normal"
+  },
+  {
+    "name": "arrow left",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77206c656674-normal"
+  },
+  {
+    "name": "",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-empty-normal"
+  },
+  {
+    "name": "arrow up",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77207570-normal"
+  },
+  {
+    "name": "arrow down",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f7720646f776e-normal"
+  },
+  {
+    "name": "notification",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6e6f74696669636174696f6e-normal"
+  },
+  {
+    "name": "alert",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-616c657274-normal"
+  },
+  {
+    "name": "blank",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-626c616e6b-normal"
+  },
+  {
+    "name": "check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636865636b-normal"
+  },
+  {
+    "name": "help",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-68656c70-normal"
+  },
+  {
+    "name": "menu",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656e75-normal"
+  },
+  {
+    "name": "attach",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-617474616368-normal"
+  },
+  {
+    "name": "person",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-706572736f6e-normal"
+  },
+  {
+    "name": "upload",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75706c6f6164-normal"
+  },
+  {
+    "name": "download",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f776e6c6f6164-normal"
+  },
+  {
+    "name": "check circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636865636b20636972636c65-normal"
+  },
+  {
+    "name": "share",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-7368617265-normal"
+  },
+  {
+    "name": "share",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-7368617265-normal-filled"
+  },
+  {
+    "name": "search",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-736561726368-normal"
+  },
+  {
+    "name": "x",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-78-normal"
+  },
+  {
+    "name": "plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-706c7573-normal"
+  },
+  {
+    "name": "circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636972636c65-normal"
+  },
+  {
+    "name": "circle fill",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636972636c652066696c6c-normal"
+  },
+  {
+    "name": "plus circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-706c757320636972636c65-normal"
+  },
+  {
+    "name": "chevron down",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63686576726f6e20646f776e-normal"
+  },
+  {
+    "name": "chevron up",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63686576726f6e207570-normal"
+  },
+  {
+    "name": "checkbox checked",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636865636b626f7820636865636b6564-normal"
+  },
+  {
+    "name": "checkbox",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636865636b626f78-normal"
+  },
+  {
+    "name": "checkbox partial",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636865636b626f78207061727469616c-normal"
+  },
+  {
+    "name": "filter",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696c746572-normal"
+  },
+  {
+    "name": "more",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6f7265-normal"
+  },
+  {
+    "name": "people",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-70656f706c65-normal"
+  },
+  {
+    "name": "wand",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-77616e64-normal"
+  },
+  {
+    "name": "wallet",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-77616c6c6574-normal"
+  },
+  {
+    "name": "invoice",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696e766f696365-normal"
+  },
+  {
+    "name": "payment",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-7061796d656e74-normal"
+  },
+  {
+    "name": "heart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6865617274-normal"
+  },
+  {
+    "name": "clock",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636c6f636b-normal"
+  },
+  {
+    "name": "book",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-626f6f6b-normal"
+  },
+  {
+    "name": "sparkle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-737061726b6c65-normal"
+  },
+  {
+    "name": "sparkle",
+    "state": "normal",
+    "filled": true,
+    "asset": "slice-icon-737061726b6c65-normal-filled"
+  },
+  {
+    "name": "inbox",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696e626f78-normal"
+  },
+  {
+    "name": "home",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-686f6d65-normal"
+  }
+]

@@ -57,3 +57,17 @@ export function useSliceTheme(): SliceNativeTheme {
 
 	return context.theme;
 }
+
+/**
+ * Native containers can inherit system appearance without requiring a provider.
+ */
+export function useSliceThemePreference(): ThemePreference {
+	return useContext(ThemeContext)?.preference ?? 'system';
+}
+
+/**
+ * Standalone icons remain usable without a Slice provider.
+ */
+export function useOptionalSliceTheme(): SliceNativeTheme | undefined {
+	return useContext(ThemeContext)?.theme;
+}

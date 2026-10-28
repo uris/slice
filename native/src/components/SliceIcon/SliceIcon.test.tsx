@@ -3,11 +3,16 @@ import type { SvgProps } from 'react-native-svg';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { STATIC_ICON_REGISTRY as webRegistry } from '../../../../src/components/Icon/iconRegistry';
 import { SliceIcon as PublicSliceIcon, StyledText, SliceThemeProvider, useSliceTheme } from '../../index';
+import { lightTheme, darkTheme, type SliceNativeTheme } from '../../theme';
 import type { IconProps } from './_types';
 import { SliceIcon } from './SliceIcon';
 import { STATIC_ICON_REGISTRY } from './iconRegistry';
 
-const state = vi.hoisted(() => ({ scheme: 'light' }));
+const state = vi.hoisted(() => ({ scheme: 'light', theme: undefined as SliceNativeTheme | undefined }));
+vi.mock('../../providers/SliceThemeProvider', async (importOriginal) => ({
+    ...await importOriginal<typeof import('../../providers/SliceThemeProvider')>(),
+    useOptionalSliceTheme: () => state.theme,
+}));
 vi.mock('react-native-reanimated', () => ({ default: { View: () => null } }));
 vi.mock('react-native', () => ({ useColorScheme: () => state.scheme, StyleSheet: { create: (styles: unknown) => styles } }));
 vi.mock('react-native-svg', () => {
@@ -47,7 +52,7 @@ describe('SliceIcon', () => {
 		expect(SliceThemeProvider).toBeTypeOf('function');
 		expect(useSliceTheme).toBeTypeOf('function');
 	});
-	beforeEach(() => { state.scheme = 'light'; });
+	beforeEach(() => { state.scheme = 'light'; state.theme = undefined; });
 
 	it('preserves every icon and variant without browser elements', () => {
 		expect([...STATIC_ICON_REGISTRY.keys()]).toEqual([...webRegistry.keys()]);
@@ -70,7 +75,7 @@ describe('SliceIcon', () => {
 	it('uses the toggled variant and falls back when none exists', () => {
 		for (const name of ['view', 'home']) {
 			const definition = STATIC_ICON_REGISTRY.get(name)!;
-			expect(render({ name, toggle: true, ...shapeProps, fill: true })?.props.children).toEqual(
+			expect(render({ name, toggle: true, stroke: shapeProps.stroke, iconColor: shapeProps.strokeColor, fillColor: shapeProps.fillColor, coverUp: shapeProps.coverUp, fill: true })?.props.children).toEqual(
 				(definition.lineOn ?? definition.line)(shapeProps),
 			);
 		}
@@ -97,4 +102,31 @@ describe('SliceIcon', () => {
 			opacity: 0.4, accessibilityState: { disabled: true },
 		});
 	});
+});
+
+it('uses the provider appearance for palette tokens, cover-ups and default fill opacity', () => {
+    const line = vi.spyOn(STATIC_ICON_REGISTRY.get('home')!, 'line');
+    state.scheme = 'light';
+    state.theme = darkTheme;
+    render({ fill: true, iconColor: 'core-icon-secondary' });
+    expect(line).toHaveBeenLastCalledWith({ stroke: 1.5, strokeColor: darkTheme.colors['core-icon-secondary'], fillColor: 0.2, coverUp: '#000000' });
+    state.scheme = 'dark';
+    state.theme = lightTheme;
+    render({ fill: true });
+    expect(line).toHaveBeenLastCalledWith({ stroke: 1.5, strokeColor: '#000000', fillColor: 0.125, coverUp: '#ffffff' });
+    line.mockRestore();
+});
+it('preserves enabled long-press and press lifecycle handlers without requiring onPress', () => {
+    const onLongPress = vi.fn(), onPressIn = vi.fn(), onPressOut = vi.fn();
+    const output = render({ onLongPress, onPressIn, onPressOut });
+    expect(output?.props).toMatchObject({ accessibilityRole: 'button', onLongPress, onPressIn, onPressOut });
+});
+it('renders the active compound search artwork using the requested semantic foreground', () => {
+    state.theme = lightTheme;
+    const output = render({ name: 'search', iconColor: 'core-icon-secondary' });
+    const shape = output?.props.children as ReactElement<{ fill: string; fillRule: string; d: string }>;
+    expect(shape.props.fill).toBe(lightTheme.colors['core-icon-secondary']);
+    expect(shape.props.fillRule).toBe('evenodd');
+    expect(shape.props.d).toContain('M9 14.5');
+    expect(shape.props.d).toContain('M10 9');
 });

@@ -38,7 +38,7 @@ vi.mock('../SliceIcon', () => ({
 			data-testid="icon"
 			data-name={props.name}
 			data-size={props.size}
-			data-color={props.strokeColor}
+			data-color={props.iconColor}
 			data-accessible={String(props.accessible)}
 		/>
 	),
@@ -77,16 +77,6 @@ function pressableStyle() {
 }
 
 describe('SliceButton', () => {
- it.each(['primary', 'secondary'] as const)('uses transparent glass for %s buttons, including disabled buttons', (variant) => {
-  const view = render(button('Save', { variant, liquidGlassBackground: {}, backgroundColor: 'red' }));
-  expect(wrapperStyle().backgroundColor).toBe('transparent');
-  expect(state.glass).toHaveProperty('cornerRadius');
-  view.rerender(button('Save', { variant, liquidGlassBackground: {}, disabled: true, icon: 'home' }));
-  expect(wrapperStyle().backgroundColor).toBe('transparent');
-  expect(state.pressable.disabled).toBe(true);
-  expect(screen.getByTestId('label').dataset.color).toBe(lightTheme.colors['core-text-disabled']);
-  expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-disabled']);
- });
  it('uses solid backgrounds on unsupported devices and respects fallback and explicit overrides', () => {
   state.supportsLiquidGlass = false;
   const view = render(button('Save', { liquidGlassBackground: {} }));
@@ -100,7 +90,7 @@ describe('SliceButton', () => {
   expect(wrapperStyle().backgroundColor).toBe(lightTheme.colors['core-surface-secondary']);
   expect(state.glass).toEqual({});
  });
- it('updates glass capability, color, and theme without remounting the button', () => {
+ it('updates fallback color and theme without remounting the button', () => {
   const view = render(button('Save', { backgroundColor: 'red' }));
   const element = screen.getByRole('button');
   expect(wrapperStyle().backgroundColor).toBe('red');
@@ -108,7 +98,7 @@ describe('SliceButton', () => {
   expect(wrapperStyle().backgroundColor).toBe('blue');
   expect(state.pressable).not.toHaveProperty('backgroundColor');
   view.rerender(button('Save', { liquidGlassBackground: {} }));
-  expect(wrapperStyle().backgroundColor).toBe('transparent');
+  expect(wrapperStyle().backgroundColor).toBe(lightTheme.colors['core-button-primary']);
   state.supportsLiquidGlass = false;
   view.rerender(button('Save', { liquidGlassBackground: {} }, 'dark'));
   expect(wrapperStyle().backgroundColor).toBe(darkTheme.colors['core-button-primary']);
@@ -138,34 +128,34 @@ describe('SliceButton', () => {
   view.rerender(button('Save', { variant: 'primary' }));
   expect(wrapperStyle().borderWidth).toBe(0);
  });
- it('preserves custom borders across theme, disabled, and glass updates', () => {
+ it('preserves regular fallback borders across theme and disabled updates', () => {
   const view = render(button('Save', { borderWidth: 3, borderColor: 'transparent', borderRadius: 8, liquidGlassBackground: {} }));
   view.rerender(button('Save', { borderWidth: 3, borderColor: 'transparent', borderRadius: 8, liquidGlassBackground: {}, disabled: true }, 'dark'));
   expect(wrapperStyle()).toMatchObject({ borderWidth: 3, borderColor: 'transparent', borderRadius: 8, pointerEvents: 'none' });
-  expect(state.glass.cornerRadius).toBe(8);
+  expect(state.glass).toEqual({});
  });
 
  it.each([
   [undefined, 1000], ['pill', 1000], ['rectangular', 4], [0, 0], [12.5, 12.5], [-4, 0], [Number.NaN, 0], [Infinity, 0],
- ] as const)('keeps wrapper and glass radii aligned for %s', (borderRadius, expected) => {
+ ] as const)('resolves regular fallback radii for %s', (borderRadius, expected) => {
   render(button('Save', { borderRadius, liquidGlassBackground: { glassStyle: 'clear', fallbackColor: 'blue' } }));
-  expect(wrapperStyle()).toMatchObject({ borderRadius: expected, overflow: 'hidden' });
-  expect(state.glass).toMatchObject({ cornerRadius: expected, glassStyle: 'clear', fallbackColor: 'blue' });
+  expect(wrapperStyle()).toMatchObject({ borderRadius: expected });
+  expect(state.glass).toEqual({});
   expect(state.pressable).not.toHaveProperty('borderRadius');
  });
- it('updates the radius and glass surface without losing button behavior', () => {
+ it('updates the fallback radius without losing button behavior', () => {
   const onPress = vi.fn();
   const view = render(button('Save', { onPress, borderRadius: 'pill', liquidGlassBackground: {} }));
   const element = screen.getByRole('button');
   view.rerender(button('Save', { onPress, borderRadius: 'rectangular', liquidGlassBackground: {} }));
   expect(wrapperStyle().borderRadius).toBe(4);
-  expect(state.glass.cornerRadius).toBe(4);
+  expect(state.glass).toEqual({});
   expect(screen.getByRole('button')).toBe(element);
   fireEvent.click(element);
   expect(onPress).toHaveBeenCalledOnce();
   view.rerender(button('Save', { borderRadius: 0, liquidGlassBackground: {} }));
   expect(wrapperStyle().borderRadius).toBe(0);
-  expect(state.glass.cornerRadius).toBe(0);
+  expect(state.glass).toEqual({});
  });
 
 	it.each([
@@ -263,6 +253,22 @@ describe('SliceButton', () => {
 		expect(pressableStyle()).toMatchObject({ paddingLeft: 0, paddingRight: 0 });
 		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-disabled']);
 	});
+
+
+	it.each([true, false])('uses the regular theme fallback for boolean glass=%s on non-iOS', (liquidGlassBackground) => {
+		render(button(undefined, { label: 'Save', liquidGlassBackground }));
+		expect(screen.getByTestId('label').textContent).toBe('Save');
+		expect(wrapperStyle().backgroundColor).toBe(lightTheme.colors['core-button-primary']);
+		expect(state.pressable).not.toHaveProperty('liquidGlassBackground');
+	});
+	it('supports label, typography, tint and logical insets on the regular fallback', () => {
+		render(button(undefined, { label: 'Save', labelTextStyle: 'body-xl-medium', tintColor: 'core-text-special', contentInsets: { leading: 9, trailing: 11, top: 5, bottom: 7 }, iconGap: 10, liquidGlassBackground: { fallbackColor: 'blue' } }));
+		expect(screen.getByTestId('label').textContent).toBe('Save');
+		expect(screen.getByTestId('label').dataset.color).toBe(lightTheme.colors['core-text-special']);
+		expect(pressableStyle()).toMatchObject({ paddingStart: 9, paddingEnd: 11, paddingTop: 5, paddingBottom: 7, gap: 10 });
+		expect(wrapperStyle().backgroundColor).toBe('blue');
+		for (const name of ['label', 'labelTextStyle', 'tintColor', 'contentInsets', 'iconGap']) expect(state.pressable).not.toHaveProperty(name);
+	});
 	it('renders a zero label with the regular button layout', () => {
 		render(button(0));
 		expect(screen.getByTestId('label').textContent).toBe('0');
@@ -282,4 +288,19 @@ describe('SliceButton', () => {
 		expect(state.views[2].style.at(-1)).toBe(animatedStyle);
 		expect(state.pressable.android_ripple).toEqual({ color: 'red' });
 	});
+});
+
+it('resolves independent text and icon colors with shared tint as their fallback', () => {
+    const view = render(button(undefined, { label: 'Save', icon: 'home', tintColor: 'core-text-primary',
+        iconColor: 'core-icon-secondary', textColor: 'red' }));
+    expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-icon-secondary']);
+    expect(screen.getByTestId('label').dataset.color).toBe('red');
+    expect(state.pressable).not.toHaveProperty('iconColor');
+    expect(state.pressable).not.toHaveProperty('textColor');
+    view.rerender(button(undefined, { label: 'Save', icon: 'home', tintColor: 'core-text-secondary', textColor: 'core-text-tertiary' }));
+    expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-secondary']);
+    expect(screen.getByTestId('label').dataset.color).toBe(lightTheme.colors['core-text-tertiary']);
+    view.rerender(button(undefined, { label: 'Save', icon: 'home', disabled: true, iconColor: 'red', textColor: 'blue' }));
+    expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-disabled']);
+    expect(screen.getByTestId('label').dataset.color).toBe(lightTheme.colors['core-text-disabled']);
 });

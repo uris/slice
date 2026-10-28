@@ -1,6 +1,6 @@
 {
 	"name": "@apple-pie/slice-native",
-	"version": "0.1.7",
+	"version": "0.1.9",
 	"description": "React Native components, icons and design tokens for Slice",
 	"author": "Uris Dacosta",
 	"license": "ISC",
@@ -52,7 +52,9 @@
 	"sideEffects": false,
 	"scripts": {
 		"test": "vitest run --config vitest.config.mts",
-		"test:package": "npm run build && node scripts/check-package.mjs",
+		"test:ios-glass-text": "node scripts/test-ios-glass-text.mjs",
+		"test:ios-button": "node scripts/test-ios-button-presence.mjs",
+		"test:package": "npm run build && node scripts/check-package.mjs && node scripts/check-ios-colors.mjs && node scripts/check-ios-icons.mjs",
 		"coverage": "vitest run --config vitest.config.mts --coverage",
 		"lint": "biome format --write . && biome check . && npm run typecheck",
 		"lint:ci": "biome ci . && npm run typecheck",
@@ -60,7 +62,7 @@
 		"pack:tarball": "node scripts/pack.mjs",
 		"pack": "node scripts/pack.mjs",
 		"prepack": "npm run build",
-		"generate": "node scripts/generate-icons.mjs && biome format --write src/components/SliceIcon/iconRegistry.tsx src/components/SliceIcon/icons.ts",
+		"generate": "node scripts/generate-ios-icons.mjs && node scripts/generate-ios-colors.mjs && node scripts/generate-icons.mjs && biome format --write src/components/SliceIcon/iconRegistry.tsx src/components/SliceIcon/icons.ts",
 		"typecheck": "tsc --noEmit -p tsconfig.json"
 	},
 	"publishConfig": {
@@ -85,6 +87,9 @@
 		"ios": {
 			"componentProvider": {
 				"SliceLiquidGlassView": "RCTLiquidGlassView",
+				"SliceGlassButton": "RCTGlassButtonView",
+				"SliceGlassText": "RCTGlassTextView",
+				"SliceGlassIcon": "RCTGlassIconView",
 				"SliceBackgroundBlur": "RCTBackgroundBlurView"
 			},
 			"modulesProvider": {

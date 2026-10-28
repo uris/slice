@@ -1,15 +1,43 @@
 import type { ComponentProps, ReactNode } from 'react';
 import type { ColorValue, PressableProps } from 'react-native';
 import type Reanimated from 'react-native-reanimated';
-import type { BorderRadius, LiquidGlassBackground, Size } from '../../types/sharedTypes';
+import type { SliceNativeTheme } from '../../theme';
+import type { BorderRadius, LiquidGlassBackground, Size } from '../../types';
+import type { SliceColorValue } from '../../utils/colors';
 
 type AnimatedViewProps = ComponentProps<typeof Reanimated.View>;
 
-export interface SliceButtonProps extends Omit<PressableProps, 'children' | 'style'> {
+export interface SliceButtonBaseProps extends Omit<PressableProps, 'children' | 'style'> {
 	/**
-	 * Element(s) to display on the button, typically just text
+	 * Plain string title. On regular buttons, takes precedence over children.
 	 */
-	children?: ReactNode;
+	label?: string;
+	/**
+	 * Slice typography token used for the title on both rendering paths.
+	 */
+	labelTextStyle?: keyof SliceNativeTheme['type'];
+	/**
+	 * Shared icon/label foreground fallback. iconColor and textColor take precedence.
+	 * Glass resolves Slice tokens or color values to native tokens,
+	 * falling back to core-text-primary for unmatched values.
+	 */
+	tintColor?: SliceColorValue;
+	/**
+	 * Icon foreground token or color value. Takes precedence over tintColor.
+	 */
+	iconColor?: SliceColorValue;
+	/**
+	 * Label foreground token or color value. Takes precedence over tintColor.
+	 */
+	textColor?: SliceColorValue;
+	/**
+	 * Logical content padding in points. Omitted edges retain the Slice defaults.
+	 */
+	contentInsets?: { top?: number; leading?: number; bottom?: number; trailing?: number };
+	/**
+	 * Gap between the icon and label in points. Defaults to 6.
+	 */
+	iconGap?: number;
 	/**
 	 * Button disabled state
 	 */
@@ -54,21 +82,16 @@ export interface SliceButtonProps extends Omit<PressableProps, 'children' | 'sty
 	 */
 	layout?: AnimatedViewProps['layout'];
 	/**
-	 * Enable liquid glass background. Will only work on ios26+ with a fallback for
-	 * non-supported devices
-	 */
-	liquidGlassBackground?: LiquidGlassBackground;
-	/**
 	 * Define a default border radius name or amount
 	 */
 	borderRadius?: BorderRadius;
 	/**
 	 * Border width in points. Negative/non-finite values become 0.
-	 * Defaults to 0 for primary buttons and 1 for secondary buttons.
+	 * Defaults to 0 for primary buttons and 1 for secondary buttons. Ignored by native glass.
 	 */
 	borderWidth?: number;
 	/**
-	 * Border color. Defaults to the theme’s core-outline-secondary color.
+	 * Border color. Defaults to the theme’s core-outline-secondary color. Ignored by native glass.
 	 */
 	borderColor?: ColorValue;
 	/**
@@ -77,3 +100,18 @@ export interface SliceButtonProps extends Omit<PressableProps, 'children' | 'sty
 	 */
 	backgroundColor?: ColorValue;
 }
+
+/**
+ * Glass titles are strings; arbitrary React children remain available for regular buttons.
+ */
+export type SliceButtonProps = SliceButtonBaseProps &
+	(
+		| {
+				/**
+				 * Use true for default glass or an options object. Uses a native iOS 26+ button, with a regular fallback elsewhere.
+				 */
+				liquidGlassBackground: true | Pick<LiquidGlassBackground, 'glassStyle' | 'glassTintColor' | 'fallbackColor'>;
+				children?: never;
+		  }
+		| { liquidGlassBackground?: false | undefined; children?: ReactNode }
+	);

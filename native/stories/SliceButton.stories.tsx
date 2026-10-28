@@ -4,9 +4,9 @@ import { SliceButton } from '../src/components';
 const meta = {
 	title: 'Components/SliceButton',
 	component: SliceButton,
-	args: { children: 'Save changes', onPress: fn() },
+	args: { label: 'Save changes', onPress: fn() },
 	argTypes: {
-		children: { control: 'text' },
+		label: { control: 'text' },
 		disabled: { control: 'boolean' },
 		icon: { control: 'text' },
 		iconSize: { control: 'number' },
@@ -28,5 +28,18 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {};
 export const Secondary: Story = { args: { variant: 'secondary' } };
 export const Disabled: Story = { args: { disabled: true } };
-export const WithIcon: Story = { args: { icon: 'home', children: 'Go home' } };
-export const IconOnly: Story = { args: { children: undefined, icon: 'home', accessibilityLabel: 'Go home' } };
+export const WithIcon: Story = { args: { icon: 'home', label: 'Go home' } };
+export const IconOnly: Story = { args: { label: undefined, icon: 'home', accessibilityLabel: 'Go home' } };
+
+// Browser stories use the regular fallback. Check these on an iOS 26+ native build.
+export const GlassLabel: Story = { args: { liquidGlassBackground: true } };
+export const GlassWithIcon: Story = {
+	args: { liquidGlassBackground: {}, icon: 'home', tintColor: 'core-text-primary' },
+};
+export const GlassIconOnly: Story = {
+	args: { label: undefined, icon: 'home', accessibilityLabel: 'Go home', liquidGlassBackground: {} },
+};
+export const GlassClear: Story = {
+	args: { liquidGlassBackground: { glassStyle: 'clear' }, tintColor: 'core-text-light' },
+};
+export const GlassTinted: Story = { args: { liquidGlassBackground: { glassTintColor: '#2f45ff' } } };

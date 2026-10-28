@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 export interface NativeProps extends ViewProps {
+	themePreference?: CodegenTypes.WithDefault<'system' | 'light' | 'dark', 'system'>;
 	glassStyle?: CodegenTypes.WithDefault<'regular' | 'clear', 'regular'>;
 	glassTintColor?: ColorValue;
 	interactive?: CodegenTypes.WithDefault<boolean, false>;

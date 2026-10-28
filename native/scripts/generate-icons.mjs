@@ -23,12 +23,13 @@ registry = registry.replace(/<(\/?)([a-z][a-zA-Z]*)(?=[\s/>])/g, (match, closing
 	if (!elements[tag]) throw new Error(`Unsupported SVG element: ${tag}`);
 	return `<${closing}${elements[tag]}`;
 });
+registry = registry.replace('strokeColor: string;', 'strokeColor: ColorValue;');
 registry = registry.replace(/\bxlinkHref=/g, 'href=');
 // Empty dash arrays are unnecessary and are not portable across SVG renderers.
 registry = registry.replace(/\s+strokeDasharray=""/g, '');
 writeFileSync(
 	new URL('iconRegistry.tsx', output),
-	`${header}import type { JSX } from 'react';\nimport { ${Object.values(elements).join(', ')} } from 'react-native-svg';\n${registry}`,
+	`${header}import type { JSX } from 'react';\nimport type { ColorValue } from 'react-native';\nimport { ${Object.values(elements).join(', ')} } from 'react-native-svg';\n${registry}`,
 );
 const types = readFileSync(new URL('_types.ts', source), 'utf8');
 const constants = types.slice(types.indexOf('export const SliceIcons ='));

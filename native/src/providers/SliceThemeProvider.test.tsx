@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { StyledText } from '../components/SliceText/SliceText';
 import { darkTheme, lightTheme } from '../theme';
-import { SliceThemeProvider, type ThemePreference, useSliceContext, useSliceTheme } from './SliceThemeProvider';
+import { SliceThemeProvider, type ThemePreference, useSliceContext, useSliceTheme, useSliceThemePreference, useOptionalSliceTheme, type ThemeContextValue } from './SliceThemeProvider';
 
 const state = vi.hoisted(() => ({ scheme: 'light' as string | null, textProps: {} as Record<string, unknown> }));
 vi.mock('react-native', () => ({
@@ -87,4 +87,61 @@ describe('StyledText with the shared provider', () => {
   expect(state.textProps.numberOfLines).toBe(1);
   expect(state.textProps.style).toContainEqual({ lineHeight });
  });
+});
+
+describe('native appearance preference and provider updates', () => {
+    function PreferenceProbe() {
+        return <span>{useSliceThemePreference()}</span>;
+    }
+    it('inherits system appearance without a provider', () => {
+        render(<PreferenceProbe />);
+        expect(screen.getByText('system')).toBeTruthy();
+    });
+    it('reports explicit preference independently of the system color scheme', () => {
+        const view = render(<SliceThemeProvider preference="dark"><PreferenceProbe /></SliceThemeProvider>);
+        expect(screen.getByText('dark')).toBeTruthy();
+        view.rerender(<SliceThemeProvider preference="light"><PreferenceProbe /></SliceThemeProvider>);
+        expect(screen.getByText('light')).toBeTruthy();
+        state.scheme = 'dark';
+        view.rerender(<SliceThemeProvider preference="system"><PreferenceProbe /></SliceThemeProvider>);
+        expect(screen.getByText('system')).toBeTruthy();
+    });
+    it('keeps context identity stable and replaces a changed callback without a theme change', () => {
+        const contexts: ThemeContextValue[] = [];
+        function ContextProbe() { contexts.push(useSliceContext()); return null; }
+        const first = vi.fn(), second = vi.fn();
+        const tree = (callback: (preference: ThemePreference) => void) =>
+            <SliceThemeProvider preference="light" onPreferenceChange={callback}><ContextProbe /></SliceThemeProvider>;
+        const view = render(tree(first));
+        const original = contexts.at(-1);
+        view.rerender(tree(first));
+        expect(contexts.at(-1)).toBe(original);
+        view.rerender(tree(second));
+        expect(contexts.at(-1)).not.toBe(original);
+        contexts.at(-1)?.setPreference?.('dark');
+        expect(second).toHaveBeenCalledWith('dark');
+        expect(first).not.toHaveBeenCalled();
+        expect(contexts.at(-1)?.theme).toBe(lightTheme);
+    });
+    it('isolates nested provider preferences from their parent', () => {
+        render(<SliceThemeProvider preference="dark">
+            <div data-testid="outer"><PreferenceProbe /></div>
+            <SliceThemeProvider preference="light"><div data-testid="inner"><PreferenceProbe /></div></SliceThemeProvider>
+        </SliceThemeProvider>);
+        expect(screen.getByTestId('outer').textContent).toBe('dark');
+        expect(screen.getByTestId('inner').textContent).toBe('light');
+    });
+});
+
+it('lets standalone consumers read an optional theme without requiring a provider', () => {
+    function OptionalProbe() {
+        const theme = useOptionalSliceTheme();
+        return <span>{theme?.name ?? 'No provider'}</span>;
+    }
+    const view = render(<OptionalProbe />);
+    expect(screen.getByText('No provider')).toBeTruthy();
+    view.rerender(<SliceThemeProvider preference="dark"><OptionalProbe /></SliceThemeProvider>);
+    expect(screen.getByText('darkMode')).toBeTruthy();
+    view.rerender(<SliceThemeProvider preference="light"><OptionalProbe /></SliceThemeProvider>);
+    expect(screen.getByText('lightMode')).toBeTruthy();
 });

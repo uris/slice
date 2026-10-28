@@ -2,10 +2,13 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { createRef, useImperativeHandle } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { useGlassContent } from './GlassContentContext';
 import { SliceLiquidGlassView } from './SliceLiquidGlassView';
 import { SliceLiquidGlassView as IOSLiquidGlassView } from './SliceLiquidGlassView.ios';
 
-const state = vi.hoisted(() => ({ fallback: {} as any, native: {} as any }));
+const state = vi.hoisted(() => ({ fallback: {} as any, native: {} as any, supported: true, preference: 'system' }));
+vi.mock('../../hooks', () => ({ useDeviceCapabilities: () => ({ supportsLiquidGlass: state.supported }) }));
+vi.mock('../../providers/SliceThemeProvider', () => ({ useSliceThemePreference: () => state.preference }));
 
 vi.mock('react-native', () => ({
 	View: ({ ref, children, ...props }: any) => {
@@ -23,9 +26,21 @@ vi.mock('../../specs/LiquidGlassNativeComponent', () => ({
 	},
 }));
 
-afterEach(cleanup);
+afterEach(() => { cleanup(); state.supported = true; state.preference = 'system'; });
+function ContentProbe() { return <span>{String(useGlassContent())}</span>; }
 
 describe('SliceLiquidGlassView', () => {
+    it('provides capability-gated glass context and forwards native appearance', () => {
+        state.preference = 'dark';
+        const view = render(<IOSLiquidGlassView><div><ContentProbe /></div></IOSLiquidGlassView>);
+        expect(screen.getByText('true')).toBeTruthy();
+        expect(state.native.themePreference).toBe('dark');
+        state.supported = false;
+        view.rerender(<IOSLiquidGlassView><div><ContentProbe /></div></IOSLiquidGlassView>);
+        expect(screen.getByText('false')).toBeTruthy();
+        view.rerender(<SliceLiquidGlassView><div><ContentProbe /></div></SliceLiquidGlassView>);
+        expect(screen.getByText('false')).toBeTruthy();
+    });
 	it('keeps fallback children, touch handlers, accessibility, styles and refs usable', () => {
 		const onTouchEnd = vi.fn();
 		const ref = createRef<any>();

@@ -4,6 +4,7 @@ import { useImperativeHandle } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SliceThemeProvider } from '../../providers/SliceThemeProvider';
 import { darkTheme, lightTheme } from '../../theme';
+import { GlassContentContext, useGlassContent } from '../SliceLiquidGlassView/GlassContentContext';
 import { SliceTextInput } from './SliceTextInput';
 import type { SliceTextInputProps } from './_types';
 
@@ -11,13 +12,20 @@ const state = vi.hoisted(() => ({
 	props: {} as any,
 	wrapper: {} as any,
 	focused: false,
+	supportsLiquidGlass: false,
+	platform: 'ios',
+	glass: undefined as any,
 	clear: vi.fn(),
 	focus: vi.fn(),
 	blur: vi.fn(),
 }));
-vi.mock('react-native', () => ({
+vi.mock('./inputColors', () => import('./inputColors.ios'));
+vi.mock('react-native', async () => ({
+    processColor: (await import('../../../tests/helpers/processColor')).processColor,
+    DynamicColorIOS: (variants: any) => ({ dynamic: variants }),
+	Platform: { OS: 'web' },
 	useColorScheme: () => 'light',
-	StyleSheet: { create: (s: unknown) => s },
+	StyleSheet: { create: (s: unknown) => s, flatten: (style: any) => Object.assign({}, ...[style].flat(Infinity).filter(Boolean)) },
 	View: ({ children }: any) => children,
 	TextInput: ({ ref, ...props }: any) => {
 		state.props = props;
@@ -40,6 +48,14 @@ vi.mock('react-native', () => ({
 		);
 	},
 }));
+vi.mock('../../hooks', async (importOriginal) => ({
+    ...await importOriginal<typeof import('../../hooks')>(),
+    useDeviceCapabilities: () => ({ supportsLiquidGlass: state.supportsLiquidGlass, platform: state.platform }),
+}));
+vi.mock('../SliceLiquidGlassView', () => ({ SliceLiquidGlassView: (props: any) => {
+    state.glass = props;
+    return <GlassContentContext.Provider value={state.supportsLiquidGlass}><div data-testid="glass">{props.children}</div></GlassContentContext.Provider>;
+} }));
 vi.mock('react-native-reanimated', () => ({
 	default: {
 		View: (props: any) => {
@@ -49,18 +65,25 @@ vi.mock('react-native-reanimated', () => ({
 	},
 }));
 vi.mock('../SliceIcon', () => ({
-	SliceIcon: (props: any) => (
+	SliceIcon: (props: any) => {
+        const inGlass = useGlassContent();
+        return (
 		<span
 			data-testid="icon"
-			data-color={props.strokeColor}
+            data-glass={String(inGlass)}
+			data-color={props.iconColor}
 			data-size={props.size}
 			data-accessible={String(props.accessible)}
 		/>
-	),
+	);
+    },
 }));
 afterEach(cleanup);
 beforeEach(() => {
 	state.focused = false;
+	state.supportsLiquidGlass = false;
+	state.platform = 'ios';
+	state.glass = undefined;
 	vi.clearAllMocks();
 });
 const tree = (props: SliceTextInputProps = {}, preference: 'light' | 'dark' = 'light') => (
@@ -70,6 +93,176 @@ const tree = (props: SliceTextInputProps = {}, preference: 'light' | 'dark' = 'l
 );
 
 describe('SliceTextInput', () => {
+    it('passes both palette variants as native dynamic colors only for supported glass', () => {
+        state.supportsLiquidGlass = true;
+        const view = render(tree({ liquidGlassBackground: {} }));
+        const text = { dynamic: { light: lightTheme.colors['core-text-primary'], dark: darkTheme.colors['core-text-primary'] } };
+        const placeholder = { dynamic: { light: lightTheme.colors['core-text-secondary'], dark: darkTheme.colors['core-text-secondary'] } };
+        const resolved = () => Object.assign({}, ...state.props.style.flat(Infinity));
+        expect(resolved().color).toEqual(text);
+        expect(state.props.placeholderTextColor).toEqual(placeholder);
+        const originalText = resolved().color;
+        view.rerender(tree({ liquidGlassBackground: {} }, 'dark'));
+        expect(resolved().color).toBe(originalText);
+        expect(state.props.placeholderTextColor).toEqual(placeholder);
+        state.supportsLiquidGlass = false;
+        view.rerender(tree({ liquidGlassBackground: {} }, 'dark'));
+        expect(resolved().color).toBe(darkTheme.colors['core-text-primary']);
+        expect(state.props.placeholderTextColor).toBe(darkTheme.colors['core-text-secondary']);
+    });
+    it('resolves text and placeholder tokens to their native palette pairs', () => {
+        state.supportsLiquidGlass = true;
+        const view = render(tree({ liquidGlassBackground: {}, textColor: 'core-text-secondary', placeholderTextColor: 'core-text-tertiary' }));
+        expect(Object.assign({}, ...state.props.style.flat(Infinity)).color).toEqual({ dynamic: {
+            light: lightTheme.colors['core-text-secondary'], dark: darkTheme.colors['core-text-secondary'],
+        } });
+        expect(state.props.placeholderTextColor).toEqual({ dynamic: {
+            light: lightTheme.colors['core-text-tertiary'], dark: darkTheme.colors['core-text-tertiary'],
+        } });
+        view.rerender(tree({ liquidGlassBackground: {}, textColor: 'red', placeholderTextColor: 'unknown', style: { color: 'orange' } }));
+        const primary = { dynamic: { light: lightTheme.colors['core-text-primary'], dark: darkTheme.colors['core-text-primary'] } };
+        expect(Object.assign({}, ...state.props.style.flat(Infinity)).color).toEqual(primary);
+        expect(state.props.placeholderTextColor).toEqual(primary);
+        view.rerender(tree({ textColor: 'purple', placeholderTextColor: 'pink' }));
+        expect(Object.assign({}, ...state.props.style.flat(Infinity)).color).toBe('purple');
+        expect(state.props.placeholderTextColor).toBe('pink');
+    });
+    it('resolves input icon tokens on regular inputs and forwards them to the glass icon renderer', () => {
+        const view = render(tree({ icon: 'home', iconColor: 'core-icon-secondary' }));
+        expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-icon-secondary']);
+        state.supportsLiquidGlass = true;
+        view.rerender(tree({ icon: 'home', iconColor: 'core-icon-secondary', liquidGlassBackground: {} }));
+        expect(screen.getByTestId('icon').dataset.color).toBe('core-icon-secondary');
+    });
+    it('leaves glass icon tint with the native renderer across focus and theme updates', () => {
+        state.supportsLiquidGlass = true;
+        const props = { icon: 'search', hideIconOnFocus: false, textColor: 'purple', liquidGlassBackground: {} };
+        const view = render(tree(props));
+        expect(screen.getByTestId('icon').dataset.glass).toBe('true');
+        expect(screen.getByTestId('icon').dataset.color).toBeUndefined();
+        fireEvent.focus(screen.getByRole('textbox'));
+        view.rerender(tree(props, 'dark'));
+        expect(screen.getByTestId('icon').dataset.color).toBeUndefined();
+        fireEvent.blur(screen.getByRole('textbox'));
+        expect(screen.getByTestId('icon').dataset.color).toBeUndefined();
+        expect(Object.assign({}, ...state.props.style.flat(Infinity)).color).toHaveProperty('dynamic');
+    });
+    it('preserves explicit glass icon colors and restores native tint when removed', () => {
+        state.supportsLiquidGlass = true;
+        const props = { icon: 'search', hideIconOnFocus: false, liquidGlassBackground: {} };
+        const view = render(tree({ ...props, iconColor: 'red' }));
+        expect(screen.getByTestId('icon').dataset.color).toBe('red');
+        view.rerender(tree(props));
+        expect(screen.getByTestId('icon').dataset.color).toBeUndefined();
+        state.supportsLiquidGlass = false;
+        view.rerender(tree({ ...props, textColor: 'purple' }));
+        expect(screen.getByTestId('icon').dataset.glass).toBe('false');
+        expect(screen.getByTestId('icon').dataset.color).toBe('purple');
+    });
+
+    it.each([true, {}])('uses default glass and 17pt typography for opt-in %s', (liquidGlassBackground) => {
+        state.supportsLiquidGlass = true;
+        render(tree({ liquidGlassBackground }));
+        expect(screen.getByTestId('glass')).toBeTruthy();
+        const resolved = Object.assign({}, ...state.props.style.flat(Infinity));
+        expect(resolved.fontSize).toBe(17);
+        expect(resolved.lineHeight).toBeCloseTo(20.4);
+        expect(resolved.fontWeight).toBe(lightTheme.type['body-xl-bold'].fontWeight);
+    });
+    it('keeps boolean false on the ordinary input path', () => {
+        state.supportsLiquidGlass = true;
+        render(tree({ liquidGlassBackground: false }));
+        expect(screen.queryByTestId('glass')).toBeNull();
+    });
+
+    it.each([false, true])('derives the 1.2 line height from overridden font size with glass=%s', (glass) => {
+        state.supportsLiquidGlass = true;
+        let liquidGlassBackground;
+        if (glass) liquidGlassBackground = {};
+        const view = render(tree({ style: [{ fontSize: 24 }, { fontSize: 18 }], liquidGlassBackground }));
+        const resolved = Object.assign({}, ...state.props.style.flat(Infinity));
+        expect(resolved.fontSize).toBe(18);
+        expect(resolved.lineHeight).toBeCloseTo(21.6);
+        view.rerender(tree({ style: { fontSize: 18, lineHeight: 30 }, liquidGlassBackground }));
+        expect(Object.assign({}, ...state.props.style.flat(Infinity))).toMatchObject({ fontSize: 18, lineHeight: 30 });
+    });
+
+    it.each([undefined, 0, 3])('leaves the glass outline to UIKit even with borderWidth=%s', (borderWidth) => {
+        state.supportsLiquidGlass = true;
+        const view = render(tree({ borderWidth, borderColor: 'red', liquidGlassBackground: {} }));
+        let border = Object.assign({}, ...state.wrapper.style.flat(Infinity));
+        expect(border.borderWidth).toBe(0);
+        expect(border).not.toHaveProperty('borderColor');
+        state.supportsLiquidGlass = false;
+        view.rerender(tree({ borderWidth, borderColor: 'red', liquidGlassBackground: {} }));
+        border = Object.assign({}, ...state.wrapper.style.flat(Infinity));
+        expect(border.borderWidth).toBe(borderWidth ?? 1);
+        expect(border.borderColor).toBe('red');
+    });
+
+    it('nests the icon and editor inside supported glass and preserves them during glass updates', () => {
+        state.supportsLiquidGlass = true;
+        const view = render(tree({ icon: 'home', hideIconOnFocus: false, defaultValue: 'Keep me', liquidGlassBackground: {} }));
+        const input = screen.getByRole('textbox') as HTMLInputElement;
+        expect(input.closest('[data-testid="glass"]')).toBe(screen.getByTestId('glass'));
+        expect(screen.getByTestId('icon').closest('[data-testid="glass"]')).toBe(screen.getByTestId('glass'));
+        expect(screen.getByTestId('icon').dataset.glass).toBe('true');
+        expect(state.glass.style).toMatchObject({ flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch', gap: 8 });
+        expect(state.glass.style).not.toHaveProperty('position', 'absolute');
+        fireEvent.change(input, { target: { value: 'Edited' } });
+        fireEvent.focus(input);
+        view.rerender(tree({ icon: 'home', hideIconOnFocus: false, defaultValue: 'Keep me', borderRadius: 12, liquidGlassBackground: {
+            glassStyle: 'clear', glassTintColor: 'red', fallbackColor: 'blue',
+        } }, 'dark'));
+        expect(state.glass).toMatchObject({ cornerRadius: 12, glassStyle: 'clear', glassTintColor: 'red', fallbackColor: 'blue' });
+        expect(Object.assign({}, ...state.wrapper.style.flat(Infinity)).backgroundColor).toBe('transparent');
+        expect(state.props).not.toHaveProperty('liquidGlassBackground');
+        expect(screen.getByRole('textbox')).toBe(input);
+        expect(input.value).toBe('Edited');
+        expect(state.clear).not.toHaveBeenCalled();
+        expect(state.focus).not.toHaveBeenCalled();
+    });
+    it.each(['ios', 'android', 'web'])('keeps an ordinary editor without glass when not opted in on %s', (platform) => {
+        state.platform = platform;
+        state.supportsLiquidGlass = true;
+        render(tree({ icon: 'home' }));
+        expect(screen.queryByTestId('glass')).toBeNull();
+        expect(screen.getByRole('textbox')).toBeTruthy();
+        expect(screen.getByTestId('icon').dataset.glass).toBe('false');
+    });
+    it.each(['android', 'web'])('keeps the fallback on %s even if capability is incorrectly reported', (platform) => {
+        state.platform = platform;
+        state.supportsLiquidGlass = true;
+        render(tree({ icon: 'home', liquidGlassBackground: {} }));
+        expect(screen.queryByTestId('glass')).toBeNull();
+        expect(screen.getByTestId('icon').dataset.glass).toBe('false');
+    });
+    it('retains controlled text when the glass opt-in changes', () => {
+        state.supportsLiquidGlass = true;
+        const view = render(tree({ value: 'Controlled' }));
+        view.rerender(tree({ value: 'Controlled', liquidGlassBackground: {} }));
+        expect((screen.getByRole('textbox') as HTMLInputElement).value).toBe('Controlled');
+        view.rerender(tree({ value: 'Controlled' }));
+        expect(screen.queryByTestId('glass')).toBeNull();
+        expect((screen.getByRole('textbox') as HTMLInputElement).value).toBe('Controlled');
+    });
+    it('uses fallback colors on unsupported devices, with explicit background taking precedence', () => {
+        const view = render(tree({ liquidGlassBackground: { fallbackColor: 'blue' } }));
+        expect(screen.queryByTestId('glass')).toBeNull();
+        expect(Object.assign({}, ...state.wrapper.style.flat(Infinity)).backgroundColor).toBe('blue');
+        view.rerender(tree({ backgroundColor: 'pink', liquidGlassBackground: { fallbackColor: 'blue' } }));
+        expect(Object.assign({}, ...state.wrapper.style.flat(Infinity)).backgroundColor).toBe('pink');
+        state.supportsLiquidGlass = true;
+        view.rerender(tree({ backgroundColor: 'pink', liquidGlassBackground: { fallbackColor: 'blue' } }));
+        expect(Object.assign({}, ...state.wrapper.style.flat(Infinity)).backgroundColor).toBe('transparent');
+    });
+    it('preserves explicitly disabled accessibility and avoids redundant blur requests', () => {
+        state.focused = false;
+        render(tree({ focused: false, accessibilityState: { disabled: true } }));
+        expect(state.blur).not.toHaveBeenCalled();
+        expect(state.props.accessibilityState.disabled).toBe(true);
+    });
+
  it('updates wrapper backgrounds and theme defaults without losing text or focus', () => {
   const view = render(tree({ defaultValue: 'Initial' }));
   const input = screen.getByRole('textbox') as HTMLInputElement;
@@ -171,13 +364,14 @@ describe('SliceTextInput', () => {
 		view.rerender(tree({ defaultValue: 'Keep this text' }));
 		expect(Object.assign({}, ...state.wrapper.style.flat(Infinity)).minHeight).toBe(48);
 	});
-	it('uses an overridden placeholder color for the idle icon and restores it after blur', () => {
+	it('keeps placeholder overrides separate from the icon foreground across focus changes', () => {
 		render(tree({ icon: 'home', hideIconOnFocus: false, placeholderTextColor: 'pink' }));
-		expect(screen.getByTestId('icon').dataset.color).toBe('pink');
+		expect(state.props.placeholderTextColor).toBe('pink');
+		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-primary']);
 		fireEvent.focus(screen.getByRole('textbox'));
-		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-icon-primary']);
+		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-primary']);
 		fireEvent.blur(screen.getByRole('textbox'));
-		expect(screen.getByTestId('icon').dataset.color).toBe('pink');
+		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-primary']);
 	});
 
 	it('preserves initial text without clearing or forcing focus', () => {
@@ -248,15 +442,24 @@ describe('SliceTextInput', () => {
 		fireEvent.focus(screen.getByRole('textbox'));
 		expect(screen.getByTestId('icon').dataset).toMatchObject({ color: 'red', size: '20' });
 	});
-	it('uses placeholder color while idle and theme color while focused', () => {
+	it('uses the text foreground for icons across focus and theme changes', () => {
 		const view = render(tree({ icon: 'home', hideIconOnFocus: false }));
-		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-tertiary']);
+		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-primary']);
 		fireEvent.focus(screen.getByRole('textbox'));
-		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-icon-primary']);
+		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-primary']);
 		view.rerender(tree({ icon: 'home', hideIconOnFocus: false }, 'dark'));
-		expect(screen.getByTestId('icon').dataset.color).toBe(darkTheme.colors['core-link-primary']);
-		expect(state.props.placeholderTextColor).toBe(darkTheme.colors['core-text-tertiary']);
+		expect(screen.getByTestId('icon').dataset.color).toBe(darkTheme.colors['core-text-primary']);
+		expect(state.props.placeholderTextColor).toBe(darkTheme.colors['core-text-secondary']);
 	});
+	it('follows textColor overrides unless iconColor is explicitly set', () => {
+		const view = render(tree({ icon: 'home', hideIconOnFocus: false, textColor: 'purple' }));
+		expect(screen.getByTestId('icon').dataset.color).toBe('purple');
+		fireEvent.focus(screen.getByRole('textbox'));
+		expect(screen.getByTestId('icon').dataset.color).toBe('purple');
+		view.rerender(tree({ icon: 'home', hideIconOnFocus: false, textColor: 'purple', iconColor: 'orange' }));
+		expect(screen.getByTestId('icon').dataset.color).toBe('orange');
+	});
+
 	it('forwards layout and placeholder overrides and exposes non-editable state', () => {
 		const layout = () => undefined;
 		render(tree({ layout, placeholderTextColor: 'pink', editable: false }));
