@@ -27,6 +27,11 @@ The web package has a separate [scripts directory](../../scripts/README.md).
   accessors to `platform/ios/SliceIcons.generated.swift`. It replaces generated
   image sets only after rendering succeeds. Requires the repository development
   dependencies and Chromium (`npx playwright install chromium` at repository root).
+  Linux CI must run `npx playwright install --with-deps chromium` at repository
+  root before building or packing the native package. Each job needs this setup;
+  installing browsers in the web test job does not provision the native job.
+  The native CI job caches browsers but still runs installation to ensure the
+  required browser revision and Linux system dependencies are available.
   Direct invocation from `native/`: `node scripts/generate-ios-icons.mjs`.
 - [check-ios-icons.mjs](check-ios-icons.mjs) runs in `npm run test:package` and
   validates source/manifest coverage, unique asset names, 1×/2×/3× PNG dimensions,

@@ -36,6 +36,13 @@ jobs:
         run: npm run typecheck:storybook:native
       - name: Build native Storybook
         run: npm run build-storybook:native
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Playwright Chromium for native icon generation
+        run: npx playwright install --with-deps chromium
       - name: Build native package
         run: npm run build --prefix native
       - name: Verify native exports and Codegen specification
