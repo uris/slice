@@ -15,6 +15,10 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.requires_arc = true
   s.source_files = 'platform/ios/**/*.{h,m,mm,swift}'
+  s.resource_bundles = {
+    'SliceNativeColors' => ['platform/ios/Resources/SliceColors.xcassets'],
+    'SliceNativeIcons' => ['platform/ios/Resources/SliceIcons.xcassets']
+  }
   # Keep C++ React headers out of the module imported by the Swift compiler.
   s.private_header_files = 'platform/ios/RCT*View.h', 'platform/ios/SliceDeviceCapabilities.h'
   s.frameworks = 'UIKit'

@@ -1461,16 +1461,12 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 		'search',
 		{
 			line: ({ strokeColor }: IconRenderProps) => (
-				<>
-					<path
-						d="M 10 9 C 10 9.552 9.552 10 9 10 C 8.448 10 8 9.552 8 9 C 8 8.448 8.448 8 9 8 C 9.552 8 10 8.448 10 9 Z"
-						fill={strokeColor}
-					/>
-					<path
-						d="M 18.53 17.47 L 17.47 18.531 L 13.392 14.451 C 10.495 16.785 6.278 16.445 3.793 13.677 C 1.307 10.909 1.42 6.681 4.051 4.05 C 6.682 1.419 10.91 1.306 13.678 3.792 C 16.446 6.277 16.786 10.494 14.452 13.391 Z M 9 14.5 C 12.038 14.5 14.5 12.038 14.5 9 C 14.5 5.962 12.038 3.5 9 3.5 C 5.962 3.5 3.5 5.962 3.5 9 C 3.5 12.038 5.962 14.5 9 14.5 Z"
-						fill={strokeColor}
-					/>
-				</>
+				<path
+					fillRule="evenodd"
+					clipRule="evenodd"
+					d="M9 14.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11Zm5.452-1.109a7 7 0 1 0-1.06 1.06l4.078 4.08 1.06-1.061-4.078-4.079ZM10 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+					fill={strokeColor}
+				/>
 			),
 		},
 	],
@@ -1586,19 +1582,7 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 			),
 		},
 	],
-	[
-		'search',
-		{
-			line: ({ strokeColor }: IconRenderProps) => (
-				<path
-					fillRule="evenodd"
-					clipRule="evenodd"
-					d="M9 14.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11Zm5.452-1.109a7 7 0 1 0-1.06 1.06l4.078 4.08 1.06-1.061-4.078-4.079ZM10 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
-					fill={strokeColor}
-				/>
-			),
-		},
-	],
+
 	[
 		'filter',
 		{

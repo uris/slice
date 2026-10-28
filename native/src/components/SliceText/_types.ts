@@ -1,5 +1,6 @@
 import type { TextProps } from 'react-native';
 import type { SliceNativeTheme } from '../../theme';
+import type { SliceColorValue } from '../../utils/colors';
 
 export type StyledTextProps = TextProps & {
 	/**
@@ -7,9 +8,10 @@ export type StyledTextProps = TextProps & {
 	 */
 	textStyle?: keyof SliceNativeTheme['type'];
 	/**
-	 * Keyed name of the slice theme color to use
+	 * Slice color token or React Native color value. Glass resolves palette values
+	 * to native tokens and falls back to core-text-primary when unmatched.
 	 */
-	textColor?: keyof SliceNativeTheme['colors'];
+	textColor?: SliceColorValue;
 	/**
 	 * If the text should be one line only, optionally the value of the line height to use
 	 * Typically pass a value for headings to avoid large line heights

@@ -34,6 +34,12 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const SliceLiquidGlassViewProps>(props);
+  _surface.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
+  if (newProps.themePreference == SliceLiquidGlassViewThemePreference::Light) {
+    _surface.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+  } else if (newProps.themePreference == SliceLiquidGlassViewThemePreference::Dark) {
+    _surface.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+  }
   [_surface configureWithClear:newProps.glassStyle == SliceLiquidGlassViewGlassStyle::Clear
                          tint:RCTUIColorFromSharedColor(newProps.glassTintColor)
                   interactive:newProps.interactive
@@ -61,7 +67,8 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
-  [_surface configureWithClear:NO tint:nil interactive:NO cornerRadius:24];
+  [_surface prepareForRecycle];
+  _surface.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
 }
 
 @end

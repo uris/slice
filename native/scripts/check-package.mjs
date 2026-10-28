@@ -32,7 +32,7 @@ const component = schema.modules.SliceLiquidGlassView.components.SliceLiquidGlas
 assert.deepEqual(component.excludedPlatforms, ['android']);
 assert.deepEqual(
 	component.props.map((prop) => prop.name),
-	['glassStyle', 'glassTintColor', 'interactive', 'cornerRadius'],
+	['themePreference', 'glassStyle', 'glassTintColor', 'interactive', 'cornerRadius'],
 );
 const transformed = require('@babel/core').transformSync(spec, {
 	filename: fileURLToPath(specPath),
@@ -51,6 +51,53 @@ for (const path of [
 	assert(existsSync(new URL(path, root)), `Missing native source: ${path}`);
 }
 assert.equal(manifest.codegenConfig.ios.componentProvider.SliceLiquidGlassView, 'RCTLiquidGlassView');
+
+// Native glass buttons must retain their iOS route, typed Codegen spec and assets.
+const buttonRoot = new URL('src/components/SliceButton/', metroRoot);
+for (const path of ['SliceButton.js', 'SliceButton.ios.js', 'SliceButtonRegular.js']) {
+	assert(existsSync(new URL(path, buttonRoot)), `Missing button platform file: ${path}`);
+}
+const buttonSpecPath = new URL('src/specs/GlassButtonNativeComponent.ts', metroRoot);
+const buttonSpec = readFileSync(buttonSpecPath, 'utf8');
+assert.equal(buttonSpec, readFileSync(new URL('src/specs/GlassButtonNativeComponent.ts', root), 'utf8'));
+assert(!existsSync(new URL('src/specs/GlassButtonNativeComponent.js', metroRoot)));
+const glassButton = new TypeScriptParser().parseString(buttonSpec).modules.SliceGlassButton.components.SliceGlassButton;
+assert.deepEqual(glassButton.excludedPlatforms, ['android']);
+assert.deepEqual(glassButton.events.map((event) => event.name).sort(), ['onButtonEvent', 'onIntrinsicSizeChange']);
+for (const prop of [
+	'label',
+	'iconName',
+	'tintToken',
+	'themePreference',
+	'fontFamily',
+	'fontSize',
+	'paddingLeading',
+	'textTintToken',
+	'iconTintToken',
+]) {
+	assert(
+		glassButton.props.some((entry) => entry.name === prop),
+		`Missing native button prop: ${prop}`,
+	);
+}
+assert.equal(manifest.codegenConfig.ios.componentProvider.SliceGlassButton, 'RCTGlassButtonView');
+for (const path of [
+	'platform/ios/GlassButtonSurface.swift',
+	'platform/ios/RCTGlassButtonView.h',
+	'platform/ios/RCTGlassButtonView.mm',
+	'platform/ios/SliceIcons.generated.swift',
+	'platform/ios/SliceColors.generated.swift',
+]) {
+	assert(existsSync(new URL(path, root)), `Missing native button source: ${path}`);
+}
+const buttonTransform = require('@babel/core').transformSync(buttonSpec, {
+	filename: fileURLToPath(buttonSpecPath),
+	babelrc: false,
+	configFile: false,
+	plugins: [require.resolve('@react-native/babel-plugin-codegen')],
+	parserOpts: { plugins: ['typescript'] },
+});
+assert(buttonTransform.code.includes('NativeComponentRegistry'));
 
 // Background blur must ship both native platform support and its typed Codegen input.
 const blurRoot = new URL('src/components/SliceBackgroundBlur/', metroRoot);
@@ -146,4 +193,52 @@ for (const entry of ['utils', 'index']) {
 }
 const hook = await bundleSelection('hooks', 'useCreateThemedStyles');
 assert(!hook.imports.some((id) => /react-native-(svg|reanimated)/.test(id)));
+
+// Adaptive text must ship its iOS renderer and the original typed Codegen input.
+for (const name of ['SliceText.js', 'SliceText.ios.js', 'SliceTextRegular.js']) {
+	assert(existsSync(new URL(`src/components/SliceText/${name}`, metroRoot)));
+}
+const textSpec = readFileSync(new URL('src/specs/GlassTextNativeComponent.ts', metroRoot), 'utf8');
+assert.equal(textSpec, readFileSync(new URL('src/specs/GlassTextNativeComponent.ts', root), 'utf8'));
+const glassText = new TypeScriptParser().parseString(textSpec).modules.SliceGlassText.components.SliceGlassText;
+assert.deepEqual(glassText.excludedPlatforms, ['android']);
+assert.equal(manifest.codegenConfig.ios.componentProvider.SliceGlassText, 'RCTGlassTextView');
+for (const name of ['GlassTextSurface.swift', 'RCTGlassTextView.h', 'RCTGlassTextView.mm']) {
+	assert(existsSync(new URL(`platform/ios/${name}`, root)));
+}
+
+const textTransform = require('@babel/core').transformSync(textSpec, {
+	filename: 'GlassTextNativeComponent.ts',
+	babelrc: false,
+	configFile: false,
+	plugins: [require.resolve('@react-native/babel-plugin-codegen')],
+	parserOpts: { plugins: ['typescript'] },
+});
+assert(textTransform.code.includes('NativeComponentRegistry'));
+// Glass icons select existing templates without losing the SVG platform route.
+for (const name of ['SliceIcon.js', 'SliceIcon.ios.js', 'SliceIconSvg.js']) {
+	assert(existsSync(new URL(`src/components/SliceIcon/${name}`, metroRoot)));
+}
+const iconSpecPath = new URL('src/specs/GlassIconNativeComponent.ts', metroRoot);
+const iconSpec = readFileSync(iconSpecPath, 'utf8');
+assert.equal(iconSpec, readFileSync(new URL('src/specs/GlassIconNativeComponent.ts', root), 'utf8'));
+assert(!existsSync(new URL('src/specs/GlassIconNativeComponent.js', metroRoot)));
+const glassIcon = new TypeScriptParser().parseString(iconSpec).modules.SliceGlassIcon.components.SliceGlassIcon;
+assert.deepEqual(glassIcon.excludedPlatforms, ['android']);
+assert.equal(manifest.codegenConfig.ios.componentProvider.SliceGlassIcon, 'RCTGlassIconView');
+for (const name of ['GlassIconSurface.swift', 'RCTGlassIconView.h', 'RCTGlassIconView.mm']) {
+	assert(existsSync(new URL(`platform/ios/${name}`, root)));
+}
+const iconTransform = require('@babel/core').transformSync(iconSpec, {
+	filename: fileURLToPath(iconSpecPath),
+	babelrc: false,
+	configFile: false,
+	plugins: [require.resolve('@react-native/babel-plugin-codegen')],
+	parserOpts: { plugins: ['typescript'] },
+});
+assert(iconTransform.code.includes('NativeComponentRegistry'));
+// iOS input colors must keep a platform sibling so web does not import DynamicColorIOS.
+for (const name of ['inputColors.js', 'inputColors.ios.js']) {
+	assert(existsSync(new URL(`src/components/SliceTextInput/${name}`, metroRoot)));
+}
 console.log('Verified package exports, Metro platform files, Codegen/Babel spec, native sources and ESM tree shaking.');

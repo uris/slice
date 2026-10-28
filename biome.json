@@ -9,6 +9,8 @@
 		"ignoreUnknown": false,
 		"ignore": [
 			"dist",
+			"**/.build",
+			"**/platform/ios/Resources",
 			"node_modules",
 			"storybook-static",
 			"storybook-native-static",
@@ -17,6 +19,7 @@
 			"benchmarks",
 			"coverage",
 			"reports",
+			"**/*.smoketest.tsx",
 			"**/*.test.ts",
 			"**/*.test.tsx",
 			"**/*.spec.ts",

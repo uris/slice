@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
-import { Text } from 'react-native';
-import { SliceLiquidGlassView } from '../src/components';
+import { Text, View } from 'react-native';
+import { SliceLiquidGlassView, StyledText } from '../src/components';
 
 const meta = {
 	title: 'Components/SliceLiquidGlassView',
@@ -35,3 +35,20 @@ type Story = StoryObj<typeof meta>;
 export const Regular: Story = {};
 export const Clear: Story = { args: { glassStyle: 'clear' } };
 export const Tinted: Story = { args: { glassTintColor: '#3484FF44' } };
+
+/**
+ * On iOS this also exercises glass context through an intermediate layout view.
+ */
+export const AdaptiveText: Story = {
+	args: {
+		children: (
+			<View style={{ gap: 12 }}>
+				<StyledText textStyle="body-xl-medium">Primary glass text</StyledText>
+				<StyledText textStyle="body-m-regular" textColor="core-text-secondary">
+					Secondary glass text
+				</StyledText>
+				<StyledText textColor="feedback-positive">Native Slice color</StyledText>
+			</View>
+		),
+	},
+};

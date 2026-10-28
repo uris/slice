@@ -18,3 +18,5 @@ export { Size, BorderRadius, LiquidGlassBackground } from './types';
 
 export { SliceBackgroundBlur } from './components/SliceBackgroundBlur';
 export type { SliceBackgroundBlurProps } from './components/SliceBackgroundBlur';
+
+export type { SliceColorValue, SliceColorToken } from './utils/colors';

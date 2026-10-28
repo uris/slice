@@ -1,4 +1,4 @@
-import type { ComponentRef, ForwardRefExoticComponent, PropsWithoutRef, RefAttributes } from 'react';
+import type { ComponentRef, ForwardRefExoticComponent, PropsWithoutRef, ReactNode, RefAttributes } from 'react';
 import type { ColorValue, View, ViewProps } from 'react-native';
 
 export type SliceLiquidGlassViewComponent = ForwardRefExoticComponent<
@@ -6,6 +6,8 @@ export type SliceLiquidGlassViewComponent = ForwardRefExoticComponent<
 >;
 
 export interface SliceLiquidGlassViewProps extends ViewProps {
+	/** Content rendered inside the glass surface. */
+	children?: ReactNode;
 	/** Custom glass child mounting does not support React Native's subview culling. */
 	removeClippedSubviews?: false;
 	/** Native iOS 26+ material. Defaults to regular. */
