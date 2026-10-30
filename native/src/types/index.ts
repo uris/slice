@@ -1,1 +1,1 @@
-export type { BorderRadius, LiquidGlassBackground, Size } from './sharedTypes';
+export type { BorderRadius, LiquidGlassBackground, Size, FontWeight } from './sharedTypes';

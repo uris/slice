@@ -15,6 +15,11 @@ export function useDeviceCapabilities(): DeviceCapabilities {
 		const native = platform === 'ios' || platform === 'android' ? NativeDeviceCapabilities?.getConstants() : null;
 		return {
 			platform,
+			isAndroid: Platform.OS === 'android',
+			isIOS: Platform.OS === 'ios',
+			isMacOS: Platform.OS === 'macos',
+			isWindows: Platform.OS === 'windows',
+			isWeb: Platform.OS === 'web',
 			iosVersion: platform === 'ios' ? String(Platform.Version) : null,
 			androidSdkVersion: platform === 'android' ? Platform.Version : null,
 			deviceName: native?.deviceName ?? null,

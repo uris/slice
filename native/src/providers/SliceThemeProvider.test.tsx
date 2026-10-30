@@ -2,7 +2,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { StyledText } from '../components/SliceText/SliceText';
+import { Text } from '../components/Text/Text';
 import { darkTheme, lightTheme } from '../theme';
 import { SliceThemeProvider, type ThemePreference, useSliceContext, useSliceTheme, useSliceThemePreference, useOptionalSliceTheme, type ThemeContextValue } from './SliceThemeProvider';
 
@@ -65,27 +65,27 @@ describe('SliceThemeProvider', () => {
  });
 });
 
-describe('StyledText with the shared provider', () => {
+describe('Text with the shared provider', () => {
  it('uses the default text color and forwards native props and children', () => {
-  render(<SliceThemeProvider><StyledText accessibilityLabel="Greeting" numberOfLines={3}>Hello</StyledText></SliceThemeProvider>);
+  render(<SliceThemeProvider><Text accessibilityLabel="Greeting" numberOfLines={3}>Hello</Text></SliceThemeProvider>);
   expect(screen.getByText('Hello')).toBeTruthy();
   expect(state.textProps).toMatchObject({ accessibilityLabel: 'Greeting', numberOfLines: 3 });
-  expect(state.textProps.style).toContainEqual({ color: lightTheme.colors['core-text-primary'] });
+  expect(state.textProps.style[0]).toMatchObject({ color: lightTheme.colors['core-text-primary'] });
  });
  it('resolves typography and colors again when the theme changes, with style overrides last', () => {
   const override = { fontSize: 40 };
   const tree = (preference: 'light' | 'dark') => <SliceThemeProvider preference={preference}>
-   <StyledText textStyle="body-m-regular" textColor="core-text-primary" style={override}>Hello</StyledText>
+   <Text textStyle="body-m-regular" textColor="core-text-primary" style={override}>Hello</Text>
   </SliceThemeProvider>;
   const view = render(tree('light'));
-  expect(state.textProps.style).toEqual([lightTheme.type['body-m-regular'], { color: lightTheme.colors['core-text-primary'] }, { lineHeight: 21 }, override]);
+  expect(state.textProps.style).toEqual([{ ...lightTheme.type['body-m-regular'], color: lightTheme.colors['core-text-primary'] }, override]);
   view.rerender(tree('dark'));
-  expect(state.textProps.style).toContainEqual({ color: darkTheme.colors['core-text-primary'] });
+  expect(state.textProps.style[0]).toMatchObject({ color: darkTheme.colors['core-text-primary'] });
  });
  it.each([[true, 18], [1.5, 22.5]] as const)('supports singleLine=%s and its line height', (singleLine, lineHeight) => {
-  render(<SliceThemeProvider><StyledText textStyle="body-m-regular" singleLine={singleLine}>Hello</StyledText></SliceThemeProvider>);
+  render(<SliceThemeProvider><Text textStyle="body-m-regular" singleLine={singleLine}>Hello</Text></SliceThemeProvider>);
   expect(state.textProps.numberOfLines).toBe(1);
-  expect(state.textProps.style).toContainEqual({ lineHeight });
+  expect(state.textProps.style[0]).toMatchObject({ lineHeight });
  });
 });
 

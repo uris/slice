@@ -15,8 +15,8 @@ for (const entry of Object.values(manifest.exports)) {
 
 // Verify Metro's iOS route and the original specification shipped for Babel/Codegen.
 const metroRoot = new URL('dist/react-native/native/', root);
-const componentRoot = new URL('src/components/SliceLiquidGlassView/', metroRoot);
-for (const path of ['SliceLiquidGlassView.js', 'SliceLiquidGlassView.ios.js', 'index.js']) {
+const componentRoot = new URL('src/components/LiquidGlass/', metroRoot);
+for (const path of ['LiquidGlass.js', 'LiquidGlass.ios.js', 'index.js']) {
 	assert(existsSync(new URL(path, componentRoot)), `Missing Metro component file: ${path}`);
 }
 const specPath = new URL('src/specs/LiquidGlassNativeComponent.ts', metroRoot);
@@ -53,8 +53,8 @@ for (const path of [
 assert.equal(manifest.codegenConfig.ios.componentProvider.SliceLiquidGlassView, 'RCTLiquidGlassView');
 
 // Native glass buttons must retain their iOS route, typed Codegen spec and assets.
-const buttonRoot = new URL('src/components/SliceButton/', metroRoot);
-for (const path of ['SliceButton.js', 'SliceButton.ios.js', 'SliceButtonRegular.js']) {
+const buttonRoot = new URL('src/components/Button/', metroRoot);
+for (const path of ['Button.js', 'Button.ios.js', 'ButtonRegular.js']) {
 	assert(existsSync(new URL(path, buttonRoot)), `Missing button platform file: ${path}`);
 }
 const buttonSpecPath = new URL('src/specs/GlassButtonNativeComponent.ts', metroRoot);
@@ -100,8 +100,8 @@ const buttonTransform = require('@babel/core').transformSync(buttonSpec, {
 assert(buttonTransform.code.includes('NativeComponentRegistry'));
 
 // Background blur must ship both native platform support and its typed Codegen input.
-const blurRoot = new URL('src/components/SliceBackgroundBlur/', metroRoot);
-for (const path of ['SliceBackgroundBlur.js', 'SliceBackgroundBlur.native.js', 'index.js']) {
+const blurRoot = new URL('src/components/BackgroundBlur/', metroRoot);
+for (const path of ['BackgroundBlur.js', 'BackgroundBlur.native.js', 'index.js']) {
 	assert(existsSync(new URL(path, blurRoot)), `Missing background blur platform file: ${path}`);
 }
 const blurSpecPath = new URL('src/specs/BackgroundBlurNativeComponent.ts', metroRoot);
@@ -189,14 +189,14 @@ async function bundleSelection(entry, name) {
 for (const entry of ['utils', 'index']) {
 	const output = await bundleSelection(entry, 'lineHeightTextStyle');
 	assert.equal(output.imports.length, 0, `${entry} utility unexpectedly imports runtime dependencies`);
-	assert(!output.code.includes('SliceButton') && !output.code.includes('STATIC_ICON_REGISTRY'));
+	assert(!output.code.includes('ButtonRegular') && !output.code.includes('STATIC_ICON_REGISTRY'));
 }
 const hook = await bundleSelection('hooks', 'useCreateThemedStyles');
 assert(!hook.imports.some((id) => /react-native-(svg|reanimated)/.test(id)));
 
 // Adaptive text must ship its iOS renderer and the original typed Codegen input.
-for (const name of ['SliceText.js', 'SliceText.ios.js', 'SliceTextRegular.js']) {
-	assert(existsSync(new URL(`src/components/SliceText/${name}`, metroRoot)));
+for (const name of ['Text.js', 'Text.ios.js', 'TextRegular.js']) {
+	assert(existsSync(new URL(`src/components/Text/${name}`, metroRoot)));
 }
 const textSpec = readFileSync(new URL('src/specs/GlassTextNativeComponent.ts', metroRoot), 'utf8');
 assert.equal(textSpec, readFileSync(new URL('src/specs/GlassTextNativeComponent.ts', root), 'utf8'));
@@ -216,8 +216,8 @@ const textTransform = require('@babel/core').transformSync(textSpec, {
 });
 assert(textTransform.code.includes('NativeComponentRegistry'));
 // Glass icons select existing templates without losing the SVG platform route.
-for (const name of ['SliceIcon.js', 'SliceIcon.ios.js', 'SliceIconSvg.js']) {
-	assert(existsSync(new URL(`src/components/SliceIcon/${name}`, metroRoot)));
+for (const name of ['Icon.js', 'Icon.ios.js', 'IconSvg.js']) {
+	assert(existsSync(new URL(`src/components/Icon/${name}`, metroRoot)));
 }
 const iconSpecPath = new URL('src/specs/GlassIconNativeComponent.ts', metroRoot);
 const iconSpec = readFileSync(iconSpecPath, 'utf8');
@@ -239,6 +239,42 @@ const iconTransform = require('@babel/core').transformSync(iconSpec, {
 assert(iconTransform.code.includes('NativeComponentRegistry'));
 // iOS input colors must keep a platform sibling so web does not import DynamicColorIOS.
 for (const name of ['inputColors.js', 'inputColors.ios.js']) {
-	assert(existsSync(new URL(`src/components/SliceTextInput/${name}`, metroRoot)));
+	assert(existsSync(new URL(`src/components/TextInput/${name}`, metroRoot)));
 }
 console.log('Verified package exports, Metro platform files, Codegen/Babel spec, native sources and ESM tree shaking.');
+
+// Both public entry points expose the renamed component API.
+for (const entry of ['index', 'components']) {
+	const declarations = readFileSync(
+		new URL(`dist/types/native/src/${entry === 'components' ? 'components/index' : 'index'}.d.ts`, root),
+		'utf8',
+	);
+	for (const name of ['BackgroundBlur', 'Button', 'FabButton', 'Icon', 'LiquidGlass', 'Text', 'TextInput']) {
+		assert(new RegExp(`\\b${name}\\b`).test(declarations), `Missing public component: ${name}`);
+	}
+}
+
+// Android input action updates keep a platform sibling and an optional TurboModule.
+for (const name of ['useKeyboardActionRefresh.js', 'useKeyboardActionRefresh.android.js']) {
+	assert(existsSync(new URL(`src/components/TextInput/${name}`, metroRoot)));
+}
+const keyboardSpecPath = new URL('src/specs/NativeTextInputKeyboard.ts', metroRoot);
+const keyboardSpec = readFileSync(keyboardSpecPath, 'utf8');
+assert.equal(keyboardSpec, readFileSync(new URL('src/specs/NativeTextInputKeyboard.ts', root), 'utf8'));
+assert(!existsSync(new URL('src/specs/NativeTextInputKeyboard.js', metroRoot)));
+const keyboardModule = new TypeScriptParser().parseString(keyboardSpec, fileURLToPath(keyboardSpecPath)).modules
+	.NativeTextInputKeyboard;
+assert.equal(keyboardModule.moduleName, 'SliceTextInputKeyboard');
+assert.deepEqual(
+	keyboardModule.spec.methods.map((method) => method.name),
+	['restartInput'],
+);
+assert(existsSync(new URL('platform/android/src/main/java/com/slice/SliceTextInputKeyboardModule.java', root)));
+
+for (const entry of ['index', 'components']) {
+	const fab = await bundleSelection(entry, 'FabButton');
+	assert(fab.exports.includes('FabButton'));
+}
+for (const name of ['FabButton.js', 'index.js']) {
+	assert(existsSync(new URL(`src/components/FabButton/${name}`, metroRoot)));
+}

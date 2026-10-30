@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SliceButton, SliceThemeProvider, useSliceTheme } from '@apple-pie/slice-native';
+import { Button, SliceThemeProvider, useSliceTheme } from '@apple-pie/slice-native';
 
 /**
  * Actual RN/Fabric buttons: independent foregrounds, updates, and press events.
@@ -54,12 +54,12 @@ function Screen({ preference, setPreference }: { preference: 'light' | 'dark'; s
       <Text style={{ color: colors['core-text-secondary'] }}>{preference} · Presses: {presses} · Scroll outside buttons</Text>
     </View>
     <View pointerEvents="box-none" style={{ position: 'absolute', top: insets.top + 195, left: 24, right: 24, gap: 16 }}>
-      {cycleStep % 2 === 0 && <SliceButton presence={{ entering: FadeIn.duration(350), exiting: FadeOut.duration(350) }} label="Link colors glass" icon="home" iconColor="core-link-primary" textColor="core-link-primary" liquidGlassBackground={{ glassStyle }} onPress={press} />} 
-      <SliceButton label="Separate colors" icon="home" iconColor={iconColor} textColor={textColor} liquidGlassBackground={{ glassStyle }} onPress={press} />
-      <SliceButton icon="@" iconColor="core-link-primary" textColor="core-text-primary" liquidGlassBackground={{ glassStyle }} onPress={press} accessibilityLabel="Icon only with separate colors" />
-      <SliceButton label="Palette literals" icon="home" iconColor={colors['core-link-primary']} textColor={colors['core-text-primary']} liquidGlassBackground={{ glassStyle }} onPress={press} />
-      <SliceButton label="Disabled split" icon="home" iconColor="feedback-positive" textColor="core-text-primary" liquidGlassBackground={{ glassStyle }} disabled />
-      <SliceButton label="Regular split" icon="home" iconColor="core-link-primary" textColor="core-text-primary" onPress={press} />
+      {cycleStep % 2 === 0 && <Button presence={{ entering: FadeIn.duration(350), exiting: FadeOut.duration(350) }} label="Link colors glass" icon="home" iconColor="core-link-primary" textColor="core-link-primary" liquidGlassBackground={{ glassStyle }} onPress={press} />}
+      <Button label="Separate colors" icon="home" iconColor={iconColor} textColor={textColor} liquidGlassBackground={{ glassStyle }} onPress={press} />
+      <Button icon="@" iconColor="core-link-primary" textColor="core-text-primary" liquidGlassBackground={{ glassStyle }} onPress={press} accessibilityLabel="Icon only with separate colors" />
+      <Button label="Palette literals" icon="home" iconColor={colors['core-link-primary']} textColor={colors['core-text-primary']} liquidGlassBackground={{ glassStyle }} onPress={press} />
+      <Button label="Disabled split" icon="home" iconColor="feedback-positive" textColor="core-text-primary" liquidGlassBackground={{ glassStyle }} disabled />
+      <Button label="Regular split" icon="home" iconColor="core-link-primary" textColor="core-text-primary" onPress={press} />
     </View>
   </View>;
 }
