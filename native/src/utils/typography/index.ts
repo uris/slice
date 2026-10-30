@@ -1,1 +1,1 @@
-export { lineHeightTextStyle } from './typography';
+export { lineHeightTextStyle, numberFromFontWeight } from './typography';

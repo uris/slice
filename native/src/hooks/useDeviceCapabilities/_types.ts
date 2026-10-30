@@ -15,4 +15,14 @@ export interface DeviceCapabilities {
 	readonly supportsLiquidGlass: boolean;
 	/** Native backdrop blur API availability, rather than content/window blur. */
 	readonly supportsNativeBlur: boolean;
+	/** qol for android check */
+	readonly isAndroid: boolean;
+	/** qol for ios check */
+	readonly isIOS: boolean;
+	/** qol for mac os check */
+	readonly isMacOS: boolean;
+	/** qol for windows check */
+	readonly isWindows: boolean;
+	/** qol for web check */
+	readonly isWeb: boolean;
 }

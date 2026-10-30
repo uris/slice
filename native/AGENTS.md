@@ -31,7 +31,7 @@ decisions, not speculative plans. Explicit user instructions take precedence.
   `../src/theme/colors/colors.ts`; icon artwork comes from
   `../src/components/Icon/iconRegistry.tsx`.
 - React Native SVG icons and the parallel iOS template library derive from the
-  same registry. Preserve the existing `SliceIcon` renderer; native assets are an
+  same registry. Preserve the existing `Icon` renderer; native assets are an
   additional library, not a replacement.
 - Update source definitions or generators rather than generated registries,
   asset catalogs, Swift accessors, or `dist/`. Include regenerated source assets
@@ -54,14 +54,18 @@ decisions, not speculative plans. Explicit user instructions take precedence.
 
 ## Liquid Glass and platform behavior
 
+- `FabButton` always renders a regular button and excludes Liquid Glass from its
+  public props. Keep its outer shadow unclipped and its corners synchronized with
+  the button; the inner button owns ripple clipping.
+
 - Keep a regular React Native fallback. Native glass controls are used only on
   iOS when capability detection reports support and the caller opts in.
 - Metro chooses `.ios.tsx` by platform, not capability. The iOS entry point must
   still choose the regular implementation when glass is unsupported or disabled.
-- `SliceButton` and `SliceTextInput` accept `liquidGlassBackground={true}` for default regular glass,
+- `Button` and `TextInput` accept `liquidGlassBackground={true}` for default regular glass,
   `false`/omission for regular rendering, or an options object. Keep the existing
   `glassStyle` name; there is no `tintStyle` prop.
-- Inside supported `SliceLiquidGlassView` content, `SliceIcon` selects existing
+- Inside supported `LiquidGlass` content, `Icon` selects existing
   native template assets through glass context, including intermediate views.
   Keep SVG rendering outside glass and for options templates cannot represent.
   Use actual Slice native color assets; do not substitute UIKit semantic colors
@@ -87,7 +91,7 @@ decisions, not speculative plans. Explicit user instructions take precedence.
   solid button backgrounds or custom borders to the native glass path.
 - Public foreground props use `iconColor` for icons and `textColor` for text.
   Buttons accept both independently; `tintColor` is their shared fallback.
-  `SliceIcon` does not retain a `strokeColor` compatibility alias in this alpha.
+  `Icon` does not retain a `strokeColor` compatibility alias in this alpha.
 - Buttons and inputs exercise the same glass-content composition available to
   consumers through view/text/icon primitives. The user verified custom text/icon
   colors and backdrop adaptation on a physical device for both composed controls.

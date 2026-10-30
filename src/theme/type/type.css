@@ -16,6 +16,7 @@
 	--font-size-m: 0.9375rem; /* 15px */
 	--font-size-l: 1rem; /* 16px */
 	--font-size-xl: 1.0625rem; /* 17px */
+	--font-size-xxl: 1.125rem; /* 18px */
 	--font-size-h1: 4.25rem; /* 68px */
 	--font-size-h2: 3.5rem; /* 56px */
 	--font-size-h3: 2.75rem; /* 44px */
@@ -164,6 +165,33 @@
 	font-weight: var(--font-weight-bold);
 	font-size: var(--font-size-xl);
 	line-height: var(--line-height-xxl);
+	letter-spacing: var(--letter-spacing-s);
+}
+
+[data-slice-theme-scope] .body-xxl-regular {
+	font-family: var(--font-family), sans-serif;
+	font-weight: var(--font-weight-regular);
+	font-size: var(--font-size-xxl);
+	line-height: var(--line-height-m);
+	text-decoration: none;
+	letter-spacing: var(--letter-spacing-s);
+}
+
+[data-slice-theme-scope] .body-xxl-medium {
+	font-family: var(--font-family), sans-serif;
+	font-weight: var(--font-weight-medium);
+	font-size: var(--font-size-xxl);
+	line-height: var(--line-height-m);
+	text-decoration: none;
+	letter-spacing: var(--letter-spacing-s);
+}
+
+[data-slice-theme-scope] .body-xxl-bold {
+	font-family: var(--font-family), sans-serif;
+	font-weight: var(--font-weight-bold);
+	font-size: var(--font-size-xxl);
+	line-height: var(--line-height-m);
+	text-decoration: none;
 	letter-spacing: var(--letter-spacing-s);
 }
 

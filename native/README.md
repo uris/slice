@@ -32,9 +32,9 @@ in Expo Go. Restarting Metro alone does not register new native code.
 ```tsx
 import { View } from 'react-native';
 import {
-  SliceButton,
+  Button,
   SliceIcons,
-  SliceTextInput,
+  TextInput,
   SliceThemeProvider,
 } from '@apple-pie/slice-native';
 
@@ -42,10 +42,10 @@ export default function App() {
   return (
     <SliceThemeProvider>
       <View style={{ padding: 24, gap: 16 }}>
-        <SliceTextInput accessibilityLabel="Search tasks" placeholder="Search…" />
-        <SliceButton icon={SliceIcons.ui.home} onPress={() => console.log('Home')}>
+        <TextInput accessibilityLabel="Search tasks" placeholder="Search…" />
+        <Button icon={SliceIcons.ui.home} onPress={() => console.log('Home')}>
           Go home
-        </SliceButton>
+        </Button>
       </View>
     </SliceThemeProvider>
   );
@@ -56,12 +56,13 @@ export default function App() {
 
 | Component | Summary |
 | --- | --- |
-| `SliceButton` | Primary/secondary buttons, optional icons, disabled states, Reanimated transitions, and optional Liquid Glass backgrounds. |
-| `SliceTextInput` | Themed native input with icons, optional focus control, focus callbacks, and opt-in clearing on blur. |
-| `StyledText` | Theme-based typography presets with native text props. |
-| `SliceIcon` / `SliceIcons` | Native SVG artwork and typed icon names shared with the web UIKit. Supports toggles, fills, sizing, and press handlers. |
-| `SliceLiquidGlassView` | Native glass container with children, tint, interaction feedback, and rounded corners. |
-| `SliceBackgroundBlur` | Background blur overlay with an optional directional fade on iOS. |
+| `Button` | Primary/secondary buttons, optional icons, disabled states, Reanimated transitions, and optional Liquid Glass backgrounds. |
+| `FabButton` | Floating action button with an unclipped shadow, a default plus icon and 56-point size. Always uses regular rendering. |
+| `TextInput` | Themed native input with icons, optional focus control, focus callbacks, and opt-in clearing on blur. |
+| `Text` | Theme-based typography presets with native text props. |
+| `Icon` / `SliceIcons` | Native SVG artwork and typed icon names shared with the web UIKit. Supports toggles, fills, sizing, and press handlers. |
+| `LiquidGlass` | Native glass container with children, tint, interaction feedback, and rounded corners. |
+| `BackgroundBlur` | Background blur overlay with an optional directional fade on iOS. |
 
 Buttons and inputs support `size` (`s`, `m`, `l`, or a number), `borderRadius`
 (`pill`, `rectangular`, or a number), `borderWidth`, `borderColor`, and
@@ -69,33 +70,33 @@ Buttons and inputs support `size` (`s`, `m`, `l`, or a number), `borderRadius`
 Inputs forward `style` to the underlying text field. Buttons expose `animatedStyle`
 for their wrapper.
 
-`SliceButton`, `SliceTextInput`, and `StyledText` use `SliceThemeProvider`. Give
+`Button`, `TextInput`, and `Text` use `SliceThemeProvider`. Give
 inputs and icon-only buttons an accessible name. Icons inside these components
 are decorative; standalone icons can use `accessibilityLabel` and `onPress`.
-For `SliceIcon`, `fillColor` means fill opacity, not a color value.
+For `Icon`, `fillColor` means fill opacity, not a color value.
 
 ### Built-in Liquid Glass and blur
 
 | Effect | iOS | Android | Web |
 | --- | --- | --- | --- |
-| `SliceLiquidGlassView` | Native Liquid Glass on iOS 26+; system blur on older iOS. | Tinted color fallback. | Tinted color fallback. |
-| `SliceBackgroundBlur` | Native backdrop blur; optional directional fade. | Uniform backdrop blur when the required API is present (SDK 37.2+) and hardware acceleration is available; otherwise a color fallback. | Color fallback. |
+| `LiquidGlass` | Native Liquid Glass on iOS 26+; system blur on older iOS. | Tinted color fallback. | Tinted color fallback. |
+| `BackgroundBlur` | Native backdrop blur; optional directional fade. | Uniform backdrop blur when the required API is present (SDK 37.2+) and hardware acceleration is available; otherwise a color fallback. | Color fallback. |
 
 The implementations ship with the package: Swift/UIKit and Fabric on iOS, and Java
 platform code on Android. Consumers do not need to install another effects library.
 iOS respects Reduce Transparency and renders a fallback when it is enabled.
 
 ```tsx
-import { SliceBackgroundBlur, SliceLiquidGlassView } from '@apple-pie/slice-native';
+import { BackgroundBlur, LiquidGlass } from '@apple-pie/slice-native';
 
 // Place over background content; fills its parent by default.
-<SliceBackgroundBlur blurIntensity={20} fadeStop={0.5} direction="down" />
+<BackgroundBlur blurIntensity={20} fadeStop={0.5} direction="down" />
 
-<SliceLiquidGlassView cornerRadius={24} glassStyle="regular" style={{ padding: 20 }}>
+<LiquidGlass cornerRadius={24} glassStyle="regular" style={{ padding: 20 }}>
   {/* Foreground content */}
-</SliceLiquidGlassView>
+</LiquidGlass>
 
-<SliceButton label="Continue" liquidGlassBackground={{ glassStyle: 'clear', fallbackColor: '#eeeeee' }} />
+<Button label="Continue" liquidGlassBackground={{ glassStyle: 'clear', fallbackColor: '#eeeeee' }} />
 ```
 
 Blur defaults to intensity `12` and `fadeStop={0}`, which renders uniform blur
@@ -117,8 +118,38 @@ blur samples the same window; separately composed surfaces such as video may dif
 | `SliceThemeProvider` | Light/dark themes; follows the system by default. Use `preference="light"` or `"dark"` to override. |
 | `useSliceTheme()` | Returns the active theme. |
 | `useSliceContext()` | Returns the theme, mode, preference, and optional preference setter. |
-| `useCreateThemedStyles(factory)` | Creates memoized styles from the active theme. Define the factory outside the component for stable reuse. |
+| `useCreateThemedStyles(styles)` | Memoizes a stylesheet, theme factory, or platform map. Platform maps merge `base` with the current `Platform.OS` entry. Keep the input stable for reuse. |
 | `useDeviceCapabilities()` | Reports native effect support, platform, OS/API version, and device information. Does not require the theme provider. |
+
+`useCreateThemedStyles` accepts an existing `StyleSheet.create(...)` result or a
+factory `(theme) => StyleSheet.create(...)`. It also accepts a map keyed by `base`,
+`ios`, `android`, `macos`, `windows`, or `web`, either directly or returned by a
+theme factory. Each map entry can be a stylesheet or its own theme factory.
+
+```tsx
+const createStyles = (theme: SliceNativeTheme) => ({
+  base: StyleSheet.create({
+    container: { padding: 16, backgroundColor: theme.colors['core-surface-primary'] },
+    title: theme.type['body-xxl-medium'],
+  }),
+  ios: StyleSheet.create({ container: { paddingTop: 24 } }),
+  android: StyleSheet.create({ container: { paddingTop: 20 } }),
+});
+
+function Screen() {
+  const styles = useCreateThemedStyles(createStyles);
+  return <View style={styles.container}><Text style={styles.title}>Hello</Text></View>;
+}
+```
+
+The selected OS entry overrides properties within each matching named style;
+other base properties remain. Style values such as `transform` and `shadowOffset`
+are replaced as a whole, following React Native style merging. Entries for other
+platforms are ignored, and their factories are not evaluated. Without a matching
+OS entry, the hook returns base styles; without either, it returns an empty
+stylesheet. Platform-only style names are optional in the return type because
+they may be absent on another OS. Style factories and maps defined outside the
+component retain memoization across renders and update when the theme changes.
 
 ```tsx
 const {
@@ -227,7 +258,7 @@ Run `npm run test:package` to verify generated color parity and packaging.
 ### Native iOS template icons
 
 The SVG renderer remains available on every platform. Inside supported iOS glass,
-`SliceIcon` selects the existing native templates automatically. The native library,
+`Icon` selects the existing native templates automatically. The native library,
 `SliceNativeIcon`, loads template images from `SliceNativeIcons.bundle`:
 
 ```swift
@@ -291,10 +322,10 @@ the caller's presence/layout animations and `animatedStyle` intact.
 Validate repeated exit/entrance cycles through the actual React Native/Reanimated
 path on a simulator or device. A successful first entrance or a native
 configuration flag does not prove that glass renders after reuse. The confirmed
-fresh-surface recycling fix currently applies to `SliceButton`; other Liquid Glass
+fresh-surface recycling fix currently applies to `Button`; other Liquid Glass
 components need their own integration verification.
 
-`SliceLiquidGlassView` also defers its effect until a visible layout pass, observes
+`LiquidGlass` also defers its effect until a visible layout pass, observes
 ancestor layer opacity/visibility throughout subsequent animation cycles, and
 clears the effect on detach and Fabric recycling. Its React content container
 stays stable while the material is rebuilt. This lifecycle handling still needs
@@ -304,14 +335,14 @@ button's fresh-control recycling result does not establish the same result for
 
 ### Native Liquid Glass buttons
 
-On iOS 26+ with native support, `SliceButton` uses a UIKit `UIButton` when
+On iOS 26+ with native support, `Button` uses a UIKit `UIButton` when
 `liquidGlassBackground` is supplied. The plain native control is nested inside
 a `UIVisualEffectView` glass content view, matching the input composition and
 allowing independent icon and title colors. Other platforms, older iOS versions, and
 buttons without that opt-in retain the regular React Native rendering.
 
 ```tsx
-<SliceButton
+<Button
   label="Save"
   icon="check"
   liquidGlassBackground
@@ -389,16 +420,16 @@ or simulator. Regular and clear glass should be evaluated separately.
 
 ### Native text inside Liquid Glass
 
-`StyledText` (the exported Slice text component) automatically uses a native iOS
+`Text` (the exported Slice text component) automatically uses a native iOS
 `UILabel` for plain string/number children inside a supported
-`SliceLiquidGlassView`, including through intermediate `View` components:
+`LiquidGlass`, including through intermediate `View` components:
 
 ```tsx
-<SliceLiquidGlassView style={{ padding: 20 }}>
+<LiquidGlass style={{ padding: 20 }}>
   <View>
-    <StyledText textColor="core-text-secondary">Account details</StyledText>
+    <Text textColor="core-text-secondary">Account details</Text>
   </View>
-</SliceLiquidGlassView>
+</LiquidGlass>
 ```
 
 All text tokens, including primary, secondary, and tertiary, load their actual
@@ -431,16 +462,16 @@ new native text component; a Metro reload is insufficient.
 
 ### Icons inside Liquid Glass
 
-`SliceIcon` uses a native `UIImageView` and the existing generated template assets
-when rendered inside supported iOS `SliceLiquidGlassView` content, including
+`Icon` uses a native `UIImageView` and the existing generated template assets
+when rendered inside supported iOS `LiquidGlass` content, including
 through intermediate `View` components. No additional asset export is needed.
 
 ```tsx
-<SliceLiquidGlassView style={{ padding: 16 }}>
+<LiquidGlass style={{ padding: 16 }}>
   <View>
-    <SliceIcon name={SliceIcons.ui.home} size={24} />
+    <Icon name={SliceIcons.ui.home} size={24} />
   </View>
-</SliceLiquidGlassView>
+</LiquidGlass>
 ```
 
 The native path defaults to the actual `core-icon-primary` Slice color asset,
@@ -465,8 +496,8 @@ app rebuild; reloading Metro alone cannot install the icon component.
 Use `liquidGlassBackground={true}` (or the shorthand prop) for default regular
 glass, an options object to customize it, or `false`/omission for a regular input.
 On iOS with Liquid Glass support and `liquidGlassBackground` enabled,
-`SliceTextInput` places its icon and React Native editor inside
-`SliceLiquidGlassView` content. The glass container owns the horizontal layout;
+`TextInput` places its icon and React Native editor inside
+`LiquidGlass` content. The glass container owns the horizontal layout;
 it is no longer an absolutely positioned sibling behind the editor. The nested
 icon can select the existing native template renderer through glass context.
 Without the opt-in, or on unsupported platforms/devices, the input renders its
@@ -494,7 +525,7 @@ While native input glass is active, `borderWidth` and `borderColor` are ignored:
 UIKit supplies the material outline. Regular and unsupported-device fallback
 inputs retain their configured borders.
 
-Glass input icons now leave their default foreground to `SliceIcon`, which loads
+Glass input icons now leave their default foreground to `Icon`, which loads
 `core-icon-primary` from the existing native Slice color assets. `textColor` no
 longer overrides the glass icon tint; use `iconColor` to select a different Slice token or palette value.
 Regular/fallback inputs continue to default their icon to `textColor`.
@@ -512,6 +543,101 @@ legibility separately, especially for faint tokens and different glass settings.
 Input line height defaults to 1.2 times the effective font size, including
 `style.fontSize` overrides. An explicit `style.lineHeight` takes precedence.
 
+### Floating action button
+
+`FabButton` is available from the package root and `/components`, with
+`FabButtonProps` exported alongside it. It always uses a regular `Button`;
+`liquidGlassBackground` is not supported. The default icon is `plus` and the
+default size is 56 points. Supply an `accessibilityLabel` for an icon-only FAB.
+
+```tsx
+<FabButton accessibilityLabel="Add task" onPress={addTask} />
+<FabButton label="Create task" icon="plus" size={64} onPress={addTask} />
+<FabButton borderRadius={16} shadowStyle={{ elevation: 8, marginBottom: 16 }} />
+```
+
+The outer shadow wrapper sizes to the button's layout instead of stretching to
+fill its parent. It follows size overrides and wider labels without fixed
+wrapper dimensions. Its corner radii match the button's resolved `borderRadius`
+prop or regular `style` values, including individual corner styles. The wrapper
+stays unclipped so the shadow can extend beyond the ripple-clipped button.
+
+Use `style` for the button's box/text styling and `shadowStyle` for outer shadow
+and positioning styles (including margins). Both accept style arrays. Resolved
+button corners and visible overflow take precedence over matching `shadowStyle`
+values to keep the shadow outline synchronized and unclipped. Other button props,
+including press events, disabled state, typography, and animation props, are
+forwarded to the wrapped button.
+
+### Android input keyboard actions
+
+When `TextInput` is focused on Android, changes to `returnKeyType`,
+`returnKeyLabel`, or the effective `enterKeyHint` refresh the existing keyboard
+input connection. `enterKeyHint` takes precedence over `returnKeyType`, matching
+React Native. Rapid updates are coalesced; initial rendering and unfocused
+changes use Android's normal input connection setup. Refreshing does not remount
+or blur the editor, clear its value, or invoke `blurClears`. Other platforms keep
+their existing keyboard behavior. The keyboard app controls the final icon/label
+appearance and may reset an active composing suggestion when its connection restarts.
+
+This uses the Android `SliceTextInputKeyboard` native module. Install a freshly
+packed package and rebuild the consuming Android app to include it; a Metro
+reload alone cannot add it. Older native builds without the module retain the
+previous behavior until rebuilt.
+
+### Regular button and input styles
+
+Regular primary buttons default both their label and icon to `core-text-light`
+in light and dark themes. This also applies to the primary `FabButton` and regular
+glass fallbacks. Explicit `textColor`, `iconColor`, `tintColor`, and label
+`style.color` overrides retain their existing priority. Secondary buttons,
+disabled colors, and native Liquid Glass foreground defaults are unchanged.
+
+`Button` and `TextInput` both accept `style: StyleProp<TextStyle>`, including
+style arrays and `StyleSheet.create` results. Define box and text properties in
+one style key: both components automatically separate them and apply each to the
+correct wrapper, content host, or text element. You do not need separate box and
+text style objects.
+
+Regular controls resolve each supported setting in this order: explicit
+component prop, matching style value, then the Slice default. For example,
+`borderRadius={0}` overrides `style={{ borderRadius: 12 }}`; omitting the prop
+uses the style's radius. The same priority applies to `borderWidth`, `borderColor`,
+`backgroundColor`, and `textColor` versus `style.color`. Zero values remain
+valid overrides. Explicit uniform border props also override per-edge style values.
+
+```tsx
+const styles = StyleSheet.create({
+  action: { borderRadius: 12, paddingHorizontal: 24, fontSize: 18, color: '#405261' },
+});
+
+<Button label="Save" style={styles.action} />
+<TextInput style={{ borderRadius: 12, backgroundColor: '#f4f4f4', fontSize: 18 }} />
+<TextInput borderRadius={0} style={{ borderRadius: 12 }} />
+```
+
+Button box styles (including borders, backgrounds, dimensions, and margins)
+apply to the painted surface wrapper. Padding, gap, and content alignment apply
+to the inner `Pressable`, keeping the ripple host stretched across the surface.
+Both the painted wrapper and ripple host clip to the resolved corner radii;
+the default Android ripple is bounded. Explicit `contentInsets` edges
+override matching padding values; omitted edges retain their style or default
+values. `iconGap` overrides style gaps. Text properties such as `fontSize`,
+`fontWeight`, and `color` apply to the label. An explicit `labelTextStyle` takes
+priority over matching typography values; `textColor` and `tintColor` take priority
+over `style.color`. Disabled buttons retain their disabled colors and interaction behavior, and `animatedStyle` remains the final
+animation layer.
+
+Input box styles apply to the outer wrapper, while typography and text color apply
+to the editor. Padding belongs to the wrapper so the icon and editor share the
+same surface. `size` sets minimum height (and icon-only button width); without
+`size`, styles can supply `minHeight` or a numeric `height` before the 48-point
+default applies. A fixed style height can expand beyond the minimum.
+
+These wrapper overrides apply to regular rendering, including unsupported glass
+fallbacks. Active native glass buttons ignore `style`. Active glass inputs retain
+their existing editor-only style handling and native surface behavior.
+
 ### Shared foreground color values
 
 Button `iconColor`/`textColor` (with shared `tintColor` fallback), text `textColor`,
@@ -521,10 +647,10 @@ token or React Native `ColorValue`. The existing placeholder prop name remains
 `placeholderTextColor`.
 
 ```tsx
-<SliceButton label="Save" liquidGlassBackground tintColor="core-text-primary" />
-<StyledText textColor="core-text-secondary">Details</StyledText>
-<SliceIcon name="search" iconColor="core-icon-secondary" />
-<SliceTextInput liquidGlassBackground icon="search"
+<Button label="Save" liquidGlassBackground tintColor="core-text-primary" />
+<Text textColor="core-text-secondary">Details</Text>
+<Icon name="search" iconColor="core-icon-secondary" />
+<TextInput liquidGlassBackground icon="search"
   iconColor="core-icon-secondary" textColor="core-text-primary"
   placeholderTextColor="core-text-secondary" />
 ```
@@ -549,14 +675,14 @@ Material `glassTintColor` is separate and is not changed by foreground resolutio
 ### Independent button foregrounds
 
 Use `iconColor` for icon foregrounds and `textColor` for text foregrounds across
-components. `SliceIcon` exposes `iconColor`; it has no public `strokeColor` prop.
+components. `Icon` exposes `iconColor`; it has no public `strokeColor` prop.
 Button `iconColor` and `textColor` can differ. `tintColor` remains a shorthand
 fallback for either foreground when its specific prop is omitted:
 
 ```tsx
-<SliceButton label="Save" icon="home" liquidGlassBackground
+<Button label="Save" icon="home" liquidGlassBackground
   iconColor="core-icon-secondary" textColor="core-text-primary" />
-<SliceIcon name="search" iconColor="core-icon-secondary" />
+<Icon name="search" iconColor="core-icon-secondary" />
 ```
 
 Each foreground uses the shared regular/glass resolver independently. Regular
@@ -564,3 +690,25 @@ buttons preserve their disabled color treatment; native glass buttons leave the
 disabled image treatment to UIKit. `glassTintColor` still controls only material
 color. Separate native button colors add Fabric props, so update Codegen/pods and
 rebuild the consuming iOS app before testing them.
+
+### Component names and text typography
+
+The native components are exported as `BackgroundBlur`, `Button`, `FabButton`,
+`Icon`, `LiquidGlass`, `Text`, and `TextInput` from both the package root and `/components`.
+Replace the previous `Slice*` component imports and `StyledText` with these names;
+public prop types use the matching names (for example, `TextProps`). Alias React
+Native primitives when importing both: `import { Text as NativeText } from 'react-native'`.
+The theme provider and `SliceIcons` registry retain their names.
+
+`Text` supports body presets from `body-xs` through `body-xxl` in regular, medium,
+and bold weights. `body-xxl` computes to 18 points, a 133.33% line height, and
+0.16875-point letter spacing from the shared theme.
+
+`Text` defaults to `body-l-regular` and supports `fontFamily`, `fontSize`,
+`fontWeight`, `lineHeight`, and `letterSpacing` on regular and native glass paths.
+The `lineHeight` prop is a font-size multiplier; theme line heights and
+`style.lineHeight` are points. Changing `fontSize` preserves the theme's line-height
+ratio. `singleLine` limits text to one line and uses a 1.2 multiplier, or its numeric
+value. Explicit `style` values take precedence. Named weights (`thin`, `extra light`,
+`light`, `normal`, `medium`, `semi`, `bold`, `extra`, `heavy`) map to 100–900;
+numeric weights pass through. Letter spacing is in points.

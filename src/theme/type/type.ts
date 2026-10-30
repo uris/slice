@@ -20,6 +20,7 @@ export const fontSizes = {
 	m: '0.9375rem',
 	l: '1rem',
 	xl: '1.0625rem',
+	xxl: '1.125rem',
 	h1: '4.25rem',
 	h2: '3.5rem',
 	h3: '2.75rem',
@@ -46,7 +47,7 @@ export const letterSpacings = {
 	l: '0.015625em',
 };
 
-// ** new styles aligned to lyra */
+// ** new styles */
 export const type: Type = {
 	'body-xs-regular': `
       font-family: ${fontFamily};
@@ -153,6 +154,27 @@ export const type: Type = {
       line-height: ${lineHeights.xxl};
       text-decoration: none;
       letter-spacing: ${letterSpacings.s}`,
+	'body-xxl-regular': `
+      font-family: ${fontFamily};
+      font-weight: ${fontWeights.regular};
+      font-size: ${fontSizes.xxl};
+      line-height: ${lineHeights.m};
+      text-decoration: none;
+      letter-spacing: ${letterSpacings.s}`,
+	'body-xxl-medium': `
+      font-family: ${fontFamily};
+      font-weight: ${fontWeights.medium};
+      font-size: ${fontSizes.xxl};
+      line-height: ${lineHeights.m};
+      text-decoration: none;
+      letter-spacing: ${letterSpacings.s}`,
+	'body-xxl-bold': `
+      font-family: ${fontFamily};
+      font-weight: ${fontWeights.bold};
+      font-size: ${fontSizes.xxl};
+      line-height: ${lineHeights.m};
+      text-decoration: none;
+      letter-spacing: ${letterSpacings.s}`,
 	h1: `
       font-family: ${fontFamily};
       font-weight: ${fontWeights.extra};
@@ -207,6 +229,9 @@ export const typeCssClasses: Record<keyof Type, string> = {
 	'body-xl-regular': 'body-xl-regular',
 	'body-xl-medium': 'body-xl-medium',
 	'body-xl-bold': 'body-xl-bold',
+	'body-xxl-regular': 'body-xxl-regular',
+	'body-xxl-medium': 'body-xxl-medium',
+	'body-xxl-bold': 'body-xxl-bold',
 	h1: 'h1',
 	h2: 'h2',
 	h3: 'h3',
@@ -333,6 +358,30 @@ export const typeStyles: Record<keyof Type, React.CSSProperties> = {
 		fontWeight: `${fontWeights.bold}`,
 		fontSize: `${fontSizes.xl}`,
 		lineHeight: `${lineHeights.xxl}`,
+		textDecoration: 'none',
+		letterSpacing: `${letterSpacings.s}`,
+	},
+	'body-xxl-regular': {
+		fontFamily: `${fontFamily}`,
+		fontWeight: `${fontWeights.regular}`,
+		fontSize: `${fontSizes.xxl}`,
+		lineHeight: `${lineHeights.m}`,
+		textDecoration: 'none',
+		letterSpacing: `${letterSpacings.s}`,
+	},
+	'body-xxl-medium': {
+		fontFamily: `${fontFamily}`,
+		fontWeight: `${fontWeights.medium}`,
+		fontSize: `${fontSizes.xxl}`,
+		lineHeight: `${lineHeights.m}`,
+		textDecoration: 'none',
+		letterSpacing: `${letterSpacings.s}`,
+	},
+	'body-xxl-bold': {
+		fontFamily: `${fontFamily}`,
+		fontWeight: `${fontWeights.bold}`,
+		fontSize: `${fontSizes.xxl}`,
+		lineHeight: `${lineHeights.m}`,
 		textDecoration: 'none',
 		letterSpacing: `${letterSpacings.s}`,
 	},

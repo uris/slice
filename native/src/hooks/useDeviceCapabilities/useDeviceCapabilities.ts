@@ -13,6 +13,11 @@ export function useDeviceCapabilities(): DeviceCapabilities {
 			deviceModel: null,
 			supportsLiquidGlass: false,
 			supportsNativeBlur: false,
+			isAndroid: Platform.OS === 'android',
+			isIOS: Platform.OS === 'ios',
+			isMacOS: Platform.OS === 'macos',
+			isWindows: Platform.OS === 'windows',
+			isWeb: Platform.OS === 'web',
 		}),
 		[],
 	);
