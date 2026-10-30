@@ -1,7 +1,8 @@
 # storybook-native
 
-Native documentation application using React Native Web. Stories remain in
-`packages/slice-native/stories`; this workspace owns the browser tooling.
+Native documentation application using React Native Web. Component and hook stories live beside their implementations under
+`packages/slice-native/src`. Shared MDX pages live in
+`packages/slice-native/documentation`; this workspace owns the browser tooling.
 
 Install dependencies from the repository root. Run these commands from this workspace:
 

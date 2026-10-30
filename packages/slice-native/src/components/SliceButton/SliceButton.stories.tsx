@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
 import { fn } from 'storybook/test';
-import { SliceButton } from '../src/components';
+import { SliceButton } from './index';
 const meta = {
 	title: 'Components/SliceButton',
 	component: SliceButton,

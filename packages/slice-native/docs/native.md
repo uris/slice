@@ -39,8 +39,12 @@ registries or iOS resources. `test:package` validates exports, Metro files, Code
 specifications, iOS assets, and tree-shaking fixtures. These checks do not replace
 compiling and exercising the native components on a device or simulator.
 
-The browser documentation lives in `apps/storybook-native`, with stories in this
-package's `stories/` directory. From the repository root:
+Native unit-test coverage enforces 100% for statements, branches, functions, and
+lines. Colocated `*.stories.tsx` examples are excluded from this source coverage
+gate and validated separately by Storybook typechecks and builds.
+
+The browser documentation lives in `apps/storybook-native`, with component and hook stories colocated in this
+package's `src/` tree and shared MDX pages in `documentation/`. From the repository root:
 
 ```sh
 npm run storybook:native

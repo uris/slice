@@ -1,13 +1,16 @@
 {
 	"extends": "../../../packages/slice-native/tsconfig.json",
-	"compilerOptions": { "lib": ["ESNext", "DOM"], "declaration": false, "declarationDir": null },
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM"],
+		"declaration": false,
+		"declarationDir": null
+	},
 	"include": [
 		"*.ts",
 		"*.tsx",
 		"../../../packages/slice-native/src/index.ts",
 		"../../../packages/slice-native/src/**/*.ts",
-		"../../../packages/slice-native/src/**/*.tsx",
-		"../../../packages/slice-native/stories/**/*.tsx"
+		"../../../packages/slice-native/src/**/*.tsx"
 	],
 	"exclude": [
 		"../../../packages/slice-native/**/*.test.ts",

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
-import { StyledText } from '../src/components';
-import { lightTheme } from '../src/theme';
+import { lightTheme } from '../../theme';
+import { StyledText } from './index';
 const meta = {
 	title: 'Components/StyledText',
 	component: StyledText,

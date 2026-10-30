@@ -11,11 +11,12 @@ export default defineConfig({
 		include: ['src/**/*.test.{ts,tsx}'],
 		coverage: {
 			provider: 'v8',
-			thresholds: { statements: 95, branches: 95, functions: 95, lines: 95 },
+			thresholds: { statements: 100, branches: 100, functions: 100, lines: 100 },
 			reportsDirectory: './coverage',
 			reporter: ['text', 'html', 'lcov', 'json-summary'],
 			include: ['src/**/*.{ts,tsx}'],
-			exclude: ['**/*.test.{ts,tsx}', '**/*.d.ts', '**/_types.ts'],
+			// Colocated Storybook examples are validated by the Storybook build, not native unit tests.
+			exclude: ['**/*.test.{ts,tsx}', '**/*.stories.{ts,tsx}', '**/*.d.ts', '**/_types.ts'],
 		},
 	},
 });

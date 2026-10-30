@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { fn } from 'storybook/test';
-import { SliceTextInput } from '../src/components';
+import { SliceTextInput } from './index';
 const meta = {
 	title: 'Components/SliceTextInput',
 	component: SliceTextInput,

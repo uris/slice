@@ -168,6 +168,18 @@ npm run pack:tarball  # Produce a local tarball through the prepack build
 - Preserve unrelated user edits. Do not change a consuming application outside
   this package merely to make package checks pass.
 
+## Storybook organization
+
+- Colocate component stories in `src/components/<Component>/<Component>.stories.tsx`.
+  Stories for exported aliases such as `StyledText` live with their implementation
+  (`src/components/SliceText/StyledText.stories.tsx`).
+- Colocate hook stories in `src/hooks/<Hook>/<Hook>.stories.tsx`.
+- Keep shared MDX pages in `documentation/`. The Storybook app owns discovery and
+  browser tooling under `../../apps/storybook-native/`.
+- Keep stories excluded from the native package build, unit-test discovery, and unit-test coverage.
+- Native source coverage must remain at 100% for statements, branches, functions, and lines.
+  Storybook examples are checked by Storybook typechecking/builds and do not count toward this gate.
+
 ## Reusable smoke screens
 
 - Name reusable React Native smoke screens `*.smoketest.tsx`. The root Biome

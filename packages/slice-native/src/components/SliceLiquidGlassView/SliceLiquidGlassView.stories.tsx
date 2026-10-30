@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
 import { Text, View } from 'react-native';
-import { SliceLiquidGlassView, StyledText } from '../src/components';
+import { StyledText } from '../SliceText';
+import { SliceLiquidGlassView } from './index';
 
 const meta = {
 	title: 'Components/SliceLiquidGlassView',

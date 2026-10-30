@@ -6,8 +6,9 @@ const require = createRequire(import.meta.url);
 
 const config: StorybookConfig = {
 	stories: [
-		'../../../packages/slice-native/stories/**/*.stories.tsx',
-		'../../../packages/slice-native/stories/**/*.mdx',
+		'../../../packages/slice-native/src/**/*.stories.@(ts|tsx)',
+		'../../../packages/slice-native/src/**/*.mdx',
+		'../../../packages/slice-native/documentation/**/*.mdx',
 	],
 	typescript: {
 		reactDocgen: 'react-docgen-typescript',

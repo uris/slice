@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
 import { StyleSheet, View } from 'react-native';
-import { StyledText } from '../src/components';
-import { useCreateThemedStyles } from '../src/hooks';
-import type { SliceNativeTheme } from '../src/theme';
-import { lineHeightTextStyle } from '../src/utils';
+import { StyledText } from '../../components/SliceText';
+import type { SliceNativeTheme } from '../../theme';
+import { lineHeightTextStyle } from '../../utils';
+import { useCreateThemedStyles } from './index';
 
 const createStyles = (theme: SliceNativeTheme) =>
 	StyleSheet.create({
