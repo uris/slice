@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
 import { StyleSheet, View } from 'react-native';
-import { StyledText } from '../../components/SliceText';
+import { Text } from '../../components/Text';
 import type { SliceNativeTheme } from '../../theme';
 import { lineHeightTextStyle } from '../../utils';
 import { useCreateThemedStyles } from './index';
@@ -18,7 +18,7 @@ function ThemedStylesExample() {
 	const styles = useCreateThemedStyles(createStyles);
 	return (
 		<View style={styles.card}>
-			<StyledText style={styles.label}>Switch the theme toolbar to update these styles.</StyledText>
+			<Text style={styles.label}>Switch the theme toolbar to update these styles.</Text>
 		</View>
 	);
 }

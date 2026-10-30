@@ -38,3 +38,14 @@ describe('native themes', () => {
 		expect(motion['motion-spring'](0.2)).toBeCloseTo(1.15);
 	});
 });
+
+it.each(['regular', 'medium', 'bold'] as const)('computes shared body-xxl-%s typography in both native themes', (weight) => {
+ const key = `body-xxl-${weight}` as const;
+ const weights = { regular: 360, medium: 420, bold: 500 };
+ for (const theme of [lightTheme, darkTheme]) {
+  expect(theme.type[key]).toMatchObject({ fontSize: 18, fontWeight: weights[weight] });
+  expect(theme.type[key].lineHeight).toBeCloseTo(23.9994, 6);
+  expect(theme.type[key].letterSpacing).toBeCloseTo(0.16875, 6);
+ }
+ expect(createTypography('AppFont')[key].fontFamily).toBe('AppFont');
+});

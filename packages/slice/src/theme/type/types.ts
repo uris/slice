@@ -14,6 +14,9 @@ export type Type = {
 	'body-xl-regular': string;
 	'body-xl-medium': string;
 	'body-xl-bold': string;
+	'body-xxl-regular': string;
+	'body-xxl-medium': string;
+	'body-xxl-bold': string;
 	h1: string;
 	h2: string;
 	h3: string;

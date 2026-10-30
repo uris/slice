@@ -1,6 +1,6 @@
 # React Native input glass smoke screen
 
-`InputGlass.smoketest.tsx` renders the real exported `SliceTextInput` from the package.
+`InputGlass.smoketest.tsx` renders the real exported `TextInput` from the package.
 It compares two editable glass inputs (empty placeholder and entered text) with
 an ordinary input over scrolling white/gray/black/gray backgrounds. Controls change
 light/dark appearance and regular/clear glass; Done dismisses the keyboard.
@@ -37,7 +37,7 @@ the first and regular baseline retain system font scaling.
 
 ## Button foreground smoke screen
 
-`ButtonColors.smoketest.tsx` uses the actual exported `SliceButton` through Fabric.
+`ButtonColors.smoketest.tsx` uses the actual exported `Button` through Fabric.
 It includes a blue icon/title glass button, separate token colors, an icon-only button matching
 the consuming app, matching palette literals, disabled split colors, and a
 regular-renderer baseline. Swap colors updates props in place; press counts verify
@@ -64,3 +64,27 @@ The composed regular-glass button honored both foregrounds; subsequent physical
 device testing confirmed text/icon contrast adaptation in buttons and inputs.
 These observations do not establish whether UIKit's configured-button behavior
 is intentional, or guarantee behavior on every OS version.
+
+## Android keyboard actions and ripple clipping
+
+`KeyboardActions.smoketest.tsx` is a reusable React Native/Fabric fixture for
+Android. Pack and reinstall the current library and rebuild the consuming app
+so Codegen includes `NativeTextInputKeyboardSpec` and the package registers
+`SliceTextInputKeyboard`. Then register this screen as the app's root or a test
+route. It uses the package's normal provider, button, and input.
+
+Tap the editor, enter text or select a range, then toggle Search/Done and cycle
+the custom label while the keyboard is open. The keyboard should refresh its
+action/label without increasing the focus/blur counters or clearing the text;
+selection should remain on the same editor. Test several switches in both
+directions, with and without an active composing suggestion. A keyboard may
+commit/cancel an active composing suggestion when its connection restarts. Tap
+Done separately to verify normal submit/blur behavior, then navigate away with a
+refresh pending to check unmount safety. Repeat with another keyboard app/device
+when available because IMEs control their final presentation.
+
+Press and hold the rounded/asymmetric buttons near their corners. The ripple
+should stay inside the painted outline for repeated presses, including after
+changing styles. Default ripples are bounded; callers can still supply an explicit
+`android_ripple` configuration. This fixture is a manual integration check;
+JavaScript tests and native compilation alone do not establish rendered behavior.

@@ -78,3 +78,12 @@ describe('useDeviceCapabilities', () => {
  });
 
 });
+
+it.each(['ios', 'android', 'macos', 'windows', 'web', 'visionos'])('reports exclusive platform helpers on %s in both implementations', (platform) => {
+ state.os = platform;
+ for (const hook of [useDeviceCapabilities, useFallbackCapabilities]) {
+  const { result, unmount } = renderHook(hook);
+  expect(result.current).toMatchObject({ isIOS: platform === 'ios', isAndroid: platform === 'android', isMacOS: platform === 'macos', isWindows: platform === 'windows', isWeb: platform === 'web' });
+  unmount();
+ }
+});

@@ -62,7 +62,7 @@
 		"pack:tarball": "node scripts/pack.mjs",
 		"pack": "node scripts/pack.mjs",
 		"prepack": "npm run build",
-		"generate": "node scripts/generate-ios-icons.mjs && node scripts/generate-ios-colors.mjs && node scripts/generate-icons.mjs && biome format --write src/components/SliceIcon/iconRegistry.tsx src/components/SliceIcon/icons.ts",
+		"generate": "node scripts/generate-ios-icons.mjs && node scripts/generate-ios-colors.mjs && node scripts/generate-icons.mjs && biome format --write src/components/Icon/iconRegistry.tsx src/components/Icon/icons.ts",
 		"typecheck": "tsc --noEmit -p tsconfig.json"
 	},
 	"publishConfig": {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Keyboard, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SliceTextInput, SliceThemeProvider, useSliceTheme } from '@apple-pie/slice-native';
+import { TextInput, SliceThemeProvider, useSliceTheme } from '@apple-pie/slice-native';
 
 /**
  * Runs the actual package component with editable inputs over changing backdrops.
@@ -101,7 +101,7 @@ function Screen({
 				style={{ position: 'absolute', top: insets.top + 210, left: 20, right: 20, gap: 20 }}
 			>
 				<View style={{ height: 52, flexDirection: 'row' }}>
-					<SliceTextInput
+					<TextInput
 						accessibilityLabel="Glass placeholder input"
 						placeholder="Search tasks — tokens"
 						iconColor="core-icon-secondary"
@@ -117,7 +117,7 @@ function Screen({
 					/>
 				</View>
 				<View style={{ height: 52, flexDirection: 'row' }}>
-					<SliceTextInput
+					<TextInput
 						accessibilityLabel="Glass entered text input"
 						allowFontScaling={false}
 						placeholder="Entered text"
@@ -134,7 +134,7 @@ function Screen({
 					/>
 				</View>
 				<View style={{ height: 52, flexDirection: 'row' }}>
-					<SliceTextInput
+					<TextInput
 						accessibilityLabel="Regular input baseline"
 						placeholder="Search tasks — regular"
 						icon="search"
