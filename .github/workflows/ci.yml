@@ -21,17 +21,13 @@ jobs:
           # Match local tooling and the Node requirement of postcss-nested.
           node-version: 24
           cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            native/package-lock.json
+          cache-dependency-path: package-lock.json
       - name: Install repository tooling
         run: npm ci
-      - name: Install native dependencies
-        run: npm ci --prefix native
       - name: Lint and typecheck
-        run: npm run lint:ci --prefix native
+        run: npm run lint:ci --workspace=@apple-pie/slice-native
       - name: Run native tests with coverage thresholds
-        run: npm run coverage --prefix native
+        run: npm run coverage --workspace=@apple-pie/slice-native
       - name: Typecheck native Storybook
         run: npm run typecheck:storybook:native
       - name: Build native Storybook
@@ -44,11 +40,11 @@ jobs:
       - name: Install Playwright Chromium for native icon generation
         run: npx playwright install --with-deps chromium
       - name: Build native package
-        run: npm run build --prefix native
+        run: npm run build --workspace=@apple-pie/slice-native
       - name: Verify native exports and Codegen specification
-        run: node native/scripts/check-package.mjs
+        run: node packages/slice-native/scripts/check-package.mjs
       - name: Validate native package contents
-        working-directory: native
+        working-directory: packages/slice-native
         # The preceding step already built the package; avoid repeating prepack.
         run: npm pack --dry-run --ignore-scripts
 
@@ -61,6 +57,8 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - name: Test deployment selection and failure handling
+        run: python3 deployment/tests/test_deploy_sites.py
       - run: npm ci
       - run: npm run lint:ci
 
@@ -88,7 +86,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: reports/coverage/
+          path: packages/slice/reports/coverage/
           retention-days: 14
 
   build:
@@ -102,4 +100,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: npm pack --dry-run
+      - run: npm pack --dry-run --workspace=@apple-pie/slice
+      - name: Build Next.js website
+        run: npm run build:landing
+      - name: Build web Storybook
+        run: npm run build-storybook

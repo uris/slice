@@ -1,203 +1,43 @@
 {
-	"name": "@apple-pie/slice",
-	"version": "0.1.60",
-	"main": "dist/cjs/index.js",
-	"module": "dist/esm/index.mjs",
-	"exports": {
-		".": {
-			"types": "./dist/types/index.d.ts",
-			"import": "./dist/esm/index.mjs",
-			"require": "./dist/cjs/index.js"
-		},
-		"./hooks": {
-			"types": "./dist/types/hooks/index.d.ts",
-			"import": "./dist/esm/hooks.mjs",
-			"require": "./dist/cjs/hooks.js"
-		},
-		"./hooks/*": {
-			"types": "./dist/types/hooks/*/*.d.ts",
-			"import": "./dist/esm/hooks/*.mjs",
-			"require": "./dist/cjs/hooks/*.js"
-		},
-		"./providers": {
-			"types": "./dist/types/providers/index.d.ts",
-			"import": "./dist/esm/providers.mjs",
-			"require": "./dist/cjs/providers.js"
-		},
-		"./providers/*": {
-			"types": "./dist/types/providers/*.d.ts",
-			"import": "./dist/esm/providers/*.mjs",
-			"require": "./dist/cjs/providers/*.js"
-		},
-		"./stores": {
-			"types": "./dist/types/stores/index.d.ts",
-			"import": "./dist/esm/stores.mjs",
-			"require": "./dist/cjs/stores.js"
-		},
-		"./stores/*": {
-			"types": "./dist/types/stores/*/index.d.ts",
-			"import": "./dist/esm/stores/*.mjs",
-			"require": "./dist/cjs/stores/*.js"
-		},
-		"./workers/*": {
-			"import": "./dist/esm/workers/*.mjs",
-			"require": "./dist/cjs/workers/*.js"
-		},
-		"./theme": {
-			"types": "./dist/types/theme/index.d.ts",
-			"import": "./dist/esm/theme.mjs",
-			"require": "./dist/cjs/theme.js"
-		},
-		"./theme/colors": {
-			"types": "./dist/types/theme/colors/colors.d.ts",
-			"import": "./dist/esm/theme/colors.mjs",
-			"require": "./dist/cjs/theme/colors.js"
-		},
-		"./theme/corners": {
-			"types": "./dist/types/theme/corners/corners.d.ts",
-			"import": "./dist/esm/theme/corners.mjs",
-			"require": "./dist/cjs/theme/corners.js"
-		},
-		"./theme/elevations": {
-			"types": "./dist/types/theme/elevations/elevations.d.ts",
-			"import": "./dist/esm/theme/elevations.mjs",
-			"require": "./dist/cjs/theme/elevations.js"
-		},
-		"./theme/motion": {
-			"types": "./dist/types/theme/motion/motion.d.ts",
-			"import": "./dist/esm/theme/motion.mjs",
-			"require": "./dist/cjs/theme/motion.js"
-		},
-		"./theme/type": {
-			"types": "./dist/types/theme/type/type.d.ts",
-			"import": "./dist/esm/theme/type.mjs",
-			"require": "./dist/cjs/theme/type.js"
-		},
-		"./styles.css": "./dist/styles.css",
-		"./css/flexBox.module.css": "./dist/css/flexBox.module.css",
-		"./css/type.module.css": "./dist/css/type.module.css",
-		"./theme/themes": {
-			"types": "./dist/types/theme/themes.d.ts",
-			"import": "./dist/esm/theme/themes.mjs",
-			"require": "./dist/cjs/theme/themes.js"
-		},
-		"./utils": {
-			"types": "./dist/types/utils/index.d.ts",
-			"import": "./dist/esm/utils/index.mjs",
-			"require": "./dist/cjs/utils/index.js"
-		},
-		"./utils/objects": {
-			"types": "./dist/types/utils/objects/index.d.ts",
-			"import": "./dist/esm/utils/objects/index.mjs",
-			"require": "./dist/cjs/utils/objects/index.js"
-		},
-		"./components/*": {
-			"types": "./dist/types/components/*/index.d.ts",
-			"import": "./dist/esm/components/*/index.mjs",
-			"require": "./dist/cjs/components/*/index.js"
-		}
-	},
-	"files": ["dist", "README.md", "scripts/copy-assets.mjs"],
-	"sideEffects": ["**/*.css"],
+	"name": "slice-monorepo",
+	"private": true,
+	"workspaces": ["apps/*", "packages/*"],
 	"scripts": {
-		"lint": "biome format --write . && biome check . && npm run typecheck && npm run typecheck:landing",
-		"lint:fix": "biome format --write . && biome check --write . && npm run typecheck && npm run typecheck:landing",
-		"lint:ci": "biome ci . && npm run typecheck && npm run typecheck:landing",
-		"typecheck": "tsc --noEmit -p tsconfig.json",
+		"build": "npm run build --workspace=@apple-pie/slice --",
+		"build:min": "npm run build:min --workspace=@apple-pie/slice --",
+		"test": "npm run test --workspace=@apple-pie/slice --",
+		"test:ui": "npm run test:ui --workspace=@apple-pie/slice --",
+		"coverage": "npm run coverage --workspace=@apple-pie/slice --",
+		"benchmark": "npm run benchmark --workspace=@apple-pie/slice --",
+		"benchmark:raw": "npm run benchmark:raw --workspace=@apple-pie/slice --",
+		"benchmark:watch": "npm run benchmark:watch --workspace=@apple-pie/slice --",
+		"benchmark:ui": "npm run benchmark:ui --workspace=@apple-pie/slice --",
+		"pack:tarball": "npm run pack:tarball --workspace=@apple-pie/slice --",
+		"typecheck": "npm run typecheck --workspace=@apple-pie/slice --",
+		"dev": "npm run storybook",
+		"storybook": "npm run dev --workspace=@slice/storybook-web --",
+		"build-storybook": "npm run build --workspace=@slice/storybook-web --",
+		"storybook:native": "npm run dev --workspace=@slice/storybook-native --",
+		"build-storybook:native": "npm run build --workspace=@slice/storybook-native --",
+		"typecheck:storybook:native": "npm run typecheck --workspace=@slice/storybook-native --",
+		"dev:landing": "npm run dev --workspace=@slice/website --",
+		"build:landing": "npm run build --workspace=@slice/website --",
+		"typecheck:landing": "npm run typecheck --workspace=@slice/website --",
 		"format": "biome format --write .",
-		"test": "vitest --project unit --project storybook",
-		"test:ui": "vitest --ui --project unit --project storybook",
-		"benchmark": "vitest run --project benchmarks benchmarks/run-with-report.bench.ts",
-		"benchmark:raw": "vitest bench --project benchmarks --run",
-		"benchmark:watch": "vitest bench --project benchmarks",
-		"benchmark:ui": "vitest bench --project benchmarks --ui",
-		"coverage": "NODE_OPTIONS=--max-old-space-size=8192 npx vitest run --project=storybook --project=unit --coverage",
-		"pack:tarball": "npm pack && ./scripts/copy-tgz.sh",
-		"prepack": "npm run build",
-		"prebuild": "rm -rf dist",
-		"build": "NODE_ENV=production rollup -c --bundleConfigAsCjs && tsc -p tsconfig.build.json && node ./scripts/finalize-styles.mjs && ./scripts/copy-css.sh",
-		"build:min": "MINIFY=true NODE_ENV=production rollup -c --bundleConfigAsCjs && tsc -p tsconfig.build.json && node ./scripts/finalize-styles.mjs && ./scripts/copy-css.sh",
-		"dev": "vite",
-		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build",
-		"storybook:native": "storybook dev --config-dir .storybook-native -p 6007",
-		"build-storybook:native": "storybook build --config-dir .storybook-native --output-dir storybook-native-static",
-		"typecheck:storybook:native": "tsc --noEmit -p .storybook-native/tsconfig.json",
-		"dev:landing": "vite --config deployment/landing/vite.config.ts --port 6008",
-		"build:landing": "npm run typecheck:landing && vite build --config deployment/landing/vite.config.ts",
-		"typecheck:landing": "tsc --noEmit -p deployment/landing/tsconfig.json"
+		"lint": "biome format --write . && biome check . && npm run typecheck:all",
+		"lint:fix": "biome format --write . && biome check --write . && npm run typecheck:all",
+		"lint:ci": "biome ci . && npm run typecheck:all",
+		"typecheck:all": "npm run typecheck --workspaces --if-present"
 	},
-	"keywords": [],
-	"author": "Uris Dacosta",
-	"license": "ISC",
-	"type": "commonjs",
-	"types": "dist/types/index.d.ts",
-	"description": "React UI SDK",
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
-		"@chromatic-com/storybook": "^5.0.1",
-		"@csstools/postcss-global-data": "^3.1.0",
-		"@rollup/plugin-alias": "^5.1.1",
-		"@rollup/plugin-babel": "^6.0.4",
-		"@rollup/plugin-commonjs": "^28.0.2",
-		"@rollup/plugin-node-resolve": "^16.0.0",
-		"@rollup/plugin-terser": "^1.0.0",
-		"@rollup/plugin-typescript": "^12.1.2",
-		"@rollup/plugin-url": "^8.0.2",
-		"@storybook/addon-a11y": "^10.6.3",
-		"@storybook/addon-docs": "^10.6.3",
-		"@storybook/addon-onboarding": "^10.6.3",
-		"@storybook/addon-vitest": "^10.6.3",
-		"@storybook/react": "^10.6.3",
-		"@storybook/react-native-web-vite": "^10.6.3",
-		"@storybook/react-vite": "^10.6.3",
-		"@svgr/rollup": "^8.1.0",
-		"@testing-library/react": "^16.3.2",
-		"@testing-library/user-event": "^14.6.1",
-		"@types/node": "^22.10.8",
-		"@types/react": "^19.0.7",
-		"@types/react-dom": "^19.0.3",
-		"@vitejs/plugin-react": "^4.3.4",
-		"@vitest/browser-playwright": "^4.1.12",
-		"@vitest/coverage-v8": "^4.1.12",
-		"@vitest/ui": "^4.1.12",
-		"fake-indexeddb": "^6.2.5",
-		"happy-dom": "^21.0.4",
-		"jsdom": "^28.1.0",
-		"playwright": "^1.58.2",
-		"postcss-custom-media": "^11.0.6",
-		"postcss-import": "^16.1.1",
-		"postcss-nested": "^9.0.0",
-		"react-native-web": "^0.21.4",
-		"rollup": "^4.32.0",
-		"rollup-plugin-json": "^4.0.0",
-		"rollup-plugin-peer-deps-external": "^2.2.4",
-		"rollup-plugin-postcss": "^4.0.2",
-		"rollup-plugin-strip-code": "^0.2.8",
-		"rollup-plugin-visualizer": "^7.0.1",
-		"rollup-preserve-directives": "^1.1.3",
-		"storybook": "^10.6.3",
-		"tsx": "^4.21.0",
 		"typescript": "^5.7.3",
-		"vite": "^6.0.11",
-		"vite-plugin-svgr": "^4.3.0",
-		"vitest": "^4.1.12",
-		"zustand": "^5.0.0"
+		"react": "19.3.0",
+		"react-dom": "19.3.0"
 	},
 	"overrides": {
 		"rollup-plugin-postcss": {
 			"postcss-selector-parser": "^7.1.6"
-		}
-	},
-	"peerDependencies": {
-		"motion": "^11.0.0 || ^12.0.0",
-		"react": "^18.0.0 || ^19.0.0",
-		"react-dom": "^18.0.0 || ^19.0.0",
-		"zustand": "^4.0.0 || ^5.0.0"
-	},
-	"peerDependenciesMeta": {
-		"zustand": {
-			"optional": true
 		}
 	}
 }

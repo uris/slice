@@ -1,0 +1,117 @@
+{
+	"name": "@apple-pie/slice-native",
+	"version": "0.1.9",
+	"description": "React Native components, icons and design tokens for Slice",
+	"author": "Uris Dacosta",
+	"license": "ISC",
+	"type": "commonjs",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.mjs",
+	"react-native": "./dist/react-native/slice-native/src/index.js",
+	"types": "./dist/types/slice-native/src/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/types/slice-native/src/index.d.ts",
+			"react-native": "./dist/react-native/slice-native/src/index.js",
+			"import": "./dist/esm/index.mjs",
+			"require": "./dist/cjs/index.js"
+		},
+		"./package.json": "./package.json",
+		"./theme": {
+			"types": "./dist/types/slice-native/src/theme/index.d.ts",
+			"react-native": "./dist/react-native/slice-native/src/theme/index.js",
+			"import": "./dist/esm/theme.mjs",
+			"require": "./dist/cjs/theme.js"
+		},
+		"./components": {
+			"types": "./dist/types/slice-native/src/components/index.d.ts",
+			"react-native": "./dist/react-native/slice-native/src/components/index.js",
+			"import": "./dist/esm/components.mjs",
+			"require": "./dist/cjs/components.js"
+		},
+		"./hooks": {
+			"types": "./dist/types/slice-native/src/hooks/index.d.ts",
+			"react-native": "./dist/react-native/slice-native/src/hooks/index.js",
+			"import": "./dist/esm/hooks.mjs",
+			"require": "./dist/cjs/hooks.js"
+		},
+		"./providers": {
+			"types": "./dist/types/slice-native/src/providers/index.d.ts",
+			"react-native": "./dist/react-native/slice-native/src/providers/index.js",
+			"import": "./dist/esm/providers.mjs",
+			"require": "./dist/cjs/providers.js"
+		},
+		"./utils": {
+			"types": "./dist/types/slice-native/src/utils/index.d.ts",
+			"react-native": "./dist/react-native/slice-native/src/utils/index.js",
+			"import": "./dist/esm/utils.mjs",
+			"require": "./dist/cjs/utils.js"
+		}
+	},
+	"files": ["dist", "platform", "src/specs", "SliceNative.podspec", "react-native.config.js"],
+	"sideEffects": false,
+	"scripts": {
+		"test": "vitest run --config vitest.config.mts",
+		"test:ios-glass-text": "node scripts/test-ios-glass-text.mjs",
+		"test:ios-button": "node scripts/test-ios-button-presence.mjs",
+		"test:package": "npm run build && node scripts/check-package.mjs && node scripts/check-ios-colors.mjs && node scripts/check-ios-icons.mjs",
+		"coverage": "vitest run --config vitest.config.mts --coverage",
+		"lint": "biome format --write . && biome check . && npm run typecheck",
+		"lint:ci": "biome ci . && npm run typecheck",
+		"build": "npm run generate && node scripts/build.mjs",
+		"pack:tarball": "node scripts/pack.mjs",
+		"pack": "node scripts/pack.mjs",
+		"prepack": "npm run build",
+		"generate": "node scripts/generate-ios-icons.mjs && node scripts/generate-ios-colors.mjs && node scripts/generate-icons.mjs && biome format --write src/components/SliceIcon/iconRegistry.tsx src/components/SliceIcon/icons.ts",
+		"typecheck": "tsc --noEmit -p tsconfig.json"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": ["react-native", "icons", "svg", "apple-pie"],
+	"devDependencies": {
+		"rollup": "^4.32.0",
+		"typescript": "^5.7.3",
+		"vitest": "^4.0.18",
+		"@babel/core": "7.29.7",
+		"@react-native/codegen": "0.88.0",
+		"@react-native/normalize-colors": "0.88.0",
+		"@storybook/react-native-web-vite": "10.6.3",
+		"@testing-library/react": "16.3.3",
+		"playwright": "1.63.0",
+		"storybook": "10.6.3",
+		"react": "19.3.0",
+		"react-native": "0.88.0",
+		"react-native-svg": "15.16.0",
+		"react-native-reanimated": "4.7.1",
+		"@vitest/coverage-v8": "4.1.12",
+		"@apple-pie/slice": "0.1.60",
+		"@react-native/babel-plugin-codegen": "0.88.0"
+	},
+	"peerDependencies": {
+		"react": "^18.0.0 || ^19.0.0",
+		"react-native": ">=0.80.0 <1.0.0",
+		"react-native-svg": "^15.0.0",
+		"react-native-reanimated": "^4.0.0"
+	},
+	"codegenConfig": {
+		"name": "SliceNativeSpec",
+		"type": "all",
+		"jsSrcsDir": "src/specs",
+		"ios": {
+			"componentProvider": {
+				"SliceLiquidGlassView": "RCTLiquidGlassView",
+				"SliceGlassButton": "RCTGlassButtonView",
+				"SliceGlassText": "RCTGlassTextView",
+				"SliceGlassIcon": "RCTGlassIconView",
+				"SliceBackgroundBlur": "RCTBackgroundBlurView"
+			},
+			"modulesProvider": {
+				"SliceDeviceCapabilities": "SliceDeviceCapabilities"
+			}
+		},
+		"android": {
+			"javaPackageName": "com.slice"
+		}
+	}
+}

@@ -1,0 +1,19 @@
+.icon {
+	cursor: var(--cursor);
+	user-select: none;
+	pointer-events: var(--pointer-events);
+	--webkit-user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	outline: none;
+	border: 0;
+	transition: stroke, fill var(--motion-water-duration) var(--motion-water);
+}
+
+.icon path,
+.icon circle,
+.icon rect,
+.icon polyline,
+.icon polygon,
+.icon line {
+	transition: stroke, fill var(--motion-water-duration) var(--motion-water);
+}

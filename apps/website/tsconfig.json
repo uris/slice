@@ -1,0 +1,33 @@
+{
+	"compilerOptions": {
+		"target": "ES2017",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "react-jsx",
+		"incremental": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"baseUrl": ".",
+		"paths": {
+			"@apple-pie/slice": ["../../packages/slice/src/index.ts"],
+			"@apple-pie/slice/components/*": ["../../packages/slice/src/components/*/index.ts"],
+			"@apple-pie/slice/providers": ["../../packages/slice/src/providers/index.ts"],
+			"@apple-pie/slice/hooks": ["../../packages/slice/src/hooks/index.ts"],
+			"@apple-pie/slice/theme": ["../../packages/slice/src/theme/index.ts"],
+			"@apple-pie/slice/utils": ["../../packages/slice/src/utils/index.ts"]
+		}
+	},
+	"include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts", ".next/dev/types/**/*.ts"],
+	"exclude": ["node_modules", "out", "dist"]
+}

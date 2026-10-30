@@ -147,6 +147,9 @@ storybook-static
 **/*.figma.ts
 
 # reactive-native package ignores
-/native/.build/
+/packages/slice-native/.build/
 
 /storybook-native-static/
+
+# Generated Next.js type references
+/apps/website/next-env.d.ts
