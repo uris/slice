@@ -2,13 +2,13 @@
 
 Read [CONTRIBUTING.md](./CONTRIBUTING.md) first — it's the source of truth for setup, the
 component lifecycle, testing strategy, and the lint/coverage/build gates CI enforces. For
-build/publish pipeline detail, read [contributor-docs/build-architecture.md](./contributor-docs/build-architecture.md);
-for component prop naming, [contributor-docs/style-prop-naming.md](./contributor-docs/style-prop-naming.md);
-for padding and the theme spacing grid, [contributor-docs/spacing.md](./contributor-docs/spacing.md);
-for how to actually write a component test vs. a regular one, [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md).
+build/publish pipeline detail, read [packages/slice/docs/build-architecture.md](./packages/slice/docs/build-architecture.md);
+for component prop naming, [packages/slice/docs/style-prop-naming.md](./packages/slice/docs/style-prop-naming.md);
+for padding and the theme spacing grid, [packages/slice/docs/spacing.md](./packages/slice/docs/spacing.md);
+for how to actually write a component test vs. a regular one, [packages/slice/docs/writing-tests.md](./packages/slice/docs/writing-tests.md).
 
-For experimental, icons-only `@apple-pie/slice-native` work, read
-[contributor-docs/native.md](./contributor-docs/native.md) before editing. It defines the
+For `@apple-pie/slice-native` work, read
+[packages/slice-native/docs/native.md](./packages/slice-native/docs/native.md) before editing. It defines the
 separate package boundary, generation workflow, and future shared theme-data direction.
 
 Do not duplicate guidance from those docs into this file. If something here and something in
@@ -16,8 +16,8 @@ CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other 
 
 ## Operational notes (things that aren't obvious from the docs alone)
 
-- **`autoUpdate` on `vitest.config.ts`'s coverage thresholds is intentionally off** — see
-  [CONTRIBUTING.md](./CONTRIBUTING.md#coverage-gate) for why the thresholds are a deliberate
+- **`autoUpdate` on `packages/slice/vitest.config.ts`'s coverage thresholds is intentionally off** — see
+  [CONTRIBUTING.md](./packages/slice/CONTRIBUTING.md#coverage-gate) for why the thresholds are a deliberate
   floor rather than the last measured number. It caused real problems when it was on: it
   rewrites the file on every run, and that kind of rewrite reformats the whole file (spaces
   instead of tabs) and can silently drop unrelated comments elsewhere in it. If any tool
@@ -31,7 +31,7 @@ CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other 
 - **`npm run lint` auto-formats (writes fixes).** `npm run lint:ci` (`biome ci .`) is what CI
   actually runs — it only checks, never writes. Use `lint:ci` to verify something is truly clean;
   `lint`/`lint:fix` to actually fix it locally.
-- **`coverage/` output is gitignored and lives at `reports/coverage/`** (not the root `coverage/`
+- **`coverage/` output is gitignored and lives at `packages/slice/reports/coverage/`** (not the root `coverage/`
   directory some tooling defaults to). If a stale root-level `coverage/` shows up, it's leftover
   from an older run and safe to delete.
 - **Coverage is the union of two Vitest projects** (`unit` + `storybook`, both run by
@@ -44,20 +44,20 @@ CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other 
   on an axe violation. Existing hooks/stores demo stories carry an explicit
   `parameters: { a11y: { test: 'todo' } }` override in their own meta; a *new* one needs that
   override added by hand or it'll be unexpectedly gated. See
-  [CONTRIBUTING.md](./CONTRIBUTING.md#accessibility-gate).
+  [CONTRIBUTING.md](./packages/slice/CONTRIBUTING.md#accessibility-gate).
 - **A green `npm run coverage` run gives you zero accessibility visibility, pass or fail.**
   Nothing about axe's violations/passes/incomplete is written to the terminal, `reports/`, or
   CI logs — pass/fail on the gated assertion is the only signal that exists outside the
   interactive Storybook UI. If you actually want to see results (not just "did it fail"), run
   `npm run storybook` and use the Accessibility panel / testing widget. Don't read a green
-  pipeline as "reviewed" — see [CONTRIBUTING.md](./CONTRIBUTING.md#accessibility-gate).
+  pipeline as "reviewed" — see [CONTRIBUTING.md](./packages/slice/CONTRIBUTING.md#accessibility-gate).
 - **The `tests` story tag does not skip or de-prioritize anything.** It only filters what shows
   up in Storybook's sidebar — a `tags: ['tests']` story's `play:` function still runs under
   `npm run coverage` and still counts toward the coverage report. See
-  [contributor-docs/writing-tests.md](./contributor-docs/writing-tests.md) for the full
+  [packages/slice/docs/writing-tests.md](./packages/slice/docs/writing-tests.md) for the full
   convention: isolated single-purpose stories instead of one long sequential `play:` function, and
   resetting module-level Zustand store state at the top of `play` when a component reads from one.
 - **`main` is branch-protected**: work on a feature branch and open a PR; never push directly
-  to `main`. See [CONTRIBUTING.md](./CONTRIBUTING.md#typecheck-gate) for current CI check
+  to `main`. See [CONTRIBUTING.md](./packages/slice/CONTRIBUTING.md#typecheck-gate) for current CI check
   names. Required checks live in GitHub branch protection/rulesets and must be kept in
   sync when workflow jobs are renamed; do not infer those settings from workflow YAML.

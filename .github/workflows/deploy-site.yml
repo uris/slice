@@ -1,9 +1,18 @@
-name: Deploy Slice UIKit Sites
+name: Deploy Slice Site
+run-name: Deploy ${{ inputs.site }} from ${{ github.ref_name }}
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      site:
+        description: Site to deploy
+        type: choice
+        required: true
+        default: website
+        options:
+          - website
+          - web-docs
+          - native-docs
 
 permissions:
   contents: read
@@ -14,34 +23,37 @@ concurrency:
 
 jobs:
   validate:
-    name: Validate documentation builds
-    if: github.ref == 'refs/heads/main'
+    name: Validate selected site
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Require main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo 'Deployments must run from main after the PR has been merged.' >&2
+          exit 1
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            native/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm ci
-      - run: npm ci --prefix native
       - run: npm run lint:ci
-      - run: npm run lint:ci --prefix native
-      - run: npm run typecheck:storybook:native
-      - run: npm test --prefix native
-      - name: Build React landing page
-        run: npm run build:landing
-      - name: Build React documentation
-        run: npm run build-storybook
-      - name: Build React Native documentation
-        run: npm run build-storybook:native
+      - run: npm test --workspace=@apple-pie/slice-native
+      - name: Build selected site
+        env:
+          DEPLOY_SITE: ${{ inputs.site }}
+        run: |
+          case "$DEPLOY_SITE" in
+            website) npm run build:landing ;;
+            web-docs) npm run build-storybook ;;
+            native-docs) npm run build-storybook:native ;;
+            *) echo "Unknown site: $DEPLOY_SITE" >&2; exit 1 ;;
+          esac
 
   deploy:
-    name: Deploy all three sites
+    name: Deploy selected site
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 40
@@ -50,11 +62,12 @@ jobs:
         uses: appleboy/ssh-action@v1.0.0
         env:
           DEPLOY_SHA: ${{ github.sha }}
+          DEPLOY_SITE: ${{ inputs.site }}
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: DEPLOY_SHA
+          envs: DEPLOY_SHA,DEPLOY_SITE
           command_timeout: 35m
           script: |
             bash -se <<'DEPLOY'
@@ -72,9 +85,9 @@ jobs:
             fi
             git fetch origin main
             if [ "$(git rev-parse origin/main)" != "$DEPLOY_SHA" ]; then
-              echo "Skipping superseded deployment: main has advanced beyond $DEPLOY_SHA."
-              exit 0
+              echo "Main has advanced beyond $DEPLOY_SHA. Run the deployment again from main." >&2
+              exit 1
             fi
             git checkout --detach "$DEPLOY_SHA"
-            bash deployment/deploy-sites.sh "$HOME/projects/docker-compose.yml"
+            bash deployment/deploy-sites.sh "$HOME/projects/docker-compose.yml" "$DEPLOY_SITE"
             DEPLOY
