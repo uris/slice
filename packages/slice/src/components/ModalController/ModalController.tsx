@@ -3,6 +3,7 @@
 import { AnimatePresence, type Transition, motion, useDragControls } from 'motion/react';
 import React, { useRef } from 'react';
 import { useModal, useModalActions } from '../../stores';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Overlay } from '../Overlay';
 import css from './ModalController.module.css';
 import type { ModalControllerProps } from './_types';
@@ -18,7 +19,8 @@ const defaultVariants = {
 	exit: { opacity: 0, y: 20 },
 };
 
-export function ModalController(props: Readonly<ModalControllerProps>) {
+export function ModalController(rawProps: Readonly<ModalControllerProps>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		dragConstraintsRef,
 		transition = defaultTransition,

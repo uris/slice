@@ -3,10 +3,12 @@
 import { AnimatePresence, motion } from 'motion/react';
 import React, { useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Dot.module.css';
 import { DEFAULT_TRANSITION, DEFAULT_VARIANTS, type DotProps } from './_types';
 
-export const Dot = React.memo((props: DotProps) => {
+export const Dot = React.memo((rawProps: DotProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		size = 8,
 		topOffset = 2,

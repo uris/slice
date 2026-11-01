@@ -4,7 +4,7 @@ This folder contains the deployment scripts; application sources live in `apps/`
 
 | File | Purpose |
 | --- | --- |
-| `../apps/website/` | Next.js static-export app using Slice web components, served at www.slice-uikit.com by the Docker `landing` target. |
+| `../apps/website/` | Next.js server app using Slice web components, served at www.slice-uikit.com by the Docker `landing` target. |
 | `deploy-sites.sh` | Called by GitHub Actions on the VM to build, restart, and check one selected site. |
 
 ## Development and deployment
@@ -12,7 +12,7 @@ This folder contains the deployment scripts; application sources live in `apps/`
 Keep the normal workflow for changes in any workspace: create a branch, commit,
 open a PR, let CI pass, and merge into `main`. CI runs on every PR and push to
 `main` without workspace path filters. It validates library builds, tests, lint,
-typechecks, and static builds for all three sites.
+typechecks, and production builds for all three sites.
 
 **Merging does not deploy.** To deploy a site after merging:
 
@@ -23,7 +23,7 @@ typechecks, and static builds for all three sites.
 The workflow file is `.github/workflows/deploy-site.yml`; it must be merged into
 `main` before the new manual inputs are available. Non-main runs fail before
 building or connecting to the VM. The run validates all workspace lint/typechecks,
-native tests, and the selected site's static build, then deploys that exact commit.
+native tests, and the selected site's production build, then deploys that exact commit.
 If `main` advances before VM checkout, the run fails and asks you to run it again.
 
 Only the selected service is built, restarted, and health-checked. Other site
@@ -76,7 +76,7 @@ CI runs them in the existing lint job.
 
 ## Landing page development
 
-The Next.js App Router app lives in `apps/website/src/app`. It owns its dependencies and scripts in its workspace manifest;
+The Next.js App Router app lives in `apps/website/app`. It owns its dependencies and scripts in its workspace manifest;
 installation uses the single root lockfile. Package-style Slice imports resolve to local
 web sources through the Next.js configuration and TypeScript paths.
 
@@ -85,6 +85,7 @@ npm run dev:landing
 npm run build:landing
 ```
 
-Development uses port 6008. Next.js builds and typechecks the app, then writes static files to
-`apps/website/out/` (ignored by Git). The Docker `landing` target builds this app
-and serves its output with Nginx. Existing Compose target and port remain unchanged.
+Development uses port 6008. `npm run build:landing` builds and typechecks the app;
+`npm run start:landing` runs its production Next.js server on port 6008. The Docker
+`landing` target runs the Next.js server on container port 80. Host Nginx continues
+to handle domains and TLS. Existing Compose target and port remain unchanged.

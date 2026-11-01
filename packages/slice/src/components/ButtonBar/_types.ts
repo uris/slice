@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 export type BarButton = {
@@ -17,11 +18,11 @@ type ButtonBarBaseProps = {
 	borderRadius?: number | string;
 	borderWidth?: number;
 	borderSize?: number;
-	borderColor?: string;
-	backgroundColor?: string;
-	backgroundColorHover?: string;
-	backgroundColorActive?: string;
-	labelColor?: string;
+	borderColor?: ColorValue;
+	backgroundColor?: ColorValue;
+	backgroundColorHover?: ColorValue;
+	backgroundColorActive?: ColorValue;
+	labelColor?: ColorValue;
 	buttonSize?: 's' | 'm' | 'l' | 'xl';
 	onClick?: (button: BarButton) => void;
 	onChange?: (option: BarButton) => void;

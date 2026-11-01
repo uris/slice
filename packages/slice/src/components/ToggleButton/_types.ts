@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { AnimationPreset, ButtonAnimation } from '../IconButton';
 import type { ToolTip } from '../sharedTypes';
 
@@ -12,12 +13,12 @@ export interface ToggleButtonProps {
 	iconOn?: string;
 	iconTwo?: string;
 	selected?: boolean;
-	iconColor?: string;
-	iconColorOn?: string;
-	iconColorHover?: string;
-	backgroundColor?: string;
-	backgroundColorHover?: string;
-	backgroundColorOn?: string;
+	iconColor?: ColorValue;
+	iconColorOn?: ColorValue;
+	iconColorHover?: ColorValue;
+	backgroundColor?: ColorValue;
+	backgroundColorHover?: ColorValue;
+	backgroundColorOn?: ColorValue;
 	onChange?: (state: boolean) => void;
 	onSelect?: () => void;
 	onToolTip?: (tip: ToolTip | null) => void;

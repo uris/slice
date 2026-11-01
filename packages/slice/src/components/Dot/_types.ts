@@ -1,5 +1,6 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type DotBaseProps = {
 	size?: number;
@@ -8,7 +9,7 @@ type DotBaseProps = {
 	border?: number;
 	position?: 'inline' | 'corner';
 	state?: 'red' | 'yellow' | 'green' | 'blue' | 'grey';
-	color?: string;
+	color?: ColorValue;
 	transition?: Transition;
 	motionValues?: Variants;
 	motion?: Variants;

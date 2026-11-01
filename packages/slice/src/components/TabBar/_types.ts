@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 export type TabOption = {
@@ -36,7 +37,7 @@ type TabBarBaseProps = {
 	onTabChange?: (option: TabOption) => void;
 	onClose?: () => void;
 	justify?: 'start' | 'center' | 'end';
-	borderColor?: string;
+	borderColor?: ColorValue;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 };
 
@@ -67,6 +68,6 @@ export interface TabOptionProps {
 	onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => void;
 	onToolTip?: (tip: ToolTip | null) => void;
 	buttonRef?: (element: HTMLButtonElement | null) => void;
-	borderColor?: string;
+	borderColor?: ColorValue;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 }

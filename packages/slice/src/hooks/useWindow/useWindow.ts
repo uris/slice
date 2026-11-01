@@ -2,21 +2,10 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-/**
- * Form factor names
- */
-export enum FormFactor {
-	Mobile = 'mobile',
-	Tablet = 'tablet',
-	Desktop = 'desktop',
-	DesktopL = 'desktopL',
-	DesktopXL = 'desktopXL',
-}
+import { type BreakPoints, FormFactor, breakpoints as defaultBreakpoints } from '../../theme/breakpoints/breakpoints';
 
-/**
- * Breakpoint type matching form factor to width value
- */
-export type BreakPoints = Record<FormFactor, number>;
+export { FormFactor, breakpoints } from '../../theme/breakpoints/breakpoints';
+export type { BreakPoints } from '../../theme/breakpoints/breakpoints';
 
 export type WindowGeolocation = {
 	latitude: number;
@@ -32,17 +21,6 @@ export type WindowGeolocation = {
 export type WindowGeolocationError = {
 	code: number;
 	message: string;
-};
-
-/**
- * Use bootstrap proxy breakpoints as defaults
- */
-const bootstrapBreakPoints: BreakPoints = {
-	[FormFactor.Mobile]: 576,
-	[FormFactor.Tablet]: 768,
-	[FormFactor.Desktop]: 992,
-	[FormFactor.DesktopL]: 1200,
-	[FormFactor.DesktopXL]: 1400,
 };
 
 const isBrowser = typeof window !== 'undefined' && typeof navigator !== 'undefined';
@@ -68,7 +46,7 @@ function getDpr(): 1 | 2 | 3 {
 	return (Math.min(Math.ceil(window.devicePixelRatio), 3) as 1 | 2 | 3) ?? 1;
 }
 
-export function useWindow(breakpoints = bootstrapBreakPoints, top = true) {
+export function useWindow(breakpoints: Readonly<BreakPoints> = defaultBreakpoints, top = true) {
 	const isElectron = checkElectron();
 	const isAppleDevice = checkAppleDevice();
 	const isTouchDevice = checkTouchDevice();

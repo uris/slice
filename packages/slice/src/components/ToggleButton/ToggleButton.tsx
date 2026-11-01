@@ -2,12 +2,14 @@
 
 import type React from 'react';
 import { useMemo } from 'react';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { IconButton } from '../IconButton';
 import { Label } from '../Label';
 import css from './ToggleButton.module.css';
 import type { ToggleButtonProps } from './_types';
 
-export function ToggleButton(props: Readonly<ToggleButtonProps>) {
+export function ToggleButton(rawProps: Readonly<ToggleButtonProps>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		label,
 		textSize,

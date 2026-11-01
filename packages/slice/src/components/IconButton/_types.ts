@@ -1,5 +1,6 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 /**
@@ -52,17 +53,17 @@ type IconButtonBaseProps = {
 	iconSize?: number;
 	iconFill?: boolean;
 	icon?: string;
-	iconColor?: string;
-	iconColorOn?: string;
-	iconColorHover?: string;
+	iconColor?: ColorValue;
+	iconColorOn?: ColorValue;
+	iconColorHover?: ColorValue;
 	tooltip?: string;
-	color?: string;
+	color?: ColorValue;
 	colorOn?: string;
 	fillColor?: number;
 	disabled?: boolean;
-	backgroundColor?: string;
-	backgroundColorOn?: string;
-	backgroundColorHover?: string;
+	backgroundColor?: ColorValue;
+	backgroundColorOn?: ColorValue;
+	backgroundColorHover?: ColorValue;
 	toggle?: boolean;
 	hover?: boolean;
 	toggleIcon?: boolean;

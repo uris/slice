@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type SliderBaseProps = {
 	value?: number;
@@ -8,11 +9,11 @@ type SliderBaseProps = {
 	height?: number | string;
 	touchHeight?: number | string;
 	trackHeadSize?: number | null;
-	headColor?: string;
-	trackColor?: string;
-	progressColor?: string;
+	headColor?: ColorValue;
+	trackColor?: ColorValue;
+	progressColor?: ColorValue;
 	trackHeadBorderSize?: number;
-	trackHeadBorderColor?: string;
+	trackHeadBorderColor?: ColorValue;
 	step?: number;
 	disabled?: boolean;
 	disabledOpacity?: number;

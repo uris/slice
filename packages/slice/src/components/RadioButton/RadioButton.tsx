@@ -3,11 +3,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import css from './RadioButton.module.css';
 import type { RadioButtonProps } from './_types';
 
-function RadioButtonComponent<T = string>(props: RadioButtonProps<T>) {
+function RadioButtonComponent<T = string>(rawProps: RadioButtonProps<T>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		label,
 		children,

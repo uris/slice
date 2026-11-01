@@ -1,9 +1,10 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type PagerBaseProps = {
 	size?: number;
 	index?: number;
-	color?: string;
+	color?: ColorValue;
 	colorOn?: string;
 	colorHover?: string;
 	pages?: number;

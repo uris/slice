@@ -4,12 +4,14 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import { type ToolTip, ToolTipType } from '../sharedTypes';
 import css from './Chip.module.css';
 import type { ChipProps } from './_types';
 
-export const Chip = React.memo((props: ChipProps) => {
+export const Chip = React.memo((rawProps: ChipProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		variant = 'normal',
 		children,

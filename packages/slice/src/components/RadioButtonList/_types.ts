@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { RadioButtonOption } from '../RadioButton';
 
 type RadioButtonListBaseProps<T = string> = {
@@ -15,8 +16,8 @@ type RadioButtonListBaseProps<T = string> = {
 	tabIndexSeed?: number;
 	hideRadio?: boolean;
 	toggleIcon?: boolean;
-	iconColor?: string;
-	iconSelectedColor?: string;
+	iconColor?: ColorValue;
+	iconSelectedColor?: ColorValue;
 	noFrame?: boolean;
 	icon?: string;
 	checkedIcon?: string;

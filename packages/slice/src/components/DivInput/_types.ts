@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type DivInputBaseProps = {
 	name?: string;
@@ -19,7 +20,7 @@ type DivInputBaseProps = {
 	padding?: string;
 	borderRadius?: number | string;
 	radius?: number | string;
-	backgroundColor?: string;
+	backgroundColor?: ColorValue;
 };
 
 export type DivInputProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DivInputBaseProps> & DivInputBaseProps;

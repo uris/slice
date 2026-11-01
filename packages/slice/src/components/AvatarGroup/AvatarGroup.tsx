@@ -2,11 +2,13 @@
 
 import React, { useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Avatar } from '../Avatar';
 import css from './AvatarGroup.module.css';
 import type { AvatarGroupProps, AvatarInfo } from './_types';
 
-export const AvatarGroup = React.memo((props: AvatarGroupProps) => {
+export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		avatars = [],
 		size = 32,

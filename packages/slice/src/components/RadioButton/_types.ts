@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export type RadioButtonOption<T = string> = {
 	fieldName?: string;
@@ -18,7 +19,7 @@ type RadioButtonBaseProps<T = string> = {
 	wrap?: boolean;
 	list?: boolean;
 	hideRadio?: boolean;
-	iconColor?: string;
+	iconColor?: ColorValue;
 	noFrame?: boolean;
 	gap?: number;
 	icon?: string;

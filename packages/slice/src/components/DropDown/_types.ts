@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export type DropDownOption<T = string> = {
 	label?: string;
@@ -9,7 +10,7 @@ export type DropDownOption<T = string> = {
 type DropDownBaseProps<T = string> = {
 	name?: string;
 	label?: string;
-	labelColor?: string;
+	labelColor?: ColorValue;
 	options?: DropDownOption<T>[];
 	selectedIndex?: number;
 	selectedValue?: T;
@@ -18,10 +19,10 @@ type DropDownBaseProps<T = string> = {
 	borderRadius?: number | string;
 	borderStyle?: 'bottom' | 'box' | 'none';
 	validate?: boolean;
-	iconColor?: string;
-	backgroundColor?: string;
-	textColor?: string;
-	borderColor?: string;
+	iconColor?: ColorValue;
+	backgroundColor?: ColorValue;
+	textColor?: ColorValue;
+	borderColor?: ColorValue;
 	borderWidth?: number;
 	borderSize?: number;
 	width?: string;

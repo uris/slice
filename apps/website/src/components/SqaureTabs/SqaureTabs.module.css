@@ -1,0 +1,10 @@
+.tabs {
+	display: flex;
+	box-sizing: border-box;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 8px;
+	padding: 0;
+	margin: 0;
+}

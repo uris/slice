@@ -5,10 +5,12 @@ import React, { useCallback, useMemo } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { addOpacity } from '../../utils';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './ErrorSummary.module.css';
 import type { ErrorMessage, ErrorSummaryProps } from './_types';
 
-export const ErrorSummary = React.memo((props: ErrorSummaryProps) => {
+export const ErrorSummary = React.memo((rawProps: ErrorSummaryProps) => {
+	const props = resolveColorProps(rawProps);
 	const { current } = useTheme();
 	const warning = current.colors['feedback-warning'];
 	const bg = addOpacity(warning, 0.1);

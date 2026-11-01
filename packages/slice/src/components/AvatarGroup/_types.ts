@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 export type AvatarInfo = {
@@ -7,9 +8,9 @@ export type AvatarInfo = {
 	image?: any;
 	avatar?: string;
 	email?: string;
-	textColor?: string;
-	color?: string;
-	backgroundColor?: string;
+	textColor?: ColorValue;
+	color?: ColorValue;
+	backgroundColor?: ColorValue;
 };
 
 export type AvatarGroupBaseProps = {
@@ -18,12 +19,12 @@ export type AvatarGroupBaseProps = {
 	overlap?: number;
 	borderWidth?: number;
 	borderSize?: number;
-	borderColor?: string;
-	borderColorHover?: string;
+	borderColor?: ColorValue;
+	borderColorHover?: ColorValue;
 	gap?: number;
 	margin?: number;
 	outerBorderSize?: number;
-	outerBorderColor?: string;
+	outerBorderColor?: ColorValue;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 

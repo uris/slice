@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 export type AvatarBaseProps = {
@@ -6,21 +7,21 @@ export type AvatarBaseProps = {
 	frame?: number | string;
 	name?: string;
 	email?: string;
-	textColor?: string;
+	textColor?: ColorValue;
 	image?: string;
-	color?: string;
+	color?: ColorValue;
 	borderWidth?: number;
 	borderSize?: number;
-	borderColor?: string;
-	borderColorHover?: string;
-	backgroundColor?: string;
+	borderColor?: ColorValue;
+	borderColorHover?: ColorValue;
+	backgroundColor?: ColorValue;
 	fontSize?: number | string;
 	onToolTip?: (tip: ToolTip | null) => void;
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 	onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 	tabIndex?: number;
 	outerBorderSize?: number;
-	outerBorderColor?: string;
+	outerBorderColor?: ColorValue;
 };
 
 export type AvatarProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof AvatarBaseProps> & AvatarBaseProps;

@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type TextAreaBaseProps = {
 	value?: string;
@@ -16,7 +17,7 @@ type TextAreaBaseProps = {
 	hasSend?: boolean;
 	sendOffset?: { bottom: number; right: number };
 	sendSize?: number;
-	backgroundColor?: string;
+	backgroundColor?: ColorValue;
 	borderRadius?: number | string;
 	returnSubmits?: boolean;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';

@@ -22,6 +22,7 @@
 		"typecheck:storybook:native": "npm run typecheck --workspace=@slice/storybook-native --",
 		"dev:landing": "npm run dev --workspace=@slice/website --",
 		"build:landing": "npm run build --workspace=@slice/website --",
+		"start:landing": "npm run start --workspace=@slice/website --",
 		"typecheck:landing": "npm run typecheck --workspace=@slice/website --",
 		"format": "biome format --write .",
 		"lint": "biome format --write . && biome check . && npm run typecheck:all",

@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Badge } from '../Badge';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
@@ -12,7 +13,8 @@ import css from './TabBar.module.css';
 import type { TabBarProps, TabOption, TabOptionProps } from './_types';
 import { placeholderOptions } from './_types';
 
-export const TabBar = React.memo((props: TabBarProps) => {
+export const TabBar = React.memo((rawProps: TabBarProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		options = placeholderOptions,
 		selected = 0,
@@ -201,7 +203,8 @@ export const TabBar = React.memo((props: TabBarProps) => {
 TabBar.displayName = 'TabBar';
 
 const Option = React.memo(
-	(props: TabOptionProps) => {
+	(rawProps: TabOptionProps) => {
+		const props = resolveColorProps(rawProps);
 		const theme = useTheme();
 		const {
 			name = 'Option',

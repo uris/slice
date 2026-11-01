@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export enum LabelBackground {
 	red = 'red',
@@ -13,13 +14,13 @@ export enum LabelBackground {
 type LabelBaseProps = {
 	children?: React.ReactNode;
 	label?: string;
-	backgroundColor?: LabelBackground | string;
+	backgroundColor?: LabelBackground | ColorValue;
 	borderWidth?: number;
 	borderSize?: number;
-	borderColor?: string;
+	borderColor?: ColorValue;
 	borderRadius?: number | string;
 	padding?: number | string;
-	textColor?: string;
+	textColor?: ColorValue;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	onClick?: (e: React.MouseEvent<any>) => void;
 };

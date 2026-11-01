@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import css from './DropDown.module.css';
 import type { DropDownOption, DropDownProps } from './_types';
@@ -13,7 +14,8 @@ function resolveValueKey(value: unknown, valueKey?: string) {
 	return (value as Record<string, unknown>)[valueKey];
 }
 
-function DropDownComponent<T = string>(props: DropDownProps<T>) {
+function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		name = 'drop-down-select',
 		label,

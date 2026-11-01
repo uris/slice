@@ -1,5 +1,6 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 type ButtonBaseProps = {
@@ -19,10 +20,10 @@ type ButtonBaseProps = {
 	tooltip?: string;
 	iconSize?: number;
 	borderRadius?: number | string;
-	iconColor?: string;
-	backgroundColor?: string;
-	backgroundColorDisabled?: string;
-	labelColor?: string;
+	iconColor?: ColorValue;
+	backgroundColor?: ColorValue;
+	backgroundColorDisabled?: ColorValue;
+	labelColor?: ColorValue;
 	labelSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	transition?: Transition;
 	variants?: Variants;

@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useVideo, useVideoActions } from '../../stores';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { IconButton } from '../IconButton';
 import { Overlay } from '../Overlay';
 import css from './VideoController.module.css';
@@ -22,7 +23,8 @@ const defaultVariants = {
 	exit: { opacity: 0 },
 };
 
-export function VideoController(props: Readonly<VideoControllerProps>) {
+export function VideoController(rawProps: Readonly<VideoControllerProps>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		dragConstraintsRef,
 		transition = defaultTransition,

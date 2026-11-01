@@ -1,8 +1,9 @@
 import type React from 'react';
+import type { ColorValue } from '../../../theme/colors/resolveColor';
 
 type DoneCheckBaseProps = {
 	size?: number;
-	color?: string;
+	color?: ColorValue;
 	stroke?: number;
 	duration?: number;
 	delay?: number;

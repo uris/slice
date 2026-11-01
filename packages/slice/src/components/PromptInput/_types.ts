@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { FileItem } from '../FileList';
 
 type BasePromptProps = {
@@ -12,8 +13,8 @@ type BasePromptProps = {
 	minWidth?: string | number;
 	borderStyle?: 'solid' | 'gradient' | 'none';
 	borderWidth?: number;
-	borderColor?: string | number;
-	borderColorOn?: string | number;
+	borderColor?: ColorValue | number;
+	borderColorOn?: ColorValue | number;
 	borderAnimate?: boolean;
 	borderRadius?: number | string;
 	placeholder?: string;

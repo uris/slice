@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import { Icon } from '../Icon';
@@ -14,7 +15,8 @@ import css from './IconButton.module.css';
 import { resolveVariants } from './_animation';
 import type { IconButtonProps } from './_types';
 
-export const IconButton = React.memo((props: IconButtonProps) => {
+export const IconButton = React.memo((rawProps: IconButtonProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		frameSize = 36,
 		iconSize = 20,

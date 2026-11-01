@@ -5,10 +5,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { cleanString, setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './DivInput.module.css';
 import type { DivInputProps } from './_types';
 
-export const DivInput = React.memo((props: DivInputProps) => {
+export const DivInput = React.memo((rawProps: DivInputProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		value: valueProp = '',
 		name = 'Input Field',

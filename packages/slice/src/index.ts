@@ -11,10 +11,15 @@ export {
 	motion,
 	elevations,
 	Elevation,
+	resolveColor,
+	breakpoints,
+	FormFactor,
 } from './theme';
 export type {
 	SliceTheme,
 	Colors,
+	ColorToken,
+	ColorValue,
 	Type,
 	Corners,
 	Elevations,

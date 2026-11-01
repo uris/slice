@@ -3,11 +3,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '../../../hooks';
 import { useTrackRenders } from '../../../hooks/useTrackRenders/useTrackRenders';
+import { resolveColorProps } from '../../../utils/functions/resolveColorProps';
 import { Icon } from '../../Icon';
 import css from './DoneCheck.module.css';
 import type { DoneCheckProps } from './_types';
 
-export const DoneCheck = React.memo((props: DoneCheckProps) => {
+export const DoneCheck = React.memo((rawProps: DoneCheckProps) => {
+	const props = resolveColorProps(rawProps);
 	const theme = useTheme();
 	const {
 		size = 88,

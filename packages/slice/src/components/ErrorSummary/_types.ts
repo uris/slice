@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export type ErrorMessage = {
 	title: string;
@@ -7,9 +8,9 @@ export type ErrorMessage = {
 
 type ErrorSummaryBaseProps = {
 	entries?: ErrorMessage[];
-	textColor?: string;
+	textColor?: ColorValue;
 	autoNumber?: boolean;
-	backgroundColor?: string;
+	backgroundColor?: ColorValue;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 };
 

@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 export type FileItem = {
@@ -18,7 +19,7 @@ type FileListBaseProps = {
 	padding?: number | string;
 	iconSize?: number;
 	onChange?: (files: FileItem[]) => void;
-	backgroundColor?: string;
+	backgroundColor?: ColorValue;
 	canRemove?: boolean;
 	onToolTip?: (tip: ToolTip | null) => void;
 };

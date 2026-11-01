@@ -5,10 +5,12 @@ import { useObserveResize } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { debounce } from '../../utils';
 import { pointerPosition } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Slider.module.css';
 import type { SliderProps } from './_types';
 
-export const Slider = React.memo((props: SliderProps) => {
+export const Slider = React.memo((rawProps: SliderProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		value = 25,
 		scaleMin = 0,

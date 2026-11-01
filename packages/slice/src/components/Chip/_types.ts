@@ -1,27 +1,28 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 type ChipBaseProps = {
 	children?: React.ReactNode;
 	label?: string;
 	labelSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
-	labelColor?: string;
-	labelColorHover?: string;
+	labelColor?: ColorValue;
+	labelColorHover?: ColorValue;
 	icon?: string;
 	iconSize?: number;
 	iconPosition?: 'left' | 'right';
-	iconColor?: string;
-	iconColorHover?: string;
-	backgroundColor?: string;
-	backgroundColorHover?: string;
+	iconColor?: ColorValue;
+	iconColorHover?: ColorValue;
+	backgroundColor?: ColorValue;
+	backgroundColorHover?: ColorValue;
 	disabled?: boolean;
 	focused?: boolean;
 	tooltip?: string;
 	borderWidth?: number;
 	borderSize?: number;
-	borderColor?: string;
-	borderColorHover?: string;
-	borderColorDisabled?: string;
+	borderColor?: ColorValue;
+	borderColorHover?: ColorValue;
+	borderColorDisabled?: ColorValue;
 	borderRadius?: number | string;
 	gap?: number;
 	paddingTop?: number;

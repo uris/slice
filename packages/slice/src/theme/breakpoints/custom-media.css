@@ -1,4 +1,4 @@
-/* Keep these values in sync with src/hooks/useWindow/useWindow.ts */
+/* Keep these values in sync with src/theme/breakpoints/breakpoints.ts */
 @custom-media --bp-mobile (min-width: 576px);
 @custom-media --bp-tablet (min-width: 768px);
 @custom-media --bp-desktop (min-width: 992px);

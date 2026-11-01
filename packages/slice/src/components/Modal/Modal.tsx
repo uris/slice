@@ -3,13 +3,15 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Button } from '../Button';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
 import css from './Modal.module.css';
 import type { ModalAction, ModalProps } from './_types';
 
-const BaseModal = <T = string>(props: ModalProps<T>) => {
+const BaseModal = <T = string>(rawProps: ModalProps<T>) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		children,
 		id,

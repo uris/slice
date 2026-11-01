@@ -1,11 +1,12 @@
 import type React from 'react';
 import type { JSX } from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export interface IconRenderProps {
 	stroke: number;
-	strokeColor: string;
+	strokeColor: ColorValue;
 	fillColor: number;
-	coverUp: string;
+	coverUp: ColorValue;
 }
 
 export type IconLineRenderer = (props: IconRenderProps) => JSX.Element;

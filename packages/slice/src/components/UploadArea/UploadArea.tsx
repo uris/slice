@@ -3,13 +3,15 @@
 import React, { useCallback, useId, useMemo, useRef, useState } from 'react';
 import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { FileList } from '../FileList';
 import { Icon } from '../Icon';
 import { ProgressIndicator } from '../Progress';
 import css from './UploadArea.module.css';
 import { type UploadAreaProps, allTypes } from './_types';
 
-const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((props, ref) => {
+const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawProps, ref) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		icon = 'upload',
 		iconColor = 'var(--core-text-primary)',

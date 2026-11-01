@@ -3,6 +3,7 @@
 import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { IconButton } from '../IconButton';
 import { ProgressIndicator } from '../Progress';
 import { Slider } from '../Slider';
@@ -10,7 +11,8 @@ import { ToggleButton } from '../ToggleButton';
 import css from './Video.module.css';
 import { PlayState, type VideoElement, type VideoProps } from './_types';
 
-const BaseVideo = React.forwardRef<VideoElement, VideoProps>((props, ref) => {
+const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		children,
 		src,

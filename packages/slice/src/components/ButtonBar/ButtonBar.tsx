@@ -2,14 +2,17 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import type { ToolTip } from '../sharedTypes';
 import css from './ButtonBar.module.css';
 import type { BarButton as ButtonBarItem, ButtonBarProps } from './_types';
 
-export const ButtonBar = React.memo(function ButtonBar(props: Readonly<ButtonBarProps>) {
+export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<ButtonBarProps>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		buttons = [],
 		selected,
@@ -152,7 +155,7 @@ interface ButtonProps {
 	classNames?: string;
 	icon?: string;
 	iconSize: number;
-	iconColor?: string;
+	iconColor?: ColorValue;
 	onClick?: () => void;
 	onMouseEnter?: () => void;
 	onMouseLeave?: () => void;
@@ -160,7 +163,8 @@ interface ButtonProps {
 	onToolTip?: (tip: ToolTip | null) => void;
 }
 
-export const BarButton = React.memo(function BarButton(props: Readonly<ButtonProps>) {
+export const BarButton = React.memo(function BarButton(rawProps: Readonly<ButtonProps>) {
+	const props = resolveColorProps(rawProps);
 	const { classNames, icon, iconSize, iconColor, toolTip, onClick, onMouseEnter, onMouseLeave, onToolTip } = props;
 	const ref = useRef<HTMLButtonElement>(null);
 

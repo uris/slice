@@ -1,10 +1,11 @@
 import type React from 'react';
+import type { ColorValue } from '../../../theme/colors/resolveColor';
 
 type ProgressIndicatorBaseProps = {
 	size?: number | string;
 	secondsPerSpin?: number;
 	show?: boolean;
-	color?: string;
+	color?: ColorValue;
 	stroke?: number;
 	duration?: number;
 	inline?: boolean;

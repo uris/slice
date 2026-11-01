@@ -1,5 +1,6 @@
 import type { Transition } from 'motion/react';
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type TextFieldBaseProps = {
 	value?: string;
@@ -25,18 +26,18 @@ type TextFieldBaseProps = {
 	padding?: string | number;
 	borderRadius?: number | string;
 	textAlign?: 'left' | 'center';
-	borderColorFocused?: string;
-	borderColorBlurred?: string;
-	borderColorError?: string;
-	backgroundColorFocused?: string;
-	backgroundColorBlurred?: string;
-	textColorFocused?: string;
-	textColorBlurred?: string;
-	textColorError?: string;
-	textColorPlaceholder?: string;
-	textColorDisabled?: string;
-	labelColor?: string;
-	iconLeft?: { name?: string; size?: number; color?: string };
+	borderColorFocused?: ColorValue;
+	borderColorBlurred?: ColorValue;
+	borderColorError?: ColorValue;
+	backgroundColorFocused?: ColorValue;
+	backgroundColorBlurred?: ColorValue;
+	textColorFocused?: ColorValue;
+	textColorBlurred?: ColorValue;
+	textColorError?: ColorValue;
+	textColorPlaceholder?: ColorValue;
+	textColorDisabled?: ColorValue;
+	labelColor?: ColorValue;
+	iconLeft?: { name?: string; size?: number; color?: ColorValue };
 	clearButton?: { size?: number } | null;
 	clearBlurs?: boolean;
 	disabled?: boolean;

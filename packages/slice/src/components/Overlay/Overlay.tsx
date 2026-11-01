@@ -3,12 +3,14 @@
 import { AnimatePresence, motion } from 'motion/react';
 import React, { useCallback, useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Overlay.module.css';
 import type { OverlayProps } from './_types';
 
 const defaultTransition = { ease: 'easeOut', duration: 0.25 };
 
-export const Overlay = React.memo((props: OverlayProps) => {
+export const Overlay = React.memo((rawProps: OverlayProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		children,
 		show = false,

@@ -1,12 +1,13 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export type LevelBaseProps = {
 	audioStream?: MediaStream | MediaStreamTrack | null;
 	playing?: boolean;
-	backgroundColor?: string;
+	backgroundColor?: ColorValue;
 	colorActive?: string;
 	borderRadius?: number | string;
-	borderColor?: string;
+	borderColor?: ColorValue;
 	borderWidth?: number;
 	width?: number | string;
 	gap?: number;

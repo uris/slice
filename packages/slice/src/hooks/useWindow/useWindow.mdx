@@ -15,6 +15,22 @@ import Notice from "../../../documentation/_components/Notice/Notice";
         ## Signature
         `useWindow(breakpoints?: BreakPoints, top?: boolean)`
 
+        ## Default breakpoint values
+
+        Import the shared, read-only pixel thresholds from `@apple-pie/slice`,
+        `@apple-pie/slice/theme`, or `@apple-pie/slice/hooks`.
+        `useWindow()` uses the same defaults. Spread them to customize a threshold.
+
+        <RenderSource language={"tsx"}>
+        ```
+        import { breakpoints, FormFactor, useWindow } from '@apple-pie/slice';
+
+        const desktopMinWidth = breakpoints[FormFactor.Desktop]; // 992
+        const customBreakpoints = { ...breakpoints, tablet: 820 };
+        const viewport = useWindow(customBreakpoints);
+        ```
+        </RenderSource>
+
         ## Parameters
         <table style={{width: '100%'}}>
             <colgroup>

@@ -1,5 +1,6 @@
 import type { Transition } from 'motion/react';
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export enum Size {
 	Grow = 'grow',
@@ -122,7 +123,7 @@ type FlexDivBaseProps = {
 	scrollY?: boolean;
 	scrollX?: boolean;
 	absolute?: boolean;
-	background?: string;
+	background?: ColorValue;
 	direction?: 'row' | 'column';
 	align?: 'start' | 'center' | 'end' | 'between';
 	justify?: 'start' | 'top' | 'center' | 'end' | 'bottom' | 'between';
@@ -143,8 +144,8 @@ type FlexDivBaseProps = {
 	variants?: any;
 	gap?: number;
 	borderRadius?: number | string;
-	scrollHandle?: string;
-	scrollHandleHover?: string;
+	scrollHandle?: ColorValue;
+	scrollHandleHover?: ColorValue;
 };
 
 export type FlexDivProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof FlexDivBaseProps> & FlexDivBaseProps;

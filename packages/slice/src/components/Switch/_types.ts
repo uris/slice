@@ -1,13 +1,14 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type SwitchBaseProps<T = string> = {
 	fieldName?: string;
 	state?: boolean;
 	height?: number;
 	width?: number;
-	backgroundColorOff?: string;
-	backgroundColorOn?: string;
-	knobColor?: string;
+	backgroundColorOff?: ColorValue;
+	backgroundColorOn?: ColorValue;
+	knobColor?: ColorValue;
 	padding?: number;
 	value?: T;
 	onChange?: (value: T | undefined, state: boolean) => void;

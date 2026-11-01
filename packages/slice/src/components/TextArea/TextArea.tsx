@@ -4,11 +4,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Button } from '../Button';
 import css from './TextArea.module.css';
 import type { TextAreaProps } from './_types';
 
-export const TextArea = React.memo((props: TextAreaProps) => {
+export const TextArea = React.memo((rawProps: TextAreaProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		value = '',
 		name = 'text_area',

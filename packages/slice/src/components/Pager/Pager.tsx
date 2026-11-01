@@ -3,10 +3,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { accessibleKeyDown } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Pager.module.css';
 import type { PagerProps } from './_types';
 
-export const Pager = React.memo((props: PagerProps) => {
+export const Pager = React.memo((rawProps: PagerProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		size = 8,
 		index = 0,

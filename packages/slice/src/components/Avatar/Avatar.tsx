@@ -3,10 +3,12 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { accessibleKeyDown, normalizedPercent, setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Avatar.module.css';
 import type { AvatarProps } from './_types';
 
-export const Avatar = React.memo((props: AvatarProps) => {
+export const Avatar = React.memo((rawProps: AvatarProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		email,
 		name,

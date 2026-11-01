@@ -3,10 +3,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
 import { AudioVisualizer, type AudioVisualizerOptions, addOpacity } from '../../utils';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './AudioBubble.module.css';
 import type { AudioBubbleProps } from './_types';
 
-export const AudioBubble = React.memo((props: AudioBubbleProps) => {
+export const AudioBubble = React.memo((rawProps: AudioBubbleProps) => {
+	const props = resolveColorProps(rawProps);
 	const { current } = useTheme();
 	const color = current.colors['core-text-primary'];
 	const {

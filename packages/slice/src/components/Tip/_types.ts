@@ -1,4 +1,5 @@
 import type { HTMLMotionProps } from 'motion/react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 export const tipBasePos = { left: 0, top: 0 };
@@ -7,11 +8,11 @@ export type PosCoords = { left: number; top: number };
 type ToolTipBaseProps = {
 	tip?: ToolTip | null;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
-	backgroundColor?: string;
-	textColor?: string;
-	color?: string;
+	backgroundColor?: ColorValue;
+	textColor?: ColorValue;
+	color?: ColorValue;
 	border?: boolean;
-	borderColor?: string;
+	borderColor?: ColorValue;
 	padding?: number | string;
 	borderRadius?: number | string;
 	radius?: number | string;

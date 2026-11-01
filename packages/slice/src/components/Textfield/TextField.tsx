@@ -6,6 +6,7 @@ import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Button } from '../Button';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
@@ -13,7 +14,8 @@ import css from './TextField.module.css';
 import { MOTION_CONFIG, type TextFieldProps } from './_types';
 
 export const TextField = React.memo(
-	(props: TextFieldProps) => {
+	(rawProps: TextFieldProps) => {
+		const props = resolveColorProps(rawProps);
 		const theme = useTheme();
 		const {
 			name = 'input_name',

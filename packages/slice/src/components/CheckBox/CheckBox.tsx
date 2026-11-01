@@ -4,11 +4,13 @@ import { motion } from 'motion/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { accessibleKeyDown } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import css from './CheckBox.module.css';
 import type { CheckBoxProps } from './_types';
 
-export const CheckBox = React.memo((props: CheckBoxProps) => {
+export const CheckBox = React.memo((rawProps: CheckBoxProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		size = 20,
 		checked = false,

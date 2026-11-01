@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import { Icon } from '../Icon';
@@ -13,7 +14,8 @@ import type { ToolTip } from '../sharedTypes';
 import css from './Button.module.css';
 import type { ButtonHandle, ButtonProps } from './_types';
 
-const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((props, buttonRef: React.Ref<ButtonHandle>) => {
+const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonRef: React.Ref<ButtonHandle>) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		children,
 		size = 'medium',

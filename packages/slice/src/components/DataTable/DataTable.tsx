@@ -2,6 +2,7 @@ import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import styles from './DataTable.module.css';
 import { resolveVirtualizeRows } from './_resolveVirtualizeRows';
@@ -11,7 +12,8 @@ import { useResizeColumn } from './_useResizeColumn';
 import { useRowWindow } from './_useRowWindow';
 import { resolveAlignValue, resolveColumnValue } from './columnHelper';
 
-export function DataTable<T>(props: Readonly<DataTableProps<T>>) {
+export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		backgroundColor = 'var(--core-surface-primary)',
 		headerBackgroundColor = 'var(--core-surface-secondary)',

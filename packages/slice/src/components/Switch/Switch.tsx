@@ -3,10 +3,12 @@
 import { motion } from 'motion/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Switch.module.css';
 import type { SwitchProps } from './_types';
 
-function SwitchComponent<T = string>(props: SwitchProps<T>) {
+function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		fieldName,
 		state = false,
