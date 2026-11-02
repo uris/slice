@@ -21,5 +21,8 @@ export const surfaceDarker = tintFromColor(darkTheme.colors['core-surface-primar
 // modified yellow color
 export const surfaceYellow = '#ffd333';
 
+// modified green color
+export const surfaceGreen = '#00DAC3';
+
 // outline tertiary
 export const outlineTertiary = addOpacity(darkTheme.colors['core-outline-primary'], 0.25);

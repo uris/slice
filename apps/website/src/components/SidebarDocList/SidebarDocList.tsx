@@ -18,7 +18,7 @@ export interface SideBarListSectionProps {
 	packageType?: Package | null;
 }
 
-export function SidebarDocList(props: SideBarListProps) {
+export function SidebarDocList(props: Readonly<SideBarListProps>) {
 	const { items } = props;
 	const packageType = usePackageType();
 	return (
@@ -36,7 +36,7 @@ export function SidebarDocList(props: SideBarListProps) {
 	);
 }
 
-export function SideBarListSection(props: SideBarListSectionProps) {
+export function SideBarListSection(props: Readonly<SideBarListSectionProps>) {
 	const { items, packageType } = props;
 	const selectedSlug = useSlug();
 	const selectedPackageType = usePackageType();

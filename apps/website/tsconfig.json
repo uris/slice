@@ -29,7 +29,8 @@
 			"@/*": ["./*"],
 			"@/src/*": ["./src/*"],
 			"@/components/*": ["./src/components/*"],
-			"@/docs/*": ["./src/docs/*"]
+			"@/docs/*": ["./src/docs/*"],
+			"@/documents/*": ["./src/content/documents/*"]
 		}
 	},
 	"include": [

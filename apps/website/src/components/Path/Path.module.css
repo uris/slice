@@ -1,0 +1,42 @@
+.wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	box-sizing: border-box;
+	gap: 16px;
+	padding: 0 24px;
+	margin: 0;
+	width: 100%;
+}
+
+.item {
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	box-sizing: border-box;
+	font-family: var(--font-special), monospace;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 1.33em;
+	letter-spacing: 1.25%;
+	text-transform: uppercase;
+	color: var(--core-text-disabled);
+	gap: 16px;
+	opacity: 0.35;
+
+	&::after {
+		content: "/";
+		display: inline-flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+	}
+
+	&:last-child {
+		&::after {
+			display: none;
+		}
+	}
+}

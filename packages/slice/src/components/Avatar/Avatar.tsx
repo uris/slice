@@ -125,6 +125,7 @@ export const Avatar = React.memo((rawProps: AvatarProps) => {
 			'--avatar-font-size': setStyle(textSize),
 			'--avatar-outer-border-size': `${outerBorderSize ?? 0}px`,
 			'--avatar-outer-border-color': outerBorderColor ?? 'var(--core-surface-primary)',
+			'--avatar-cursor': onClick ? 'pointer' : 'default',
 		} as React.CSSProperties;
 	}, [
 		size,
@@ -138,6 +139,7 @@ export const Avatar = React.memo((rawProps: AvatarProps) => {
 		textSize,
 		outerBorderSize,
 		outerBorderColor,
+		onClick,
 	]);
 
 	// compose wrapper class names

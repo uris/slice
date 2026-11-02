@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useObserveResize } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { debounce } from '../../utils';
-import { pointerPosition } from '../../utils/functions/misc';
+import { pointerPosition, setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Slider.module.css';
 import type { SliderProps } from './_types';
@@ -22,6 +22,7 @@ export const Slider = React.memo((rawProps: SliderProps) => {
 		step,
 		disabled = false,
 		disabledOpacity = 0.5,
+		headRadius = '100%',
 		cursor = 'default',
 		headColor = 'var(--core-text-light)',
 		trackColor = 'var(--core-surface-secondary)',
@@ -317,7 +318,7 @@ export const Slider = React.memo((rawProps: SliderProps) => {
 			'--slider-touch-height': `${touchHeight}px`,
 			'--slider-cursor': cursor,
 			'--slider-head-display': height ? 'block' : 'none',
-			'--slider-head-radius': '100%',
+			'--slider-head-radius': setStyle(headRadius, '100%'),
 			'--slider-head-size': `${trackHeadSize ?? 0}px`,
 			'--slider-head-width': `${trackHeadSize ?? 0}px`,
 			'--slider-head-color': trackHeadColor,
@@ -330,6 +331,7 @@ export const Slider = React.memo((rawProps: SliderProps) => {
 		padding,
 		height,
 		touchHeight,
+		headRadius,
 		cursor,
 		progressColor,
 		trackColor,

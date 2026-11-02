@@ -14,7 +14,7 @@ const avatars: AvatarInfo[] = [
 	{
 		first: 'John',
 		last: 'Appleseed',
-		image: 'https://www.slice-uikit.com/public/images/profile-male-02.jpg',
+		image: '/public/images/profile-male-02.jpg',
 		email: 'johna@email.com',
 	},
 	{

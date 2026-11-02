@@ -129,7 +129,10 @@ export function filterClasses(classNames: string[]): string {
 /**
  * Normalize a style value or fallback into a CSS-ready string.
  */
-export function setStyle(value: string | number | undefined, defaultVal: number | string | undefined = undefined) {
+export function setStyle(
+	value: string | number | undefined | null,
+	defaultVal: number | string | undefined | null = undefined,
+) {
 	const useValue = value ?? defaultVal;
 	if (!useValue) return 'unset';
 	if (typeof useValue === 'string') return useValue;

@@ -30,10 +30,11 @@
 	background-position: center;
 	background-repeat: no-repeat;
 	background-origin: border-box;
-	cursor: pointer;
+	cursor: var(--avatar-cursor);
 	user-select: none;
 	-webkit-user-select: none;
 	transition: border-color var(--motion-water-duration) var(--motion-water) 0s;
+
 	&:hover {
 		border-color: var(--avatar-border-color-hover);
 	}
