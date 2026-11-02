@@ -81,6 +81,8 @@ export default defineConfig({
 				},
 			},
 			{
+				// Prebundle the hydration test renderer to avoid a dependency reload during browser tests.
+				optimizeDeps: { include: ['react-dom/server'] },
 				plugins: [
 					// The plugin will run tests for the stories defined in your Storybook config
 					// See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest

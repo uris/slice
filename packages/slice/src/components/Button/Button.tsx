@@ -14,14 +14,21 @@ import type { ToolTip } from '../sharedTypes';
 import css from './Button.module.css';
 import type { ButtonHandle, ButtonProps } from './_types';
 
+const noop = () => {};
+
 const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonRef: React.Ref<ButtonHandle>) => {
 	const props = resolveColorProps(rawProps);
 	const {
 		children,
+		disabled = false,
+		onMouseEnter,
+		onMouseLeave,
+		onFocus,
+		onBlur,
 		size = 'medium',
 		variant = 'outline',
 		label = undefined,
-		labelSize = 'm',
+		textSize = 'm',
 		iconRight = undefined,
 		iconLeft = undefined,
 		iconFill = false,
@@ -38,7 +45,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		iconColor = undefined,
 		backgroundColor = undefined,
 		backgroundColorDisabled = undefined,
-		labelColor = undefined,
+		textColor = undefined,
 		transition = undefined,
 		variants = undefined,
 		initial = undefined,
@@ -53,8 +60,8 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		destructive = false,
 		link,
 		target = '_self',
-		onClick = () => null,
-		onToolTip = () => null,
+		onClick,
+		onToolTip,
 		...divAttributes
 	} = props;
 	const { id: divId, className, style, ...rest } = divAttributes;
@@ -63,9 +70,22 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	const resolvedBackgroundColor = backgroundColor;
 	const resolvedBackgroundColorDisabled = backgroundColorDisabled;
 
-	const [btnState, setBtnState] = useState<'normal' | 'hover' | 'disabled'>(state);
+	const [hovered, setHovered] = useState(false);
+	const hoveredRef = useRef(false);
+	const focusedRef = useRef(false);
+	const isDisabled = disabled || state === 'disabled';
+	const btnState = isDisabled ? 'disabled' : hovered || state === 'hover' ? 'hover' : 'normal';
 	const [lockedWidth, setLockedWidth] = useState<number | undefined>(undefined);
-	const [playing, setPlaying] = useState<boolean>(working);
+	const [timedWorking, setTimedWorking] = useState(false);
+	const playing = working || timedWorking;
+	const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const inFlight = useRef(false);
+	const wasTriggered = useRef(false);
+	const replayTimedTrigger = useRef(false);
+	const latestAction = useRef({ onClick, isDisabled, working });
+	useEffect(() => {
+		latestAction.current = { onClick, isDisabled, working };
+	}, [onClick, isDisabled, working]);
 	const ref = useRef<HTMLButtonElement | null>(null);
 
 	// capture the rendered button width before swapping content during loading
@@ -74,42 +94,65 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		setLockedWidth(ref.current.offsetWidth);
 	}, []);
 
-	// handle clicks, trigger tooltip cleanup, and start progress mode when needed
-	const handleClick = useCallback(
-		(e: React.MouseEvent<any> | undefined) => {
-			onToolTip(null);
-			if (btnState === 'disabled') return;
-			if (progress && duration) {
-				lockCurrentWidth();
-				setPlaying(true);
-			} else {
-				if (link && globalThis.window !== undefined) {
-					globalThis.window.open(link, target);
-				}
-				onClick(e);
-			}
+	// Cancel a deferred action when disabled, externally working, or unmounted.
+	useEffect(() => {
+		if ((isDisabled || working) && timer.current !== null) {
+			clearTimeout(timer.current);
+			timer.current = null;
+			inFlight.current = false;
+			setTimedWorking(false);
+		}
+	}, [isDisabled, working]);
+	useEffect(
+		() => () => {
+			// Strict Mode replays mount effects: reschedule a canceled timed trigger without repeating immediate actions.
+			replayTimedTrigger.current = timer.current !== null && wasTriggered.current;
+			if (timer.current !== null) clearTimeout(timer.current);
+			timer.current = null;
+			inFlight.current = false;
 		},
-		[onToolTip, btnState, progress, duration, lockCurrentWidth, onClick, link, target],
+		[],
 	);
 
-	// sync the visual button state from the controlled prop
-	useEffect(() => setBtnState(state), [state]);
+	const handleClick = useCallback(
+		(event: React.MouseEvent<HTMLButtonElement> | undefined) => {
+			if (isDisabled || working || inFlight.current) return;
+			onToolTip?.(null);
+			if (progress && duration !== undefined && Number.isFinite(duration) && duration > 0) {
+				// Timed progress defers the action, including preventing an immediate native form submission.
+				event?.preventDefault();
+				lockCurrentWidth();
+				inFlight.current = true;
+				setTimedWorking(true);
+				timer.current = setTimeout(() => {
+					timer.current = null;
+					inFlight.current = false;
+					setTimedWorking(false);
+					if (!latestAction.current.isDisabled && !latestAction.current.working)
+						latestAction.current.onClick?.(undefined);
+				}, duration * 1000);
+				return;
+			}
+			onClick?.(event);
+			if (link && !event?.defaultPrevented && globalThis.window !== undefined) globalThis.window.open(link, target);
+		},
+		[isDisabled, working, onToolTip, progress, duration, lockCurrentWidth, onClick, link, target],
+	);
 
-	// sync the progress indicator from the controlled working flag
 	useEffect(() => {
 		if (working) lockCurrentWidth();
-		else setLockedWidth(undefined);
-		setPlaying(working);
 	}, [working, lockCurrentWidth]);
-
-	// expose the click trigger through the forwarded ref
-	useImperativeHandle(buttonRef, () => ({
-		triggerClick: () => handleClick(undefined),
-	}));
-
-	// trigger a programmatic click when the trigger prop flips on
 	useEffect(() => {
-		if (trigger) handleClick(undefined);
+		if (!playing) setLockedWidth(undefined);
+	}, [playing]);
+
+	useImperativeHandle(buttonRef, () => ({ triggerClick: () => handleClick(undefined) }), [handleClick]);
+	useEffect(() => {
+		if (trigger && (!wasTriggered.current || replayTimedTrigger.current)) {
+			wasTriggered.current = true;
+			replayTimedTrigger.current = false;
+			handleClick(undefined);
+		} else if (!trigger) wasTriggered.current = false;
 	}, [trigger, handleClick]);
 
 	// resolve destructive text and icon colors for the current state
@@ -145,12 +188,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				disabled: 'transparent',
 			},
 			color: {
-				normal: labelColor || (destructive ? 'white' : 'var(--core-text-light)'),
-				hover: labelColor || (destructive ? 'white' : 'var(--core-text-light)'),
+				normal: textColor || (destructive ? 'white' : 'var(--core-text-light)'),
+				hover: textColor || (destructive ? 'white' : 'var(--core-text-light)'),
 				disabled: 'var(--core-text-disabled)',
 			},
 		};
-	}, [labelColor, destructive, destructiveColor, resolvedBackgroundColor, resolvedBackgroundColorDisabled, iconColor]);
+	}, [textColor, destructive, destructiveColor, resolvedBackgroundColor, resolvedBackgroundColorDisabled, iconColor]);
 
 	// resolve color tokens for the outline button variant
 	const outline = useMemo(() => {
@@ -172,12 +215,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				disabled: 'var(--core-outline-primary)',
 			},
 			color: {
-				normal: labelColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-primary)'),
-				hover: labelColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-special)'),
+				normal: textColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-primary)'),
+				hover: textColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-special)'),
 				disabled: 'var(--core-text-disabled)',
 			},
 		};
-	}, [labelColor, destructive, destructiveColor, resolvedBackgroundColor, resolvedBackgroundColorDisabled, iconColor]);
+	}, [textColor, destructive, destructiveColor, resolvedBackgroundColor, resolvedBackgroundColorDisabled, iconColor]);
 
 	// resolve color tokens for the text button variant
 	const text = useMemo(() => {
@@ -189,9 +232,9 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				disabled: iconColor || 'var(--core-text-disabled)',
 			},
 			background: {
-				normal: 'transparent',
-				hover: 'transparent',
-				disabled: 'transparent',
+				normal: resolvedBackgroundColor || 'transparent',
+				hover: resolvedBackgroundColor || 'transparent',
+				disabled: resolvedBackgroundColorDisabled || 'transparent',
 			},
 			borderColor: {
 				normal: 'transparent',
@@ -199,12 +242,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				disabled: 'transparent',
 			},
 			color: {
-				normal: labelColor || destructiveColor(false),
-				hover: labelColor || destructiveColor(false),
+				normal: textColor || destructiveColor(false),
+				hover: textColor || destructiveColor(false),
 				disabled: 'var(--core-text-disabled)',
 			},
 		};
-	}, [destructiveColor, labelColor, iconColor]);
+	}, [destructiveColor, textColor, iconColor, resolvedBackgroundColor, resolvedBackgroundColorDisabled]);
 
 	// group variant-specific color styles into a single lookup map
 	const colorStyles = useMemo(() => {
@@ -263,43 +306,46 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		};
 	}, [iconSize, borderRadius, setPadding]);
 
-	// update hover state and surface tooltip content on pointer entry
 	const handleMouseEnter = useCallback(
-		(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-			if (btnState !== 'disabled') setBtnState('hover');
-			if (!ref?.current || !tooltip) return;
-			const tip: ToolTip = {
-				type: ToolTipType.button,
-				payload: { label: tooltip },
-				event: e,
-				ref,
-			};
-			onToolTip(tip);
+		(event: React.MouseEvent<HTMLButtonElement>) => {
+			onMouseEnter?.(event);
+			if (isDisabled) return;
+			hoveredRef.current = true;
+			setHovered(true);
+			if (tooltip) onToolTip?.({ type: ToolTipType.button, payload: { label: tooltip }, event, ref });
 		},
-		[btnState, tooltip, onToolTip],
+		[onMouseEnter, isDisabled, tooltip, onToolTip],
 	);
-
-	// restore the resting state and clear tooltip content on pointer exit
-	const handleMouseLeave = useCallback(() => {
-		if (btnState !== 'disabled') setBtnState('normal');
-		if (tooltip) onToolTip(null);
-	}, [btnState, tooltip, onToolTip]);
-
-	// finish progress mode and forward the completed click event
-	const handleDidStop = useCallback(() => {
-		setPlaying(false);
-		setLockedWidth(undefined);
-		onClick(undefined);
-	}, [onClick]);
+	const handleMouseLeave = useCallback(
+		(event: React.MouseEvent<HTMLButtonElement>) => {
+			onMouseLeave?.(event);
+			hoveredRef.current = false;
+			setHovered(false);
+			if (tooltip && !focusedRef.current) onToolTip?.(null);
+		},
+		[onMouseLeave, tooltip, onToolTip],
+	);
+	const handleFocus = useCallback(
+		(event: React.FocusEvent<HTMLButtonElement>) => {
+			onFocus?.(event);
+			focusedRef.current = true;
+			if (tooltip && !isDisabled) onToolTip?.({ type: ToolTipType.button, payload: { label: tooltip }, ref });
+		},
+		[onFocus, tooltip, isDisabled, onToolTip],
+	);
+	const handleBlur = useCallback(
+		(event: React.FocusEvent<HTMLButtonElement>) => {
+			onBlur?.(event);
+			focusedRef.current = false;
+			if (tooltip && !hoveredRef.current) onToolTip?.(null);
+		},
+		[onBlur, tooltip, onToolTip],
+	);
 
 	const buttonContent = children ?? label;
 
-	// hide the label only while a center progress indicator is shown
-	const shouldShowLabel = useMemo(
-		() => !(playing && !iconLeft && !iconRight) && Boolean(buttonContent),
-		[playing, iconLeft, iconRight, buttonContent],
-	);
-
+	const hasContent =
+		buttonContent !== undefined && buttonContent !== null && buttonContent !== false && buttonContent !== '';
 	// normalize style values before applying them as CSS
 	const setStyle = useCallback((value: string | number | undefined) => {
 		if (value === undefined) return 'unset';
@@ -310,6 +356,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	// calc width and memo
 	const setWidth = useMemo(() => {
 		if (playing && lockedWidth && width === 'min-content') return setStyle(lockedWidth);
+		if (width === 'fill') return '100%';
 		if (width && width !== 'fill') return setStyle(width);
 		return 'min-content';
 	}, [playing, lockedWidth, width, setStyle]);
@@ -318,39 +365,60 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	const buttonStyle = useMemo(
 		() => ({
 			color: colorStyles[variant].color[btnState],
-			background: fill ? 'var(--core-surface-primary)' : colorStyles[variant].background[state],
+			background: fill && !isDisabled ? 'var(--core-surface-primary)' : colorStyles[variant].background[btnState],
 			paddingRight: paddingRight ?? sizingStyles[size].paddingRight,
 			paddingLeft: paddingLeft ?? sizingStyles[size].paddingLeft,
 			paddingTop: variant === 'text' ? 0 : sizingStyles[size].paddingTop,
 			paddingBottom: variant === 'text' ? 0 : sizingStyles[size].paddingBottom,
 			borderRadius: sizingStyles[size].borderRadius,
-			height: sizingStyles[size].height,
-			maxHeight: sizingStyles[size].height,
-			minHeight: sizingStyles[size].height,
+			height: round && size === 'small' ? `calc(${iconSize}px + 2 * var(--spacing-xs))` : sizingStyles[size].height,
+			maxHeight: round && size === 'small' ? `calc(${iconSize}px + 2 * var(--spacing-xs))` : sizingStyles[size].height,
+			minHeight: round && size === 'small' ? `calc(${iconSize}px + 2 * var(--spacing-xs))` : sizingStyles[size].height,
 			flex: width === 'fill' ? 1 : 'unset',
-			width: setWidth,
-			maxWidth: setWidth,
+			width:
+				round && width === 'min-content'
+					? size === 'small'
+						? `calc(${iconSize}px + 2 * var(--spacing-xs))`
+						: sizingStyles[size].height
+					: setWidth,
+			maxWidth: round && width === 'min-content' ? 'unset' : setWidth,
+			minWidth: 0,
 			gap: sizingStyles[size].gap,
 			borderWidth: colorStyles[variant].border,
 			borderStyle: 'solid' as const,
 			borderColor: colorStyles[variant].borderColor[btnState],
-			cursor: state === 'disabled' ? ('default' as const) : ('pointer' as const),
+			cursor: isDisabled || playing ? ('default' as const) : ('pointer' as const),
 			transition: 'all var(--motion-water-duration) var(--motion-water) 0s',
 		}),
-		[colorStyles, variant, btnState, fill, state, paddingRight, paddingLeft, sizingStyles, size, setWidth, width],
+		[
+			colorStyles,
+			variant,
+			btnState,
+			fill,
+			paddingRight,
+			paddingLeft,
+			sizingStyles,
+			size,
+			setWidth,
+			width,
+			round,
+			iconSize,
+			isDisabled,
+			playing,
+		],
 	);
 
 	// resolve the progress indicator color from variant and destructive state
 	const progressColor = useMemo(
-		() => (destructive ? 'var(feedback-warning)' : colorStyles[variant].color[btnState]),
+		() => (destructive ? 'var(--feedback-warning)' : colorStyles[variant].color[btnState]),
 		[destructive, colorStyles, variant, btnState],
 	);
 
 	// resolve the icon container size from the current shape and icon size
 	const iconDivSize = useMemo(() => {
-		if (round) return `${buttonStyle.minHeight}px`;
+		if (round) return setStyle(iconSize);
 		return iconSize ? setStyle(iconSize) : 'unset';
-	}, [round, iconSize, buttonStyle, setStyle]);
+	}, [round, iconSize, setStyle]);
 
 	// compose CSS custom properties for decoration and icon sizing
 	const cssVars = useMemo(() => {
@@ -368,10 +436,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		<motion.button
 			id={divId}
 			type="button"
-			className={`${css.button}  ${css[labelSize]}${divClass}`}
+			className={`${css.button}  ${css[textSize]}${divClass}`}
 			ref={ref}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
+			onFocus={handleFocus}
+			onBlur={handleBlur}
 			style={{ ...divStyle, ...buttonStyle, ...cssVars }}
 			transition={transition}
 			variants={variants}
@@ -379,27 +449,29 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 			animate={animate}
 			exit={exit}
 			onClick={(e) => handleClick(e)}
-			disabled={btnState === 'disabled'}
-			aria-disabled={btnState === 'disabled'}
-			{...(rest as any)}
+			{...rest}
+			disabled={isDisabled || playing}
+			aria-disabled={isDisabled || playing}
+			aria-busy={playing}
 		>
 			{!playing && iconLeft && (
-				<div className={css.icon}>
+				<div className={css.icon} aria-hidden="true">
 					<Icon
 						name={iconLeft}
 						size={sizingStyles[size].iconSize}
 						strokeColor={colorStyles[variant].iconColor[btnState]}
-						pointer={btnState !== 'disabled'}
+						pointer={false}
+						tabIndex={-1}
 						fill={iconFill}
 					/>
 				</div>
 			)}
 			{playing && iconLeft && (
-				<div className={css.icon}>
+				<div className={css.icon} aria-hidden="true">
 					<ProgressIndicator
 						show={playing}
-						didStop={handleDidStop}
-						duration={duration}
+						didStart={noop}
+						didStop={noop}
 						size={sizingStyles[size].iconSize}
 						color={progressColor}
 						inline
@@ -407,24 +479,28 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				</div>
 			)}
 			{playing && !iconLeft && !iconRight && (
-				<div className={css.icon}>
+				<div className={css.centerProgress} aria-hidden="true">
 					<ProgressIndicator
 						show={playing}
-						didStop={handleDidStop}
-						duration={duration}
+						didStart={noop}
+						didStop={noop}
 						size={sizingStyles[size].iconSize}
 						color={progressColor}
 						inline={false}
 					/>
 				</div>
 			)}
-			{shouldShowLabel && <div className={css.label}>{buttonContent}</div>}
+			{hasContent && (
+				<div className={`${css.label}${playing && !iconLeft && !iconRight ? ` ${css.labelHidden}` : ''}`}>
+					{buttonContent}
+				</div>
+			)}
 			{playing && iconRight && (
-				<div className={css.icon}>
+				<div className={css.icon} aria-hidden="true">
 					<ProgressIndicator
 						show={playing}
-						didStop={handleDidStop}
-						duration={duration}
+						didStart={noop}
+						didStop={noop}
 						size={sizingStyles[size].iconSize}
 						color={progressColor}
 						inline
@@ -432,20 +508,21 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				</div>
 			)}
 			{!playing && iconRight && (
-				<div className={css.icon}>
+				<div className={css.icon} aria-hidden="true">
 					<Icon
 						name={iconRight}
 						size={sizingStyles[size].iconSize}
 						strokeColor={colorStyles[variant].iconColor[btnState]}
-						pointer={btnState !== 'disabled'}
+						pointer={false}
+						tabIndex={-1}
 						fill={iconFill}
 					/>
 				</div>
 			)}
 			<Dot show={!playing && showDot} />
-			{!playing && count && (
+			{!playing && count !== undefined && count !== 0 && (
 				<div className={css.count}>
-					<Badge variant={'light'} count={Number(count)} />
+					<Badge variant={'light'} count={count} aria-live="off" />
 				</div>
 			)}
 		</motion.button>

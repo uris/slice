@@ -12,22 +12,22 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 	const {
 		avatars = [],
 		size = 32,
-		borderWidth,
-		borderSize = 3,
+		lazyLoad = false,
+		textSize = 'm',
+		borderWidth = 3,
 		overlap = 8,
 		gap = 0,
 		borderColor,
 		borderColorHover,
-		outerBorderSize = 3,
+		outerBorderWidth = 3,
 		outerBorderColor = 'var(--core-surface-primary)',
 		margin = 0,
-		onToolTip = () => null,
+		onToolTip,
 		...divAttributes
 	} = props;
 	const { id: divId, className, style, ...rest } = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
-	const resolvedBorderWidth = borderWidth ?? borderSize;
 
 	// compose CSS custom properties for spacing and overlap
 	const cssVars = useMemo(() => {
@@ -42,25 +42,40 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 	const renderedAvatars = useMemo(() => {
 		if (!avatars) return null;
 		return avatars.map((avatar: AvatarInfo, index: number) => (
-			<div className={css.avatar} key={`avatar_${avatar.email}_${index}`}>
+			<div
+				className={css.avatar}
+				key={avatar.id !== undefined ? `id:${avatar.id}` : `fallback:${avatar.email ?? ''}:${index}`}
+			>
 				<Avatar
-					name={`${avatar.first} ${avatar.last}`}
+					name={[avatar.first, avatar.last].filter(Boolean).join(' ')}
 					email={avatar.email}
-					image={avatar.image || avatar.avatar}
+					image={avatar.image}
 					size={size}
-					frame={size}
-					borderWidth={resolvedBorderWidth}
+					lazyLoad={lazyLoad}
+					textSize={textSize}
+					borderWidth={borderWidth}
 					borderColor={borderColor}
 					borderColorHover={borderColorHover}
-					outerBorderSize={outerBorderSize}
+					outerBorderWidth={outerBorderWidth}
 					outerBorderColor={outerBorderColor}
-					textColor={avatar.textColor ?? avatar.color}
+					textColor={avatar.textColor}
 					backgroundColor={avatar.backgroundColor}
 					onToolTip={onToolTip}
 				/>
 			</div>
 		));
-	}, [avatars, size, resolvedBorderWidth, borderColor, borderColorHover, outerBorderSize, outerBorderColor, onToolTip]);
+	}, [
+		avatars,
+		size,
+		lazyLoad,
+		textSize,
+		borderWidth,
+		borderColor,
+		borderColorHover,
+		outerBorderWidth,
+		outerBorderColor,
+		onToolTip,
+	]);
 
 	// compose wrapper class names
 	const classNames = useMemo(() => {

@@ -1,5 +1,3 @@
-import type { ReactDocSlug } from '@/docs/registry/react';
-import type { ReactNativeDocSlug } from '@/docs/registry/react-native';
 import type { Package } from '@/src/consts/consts';
 import type { Metadata } from 'next';
 
@@ -40,7 +38,8 @@ export const sharedDocsMetadata: Record<SharedDocSlug, Metadata> = {
 	},
 };
 
-export type DocsSlug = ReactDocSlug | ReactNativeDocSlug;
+// Keep unknown route slugs so missing documents can render inside the docs shell.
+export type DocsSlug = string;
 
 export type DocsContext = { slug?: DocsSlug | null; packageType?: Package | null };
 

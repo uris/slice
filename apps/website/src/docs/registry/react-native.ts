@@ -1,6 +1,5 @@
 import { sharedDocSlugs, sharedDocsMetadata } from '@/docs/registry/shared';
 import type { Metadata } from 'next';
-import React, { type ComponentType } from 'react';
 
 // all doc slugs (pages) including shared docs
 export const reactNativeDocSlugs = [
@@ -34,9 +33,6 @@ export const reactNativeDocsMetadata: Record<ReactNativeDocSlug, Metadata> = {
 	},
 	...sharedDocsMetadata,
 };
-
-/// doc page module type
-export type DocPageModule = { default: ComponentType };
 
 // utility to check if string is a valid slug
 export function isReactNativeDocSlug(slug: string): slug is ReactNativeDocSlug {

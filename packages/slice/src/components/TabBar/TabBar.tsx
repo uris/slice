@@ -326,7 +326,7 @@ const Option = React.memo(
 					</div>
 				)}
 				{name}
-				{count !== 0 && <Badge variant={'light'} hideNull={false} count={count} />}
+				{count !== 0 && <Badge variant={'light'} hideZero={false} count={count} />}
 			</button>
 		);
 	},

@@ -308,7 +308,7 @@ export const TextField = React.memo(
 									variant={'text'}
 									size={'small'}
 									state={text === '' ? 'disabled' : 'normal'}
-									labelColor={theme.current.colors['core-button-primary']}
+									textColor={theme.current.colors['core-button-primary']}
 									onClick={onAction}
 								/>
 							</motion.div>

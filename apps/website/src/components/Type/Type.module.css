@@ -135,3 +135,30 @@
 .paragraph + .definition {
 	margin-top: 24px;
 }
+
+.button {
+	font: inherit;
+	letter-spacing: inherit;
+	color: inherit;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background-color: transparent;
+	cursor: pointer;
+	text-decoration-line: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+	text-decoration-style: solid;
+	text-decoration-color: var(--underline-color);
+
+	&:hover,
+	&:focus-visible {
+		text-decoration-color: var(--underline-hover-color);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--underline-hover-color);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+}

@@ -64,16 +64,16 @@ export const avatarConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<Avatar first="John" last="Doe" size={34} />, 50),
+			fn: () => measureMountTime(<Avatar name="John Doe" size={34} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<Avatar first="John" last="Doe" size={34} />,
+					<Avatar name="John Doe" size={34} />,
 					(container) => {
-						container.rerender(<Avatar first="Jane" last="Smith" size={34} />);
+						container.rerender(<Avatar name="Jane Smith" size={34} />);
 					},
 					50,
 				),
@@ -81,7 +81,7 @@ export const avatarConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<Avatar first="John" last="Doe" />, 10),
+			fn: () => measureMemoryDelta(<Avatar name="John Doe" />, 10),
 		},
 	],
 };

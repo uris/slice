@@ -1,5 +1,6 @@
 import { outlineTertiary, surfaceDark, surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
+import { Icon } from '@apple-pie/slice';
 import type React from 'react';
 import { useMemo } from 'react';
 import styles from './SqaureButton.module.css';
@@ -9,16 +10,24 @@ export enum SquareButtonType {
 	Secondary = 'secondary',
 	Text = 'text',
 }
+
 interface SquareButtonProps {
 	label?: string;
 	variant?: SquareButtonType;
-	onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	disabled?: boolean;
 	decorative?: boolean;
+	icon?: string;
 }
 
 export function SquareButton(props: Readonly<SquareButtonProps>) {
-	const { label = 'Button Label', onClick = () => null, variant = SquareButtonType.Primary, disabled = false } = props;
+	const {
+		label = 'Button Label',
+		onClick = () => null,
+		variant = SquareButtonType.Primary,
+		disabled = false,
+		icon,
+	} = props;
 	const isPrimary = variant === SquareButtonType.Primary;
 
 	const className = useMemo(() => {
@@ -41,13 +50,9 @@ export function SquareButton(props: Readonly<SquareButtonProps>) {
 	}, [isPrimary]);
 
 	return (
-		<input
-			className={className}
-			style={buttonStyles}
-			type={'button'}
-			value={label}
-			onClick={onClick}
-			disabled={disabled}
-		/>
+		<button className={className} style={buttonStyles} type={'button'} onClick={onClick} disabled={disabled}>
+			<span>{label}</span>
+			{icon && <Icon name={icon} size={16} />}
+		</button>
 	);
 }

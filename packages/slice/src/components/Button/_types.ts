@@ -1,4 +1,4 @@
-import type { Transition, Variants } from 'motion/react';
+import type { HTMLMotionProps, Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
@@ -23,8 +23,8 @@ type ButtonBaseProps = {
 	iconColor?: ColorValue;
 	backgroundColor?: ColorValue;
 	backgroundColorDisabled?: ColorValue;
-	labelColor?: ColorValue;
-	labelSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
+	textColor?: ColorValue;
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	transition?: Transition;
 	variants?: Variants;
 	initial?: string;
@@ -44,7 +44,15 @@ type ButtonBaseProps = {
 	onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => void;
 };
 
-export type ButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof ButtonBaseProps> & ButtonBaseProps;
+// Motion owns these event names; use its callback signatures rather than native DOM event signatures.
+type MotionEvents = Pick<HTMLMotionProps<'button'>, 'onAnimationStart' | 'onDrag' | 'onDragStart' | 'onDragEnd'>;
+
+export type ButtonProps = Omit<
+	React.ButtonHTMLAttributes<HTMLButtonElement>,
+	keyof ButtonBaseProps | keyof MotionEvents | 'color'
+> &
+	ButtonBaseProps &
+	MotionEvents;
 
 export interface ButtonHandle {
 	triggerClick: () => void;

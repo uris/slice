@@ -129,3 +129,17 @@ Contributor setup and workflow:
 
 - Documentation and demos: https://slice-uikit.com
 - Source and issues: https://github.com/uris/slice
+
+## Scrollbar styling
+
+After importing `@apple-pie/slice/styles.css`, apply `slice-scrollbars` to a scrollable element:
+
+```tsx
+<div className="slice-scrollbars" style={{ overflowY: 'auto', maxHeight: 320 }}>
+    {children}
+</div>
+```
+
+This uses the same scrollbar styles as Slice components. Override `--scrollbar-size`,
+`--scrollbar-bg`, `--scrollbar-thumb`, and `--scrollbar-thumb-hover` on the element to
+customize its appearance. The class styles scrollbars; it does not enable scrolling.

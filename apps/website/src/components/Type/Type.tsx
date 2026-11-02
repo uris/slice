@@ -6,7 +6,7 @@ import { classNames } from '@/src/utils/misc';
 import { useIntersecting } from '@apple-pie/slice/hooks';
 import { addOpacity } from '@apple-pie/slice/utils';
 import type React from 'react';
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import styles from './Type.module.css';
 
 export interface TextProps {
@@ -15,12 +15,14 @@ export interface TextProps {
 	children?: React.ReactNode;
 	clipWidth?: true | number;
 	style?: React.CSSProperties;
+	openURL?: string;
+	target?: '_blank' | '_top';
 }
 
-function useTextVisibility<T extends HTMLElement>(props: Readonly<TextProps>) {
+function useTextVisibility<T extends HTMLElement>(props: Readonly<TextProps>, trackVisibility = false) {
 	const { id, onVisibilityChange } = props;
 	const { updateVisibleItems } = useDocsActions();
-	const track = Boolean(id?.trim());
+	const track = trackVisibility && Boolean(id?.trim());
 	const ref = useRef<T>(null);
 	const callback = useRef(onVisibilityChange);
 
@@ -58,7 +60,7 @@ function useTextVisibility<T extends HTMLElement>(props: Readonly<TextProps>) {
 }
 
 export function H1(props: Readonly<TextProps>) {
-	const visibility = useTextVisibility<HTMLDivElement>(props);
+	const visibility = useTextVisibility<HTMLDivElement>(props, true);
 	const { children } = props;
 	return (
 		<div {...visibility} className={styles.wrapper}>
@@ -68,7 +70,7 @@ export function H1(props: Readonly<TextProps>) {
 }
 
 export function H2(props: Readonly<TextProps>) {
-	const visibility = useTextVisibility<HTMLDivElement>(props);
+	const visibility = useTextVisibility<HTMLDivElement>(props, true);
 	const { children } = props;
 	return (
 		<div {...visibility} className={styles.wrapper}>
@@ -115,10 +117,29 @@ export function Caption(props: Readonly<TextProps>) {
 
 export function Code(props: Readonly<TextProps>) {
 	const visibility = useTextVisibility<HTMLSpanElement>(props);
-	const { children } = props;
+	const { children, openURL, style, target } = props;
+	const url = openURL?.trim();
+	const cssStyles = useMemo(() => {
+		return {
+			'--underline-hover-color': surfaceYellow,
+			'--underline-color': addOpacity(surfaceYellow, 0.25),
+			...style,
+		} as React.CSSProperties;
+	}, [style]);
+
+	const handleClick = useCallback(() => {
+		if (url) window.open(url, target ?? '_blank');
+	}, [url, target]);
+
 	return (
-		<span {...visibility} className={styles.code}>
-			{children}
+		<span {...visibility} className={styles.code} style={cssStyles}>
+			{url ? (
+				<button type={'button'} className={styles.button} onClick={handleClick}>
+					{children}
+				</button>
+			) : (
+				children
+			)}
 		</span>
 	);
 }
@@ -180,7 +201,7 @@ export function DefaultVal(props: Readonly<TextProps>) {
 }
 
 export function Definition(props: Readonly<TextProps>) {
-	const visibility = useTextVisibility<HTMLDivElement>(props);
+	const visibility = useTextVisibility<HTMLDivElement>(props, true);
 	const { children } = props;
 	return (
 		<div {...visibility} className={classNames(styles.wrapper, styles.definition)}>

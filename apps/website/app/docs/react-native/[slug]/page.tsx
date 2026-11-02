@@ -3,7 +3,6 @@ import { getReactNativeDocSlugs, isReactNativeDocSlug, reactNativeDocsMetadata }
 import { SiteSection } from '@/docs/registry/shared';
 import { Package } from '@/src/consts/consts';
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 
 export const dynamicParams = true;
 
@@ -15,14 +14,11 @@ export function generateStaticParams() {
 // generate static page meta for all slugs at build time
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
 	const { slug } = await params;
-	return isReactNativeDocSlug(slug) ? reactNativeDocsMetadata[slug] : { title: 'Page Not Found' };
+	return isReactNativeDocSlug(slug) ? reactNativeDocsMetadata[slug] : { title: 'Document not found | Slice UIKit' };
 }
 
 export default async function Docs({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
 	const { slug } = await params;
-
-	// 404 invalid slugs
-	if (!isReactNativeDocSlug(slug)) notFound();
 
 	// render the doc page for slug
 	return <DocsPage slug={slug} packageType={Package.ReactNative} section={SiteSection.Docs} />;

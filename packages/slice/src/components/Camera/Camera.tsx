@@ -647,8 +647,6 @@ export function ToolbarButton(props: Readonly<ToolbarButtonProps>) {
 export function DefaultNoVideoPoster(props: Readonly<DefaultNoVideoPosterProps>) {
 	const { size = 0.75, user, message = 'Video is off' } = props;
 	if (user)
-		return (
-			<Avatar image={user?.avatar} name={`${user?.name}`} email={`${user?.email}`} size={'50%'} fontSize={'25%'} />
-		);
+		return <Avatar image={user?.avatar} name={`${user?.name}`} email={`${user?.email}`} size={'50%'} textSize={'xl'} />;
 	return message;
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { SquareButton, SquareButtonType } from '@/components/SqaureButton/SquareButton';
 import { Caption, SpacerS } from '@/components/Type/Type';
 import pattern from '@/src/assets/pattern-canvas.png';
 import { surfaceYellow } from '@/src/consts/consts';
@@ -16,12 +17,13 @@ export type Zoom = {
 
 export interface ComponentCanvasProps {
 	name?: string;
+	storybookUrl?: string;
 	zoom?: Zoom;
 	components?: React.ReactNode;
 }
 
 export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.ReactElement {
-	const { name, zoom, components } = props;
+	const { name, zoom, components, storybookUrl } = props;
 	const { initial, min, max } = zoom ?? { initial: 1, min: 0, max: 2 };
 	const [scale, setScale] = useState(initial);
 	const patternStyles = useMemo(() => {
@@ -41,6 +43,16 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 	return (
 		<div className={styles.container}>
 			<div className={styles.canvas}>
+				{storybookUrl && (
+					<div className={styles.storybookLink}>
+						<SquareButton
+							icon="share"
+							label="View on Storybook"
+							variant={SquareButtonType.Secondary}
+							onClick={() => window.open(storybookUrl, '_blank', 'noopener,noreferrer')}
+						/>
+					</div>
+				)}
 				<div className={styles.pattern} style={patternStyles} />
 				<div className={styles.mask} style={maskStyles} />
 				<div className={styles.content}>

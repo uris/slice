@@ -191,7 +191,7 @@ export const IconButton = React.memo((rawProps: IconButtonProps) => {
 			<Dot show={showDot} />
 			{count !== 0 && (
 				<div className={css.count}>
-					<Badge variant={'light'} count={count} hideNull />
+					<Badge variant={'light'} count={count} hideZero />
 				</div>
 			)}
 		</motion.button>

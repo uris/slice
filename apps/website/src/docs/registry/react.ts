@@ -1,15 +1,48 @@
 import { sharedDocSlugs, sharedDocsMetadata } from '@/docs/registry/shared';
 import type { Metadata } from 'next';
-import type { ComponentType } from 'react';
 
 // all doc slugs (pages)
-export const reactDocSlugs = ['placeholder', 'get-started', 'installation', 'resources', ...sharedDocSlugs] as const;
+export const reactDocSlugs = [
+	'audio-bubble',
+	'avatar',
+	'avatar-group',
+	'badge',
+	'button',
+	'placeholder',
+	'get-started',
+	'installation',
+	'resources',
+	...sharedDocSlugs,
+] as const;
 
 // doc slug type including shared
 export type ReactDocSlug = (typeof reactDocSlugs)[number];
 
 // meta for all slugs including shared
 export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
+	'audio-bubble': {
+		title: 'AudioBubble | Slice UIKit',
+		description:
+			'Bring live audio to life with the Slice AudioBubble component for React. Explore usage, behavior, accessibility, props, and events.',
+	},
+	avatar: {
+		title: 'Avatar | Slice UIKit',
+		description: 'Display profile photos and initials with the Slice Avatar component for React.',
+	},
+	'avatar-group': {
+		title: 'AvatarGroup | Slice UIKit',
+		description: 'Show collaborators, assignees, and participants with the Slice AvatarGroup component for React.',
+	},
+	badge: {
+		title: 'Badge | Slice UIKit',
+		description:
+			'Add compact counts and labels with the Slice Badge component for React. Explore usage, accessibility, props, and events.',
+	},
+	button: {
+		title: 'Button | Slice UIKit',
+		description:
+			'Build clear actions with the Slice Button component for React. Explore variants, icons, loading states, accessibility, props, and refs.',
+	},
 	placeholder: {
 		title: 'Placeholder | Slice UIKit',
 		description: 'Placeholder description.',
@@ -28,9 +61,6 @@ export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
 	},
 	...sharedDocsMetadata,
 };
-
-/// doc page module type
-export type DocPageModule = { default: ComponentType };
 
 // utility to check if string is a valid slug
 export function isReactDocSlug(slug: string): slug is ReactDocSlug {

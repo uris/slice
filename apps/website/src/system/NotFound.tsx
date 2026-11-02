@@ -13,9 +13,9 @@ export default function NotFound() {
 				label={'Move along ...'}
 				size={'large'}
 				variant={'text'}
-				labelSize={'l'}
+				textSize={'l'}
 				underline
-				labelColor={'var(--core-link-primary)'}
+				textColor={'var(--core-link-primary)'}
 				iconLeft={'home'}
 				iconColor={'var(--core-link-primary)'}
 				onClick={() => {

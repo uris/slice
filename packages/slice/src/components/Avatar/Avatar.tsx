@@ -1,151 +1,98 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import { accessibleKeyDown, normalizedPercent, setStyle } from '../../utils/functions/misc';
+import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Avatar.module.css';
 import type { AvatarProps } from './_types';
 
-export const Avatar = React.memo((rawProps: AvatarProps) => {
+/** A new source gets a fresh loading state, including when switching back to an earlier photo. */
+function AvatarImage({ image, lazyLoad, initials }: { image: string; lazyLoad: boolean; initials: string }) {
+	const [loaded, setLoaded] = useState(false);
+	const syncLoadedImage = useCallback((element: HTMLImageElement | null) => {
+		// Server-rendered or cached images can finish before React attaches onLoad.
+		if (element?.complete && element.naturalWidth > 0) setLoaded(true);
+	}, []);
+	return (
+		<>
+			{!loaded && initials}
+			<img
+				ref={syncLoadedImage}
+				className={css.image}
+				src={image}
+				alt=""
+				loading={lazyLoad ? 'lazy' : 'eager'}
+				decoding="async"
+				data-loaded={loaded}
+				onLoad={() => setLoaded(true)}
+				onError={() => setLoaded(false)}
+			/>
+		</>
+	);
+}
+
+function AvatarComponent<T = unknown>(rawProps: AvatarProps<T>) {
 	const props = resolveColorProps(rawProps);
 	const {
-		email,
+		info,
 		name,
+		email,
 		image = '',
-		textColor,
-		borderWidth,
-		borderSize = 0,
-		color = undefined,
-		borderColor = undefined,
-		borderColorHover = undefined,
-		outerBorderSize,
-		outerBorderColor,
-		backgroundColor,
-		onClick = undefined,
-		onKeyDown = undefined,
-		fontSize = undefined,
-		onToolTip = () => null,
+		lazyLoad = false,
 		size = 34,
-		frame = 34,
-		tabIndex = 0,
-		...divAttributes
-	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
-	const ref = useRef<HTMLDivElement>(null);
-	const [textSize, setTextSize] = useState<number | string>('inherit');
-	const resolvedTextColor = textColor ?? color;
-	const resolvedBorderWidth = borderWidth ?? borderSize;
-	const resolvedBackgroundColor = backgroundColor;
-
-	// derive the fallback initials shown when no image is rendered
-	const initials = useMemo(() => {
-		if (!name && !email) return '';
-		if (name) {
-			let last: string | undefined = undefined;
-			const parts = name.trim().split(' ');
-			const first = parts[0];
-			if (parts.length > 1) last = parts.at(-1);
-			return `${first.charAt(0)}${last ? last.charAt(0) : ''}`;
-		}
-		if (email) return email.charAt(0);
-	}, [name, email]);
-
-	// resolve the optional background image for the avatar frame
-	const bgImage = useMemo(() => {
-		return image ? `url(${image})` : '';
-	}, [image]);
-
-	// sync the rendered font size from the configured size mode
-	useEffect(() => {
-		if (fontSize === undefined) {
-			setTextSize('inherit');
-			return;
-		}
-		if (fontSize === 'auto' || (typeof fontSize === 'number' && fontSize <= 1)) {
-			const parentHeight = ref.current?.offsetHeight;
-			if (!parentHeight) {
-				setTextSize('inherit');
-				return;
-			}
-			let size = 0.5;
-			if (typeof fontSize === 'number') size = fontSize;
-			const fSize = Math.round(parentHeight * size);
-			setTextSize(fSize);
-			return;
-		}
-		if (typeof fontSize === 'string' && fontSize.includes('%')) {
-			const normalized = normalizedPercent(fontSize);
-			setTextSize(normalized);
-			return;
-		}
-		setTextSize(fontSize);
-	}, [fontSize]);
-
-	// derive whether the avatar should render initials or image-only content
-	const displayContent = useMemo(() => (image ? null : initials), [image, initials]);
-
-	// forward tooltip payload on hover
-	const onMouseEnter = useCallback(
-		(event: React.MouseEvent<HTMLDivElement>) => {
-			const payload = { label: name ?? email ?? '' };
-			onToolTip({ payload, event });
-		},
-		[name, email, onToolTip],
-	);
-
-	// clear tooltip state when the pointer leaves the avatar
-	const onMouseLeave = useCallback(() => {
-		onToolTip(null);
-	}, [onToolTip]);
-
-	// mirror click activation for keyboard users on clickable avatars
-	const handleKeyDown = useCallback(
-		(event: React.KeyboardEvent<HTMLDivElement>) => {
-			onKeyDown?.(event);
-			if (!onClick || event.defaultPrevented) return;
-			accessibleKeyDown(event, () => onClick(event as any));
-		},
-		[onClick, onKeyDown],
-	);
-
-	// compose CSS custom properties for avatar sizing and colors
-	const avatarVars = useMemo(() => {
-		return {
-			'--avatar-size': setStyle(size),
-			'--avatar-frame': setStyle(frame),
-			'--avatar-border': `${resolvedBorderWidth}px`,
-			'--avatar-color': resolvedTextColor ?? 'var(--core-text-primary)',
-			'--avatar-bg-color': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
-			'--avatar-border-color': borderColor ?? 'var(--core-outline-primary)',
-			'--avatar-border-color-hover': borderColorHover ?? 'var(--core-outline-special)',
-			'--avatar-bg-image': `${bgImage}`,
-			'--avatar-font-size': setStyle(textSize),
-			'--avatar-outer-border-size': `${outerBorderSize ?? 0}px`,
-			'--avatar-outer-border-color': outerBorderColor ?? 'var(--core-surface-primary)',
-			'--avatar-cursor': onClick ? 'pointer' : 'default',
-		} as React.CSSProperties;
-	}, [
-		size,
-		frame,
-		resolvedBorderWidth,
-		resolvedTextColor,
-		resolvedBackgroundColor,
+		textSize = 'm',
+		textColor,
+		backgroundColor,
+		borderWidth = 0,
 		borderColor,
 		borderColorHover,
-		bgImage,
-		textSize,
-		outerBorderSize,
+		outerBorderWidth = 0,
 		outerBorderColor,
 		onClick,
-	]);
+		onKeyDown,
+		onToolTip,
+		onMouseEnter,
+		onMouseLeave,
+		onFocus,
+		onBlur,
+		tabIndex = 0,
+		className,
+		style,
+		...divAttributes
+	} = props;
+	// Adapt remaining native handlers, including capture events, without forwarding info to the DOM.
+	const forwardedAttributes: Record<string, unknown> = { ...divAttributes };
+	for (const [key, value] of Object.entries(forwardedAttributes)) {
+		if (key.startsWith('on') && typeof value === 'function') {
+			forwardedAttributes[key] = (event: React.SyntheticEvent<HTMLDivElement>) => value(event, info);
+		}
+	}
 
-	// compose wrapper class names
-	const classNames = useMemo(() => {
-		return `${css.wrapper}${divClass}`;
-	}, [divClass]);
+	const ref = useRef<HTMLDivElement>(null);
+	const hovered = useRef(false);
+	const focused = useRef(false);
+	const displayName = name?.trim() ?? '';
+	const displayEmail = email?.trim() ?? '';
+	const label = displayName || displayEmail;
+	const parts = displayName.split(/\s+/);
+	let initials = displayEmail.charAt(0);
+	if (displayName) {
+		initials = parts[0].charAt(0);
+		if (parts.length > 1) initials += parts[parts.length - 1].charAt(0);
+	}
+
+	const avatarVars = {
+		'--avatar-size': setStyle(size),
+		'--avatar-border': `${borderWidth}px`,
+		'--avatar-color': textColor ?? 'var(--core-text-primary)',
+		'--avatar-bg-color': backgroundColor ?? 'var(--core-surface-secondary)',
+		'--avatar-border-color': borderColor ?? 'var(--core-outline-primary)',
+		'--avatar-border-color-hover': borderColorHover ?? 'var(--core-outline-special)',
+		'--avatar-outer-border-size': `${outerBorderWidth}px`,
+		'--avatar-outer-border-color': outerBorderColor ?? 'var(--core-surface-primary)',
+		'--avatar-cursor': onClick ? 'pointer' : 'default',
+	} as React.CSSProperties;
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Avatar');
@@ -153,21 +100,47 @@ export const Avatar = React.memo((rawProps: AvatarProps) => {
 
 	return (
 		<div
-			id={divId}
-			className={classNames}
-			style={{ ...divStyle, ...avatarVars }}
-			onMouseEnter={onMouseEnter}
-			onMouseLeave={onMouseLeave}
-			onClick={onClick}
-			onKeyDown={handleKeyDown}
-			role={onClick ? 'button' : 'img'}
+			{...forwardedAttributes}
+			ref={ref}
+			className={`${css.wrapper}${className ? ` ${className}` : ''}`}
+			style={{ ...style, ...avatarVars }}
+			onMouseEnter={(event) => {
+				hovered.current = true;
+				onMouseEnter?.(event, info);
+				onToolTip?.({ payload: { label }, ref, event }, info);
+			}}
+			onMouseLeave={(event) => {
+				hovered.current = false;
+				onMouseLeave?.(event, info);
+				if (!focused.current) onToolTip?.(null, info);
+			}}
+			onFocus={(event) => {
+				focused.current = true;
+				onFocus?.(event, info);
+				onToolTip?.({ payload: { label }, ref }, info);
+			}}
+			onBlur={(event) => {
+				focused.current = false;
+				onBlur?.(event, info);
+				if (!hovered.current) onToolTip?.(null, info);
+			}}
+			onClick={onClick ? (event) => onClick(event, info) : undefined}
+			onKeyDown={(event) => {
+				onKeyDown?.(event, info);
+				if (!onClick || event.defaultPrevented || event.repeat) return;
+				// Dispatch a real click so onClick always receives a mouse event, including keyboard activation.
+				accessibleKeyDown(event, () => event.currentTarget.click());
+			}}
+			role={divAttributes.role ?? (onClick ? 'button' : 'img')}
 			tabIndex={onClick ? tabIndex : undefined}
-			aria-label={`User Avatar - ${name ?? email ?? 'Unknown User'}`}
-			{...rest}
+			aria-label={divAttributes['aria-label'] ?? `User Avatar - ${label || 'Unknown User'}`}
 		>
-			<div ref={ref} aria-hidden={true} className={css.user}>
-				{displayContent}
+			<div aria-hidden={true} className={`${css.user} ${css[textSize]}`}>
+				{image ? <AvatarImage key={image} image={image} lazyLoad={lazyLoad} initials={initials} /> : initials}
 			</div>
 		</div>
 	);
-});
+}
+
+// React.memo erases generic inference; preserve the wrapped component's public signature.
+export const Avatar = React.memo(AvatarComponent) as typeof AvatarComponent;

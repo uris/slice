@@ -1,32 +1,28 @@
 import type React from 'react';
-import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { AvatarProps } from '../Avatar';
 import type { ToolTip } from '../sharedTypes';
 
-export type AvatarInfo = {
+export type AvatarInfo = Pick<AvatarProps, 'image' | 'email' | 'textColor' | 'backgroundColor'> & {
+	/** Unique, stable identity within the group. Used as the React key, not a DOM id. */
+	id?: string | number;
 	first?: string;
 	last?: string;
-	image?: any;
-	avatar?: string;
-	email?: string;
-	textColor?: ColorValue;
-	color?: ColorValue;
-	backgroundColor?: ColorValue;
 };
 
-export type AvatarGroupBaseProps = {
+export type AvatarGroupBaseProps = Pick<
+	AvatarProps,
+	'borderWidth' | 'borderColor' | 'borderColorHover' | 'outerBorderWidth' | 'outerBorderColor' | 'lazyLoad' | 'textSize'
+> & {
 	avatars?: AvatarInfo[] | null;
 	size?: number;
 	overlap?: number;
-	borderWidth?: number;
-	borderSize?: number;
-	borderColor?: ColorValue;
-	borderColorHover?: ColorValue;
 	gap?: number;
 	margin?: number;
-	outerBorderSize?: number;
-	outerBorderColor?: ColorValue;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
-export type AvatarGroupProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof AvatarGroupBaseProps> &
+export type AvatarGroupProps = Omit<
+	React.HTMLAttributes<HTMLDivElement>,
+	keyof AvatarGroupBaseProps | 'color' | 'children'
+> &
 	AvatarGroupBaseProps;

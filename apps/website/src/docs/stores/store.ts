@@ -12,7 +12,10 @@ export const useDocsStore = create<DocsStoreType>((set) => ({
 	scrollAmount: 0,
 	actions: {
 		setDocContext: (slug, packageType, section) => {
-			set({ slug, packageType, section });
+			set((state) => {
+				if (state.slug === slug && state.packageType === packageType && state.section === section) return state;
+				return { slug, packageType, section, visibleItems: new Set<string>(), scrollAmount: 0 };
+			});
 		},
 		updateVisibleItems: (item, visible) => {
 			if (!item) return;

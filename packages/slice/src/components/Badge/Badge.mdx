@@ -34,12 +34,22 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>count</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Text/value for `count`.</td></tr>
-            <tr><td><code>hideNull</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `hideNull`.</td></tr>
-            <tr><td><code>variant</code></td><td><code>{`'light' | 'dark'`}</code></td><td><code>-</code></td><td>Controls `variant`.</td></tr>
+            <tr><td><code>backgroundColor</code></td><td><code>ColorValue</code></td><td><code>variant background</code></td><td>Theme token or CSS color overriding the preset fill.</td></tr>
+            <tr><td><code>count</code></td><td><code>{`number | string | null`}</code></td><td><code>undefined</code></td><td>Number or short label. Numbers above 99 display as 99+. Missing, blank, and non-finite values are hidden.</td></tr>
+            <tr><td><code>hideZero</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Hide numeric zero. Set to false to display 0. String labels are unaffected.</td></tr>
+            <tr><td><code>textColor</code></td><td><code>ColorValue</code></td><td><code>variant text</code></td><td>Theme token or CSS color overriding the preset text.</td></tr>
+            <tr><td><code>variant</code></td><td><code>{`'light' | 'dark'`}</code></td><td><code>dark</code></td><td>Theme color preset.</td></tr>
             <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
           </tbody>
         </table>
+
+        Custom backgroundColor and textColor override the variant independently. Omitted colors retain the preset. Choose readable color combinations.
+
+        ## Behavior
+        Numeric counts above 99 display as 99+. Strings are shown as labels without numeric conversion. Null, undefined, blank strings, NaN, and infinite numbers render nothing. Numeric zero is hidden by default.
+
+        ## Accessibility
+        Badge defaults to role="status", aria-live="polite", and aria-atomic="true". Supply an aria-label to explain the count, including the full number when the display is capped. Use hideZero={false} to keep zero mounted for later updates. Actions belong on a labeled control.
 
         ## Events
         <table style={{width: '100%'}}>
@@ -54,14 +64,14 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>-</code></td><td><code>-</code></td></tr>
+            <tr><td>Native React div events</td><td>Standard React event signatures. Badge has no custom callbacks.</td></tr>
           </tbody>
         </table>
 
         ## Code Examples
         </Unstyled>
 
-        <RenderSource language={"tsx"}>
+        <RenderSource>
 ```
 import { Badge } from '@apple-pie/slice';
 
@@ -70,7 +80,7 @@ export function BadgeExample() {
         <Badge
             count={12}
             variant="dark"
-            hideNull={true}
+            hideZero={true}
             id="badge-example"
             data-testid="badge-example"
             className="custom-wrapper"

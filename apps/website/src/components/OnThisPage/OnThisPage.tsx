@@ -89,7 +89,7 @@ export function OnThisPage(props: Readonly<OnThisPageProps>) {
 	if (items.length === 0) return null;
 	return (
 		<motion.div
-			className={styles.wrapper}
+			className={classNames(styles.wrapper, 'slice-scrollbars')}
 			initial={{ opacity: 0, x: 35 }}
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: 35 }}
