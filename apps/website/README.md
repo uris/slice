@@ -1,5 +1,7 @@
 # Slice website
 
+Repository guidance: [AGENTS.md](../../AGENTS.md).
+
 Next.js App Router website, served by a Next.js Node server in production.
 
 Install dependencies from the repository root. Run from this workspace:

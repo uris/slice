@@ -26,20 +26,27 @@ export function ButtonDoc() {
 				Make the next step clear. Button brings labels, icons, and busy states to the actions in your interface.
 			</P>
 			<ComponentCanvas
-				name="Button"
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={
-					<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-						<div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-							<Button label="Primary" variant="solid" iconRight="arrow right" />
-							<Button label="Secondary" variant="outline" />
-						</div>
-						<div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-							<Button label="Primary" variant="solid" iconRight="arrow right" working />
-							<Button label="Secondary" variant="outline" working />
-						</div>
-					</div>
-				}
+				components={[
+					{
+						label: 'Primary buttons',
+						component: (
+							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+								<Button label="Primary" variant="solid" iconRight="arrow right" />
+								<Button label="Primary" variant="solid" iconRight="arrow right" working />
+							</div>
+						),
+					},
+					{
+						label: 'Secondary buttons',
+						component: (
+							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+								<Button label="Secondary" variant="outline" />
+								<Button label="Secondary" variant="outline" working />
+							</div>
+						),
+					},
+				]}
 			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
@@ -422,24 +429,6 @@ export function ButtonDoc() {
 				Receives the click event for normal pointer or keyboard activation. Receives undefined for ref/trigger
 				activation and after timed progress. Controlled working does not emit a completion click.
 			</P>
-			<Definition id={'onDrag'}>
-				<Method>onDrag</Method>
-				<TypeDef>{"HTMLMotionProps<'button'>['onDrag']"}</TypeDef>
-			</Definition>
-			<P>
-				Motion drag callback signature: the gesture event and pan information. This event name is owned by Motion rather
-				than native HTML drag-and-drop.
-			</P>
-			<Definition id={'onDragEnd'}>
-				<Method>onDragEnd</Method>
-				<TypeDef>{"HTMLMotionProps<'button'>['onDragEnd']"}</TypeDef>
-			</Definition>
-			<P>Motion drag-end callback signature.</P>
-			<Definition id={'onDragStart'}>
-				<Method>onDragStart</Method>
-				<TypeDef>{"HTMLMotionProps<'button'>['onDragStart']"}</TypeDef>
-			</Definition>
-			<P>Motion drag-start callback signature.</P>
 			<Definition id={'onToolTip'}>
 				<Method>onToolTip</Method>
 				<TypeDef>{'(tip: ToolTip | null) => void'}</TypeDef>
@@ -454,7 +443,7 @@ export function ButtonDoc() {
 			</Definition>
 			<P>
 				Other native handlers pass through. onMouseEnter, onMouseLeave, onFocus, and onBlur run alongside internal hover
-				and tooltip behavior. Motion-owned names above use their Motion signatures.
+				and tooltip behavior. The animation callback above uses Motion’s signature.
 			</P>
 			<H2 id={'ref'}>Ref</H2>
 			<P>
@@ -536,9 +525,6 @@ export const buttonTrackedItems: TrackedItem[] = [
 		items: [
 			{ id: 'onAnimationStart', title: 'onAnimationStart', code: true },
 			{ id: 'onClick', title: 'onClick', code: true },
-			{ id: 'onDrag', title: 'onDrag', code: true },
-			{ id: 'onDragEnd', title: 'onDragEnd', code: true },
-			{ id: 'onDragStart', title: 'onDragStart', code: true },
 			{ id: 'onToolTip', title: 'onToolTip', code: true },
 			{ id: 'buttonEvents', title: '...buttonEvents', code: true },
 		],

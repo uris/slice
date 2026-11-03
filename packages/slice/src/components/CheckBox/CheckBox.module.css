@@ -1,27 +1,60 @@
 .wrapper {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	min-height: var(--cb-size);
-	height: var(--cb-size);
-	width: auto;
-	gap: 6px;
-	cursor: pointer;
-	overflow: hidden;
+	display: inline-flex;
+	align-items: var(--cb-align);
+	justify-content: center;
+	box-sizing: border-box;
+	min-height: var(--cb-icon-size);
+	max-width: 100%;
+	gap: var(--cb-gap);
+	cursor: var(--cb-cursor);
 	user-select: none;
 	-webkit-user-select: none;
 	outline: none;
 	border: 0;
 }
 
+.wrapper:focus-visible {
+	box-shadow: inset 0 0 0 2px var(--core-outline-special);
+}
+
 .icon {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	min-width: var(--cb-size);
-	max-width: var(--cb-size);
-	min-height: var(--cb-size);
-	max-height: var(--cb-size);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--cb-icon-size);
+	height: var(--cb-icon-size);
+	flex-shrink: 0;
 }
 
 .label {
+	padding-top: var(--cb-text-padding-top);
+	padding-bottom: var(--cb-text-padding-bottom);
+	transform: translateY(var(--cb-text-shift));
+	min-width: 0;
+	white-space: pre-line;
+	overflow-wrap: anywhere;
+	color: var(--cb-text-color);
+	transition: color var(--motion-water-duration) var(--motion-water);
+}
+
+.xs {
+	composes: body-xs-regular from "../../utils/styling/type.module.css";
+}
+.s {
+	composes: body-s-regular from "../../utils/styling/type.module.css";
+}
+.m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
-	color: var(--cb-label-color);
-	transition: color var(--motion-water-duration) var(--motion-water-easing) 0s;
+}
+.l {
+	composes: body-l-regular from "../../utils/styling/type.module.css";
+}
+.xl {
+	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.label {
+		transition: none;
+	}
 }

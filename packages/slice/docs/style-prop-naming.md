@@ -133,6 +133,9 @@ Rules:
 
 Do not use `color` for the main text of a component.
 
+Pager intentionally retains `color`, `colorHover`, and `colorOn` for its dot colors.
+This is an agreed component-specific exception; preserve these names when updating it.
+
 ## Spacing props
 Use:
 
@@ -190,6 +193,38 @@ backgroundColor = {
 ```
 
 The public component API must expose flattened props.
+
+## Motion integration
+
+Use `motionValues` for a component-level animation variants configuration, typed
+as Motion's `Variants`. Use `transition` for its timing and easing configuration,
+typed as Motion's `Transition`. Wire both into the animation implementation;
+never declare animation props that only fall through as DOM attributes.
+
+Use the current theme's Water easing and duration as the default transition.
+Merge custom `transition` settings with Water so partial overrides retain the
+remaining defaults. Use the internal [getWaterTransition](../src/utils/styling/getWaterTransition.ts)
+helper to convert theme tokens into Motion timing settings. In docs, say that
+transition settings are merged with Water.
+
+Use the same `transition` settings for coordinated state animations, such as a
+Switch's knob movement and track color. Avoid leaving one animation on fixed CSS
+timing while the public prop controls only the other. Use Motion for both when
+the full transition API cannot be represented by CSS timing alone.
+
+Do not introduce `motion` as an alias for `motionValues`, or expose both names for
+the same configuration. When normalizing an existing component, remove unused
+aliases and update its types, stories, examples, docs, and tests together.
+
+Components that deliberately expose Motion's native props directly should retain
+their native names, such as `initial`, `animate`, `exit`, `variants`, and `layout`.
+Do not add a redundant `motionValues` wrapper around that API. Explain whether a
+prop configures component-managed variants or passes directly to a Motion element.
+Only expose and document gestures or animation callbacks that the component
+intentionally supports.
+
+Respect reduced-motion preferences by default, including custom animation
+configuration. See the [reduced-motion implementation guidance](../../../apps/website/src/content/documents/README.md#reduced-motion-is-the-default).
 
 ## Documentation rule
 Documentation must use the same public prop names as the implementation.
@@ -305,3 +340,21 @@ The required naming pattern is:
 - `strokeColor`
 
 State-specific variants must append a suffix to the normalized base prop name.
+
+## Accessible names and ARIA
+
+Expose intent-based props for accessibility rather than raw `aria-*` attributes.
+For example, use `actionName` to describe an icon action or `tabBarName` to name a
+tab group. Derive the appropriate ARIA attributes internally from these props,
+selection, disabled state, and panel relationships. Use a meaningful fallback when
+an accessible name is omitted or blank.
+
+Omit `keyof React.AriaAttributes` from inherited native attribute types for new or
+refined components that manage their semantics, and prevent forwarded attributes
+from overriding the managed ARIA values. Do not document raw ARIA attributes as the
+component's configuration API. Keep intent-based relationship props such as `id`
+and `panelId` when consumers render related content themselves; examples may use
+native ARIA attributes on those application-owned elements.
+
+Apply this convention when reviewing a component; do not silently change unrelated
+components as part of another component's update.

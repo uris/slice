@@ -26,18 +26,36 @@ export function AvatarGroupDoc() {
 				assignees, and participants.
 			</P>
 			<ComponentCanvas
-				name={'AvatarGroup'}
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
-				components={
-					<AvatarGroup
-						avatars={participants}
-						size={40}
-						borderWidth={0}
-						outerBorderColor="core-surface-primary-tint"
-						role="group"
-						aria-label="Project collaborators"
-					/>
-				}
+				components={[
+					{
+						label: 'Avatar group',
+						component: (
+							<AvatarGroup
+								avatars={participants}
+								size={40}
+								borderWidth={0}
+								outerBorderColor="core-surface-primary-tint"
+								role="group"
+								aria-label="Project collaborators"
+							/>
+						),
+					},
+					{
+						label: 'Compact avatar group',
+						component: (
+							<AvatarGroup
+								avatars={participants}
+								size={40}
+								overlap={20}
+								borderWidth={0}
+								outerBorderColor="core-surface-primary-tint"
+								role="group"
+								aria-label="Project collaborators"
+							/>
+						),
+					},
+				]}
 			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>

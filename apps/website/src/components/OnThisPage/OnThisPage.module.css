@@ -64,4 +64,5 @@
 	line-height: 162.5%;
 	letter-spacing: 0.94%;
 	color: var(--core-text-tertiary);
+	padding-left: 8px;
 }

@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
+import { type Transition, motion } from 'motion/react';
+import React, { useRef } from 'react';
+import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
+import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import { Icon } from '../Icon';
 import { type ToolTip, ToolTipType } from '../sharedTypes';
 import css from './Chip.module.css';
@@ -13,153 +16,228 @@ import type { ChipProps } from './_types';
 export const Chip = React.memo((rawProps: ChipProps) => {
 	const props = resolveColorProps(rawProps);
 	const {
-		variant = 'normal',
+		onClick,
+		onRemove,
+		removeLabel,
+		selected,
+		textColorSelected = 'var(--core-text-special)',
+		iconColorSelected = 'var(--core-text-special)',
+		backgroundColorSelected = 'var(--core-surface-secondary)',
+		borderColorSelected = 'var(--core-text-special)',
+		layout = selected !== undefined,
+		transition,
 		children,
 		label,
 		icon,
 		tooltip,
 		iconSize = 20,
 		disabled = false,
-		focused = false,
 		iconPosition = 'left',
-		labelSize = 'm',
-		labelColor = 'var(--core-text-primary)',
-		labelColorHover = variant === 'normal' ? labelColor : 'var(--core-text-special)',
+		textSize = 'm',
+		textColor = 'var(--core-text-primary)',
+		textColorHover = !onClick ? textColor : 'var(--core-text-special)',
 		iconColor = 'var(--core-text-primary)',
-		iconColorHover = variant === 'normal' ? iconColor : 'var(--core-text-special)',
+		iconColorHover = !onClick ? iconColor : 'var(--core-text-special)',
 		backgroundColor = 'transparent',
-		backgroundColorHover = variant === 'normal' ? backgroundColor : 'var(--core-surface-secondary)',
-		borderWidth,
-		borderSize = 1,
+		backgroundColorHover = !onClick ? backgroundColor : 'var(--core-surface-secondary)',
+		borderWidth = 1,
 		borderColor = 'var(--core-text-primary)',
-		borderColorHover = variant === 'normal' ? borderColor : 'var(--core-text-special)',
+		borderColorHover = !onClick ? borderColor : 'var(--core-text-special)',
 		borderColorDisabled = 'var(--core-text-disabled)',
 		borderRadius = corners['corner-m'],
-		paddingTop,
-		paddingTops,
-		paddingSides,
-		gap = 4,
-		onToolTip = () => null,
-		onClick = () => null,
-		...divAttributes
-	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
-	const [isHovered, setIsHovered] = useState<boolean>(false);
-	const resolvedBackgroundColor = backgroundColor;
-	const resolvedBackgroundColorHover = backgroundColorHover;
-	const resolvedBorderWidth = borderWidth ?? borderSize;
-	const resolvedPaddingTop = paddingTop ?? paddingTops;
-
-	// forward click events while respecting the disabled state
-	const handleClick = useCallback(
-		(e: React.MouseEvent<HTMLDivElement>) => {
-			if (!disabled) onClick(e);
-		},
-		[disabled, onClick],
-	);
-
-	// manage tooltip visibility and hover state together
-	const handleMouseEnter = useCallback(
-		(enter: boolean, event: React.MouseEvent<HTMLDivElement>) => {
-			if (enter) {
-				if (tooltip) {
-					const tip: ToolTip = {
-						type: ToolTipType.button,
-						payload: { label: tooltip },
-						ref: null,
-						event,
-					};
-					onToolTip(tip);
-				}
-				if (variant === 'button') setIsHovered(true);
-			} else {
-				onToolTip(null);
-				setIsHovered(false);
-			}
-		},
-		[tooltip, variant, onToolTip],
-	);
-
-	// resolve chip padding adjusting for side icon is on
-	const padding = useMemo(() => {
-		const compact = labelSize === 's' || labelSize === 'xs';
-		const defaultVertical = compact ? 'var(--spacing-xs)' : 'var(--spacing-s)';
-		const vertical = resolvedPaddingTop === undefined ? defaultVertical : `${resolvedPaddingTop}px`;
-		const defaultHorizontal = compact ? 'var(--spacing-s)' : 'var(--spacing-m)';
-		const horizontal = paddingSides === undefined ? defaultHorizontal : `${paddingSides}px`;
-		if (!label || !icon || paddingSides !== undefined) return `${vertical} ${horizontal}`;
-		const iconPadding = `calc(${horizontal} - var(--spacing-${compact ? 'xxs' : 'xs'}))`;
-		const paddingRight = iconPosition === 'right' ? iconPadding : horizontal;
-		const paddingLeft = iconPosition === 'right' ? horizontal : iconPadding;
-		return `${vertical} ${paddingRight} ${vertical} ${paddingLeft}`;
-	}, [icon, iconPosition, resolvedPaddingTop, paddingSides, label, labelSize]);
-
-	// resolve the current icon color from theme and interaction state
-	const computedIconColor = useMemo(() => {
-		if (disabled) return 'var(--core-text-disabled)';
-		if (isHovered) return iconColorHover ?? 'var(--core-text-special)';
-		return iconColor ?? 'var(--core-text-primary)';
-	}, [iconColor, disabled, isHovered, iconColorHover]);
-
-	// compose CSS custom properties for chip spacing and colors
-	const cssVars = useMemo(() => {
-		return {
-			'--ui-chip-padding': padding,
-			'--ui-chip-gap': setStyle(gap),
-			'--ui-chip-border-radius': setStyle(borderRadius),
-			'--ui-chip-border-size': setStyle(resolvedBorderWidth),
-			'--ui-chip-border-color': disabled ? borderColorDisabled : borderColor,
-			'--ui-chip-border-color-hover': disabled ? borderColorDisabled : borderColorHover,
-			'--ui-chip-bg-color': resolvedBackgroundColor,
-			'--ui-chip-bg-color-hover': disabled ? resolvedBackgroundColor : resolvedBackgroundColorHover,
-			'--ui-chip-label-color': disabled ? 'var(--core-text-disabled)' : labelColor,
-			'--ui-chip-label-color-hover': disabled ? 'var(--core-text-disabled)' : labelColorHover,
-			'--ui-chip-cursor': disabled || variant === 'normal' ? 'default' : 'pointer',
-		} as React.CSSProperties;
-	}, [
 		padding,
-		resolvedBackgroundColor,
-		borderColor,
-		borderColorDisabled,
-		borderColorHover,
-		resolvedBorderWidth,
-		resolvedBackgroundColorHover,
-		labelColorHover,
-		labelColor,
-		gap,
-		borderRadius,
-		disabled,
-		variant,
-	]);
+		paddingTop,
+		paddingRight,
+		paddingBottom,
+		paddingLeft,
+		gap = 4,
+		onToolTip,
+		className,
+		style,
+		...nativeAttributes
+	} = props;
+	const rootRef = useRef<HTMLDivElement | null>(null);
+	const reduceMotion = usePrefersReducedMotion();
+	const theme = useTheme().current;
+	const waterCurve = theme.motion['motion-water']
+		.match(/cubic-bezier\(([^)]+)\)/)?.[1]
+		.split(',')
+		.map(Number);
+	const waterEase: [number, number, number, number] =
+		waterCurve?.length === 4 && waterCurve.every(Number.isFinite)
+			? (waterCurve as [number, number, number, number])
+			: [0.36, 0, 0.64, 1];
+	const layoutTransition: Transition = reduceMotion
+		? { duration: 0 }
+		: (transition ?? {
+				type: 'tween',
+				duration: 0.15,
+				ease: waterEase,
+			});
+	const animateLayout = layout && !reduceMotion;
+	const hovered = useRef(false);
+	const focused = useRef(false);
+	const content = label ?? children;
+	const hasContent = content !== undefined && content !== null && content !== false && content !== '';
+	const compact = textSize === 'xs' || textSize === 's';
+	const vertical = compact ? 'var(--spacing-xs)' : 'var(--spacing-s)';
+	const horizontal = compact ? 'var(--spacing-s)' : 'var(--spacing-m)';
+	const iconSide = `calc(${horizontal} - var(--spacing-${compact ? 'xxs' : 'xs'}))`;
+	const iconOnly = Boolean(icon) && !hasContent;
+	const hasLeadingIcon = Boolean(icon) && (iconPosition === 'left' || iconOnly);
+	const hasTrailingIcon = Boolean(onRemove) || (Boolean(icon) && (iconPosition === 'right' || iconOnly));
+	const side = (specific: number | undefined, fallback: string) => {
+		const value = specific ?? padding;
+		return value === undefined ? fallback : `${value}px`;
+	};
+	const cssVars = {
+		'--ui-chip-padding-top': side(paddingTop, vertical),
+		'--ui-chip-padding-right': side(paddingRight, hasTrailingIcon ? iconSide : horizontal),
+		'--ui-chip-padding-bottom': side(paddingBottom, vertical),
+		'--ui-chip-padding-left': side(paddingLeft, hasLeadingIcon ? iconSide : horizontal),
+		'--ui-chip-gap': `${gap}px`,
+		'--ui-chip-icon-size': `${iconSize}px`,
+		'--ui-chip-border-radius': setStyle(borderRadius),
+		'--ui-chip-border-width': `${borderWidth}px`,
+		'--ui-chip-border-color': disabled ? borderColorDisabled : selected ? borderColorSelected : borderColor,
+		'--ui-chip-border-color-hover': disabled ? borderColorDisabled : selected ? borderColorSelected : borderColorHover,
+		'--ui-chip-bg-color': selected && !disabled ? backgroundColorSelected : backgroundColor,
+		'--ui-chip-bg-color-hover': disabled ? backgroundColor : selected ? backgroundColorSelected : backgroundColorHover,
+		'--ui-chip-text-color': disabled ? 'var(--core-text-disabled)' : selected ? textColorSelected : textColor,
+		'--ui-chip-text-color-hover': disabled
+			? 'var(--core-text-disabled)'
+			: selected
+				? textColorSelected
+				: textColorHover,
+		'--ui-chip-icon-color': disabled ? 'var(--core-text-disabled)' : selected ? iconColorSelected : iconColor,
+		'--ui-chip-icon-color-hover': disabled
+			? 'var(--core-text-disabled)'
+			: selected
+				? iconColorSelected
+				: iconColorHover,
+		'--ui-chip-cursor': disabled || !onClick ? 'default' : 'pointer',
+	} as React.CSSProperties;
+	const iconContent = icon ? (
+		<span className={css.icon} aria-hidden="true">
+			<Icon name={icon} size={iconSize} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+		</span>
+	) : null;
+	const contentNodes = (
+		<motion.span
+			className={css.content}
+			layout={animateLayout ? 'position' : false}
+			transition={{ layout: layoutTransition }}
+		>
+			{iconPosition === 'left' && iconContent}
+			{hasContent && <span className={css[textSize]}>{content}</span>}
+			{iconPosition === 'right' && iconContent}
+		</motion.span>
+	);
+	const actionShared = { className: css.action, 'aria-disabled': disabled ? true : nativeAttributes['aria-disabled'] };
+
+	function handlers<E extends HTMLElement>(attributes: React.DOMAttributes<E>) {
+		const showTooltip = (event?: React.MouseEvent<E>) => {
+			if (tooltip) onToolTip?.({ type: ToolTipType.button, payload: { label: tooltip }, ref: rootRef, event });
+		};
+		return {
+			onClick: (event: React.MouseEvent<E>) => {
+				if (disabled) {
+					event.preventDefault();
+					return;
+				}
+				attributes.onClick?.(event);
+				onToolTip?.(null);
+			},
+			onMouseEnter: (event: React.MouseEvent<E>) => {
+				attributes.onMouseEnter?.(event);
+				if (event.defaultPrevented) return;
+				hovered.current = true;
+				showTooltip(event);
+			},
+			onMouseLeave: (event: React.MouseEvent<E>) => {
+				attributes.onMouseLeave?.(event);
+				hovered.current = false;
+				if (!focused.current) onToolTip?.(null);
+			},
+			onFocus: (event: React.FocusEvent<E>) => {
+				attributes.onFocus?.(event);
+				if (event.defaultPrevented) return;
+				focused.current = true;
+				showTooltip();
+			},
+			onBlur: (event: React.FocusEvent<E>) => {
+				attributes.onBlur?.(event);
+				focused.current = false;
+				if (!hovered.current) onToolTip?.(null);
+			},
+		};
+	}
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Chip');
 	/* END.DEBUG */
 
+	const primary = onClick
+		? (() => {
+				const attributes = nativeAttributes as React.ButtonHTMLAttributes<HTMLButtonElement>;
+				return (
+					<button
+						{...attributes}
+						{...actionShared}
+						{...handlers({ ...attributes, onClick })}
+						type={attributes.type ?? 'button'}
+						disabled={disabled}
+						aria-pressed={selected}
+					>
+						{contentNodes}
+					</button>
+				);
+			})()
+		: (() => {
+				const attributes = nativeAttributes as React.HTMLAttributes<HTMLDivElement>;
+				return (
+					<div {...attributes} {...actionShared} {...handlers(attributes)}>
+						{contentNodes}
+					</div>
+				);
+			})();
+	const readableLabel =
+		label ?? (typeof children === 'string' || typeof children === 'number' ? String(children) : undefined);
+	const removalName = removeLabel ?? (readableLabel ? `Remove ${readableLabel}` : 'Remove chip');
+
 	return (
-		<div
-			id={divId}
-			className={`${css.chip}${divClass}`}
-			style={{ ...divStyle, ...cssVars }}
-			onKeyDown={(e) => accessibleKeyDown(e, () => handleClick(e as any))}
-			onClick={handleClick}
-			onMouseEnter={(e) => handleMouseEnter(true, e)}
-			onMouseLeave={(e) => handleMouseEnter(false, e)}
-			{...rest}
+		<motion.div
+			ref={rootRef}
+			className={`${css.chip}${className ? ` ${className}` : ''}`}
+			style={{ ...cssVars, ...style }}
+			layout={animateLayout}
+			transition={{ layout: layoutTransition }}
+			data-selected={selected === true ? 'true' : undefined}
+			data-removable={onRemove ? 'true' : undefined}
 		>
-			{icon && iconPosition !== 'right' && (
-				<div className={css.icon}>
-					<Icon name={icon} size={iconSize} strokeColor={computedIconColor} />
-				</div>
+			{primary}
+			{onRemove && (
+				<button
+					className={css.remove}
+					type="button"
+					aria-label={removalName}
+					disabled={disabled}
+					onClick={(event) => {
+						event.stopPropagation();
+						onRemove(event);
+						onToolTip?.(null);
+					}}
+				>
+					<motion.span
+						layout={animateLayout ? 'position' : false}
+						transition={{ layout: layoutTransition }}
+						className={css.icon}
+						aria-hidden="true"
+					>
+						<Icon name="x" size={iconSize} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+					</motion.span>
+				</button>
 			)}
-			{(children || label) && <div className={css[labelSize]}>{children ?? label}</div>}
-			{icon && iconPosition === 'right' && (
-				<div className={css.icon}>
-					<Icon name={icon} size={iconSize} strokeColor={computedIconColor} />
-				</div>
-			)}
-		</div>
+		</motion.div>
 	);
 });

@@ -29,13 +29,13 @@ export const DefaultsAndOverrides: StoryObj = {
 			<TextField className="zero" name="zero" padding={0} />
 			<TextField className="custom" name="custom" padding="2px calc(var(--spacing-m) + 4px) 8px 4px" />
 			<DropDown className="dropdown" />
-			<RadioButton className="radio" label="Radio" noFrame={false} />
-			<RadioButton className="hidden-radio" label="No icon" noFrame={false} hideRadio />
+			<RadioButton className="radio" label="Radio" borderWidth={1} padding="8px 16px" />
+			<RadioButton className="hidden-radio" label="No icon" borderWidth={1} padding="8px 16px" iconSize={0} />
 			<Button className="text-button" label="Action" variant="text" size="small" />
-			<Chip className="chip" label="Chip" icon="search" paddingSides={0} />
-			<Switch className="switch" fieldName="Switch" />
+			<Chip className="chip" label="Chip" icon="search" paddingLeft={0} paddingRight={0} />
+			<Switch className="switch" aria-label="Switch" />
 			<div style={{ '--spacing-xxs': '4px' } as CSSProperties}>
-				<Switch className="themed-switch" fieldName="Themed switch" />
+				<Switch className="themed-switch" aria-label="Themed switch" />
 			</div>
 			<FileList className="files" files={[{ file: 'ready.txt' }, { file: 'uploading.txt', uploading: true }]} />
 			<FileList className="zero-files" files={[{ file: 'zero.txt' }]} padding={0} />
@@ -51,19 +51,20 @@ export const DefaultsAndOverrides: StoryObj = {
 		};
 		await padding('.plain', '16px', '16px');
 		await padding('.icons', '12px', '12px');
-		await padding('.labeled', '16px', '16px');
+		await padding('.labeled', '12px', '16px');
 		await padding('.password', '16px', '12px');
 		await padding('.zero', '0px', '0px');
 		await padding('.custom', '4px', '20px');
 		await padding('.dropdown', '16px', '12px');
-		await padding('.radio', '12px', '16px');
-		await padding('.hidden-radio', '16px', '16px');
+		await padding('.radio > span', '16px', '16px');
+		await padding('.hidden-radio > span', '16px', '16px');
 		await padding('.text-button', '4px', '4px');
 		await padding('.chip', '0px', '0px');
 		await padding('.switch', '2px', '2px');
-		await expect(getComputedStyle(node('.switch > div')).width).toBe('18px');
+		await expect(getComputedStyle(node('.switch > div')).width).toBe('26px');
 		await padding('.themed-switch', '4px', '4px');
-		await expect(getComputedStyle(node('.themed-switch > div')).width).toBe('14px');
+		await expect(getComputedStyle(node('.themed-switch > div')).width).toBe('26px');
+		await expect(getComputedStyle(node('.themed-switch > div')).height).toBe('14px');
 		await padding('.files > div:first-child', '2px', '2px');
 		await padding('.files > div:last-child', '2px', '4px');
 		await padding('.zero-files > div', '0px', '0px');

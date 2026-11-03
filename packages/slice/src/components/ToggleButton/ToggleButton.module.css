@@ -1,5 +1,29 @@
-.toggleButton {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	width: min-content;
+.toggleButton.toggleButton {
+	width: max-content;
+	height: auto;
+	max-width: 100%;
 	gap: var(--tb-gap);
+	padding: var(--tb-padding);
+}
+.label {
+	display: inline-block;
+	white-space: nowrap;
+}
+.toggleButton:disabled .label {
+	opacity: 0.3;
+}
+.xs {
+	composes: body-xs-regular from "../../utils/styling/type.module.css";
+}
+.s {
+	composes: body-s-regular from "../../utils/styling/type.module.css";
+}
+.m {
+	composes: body-m-regular from "../../utils/styling/type.module.css";
+}
+.l {
+	composes: body-l-regular from "../../utils/styling/type.module.css";
+}
+.xl {
+	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }

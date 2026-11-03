@@ -1,119 +1,128 @@
 'use client';
-
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useContext } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import css from './RadioButton.module.css';
+import { RadioGroupContext } from './RadioGroupContext';
 import type { RadioButtonProps } from './_types';
 
+const length = (value: number | string, fallback: string) =>
+	typeof value === 'number' ? (Number.isFinite(value) ? `${Math.max(0, value)}px` : fallback) : value;
 function RadioButtonComponent<T = string>(rawProps: RadioButtonProps<T>) {
-	const props = resolveColorProps(rawProps);
+	const group = useContext(RadioGroupContext);
+	const ownProps = Object.fromEntries(
+		Object.entries(rawProps).filter(([, value]) => value !== undefined),
+	) as RadioButtonProps<T>;
+	const props = resolveColorProps(group ? { ...group.optionProps, ...ownProps } : rawProps);
 	const {
+		actionName,
+		align = 'middle',
 		label,
 		children,
+		checked,
+		defaultChecked = false,
+		disabled = false,
 		fieldName,
 		value,
-		selected = false,
-		controlType = 'radio',
-		deselect = true,
-		tabIndex = 0,
-		wrap = false,
-		list = false,
-		hideRadio = false,
-		noFrame = true,
-		icon = 'circle',
-		checkedIcon = 'check circle',
-		iconColor,
+		formValue,
+		iconChecked = 'check circle',
+		iconUnChecked = 'circle',
+		iconColor = 'var(--core-text-primary)',
+		iconColorSelected,
+		iconSize = 20,
 		gap = 6,
-		onChange = () => null,
-		...divAttributes
+		textColor = 'var(--core-text-primary)',
+		textSize = 'm',
+		textTopOffset = 0,
+		backgroundColor = 'transparent',
+		backgroundColorSelected = 'transparent',
+		borderWidth = 0,
+		borderColor = 'var(--core-outline-primary)',
+		borderRadius = 8,
+		padding = 0,
+		onChange,
+		onClick,
+		className,
+		style,
+		...inputAttributes
 	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
-	const [isSelected, setIsSelected] = useState<boolean>(selected);
-
-	useEffect(() => setIsSelected(selected), [selected]);
-
-	const handleChange = useCallback(() => {
-		if (isSelected && !deselect) return;
-		setIsSelected(!isSelected);
-		onChange(
-			{
-				fieldName,
-				label,
-				value,
-			},
-			!isSelected,
-		);
-	}, [isSelected, deselect, onChange, fieldName, label, value]);
-
-	const setAriaLabel = useMemo(() => {
-		if (label) return label;
-		if (children && typeof children === 'string') return children;
-		return 'Radio Button';
-	}, [label, children]);
-
-	const setIconColor = useMemo(() => {
-		if (iconColor) return iconColor;
-		return 'var(--core-text-primary)';
-	}, [iconColor]);
-
-	const iconName = useMemo(() => (isSelected ? checkedIcon : icon), [isSelected, checkedIcon, icon]);
-
-	const setFlex = useMemo(() => {
-		if (list) return 'unset';
-		return wrap ? '40%' : '1';
-	}, [list, wrap]);
-
-	const cssVars = useMemo(() => {
-		return {
-			'--rb-max-width': wrap ? '50%' : '100%',
-			'--rb-flex': setFlex,
-			'--rb-padding': noFrame
-				? '0'
-				: hideRadio
-					? 'var(--spacing-s) var(--spacing-m)'
-					: 'var(--spacing-s) var(--spacing-m) var(--spacing-s) calc(var(--spacing-m) - var(--spacing-xs))',
-			'--rb-bg': !noFrame && isSelected ? 'var(--core-surface-secondary)' : 'transparent',
-			'--rb-border': noFrame ? 'none' : '1px solid var(--core-outline-primary)',
-			'--rb-gap': setStyle(gap),
-		} as React.CSSProperties;
-	}, [setFlex, isSelected, wrap, noFrame, hideRadio, gap]);
-
+	if (group && (value === undefined || value === null))
+		throw new Error('RadioButton inside RadioButtonList requires a non-null value.');
+	const effectiveChecked = group
+		? group.value !== null && group.value !== undefined && Object.is(group.value, value)
+		: checked;
+	const effectiveDisabled = disabled || Boolean(group?.disabled);
+	const content = label ?? children;
+	const hasContent =
+		content !== undefined &&
+		content !== null &&
+		typeof content !== 'boolean' &&
+		(typeof content !== 'string' || content.trim().length > 0);
+	const size = Number.isFinite(iconSize) && iconSize >= 0 ? iconSize : 20;
+	const offset = Number.isFinite(textTopOffset) ? textTopOffset : 0;
+	const cssVars = {
+		'--rb-align': align === 'top' ? 'flex-start' : align === 'bottom' ? 'flex-end' : 'center',
+		'--rb-icon-size': `${size}px`,
+		'--rb-gap': `${Number.isFinite(gap) ? Math.max(0, gap) : 6}px`,
+		'--rb-icon-color': iconColor,
+		'--rb-icon-color-selected': iconColorSelected ?? iconColor,
+		'--rb-text-color': textColor,
+		'--rb-text-top': `${Math.max(0, offset)}px`,
+		'--rb-text-bottom': `${Math.max(0, -offset)}px`,
+		'--rb-background': backgroundColor,
+		'--rb-background-selected': backgroundColorSelected,
+		'--rb-border-width': length(borderWidth, '0px'),
+		'--rb-border-color': borderColor,
+		'--rb-border-radius': length(borderRadius, '8px'),
+		'--rb-padding': length(padding, '0px'),
+	} as React.CSSProperties;
 	/* START.DEBUG */
-	useTrackRenders(props, 'Radio Button');
+	useTrackRenders(props, 'RadioButton');
 	/* END.DEBUG */
-
 	return (
-		<button
-			id={divId}
-			type="button"
-			className={`${css.wrapper}${divClass}`}
-			style={{ ...divStyle, ...cssVars }}
-			onClick={handleChange}
-			role={controlType}
-			tabIndex={tabIndex}
-			aria-label={setAriaLabel}
-			aria-checked={isSelected}
-			{...rest}
+		<label
+			className={`${css.wrapper}${className ? ` ${className}` : ''}`}
+			style={{ ...style, ...cssVars }}
+			data-disabled={effectiveDisabled || undefined}
 		>
-			{!hideRadio && (
-				<div className={css.radioIcon}>
-					<Icon name={iconName} strokeColor={setIconColor} size={20} />
-				</div>
-			)}
-			<div className={css.radioContent}>
-				<div className={css.radioTitle}>{label ?? children}</div>
-			</div>
-		</button>
+			<input
+				{...inputAttributes}
+				className={css.input}
+				type="radio"
+				name={group?.name ?? inputAttributes.name}
+				checked={effectiveChecked}
+				defaultChecked={!group && checked === undefined ? defaultChecked : undefined}
+				disabled={effectiveDisabled}
+				value={formValue ?? (typeof value === 'string' || typeof value === 'number' ? value : undefined)}
+				aria-label={actionName?.trim() || (hasContent ? undefined : 'Option')}
+				aria-labelledby={undefined}
+				onClick={onClick}
+				onChange={(event) => {
+					if (event.defaultPrevented || event.nativeEvent.defaultPrevented || effectiveDisabled) return;
+					const option = { fieldName, label, value };
+					const next = event.currentTarget.checked;
+					onChange?.(option, next);
+					if (next) group?.select(option);
+				}}
+			/>
+			<span className={css.surface}>
+				{size > 0 && (
+					<span className={css.icon} aria-hidden="true">
+						<span className={css.unchecked}>
+							<Icon name={iconUnChecked} size={size} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+						</span>
+						<span className={css.checked}>
+							<Icon name={iconChecked} size={size} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+						</span>
+					</span>
+				)}
+				{hasContent && <span className={`${css.text} ${css[textSize]}`}>{content}</span>}
+			</span>
+		</label>
 	);
 }
-
 RadioButtonComponent.displayName = 'RadioButton';
-
 export const RadioButton = React.memo(RadioButtonComponent) as <T = string>(
 	props: RadioButtonProps<T>,
 ) => React.JSX.Element;

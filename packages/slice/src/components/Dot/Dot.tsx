@@ -2,13 +2,17 @@
 
 import { AnimatePresence, motion } from 'motion/react';
 import React, { useMemo } from 'react';
+import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import css from './Dot.module.css';
 import { DEFAULT_TRANSITION, DEFAULT_VARIANTS, type DotProps } from './_types';
 
 export const Dot = React.memo((rawProps: DotProps) => {
 	const props = resolveColorProps(rawProps);
+	const reduceMotion = usePrefersReducedMotion();
+	const themeMotion = useTheme().current.motion;
 	const {
 		size = 8,
 		topOffset = 2,
@@ -36,11 +40,21 @@ export const Dot = React.memo((rawProps: DotProps) => {
 
 	// merge caller transition overrides into the default transition
 	const trans = useMemo(() => {
-		if (transition) {
-			return { ...DEFAULT_TRANSITION, ...transition };
-		}
-		return DEFAULT_TRANSITION;
-	}, [transition]);
+		const curve = themeMotion['motion-water']
+			.match(/cubic-bezier\(([^)]+)\)/)?.[1]
+			.split(',')
+			.map(Number);
+		const durationText = themeMotion['motion-water-duration'];
+		const duration = Number.parseFloat(durationText) / (durationText.endsWith('ms') ? 1000 : 1);
+		return {
+			...DEFAULT_TRANSITION,
+			...(curve?.length === 4 && curve.every(Number.isFinite)
+				? { ease: curve as [number, number, number, number] }
+				: {}),
+			...(Number.isFinite(duration) && duration >= 0 ? { duration } : {}),
+			...transition,
+		};
+	}, [themeMotion, transition]);
 
 	// resolve the dot color from explicit color or named state
 	const bgColor = useMemo(() => {
@@ -84,6 +98,23 @@ export const Dot = React.memo((rawProps: DotProps) => {
 	/* START.DEBUG */
 	useTrackRenders(props, 'Dot');
 	/* END.DEBUG */
+
+	// A static branch bypasses all variant delays, repeats, transforms, and exit animations.
+	if (reduceMotion) {
+		return show ? (
+			<div
+				id={divId}
+				className={`${css.dot}${divClass}`}
+				style={{ ...divStyle, ...cssVars }}
+				role="status"
+				aria-live="polite"
+				aria-label="Blue dot indicating active or new"
+				{...rest}
+			>
+				<div className="dot" />
+			</div>
+		) : null;
+	}
 
 	return (
 		<AnimatePresence initial={false}>

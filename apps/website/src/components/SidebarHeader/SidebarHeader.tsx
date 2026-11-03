@@ -7,7 +7,7 @@ export function SidebarHeader() {
 		<div className={styles.wrapper}>
 			<div className={styles.identity}>
 				<SliceLogo size={24} />
-				<Chip label={'UI-Kit'} />
+				<Chip label={'Beta'} />
 			</div>
 		</div>
 	);

@@ -114,6 +114,7 @@ export function VideoController(rawProps: Readonly<VideoControllerProps>) {
 								</div>
 								{quit === 'outside' && (
 									<IconButton
+										actionName="Close video"
 										icon={'x'}
 										buttonSize={'l'}
 										onClick={handleHide}

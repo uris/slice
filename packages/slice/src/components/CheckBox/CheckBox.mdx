@@ -1,87 +1,272 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { FlexDiv } from '../FlexDiv';
 import * as CheckBoxStories from './CheckBox.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={CheckBoxStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # CheckBox
-        Renders a checkbox control for boolean selection with label and state styling.
+<FlexDiv width="fill" maxWidth={760} height="auto">
+<Unstyled>
+# CheckBox
 
-        ## Base element
-        `HTMLDivElement`
+Choose an option or show a partially selected group. Use label for text and its
+accessible name; label takes precedence over children. Omit label for custom content.
 
-        ## Interface
-        `CheckBoxProps`
+## Behavior
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>children</code></td><td><code>{`React.ReactNode | string`}</code></td><td><code>-</code></td><td>Optional label content rendered next to the checkbox icon.</td></tr>
-            <tr><td><code>checked</code></td><td><code>{`'mixed' | boolean`}</code></td><td><code>-</code></td><td>Controls the checked state, including the mixed state.</td></tr>
-            <tr><td><code>color</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `color`.</td></tr>
-            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `disabled`.</td></tr>
-            <tr><td><code>size</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `size`.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
+The checkbox keeps local state and synchronizes when checked changes. Activating a
+mixed checkbox checks it. onChange always reports a boolean. The div root does not
+submit a native form value or provide required-field validation.
 
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onChange</code></td><td><code>{`(state: boolean) => void`}</code></td></tr>
-          </tbody>
-        </table>
+Long labels wrap within the available width; line breaks are preserved. Use
+`align="top"` or `align="bottom"` to align the icon with the text block. The default
+is middle. Constrain width when needed, for example with style maxWidth. Use
+textTopOffset for a manual correction: positive moves text down, negative moves it up.
 
-        ## Code Examples
-        </Unstyled>
+## Accessibility
 
-        <RenderSource language={"tsx"}>
+The root has role=checkbox, aria-checked, and aria-disabled. Enter and Space toggle
+it, with a visible keyboard focus indicator. Disabled controls leave the tab order.
+The accessible name comes from label or the rendered children. aria-label and
+aria-labelledby can override it; provide one for controls without visible text.
+Icons are decorative and do not add tab stops.
+
+## Props
+
+All props are optional. Color props accept Slice theme tokens or CSS colors.
+Explicit color overrides also apply while disabled.
+
+<table>
+<thead>
+<tr>
+<th>Prop</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>align</code>
+</td>
+<td>
+<code>'top' | 'middle' | 'bottom'</code>
+</td>
+<td>
+<code>middle</code>
+</td>
+<td>Vertical icon alignment against the text block, especially for multiline labels.</td>
+</tr>
+<tr>
+<td>
+<code>checked</code>
+</td>
+<td>
+<code>'mixed' &#124; boolean</code>
+</td>
+<td>
+<code>false</code>
+</td>
+<td>Checked value, synchronized when the prop changes. mixed represents a partial selection.</td>
+</tr>
+<tr>
+<td>
+<code>children</code>
+</td>
+<td>
+<code>React.ReactNode</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Content beside the icon when label is not supplied. Rich text and numeric content are supported.</td>
+</tr>
+<tr>
+<td>
+<code>disabled</code>
+</td>
+<td>
+<code>boolean</code>
+</td>
+<td>
+<code>false</code>
+</td>
+<td>Blocks toggling and removes the checkbox from the keyboard tab order.</td>
+</tr>
+<tr>
+<td>
+<code>gap</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>6</code>
+</td>
+<td>Space between the icon and text in pixels.</td>
+</tr>
+<tr>
+<td>
+<code>iconChecked</code>
+</td>
+<td>
+<code>string</code>
+</td>
+<td>
+<code>checkbox checked</code>
+</td>
+<td>Slice icon name for the checked state.</td>
+</tr>
+<tr>
+<td>
+<code>iconColor</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Base icon color override. iconColorSelected takes priority for checked and mixed states. By default, uses core-icon-secondary when unchecked, core-text-special when checked, core-icon-primary when mixed, and core-icon-disabled when disabled.</td>
+</tr>
+<tr>
+<td>
+<code>iconColorSelected</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Icon color for checked and mixed states. Takes priority over iconColor; omission preserves current state colors.</td>
+</tr>
+<tr>
+<td>
+<code>iconPartial</code>
+</td>
+<td>
+<code>string</code>
+</td>
+<td>
+<code>checkbox partial</code>
+</td>
+<td>Slice icon name for the mixed state.</td>
+</tr>
+<tr>
+<td>
+<code>iconSize</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>20</code>
+</td>
+<td>Icon width and height in pixels. Text size is independent.</td>
+</tr>
+<tr>
+<td>
+<code>iconUnChecked</code>
+</td>
+<td>
+<code>string</code>
+</td>
+<td>
+<code>checkbox</code>
+</td>
+<td>Slice icon name for the unchecked state.</td>
+</tr>
+<tr>
+<td>
+<code>label</code>
+</td>
+<td>
+<code>string</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Text beside the icon and its default accessible name. Takes precedence over children when supplied, including an empty string.</td>
+</tr>
+<tr>
+<td>
+<code>textColor</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Text color override. Defaults to core-text-primary, or core-text-disabled when disabled.</td>
+</tr>
+<tr>
+<td>
+<code>textSize</code>
+</td>
+<td>
+<code>'xs' &#124; 's' &#124; 'm' &#124; 'l' &#124; 'xl'</code>
+</td>
+<td>
+<code>m</code>
+</td>
+<td>Theme typography size for label or children.</td>
+</tr>
+<tr>
+<td>
+<code>textTopOffset</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>0</code>
+</td>
+<td>Manual text offset in pixels. Positive adds top padding and moves text down; negative adds bottom padding and moves text up. Works with top, middle, and bottom alignment.</td>
+</tr>
+<tr>
+<td>
+<code>...divAttributes</code>
+</td>
+<td>
+<code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Other attributes apply to the root div. className is appended and style is merged; component variables take priority. aria-label and aria-labelledby can override the accessible name. The component maintains its checkbox role, checked state, and disabled state.</td>
+</tr>
+</tbody>
+</table>
+
+## Events
+
+onChange: `(state: boolean) => void`. Reports user toggles, not prop updates.
+Disabled controls do not emit it.
+
+Standard native div events pass through. onClick and onKeyDown run before the
+internal toggle; call event.preventDefault() to cancel it. There are no special
+Motion events.
+</Unstyled>
+
+<RenderSource>
 ```
 import { CheckBox } from '@apple-pie/slice';
 
-export function CheckBoxExample() {
-    return (
-        <CheckBox
-            checked={true}
-            onChange={(state) => console.log(state)}
-            id="checkbox-example"
-            data-testid="checkbox-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        >
-            Enable notifications
-        </CheckBox>
-    );
-}
+<CheckBox label="Email updates" checked={subscribed} onChange={setSubscribed} />
 ```
-        </RenderSource>
-    </FlexDiv>
+</RenderSource>
+<RenderSource>
+```
+<CheckBox
+    label="I accept the terms and conditions and confirm that I have read the privacy policy."
+    align="top"
+    textTopOffset={-2}
+    iconColorSelected="core-text-special"
+    style={{ maxWidth: 320 }}
+/>
+```
+</RenderSource>
 </FlexDiv>

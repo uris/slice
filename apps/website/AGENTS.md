@@ -8,6 +8,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+## Repository guidance
+
+Read the [root AGENTS.md](../../AGENTS.md) for repository-wide instructions and
+contributor resources, alongside the workspace-specific guidance in this file.
+
 ## Component documentation
 
 Before creating or editing component docs, read

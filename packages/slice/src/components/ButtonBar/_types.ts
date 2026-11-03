@@ -5,27 +5,28 @@ import type { ToolTip } from '../sharedTypes';
 export type BarButton = {
 	icon?: string;
 	action?: string;
-	label?: string;
+	/** Accessible button name and tooltip text. */
 	tip: string;
 };
 
 type ButtonBarBaseProps = {
 	buttons?: BarButton[];
-	frameSize?: number;
+	buttonGap?: number;
+	padding?: number;
+	selectionRadius?: number | string;
+	buttonSize?: 's' | 'm' | 'l' | 'xl' | number;
 	iconSize?: number;
 	toggle?: boolean;
-	selected?: number;
+	selectedIndex?: number | null;
+	defaultSelectedIndex?: number | null;
 	borderRadius?: number | string;
 	borderWidth?: number;
-	borderSize?: number;
 	borderColor?: ColorValue;
 	backgroundColor?: ColorValue;
 	backgroundColorHover?: ColorValue;
-	backgroundColorActive?: ColorValue;
-	labelColor?: ColorValue;
-	buttonSize?: 's' | 'm' | 'l' | 'xl';
+	backgroundColorSelected?: ColorValue;
 	onClick?: (button: BarButton) => void;
-	onChange?: (option: BarButton) => void;
+	onChange?: (button: BarButton) => void;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 

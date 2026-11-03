@@ -16,20 +16,28 @@ export function AvatarDoc() {
 				conversation lists, and team spaces, with colors that fit your theme.
 			</P>
 			<ComponentCanvas
-				name={'Avatar'}
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatar--demo"
-				components={
-					<Avatar
-						name={'John Wick'}
-						size={40}
-						borderWidth={1}
-						borderColor={'transparent'}
-						borderColorHover={'core-link-primary'}
-						backgroundColor={'array-sky-label'}
-						image={'/images/jw-profile.png'}
-						onClick={() => null}
-					/>
-				}
+				components={[
+					{
+						label: 'Photo avatar',
+						component: (
+							<Avatar
+								name={'John Wick'}
+								size={40}
+								borderWidth={1}
+								borderColor={'transparent'}
+								borderColorHover={'core-link-primary'}
+								backgroundColor={'array-sky-label'}
+								image={'/images/jw-profile.png'}
+								onClick={() => null}
+							/>
+						),
+					},
+					{
+						label: 'Initials avatar',
+						component: <Avatar name="John Wick" size={40} borderWidth={0} backgroundColor="array-sky-label" />,
+					},
+				]}
 			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>

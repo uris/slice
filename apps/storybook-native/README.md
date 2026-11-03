@@ -1,5 +1,7 @@
 # storybook-native
 
+Repository guidance: [AGENTS.md](../../AGENTS.md).
+
 Native documentation application using React Native Web. Component and hook stories live beside their implementations under
 `packages/slice-native/src`. Shared MDX pages live in
 `packages/slice-native/documentation`; this workspace owns the browser tooling.

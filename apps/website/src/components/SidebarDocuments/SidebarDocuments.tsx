@@ -5,7 +5,7 @@ export interface SidebarDocumentsProps {
 	children?: React.ReactNode;
 }
 
-export function SidebarDocuments(props: SidebarDocumentsProps) {
+export function SidebarDocuments(props: Readonly<SidebarDocumentsProps>) {
 	const { children } = props;
 	return <div className={styles.wrapper}>{children}</div>;
 }

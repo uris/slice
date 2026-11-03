@@ -66,28 +66,28 @@ function ToastDemo(args: Parameters<Exclude<StoryObj<typeof Toast>['render'], un
 			Click me!
 			<IconButton
 				icon={'home'}
-				aria-label={'Info Toast'}
+				actionName={'Info Toast'}
 				onClick={() => handleToast('Thank you for clicking!', ToastType.Info)}
 				toggle={false}
 				hover={true}
 			/>
 			<IconButton
 				icon={'check'}
-				aria-label={'Success Toast'}
+				actionName={'Success Toast'}
 				onClick={() => handleToast('Saved successfully', ToastType.Success)}
 				toggle={false}
 				hover={true}
 			/>
 			<IconButton
 				icon={'alert'}
-				aria-label={'Warning Toast'}
+				actionName={'Warning Toast'}
 				onClick={() => handleToast('Careful now', ToastType.Warning)}
 				toggle={false}
 				hover={true}
 			/>
 			<IconButton
 				icon={'x'}
-				aria-label={'Error Toast'}
+				actionName={'Error Toast'}
 				onClick={() => handleToast('Something failed', ToastType.Error, 'Infinite')}
 				toggle={false}
 				hover={true}

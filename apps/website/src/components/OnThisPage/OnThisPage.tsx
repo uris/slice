@@ -1,4 +1,4 @@
-import { useNewestVisibleItem, useOldestVisibleItem, useScrollAmount, useScrollBox } from '@/docs/stores/store';
+import { useNewestVisibleItem, useScrollAmount, useScrollBox } from '@/docs/stores/store';
 import { surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
 import { motion } from 'motion/react';
@@ -19,7 +19,6 @@ interface OnThisPageProps {
 export function OnThisPage(props: Readonly<OnThisPageProps>) {
 	const { items = [] } = props;
 	const selectedId = useNewestVisibleItem();
-	const firstVisibleItem = useOldestVisibleItem();
 	const scrollBox = useScrollBox();
 	const scrollAmount = useScrollAmount();
 	const [selected, setSelected] = useState<string | null>(null);
@@ -27,12 +26,12 @@ export function OnThisPage(props: Readonly<OnThisPageProps>) {
 
 	const isSelected = useCallback(
 		(itemId: string) => {
-			if (scrollAmount === 0 && !selected) return firstVisibleItem === itemId;
+			if (scrollAmount === 0 && !selected) return items[0]?.id === itemId;
 			if (amount !== null && scrollAmount !== undefined && Math.abs(amount - scrollAmount) <= 1 && selected)
 				return selected === itemId;
 			return selectedId === itemId;
 		},
-		[selectedId, amount, scrollAmount, selected, firstVisibleItem],
+		[selectedId, amount, scrollAmount, selected, items],
 	);
 
 	const handleScrollToItem = useCallback(

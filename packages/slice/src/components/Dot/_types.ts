@@ -12,10 +12,11 @@ type DotBaseProps = {
 	color?: ColorValue;
 	transition?: Transition;
 	motionValues?: Variants;
-	motion?: Variants;
 	show?: boolean;
 };
 
+/** No intentional gesture API or component-specific callbacks. Document inherited DOM events as a group;
+ * Motion's incidental passthrough callbacks are implementation details, not Dot features. */
 export type DotProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DotBaseProps> & DotBaseProps;
 
 export const DEFAULT_VARIANTS: Variants = {
@@ -25,6 +26,7 @@ export const DEFAULT_VARIANTS: Variants = {
 };
 
 export const DEFAULT_TRANSITION: Transition = {
-	ease: 'easeInOut',
-	duration: 0.5,
+	type: 'tween',
+	ease: [0.36, 0, 0.64, 1],
+	duration: 0.25,
 };

@@ -31,27 +31,30 @@ export function IconSampler(props: Readonly<IconSamplerProps>) {
 		<>
 			<div className={css.controls}>
 				<Slider
-					scaleMin={10}
-					scaleMax={128}
+					aria-label="Icon size"
+					min={10}
+					max={128}
 					value={iconSize}
 					onChange={(value, _) => setIconSize(value)}
 					width={'100%'}
 					trackHeadSize={16}
 				/>
 				<TextField
-					value={iconSize.toFixed(0)}
+					inputName="Icon size"
+					defaultValue={iconSize.toFixed(0)}
 					onBlur={(v) => handleIconSizeChange(v)}
 					placeholder={'64'}
 					clearButton={null}
-					key={sizeKey}
-					size={{ width: 75 }}
+					key={`${iconSize}:${sizeKey}`}
+					width={75}
 					textAlign={'center'}
 				/>
 				<IconButton
+					actionName="Show filled icons"
 					icon={'moon full'}
 					iconFill={showFill}
 					toggle
-					isToggled={showFill}
+					selected={showFill}
 					onClick={() => setShowFill(!showFill)}
 				/>
 			</div>

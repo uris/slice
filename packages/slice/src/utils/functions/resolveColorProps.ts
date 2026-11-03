@@ -11,6 +11,7 @@ export function resolveColorProps<T extends object>(props: T): T {
 		if (
 			typeof value === 'string' &&
 			(key === 'color' ||
+				/^color[A-Z]/.test(key) ||
 				key.includes('Color') ||
 				['background', 'coverUp', 'scrollHandle', 'scrollHandleHover'].includes(key))
 		) {

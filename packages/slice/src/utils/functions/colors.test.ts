@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addOpacity, tintFromColor } from './colors';
+import { addOpacity, resolveTransparent, tintFromColor } from './colors';
 
 describe('tintFromColor', () => {
 	it('returns the original value for an invalid hex', () => {
@@ -60,4 +60,24 @@ describe('addOpacity', () => {
 		expect(addOpacity('#112233', -5)).toBe('rgba(17, 34, 51, 0)');
 		expect(addOpacity('#112233', Number.NaN)).toBe('rgba(17, 34, 51, 1)');
 	});
+});
+
+
+describe('resolveTransparent', () => {
+it('uses a reference color’s RGB channels with zero alpha', () => {
+ expect(resolveTransparent('transparent', ['#ffff00'], {}, false)).toBe('rgba(255, 255, 0, 0)');
+});
+it('resolves theme tokens and strips existing alpha', () => {
+ expect(resolveTransparent('transparent', ['var(--surface)'], {surface: '#1f262d'}, true)).toBe('rgba(31, 38, 45, 0)');
+ for (const color of ['#ff08', '#ffff0080', 'rgba(255, 255, 0, 0.5)']) {
+  expect(resolveTransparent('transparent', [color], {}, false)).toBe('rgba(255, 255, 0, 0)');
+ }
+});
+it('tries subsequent reference colors and falls back according to theme', () => {
+ expect(resolveTransparent('transparent', ['transparent', '#abc'], {}, false)).toBe('rgba(170, 187, 204, 0)');
+ expect(resolveTransparent(undefined, [], {}, false)).toBe('rgba(0, 0, 0, 0)');
+ expect(resolveTransparent('transparent', [], {}, true)).toBe('rgba(255, 255, 255, 0)');
+ expect(resolveTransparent('#ffff00', [], {}, false)).toBe('#ffff00');
+});
+
 });

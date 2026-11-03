@@ -140,8 +140,8 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
                     <div>Muted: {String(muted)}</div>
                     <Slider
                         value={muted ? storedVolume : volume}
-                        scaleMin={0}
-                        scaleMax={1}
+                        min={0}
+                        max={1}
                         step={0.05}
                         width={'100%'}
                         onChange={(value) => actions.setVolume(value, { playFeedback: false })}

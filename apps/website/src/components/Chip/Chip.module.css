@@ -9,7 +9,7 @@
 	font-size: 12px;
 	line-height: 1.4em;
 	letter-spacing: 0.94%;
-	padding: 2px 4px;
+	padding: var(--chip-padding);
 	margin: 0;
 	border-style: solid;
 	text-transform: uppercase;

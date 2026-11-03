@@ -15,3 +15,10 @@
 	border-radius: 100%;
 	z-index: var(--elevation-status);
 }
+
+@media (prefers-reduced-motion: reduce) {
+	.dot {
+		transition: none !important;
+		animation: none !important;
+	}
+}

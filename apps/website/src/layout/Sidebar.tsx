@@ -5,10 +5,10 @@ import { SidebarDocuments } from '@/components/SidebarDocuments/SidebarDocuments
 import { SidebarHeader } from '@/components/SidebarHeader/SidebarHeader';
 import { SquareTabs, type Tab } from '@/components/SqaureTabs/SqaureTabs';
 import { getSidebarDocSections } from '@/docs/registry/sidebar';
-import { usePackageType } from '@/docs/stores/store';
+import { usePackageType, useSlug } from '@/docs/stores/store';
 import { Package, sidePanelConstraints, surfaceDarker } from '@/src/consts/consts';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 const packageTabs: readonly Tab<Package>[] = [
 	{ name: 'React', id: Package.React, value: '/docs/react/get-started/' },
@@ -17,6 +17,7 @@ const packageTabs: readonly Tab<Package>[] = [
 
 export function Sidebar() {
 	const packageType = usePackageType();
+	const slug = useSlug();
 
 	const handleChangeTab = useCallback(
 		(tab: Tab<Package>) => {
@@ -25,6 +26,12 @@ export function Sidebar() {
 		},
 		[packageType],
 	);
+
+	useEffect(() => {
+		if (!slug) return;
+		const element = document.getElementById(`sidebar.${slug}`);
+		if (element) element.scrollIntoView({ behavior: 'instant', block: 'center' });
+	}, [slug]);
 
 	return (
 		<FlexDiv

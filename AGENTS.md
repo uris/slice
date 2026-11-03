@@ -1,7 +1,12 @@
 # Working in this repo
 
+These instructions apply across the repository. Read this entry point first, then
+any workspace-specific `AGENTS.md` and the relevant resources linked below.
+
 Read [CONTRIBUTING.md](./CONTRIBUTING.md) first — it's the source of truth for setup, the
-component lifecycle, testing strategy, and the lint/coverage/build gates CI enforces. For
+component lifecycle, testing strategy, and the lint/coverage/build gates CI enforces.
+For readable branching, follow its [code readability guideline](./CONTRIBUTING.md#code-readability):
+extract nested ternaries into named helpers with explicit `if`/`return` branches. For
 build/publish pipeline detail, read [packages/slice/docs/build-architecture.md](./packages/slice/docs/build-architecture.md);
 for component prop naming, [packages/slice/docs/style-prop-naming.md](./packages/slice/docs/style-prop-naming.md);
 for padding and the theme spacing grid, [packages/slice/docs/spacing.md](./packages/slice/docs/spacing.md);
@@ -13,6 +18,16 @@ separate package boundary, generation workflow, and future shared theme-data dir
 
 Do not duplicate guidance from those docs into this file. If something here and something in
 CONTRIBUTING.md disagree, CONTRIBUTING.md wins — fix this file, not the other way around.
+
+## Workspace resources
+
+| Workspace | Additional guidance |
+| --- | --- |
+| `packages/slice` | [Web contributor guide](packages/slice/CONTRIBUTING.md), including its testing and component lifecycle requirements. |
+| `apps/website` | [Website instructions](apps/website/AGENTS.md); for authored component and hook docs, read the [documentation guide](apps/website/src/content/documents/README.md). |
+| `apps/storybook-web` | [Web testing strategy](packages/slice/CONTRIBUTING.md#testing-strategy) and [test-writing conventions](packages/slice/docs/writing-tests.md). |
+| `packages/slice-native` | [Native instructions](packages/slice-native/AGENTS.md) and [native architecture](packages/slice-native/docs/native.md). |
+| `apps/storybook-native` | [Native Storybook conventions](packages/slice-native/AGENTS.md#storybook-organization) and [native validation](packages/slice-native/docs/native.md#development-and-validation). |
 
 ## Operational notes (things that aren't obvious from the docs alone)
 

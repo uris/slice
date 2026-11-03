@@ -400,6 +400,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 								{customControls.fullscreen && (
 									<div className={css.left}>
 										<IconButton
+											actionName="Enter fullscreen"
 											icon={'fullscreen'}
 											iconFill={true}
 											buttonSize={'m'}
@@ -415,24 +416,26 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 								{customControls.volume && (
 									<div className={css.right}>
 										<IconButton
+											actionName={isMuted ? 'Unmute' : 'Mute'}
 											icon={speakerIcon}
 											iconFill={true}
 											buttonSize={'m'}
 											iconSize={20}
 											backgroundColor={'rgba(255,255,255,0.05)'}
 											backgroundColorHover={'rgba(0,0,0,0.7)'}
-											backgroundColorOn={'rgba(0,0,0,0.5)'}
+											backgroundColorSelected={'rgba(0,0,0,0.5)'}
 											iconColor={'var(--core-text-light)'}
 											iconColorHover={'var(--core-text-light)'}
 											onClick={() => handleMute()}
 										/>
 										<Slider
+											aria-label="Volume"
 											trackColor={'rgba(0,0,0,0.5)'}
 											progressColor={'var(--core-text-light)'}
 											trackHeadSize={16}
-											trackHeadBorderSize={0}
-											scaleMax={1}
-											scaleMin={0}
+											trackHeadBorderWidth={0}
+											max={1}
+											min={0}
 											value={currentVolume}
 											onChange={(value) => handleVolumeChange(value)}
 										/>
@@ -442,16 +445,17 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 							<div className={css.controlsBody}>
 								{customControls.play && (
 									<ToggleButton
+										actionName="Play"
 										selected={isPlaying}
 										icon={'play'}
-										iconOn={'pause'}
+										iconSelected={'pause'}
 										iconSize={48}
 										buttonSize={'xl'}
 										backgroundColor={'rgba(0,0,0,0.5)'}
 										backgroundColorHover={'rgba(0,0,0,0.7)'}
-										backgroundColorOn={'rgba(0,0,0,0.5)'}
+										backgroundColorSelected={'rgba(0,0,0,0.5)'}
 										iconColor={'var(--core-text-light)'}
-										iconColorOn={'var(--core-text-light)'}
+										iconColorSelected={'var(--core-text-light)'}
 										iconColorHover={'var(--core-text-light)'}
 										onChange={() => handlePlayClick()}
 									/>
@@ -461,41 +465,44 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 								{customControls.progress && (
 									<div className={css.progress}>
 										<ToggleButton
+											actionName="Play"
 											selected={isPlaying}
 											icon={'play'}
-											iconOn={'pause'}
+											iconSelected={'pause'}
 											buttonSize={'m'}
 											iconSize={28}
 											backgroundColor={'rgba(255,255,255,0.05)'}
 											backgroundColorHover={'rgba(0,0,0,0.7)'}
-											backgroundColorOn={'rgba(255,255,255,0.05)'}
+											backgroundColorSelected={'rgba(255,255,255,0.05)'}
 											iconColor={'var(--core-text-light)'}
 											iconColorHover={'var(--core-text-light)'}
-											iconColorOn={'var(--core-text-light)'}
+											iconColorSelected={'var(--core-text-light)'}
 											onChange={() => handlePlayClick()}
 										/>
 										<Slider
+											aria-label="Playback position"
 											trackColor={'rgba(0,0,0,0.5)'}
 											progressColor={'var(--core-text-light)'}
 											trackHeadSize={16}
-											trackHeadBorderSize={0}
-											scaleMax={1}
-											scaleMin={0}
+											trackHeadBorderWidth={0}
+											max={1}
+											min={0}
 											value={currentProgress}
 											onChange={handleSetProgress}
 											width={'100%'}
 										/>
 										{customControls.quit && (
 											<IconButton
+												actionName="Close video"
 												toggle={false}
 												icon={'x'}
 												buttonSize={'m'}
 												backgroundColor={'rgba(255,255,255,0.05)'}
 												backgroundColorHover={'rgba(0,0,0,0.7)'}
-												backgroundColorOn={'rgba(255,255,255,0.05)'}
+												backgroundColorSelected={'rgba(255,255,255,0.05)'}
 												iconColor={'var(--core-text-light)'}
 												iconColorHover={'var(--core-text-light)'}
-												iconColorOn={'var(--core-text-light)'}
+												iconColorSelected={'var(--core-text-light)'}
 												onClick={() => onQuit?.()}
 											/>
 										)}

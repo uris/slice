@@ -1,101 +1,313 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { FlexDiv } from '../FlexDiv';
 import * as ButtonBarStories from './ButtonBar.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ButtonBarStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # ButtonBar
-        Renders a segmented row of icon buttons and emits the selected command option.
+<FlexDiv width="fill" maxWidth={760} height="auto">
+<Unstyled>
+# ButtonBar
 
-        ## Base element
-        `HTMLDivElement`
+Group icon actions with circular hover and selection highlights. The bar uses a
+native button group; `tip` provides each accessible name. Icons are decorative.
 
-        ## Interface
-        `ButtonBarProps`
+## Usage and behavior
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>buttons</code></td><td><code>BarButton[]</code></td><td><code>[]</code></td><td>Button items rendered in the bar.</td></tr>
-            <tr><td><code>selected</code></td><td><code>number</code></td><td><code>-</code></td><td>Controlled selected button index.</td></tr>
-            <tr><td><code>toggle</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When <code>true</code>, the clicked button becomes the active selection and <code>onChange</code> fires.</td></tr>
-            <tr><td><code>buttonSize</code></td><td><code>{`'s' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Named size preset for each button. When omitted, <code>frameSize</code> is used as the fallback pixel size.</td></tr>
-            <tr><td><code>frameSize</code></td><td><code>number</code></td><td><code>36</code></td><td>Fallback square size in pixels when no <code>buttonSize</code> preset is provided.</td></tr>
-            <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>20</code></td><td>Icon size in pixels.</td></tr>
-            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>-</code></td><td>Border thickness in pixels. Overrides <code>borderSize</code> when both are provided.</td></tr>
-            <tr><td><code>borderSize</code></td><td><code>number</code></td><td><code>0</code></td><td>Legacy alias for the outer border thickness.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>100</code></td><td>Outer corner radius for the bar.</td></tr>
-            <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Border color token or CSS value.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Base button background color.</td></tr>
-            <tr><td><code>backgroundColorHover</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Hover background color.</td></tr>
-            <tr><td><code>backgroundColorActive</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Selected button background color.</td></tr>
-            <tr><td><code>labelColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Reserved label color token for bar styling.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
+Enable `toggle`, then use `defaultSelectedIndex` for local selection or `selectedIndex` plus `onChange` for controlled
+selection. Indices are zero-based. Set `selectedIndex={null}` to clear a controlled
+selection. Invalid indices display no selection. Defaults are read once;
+controlled selection changes only when the parent updates `selectedIndex`.
 
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onClick</code></td><td><code>{`(button: BarButton) => void`}</code></td></tr>
-            <tr><td><code>onChange</code></td><td><code>{`(option: BarButton) => void`}</code></td></tr>
-            <tr><td><code>onToolTip</code></td><td><code>{`(tip: ToolTip | null) => void`}</code></td></tr>
-          </tbody>
-        </table>
+Buttons are independent actions by default. Enable `toggle` for selection: buttons expose `aria-pressed`. Activating a different item calls
+`onClick`, then `onChange`. With `toggle={false}`, items are independent actions without
+pressed state or change notifications. Items render no labels.
 
-        ## Code Examples
-        </Unstyled>
+`buttonSize` controls the circular hit area; `iconSize` controls its icon. The bar
+uses padding (4px by default) uniformly inside its wrapper, and buttonGap (-2px by default) between buttons. Set padding to 0 for no inset. Negative
+buttonGap values overlap buttons and their hit areas. selectionRadius shapes each
+hover/selection highlight and its inset focus indicator; the default is 50% (a circle). `backgroundColor` colors the bar; hover and
+selected colors apply to the individual circles. `borderRadius` affects only the
+outer bar, and `borderWidth` adds an outer border without internal separators.
 
-        <RenderSource>
+## Accessibility
+
+The root is a group named “Actions”; override its `aria-label` for context. Each
+button uses `tip` as its name. Enter and Space activate a button, Tab visits each
+button, and focus-visible shows an inset indicator. This is not a tab list or radio group.
+Tooltips can be requested on focus as well as hover; the application renders them.
+Color changes use the theme’s Water duration and easing, with transitions disabled
+when the viewer prefers reduced motion.
+
+## Props
+
+<table>
+<thead>
+<tr>
+<th>Prop</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>backgroundColor</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-surface-secondary</code>
+</td>
+<td>Background of the bar. Unselected buttons are transparent.</td>
+</tr>
+<tr>
+<td>
+<code>backgroundColorHover</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-outline-primary</code>
+</td>
+<td>Circular highlight on hover. A selected button keeps backgroundColorSelected.</td>
+</tr>
+<tr>
+<td>
+<code>backgroundColorSelected</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-outline-primary</code>
+</td>
+<td>Circular highlight for the selected button.</td>
+</tr>
+<tr>
+<td>
+<code>borderColor</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-outline-primary</code>
+</td>
+<td>Outer border color. Buttons have no internal separators.</td>
+</tr>
+<tr>
+<td>
+<code>borderRadius</code>
+</td>
+<td>
+<code>number &#124; string</code>
+</td>
+<td>
+<code>corner-round</code>
+</td>
+<td>Outer bar corner radius. Numbers are pixels; strings are CSS values. selectionRadius controls the individual highlights.</td>
+</tr>
+<tr>
+<td>
+<code>borderWidth</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>0</code>
+</td>
+<td>Outer border width in pixels.</td>
+</tr>
+<tr>
+<td>
+<code>buttonGap</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>-2</code>
+</td>
+<td>Space between buttons in pixels. Negative values overlap buttons and their hit areas. Selected, hovered, and focused buttons are raised above idle neighbors.</td>
+</tr>
+<tr>
+<td>
+<code>buttons</code>
+</td>
+<td>
+<code>BarButton[]</code>
+</td>
+<td>
+<code>[]</code>
+</td>
+<td>Icon action records: &#123; icon?: string; action?: string; tip: string &#125;. tip names the button and supplies tooltip text. action is optional application metadata; callbacks receive the original record.</td>
+</tr>
+<tr>
+<td>
+<code>buttonSize</code>
+</td>
+<td>
+<code>'s' &#124; 'm' &#124; 'l' &#124; 'xl' &#124; number</code>
+</td>
+<td>
+<code>m</code>
+</td>
+<td>Circular button diameter: s=24px, m=36px, l=44px, xl=56px. Supply a positive finite number for a custom pixel diameter. Invalid runtime values fall back to 36px. Choose a diameter that accommodates iconSize.</td>
+</tr>
+<tr>
+<td>
+<code>defaultSelectedIndex</code>
+</td>
+<td>
+<code>number &#124; null</code>
+</td>
+<td>
+<code>null</code>
+</td>
+<td>Initial uncontrolled selected index, read once. Ignored when selectedIndex is supplied. null starts without selection.</td>
+</tr>
+<tr>
+<td>
+<code>iconSize</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>20</code>
+</td>
+<td>Icon dimensions in pixels.</td>
+</tr>
+<tr>
+<td>
+<code>padding</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>4</code>
+</td>
+<td>Uniform wrapper inset in pixels. Set 0 for no inset. Independent of buttonGap.</td>
+</tr>
+<tr>
+<td>
+<code>selectedIndex</code>
+</td>
+<td>
+<code>number &#124; null</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Controlled zero-based selected index. null means no selection; undefined enables local selection. onChange does not change a controlled selection until this prop changes.</td>
+</tr>
+<tr>
+<td>
+<code>selectionRadius</code>
+</td>
+<td>
+<code>number | string</code>
+</td>
+<td>
+<code>'50%'</code>
+</td>
+<td>Individual hover/selection highlight and focus-indicator radius. Numbers are pixels; strings are CSS values. Outer bar radius remains borderRadius.</td>
+</tr>
+<tr>
+<td>
+<code>toggle</code>
+</td>
+<td>
+<code>boolean</code>
+</td>
+<td>
+<code>false</code>
+</td>
+<td>Enables single selection with aria-pressed. false makes buttons independent actions and suppresses onChange.</td>
+</tr>
+<tr>
+<td>
+<code>...divAttributes</code>
+</td>
+<td>
+<code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Other attributes apply to the group root. className is appended; style is merged after component variables. Override aria-label to name the group. Children are not rendered; items come from buttons.</td>
+</tr>
+</tbody>
+</table>
+
+## Events
+
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>onChange</code>
+</td>
+<td>
+<code>(button: BarButton) =&gt; void</code>
+</td>
+<td>Requests a different selection when toggle is true. Receives the original record, not its index. Suppressed when the selected item is activated again. Programmatic prop changes do not emit this callback.</td>
+</tr>
+<tr>
+<td>
+<code>onClick</code>
+</td>
+<td>
+<code>(button: BarButton) =&gt; void</code>
+</td>
+<td>Runs for every pointer or keyboard activation, including the already selected item. Runs before onChange when both are emitted.</td>
+</tr>
+<tr>
+<td>
+<code>onToolTip</code>
+</td>
+<td>
+<code>(tip: ToolTip &#124; null) =&gt; void</code>
+</td>
+<td>Receives text and the button ref on hover or focus; a mouse event is included for hover only. Receives null on activation or after both hover and focus have left. Your application renders the tooltip.</td>
+</tr>
+</tbody>
+</table>
+
+Other native events apply to the group root. `onClick` and `onChange` above use
+component item payloads rather than native event objects.
+</Unstyled>
+
+<RenderSource>
 ```
 import { ButtonBar } from '@apple-pie/slice';
 
-export function ButtonBarExample() {
-    return (
-        <ButtonBar
-            buttons={[
-                { icon: 'copy', action: 'copy', tip: 'Copy' },
-                { icon: 'filter', action: 'filter', tip: 'Filter' },
-                { icon: 'more', action: 'more', tip: 'More actions' },
-            ]}
-            selected={0}
-            onChange={(button) => console.log(button)}
-            id="buttonbar-example"
-            data-testid="buttonbar-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+<ButtonBar
+    aria-label="Navigation"
+    buttons={[
+        { icon: 'arrow left', action: 'previous', tip: 'Previous' },
+        { icon: 'arrow right', action: 'next', tip: 'Next' },
+    ]}
+    onClick={runAction}
+/>
 ```
-        </RenderSource>
-    </FlexDiv>
+</RenderSource>
+<RenderSource>
+```
+<ButtonBar buttons={buttons} selectionRadius={12} buttonGap={-4} padding={8} />
+```
+</RenderSource>
 </FlexDiv>

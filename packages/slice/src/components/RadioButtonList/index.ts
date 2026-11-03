@@ -1,2 +1,2 @@
 export { RadioButtonList } from './RadioButtonList';
-export type { RadioButtonListProps } from './_types';
+export type { RadioButtonListProps, RadioButtonListOption } from './_types';

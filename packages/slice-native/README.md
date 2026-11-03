@@ -1,5 +1,7 @@
 # @apple-pie/slice-native
 
+Repository guidance: [AGENTS.md](../../AGENTS.md).
+
 **Alpha software — APIs, styling, and platform behavior may change between releases.**
 
 A React Native UI kit with themed components, SVG icons, native blur, and Liquid Glass.

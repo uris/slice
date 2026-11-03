@@ -21,7 +21,7 @@ export interface SidebarListItemProps {
 	onClick?: (itemInfo: DocsContext) => void;
 }
 
-export function SidebarListItem(props: SidebarListItemProps) {
+export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 	const {
 		type = SidebarListItemType.DocTitle,
 		title = 'Missing Item Title',
@@ -53,7 +53,7 @@ export function SidebarListItem(props: SidebarListItemProps) {
 
 	if (!display) return null;
 	return (
-		<div className={styles.wrapper}>
+		<div className={styles.wrapper} id={`sidebar.${slug}`}>
 			<input type={'button'} className={className} style={cssVars} onClick={handleClick} value={value} />
 		</div>
 	);

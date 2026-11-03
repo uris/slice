@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
 import { Dot } from 'src/components/Dot/Dot';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { runDotPlay, runDotVariantsPlay } from 'src/components/playHelpers';
@@ -19,7 +20,6 @@ const meta: Meta<typeof Dot> = {
 		rightOffset: 2,
 		border: 3,
 		position: 'inline',
-		motion: undefined,
 		motionValues: undefined,
 		show: true,
 		state: 'blue',
@@ -60,4 +60,26 @@ export const Variants: StoryObj<typeof Dot> = {
 		</FlexDiv>
 	),
 	play: runDotVariantsPlay,
+};
+
+export const ToggleVisibility: StoryObj<typeof Dot> = {
+	args: {
+		transition: { duration: 2, delay: 1 },
+		motionValues: {
+			initial: { opacity: 0, scale: 0.5 },
+			animate: { opacity: 1, scale: 1 },
+			exit: { opacity: 0, scale: 0.5 },
+		},
+	},
+	render: (args) => {
+		const [show, setShow] = useState(false);
+		return (
+			<FlexDiv gap={16} align="center">
+				<button type="button" onClick={() => setShow((value) => !value)}>
+					Toggle dot
+				</button>
+				<Dot {...args} show={show} />
+			</FlexDiv>
+		);
+	},
 };

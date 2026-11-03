@@ -30,7 +30,7 @@ Use the existing grid: `xxs=2`, `xs=4`, `s=8`, `m=16`, `l=24`, `xl=32`, `xxl=64`
 | --- | --- |
 | DropDown | 8px top/bottom, 16px left, 12px right (16px - 4px, chevron on the right). Underline mode still removes top and side padding. |
 | RadioButton | Framed: 8px vertical, 16px horizontal, with 12px left only when the radio icon is present. `hideRadio` uses 16px on both sides. `noFrame` padding is zero. |
-| TextField | 8px vertical / 16px horizontal. Left edge 12px only when the left icon is the outermost content (a visible label before it keeps 16px). Right edge 12px when the outermost trailing element is an icon control or its reserved slot, otherwise 16px. Explicit `padding` is applied as given; no automatic side overrides. |
+| TextField | Outlined: 8px plus half the label font size on top, 16px sides, 8px bottom. Simple and stacked: 8px vertical / 16px horizontal. For simple and stacked fields, left edge 12px when a leading icon is present; in simple fields it precedes the label. Their right edge is 12px when the outermost trailing element is an icon control or its reserved slot, otherwise 16px. Explicit `padding` is applied as given; no automatic side overrides. |
 | Toast | 8px vertical / 16px horizontal, with the token-based 4px reduction on the close-icon side. |
 | Tip | 4px vertical / 8px horizontal (`--spacing-xs` / `--spacing-s`). A compact exception. |
 | Switch | 44x22px track, 2px inset (`--spacing-xxs`). Knob size is derived from the track height minus twice the resolved inset (18px by default). |

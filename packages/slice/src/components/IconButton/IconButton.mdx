@@ -1,110 +1,102 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
 import * as IconButtonStories from './IconButton.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={IconButtonStories} />
+<Unstyled>
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # IconButton
-        Renders an icon-only button with accessible interactions, states, and tooltip support.
+# IconButton
 
-        ## Base element
-        `HTMLButtonElement`
+Compact icon actions with optional toggling, activity dots, and counts.
 
-        ## Interface
-        `IconButtonProps`
+## Usage
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>animate</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `animate`.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Button background at rest.</td></tr>
-            <tr><td><code>backgroundColorHover</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Button background while hovered.</td></tr>
-            <tr><td><code>backgroundColorOn</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Button background while toggled on.</td></tr>
-            <tr><td><code>buttonSize</code></td><td><code>{`'s' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Named size preset for the button frame. When omitted, <code>frameSize</code> is used as the fallback pixel size.</td></tr>
-            <tr><td><code>border</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Sizing/layout setting for `border`.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>-</code></td><td>Sizing/layout setting for `borderRadius`.</td></tr>
-            <tr><td><code>color</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `color`.</td></tr>
-            <tr><td><code>colorOn</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `colorOn`.</td></tr>
-            <tr><td><code>count</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `count`.</td></tr>
-            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `disabled`.</td></tr>
-            <tr><td><code>exit</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `exit`.</td></tr>
-            <tr><td><code>fillColor</code></td><td><code>number</code></td><td><code>-</code></td><td>Opacity value used for filled portions of the rendered icon.</td></tr>
-            <tr><td><code>frameSize</code></td><td><code>number</code></td><td><code>36</code></td><td>Fallback square frame size in pixels when no <code>buttonSize</code> preset is provided.</td></tr>
-            <tr><td><code>hover</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `hover`.</td></tr>
-            <tr><td><code>icon</code></td><td><code>string</code></td><td><code>-</code></td><td>Icon configuration for `icon`.</td></tr>
-            <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `iconSize`.</td></tr>
-            <tr><td><code>initial</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `initial`.</td></tr>
-            <tr><td><code>isToggled</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `isToggled`.</td></tr>
-            <tr><td><code>label</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `label`.</td></tr>
-            <tr><td><code>round</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When <code>true</code>, the button renders as a circle and ignores the numeric <code>borderRadius</code>.</td></tr>
-            <tr><td><code>showDot</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `showDot`.</td></tr>
-            <tr><td><code>toggle</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `toggle`.</td></tr>
-            <tr><td><code>toggleIcon</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `toggleIcon`.</td></tr>
-            <tr><td><code>tooltip</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `tooltip`.</td></tr>
-            <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>-</code></td><td>Controls `transition`.</td></tr>
-            <tr><td><code>variants</code></td><td><code>Variants</code></td><td><code>-</code></td><td>Controls `variants`.</td></tr>
-            <tr><td><code>...buttonAttributes</code></td><td><code>{`ButtonHTMLAttributes<HTMLButtonElement>`}</code></td><td><code>-</code></td><td>Native `button` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`, `disabled`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onClick</code></td><td><code>{`(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void`}</code></td></tr>
-            <tr><td><code>onToolTip</code></td><td><code>{`(tip: ToolTip | null) => void`}</code></td></tr>
-          </tbody>
-        </table>
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource language={"tsx"}>
+</Unstyled>
+<RenderSource>
 ```
 import { IconButton } from '@apple-pie/slice';
 
-export function IconButtonExample() {
-    return (
-        <IconButton
-            icon="plus"
-            label="Add Item"
-            frameSize={32}
-            onClick={() => console.log('clicked')}
-            id="iconbutton-example"
-            data-testid="iconbutton-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+<IconButton icon="more" actionName="More options" onClick={myHandler} />
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+</RenderSource>
+<Unstyled>
+
+### Animate an icon on toggle
+
+Give selected and unselected different animation targets, such as rotation or scale.
+The icon animates between them when toggled. This example uses rotation.
+
+</Unstyled>
+<RenderSource>
+```
+<IconButton
+  icon="sun"
+  actionName="Highlight"
+  toggle
+  motionValues={{ unselected: { rotate: 0 }, selected: { rotate: 135 } }}
+/>
+```
+</RenderSource>
+<Unstyled>
+
+## Behavior
+
+Use toggle with selected/onChange for controlled selection, or defaultSelected for
+local state. onClick runs first; preventDefault cancels selection. Selected colors
+win over hover. buttonSize accepts a preset or positive finite pixels.
+
+## Accessibility
+
+actionName supplies the internal aria-label, falling back to “Action” for missing,
+empty, or whitespace-only names. Set a specific action name. Direct aria-label and
+aria-labelledby props are not exposed. Enter and Space activate the native button;
+keyboard focus is visible. Toggles expose aria-pressed. Icons, dots, and counts are
+decorative; describe meaningful status in the action name or nearby text.
+Disabled buttons cannot be activated or reached with Tab. Reduced motion disables
+color and icon animation, including custom delays/repeats, without losing focus.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `actionName` | `string` | `Action` | Describes the action without adding visible text. |
+| `backgroundColor` | `ColorValue` | `core-surface-secondary` | Resting background. |
+| `backgroundColorHover` | `ColorValue` | `core-outline-primary` | Hover background while unselected. |
+| `backgroundColorSelected` | `ColorValue` | `core-outline-primary` | Selected background; takes priority over hover. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Outline color. |
+| `borderRadius` | `number \| string` | `50%` | Corner radius. Numbers are pixels; use 0 for square corners. |
+| `borderWidth` | `number` | `0` | Border width in pixels. Negative or nonfinite values become zero. |
+| `buttonSize` | `'s' \| 'm' \| 'l' \| 'xl' \| number` | `m` | Square frame size: s=24, m=36, l=44, xl=56px. A positive finite number sets a custom pixel size; invalid values fall back to 36px. |
+| `count` | `number` | `0` | Badge count. Zero hides it. |
+| `defaultSelected` | `boolean` | `false` | Initial local toggle state. Later changes are ignored; use selected for external control. |
+| `disabled` | `boolean` | `false` | Disables activation, dims the icon, and dismisses an open tooltip. |
+| `hover` | `boolean` | `true` | Enables hover colors for both background and icon. Tooltip requests remain available. |
+| `icon` | `string` | `more` | Icon name. |
+| `iconColor` | `ColorValue` | `core-text-primary` | Resting icon color. |
+| `iconColorHover` | `ColorValue` | `core-text-primary` | Hover icon color while unselected. |
+| `iconColorSelected` | `ColorValue` | `core-text-primary` | Selected icon color; takes priority over hover. |
+| `iconFill` | `boolean` | `false` | Uses the icon’s filled appearance. |
+| `iconSize` | `number` | `20` | Icon size in pixels. Zero hides its geometry; negative or nonfinite values fall back to 20px. |
+| `selected` | `boolean` | `undefined` | Controls selection when toggle=true. Update it from onChange. User activation requests a change without mutating this value. |
+| `showDot` | `boolean` | `false` | Shows a decorative activity dot. |
+| `toggle` | `boolean` | `false` | Enables on/off selection. Ordinary actions do not emit onChange. |
+| `toggleIcon` | `boolean` | `false` | Uses the icon’s alternate selected shape when available and toggle=true. |
+| `tooltip` | `string` | `undefined` | Optional text requested through onToolTip on hover or focus. Your application renders the tooltip. |
+| `...buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | `undefined` | Other native attributes apply to the button. className is appended; style is merged, with component sizing and border variables taking priority. type defaults to button. Children are not supported. |
+| `motionValues` | `Variants` | `undefined` | Inner-icon animation targets named selected and unselected. Each state is merged with neutral rotate=0, scale=1, and opacity=1 values. Variant functions receive the selection boolean. Use transition for timing; per-variant transition settings are ignored. |
+| `transition` | `Transition` | `undefined` | Shared timing for background colors, icon colors, and icon animation. Partial settings are merged with Slice’s Water transition. |
+
+
+## Motion
+
+motionValues configures selected/unselected icon variants. transition drives both
+color and icon animation, merged with Slice’s Water transition.
+
+## Events
+
+- **onChange**: `(selected: boolean) => void`. Requests the next toggle state after an uncancelled activation. Runs only when toggle=true.
+- **onClick**: `React.MouseEventHandler<HTMLButtonElement>`. Runs first for pointer or keyboard activation. Calling event.preventDefault() cancels selection changes and onChange. Disabled buttons do not activate.
+- **onToolTip**: `(tip: ToolTip | null) => void`. Requests tooltip content on hover or focus. ToolTip carries type, payload.label, and the button ref; event is present for mouse requests and absent for focus. Sends null on activation, when both hover and focus end, when disabled, when tooltip text changes, or on unmount.
+- **...buttonEvents**: `React.DOMAttributes<HTMLButtonElement>`. Native handlers are composed with internal hover and focus handling. Preventing default on entry or focus suppresses the corresponding internal behavior. There are no drag or pan gestures.
+
+</Unstyled>

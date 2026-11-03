@@ -33,6 +33,7 @@ export { radioButtonListBenchmarkConfig } from './RadioButtonList.bench';
 export { sliderBenchmarkConfig } from './Slider.bench';
 export { spacerBenchmarkConfig } from './Spacer.bench';
 export { switchBenchmarkConfig } from './Switch.bench';
+export { tabBenchmarkConfig } from './Tab.bench';
 export { tabBarBenchmarkConfig } from './TabBar.bench';
 export { textAreaBenchmarkConfig } from './TextArea.bench';
 export { textfieldBenchmarkConfig } from './Textfield.bench';

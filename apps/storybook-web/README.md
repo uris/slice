@@ -1,5 +1,7 @@
 # storybook-web
 
+Repository guidance: [AGENTS.md](../../AGENTS.md).
+
 Web documentation application. Stories and MDX remain with the web library in
 `packages/slice`; this workspace owns the Storybook configuration and static assets.
 

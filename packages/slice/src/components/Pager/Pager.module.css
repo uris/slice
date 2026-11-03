@@ -1,30 +1,60 @@
 .wrapper {
-	composes: row from "../../utils/styling/flexBox.module.css";
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
 	gap: var(--pager-gap);
-	width: 100%;
+	width: min-content;
+	flex: none;
 	z-index: var(--elevation-status);
 }
 
+.viewport {
+	position: relative;
+	width: var(--pager-window-width);
+	height: var(--pager-window-height);
+	overflow: hidden;
+	flex: none;
+}
+
 .bullet {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	width: var(--pager-size);
-	height: var(--pager-size);
-	max-width: var(--pager-size);
-	max-height: var(--pager-size);
-	background: var(--pager-color);
-	border-radius: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	appearance: none;
+	-webkit-appearance: none;
+	flex: 0 0 var(--pager-slot-size);
+	padding: 0;
+	margin: 0;
+	width: var(--pager-slot-size);
+	height: var(--pager-slot-size);
+	min-width: var(--pager-slot-size);
+	min-height: var(--pager-slot-size);
+	border-radius: 50%;
+	background: transparent;
 	border: 0;
 	cursor: pointer;
 	outline: none;
-	transition: background var(--motion-water-duration) var(--motion-water) 0s;
-	&:hover {
-		background: var(--pager-colorHover);
-	}
 }
 
-.selected {
-	background: var(--pager-colorOn);
-	&:hover {
-		background: var(--pager-colorOn);
-	}
+.bullet:focus-visible {
+	outline: 2px solid var(--core-outline-special);
+	outline-offset: -2px;
+}
+
+.dot {
+	display: block;
+	flex: none;
+	width: var(--pager-size);
+	height: var(--pager-size);
+	background-color: var(--pager-color);
+	border-radius: 50%;
+	pointer-events: none;
 }

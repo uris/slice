@@ -183,7 +183,7 @@ const BaseModal = <T = string>(rawProps: ModalProps<T>) => {
 							<div className={css.titleIcon}>
 								<IconButton
 									tooltip={'close'}
-									aria-label={'close'}
+									actionName={'close'}
 									icon={'x'}
 									onClick={handleClose}
 									onToolTip={(tip) => onToolTip?.(tip)}

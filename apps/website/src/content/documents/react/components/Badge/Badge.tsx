@@ -15,9 +15,11 @@ export function BadgeDoc() {
 				Keep small updates visible. Badge adds a compact count or label to notifications, tabs, and navigation.
 			</P>
 			<ComponentCanvas
-				name={'Badge'}
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-badge--default"
-				components={<Badge count={12} />}
+				components={[
+					{ label: 'Badge', component: <Badge count={12} /> },
+					{ label: 'Large count', component: <Badge count={240} aria-label="240 items" /> },
+				]}
 			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>

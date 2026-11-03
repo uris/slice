@@ -5,6 +5,7 @@ import type { NextConfig } from 'next';
 const sliceSource = resolve(__dirname, '../../packages/slice/src');
 
 const config: NextConfig = {
+	allowedDevOrigins: ['127.0.0.1'],
 	trailingSlash: true,
 	transpilePackages: ['@apple-pie/slice'],
 	// keep local slice package source edits visible without a separate library build.

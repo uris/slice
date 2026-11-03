@@ -43,15 +43,16 @@ function VolumeStoreDemo() {
 				<span>Stored Volume: {storedVolume.toFixed(2)}</span>
 				<span>Muted: {muted ? 'true' : 'false'}</span>
 				<Slider
+					aria-label="Volume"
 					value={muted ? storedVolume : volume}
-					scaleMin={0}
-					scaleMax={1}
+					min={0}
+					max={1}
 					step={0.05}
 					width={'100%'}
 					height={4}
 					trackHeadSize={16}
 					onChange={(value) => actions.setVolume(value)}
-					onDragChange={(value, _percent) => {
+					onChangeEnd={(value, _percent) => {
 						actions.playFeedback(value);
 					}}
 				/>

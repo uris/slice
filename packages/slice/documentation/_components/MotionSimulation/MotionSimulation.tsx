@@ -60,8 +60,9 @@ export function MotionSimulation(props: Readonly<MotionSimulationProps>) {
 			<div className={css.controls}>
 				<Label borderSize={0}>Drag to adjust duration:</Label>
 				<Slider
-					scaleMin={0}
-					scaleMax={5}
+					aria-label="Animation speed"
+					min={0}
+					max={5}
 					value={time}
 					onChange={(value, _) => setTime(value)}
 					width={'100%'}

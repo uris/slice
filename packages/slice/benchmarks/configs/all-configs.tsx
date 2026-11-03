@@ -33,6 +33,7 @@ import {
 	Spacer,
 	Switch,
 	TabBar,
+	Tab,
 	TextArea,
 	TextField,
 	Tip,
@@ -716,9 +717,9 @@ export const switchConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<Switch state={false} />,
+					<Switch checked={false} />,
 					(container) => {
-						container.rerender(<Switch state={true} />);
+						container.rerender(<Switch checked={true} />);
 					},
 					50,
 				),
@@ -828,9 +829,9 @@ export const buttonConfig: ComponentBenchmarkConfig = {
 };
 
 const mockButtons = [
-	{ label: 'Save', icon: 'check', tip: 'check' },
-	{ label: 'Cancel', icon: 'close', tip: 'close' },
-	{ label: 'Delete', icon: 'trash', tip: 'delete' },
+	{ icon: 'check', tip: 'check' },
+	{ icon: 'close', tip: 'close' },
+	{ icon: 'trash', tip: 'delete' },
 ];
 
 export const buttonBarConfig: ComponentBenchmarkConfig = {
@@ -839,17 +840,17 @@ export const buttonBarConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<ButtonBar options={mockButtons} />, 50),
+			fn: () => measureMountTime(<ButtonBar buttons={mockButtons} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<ButtonBar options={mockButtons} />,
+					<ButtonBar buttons={mockButtons} />,
 					(container) => {
-						const updatedButtons = [...mockButtons, { label: 'New', icon: 'plus', tip:'plus' }];
-						container.rerender(<ButtonBar options={updatedButtons} />);
+						const updatedButtons = [...mockButtons, { icon: 'plus', tip:'plus' }];
+						container.rerender(<ButtonBar buttons={updatedButtons} />);
 					},
 					50,
 				),
@@ -859,7 +860,7 @@ export const buttonBarConfig: ComponentBenchmarkConfig = {
 			type: 'event',
 			fn: () =>
 				measureEventResponseTime(
-					<ButtonBar options={mockButtons} onChange={() => {}} />,
+					<ButtonBar buttons={mockButtons} onChange={() => {}} />,
 					(container) => {
 						const button = container.container.querySelector('button');
 						if (button) fireEvent.click(button);
@@ -870,7 +871,7 @@ export const buttonBarConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<ButtonBar options={mockButtons} />, 10),
+			fn: () => measureMemoryDelta(<ButtonBar buttons={mockButtons} />, 10),
 		},
 	],
 };
@@ -1265,16 +1266,16 @@ export const iconButtonConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<IconButton icon="check" />, 50),
+			fn: () => measureMountTime(<IconButton actionName="Confirm" icon="check" />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<IconButton icon="check" />,
+					<IconButton actionName="Confirm" icon="check" />,
 					(container) => {
-						container.rerender(<IconButton icon="close" />);
+						container.rerender(<IconButton actionName="Close" icon="x" />);
 					},
 					50,
 				),
@@ -1284,9 +1285,9 @@ export const iconButtonConfig: ComponentBenchmarkConfig = {
 			type: 'event',
 			fn: () =>
 				measureEventResponseTime(
-					<IconButton icon="save" onClick={() => {}} />,
+					<IconButton actionName="Save" icon="save" onClick={() => {}} />,
 					(container) => {
-						const button = container.container.querySelector('[class*="wrapper"]');
+						const button = container.container.querySelector('button');
 						if (button) fireEvent.click(button);
 					},
 					50,
@@ -1295,7 +1296,7 @@ export const iconButtonConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<IconButton icon="check" />, 10),
+			fn: () => measureMemoryDelta(<IconButton actionName="Confirm" icon="check" />, 10),
 		},
 	],
 };
@@ -1378,16 +1379,16 @@ export const pagerConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<Pager pages={15} index={1} />, 50),
+			fn: () => measureMountTime(<Pager pages={15} selectedIndex={1} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<Pager pages={15} index={1} />,
+					<Pager pages={15} selectedIndex={1} />,
 					(container) => {
-						container.rerender(<Pager pages={15} index={10} />);
+						container.rerender(<Pager pages={15} selectedIndex={10} />);
 					},
 					50,
 				),
@@ -1397,9 +1398,9 @@ export const pagerConfig: ComponentBenchmarkConfig = {
 			type: 'event',
 			fn: () =>
 				measureEventResponseTime(
-					<Pager pages={15} index={1} onChange={() => {}} />,
+					<Pager pages={15} selectedIndex={1} onChange={() => {}} />,
 					(container) => {
-						const nextButton = container.container.querySelector('[aria-label*="next"], [class*="next"]');
+						const nextButton = container.container.querySelector('button[aria-label="Page 3 of 15"]');
 						if (nextButton) fireEvent.click(nextButton);
 					},
 					50,
@@ -1408,7 +1409,7 @@ export const pagerConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<Pager pages={15} index={1}  />, 10),
+			fn: () => measureMemoryDelta(<Pager pages={15} selectedIndex={1} />, 10),
 		},
 	],
 };
@@ -1447,16 +1448,16 @@ export const radioButtonConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<RadioButton option={{title:"title", icon:"home"}} />, 50),
+			fn: () => measureMountTime(<RadioButton label="Option" />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<RadioButton  option={{title:"title", icon:"home"}} selected={false} />,
+					<RadioButton label="Option" checked={false} />,
 					(container) => {
-						container.rerender(<RadioButton option={{title:"title", icon:"home"}} selected={true} />);
+						container.rerender(<RadioButton label="Option" checked={true} />);
 					},
 					50,
 				),
@@ -1466,7 +1467,7 @@ export const radioButtonConfig: ComponentBenchmarkConfig = {
 			type: 'event',
 			fn: () =>
 				measureEventResponseTime(
-					<RadioButton option={{title:"title", icon:"home"}} onChange={() => {}} />,
+					<RadioButton label="Option" onChange={() => {}} />,
 					(container) => {
 						const radio = container.container.querySelector('[class*="wrapper"]');
 						if (radio) fireEvent.click(radio);
@@ -1477,15 +1478,12 @@ export const radioButtonConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<RadioButton option={{title:"title", icon:"home"}} />, 10),
+			fn: () => measureMemoryDelta(<RadioButton label="Option" />, 10),
 		},
 	],
 };
 
-const mockRadios = [
-	{title:"Title1", icon:"home"},
-	{title:"Title2", icon:"home"},
-]
+const mockRadios = [{label:'Monthly',value:'monthly'},{label:'Annual',value:'annual'}];
 export const radioButtonListConfig: ComponentBenchmarkConfig = {
 	componentName: 'RadioButtonList',
 	tests: [
@@ -1499,9 +1497,9 @@ export const radioButtonListConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<RadioButtonList options={mockRadios} selectedIndexes={[0]} />,
+					<RadioButtonList options={mockRadios} value="monthly" />,
 					(container) => {
-						container.rerender(<RadioButtonList options={mockRadios} selectedIndexes={[1]} />);
+						container.rerender(<RadioButtonList options={mockRadios} value="annual" />);
 					},
 					50,
 				),
@@ -1513,7 +1511,7 @@ export const radioButtonListConfig: ComponentBenchmarkConfig = {
 				measureEventResponseTime(
 					<RadioButtonList options={mockRadios} onChange={() => {}} />,
 					(container) => {
-						const firstRadio = container.container.querySelector('[class*="wrapper"]');
+						const firstRadio = container.container.querySelector('input[type="radio"]');
 						if (firstRadio) fireEvent.click(firstRadio);
 					},
 					50,
@@ -1554,8 +1552,8 @@ export const sliderConfig: ComponentBenchmarkConfig = {
 				measureEventResponseTime(
 					<Slider onChange={() => {}} />,
 					(container) => {
-						const slider = container.container.querySelector('[class*="wrapper"]');
-						if (slider) fireEvent.mouseDown(slider, { clientX: 50 });
+						const slider = container.container.querySelector('input[type="range"]');
+						if (slider) fireEvent.input(slider, { target: { value: '50' } });
 					},
 					50,
 				),
@@ -1602,6 +1600,19 @@ const mockTabBarTabs = [
 	{ label: 'Tab 3', value: '3' },
 ];
 
+function TabBenchmark({ label = 'Details' }: { label?: string }) {
+	return <TabBar tabBarName="Benchmark views" defaultValue="overview"><Tab value="overview" label="Overview" /><Tab value="details" label={label} /></TabBar>;
+}
+export const tabConfig: ComponentBenchmarkConfig = {
+	componentName: 'Tab',
+	tests: [
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<TabBenchmark />, 50) },
+		{ name: 'Re-render', type: 'rerender', fn: () => measureRerenderTime(<TabBenchmark />, container => container.rerender(<TabBenchmark label="Updated details" />), 50) },
+		{ name: 'Event Response', type: 'event', fn: () => measureEventResponseTime(<TabBenchmark />, container => { const tab = container.container.querySelectorAll('[role="tab"]')[1]; if (tab) fireEvent.click(tab); }, 50) },
+		{ name: 'Memory', type: 'memory', fn: () => measureMemoryDelta(<TabBenchmark />, 10) },
+	],
+};
+
 export const tabBarConfig: ComponentBenchmarkConfig = {
 	componentName: 'TabBar',
 	tests: [
@@ -1615,9 +1626,9 @@ export const tabBarConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<TabBar options={mockTabBarTabs} selectedValue="1" />,
+					<TabBar options={mockTabBarTabs} value="1" />,
 					(container) => {
-						container.rerender(<TabBar options={mockTabBarTabs} selectedValue="2" />);
+						container.rerender(<TabBar options={mockTabBarTabs} value="2" />);
 					},
 					50,
 				),
@@ -1832,6 +1843,7 @@ export const allBenchmarkConfigs = [
 	sliderConfig,
 	spacerConfig,
 	switchConfig,
+	tabConfig,
 	tabBarConfig,
 	textAreaConfig,
 	tipConfig,

@@ -22,7 +22,7 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
 
         `onChange` receives:
 
-        `(value?: T, state: boolean) => void`
+        `(value: T | undefined, checked: boolean) => void`
 
         ## Props
         <table style={{ width: '100%' }}>
@@ -41,16 +41,19 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
                 </tr>
             </thead>
             <tbody>
-                <tr><td><code>fieldName</code></td><td><code>string</code></td><td><code>-</code></td><td>Used as the accessible label fallback when no explicit aria label is provided.</td></tr>
-                <tr><td><code>state</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Controlled checked state.</td></tr>
-                <tr><td><code>value</code></td><td><code>T</code></td><td><code>-</code></td><td>Typed value returned in the <code>onChange</code> payload.</td></tr>
-                <tr><td><code>height</code></td><td><code>number</code></td><td><code>22</code></td><td>Track height in pixels.</td></tr>
-                <tr><td><code>width</code></td><td><code>number</code></td><td><code>44</code></td><td>Track width in pixels.</td></tr>
-                <tr><td><code>padding</code></td><td><code>number</code></td><td><code>2 (theme spacing-xxs)</code></td><td>Inner track padding; omitted values follow the theme and explicit numbers are pixels.</td></tr>
-                <tr><td><code>knobColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary)'</code></td><td>Knob color.</td></tr>
-                <tr><td><code>backgroundColorOn</code></td><td><code>string</code></td><td><code>'var(--feedback-positive)'</code></td><td>Track background color when the switch is on.</td></tr>
                 <tr><td><code>backgroundColorOff</code></td><td><code>string</code></td><td><code>'var(--core-text-disabled)'</code></td><td>Track background color when the switch is off.</td></tr>
-                <tr><td><code>onChange</code></td><td><code>{`(option: { value?: T; state: boolean }) => void`}</code></td><td><code>-</code></td><td>Called when the checked state changes.</td></tr>
+                <tr><td><code>backgroundColorOn</code></td><td><code>string</code></td><td><code>'var(--feedback-positive)'</code></td><td>Track background color when the switch is on.</td></tr>
+                <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>var(--corner-round)</code></td><td>Outer track corner radius; numbers are pixels, strings are CSS values.</td></tr>
+                <tr><td><code>checked</code></td><td><code>boolean</code></td><td><code>undefined</code></td><td>Controlled on/off state; update it in onChange.</td></tr>
+                <tr><td><code>defaultChecked</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Initial uncontrolled state, read once.</td></tr>
+                <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Blocks interaction and dims the control.</td></tr>
+                <tr><td><code>height</code></td><td><code>number</code></td><td><code>22</code></td><td>Track height in pixels.</td></tr>
+                <tr><td><code>knobColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary)'</code></td><td>Knob color.</td></tr>
+                <tr><td><code>knobRadius</code></td><td><code>number | string</code></td><td><code>var(--corner-round)</code></td><td>Knob corner radius, independent of the track; use 0 for square corners.</td></tr>
+                <tr><td><code>knobWidth</code></td><td><code>number</code></td><td><code>26</code></td><td>Knob width in pixels, clamped to available track space. Defaults to a pill shape; invalid or nonpositive values use 26px.</td></tr>
+                <tr><td><code>padding</code></td><td><code>number</code></td><td><code>2 (theme spacing-xxs)</code></td><td>Inner track padding; omitted values follow the theme and explicit numbers are pixels.</td></tr>
+                <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>undefined</code></td><td>Transition settings merged with Slice’s Water transition and applied to knob movement and color changes on both knob and track.</td></tr>
+                <tr><td><code>width</code></td><td><code>number</code></td><td><code>48</code></td><td>Track width in pixels.</td></tr>
                 <tr><td><code>...buttonAttributes</code></td><td><code>{`ButtonHTMLAttributes<HTMLButtonElement>`}</code></td><td><code>-</code></td><td>Standard button props passed through to the root element.</td></tr>
             </tbody>
         </table>
@@ -58,7 +61,19 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
         ## Notes
         - `Switch<string>` is the default if you do not provide a generic.
         - Use `Switch<T>` when the switch should carry a typed value object or non-string identifier.
-        - `state` controls the visual on/off state, and `value` is the optional typed payload returned in `onChange`.
+        - `checked` controls the on/off state; omit it to use local state, optionally initialized with `defaultChecked`. `value` is callback metadata, not a submitted form value.
+        - Native `onClick` runs before toggling; call `event.preventDefault()` to cancel the change.
+        - Invalid dimensions fall back to 48 × 22px; width is at least height and padding is clamped to retain a knob of at least 1px.
+
+        ## Accessibility
+        Use `aria-label` or `aria-labelledby` to name the setting. The native button has `role="switch"`, reports `aria-checked`, supports Enter/Space, and provides an inset keyboard focus indicator.
+
+        Reduced-motion preferences disable knob animations and track transitions, including custom delays. Live changes preserve focus.
+
+        ## Events
+        `onChange(value, checked)` reports user changes. Native button events pass through; Motion gestures are not part of the public API.
+
+        Set `knobWidth` for a pill-shaped knob. Use `knobRadius` for knob corners and `borderRadius` for track corners. Defaults preserve the rounded appearance.
 
         ## Code Examples
         </Unstyled>
@@ -70,10 +85,10 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
         export function SwitchExample() {
             return (
                 <Switch
-                    state={true}
+                    defaultChecked
                     width={42}
                     height={24}
-                    onChange={(value, state) => console.log(value, state)}
+                    onChange={(value, checked) => console.log(value, checked)}
                     id="switch-example"
                     data-testid="switch-example"
                     className="custom-wrapper"
@@ -95,11 +110,11 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
         export function TypedSwitchExample() {
             return (
                 <Switch<FeatureValue>
-                    fieldName="Auto Save"
+                    aria-label="Auto Save"
                     value={{ id: 1 }}
-                    state={false}
-                    onChange={(value, state) => {
-                        console.log(value?.id, state);
+                    defaultChecked={false}
+                    onChange={(value, checked) => {
+                        console.log(value?.id, checked);
                     }}
                 />
             );

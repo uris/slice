@@ -87,11 +87,8 @@ ColorValue accepts Slice color tokens and CSS colors. Native button attributes a
 | --- | --- | --- |
 | `onAnimationStart` | `HTMLMotionProps<'button'>['onAnimationStart']` | Motion animation-start callback. Receives an animation definition, not a native AnimationEvent. |
 | `onClick` | `(event: React.MouseEvent<HTMLButtonElement> \| undefined) => void` | Receives the click event for normal pointer or keyboard activation. Receives undefined for ref/trigger activation and after timed progress. Controlled working does not emit a completion click. |
-| `onDrag` | `HTMLMotionProps<'button'>['onDrag']` | Motion drag callback signature: the gesture event and pan information. This event name is owned by Motion rather than native HTML drag-and-drop. |
-| `onDragEnd` | `HTMLMotionProps<'button'>['onDragEnd']` | Motion drag-end callback signature. |
-| `onDragStart` | `HTMLMotionProps<'button'>['onDragStart']` | Motion drag-start callback signature. |
 | `onToolTip` | `(tip: ToolTip \| null) => void` | Receives type, payload.label, and the button ref on hover or focus. Hover also includes the pointer event. Null clears the tooltip after hover and focus end, or on activation. |
-| `buttonEvents` | `React.DOMAttributes<HTMLButtonElement>` | Other native handlers pass through. onMouseEnter, onMouseLeave, onFocus, and onBlur run alongside internal hover and tooltip behavior. Motion-owned names above use their Motion signatures. |
+| `buttonEvents` | `React.DOMAttributes<HTMLButtonElement>` | Other native handlers pass through. onMouseEnter, onMouseLeave, onFocus, and onBlur run alongside internal hover and tooltip behavior. The animation callback above uses Motion’s signature. |
 
 ## Ref
 

@@ -18,9 +18,8 @@ export function AudioBubbleDoc() {
 				with a soft glow that fits your theme.
 			</P>
 			<ComponentCanvas
-				name={'AudioBubble'}
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-audiobubble--demo"
-				components={<AudioBubblePreview />}
+				components={[{ label: 'AudioBubble', component: <AudioBubblePreview /> }]}
 			/>
 			<TipBox inline noBorder marginBottom={false} title={'Tip:'}>
 				Watch the bubble react to sound by allowing microphone access and talking

@@ -1,5 +1,7 @@
 # Slice (`@apple-pie/slice`)
 
+Repository guidance: [AGENTS.md](../../AGENTS.md).
+
 Slice is a TypeScript-first React UI kit with themed components, hooks, optional Zustand stores, worker-backed uploads, and Storybook documentation.
 
 The package is currently in beta. Until `1.0.0`, breaking API changes may still happen.

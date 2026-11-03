@@ -1,133 +1,88 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as TabBarStories from './TabBar.stories';
-import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={TabBarStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # TabBar
-        Renders horizontal tab navigation and emits selection changes for section switching.
+# TabBar
 
-        ## Base element
-        `HTMLDivElement`
+Compose related views with shared value-based selection and a sliding, resizing underline.
 
-        ## Interface
-        `TabBarProps`
+TabBar manages a group of [Tab](?path=/docs/components-tab--docs) choices.
 
-        ## Related types
-        `TabOption`
+## Usage
 
-        ## Props
-        <table style={{ width: '100%' }}>
-            <colgroup>
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '97%' }} />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th className={"left"}>Prop</th>
-                    <th className={"left"}>Type</th>
-                    <th className={"left"}>Default</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><code>options</code></td><td><code>TabOption[]</code></td><td><code>placeholderOptions</code></td><td>Tab definitions rendered by the bar.</td></tr>
-                <tr><td><code>selected</code></td><td><code>number</code></td><td><code>0</code></td><td>Controlled selected tab index.</td></tr>
-                <tr><td><code>selectedValue</code></td><td><code>string</code></td><td><code>-</code></td><td>Alternative controlled selection by matching <code>option.value</code>.</td></tr>
-                <tr><td><code>underline</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Shows an underline on the selected tab.</td></tr>
-                <tr><td><code>border</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Shows the bottom border for the tab bar.</td></tr>
-                <tr><td><code>height</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Overall bar height.</td></tr>
-                <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Overall bar width.</td></tr>
-                <tr><td><code>tabWidth</code></td><td><code>{`'compact' | 'fill' | number`}</code></td><td><code>'fill'</code></td><td>Controls each tab width. Use <code>'compact'</code> for content-sized tabs, <code>'fill'</code> to distribute tabs, or a number for a fixed pixel width.</td></tr>
-                <tr><td><code>closeWidth</code></td><td><code>{`number | string`}</code></td><td><code>'auto'</code></td><td>Width reserved for the optional close action area.</td></tr>
-                <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>8</code></td><td>Horizontal and vertical tab padding.</td></tr>
-                <tr><td><code>justify</code></td><td><code>{`'start' | 'center' | 'end'`}</code></td><td><code>'start'</code></td><td>Controls horizontal alignment of the rendered tab options inside the bar.</td></tr>
-                <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'var(--core-outline-secondary)'</code></td><td>Color used for the bottom bar border and the selected-tab underline.</td></tr>
-                <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Typography size token applied to each tab label.</td></tr>
-                <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>20</code></td><td>Icon size for tab icons and the close button.</td></tr>
-                <tr><td><code>iconGap</code></td><td><code>number</code></td><td><code>8</code></td><td>Gap between the icon and tab label.</td></tr>
-                <tr><td><code>tabGap</code></td><td><code>number</code></td><td><code>0</code></td><td>Gap between rendered tab options.</td></tr>
-                <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables interaction for all tabs.</td></tr>
-                <tr><td><code>hasClose</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows a trailing close button.</td></tr>
-                <tr><td><code>onToolTip</code></td><td><code>{`(tip: ToolTip | null) => void`}</code></td><td><code>-</code></td><td>Receives tooltip state when a tab exposes a tooltip.</td></tr>
-                <tr><td><code>onChange</code></td><td><code>{`(index: number) => void`}</code></td><td><code>-</code></td><td>Called with the selected tab index.</td></tr>
-                <tr><td><code>onTabChange</code></td><td><code>{`(option: TabOption) => void`}</code></td><td><code>-</code></td><td>Called with the selected option object.</td></tr>
-                <tr><td><code>onClose</code></td><td><code>{`() => void`}</code></td><td><code>-</code></td><td>Called when the optional close button is pressed.</td></tr>
-                <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Standard div props passed through to the root element.</td></tr>
-            </tbody>
-        </table>
-
-        ## TabOption
-        `TabOption` supports:
-
-        `name?: string`
-
-        `value?: any`
-
-        `icon?: string | null`
-
-        `toolTip?: string`
-
-        `count?: number`
-
-        ## Notes
-        - `selectedValue` takes precedence when it matches an option value. Otherwise the component falls back to `selected`.
-        - `tabWidth="fill"` makes tabs flex across the available space.
-        - `tabWidth="compact"` makes each tab size to its content.
-        - `tabWidth={number}` applies a fixed pixel width to each tab.
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
 ```
-import { TabBar } from '@apple-pie/slice';
+import { Tab, TabBar } from '@apple-pie/slice';
 
-export function TabBarExample() {
-    return (
-        <TabBar
-            options={[
-                { name: 'Overview', value: 'overview' },
-                { name: 'Settings', value: 'settings' },
-            ]}
-            selected={0}
-            onTabChange={(option) => console.log(option)}
-            id="tabbar-example"
-            data-testid="tabbar-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+<TabBar tabBarName="Project views" defaultValue="overview">
+  <Tab value="overview" label="Overview" />
+  <Tab value="activity" label="Activity" />
+</TabBar>
 ```
-        </RenderSource>
 
-        <RenderSource>
-```
-import { TabBar } from '@apple-pie/slice';
+### Use options
 
-export function FixedWidthTabBarExample() {
-    return (
-        <TabBar
-            tabWidth={200}
-            justify="center"
-            borderColor="var(--core-outline-primary)"
-            textSize="l"
-            options={[
-                { name: 'Light', value: 'light', icon: 'circle' },
-                { name: 'Dark', value: 'dark', icon: 'target' },
-            ]}
-            selectedValue="dark"
-        />
-    );
-}
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+<TabBar tabBarName="Project views" options={[
+  { value: 'overview', label: 'Overview' },
+  { value: 'activity', label: 'Activity', count: 12 },
+]} />
+```
+
+### Control selection
+
+```
+<TabBar tabBarName="Project views" value={activeView} onChange={setActiveView} options={options} />
+```
+
+## Behavior
+
+Children take priority over options. Values must be unique and non-null; prefer stable strings or numbers. Object values are matched by reference. Selection survives reordering. Omit defaultValue to select the first enabled tab, or use null for no initial selection. An unmatched or removed value leaves no selected tab. Your application renders panels and handles closing.
+
+## Accessibility
+
+Use tabBarName to name the tablist. The component supplies its ARIA label, with Tabs as the fallback; blank names also use Tabs. ARIA attributes are managed internally. Left/Right arrows wrap through enabled tabs; Home/End select the first/last enabled tab. Tab enters the selected enabled choice, or the first enabled choice when none matches. Native disabled tabs and the close action block interaction. Icons and the indicator are decorative; the close action sits outside the tablist. Use each tab’s id and panelId to connect application-rendered tabpanels. Reduced motion disables underline movement and color transitions, including live preference changes.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `border` | `boolean` | `true` | Shows the baseline beneath the tabs. |
+| `borderColor` | `ColorValue` | `core-outline-secondary` | Baseline color. Accepts Slice color tokens or CSS colors. |
+| `children` | `React.ReactNode` | `undefined` | Composed Tab choices. Takes priority over options, including when explicitly set to null. |
+| `closeWidth` | `number  /  string` | `auto` | Width of the separate close area. Numbers are pixels; strings accept CSS dimensions. |
+| `defaultValue` | `T  /  null` | `first enabled value` | Initial selection for an uncontrolled bar. Use null to start with no selection. |
+| `disabled` | `boolean` | `false` | Disables all tabs and the close action. |
+| `hasClose` | `boolean` | `false` | Shows one close action for the entire bar. Handle it with onClose. |
+| `height` | `number  /  string` | `auto` | Height of the bar. Numbers are pixels; strings accept CSS dimensions. |
+| `iconFill` | `boolean` | `false` | Uses the filled treatment for tab icons and the close icon. |
+| `iconGap` | `number` | `8` | Gap in pixels between the icon, label, and count. |
+| `iconSize` | `number` | `20` | Size of tab icons in pixels. |
+| `justify` | `'start'  /  'center'  /  'end'` | `start` | Aligns compact or fixed-width tabs within the bar. Filled tabs occupy the available width. |
+| `options` | `TabOption<T>[]` | `[]` | Creates tabs from data. Each entry supplies Tab content and state, including a unique non-null value. Use composed Tab children for native button attributes and handlers. |
+| `padding` | `number  /  string` | `var(--spacing-s)` | Padding inside each tab and the close area. Numbers are pixels; strings accept CSS padding syntax. Explicit zero is preserved. |
+| `tabBarName` | `string` | `Tabs` | Accessible name for the tab group. ARIA attributes are managed internally. |
+| `tabGap` | `number` | `8` | Gap between tabs in pixels. |
+| `tabWidth` | `'compact'  /  'fill'  /  number` | `compact` | Use compact for natural content widths that shrink when space is limited, fill for equal shares of the available space, or a number for a fixed pixel width. |
+| `textSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Text size for tab labels. |
+| `underline` | `boolean` | `true` | Shows the moving selection indicator. It slides and resizes to the selected enabled tab. |
+| `value` | `T  /  null` | `undefined` | Controlled selection. Use null to clear it. An unmatched value selects no tab. |
+| `width` | `number  /  string` | `100%` | Width of the complete bar, including its close area. Numbers are pixels; strings accept CSS dimensions. |
+| `divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Native attributes and events apply to the tablist. className and style apply to the outer layout wrapper. The tablist role, name, ARIA attributes, and horizontal orientation are managed by the component. |
+
+## Motion
+
+`transition` is merged with Slice’s water transition and controls the shared underline’s position and width. Container and tab size changes update its destination.
+
+```
+<TabBar tabBarName="Project views" options={options} transition={{ duration: 0 }} />
+```
+
+Set duration to 0 to snap into place. Reduced motion takes priority over custom timing.
+
+## Events
+
+- `onChange(value, option)` requests a different selection. Repeat activation, initialization, and prop changes do not emit it.
+- `onClose()` handles the whole-bar close action.
+- `onToolTip(tip)` provides tooltip data on hover; null clears it on leave or selection. Your application renders the tooltip.
+- Native div events apply to the tablist. Composed tabs accept native button handlers, which run first; preventDefault cancels internal click or keyboard handling.

@@ -1,101 +1,486 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { FlexDiv } from '../FlexDiv';
 import * as ChipStories from './Chip.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {Spacer} from "../Spacer";
+import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ChipStories} />
+<FlexDiv width="fill" maxWidth={760} height="auto">
+<Unstyled>
+# Chip
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Chip
-        Renders a compact chip for tags, filters, and selectable metadata items.
+Display compact tags or actions with text and an optional icon. label takes
+precedence over children; numeric children such as 0 are supported.
 
-        ## Base element
-        `HTMLDivElement`
+## Behavior
 
-        ## Interface
-        `ChipProps`
+Providing onClick creates a native button with type=button by default. Without it,
+the content is static. selected is controlled by your app. onRemove adds a separate
+remove button and requests removal; your handler updates the list. The wrapper
+animates layout when selected is supplied, using Water easing over 150ms.
+Default outer padding compensates for space inside SVG icons: subtract spacing-xs
+(4px) for m–xl text, or spacing-xxs (2px) for xs/s. A left icon adjusts the left edge;
+a right icon or remove button adjusts the right edge. Icon-only chips adjust both
+edges. This leaves the icon-to-text gap unchanged. Explicit uniform or side padding
+overrides the adjustment; individual sides take priority over uniform padding.
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td><code>-</code></td><td>Optional custom content rendered instead of <code>label</code>.</td></tr>
-            <tr><td><code>label</code></td><td><code>string</code></td><td><code>-</code></td><td>Text rendered when <code>children</code> is not provided.</td></tr>
-            <tr><td><code>labelSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Typography size applied to the chip label.</td></tr>
-            <tr><td><code>labelColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Label color in the default state.</td></tr>
-            <tr><td><code>labelColorHover</code></td><td><code>string</code></td><td><code>'var(--core-text-special)'</code></td><td>Label color while the chip is hovered.</td></tr>
-            <tr><td><code>icon</code></td><td><code>string</code></td><td><code>-</code></td><td>Optional icon name to render alongside the label.</td></tr>
-            <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>20</code></td><td>Pixel size passed to the icon renderer.</td></tr>
-            <tr><td><code>iconPosition</code></td><td><code>{`'left' | 'right'`}</code></td><td><code>'left'</code></td><td>Controls whether the icon renders before or after the label.</td></tr>
-            <tr><td><code>iconColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Icon color in the default state.</td></tr>
-            <tr><td><code>iconColorHover</code></td><td><code>string</code></td><td><code>'var(--core-text-special)'</code></td><td>Icon color while the chip is hovered.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'transparent'</code></td><td>Background color in the default state.</td></tr>
-            <tr><td><code>backgroundColorHover</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Background color while the chip is hovered.</td></tr>
-            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables click and mouse-down handlers and applies disabled colors.</td></tr>
-            <tr><td><code>focused</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Focus-state flag exposed by the API.</td></tr>
-            <tr><td><code>tooltip</code></td><td><code>string</code></td><td><code>-</code></td><td>Tooltip label emitted through <code>onToolTip</code> on hover.</td></tr>
-            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>1</code></td><td>Border width in pixels.</td></tr>
-            <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Border color in the default state.</td></tr>
-            <tr><td><code>borderColorHover</code></td><td><code>string</code></td><td><code>'var(--core-text-special)'</code></td><td>Border color while the chip is hovered.</td></tr>
-            <tr><td><code>borderColorDisabled</code></td><td><code>string</code></td><td><code>'var(--core-text-disabled)'</code></td><td>Border color used when <code>disabled</code> is true.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>8</code></td><td>Corner radius in pixels.</td></tr>
-            <tr><td><code>gap</code></td><td><code>number</code></td><td><code>4</code></td><td>Spacing between the icon and label in pixels.</td></tr>
-            <tr><td><code>paddingTop</code></td><td><code>number</code></td><td><code>4 for xs/s; 8 otherwise</code></td><td>Top and bottom padding in pixels. Defaults follow spacing-xs for xs/s labels and spacing-s otherwise; explicit overrides take precedence.</td></tr>
-            <tr><td><code>paddingSides</code></td><td><code>number</code></td><td><code>4 for xs/s; 16 otherwise</code></td><td>Exact horizontal padding override in pixels. Defaults use spacing-xs for xs/s labels (minus spacing-xxs on the icon side), or spacing-m otherwise (minus spacing-xs on the icon side).</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
+## Accessibility
 
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onToolTip</code></td><td><code>{`(tip: ToolTip | null) => void`}</code></td></tr>
-            <tr><td><code>onClick</code></td><td><code>{`(e: React.MouseEvent<HTMLDivElement> | undefined) => void`}</code></td></tr>
-          </tbody>
-        </table>
+Action chips support Enter and Space, a visible focus indicator, and native
+disabled behavior. Text supplies their name; give icon-only buttons an aria-label.
+Icons are decorative and do not add tab stops. Selected action buttons expose
+aria-pressed. Main and remove buttons are siblings, never nested. Static content
+has no automatic button role or tab stop. Tooltips support focus and hover.
+Water color and layout transitions respect reduced-motion preferences.
 
-        ## Code Examples
-        </Unstyled>
+## Props
 
-        <RenderSource>
-            ```
-            import { Chip } from '@apple-pie/slice';
-            
-            export function ChipExample() {
-                return (
-                    <Chip icon="clock" onClick={() => console.log('clicked')}>
-                        In Review
-                    </Chip>
-                );
-            }
-            ```
-        </RenderSource>
-    <Spacer size="xxl" />
-    </FlexDiv>
+Color props accept Slice theme tokens or CSS colors.
+
+<table>
+<thead>
+<tr>
+<th>Prop</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>backgroundColor</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>transparent</code>
+</td>
+<td>Chip background.</td>
+</tr>
+<tr>
+<td>
+<code>backgroundColorHover</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>click-dependent</code>
+</td>
+<td>Hover and keyboard-focus background. Static chips keep backgroundColor; clickable chips use core-surface-secondary. Disabled chips keep backgroundColor.</td>
+</tr>
+<tr>
+<td>
+<code>backgroundColorSelected</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-surface-secondary</code>
+</td>
+<td>Selected background. Takes priority over hover; disabled chips keep backgroundColor.</td>
+</tr>
+<tr>
+<td>
+<code>borderColor</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-text-primary</code>
+</td>
+<td>Normal border color.</td>
+</tr>
+<tr>
+<td>
+<code>borderColorDisabled</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-text-disabled</code>
+</td>
+<td>Border color while disabled, including hover.</td>
+</tr>
+<tr>
+<td>
+<code>borderColorHover</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>click-dependent</code>
+</td>
+<td>Hover and keyboard-focus border color. Static chips keep borderColor; clickable chips use core-text-special.</td>
+</tr>
+<tr>
+<td>
+<code>borderColorSelected</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-text-special</code>
+</td>
+<td>Selected border color. Disabled chips use borderColorDisabled.</td>
+</tr>
+<tr>
+<td>
+<code>borderRadius</code>
+</td>
+<td>
+<code>number &#124; string</code>
+</td>
+<td>
+<code>corner-m</code>
+</td>
+<td>Corner radius. Numbers are pixels; strings accept CSS values.</td>
+</tr>
+<tr>
+<td>
+<code>borderWidth</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>1</code>
+</td>
+<td>Border width in pixels.</td>
+</tr>
+<tr>
+<td>
+<code>children</code>
+</td>
+<td>
+<code>React.ReactNode</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Content when label is absent. Numeric content such as 0 is supported.</td>
+</tr>
+<tr>
+<td>
+<code>disabled</code>
+</td>
+<td>
+<code>boolean</code>
+</td>
+<td>
+<code>false</code>
+</td>
+<td>Applies disabled colors and blocks the click callback. All action and remove buttons use native disabled behavior and leave the tab order.</td>
+</tr>
+<tr>
+<td>
+<code>gap</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>4</code>
+</td>
+<td>Space between the icon and text in pixels.</td>
+</tr>
+<tr>
+<td>
+<code>icon</code>
+</td>
+<td>
+<code>string</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Slice icon name. Omit for text only.</td>
+</tr>
+<tr>
+<td>
+<code>iconColor</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-text-primary</code>
+</td>
+<td>Icon color. Disabled chips use core-text-disabled.</td>
+</tr>
+<tr>
+<td>
+<code>iconColorHover</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>click-dependent</code>
+</td>
+<td>Hover and keyboard-focus icon color. Static chips keep iconColor; clickable chips use core-text-special. Disabled chips use core-text-disabled.</td>
+</tr>
+<tr>
+<td>
+<code>iconColorSelected</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-text-special</code>
+</td>
+<td>Selected icon color. Disabled chips use core-text-disabled.</td>
+</tr>
+<tr>
+<td>
+<code>iconPosition</code>
+</td>
+<td>
+<code>'left' &#124; 'right'</code>
+</td>
+<td>
+<code>left</code>
+</td>
+<td>Places the icon before or after the content.</td>
+</tr>
+<tr>
+<td>
+<code>iconSize</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>20</code>
+</td>
+<td>Icon width and height in pixels.</td>
+</tr>
+<tr>
+<td>
+<code>label</code>
+</td>
+<td>
+<code>string</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Primary text. Replaces children whenever supplied, including an empty string.</td>
+</tr>
+<tr>
+<td>
+<code>layout</code>
+</td>
+<td>
+<code>boolean</code>
+</td>
+<td>
+<code>selected is supplied</code>
+</td>
+<td>Enables Motion layout animation for size changes. Automatically enabled when selected is supplied; set false to disable, or true for other content changes.</td>
+</tr>
+<tr>
+<td>
+<code>padding</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Uniform padding in pixels. Individual side props take priority. When omitted, spacing follows textSize with optical adjustment at icon edges, including removal.</td>
+</tr>
+<tr>
+<td>
+<code>paddingBottom</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Bottom padding in pixels. Overrides padding for this side.</td>
+</tr>
+<tr>
+<td>
+<code>paddingLeft</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Left padding in pixels. Overrides padding for this side.</td>
+</tr>
+<tr>
+<td>
+<code>paddingRight</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Right padding in pixels. Overrides padding for this side.</td>
+</tr>
+<tr>
+<td>
+<code>paddingTop</code>
+</td>
+<td>
+<code>number</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Top padding in pixels. Overrides padding for this side.</td>
+</tr>
+<tr>
+<td>
+<code>removeLabel</code>
+</td>
+<td>
+<code>string</code>
+</td>
+<td>
+<code>derived from label</code>
+</td>
+<td>Accessible name of the remove button. Defaults to Remove followed by the text label, or Remove chip when there is no plain-text label.</td>
+</tr>
+<tr>
+<td>
+<code>selected</code>
+</td>
+<td>
+<code>boolean</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Controlled selection state. Clickable chips expose aria-pressed when supplied. Update selected in onClick; Chip does not toggle it internally.</td>
+</tr>
+<tr>
+<td>
+<code>textColor</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-text-primary</code>
+</td>
+<td>Primary text color. Disabled chips use core-text-disabled.</td>
+</tr>
+<tr>
+<td>
+<code>textColorHover</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>click-dependent</code>
+</td>
+<td>Hover and keyboard-focus text color. Static chips keep textColor; clickable chips use core-text-special. Disabled chips use core-text-disabled.</td>
+</tr>
+<tr>
+<td>
+<code>textColorSelected</code>
+</td>
+<td>
+<code>ColorValue</code>
+</td>
+<td>
+<code>core-text-special</code>
+</td>
+<td>Selected text color. Disabled chips use core-text-disabled.</td>
+</tr>
+<tr>
+<td>
+<code>textSize</code>
+</td>
+<td>
+<code>'xs' &#124; 's' &#124; 'm' &#124; 'l' &#124; 'xl'</code>
+</td>
+<td>
+<code>m</code>
+</td>
+<td>Theme typography size for label or children. Also sets the default padding.</td>
+</tr>
+<tr>
+<td>
+<code>tooltip</code>
+</td>
+<td>
+<code>string</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>Text sent to onToolTip on hover or focus. Your application renders the tooltip.</td>
+</tr>
+<tr>
+<td>
+<code>transition</code>
+</td>
+<td>
+<code>Transition</code>
+</td>
+<td>
+<code>150ms, Water easing</code>
+</td>
+<td>Motion layout transition options. Defaults to 150ms with the theme’s Water easing. Does not change CSS color transitions.</td>
+</tr>
+<tr>
+<td>
+<code>...elementAttributes</code>
+</td>
+<td>
+<code>React.HTMLAttributes&lt;HTMLDivElement&gt; &#124; React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;</code>
+</td>
+<td>
+<code>undefined</code>
+</td>
+<td>With onClick, native button attributes apply to the main action; otherwise div attributes apply to the static content. className and style apply to the outer layout wrapper. Button attributes such as type and form require onClick.</td>
+</tr>
+</tbody>
+</table>
+
+## Events
+
+onClick creates the main native button and handles its activation. onRemove adds
+a separate removal action; the parent removes the chip. Both callbacks receive
+native button mouse events, including keyboard-generated clicks. Disabled chips
+emit neither callback.
+
+onToolTip: `(tip: ToolTip | null) => void`. Receives tooltip text and the root ref
+on hover or focus, with a mouse event for hover only. null dismisses the tooltip
+after activation or when both hover and focus have left.
+
+Other native events match the main button or static content. Mouse and focus handlers compose with
+tooltip behavior. Prevent default on mouse enter or focus to suppress the request.
+</Unstyled>
+<RenderSource>
+```
+import { Chip } from '@apple-pie/slice';
+
+<Chip label="Design" />
+```
+</RenderSource>
+<RenderSource>
+```
+<Chip label="Open tag" onClick={myHandler} />
+```
+</RenderSource>
 </FlexDiv>

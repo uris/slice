@@ -1,48 +1,115 @@
 .wrapper {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	padding: var(--rb-padding) !important;
-	max-width: var(--rb-max-width);
-	flex: var(--rb-flex);
-	border: var(--rb-border);
-	background: var(--rb-bg);
-	gap: var(--rb-gap);
-	border-radius: var(--corner-m);
+	position: relative;
+	display: inline-flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: flex-start;
+	justify-content: flex-start;
+	align-self: flex-start;
+	box-sizing: border-box;
+	flex: 0 1 auto;
+	min-width: 0;
+	width: max-content;
+	max-width: 100%;
 	cursor: pointer;
-	transition: all var(--motion-water-duration) var(--motion-water) 0s;
-	user-select: none;
-	-webkit-user-select: none;
-	appearance: none;
-	-webkit-appearance: none;
-	background-image: none;
-	outline: none;
 }
-
-.radioIcon {
-	composes: column from "../../utils/styling/flexBox.module.css";
-	width: 20px;
-	height: 20px;
-	max-width: 20px;
-	max-height: 20px;
-	min-height: 20px;
-	min-width: 20px;
+.wrapper[data-disabled] {
+	cursor: default;
+	opacity: 0.5;
 }
-
-.radioTitle {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	composes: body-m-regular from "../../utils/styling/type.module.css";
-	color: var(--core-text-primary);
-	white-space: nowrap;
-	flex: 1;
-}
-
-.radioSummary {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	composes: body-s-regular from "../../utils/styling/type.module.css";
-	color: var(--core-text-primary);
-	flex: 1;
-}
-
-.radioContent {
-	composes: columnStart from "../../utils/styling/flexBox.module.css";
+.input {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
 	width: 100%;
+	height: 100%;
+	opacity: 0;
+	margin: 0;
+	cursor: inherit;
+}
+.surface {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	flex: 0 1 auto;
+	min-width: 0;
+	box-sizing: border-box;
+	width: 100%;
+	align-items: var(--rb-align);
+	gap: var(--rb-gap);
+	padding: var(--rb-padding);
+	border: var(--rb-border-width) solid var(--rb-border-color);
+	border-radius: var(--rb-border-radius);
+	background: var(--rb-background);
+	transition: background-color var(--motion-water-duration) var(--motion-water);
+}
+.input:checked + .surface {
+	background: var(--rb-background-selected);
+}
+.input:focus-visible + .surface {
+	outline: 2px solid var(--core-text-special);
+	outline-offset: 3px;
+}
+.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 var(--rb-icon-size);
+	width: var(--rb-icon-size);
+	height: var(--rb-icon-size);
+	color: var(--rb-icon-color);
+	transition: color var(--motion-water-duration) var(--motion-water);
+}
+.icon > span {
+	flex: 0 0 auto;
+	width: 100%;
+	height: 100%;
+}
+.icon svg {
+	flex: 0 0 auto;
+}
+.unchecked {
+	display: flex;
+}
+.checked {
+	display: none;
+}
+.input:checked + .surface .icon {
+	color: var(--rb-icon-color-selected);
+}
+.input:checked + .surface .unchecked {
+	display: none;
+}
+.input:checked + .surface .checked {
+	display: flex;
+}
+.text {
+	min-width: 0;
+	color: var(--rb-text-color);
+	padding-top: var(--rb-text-top);
+	padding-bottom: var(--rb-text-bottom);
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+.xs {
+	composes: body-xs-regular from "../../utils/styling/type.module.css";
+}
+.s {
+	composes: body-s-regular from "../../utils/styling/type.module.css";
+}
+.m {
+	composes: body-m-regular from "../../utils/styling/type.module.css";
+}
+.l {
+	composes: body-l-regular from "../../utils/styling/type.module.css";
+}
+.xl {
+	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+@media (prefers-reduced-motion: reduce) {
+	.surface,
+	.icon {
+		transition: none;
+	}
 }

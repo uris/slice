@@ -42,9 +42,10 @@ function UseIntersectingDemo() {
 			<FlexDiv direction={'column'} align={'center'} height={'auto'} gap={12}>
 				Change Threshold
 				<Slider
+					aria-label="Visibility threshold"
 					width={300}
-					scaleMin={0}
-					scaleMax={1}
+					min={0}
+					max={1}
 					step={0.05}
 					value={thresholds}
 					trackHeadSize={0}

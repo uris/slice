@@ -1,34 +1,25 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
-import type { AnimationPreset, ButtonAnimation } from '../IconButton';
-import type { ToolTip } from '../sharedTypes';
+import type { IconButtonProps } from '../IconButton';
 
-export interface ToggleButtonProps {
-	children?: React.ReactNode;
+type ToggleButtonBaseProps = {
+	actionName?: string;
 	label?: string;
+	labelOutside?: boolean;
+	children?: React.ReactNode;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
-	buttonSize?: 's' | 'm' | 'l' | 'xl';
-	frameSize?: number;
-	icon?: string;
-	iconOn?: string;
-	iconTwo?: string;
-	selected?: boolean;
-	iconColor?: ColorValue;
-	iconColorOn?: ColorValue;
-	iconColorHover?: ColorValue;
-	backgroundColor?: ColorValue;
-	backgroundColorHover?: ColorValue;
-	backgroundColorOn?: ColorValue;
-	onChange?: (state: boolean) => void;
-	onSelect?: () => void;
-	onToolTip?: (tip: ToolTip | null) => void;
+	textColor?: ColorValue;
+	textColorHover?: ColorValue;
+	textColorSelected?: ColorValue;
+	iconSelected?: string;
 	gap?: number;
-	border?: boolean;
-	iconSize?: number;
-	tooltip?: string;
-	fill?: boolean;
-	unselect?: boolean;
-	disabled?: boolean;
-	presetAnimations?: AnimationPreset;
-	customAnimations?: ButtonAnimation;
-}
+	padding?: number | string;
+	paddingTop?: number | string;
+	paddingRight?: number | string;
+	paddingBottom?: number | string;
+	paddingLeft?: number | string;
+	deselect?: boolean;
+};
+
+export type ToggleButtonProps = Omit<IconButtonProps, 'toggle' | 'count' | 'showDot' | 'onSelect'> &
+	ToggleButtonBaseProps;

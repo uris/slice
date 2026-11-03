@@ -2,6 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { resolveColorProps } from './resolveColorProps';
 
 describe('resolveColorProps', () => {
+	it('resolves lowercase-prefixed color states while preserving CSS colors and unrelated text', () => {
+		const props = Object.freeze({ colorOn: 'core-text-primary', colorHover: 'core-text-special', colorOff: '#123456', colorful: 'core-text-primary' });
+		expect(resolveColorProps(props)).toEqual({ colorOn: 'var(--core-text-primary)', colorHover: 'var(--core-text-special)', colorOff: '#123456', colorful: 'core-text-primary' });
+		expect(props.colorOn).toBe('core-text-primary');
+	});
 	it('resolves color states and nested options without mutating frozen props', () => {
 		const iconLeft = Object.freeze({ name: 'home', color: 'core-icon-primary' });
 		const props = Object.freeze({

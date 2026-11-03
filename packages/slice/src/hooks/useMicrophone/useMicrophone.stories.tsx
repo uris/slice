@@ -168,10 +168,11 @@ function UseMicrophoneDemo(props: Readonly<UseMicrophoneDemoProps>) {
 					<div>
 						<label htmlFor={'microphone-input-volume'}>Input volume</label>
 						<Slider
+							aria-label="Microphone volume"
 							id={'microphone-input-volume'}
 							value={inputVolume}
-							scaleMin={0}
-							scaleMax={1}
+							min={0}
+							max={1}
 							step={0.05}
 							width={'100%'}
 							onChange={(value) => setInputVolume(value)}

@@ -1,101 +1,58 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as SliderStories from './Slider.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={SliderStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Slider
-        Renders a draggable range control for selecting numeric values within min/max bounds.
+# Slider
 
-        ## Base element
-        `HTMLDivElement`
+Choose continuous values with a custom track and head over a native range input.
 
-        ## Interface
-        `SliderProps`
+## Usage
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>value</code></td><td><code>number</code></td><td><code>25</code></td><td>Current slider value.</td></tr>
-            <tr><td><code>scaleMin</code></td><td><code>number</code></td><td><code>0</code></td><td>Minimum selectable value.</td></tr>
-            <tr><td><code>scaleMax</code></td><td><code>number</code></td><td><code>100</code></td><td>Maximum selectable value.</td></tr>
-            <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>100</code></td><td>Width of the slider. Numeric values are treated as pixels. Pass a string such as <code>'100%'</code> for responsive layouts.</td></tr>
-            <tr><td><code>height</code></td><td><code>{`number | string`}</code></td><td><code>2</code></td><td>Visual thickness of the slider track.</td></tr>
-            <tr><td><code>touchHeight</code></td><td><code>{`number | string`}</code></td><td><code>24</code></td><td>Interactive hit area height used for dragging.</td></tr>
-            <tr><td><code>trackHeadSize</code></td><td><code>{`number | null`}</code></td><td><code>7</code></td><td>Size of the draggable thumb. Set to <code>0</code> or <code>null</code> to visually hide it.</td></tr>
-            <tr><td><code>headColor</code></td><td><code>string</code></td><td><code>var(--core-text-light)</code></td><td>Thumb color.</td></tr>
-            <tr><td><code>trackColor</code></td><td><code>string</code></td><td><code>var(--core-surface-secondary)</code></td><td>Background track color.</td></tr>
-            <tr><td><code>progressColor</code></td><td><code>string</code></td><td><code>var(--core-text-tertiary)</code></td><td>Filled progress color.</td></tr>
-            <tr><td><code>trackHeadBorderSize</code></td><td><code>number</code></td><td><code>1</code></td><td>Border width for the draggable thumb.</td></tr>
-            <tr><td><code>trackHeadBorderColor</code></td><td><code>string</code></td><td><code>var(--core-outline-secondary)</code></td><td>Border color for the draggable thumb.</td></tr>
-            <tr><td><code>step</code></td><td><code>number</code></td><td><code>undefined</code></td><td>Optional keyboard increment used by arrow keys, page keys, and other discrete keyboard controls.</td></tr>
-            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables pointer and keyboard interaction.</td></tr>
-            <tr><td><code>disabledOpacity</code></td><td><code>number</code></td><td><code>0.5</code></td><td>Opacity applied while the slider is disabled.</td></tr>
-            <tr><td><code>cursor</code></td><td><code>{`'default' | 'grab' | 'grabbing' | 'pointer'`}</code></td><td><code>default</code></td><td>Cursor shown while hovering or dragging the control.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onChange</code></td><td><code>{`(value: number, percent: number) => void`}</code></td></tr>
-            <tr><td><code>onDragChange</code></td><td><code>{`(value: number, percent: number) => void`}</code></td></tr>
-          </tbody>
-        </table>
-
-        `onChange` fires during drag and keyboard changes. `onDragChange` fires when the drag interaction completes, which makes it better suited for deferred commits such as preview sounds or expensive downstream updates.
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource language={"tsx"}>
 ```
 import { Slider } from '@apple-pie/slice';
 
-export function SliderExample() {
-    return (
-        <Slider
-            value={42}
-            scaleMin={0}
-            scaleMax={100}
-            onChange={(value) => console.log(value)}
-            id="slider-example"
-            data-testid="slider-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+<Slider aria-label="Volume" />
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+Use controlled `value` with `onChange`, or `defaultValue` for an initial uncontrolled value. `min` and `max` bound the value. `step` controls keyboard increments only: dragging remains continuous, and keyboard changes start from the current value without snapping to a grid. Arrow and Page keys move by one increment; Home/End select the bounds.
+
+`onChange(value, percent)` reports live changes, with percent in the range 0–1. `onChangeEnd(value, percent)` reports a changed interaction after pointer release or key release, including repeated keys. Blur commits pending keyboard changes; canceled, disabled, or unmounted interactions do not commit. Atomic assistive-technology changes commit immediately. External prop updates and unchanged values emit no callbacks.
+
+## Accessibility
+
+Name the input with `aria-label`, `aria-labelledby`, or an associated HTML label. Native attributes and events target the input; className/style apply to the wrapper. Keyboard focus has a visible inset indicator. Disabled inputs are not focusable and are excluded from form submission. Pass name to submit the current value.
+
+A nonzero head can fade in on hover, keyboard focus, or dragging with `trackHeadOnHover`. Water timing respects reduced motion, including live preference changes. Value movement follows input directly.
+
+## Props
+
+<table>
+  <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>cursor</code></td><td><code>{`'default' | 'grab' | 'grabbing' | 'pointer'`}</code></td><td><code>grabbing</code></td><td>Cursor for an enabled slider. Disabled sliders use the default cursor.</td></tr>
+    <tr><td><code>defaultValue</code></td><td><code>{`number`}</code></td><td><code>50</code></td><td>Initial uncontrolled value. Later changes do not reset it; the displayed value is clamped to the current bounds.</td></tr>
+    <tr><td><code>disabled</code></td><td><code>{`boolean`}</code></td><td><code>false</code></td><td>Blocks interaction and removes the input from the tab order.</td></tr>
+    <tr><td><code>disabledOpacity</code></td><td><code>{`number`}</code></td><td><code>0.5</code></td><td>Opacity of the whole control while disabled. Clamped to 0–1; non-finite values use 0.5.</td></tr>
+    <tr><td><code>height</code></td><td><code>{`number | string`}</code></td><td><code>2</code></td><td>Track thickness. Numbers are pixels; strings accept CSS lengths. Negative numbers become zero; non-finite numbers use 2.</td></tr>
+    <tr><td><code>max</code></td><td><code>{`number`}</code></td><td><code>100</code></td><td>Maximum value. Non-finite bounds use their defaults; reversed bounds are sorted. Equal bounds produce a fixed value.</td></tr>
+    <tr><td><code>min</code></td><td><code>{`number`}</code></td><td><code>0</code></td><td>Minimum value. Non-finite bounds use their defaults; reversed bounds are sorted.</td></tr>
+    <tr><td><code>progressColor</code></td><td><code>{`ColorValue`}</code></td><td><code>core-text-tertiary</code></td><td>Color of the filled track.</td></tr>
+    <tr><td><code>step</code></td><td><code>{`number`}</code></td><td><code>undefined</code></td><td>Keyboard increment for Arrow and Page keys. Pointer dragging stays continuous. Omit or pass an invalid/nonpositive number to use 1% of the range, with a minimum increment of 0.01.</td></tr>
+    <tr><td><code>touchHeight</code></td><td><code>{`number | string`}</code></td><td><code>24</code></td><td>Minimum interaction height. Numbers are pixels; strings accept CSS lengths. The hit area also fits the track and head. Negative numbers become zero; non-finite numbers use 24.</td></tr>
+    <tr><td><code>trackColor</code></td><td><code>{`ColorValue`}</code></td><td><code>core-surface-secondary</code></td><td>Color of the unfilled track.</td></tr>
+    <tr><td><code>trackHeadBorderColor</code></td><td><code>{`ColorValue`}</code></td><td><code>core-outline-secondary</code></td><td>Head border color.</td></tr>
+    <tr><td><code>trackHeadBorderRadius</code></td><td><code>{`number | string | null`}</code></td><td><code>100%</code></td><td>Head corner radius. Numbers are pixels; strings accept CSS radius values. Null uses the rounded default.</td></tr>
+    <tr><td><code>trackHeadBorderWidth</code></td><td><code>{`number`}</code></td><td><code>1</code></td><td>Head border width in pixels, included in its size. Negative values become zero; non-finite values use 1.</td></tr>
+    <tr><td><code>trackHeadColor</code></td><td><code>{`ColorValue`}</code></td><td><code>core-text-light</code></td><td>Head background color.</td></tr>
+    <tr><td><code>trackHeadOnHover</code></td><td><code>{`true | undefined`}</code></td><td><code>undefined</code></td><td>Fade in a nonzero head on hover, keyboard focus, or while dragging. Omit to keep the head visible. Uses Water timing and respects reduced motion.</td></tr>
+    <tr><td><code>trackHeadSize</code></td><td><code>{`number | null`}</code></td><td><code>12</code></td><td>Head diameter in pixels. Zero or null hides it; negative values become zero and non-finite values use 12.</td></tr>
+    <tr><td><code>value</code></td><td><code>{`number`}</code></td><td><code>undefined</code></td><td>Controlled value. Update it through onChange. Values are clamped to the bounds; non-finite values use the minimum.</td></tr>
+    <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>100</code></td><td>Overall width, including head clearance. Numbers are pixels; strings accept CSS lengths. Use 100% or auto to fill available width. Negative numbers become zero; non-finite numbers use 100.</td></tr>
+    <tr><td><code>...inputAttributes</code></td><td><code>{`React.InputHTMLAttributes<HTMLInputElement>`}</code></td><td><code>undefined</code></td><td>Native attributes apply to the range input, including id, name, form, aria-label, aria-labelledby, aria-valuetext, and data attributes. className and style apply to the visual wrapper. Internal geometry and color variables take priority over overlapping style variables. Children are not supported.</td></tr>
+  </tbody>
+</table>
+
+## Events
+
+`onChange(value, percent)` and `onChangeEnd(value, percent)` are numeric component callbacks. Native input events pass through as a group. `onKeyDown` and `onPointerDown` run first; preventDefault cancels the corresponding interaction. This component does not expose Motion gestures.
