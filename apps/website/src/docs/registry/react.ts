@@ -6,8 +6,13 @@ export const reactDocSlugs = [
 	'textfield',
 	'text-area',
 	'drop-down',
-	'div-input',
+	'content-editable',
 	'error-summary',
+	'overlay',
+	'modal',
+	'modal-controller',
+	'tip',
+	'toast',
 
 	'icon-button',
 	'toggle-button',
@@ -42,6 +47,26 @@ export type ReactDocSlug = (typeof reactDocSlugs)[number];
 
 // meta for all slugs including shared
 export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
+	overlay: {
+		title: 'Overlay | Slice UIKit',
+		description: 'Dim the background for focused tasks with the Slice Overlay component for React.',
+	},
+	modal: {
+		title: 'Modal | Slice UIKit',
+		description: 'Present dialog content and typed actions with the Slice Modal component for React.',
+	},
+	'modal-controller': {
+		title: 'ModalController | Slice UIKit',
+		description: 'Present store-driven dialogs and collect responses with the Slice ModalController for React.',
+	},
+	tip: {
+		title: 'Tip | Slice UIKit',
+		description: 'Position short contextual hints with the Slice Tip component for React.',
+	},
+	toast: {
+		title: 'Toast | Slice UIKit',
+		description: 'Show timed and persistent notifications with the Slice Toast component for React.',
+	},
 	textfield: {
 		title: 'TextField | Slice UIKit',
 		description:
@@ -55,8 +80,8 @@ export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
 		title: 'DropDown | Slice UIKit',
 		description: 'Offer a focused set of choices with native selection, optional labels, and typed option data.',
 	},
-	'div-input': {
-		title: 'DivInput | Slice UIKit',
+	'content-editable': {
+		title: 'ContentEditable | Slice UIKit',
 		description:
 			'Edit a short title or label in place, with an editable text surface that can blend into surrounding content.',
 	},

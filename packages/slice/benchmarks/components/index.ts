@@ -9,7 +9,7 @@ export { audioBubbleBenchmarkConfig } from './AudioBubble.bench';
 export { badgeBenchmarkConfig } from './Badge.bench';
 export { cameraBenchmarkConfig } from './Camera.bench';
 export { checkBoxBenchmarkConfig } from './CheckBox.bench';
-export { divInputBenchmarkConfig } from './DivInput.bench';
+export { contentEditableBenchmarkConfig } from './ContentEditable.bench';
 export { dotBenchmarkConfig } from './Dot.bench';
 export { draggablePanelBenchmarkConfig } from './DraggablePanel.bench';
 export { dropDownBenchmarkConfig } from './DropDown.bench';

@@ -13,7 +13,8 @@ describe('Full Benchmark Suite with Reporting', () => {
 
 	// Run all benchmark configs
 	allBenchmarkConfigs.forEach((config) => {
-		it(`${config.componentName} - Performance Tests`, async () => {
+		// Multiple sampled scenarios need more time than an ordinary unit test.
+		it(`${config.componentName} - Performance Tests`, { timeout: 15_000 }, async () => {
 			console.log(`\n⏱️  Testing ${config.componentName} component...`);
 
 			const result = await runBenchmarkConfig(config);

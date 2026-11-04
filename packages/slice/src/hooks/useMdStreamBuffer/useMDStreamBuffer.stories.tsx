@@ -239,7 +239,7 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 					value={raw}
 					onChange={setRaw}
 					rows={3}
-					border={true}
+					borderStyle="box"
 					resizable={true}
 					backgroundColor={'var(--core-surface-primary)'}
 				/>

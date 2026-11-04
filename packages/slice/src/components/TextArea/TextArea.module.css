@@ -1,79 +1,140 @@
+.field {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: stretch;
+	flex: 0 1 auto;
+	min-height: 0;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+.label {
+	box-sizing: border-box;
+	padding-left: var(--ta-message-left, 0px);
+	padding-right: var(--ta-message-right, 0px);
+	overflow-wrap: anywhere;
+	color: var(--ta-label-color);
+	margin-bottom: var(--spacing-xs);
+}
 .wrapper {
-	composes: columnStart from "../../utils/styling/flexBox.module.css";
 	position: relative;
-	padding: var(--ta-padding) !important;
-	width: var(--ta-width);
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	flex: 0 1 auto;
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+	box-sizing: border-box;
+	padding: var(--ta-padding);
+	width: 100%;
 	height: var(--ta-height);
 	max-height: var(--ta-max-height);
 	border-radius: var(--ta-border-radius);
 	background-color: var(--ta-bg-color);
-	box-shadow: 0 0 0 1px var(--ta-border-color);
-	transition: all var(--motion-water-duration) var(--motion-water) 0s;
+	box-shadow: var(--ta-box-shadow);
+	transition: background-color var(--motion-water-duration) var(--motion-water), box-shadow var(--motion-water-duration)
+		var(--motion-water);
 }
-
 .textarea {
 	border: 0;
 	outline: 0;
 	padding: 0;
+	margin: 0;
 	width: 100%;
-	height: 100%;
-	color: var(--core-text-primary);
+	min-width: 0;
+	min-height: 0;
+	flex: 1 1 auto;
+	color: var(--ta-text-color);
 	background-color: transparent;
 	box-sizing: border-box;
 	resize: var(--ta-resize);
-
-	&:disabled {
-		color: var(--core-text-disabled);
-	}
-
-	&::placeholder {
-		color: var(--core-text-disabled);
-	}
-
 	overflow-y: auto;
 	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
+	transition: color var(--motion-water-duration) var(--motion-water);
 }
-
-.actions {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	composes: body-xs-regular from "../../utils/styling/type.module.css";
-	width: 100%;
-	min-height: 30px;
-	color: var(--core-text-disabled);
-	gap: 16px;
+.textarea[data-resizable] {
+	/* Extend the native grip into the bottom inset while preserving text spacing. */
+	padding-bottom: var(--ta-resize-offset, 0px);
+	margin-bottom: calc(-1 * var(--ta-resize-offset, 0px));
 }
-
-.option {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	gap: 4px;
-	white-space: nowrap;
-	user-select: none;
-	-webkit-user-select: none;
-	cursor: default;
+.textarea::-webkit-resizer {
+	width: 16px;
+	height: 16px;
+	background: transparent;
 }
-
+.resizeGrip {
+	position: absolute;
+	top: var(--ta-grip-top);
+	right: var(--ta-grip-right);
+	width: 16px;
+	height: 16px;
+	pointer-events: none;
+	/* Paint outside the native scrollbar corner, which may clip its own artwork. */
+	--ta-resize-line: linear-gradient(
+		135deg,
+		transparent calc(50% - 0.5px),
+		var(--core-icon-tertiary) calc(50% - 0.5px),
+		var(--core-icon-tertiary) calc(50% + 0.5px),
+		transparent calc(50% + 0.5px)
+	);
+	background: var(--ta-resize-line) right 2px bottom 2px / 10px 10px no-repeat, var(--ta-resize-line) right 2px bottom
+		2px / 6px 6px no-repeat;
+}
+.textarea::placeholder {
+	color: var(--ta-placeholder-color);
+}
+.message {
+	min-width: 0;
+	box-sizing: border-box;
+	padding: var(--spacing-xs) var(--ta-message-right, 0px) 0 var(--ta-message-left, 0px);
+	overflow-wrap: anywhere;
+}
+.sendSpace {
+	flex: 0 0 calc(var(--ta-send-size) + var(--ta-send-bottom));
+}
 .send {
 	position: absolute;
-	bottom: var(--ta-send-icon-offset-bottom);
-	right: var(--ta-send-icon-offset-right);
+	bottom: var(--ta-send-bottom);
+	right: var(--ta-send-right);
+	width: var(--ta-send-size);
+	height: var(--ta-send-size);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background-color: var(--core-button-primary);
+	cursor: pointer;
+	transition: opacity var(--motion-water-duration) var(--motion-water);
 }
-
+.send:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+.send:focus-visible {
+	outline: 2px solid var(--core-link-primary);
+	outline-offset: 2px;
+}
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }
-
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
-
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
 }
-
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
-
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+@media (prefers-reduced-motion: reduce) {
+	.wrapper,
+	.textarea,
+	.send {
+		transition: none;
+	}
 }

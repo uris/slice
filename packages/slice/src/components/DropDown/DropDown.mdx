@@ -1,181 +1,174 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as DropDownStories from './DropDown.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={DropDownStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # DropDown
-        `DropDown` renders a styled select control with typed options, controlled selection by index or value, and a typed `onChange` callback.
+# DropDown
 
-        ## Base element
-        `HTMLSpanElement`
+Keep a short list of choices easy to scan and select, with native keyboard interaction and typed option data.
 
-        ## Typing
-        `DropDown` is generic and defaults to string values:
+## Usage
 
-        <RenderSource>
-        ```
-        type DropDownOption<T = string> = {
-            label?: string;
-            value?: T;
-            alt?: string;
-        };
-        
-        type DropDownProps<T = string> = {
-            label?: string;
-            labelColor?: string;
-            options?: DropDownOption<T>[];
-            selectedValue?: T;
-            valueKey?: string;
-            borderStyle?: 'bottom' | 'box' | 'none';
-            onChange?: (index: number, option: DropDownOption<T>) => void;
-            // ...other visual props
-        };
-        ```
-        </RenderSource>
+Compose native `option` elements and give the field a meaningful `name`. Use `onChange` to receive the selected value and option data.
 
-        Use string values when possible. If option values are objects, pass `valueKey` so `selectedValue` can match options by a simple field such as `id`.
+```tsx
+import { DropDown } from '@apple-pie/slice';
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '24%'}} />
-            <col style={{width: '15%'}} />
-            <col style={{width: '60%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th className={"left"}>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>name</code></td><td><code>string</code></td><td><code>'drop-down-select'</code></td><td>Accessible label passed to the underlying native <code>select</code>.</td></tr>
-            <tr><td><code>label</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Optional visible label rendered above the dropdown face.</td></tr>
-            <tr><td><code>labelColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Label text color.</td></tr>
-            <tr><td><code>options</code></td><td><code>{`DropDownOption<T>[]`}</code></td><td><code>[]</code></td><td>Typed option list rendered into the dropdown.</td></tr>
-            <tr><td><code>selectedIndex</code></td><td><code>number</code></td><td><code>undefined</code></td><td>Controls selection by option index. If <code>selectedValue</code> is provided, value-based selection takes precedence.</td></tr>
-            <tr><td><code>selectedValue</code></td><td><code>T</code></td><td><code>undefined</code></td><td>Controls selection by option value.</td></tr>
-            <tr><td><code>valueKey</code></td><td><code>string</code></td><td><code>undefined</code></td><td>When option values are objects, compares <code>selectedValue[valueKey]</code> against each option value using the same key.</td></tr>
-            <tr><td><code>placeholder</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Treats index <code>0</code> as a placeholder-style selection for text color purposes.</td></tr>
-            <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Controls the face and label sizing preset.</td></tr>
-            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables interaction and applies disabled styling.</td></tr>
-            <tr><td><code>error</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Applies warning/error border styling.</td></tr>
-            <tr><td><code>width</code></td><td><code>string</code></td><td><code>'100%'</code></td><td>Wrapper width.</td></tr>
-            <tr><td><code>height</code></td><td><code>string</code></td><td><code>'auto'</code></td><td>Wrapper height.</td></tr>
-            <tr><td><code>gap</code></td><td><code>number</code></td><td><code>8</code></td><td>Wrapper gap token passed through CSS vars.</td></tr>
-            <tr><td><code>inline</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Renders the wrapper as an inline control with inline-flex layout and compact horizontal margin so it can sit naturally inside flowing text or compact toolbars.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>8</code></td><td>Border radius in pixels.</td></tr>
-            <tr><td><code>borderStyle</code></td><td><code>{`'bottom' | 'box' | 'none'`}</code></td><td><code>'box'</code></td><td>Controls whether the dropdown renders a full border, bottom-only border, or no border.</td></tr>
-            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>1</code></td><td>Border thickness.</td></tr>
-            <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Normal border color.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Background color for the face element.</td></tr>
-            <tr><td><code>iconColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Chevron icon color.</td></tr>
-            <tr><td><code>textColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Selected text color when the control is not disabled and not showing the placeholder state.</td></tr>
-            <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>20</code></td><td>Chevron icon size in pixels.</td></tr>
-            <tr><td><code>paddingLeft</code></td><td><code>{`number | string`}</code></td><td><code>var(--spacing-m)</code></td><td>Left padding.</td></tr>
-            <tr><td><code>paddingRight</code></td><td><code>{`number | string`}</code></td><td><code>calc(var(--spacing-m) - var(--spacing-xs))</code></td><td>Right padding.</td></tr>
-            <tr><td><code>paddingTop</code></td><td><code>{`number | string`}</code></td><td><code>var(--spacing-s)</code></td><td>Top padding token used by the component CSS vars.</td></tr>
-            <tr><td><code>paddingBottom</code></td><td><code>{`number | string`}</code></td><td><code>var(--spacing-s)</code></td><td>Bottom padding token used by the component CSS vars.</td></tr>
-            <tr><td><code>validate</code></td><td><code>boolean</code></td><td><code>undefined</code></td><td>Declared prop type; not currently used by the component implementation.</td></tr>
-            <tr><td><code>...spanAttributes</code></td><td><code>{`HTMLAttributes<HTMLSpanElement>`}</code></td><td><code>-</code></td><td>Native wrapper <code>span</code> props such as <code>id</code>, <code>className</code>, <code>style</code>, and <code>aria-*</code>.</td></tr>
-          </tbody>
-        </table>
+<DropDown name="status" inputName="Status" onChange={myHandler}>
+  <option value="">-- Choose a status</option>
+  <option value="active">In progress</option>
+  <option value="complete">Complete</option>
+</DropDown>;
+```
 
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onChange</code></td><td><code>{`(index: number, option: DropDownOption<T>) => void`}</code></td></tr>
-          </tbody>
-        </table>
+### Use options
 
-        ## Selection behavior
-        `DropDown` resolves selection in this order:
-        - If `selectedValue` is provided, it tries to match by direct value equality first.
-        - If `valueKey` is provided and the values are objects, it compares `option.value[valueKey]` to `selectedValue[valueKey]`.
-        - As a fallback, it compares the string form of `selectedValue` against `label` and `alt`.
-        - If `selectedValue` is not provided, `selectedIndex` controls the selection.
-        - If neither is provided, the component falls back to internal index state initialized from `selectedIndex ?? 0`.
+Pass an `options` array as an alternative to composition. Both forms use the same selection, form, and label behavior.
 
-        ## Face text behavior
-        - The visible dropdown face truncates long selected labels with ellipsis.
-        - The optional external `label` remains separate from the selected face text.
+```tsx
+<DropDown name="status" inputName="Status" options={[
+  { label: '-- Choose a status', value: '' },
+  { label: 'In progress', value: 'active' },
+  { label: 'Complete', value: 'complete' },
+]} onChange={myHandler} />;
+```
 
-        ## Code examples
-        </Unstyled>
+### Position the label
 
-        <RenderSource>
-        ```
-        import { DropDown } from '@apple-pie/slice';
-        
-        export function BasicDropDownExample() {
-            return (
-                <DropDown
-                    name="Jurisdiction"
-                    label="Jurisdiction"
-                    borderStyle="box"
-                    options={[
-                        { label: 'California', value: 'ca' },
-                        { label: 'New York', value: 'ny' },
-                    ]}
-                    selectedValue="ny"
-                    onChange={(index, option) => console.log(index, option.value)}
-                    id="dropdown-example"
-                    data-testid="dropdown-example"
-                    className="custom-wrapper"
-                    style={{ marginTop: 8, maxWidth: 480 }}
-                />
-            );
-        }
-        ```
-        </RenderSource>
+Use `variant` to place the label. `behavior="appear"` animates stacked labels when a choice is selected.
 
-        <RenderSource>
-        ```
-        import { DropDown, type DropDownOption } from '@apple-pie/slice';
-        
-        type UserOptionValue = {
-            id: number;
-            name: string;
-        };
-        
-        const options: DropDownOption<UserOptionValue>[] = [
-            { label: 'Alice', value: { id: 1, name: 'Alice' } },
-            { label: 'Bob', value: { id: 2, name: 'Bob' } },
-        ];
-        
-        export function ObjectValueDropDownExample() {
-            return (
-                <DropDown<UserOptionValue>
-                    name="User"
-                    label="User"
-                    options={options}
-                    valueKey="id"
-                    selectedValue={{ id: 2, name: 'Bob' }}
-                    onChange={(index, option) => {
-                        console.log(index, option.value?.id);
-                    }}
-                />
-            );
-        }
-        ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+```tsx
+<>
+  <DropDown label="Status" variant="simple" options={statusOptions} />
+  <DropDown label="Status" variant="stacked" options={statusOptions} />
+  <DropDown label="Status" variant="stacked" behavior="appear" options={statusOptions} />
+  <DropDown label="Status" variant="outlined" options={statusOptions} />
+</>;
+```
+
+### Control selection
+
+Use `value` with `onChange` for application state, or `defaultValue` for local selection. Use a client component when server rendering with frameworks such as Next.js.
+
+```tsx
+import { useState } from 'react';
+
+function StatusField() {
+  const [status, setStatus] = useState('active');
+  return <DropDown name="status" label="Status" value={status} onChange={setStatus} options={[
+    { label: 'In progress', value: 'active' },
+    { label: 'Complete', value: 'complete' },
+  ]} placeholder={false} />;
+}
+```
+
+### Use typed values
+
+Match equivalent object values through a stable `valueKey`. The callback receives the original typed value and option.
+
+```tsx
+<DropDown<{ id: number }>
+  name="owner"
+  inputName="Owner"
+  valueKey="id"
+  defaultValue={{ id: 2 }}
+  placeholder={false}
+  options={[
+    { label: 'Alex', value: { id: 1 } },
+    { label: 'Sam', value: { id: 2 } },
+  ]}
+  onChange={myHandler}
+/>;
+```
+
+### Add field guidance
+
+Provide a `tip` for normal use and an `errorMessage` for validation feedback.
+
+```tsx
+<DropDown
+  name="status"
+  label="Status"
+  variant="stacked"
+  options={statusOptions}
+  tip="Choose the current status."
+  error={hasError}
+  errorMessage="Choose a status before continuing."
+  onChange={myHandler}
+/>;
+```
+
+## Behavior
+
+A leading `--` remains visible in the option menu and is hidden on the closed face. That option stays selectable so users can return to it.
+
+Selection follows the value when options move. If the selected value disappears, the old label is cleared rather than left on screen.
+
+## Accessibility
+
+The visible `label` is associated with the native select. Use `inputName` for a more specific accessible name; without a label, it falls back to `name`, then `Select an option`.
+
+The native select retains platform keyboard interaction. Focus uses `borderColorFocused`; the chevron and mirrored selection text are decorative. Disabled state blocks interaction; error state marks the select invalid.
+
+The visible `tip` or `errorMessage` supplies the accessible description. Supporting text uses the field’s horizontal inset and a `4px` top gap.
+
+Reduced-motion preferences disable border, background, and label transitions. With `behavior="appear"`, the stacked label stays above the selection and the original prompt remains below, including live preference changes.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `backgroundColor` | `ColorValue` | `transparent for underline; core-surface-secondary otherwise` | Field background. An explicit color overrides the border-style default. |
+| `behavior` | `'persistent'  /  'appear'` | `persistent` | Label behavior for the stacked variant. `appear` uses the label in the empty selection position, then animates it above a selected answer. Simple and outlined labels stay persistent. Reduced-motion preferences use the persistent layout. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Border color while not focused, disabled, or in an error state. |
+| `borderColorDisabled` | `ColorValue` | `core-outline-primary` | Border color while disabled. |
+| `borderColorError` | `ColorValue` | `feedback-warning` | Border color when `error` is `true`, unless disabled. Applies equally to box and underline styles. |
+| `borderColorFocused` | `ColorValue` | `core-link-primary` | Border color while focused, unless disabled or in an error state. |
+| `borderRadius` | `number  /  string` | `8` | Corner radius in box mode. Other border styles use zero radius. |
+| `borderStyle` | `'box'  /  'underline'  /  'none'` | `box` | Choose a full box, bottom line, or no border. Box and underline modes share default padding. Borderless mode defaults to bottom padding only; explicit padding remains exact. |
+| `borderWidth` | `number` | `1` | Border thickness in pixels, including an explicit zero. |
+| `children` | `React.ReactNode` | `undefined` | Native `option` elements as an alternative to `options`. Fragments, arrays, and conditional entries are supported; other elements, custom components, and non-whitespace text are rejected. Values are strings, with option text as the fallback when `value` is omitted. Numeric native values become strings. Use `value` or `defaultValue` on DropDown rather than `selected` on an option. Option content must be plain text; native attributes such as `disabled`, `hidden`, `label`, and `title` are preserved. |
+| `defaultValue` | `T  /  null` | `first option value` | Initial selection for local editing. Native form reset restores it without emitting `onChange`. Use `null` for no selected option. |
+| `disabled` | `boolean` | `false` | Disables the native select, blocking pointer and keyboard changes and excluding it from native form data. |
+| `error` | `boolean` | `false` | Marks the select invalid, applies `borderColorError`, and replaces `tip` with `errorMessage`. Validation remains application-owned. |
+| `errorMessage` | `string` | `undefined` | Text beneath the field when `error` is `true`. Empty or whitespace-only text is hidden, without falling back to `tip`. |
+| `gap` | `number` | `8` | Spacing between the inline label, selected text, and chevron, in pixels. |
+| `height` | `number  /  string` | `auto` | Field height including padding and borders. Numbers become pixels; CSS strings pass through. |
+| `iconColor` | `ColorValue` | `core-text-primary` | Chevron color, replaced by `textColorDisabled` while disabled. |
+| `iconSize` | `number` | `20` | Chevron width and height in pixels. |
+| `inline` | `boolean` | `false` | Uses inline-flex layout with a `spacing-xs` margin on each side. |
+| `inputAttributes` | `DropDownProps<T>['inputAttributes']` | `{}` | Native select settings such as `required`, `autoComplete`, and `form`, plus native focus and keyboard handlers. Autocomplete follows the browser/form default unless specified. Managed values, names, styling, callbacks, multiple selection, and raw ARIA are excluded. |
+| `inputId` | `string` | `generated` | Native select ID, associated automatically with the visible label. |
+| `inputName` | `string` | `label, name, then Select an option` | Accessible-name override. Native form naming uses the separate `name` prop. |
+| `label` | `string` | `undefined` | Associated visible label positioned by `variant`. Inline labels have a decorative divider before the value. Empty text is hidden. |
+| `labelBackgroundColor` | `ColorValue` | `core-surface-primary` | Backing color for the outlined label. The label uses `4px` side padding, `2px` top padding, and a `1em` line height. Ignored by other variants. |
+| `labelColor` | `ColorValue` | `core-text-primary` | Visible label color, replaced by `textColorDisabled` while disabled. |
+| `labelSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Simple label typography size. Other variants use `stackedLabelTextSize`. |
+| `name` | `string` | `undefined` | Native form field name. Supply a meaningful name for form data and browser guidance. |
+| `options` | `DropDownOption<T>[]` | `[]` | Choices with a required `value` and optional `label`, `alt`, `formValue`, and `disabled`. Labels are displayed in the menu; `alt` is application metadata and is not used for matching. Use unique values and native form values. Primitive values serialize directly; object values use `valueKey` when available, otherwise the option index. Supply `formValue` to explicitly control form serialization. Disabled options cannot be selected by the user. Use the array form for typed object values and application metadata. Supply either array options or children; mixing them is rejected. |
+| `padding` | `number  /  string` | `automatic spacing tokens` | Field padding shorthand. Simple and stacked box/underline fields use `8px` vertically, `16px` left, and `12px` right. Outlined box/underline fields use `8px` plus half the label font size on top, `16px` sides, and `8px` bottom. Borderless mode defaults to bottom padding only. Explicit values are exact; individual side props take precedence. |
+| `paddingBottom` | `number  /  string` | `spacing-s` | Bottom padding, `8px` by default in all border modes. Numbers become pixels; CSS values and zero are exact. Overrides that side of `padding`. |
+| `paddingLeft` | `number  /  string` | `16px in box/underline modes; otherwise 0` | Left padding. Explicit values override that side of `padding`. |
+| `paddingRight` | `number  /  string` | `12px in simple/stacked box/underline modes; 16px outlined; otherwise 0` | Right padding. Simple and stacked fields compensate for the chevron’s internal space. Explicit values override that side of `padding`. |
+| `paddingTop` | `number  /  string` | `8px in box/underline modes; outlined adds half the label font size; otherwise 0` | Top padding. Explicit values override that side of `padding`. |
+| `placeholder` | `boolean` | `true` | Keeps the existing prompt convention: index zero uses `textColorPlaceholder`. Include a first option such as `-- Choose a status` to make that prompt selectable. This flag does not insert a visible option. |
+| `stackedGap` | `number` | `2` | Space in pixels between a stacked label and value. The space remains reserved with `behavior="appear"`, keeping field height stable. |
+| `stackedLabelTextSize` | `keyof Type` | `body-xs-regular` | Slice typography preset for stacked and outlined labels. |
+| `textColor` | `ColorValue` | `core-text-primary` | Selected text color. Error state does not recolor the value. |
+| `textColorDisabled` | `ColorValue` | `core-text-disabled` | Text, label, and chevron color while disabled. |
+| `textColorError` | `ColorValue` | `feedback-warning` | Error message text color. Does not recolor the selected value. |
+| `textColorPlaceholder` | `ColorValue` | `core-text-tertiary` | First-option or unmatched-selection text color when `placeholder` is `true`. |
+| `textSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Typography size of the label and selected text. |
+| `tip` | `string` | `undefined` | Helpful text beneath the field when `error` is `false`. Empty or whitespace-only text is hidden. |
+| `value` | `T  /  null` | `undefined` | Controlled selection. Changes request a new value through `onChange`; update this prop to accept them. `null` or an unmatched value leaves no option selected instead of retaining a stale choice. |
+| `valueKey` | `string` | `undefined` | Stable object field used to match equivalent values, such as `id`. Without it, object values match by reference. Labels and `alt` text are not guessed as values. Primitive key values also supply native form values unless `formValue` is provided. |
+| `variant` | `'simple'  /  'stacked'  /  'outlined'` | `simple` | Label placement: beside the value, above it, or on the field outline. Independent of `borderStyle`. |
+| `width` | `number  /  string` | `100%` | Field width, including padding and borders. |
+| `...spanAttributes` | `React.HTMLAttributes<HTMLSpanElement>` | `undefined` | Other native attributes and handlers apply to the outer span. `className` is appended and `style` is merged. Raw ARIA is managed internally. |
+
+## Events
+
+| Event | Type | Description |
+| --- | --- | --- |
+| `onChange` | `(value: T, option: DropDownOption<T>, index: number) => void` | Requests the selected value and provides normalized option data plus its current index. One native selection change emits one callback. Prop changes and native form reset do not emit it. |
+| `...spanEvents` | `React.DOMAttributes<HTMLSpanElement>` | Other native handlers apply to the outer span. Use `inputAttributes` for native select keyboard/focus handlers. No Motion gesture or animation lifecycle events are part of the documented API. |

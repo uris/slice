@@ -1,8 +1,8 @@
 # Component review batch 03
 
-The website writing pass covers **TextField, TextArea, DropDown, DivInput, and
+The website writing pass covers **TextField, TextArea, DropDown, ContentEditable, and
 ErrorSummary**. Pages describe the current public API and verified limitations.
-This pass does not change library behavior, rename props, or add compatibility aliases.
+The component reviews below record the agreed implementation changes, with no compatibility aliases.
 
 Review these components one at a time in the order below. After agreeing on each
 change, update implementation, consumers, website, MDX, Storybook controls/play
@@ -66,162 +66,225 @@ The user may request further interaction changes. This pass
 establishes the state/API contract and fixes the confirmed bugs without preempting
 that next design discussion.
 
-## TextArea — ready for review
+## TextArea — first fix pass completed
 
 Route: `/docs/react/text-area/`. Sources:
 [implementation](../../../../../packages/slice/src/components/TextArea/TextArea.tsx),
 [types](../../../../../packages/slice/src/components/TextArea/_types.ts),
 [styles](../../../../../packages/slice/src/components/TextArea/TextArea.module.css).
 
-Confirmed findings:
+- Split controlled `value` from local `defaultValue`. Submission clearing reports
+  `onChange('')`; native form reset restores initial local text, respects canceled
+  resets, and supports external form ownership.
+- Added explicit `autoGrow`, with `rows` as its baseline and `maxHeight` as its
+  scrolling limit. External values, parent width, typography, and row changes
+  remeasure content. Explicit `height` takes precedence; native vertical resizing
+  is available with `autoGrow={false}` and `height="auto"`.
+- Added associated `label`, `inputId`, intent-based `inputName`, native
+  `inputAttributes`, and `readOnly`. Autocomplete follows the form/browser default.
+  Managed values, callbacks, styling, and raw ARIA are not duplicated in native settings.
+- Added `tip` and `errorMessage` with accessible descriptions and field-aligned
+  horizontal padding plus 4px above. Errors style the outline and message, leaving
+  the value at its normal color.
+- Replaced `hasSend` with `showSendButton` and `border` with `borderStyle`.
+  Removed the unused TextArea-specific `Tip` type. No legacy aliases are retained.
+- The send action is a native named button, supports keyboard activation, and honors
+  disabled/read-only/empty states. `sendSize` now sizes it, and reserved footer space
+  prevents overlap with text. Pointer sending retains textarea focus.
+- Enter handling calls the consumer first, honors cancellation and composition,
+  preserves Shift+Enter newlines, and avoids duplicate native form submission.
+  Without `onSubmit`, native multiline editing remains available.
+- Applied `minWidth` correctly, fixed `xl` typography, consolidated dimensions through
+  `setStyle`, removed broad transitions and `!important`, and honored reduced motion.
+- Updated consumers, website/MDX references and previews, and colocated stories/type
+  checks. Runtime checks now live in the component story instead of shared play helpers.
 
-- `value` is effect-synchronized local state. `submitClears` changes the DOM and
-  local state without emitting `onChange`, so application state can retain stale text.
-- Auto-sizing runs on mount, `rows` changes, and input events, but not on later
-  `value` changes. Explicit height, rows, native resizing, and auto-sizing compete
-  without a clear mode. `minWidth` creates an unused variable and appends `px` to
-  strings. `sendSize` also creates an unused variable. `textSize="xl"` maps to small.
-- The textarea has no built-in accessible label; `name` is only a native form name.
-  Wrapper IDs and ARIA do not reach the inner textarea. The docs preview uses an
-  implicit native label as application-owned wiring.
-- The send action is on a div's `onMouseDown`, not the button's click handler.
-  Keyboard activation does not take that path, and `disabled` only disables the
-  textarea. The send icon needs an action name.
-- Enter submission ignores Shift and composition. `onKeyDown` runs after submission,
-  so a consumer cannot cancel it. Blur/focus callbacks live on the outer wrapper
-  and fire for descendant focus changes, including the send control.
-- CSS uses broad transitions and `!important`, with no reduced-motion override.
-  A private dimension helper repeats `setStyle` behavior.
+Label variants and animated label appearance remain a separate follow-up pass.
 
-Proposed decisions:
-
-- Align value, focus, label, read-only, and native-attribute contracts with TextField.
-- Define auto-grow versus fixed/native-resize modes. Remeasure on external text,
-  width, and typography changes; preserve explicit bounds. Apply `minWidth`, fix
-  the `xl` mapping, and implement or remove `sendSize`.
-- Move submission to a named native action button, honor disabled state, and define
-  Enter/Shift+Enter/composition behavior. Let consumer handlers cancel it first.
-- Keep clearing observable to application state and emit focus callbacks for the
-  intended control. Replace duplicate sizing and broad animation with shared helpers,
-  targeted Water timing, and reduced-motion handling.
-
-## DropDown — ready for review
+## DropDown — first fix pass completed; placeholder review next
 
 Route: `/docs/react/drop-down/`. Sources:
 [implementation](../../../../../packages/slice/src/components/DropDown/DropDown.tsx),
 [types](../../../../../packages/slice/src/components/DropDown/_types.ts),
 [styles](../../../../../packages/slice/src/components/DropDown/DropDown.module.css).
 
-Confirmed findings:
+- Added strict `value` / local `defaultValue` selection in place of competing
+  `selectedIndex` / `selectedValue` inputs. Selection and the visible face derive
+  from the same value during SSR, prop updates, option reordering, and option removal.
+- Kept stable object matching through `valueKey` or reference identity; removed
+  accidental label/alt matching. A null or unmatched value leaves no matching choice
+  instead of displaying the previous selection.
+- Consolidated selection into `onChange(value, option, index)`. Removed `onOption`
+  and option mouse handlers; native change is the only selection path.
+- Added native disabling, option disabling, form naming/serialization, and reset
+  behavior. Primitive values serialize directly; object keys or explicit option
+  `formValue` provide meaningful form values. Object values without either fall
+  back to indexes. Controlled form reset preserves the current application value.
+- Added associated labels, `inputId`, intent-based `inputName`, and native
+  `inputAttributes`. Raw ARIA is managed internally; mirrored text and the chevron
+  are decorative. Native focus updates the visible border.
+- Removed `borderSize` and unused `validate`; renamed the bottom border mode to
+  `underline`, matching TextField/TextArea. Applied numeric/CSS width and height,
+  accurate span attributes, consistent error/disabled border colors, exact explicit
+  padding, and self-contained clipping/layout.
+- Replaced broad transitions and `!important` with targeted Water color timing and
+  reduced-motion support. Updated stories, type checks, docs, previews, and benchmarks.
 
-- `disabled` only changes colors and prevents pointer-down. The native select
-  remains enabled, keyboard-selectable, and unguarded by `handleChange`.
-- `selectedIndex` and `selectedValue` both synchronize local state. Value matching
-  also guesses from label/alt strings, and unmatched values retain a stale selection.
-  The visible face starts at “Select an option” independently of the actual first
-  native option unless a selection prop is supplied; SSR and hydration can disagree.
-- `placeholder` only changes index-zero coloring. It does not insert a placeholder
-  option. The face strips the first `-- ` from labels, introducing an implicit text convention.
-- Native option values are indexes. `name` is used as an ARIA label but is never
-  assigned as the native select's form name, preventing normal form serialization.
-- `borderSize` duplicates `borderWidth`. `validate` is typed but unused and forwarded
-  to the wrapper. `height` generates an unused variable. The outer span inherits
-  div attribute/event types.
-- Box-border state and bottom-border state use different color paths: error and
-  disabled colors can disagree. The visible label is unassociated, the chevron is
-  not decorative, and the transparent native select removes its outline.
-- Option mouse-up and select change handlers duplicate selection paths. CSS uses
-  broad transitions and `!important`, with no reduced-motion handling.
+The form-layout follow-up adds TextField's `simple`, `stacked`, and `outlined`
+label variants, stacked `behavior="appear"`, stable reserved label space, live
+reduced-motion fallback, label typography/backing controls, and exact `padding`
+with side overrides. `tip` / `errorMessage` share the field inset and a 4px top gap,
+provide accessible descriptions, and keep error coloring off the selected value.
+Underline backgrounds default to transparent unless a color is explicitly supplied.
 
-Proposed decisions:
+Native `option` children are now an alternative to array `options`, using the
+same value, form, and label paths. Fragments/conditional entries are flattened;
+non-option elements, custom components, mixed sources, option `selected` state,
+and non-text option content are rejected. Children use native string values;
+arrays retain generic object values and metadata. Native option attributes are
+preserved. Docs introduce composition first and the array alternative immediately
+next, with the main canvas preview using children.
 
-- Fix native disabling and form naming first. Define explicit value/defaultValue
-  selection, stable object matching if retained, and one change callback.
-- Replace prompt/label guessing with an explicit placeholder contract. Decide
-  whether composed options are useful, using the same selection path as data options.
-- Remove `borderSize` and unused `validate`; apply dimensions and correct native
-  span/select types. Keep selected display, native value, and form data consistent.
-- Associate labels, hide decorative icons, and keep accessibility configuration
-  intent-based. Reconcile state colors and use targeted Water transitions with reduced motion.
+The current placeholder convention is deliberately retained for the next discussion:
+`placeholder` styles index zero; applications provide a selectable first option such
+as `-- Choose a status`, usually with an empty value. The leading marker stays in the
+menu and is omitted on the closed face. It is not treated as a real selected answer,
+but it remains available so users can return to no selection. No new visible
+placeholder option is inserted automatically.
 
-## DivInput — ready for review
+## ContentEditable — implemented: editing text in place
 
-Route: `/docs/react/div-input/`. Sources:
-[implementation](../../../../../packages/slice/src/components/DivInput/DivInput.tsx),
-[types](../../../../../packages/slice/src/components/DivInput/_types.ts),
-[styles](../../../../../packages/slice/src/components/DivInput/DivInput.module.css).
+Route: `/docs/react/content-editable/`. Sources:
+[implementation](../../../../../packages/slice/src/components/ContentEditable/ContentEditable.tsx),
+[types](../../../../../packages/slice/src/components/ContentEditable/_types.ts),
+[styles](../../../../../packages/slice/src/components/ContentEditable/ContentEditable.module.css).
 
-Confirmed findings:
+### Agreed intent
 
-- Enter calls `onChange(null)` and `onSubmit`, then blurs. The blur handler repeats
-  both callbacks, so one commit can produce duplicate side effects.
-- Placeholder text is actual editable content and shares mutable refs with the value.
-  Clearing, typing over placeholder text, and blur can expose placeholder or stale
-  text as a value. Initial server-rendered empty content differs from the placeholder
-  written after mount.
-- `setCursor` uses hardcoded Range offsets and can target invalid child offsets.
-  Paste manipulates the selection/DOM directly and updates a ref without updating
-  the local text state used by placeholder rendering. `cleanString` is plain-text
-  normalization, not a rich-text model or a general HTML security boundary.
-- `wrap=false` generates invalid `white-space: no-wrap`; the true branch’s
-  `wrap` value is supported in both tested browsers. `clamp` is removed only
-  during focused editing. `focus=false` changes visual state without actually blurring.
-- `radius` duplicates `borderRadius`; the inner surface uses its own fixed radius.
-  `isEditable`, `focus`, and `onDblClick` differ from established native naming.
-- All keyboard events stop propagation; Enter and angle brackets are blocked before
-  inherited wrapper handlers can help. Click handling prevents default and bubbling.
-  Read-only text retains a textbox role without corresponding read-only state;
-  multiline semantics and native form serialization are absent.
-- A Motion wrapper is used without an intentional animation/gesture API. CSS has
-  no reduced-motion override, and the component repeats a dimension helper.
+ContentEditable displays text that an application can temporarily make editable, such as
+an item title. It does not own its activation gesture or participate in form
+submission. The application controls `isEditable` and can attach Slice's
+`useDoubleClick` handlers directly, use a single click, or provide a keyboard/edit
+button trigger. Keep `isEditable` as an editing-mode prop rather than replacing it
+with a form-style `readOnly` contract.
 
-Proposed decisions:
+### Issues addressed in this pass
 
-- Decide whether this should remain a contenteditable editor or use a native input
-  for single-line title editing. Preserve a separate component only for a clear benefit.
-- Define text/value/defaultValue semantics and one commit event. Separate placeholder
-  presentation from stored content; handle plain-text paste and caret restoration safely.
-- Normalize `readOnly`, focus requests, `onDoubleClick`, and `borderRadius`; remove
-  legacy aliases and the unused Motion layer if it adds no intended behavior.
-- Fix wrapping/clamping, preserve intended browser editing shortcuts, support IME,
-  and define form integration and semantics with intent-based accessibility props.
+- Enter calls `onChange(null)` and `onSubmit`, then blur repeats both. A single edit
+  can trigger duplicate persistence requests; unchanged blur also submits.
+- Placeholder text is written into the editable DOM and can be mistaken for saved
+  content. Literal text equal to the placeholder is also incorrectly classified.
+- The synchronization effect rewrites DOM text when value, placeholder, focus, or
+  editability changes, which can discard drafts or disturb the caret.
+- Click handling prevents default and propagation, drops the native event payload,
+  and uses a custom `onDblClick` name. This obstructs external activation handlers.
+  Keyboard handling stops every key before consumers can intervene.
+- Range placement uses fixed child offsets that are invalid for empty or more
+  complex DOM. Paste does not consistently synchronize the draft and display state.
+  `cleanString` removes whitespace/markup from plain user text; blocking angle
+  brackets does not make sense when text is rendered safely as text.
+- Static text still exposes a textbox role and cannot be selected for copying.
+  Wrapping uses invalid `no-wrap`; the inner and outer radius can disagree.
+  An unused Motion layer and private width helper add unnecessary machinery.
+- `useDoubleClick` returns timer cleanup from an event handler. React does not run
+  that return value as unmount cleanup, so pending single-click work needs a hook
+  lifecycle cleanup when the activation example is implemented.
 
-## ErrorSummary — ready for review
+### Implementation checklist (completed)
+
+1. Keep a committed/display value and a separate edit-session draft. Snapshot the
+   starting value on activation, focus safely, and avoid DOM rewrites during typing.
+   External updates should not erase an active draft or move its caret. Define
+   how queued external values and external edit-mode exit are resolved explicitly.
+2. Replace `onSubmit` with `onCommit`, called once only when the draft differs from
+   the session's starting value. Enter and blur share one guarded finish path;
+   Escape cancels without committing. `onChange` reports strings only, never null.
+   Add a completion notification such as `onEditEnd(reason)` so the owner can exit
+   edit mode even when nothing changed. Preserve IME composition and undo shortcuts.
+3. Use native `onClick(event)`, `onDoubleClick(event)`, and `onKeyDown(event)`.
+   Activation remains application-owned; honor consumer cancellation before handling
+   finish keys. No built-in double-click detector or persistence/network ownership.
+4. Keep placeholder presentation outside the stored/editable value. Use safe text
+   DOM operations and plain-text paste; preserve literal angle brackets and spaces.
+   For a single-line title model, pasted line breaks become spaces rather than
+   concatenating words. `wrap` controls visual wrapping, not Enter submission.
+5. Render normal selectable text outside editing and appropriate textbox semantics
+   during editing. Keep accessible naming intent-based. Examples need a keyboard
+   activation path in addition to any pointer gesture. Selecting all on activation
+   should be optional so click activation can retain natural caret placement.
+6. Remove `radius` in favor of `borderRadius` and normalize any retained focus
+   request to `focused`. Use `setStyle`, valid wrapping/clamping, self-contained
+   flex sizing, consistent radii, and surrounding typography by default. Remove
+   the unused Motion wrapper; any visual transitions use Water and reduced motion.
+
+### Documentation and verification
+
+- Introduce the component as editing text in place, with `onCommit` described as
+  requesting application persistence rather than submitting a form.
+- Show an application-owned activation example using `useDoubleClick`, then an
+  immediate single-click alternative and a keyboard/edit-button activation path.
+- Demonstrate optimistic local title updates followed by application-owned async
+  persistence. Keep pending/error handling outside the base component unless a
+  separate need is established.
+- Canvas previews: double-click title editing, single-click editing, an empty title
+  with a real placeholder, and wrapped/clamped title text. Instructions belong in
+  a concise TipBox, not in the rendered title.
+- Keep the established Usage/Behavior/Accessibility/alpha Props/Events structure,
+  with no repeated prop guidance and only H1/H2/Definition tracking.
+- Replace tests that assert the old bugs with focused hidden story fixtures for
+  one commit, unchanged edits, cancel, Enter then blur, external activation, native
+  event forwarding, placeholders, caret/paste, composition, and external updates.
+  Add hook unit coverage for timer cleanup if `useDoubleClick` is updated.
+
+Implemented the edit-session contract above, with `onCommit(value, previousValue)`,
+string-only `onChange`, and `onEditEnd(reason)`. Native events now reach the text
+surface directly. `radius`, `focus`, `onDblClick`, and `onSubmit` were removed;
+activation automatically focuses, so a separate focus prop was unnecessary.
+`defaultValue` supports local committed text; controlled `value` stays separate
+from the draft. External exit commits changed text, and Escape restores the latest
+committed value. Static text inherits typography and remains selectable. Plain-text
+paste preserves spaces and angle brackets; placeholders remain presentation only.
+The unused Motion layer was removed in favor of CSS Water with reduced motion.
+Website/Storybook docs, canvas previews, interaction fixtures, public type exports,
+and benchmark scenarios reflect the new API. `useDoubleClick` also cancels pending
+single-click work on unmount; its existing manual cancellation API is retained.
+
+## ErrorSummary — implemented
 
 Route: `/docs/react/error-summary/`. Sources:
 [implementation](../../../../../packages/slice/src/components/ErrorSummary/ErrorSummary.tsx),
 [types](../../../../../packages/slice/src/components/ErrorSummary/_types.ts),
 [styles](../../../../../packages/slice/src/components/ErrorSummary/ErrorSummary.module.css).
 
-Confirmed findings:
-
-- Show/hide animation has a hardcoded `maxHeight: 500` while the panel hides overflow,
-  so a long summary can be clipped. Timing is fixed easeInOut at 250ms, not Water;
-  reduced-motion preferences are not observed and there is no public transition prop.
-- The summary has no built-in alert/live-region role, focus handling, heading
-  association, or field-navigation links. Titles are bold spans rather than headings.
-  Application-owned wrappers can provide announcement semantics in the meantime.
-- Entry keys include array indexes; message keys use raw message text, so duplicate
-  messages within one entry produce duplicate React keys. Stable item IDs are absent.
-- `textColor` also sets the border color; border shape/width, spacing, and heading
-  styling are hardcoded. CSS contains `!important` overrides.
-- Remaining div attributes are cast to `any` and spread onto a Motion wrapper,
-  allowing accidental APIs beyond the declared native event contract.
-
-Proposed decisions:
-
-- Animate intrinsic height or measured height without a fixed clipping ceiling.
-  Expose `transition` merged with Water and honor live reduced-motion changes.
-- Choose announcement and optional focus behavior deliberately through named props;
-  avoid raw ARIA configuration. Consider field targets as typed entry metadata,
-  with application-owned navigation when the summary cannot own it.
-- Add stable identities where needed and preserve duplicate messages safely. Decide
-  which presentation controls are useful before adding more props.
-- Keep native event typing accurate and document only intentional animation behavior.
+- Removed numbering and the `autoNumber` prop. Errors are unnumbered groups with
+  optional bullet messages; repeated messages render safely and blanks are omitted.
+- Kept `feedback-warning` defaults. Added independent `borderColor`, `borderWidth`,
+  `borderRadius`, `padding`, and `gap`, with exact CSS dimension handling.
+- Replaced the 500px ceiling with internal AnimatePresence height/opacity animation,
+  including initial appearance. `motionValues` customizes `initial`, `animate`, and
+  `exit` states; partial object overrides retain defaults. `transition` merges with
+  Slice's Water defaults; live reduced-motion changes stop movement and
+  fading, including an exit already in progress.
+- Added a persistent live region: `announcement` defaults to `polite`, with
+  `assertive` and `off` alternatives. `summaryName` supplies the accessible name.
+  Showing errors does not steal focus; a forwarded native div ref supports
+  application-managed focus after validation.
+- Entries accept optional stable `id` and `fieldName`. A field title becomes a
+  native button when `fieldName` is present. Navigation matches a visible enabled
+  input/select/textarea by native `name`, preferring the surrounding form. It
+  focuses the control and scrolls its parent into view; reduced motion scrolls
+  immediately. Missing targets do nothing.
+- Kept native attributes/events on the persistent outer div rather than casting
+  them to Motion props. Managed ARIA is intent-based; incidental Motion callbacks
+  are not public API. Removed CSS `!important` overrides.
+- Updated website/MDX docs, the Motion section, field-navigation and live-validation
+  previews, interaction stories, public type checks, and benchmark fixtures. All
+  examples place the summary above the fields, reflecting its role as a top-of-form
+  overview rather than an individual field’s error message.
 
 ## Suggested review order
 
 Start with TextField, then TextArea, so naming, disabled/read-only behavior, focus,
 and value contracts can be shared. Review DropDown next for the native-selection
-contract, DivInput for whether contenteditable is justified, and ErrorSummary last
+contract, ContentEditable for whether contenteditable is justified, and ErrorSummary last
 for integration with the refined fields.

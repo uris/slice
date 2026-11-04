@@ -17,7 +17,13 @@ export const selectionCode = `
 `;
 
 export const removeCode = `
-<Chip label="Design" onRemove={myRemoveHandler} />
+{tags.map((tag) => (
+    <Chip
+        key={tag.id}
+        label={tag.label}
+        onRemove={() => setTags((items) => items.filter((item) => item.id !== tag.id))}
+    />
+))}
 `;
 
 export const stylingCode = `

@@ -260,7 +260,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 	const getPadding = () => {
 		if (padding != null) return setStyle(padding);
 		if (variant === 'outlined') {
-			return 'calc(var(--spacing-s) + var(--tf-label-font-size, 0px) / 2) var(--spacing-m) var(--spacing-s)';
+			return 'calc(var(--spacing-s) + var(--tf-label-font-size, 0px) / 2) var(--spacing-m)';
 		}
 		const left = iconLeft ? iconInset : 'var(--spacing-m)';
 		const right = trailingIcon ? iconInset : 'var(--spacing-m)';
@@ -332,6 +332,11 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 					<label className={`${css.label} ${css[labelSize]}`} htmlFor={id}>
 						{label}
 					</label>
+				)}
+				{hasLabel && variant === 'simple' && (
+					<span className={`${css.separator} ${css[labelSize]}`} aria-hidden="true">
+						|
+					</span>
 				)}
 				<div className={css.container}>
 					{variant !== 'simple' && leadingIcon}

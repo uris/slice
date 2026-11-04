@@ -795,7 +795,10 @@ export const OutlinedDefaultPadding: Story = {
 		expect(Number.parseFloat(style.paddingTop)).toBe(8 + Number.parseFloat(getComputedStyle(label).fontSize) / 2);
 		expect(style.paddingLeft).toBe('16px');
 		expect(style.paddingRight).toBe('16px');
-		expect(style.paddingBottom).toBe('8px');
+		expect(style.paddingBottom).toBe(style.paddingTop);
+		const bounds = wrapper.getBoundingClientRect();
+		const valueBounds = input.getBoundingClientRect();
+		expect(Math.abs(valueBounds.top + valueBounds.height / 2 - bounds.top - bounds.height / 2)).toBeLessThan(0.5);
 		expect(Math.abs(label.getBoundingClientRect().left - input.getBoundingClientRect().left)).toBeLessThan(1);
 		expect(
 			Math.abs(
@@ -967,5 +970,16 @@ export const AppearingClearDelay: Story = {
 		await userEvent.click(clear);
 		expect(input).toHaveValue('');
 		expect(clear).not.toBeVisible();
+	},
+};
+
+export const InlineLabelSeparator: Story = {
+	tags: ['tests'],
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const label = canvas.getByText('Email', { selector: 'label' });
+		expect(label.nextElementSibling).toHaveTextContent('|');
+		expect(label.nextElementSibling).toHaveAttribute('aria-hidden', 'true');
+		expect(canvas.getByRole('textbox')).toHaveAccessibleName('Email');
 	},
 };

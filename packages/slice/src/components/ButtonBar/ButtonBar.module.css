@@ -1,4 +1,7 @@
 .wrapper {
+	font: inherit;
+	font-size: var(--font-size-m);
+	line-height: var(--line-height-l);
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
@@ -15,6 +18,7 @@
 }
 
 .button {
+	font: inherit;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -42,6 +46,7 @@
 }
 
 .button + .button {
+	font: inherit;
 	margin-inline-start: var(--bb-button-gap);
 }
 

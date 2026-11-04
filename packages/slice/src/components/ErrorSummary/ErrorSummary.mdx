@@ -1,95 +1,140 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as ErrorSummaryStories from './ErrorSummary.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ErrorSummaryStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # ErrorSummary
-        `ErrorSummary` renders a grouped summary of errors with entry titles and one or more message lines per entry.
+# ErrorSummary
 
-        ## Base element
-        `HTMLDivElement`
+Bring validation messages together and help people get back to the right field.
 
-        ## Interface
-        `ErrorSummaryProps`
+## Usage
 
-        ## Typing
-        Error entries have the following shape:
-        <RenderSource>
-        ```
-        type ErrorMessage = {
-            title: string;
-            message?: string | string[];
-        };
-        ```
-        </RenderSource>
+Place the summary above the fields, typically at the top of a large form. It collects errors across fields; each field can retain its own error message.
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '24%'}} />
-            <col style={{width: '15%'}} />
-            <col style={{width: '60%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th className={"left"}>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>entries</code></td><td><code>ErrorMessage[]</code></td><td><code>undefined</code></td><td>List of grouped error entries to render. When omitted or empty, nothing is rendered.</td></tr>
-            <tr><td><code>textColor</code></td><td><code>string</code></td><td><code>'var(--feedback-warning)'</code></td><td>Text color applied to the summary content through CSS variables.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'transparent'</code></td><td>Background color applied to the summary container through CSS variables.</td></tr>
-            <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Text size token applied to entry titles and message list items.</td></tr>
-            <tr><td><code>autoNumber</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Automatically prefixes entry titles with `1.`, `2.`, etc. when more than one entry is present.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native wrapper <code>div</code> props such as <code>id</code>, <code>className</code>, <code>style</code>, and <code>aria-*</code>.</td></tr>
-          </tbody>
-        </table>
+```tsx
+import { ErrorSummary } from '@apple-pie/slice';
 
-        ## Events
-        `ErrorSummary` does not expose component-specific callback props.
+<ErrorSummary entries={[
+  { id: 'email', title: 'Email address required', message: 'Add an email address to continue.' },
+  { id: 'project', title: 'Choose a project' },
+]} />
+```
 
-        ## Rendering behavior
-        - The component only renders when `entries` exists and contains at least one item.
-        - Each entry renders its `title` in bold.
-        - If `message` exists, it is normalized into a list and rendered as bullet items.
-        - When `autoNumber` is `true` and there is more than one entry, titles are prefixed with their item number.
-        - `textSize`, `textColor`, and `backgroundColor` are applied through the component CSS variables.
-        - The summary uses motion-based enter/exit animation when it appears or disappears.
+### Connect errors to fields
 
-        ## Code examples
-        </Unstyled>
+```tsx
+import { useState } from 'react';
+import { ErrorSummary, type ErrorMessage, TextField } from '@apple-pie/slice';
 
-        <RenderSource>
-        ```
-        import { ErrorSummary } from '@apple-pie/slice';
-            
-        // error list
-        const errors = [
-            { title: 'Email is required' },
-            {
-                title: 'Invalid Password Format',
-                message: [
-                    'Password must be at least 8 characters',
-                    'Password must include a number',
-                ],
-            },
-        ]
-            
-        export function ErrorSummaryExample() {
-            return (
-                <ErrorSummary autoNumber={true} entries={errors} />
-            );
-        }
-        ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+function ContactForm() {
+  const [email, setEmail] = useState('');
+  const [errors, setErrors] = useState<ErrorMessage[]>([]);
+
+  return <form onSubmit={(event) => {
+    event.preventDefault();
+    setErrors(email.trim() ? [] : [{
+      id: 'email-required',
+      title: 'Email address required',
+      message: 'Add an email address to continue.',
+      fieldName: 'email',
+    }]);
+  }}>
+    <ErrorSummary entries={errors} />
+    <TextField name="email" inputName="Email address" value={email}
+      onChange={(next) => setEmail(next ?? '')} />
+    <button type="submit">Continue</button>
+  </form>;
+}
+```
+
+### Show errors as you type
+
+This demo treats every entered value as invalid. Your app supplies the validation rules.
+
+```tsx
+function LiveValidation() {
+  const [value, setValue] = useState('');
+  const errors: ErrorMessage[] = value.length > 0 ? [{
+    id: 'example-value',
+    title: 'Value not accepted',
+    message: 'Choose a different value.',
+    fieldName: 'example-value',
+  }] : [];
+
+  return <form onSubmit={(event) => event.preventDefault()}>
+    <ErrorSummary entries={errors} />
+    <TextField name="example-value" inputName="Example value"
+      placeholder="Enter a value" value={value}
+      onChange={(next) => setValue(next ?? '')} error={errors.length > 0} />
+  </form>;
+}
+```
+
+## Behavior
+
+Errors are unnumbered groups with optional bullet messages. Blank messages are omitted; repeated messages are supported. The panel animates its actual height without a clipping ceiling. Field navigation searches its surrounding form first, or the document when outside a form, matching the native `name` of a visible enabled input, select, or textarea. It focuses that control and scrolls its parent into view. Missing targets do nothing. An empty array hides the panel while preserving the announcement region.
+
+## Accessibility
+
+Updates are announced politely by default. Keep the summary mounted before validation updates. Use `summaryName` for its accessible name and `announcement` for urgency or to disable announcements. Showing errors does not move focus automatically. Field titles are native buttons when `fieldName` is supplied. A forwarded `ref` points to the outer div for application-managed focus. Reduced motion disables panel animation and smooth navigation scrolling, including live preference changes.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `announcement` | `'polite' ∣ 'assertive' ∣ 'off'` | `polite` | Controls announcements of updated errors. `polite` waits for a pause, `assertive` requests immediate attention, and `off` disables announcements. |
+| `backgroundColor` | `ColorValue` | `feedback-warning at 10% opacity` | Panel background. |
+| `borderColor` | `ColorValue` | `feedback-warning` | Panel border color, independent of `textColor`. |
+| `borderRadius` | `number ∣ string` | `corner-xs (4px)` | Panel corner radius in pixels or CSS units. |
+| `borderWidth` | `number ∣ string` | `1` | Border width in pixels or CSS units. Zero removes the border. |
+| `entries` | `ErrorMessage[]` | `undefined` | Current validation errors. An empty or omitted array hides the visible panel while retaining its announcement region. |
+| `gap` | `number ∣ string` | `spacing-xs (4px)` | Space between error groups, in pixels or CSS units. |
+| `padding` | `number ∣ string` | `spacing-m (16px)` | Panel padding. Numeric values become pixels; CSS shorthands and zero are applied exactly. |
+| `summaryName` | `string` | `Errors to review` | Accessible name for the summary. Blank names use the fallback. |
+| `textColor` | `ColorValue` | `feedback-warning` | Color of titles, messages, and field actions. |
+| `textSize` | `'xs' ∣ 's' ∣ 'm' ∣ 'l' ∣ 'xl'` | `m` | Slice body text size for titles and messages. |
+| `divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Native attributes and events apply to the persistent outer wrapper. `className` is appended and `style` is merged; component CSS variables take priority. Content, roles, and raw ARIA attributes are managed internally. |
+
+### ErrorMessage
+
+```ts
+type ErrorMessage = {
+  id?: string;
+  title: string;
+  message?: string | string[];
+  fieldName?: string;
+};
+```
+
+Use `id` for stable identity during changes or reordering. Identity otherwise falls back to `fieldName` or `title`. `fieldName` matches the control’s native `name`, rather than its accessible name.
+
+## Motion
+
+Appearance and removal use an internal `AnimatePresence` and Motion element: opacity fades from 0 to 1 while height expands from 0 to auto; exit reverses both. You do not need to wrap the summary yourself.
+
+```tsx
+<ErrorSummary
+  entries={errors}
+  transition={{ duration: 0.35 }}
+  motionValues={{
+    initial: { y: -8 },
+    animate: { y: 0 },
+    exit: { y: -8 },
+  }}
+/>
+```
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `motionValues` | `Variants` | Fade and height expansion | Overrides the `initial`, `animate`, and `exit` states. Partial object overrides retain default height and opacity values. |
+| `transition` | `Transition` | Water | Settings are merged with Slice’s Water transition. |
+
+Defaults are `initial: { height: 0, opacity: 0 }`, `animate: { height: 'auto', opacity: 1 }`, and `exit: { height: 0, opacity: 0 }`. Reduced motion bypasses custom variants, delays, and repeats, including live preference changes.
+
+## Events
+
+Native div events apply to the persistent outer wrapper; field actions bubble normally. No component-specific callbacks or Motion gesture callbacks are exposed.
+
+## Ref
+
+The forwarded ref points to the outer `HTMLDivElement`. With visible entries it can be focused through `ref.current?.focus()`.

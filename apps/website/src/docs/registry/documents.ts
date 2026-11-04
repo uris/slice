@@ -16,8 +16,14 @@ const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 		['textfield', () => import('@/documents/react/components/TextField/TextField')],
 		['text-area', () => import('@/documents/react/components/TextArea/TextArea')],
 		['drop-down', () => import('@/documents/react/components/DropDown/DropDown')],
-		['div-input', () => import('@/documents/react/components/DivInput/DivInput')],
+		['content-editable', () => import('@/documents/react/components/ContentEditable/ContentEditable')],
 		['error-summary', () => import('@/documents/react/components/ErrorSummary/ErrorSummary')],
+
+		['overlay', () => import('@/documents/react/components/Overlay/Overlay')],
+		['modal', () => import('@/documents/react/components/Modal/Modal')],
+		['modal-controller', () => import('@/documents/react/components/ModalController/ModalController')],
+		['tip', () => import('@/documents/react/components/Tip/Tip')],
+		['toast', () => import('@/documents/react/components/Toast/Toast')],
 
 		['icon-button', () => import('@/documents/react/components/IconButton/IconButton')],
 		['toggle-button', () => import('@/documents/react/components/ToggleButton/ToggleButton')],

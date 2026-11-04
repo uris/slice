@@ -11,7 +11,7 @@ import {
 	AudioBubble,
 	Camera,
 	CheckBox,
-	DivInput,
+	ContentEditable,
 	Dot,
 	DraggablePanel,
 	DropDown,
@@ -94,9 +94,9 @@ const mockAvatars = [
 ];
 
 const mockErrors = [
-	{ id: '1', title: '1', bullets: ['one'] },
-	{ id: '2', title: '2', bullets: ['one', 'two'] },
-	{ id: '3', title: '3', bullets: ['one'] },
+	{ id: '1', title: '1', message: ['one'] },
+	{ id: '2', title: '2', message: ['one', 'two'] },
+	{ id: '3', title: '3', message: ['one'] },
 ];
 
 export const avatarGroupConfig: ComponentBenchmarkConfig = {
@@ -107,6 +107,16 @@ export const avatarGroupConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () => measureMountTime(<AvatarGroup avatars={mockAvatars} />, 50),
 		},
+  {
+   name: 'Children Mount Time',
+   type: 'mount',
+   fn: () => measureMountTime(<AvatarGroup>{mockAvatars.map((avatar) => <Avatar key={avatar.email} name={`${avatar.first} ${avatar.last}`} />)}</AvatarGroup>, 50),
+  },
+  {
+   name: 'Limited Mount Time',
+   type: 'mount',
+   fn: () => measureMountTime(<AvatarGroup avatars={mockAvatars} limit={1} backgroundColor="core-surface-tertiary" onMore={() => {}} />, 50),
+  },
 		{
 			name: 'Re-render',
 			type: 'rerender',
@@ -850,7 +860,7 @@ export const buttonBarConfig: ComponentBenchmarkConfig = {
 					<ButtonBar buttons={mockButtons} />,
 					(container) => {
 						const updatedButtons = [...mockButtons, { icon: 'plus', tip:'plus' }];
-						container.rerender(<ButtonBar buttons={updatedButtons} />);
+						container.rerender(<ButtonBar buttons={updatedButtons} buttonSize="l" />);
 					},
 					50,
 				),
@@ -901,9 +911,9 @@ export const chipConfig: ComponentBenchmarkConfig = {
 			type: 'event',
 			fn: () =>
 				measureEventResponseTime(
-					<Chip label="Chip" onClick={() => {}} />,
+					<Chip label="Chip" onRemove={() => {}} />,
 					(container) => {
-						const chip = container.container.querySelector('[class*="chip"]');
+						const chip = container.getByRole('button', { name: 'Remove Chip' });
 						if (chip) fireEvent.click(chip);
 					},
 					50,
@@ -945,22 +955,28 @@ export const labelConfig: ComponentBenchmarkConfig = {
 	],
 };
 
-export const divInputConfig: ComponentBenchmarkConfig = {
-	componentName: 'DivInput',
+export const contentEditableConfig: ComponentBenchmarkConfig = {
+	componentName: 'ContentEditable',
 	tests: [
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<DivInput isEditable value="Test" />, 50),
+			fn: () => measureMountTime(<p>Project: <ContentEditable value="Test" /></p>, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<DivInput isEditable value="Initial" />,
+					<div style={{ display: 'flex', flexDirection: 'column', width: 360 }}>
+						<ContentEditable value="Short title" />
+					</div>,
 					(container) => {
-						container.rerender(<DivInput isEditable value="Updated" />);
+						container.rerender(
+							<div style={{ display: 'flex', flexDirection: 'column', width: 360 }}>
+								<ContentEditable value="A longer project title that wraps within the available space" />
+							</div>,
+						);
 					},
 					50,
 				),
@@ -970,9 +986,9 @@ export const divInputConfig: ComponentBenchmarkConfig = {
 			type: 'event',
 			fn: () =>
 				measureEventResponseTime(
-					<DivInput isEditable value="Test" onFocus={() => {}} />,
+					<ContentEditable isEditable value="Test" onFocus={() => {}} />,
 					(container) => {
-						const input = container.container.querySelector('[class*="input"]');
+						const input = container.container.querySelector('[role="textbox"]');
 						if (input) fireEvent.focus(input);
 					},
 					50,
@@ -981,7 +997,7 @@ export const divInputConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<DivInput value="Test Input" isEditable />, 10),
+			fn: () => measureMemoryDelta(<ContentEditable value="Test Input" isEditable />, 10),
 		},
 	],
 };
@@ -1079,10 +1095,33 @@ export const dropDownConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<DropDown options={mockDropDownOptions} selectedValue="1" />,
+					<DropDown options={mockDropDownOptions} value="1" />,
 					(container) => {
-						container.rerender(<DropDown options={mockDropDownOptions} selectedValue="2" />);
+						container.rerender(<DropDown options={mockDropDownOptions} value="2" />);
 					},
+					50,
+				),
+		},
+		{
+			name: 'Appearing label selection',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<DropDown options={mockDropDownOptions} value="1" label="Status" variant="stacked" behavior="appear" />,
+					(container) => container.rerender(<DropDown options={mockDropDownOptions} value="2" label="Status" variant="stacked" behavior="appear" />),
+					50,
+				),
+		},
+		{
+			name: 'Native option composition',
+			type: 'mount',
+			fn: () =>
+				measureMountTime(
+					<DropDown name="status" inputName="Status">
+						<option value="">-- Choose a status</option>
+						<option value="active">In progress</option>
+						<option value="complete">Complete</option>
+					</DropDown>,
 					50,
 				),
 		},
@@ -1093,8 +1132,8 @@ export const dropDownConfig: ComponentBenchmarkConfig = {
 				measureEventResponseTime(
 					<DropDown options={mockDropDownOptions} onChange={() => {}} />,
 					(container) => {
-						const dropdown = container.container.querySelector('[class*="wrapper"]');
-						if (dropdown) fireEvent.click(dropdown);
+						const select = container.container.querySelector('select');
+						if (select) fireEvent.change(select, { target: { value: '2' } });
 					},
 					50,
 				),
@@ -1209,7 +1248,12 @@ export const errorSummaryConfig: ComponentBenchmarkConfig = {
 				measureRerenderTime(
 					<ErrorSummary entries={[]} />,
 					(container) => {
-						container.rerender(<ErrorSummary entries={[...mockErrors, {id:"4", title:"1", bullets:["bullet"]}]}/>);
+						container.rerender(
+							<ErrorSummary
+								entries={[...mockErrors, { id: '4', title: 'Another field needs attention', message: ['Add a value to continue.'], fieldName: 'project' }]}
+								motionValues={{ initial: { y: -8 }, animate: { y: 0 }, exit: { y: -8 } }}
+							/>,
+						);
 					},
 					50,
 				),
@@ -1675,6 +1719,25 @@ export const textAreaConfig: ComponentBenchmarkConfig = {
 				),
 		},
 		{
+			name: 'Capped auto-grow',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<TextArea value="Short note" rows={2} maxHeight={200} />,
+					(container) => container.rerender(<TextArea value={'Longer note\n'.repeat(20)} rows={2} maxHeight={200} />),
+					50,
+				),
+		},
+		{
+			name: 'Fixed height with send action',
+			type: 'mount',
+			fn: () =>
+				measureMountTime(
+					<TextArea height={180} showSendButton defaultValue="Ready to send" onSubmit={() => {}} />,
+					50,
+				),
+		},
+		{
 			name: 'Event Response',
 			type: 'event',
 			fn: () =>
@@ -1819,7 +1882,7 @@ export const allBenchmarkConfigs = [
 	badgeConfig,
 	cameraConfig,
 	checkBoxConfig,
-	divInputConfig,
+	contentEditableConfig,
 	dotConfig,
 	draggablePanelConfig,
 	dropDownConfig,

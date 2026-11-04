@@ -20,6 +20,7 @@ export const colorsCode = `
         { id: 'jane', first: 'Jane', last: 'Smith', backgroundColor: 'array-sky-label' },
         { id: 'morgan', first: 'Morgan', last: 'Chen', textColor: '#ffffff', backgroundColor: '#2563eb' },
     ]}
+    backgroundColor="core-surface-secondary"
     borderWidth={1}
     borderColor="transparent"
     outerBorderColor="core-surface-primary"
@@ -58,4 +59,34 @@ export const lazyLoadCode = `
 
 export const typographyCode = `
 <AvatarGroup avatars={participants} size={48} textSize="l" />
+`;
+
+export const moreCode = `
+import { AvatarGroup, type AvatarGroupMore, type AvatarInfo } from '@apple-pie/slice';
+
+export function TeamAvatars({ people }: { people: AvatarInfo[] }) {
+    
+    function handleMore(details: AvatarGroupMore) {
+        const {source, more, all} = details
+        console.log({source, more, all})
+    }
+
+    return (
+       <AvatarGroup avatars={people} limit={5} onMore={handleMore} />
+    );
+}
+`;
+
+export const childrenCode = `
+import { Avatar, AvatarGroup } from '@apple-pie/slice';
+
+export function TeamAvatars({ onOpenProfile }: { onOpenProfile: (id: string) => void }) {
+    return (
+        <AvatarGroup size={40} borderWidth={1}>
+            <Avatar name="Jane Smith" onClick={() => onOpenProfile('jane')} />
+            <Avatar name="Morgan Chen" backgroundColor="array-yellow-label" />
+            <Avatar name="Alex Kim" size={48} borderWidth={0} />
+        </AvatarGroup>
+    );
+}
 `;

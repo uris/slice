@@ -68,7 +68,9 @@ export const DefaultsAndOverrides: StoryObj = {
 		await padding('.files > div:first-child', '2px', '2px');
 		await padding('.files > div:last-child', '2px', '4px');
 		await padding('.zero-files > div', '0px', '0px');
-		await padding('.textarea', '16px', '16px');
+		await padding('.textarea', '16px', '8px');
+		await expect(getComputedStyle(node('.textarea')).paddingTop).toBe('16px');
+		await expect(getComputedStyle(node('.textarea')).paddingBottom).toBe('16px');
 		await padding('.textarea textarea', '0px', '0px');
 	},
 };

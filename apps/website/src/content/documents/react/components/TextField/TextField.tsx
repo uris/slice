@@ -30,7 +30,7 @@ export function TextFieldDoc() {
 					{ label: 'Error state', component: <TextFieldPreview variant="error" /> },
 				]}
 			/>
-			<TipBox title={'Tip:'} inline>
+			<TipBox title={'Tip:'} inline noBorder>
 				Enter text into the input field to preview it's behavior
 			</TipBox>
 			<H2 id="usage">Usage</H2>
@@ -380,7 +380,11 @@ export function TextFieldDoc() {
 				<TypeDef>{'string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>{'Visible label, associated with the native input. Whitespace-only labels are omitted.'}</P>
+			<P>
+				{
+					'Visible label, associated with the native input. Inline labels have a decorative divider before the value. Whitespace-only labels are omitted.'
+				}
+			</P>
 			<Definition id={'labelBackgroundColor'}>
 				<Prop>labelBackgroundColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
@@ -437,8 +441,8 @@ export function TextFieldDoc() {
 				<DefaultVal>{'automatic spacing tokens'}</DefaultVal>
 			</Definition>
 			<P>
-				Outlined fields default to <Code>8px</Code> plus half the label font size on top, <Code>16px</Code> side
-				padding, and <Code>8px</Code> bottom padding. Other variants use <Code>spacing-s</Code> vertically and{' '}
+				Outlined fields default to <Code>8px</Code> plus half the label font size on both top and bottom, keeping the
+				value centered, with <Code>16px</Code> side padding. Other variants use <Code>spacing-s</Code> vertically and{' '}
 				<Code>spacing-m</Code> horizontally, with a <Code>spacing-xs</Code> reduction at icon edges. Explicit{' '}
 				<Code>padding</Code>, including zero, is applied exactly.
 			</P>

@@ -15,8 +15,10 @@ precedence over children; numeric children such as 0 are supported.
 
 Providing onClick creates a native button with type=button by default. Without it,
 the content is static. selected is controlled by your app. onRemove adds a separate
-remove button and requests removal; your handler updates the list. The wrapper
+remove button; after its exit transition, your handler updates the list. The wrapper
 animates layout when selected is supplied, using Water easing over 150ms.
+Chip owns removal presence internally. Its remove button fades the chip to zero opacity and scales it to 0.9 over 150ms with Water easing, then calls `onRemove` once so the parent can update its list. No presence wrapper is needed. Reduced motion skips the transition.
+
 Default outer padding compensates for space inside SVG icons: subtract spacing-xs
 (4px) for m–xl text, or spacing-xxs (2px) for xs/s. A left icon adjusts the left edge;
 a right icon or remove button adjusts the right edge. Icon-only chips adjust both
@@ -30,7 +32,7 @@ disabled behavior. Text supplies their name; give icon-only buttons an aria-labe
 Icons are decorative and do not add tab stops. Selected action buttons expose
 aria-pressed. Main and remove buttons are siblings, never nested. Static content
 has no automatic button role or tab stop. Tooltips support focus and hover.
-Water color and layout transitions respect reduced-motion preferences.
+Water color, layout, and exit transitions respect reduced-motion preferences. Reduced motion removes chips immediately, including with custom transitions. Exiting chips are hidden from assistive technology and cannot receive input; the app should move focus to a remaining chip or another appropriate control.
 
 ## Props
 
@@ -440,7 +442,7 @@ Color props accept Slice theme tokens or CSS colors.
 <td>
 <code>150ms, Water easing</code>
 </td>
-<td>Motion layout transition options. Defaults to 150ms with the theme’s Water easing. Does not change CSS color transitions.</td>
+<td>Motion layout and exit transition options. Defaults to 150ms with the theme’s Water easing. Does not change CSS color transitions.</td>
 </tr>
 <tr>
 <td>
@@ -460,7 +462,7 @@ Color props accept Slice theme tokens or CSS colors.
 ## Events
 
 onClick creates the main native button and handles its activation. onRemove adds
-a separate removal action; the parent removes the chip. Both callbacks receive
+a separate removal action; the chip exits before notifying the parent to remove it. Both callbacks receive
 native button mouse events, including keyboard-generated clicks. Disabled chips
 emit neither callback.
 

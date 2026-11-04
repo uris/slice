@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { AvatarGroupContext } from '../AvatarGroup/AvatarGroupContext';
 import css from './Avatar.module.css';
 import type { AvatarProps } from './_types';
 
@@ -32,10 +33,18 @@ function AvatarImage({ image, lazyLoad, initials }: { image: string; lazyLoad: b
 	);
 }
 
-function AvatarComponent<T = unknown>(rawProps: AvatarProps<T>) {
-	const props = resolveColorProps(rawProps);
+type AvatarRenderProps<T> = AvatarProps<T> & { displayText?: string };
+
+// displayText is private to the group's overflow avatar, not part of Avatar's public API.
+function AvatarComponent<T = unknown>(rawProps: AvatarRenderProps<T>) {
+	const group = useContext(AvatarGroupContext);
+	const ownProps = Object.fromEntries(
+		Object.entries(rawProps).filter(([, value]) => value !== undefined),
+	) as AvatarRenderProps<T>;
+	const props = resolveColorProps(group ? ({ ...group.avatarProps, ...ownProps } as AvatarRenderProps<T>) : rawProps);
 	const {
 		info,
+		displayText,
 		name,
 		email,
 		image = '',
@@ -82,6 +91,20 @@ function AvatarComponent<T = unknown>(rawProps: AvatarProps<T>) {
 		if (parts.length > 1) initials += parts[parts.length - 1].charAt(0);
 	}
 
+	const renderContent = () => {
+		if (image) return <AvatarImage key={image} image={image} lazyLoad={lazyLoad} initials={initials} />;
+		if (displayText)
+			return (
+				<span
+					className={css.overflowLabel}
+					style={{ '--avatar-label-length': displayText.length } as React.CSSProperties}
+				>
+					{displayText}
+				</span>
+			);
+		return initials;
+	};
+
 	const avatarVars = {
 		'--avatar-size': setStyle(size),
 		'--avatar-border': `${borderWidth}px`,
@@ -98,7 +121,7 @@ function AvatarComponent<T = unknown>(rawProps: AvatarProps<T>) {
 	useTrackRenders(props, 'Avatar');
 	/* END.DEBUG */
 
-	return (
+	const avatar = (
 		<div
 			{...forwardedAttributes}
 			ref={ref}
@@ -136,11 +159,29 @@ function AvatarComponent<T = unknown>(rawProps: AvatarProps<T>) {
 			aria-label={divAttributes['aria-label'] ?? `User Avatar - ${label || 'Unknown User'}`}
 		>
 			<div aria-hidden={true} className={`${css.user} ${css[textSize]}`}>
-				{image ? <AvatarImage key={image} image={image} lazyLoad={lazyLoad} initials={initials} /> : initials}
+				{renderContent()}
 			</div>
 		</div>
 	);
+	return group ? <div className={group.itemClassName}>{avatar}</div> : avatar;
 }
 
 // React.memo erases generic inference; preserve the wrapped component's public signature.
-export const Avatar = React.memo(AvatarComponent) as typeof AvatarComponent;
+export const Avatar = React.memo(AvatarComponent) as <T = unknown>(props: AvatarProps<T>) => React.JSX.Element;
+
+/** Internal overflow renderer: shares the avatar's frame, tooltip, and keyboard behavior. */
+export function AvatarOverflow({
+	count,
+	onClick,
+}: { count: number; onClick?: React.MouseEventHandler<HTMLDivElement> }) {
+	const label = `${count} more ${count === 1 ? 'avatar' : 'avatars'}`;
+	return (
+		<AvatarComponent
+			className={css.overflow}
+			name={label}
+			displayText={`+${count}`}
+			aria-label={label}
+			onClick={onClick}
+		/>
+	);
+}

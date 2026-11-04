@@ -142,8 +142,9 @@ export function ButtonBarDoc() {
 				<DefaultVal>{'m'}</DefaultVal>
 			</Definition>
 			<P>
-				Circular button diameter: s=24px, m=36px, l=44px, xl=56px. Supply a positive finite number for a custom pixel
-				diameter. Invalid runtime values fall back to 36px. Choose a diameter that accommodates <Code>iconSize</Code>.
+				Overall height presets: small matches the default outlined small Button (31px with the default theme), medium is
+				36px, large is 48px, and extra large is 56px. Inner circles compensate for default wrapper padding and borders.
+				A positive finite number sets the inner circle diameter instead. Invalid runtime values use medium.
 			</P>
 			<Definition id={'defaultSelectedIndex'}>
 				<Prop>defaultSelectedIndex</Prop>
@@ -166,8 +167,9 @@ export function ButtonBarDoc() {
 				<DefaultVal>4</DefaultVal>
 			</Definition>
 			<P>
-				Uniform space between the buttons and all four wrapper edges, in pixels. Use 0 for no inset. Independent of
-				buttonGap, which controls space between buttons.
+				Uniform space between the buttons and all four wrapper edges, in pixels. Defaults to the spacing-xs token.
+				Explicit values change the overall height and are applied exactly. Use 0 for no inset. Independent of buttonGap,
+				which controls space between buttons.
 			</P>
 			<Definition id={'selectedIndex'}>
 				<Prop>selectedIndex</Prop>

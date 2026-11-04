@@ -12,6 +12,7 @@ import {
 	runButtonBarWithoutHandlersPlay,
 } from 'src/components/playHelpers';
 import { expect, fn, userEvent, within } from 'storybook/test';
+import { Button } from '../Button';
 
 const listView: BarButton[] = [
 	{ icon: 'arrow left', action: 'previous', tip: 'Previous' },
@@ -33,7 +34,7 @@ const meta: Meta<typeof ButtonBar> = {
 		buttonSize: {
 			control: 'select',
 			options: ['s', 'm', 'l', 'xl', 28, 32, 40, 48, 64],
-			description: 'Preset or pixel diameter.',
+			description: 'Overall height preset, or an explicit inner button diameter in pixels.',
 		},
 		buttonGap: {
 			control: { type: 'number', step: 1 },
@@ -335,7 +336,7 @@ export const OverlappingButtons: StoryObj<typeof ButtonBar> = {
 		const home = canvas.getByRole('button', { name: 'Home' });
 		const first = previous.getBoundingClientRect();
 		const second = home.getBoundingClientRect();
-		await expect(second.x - first.x).toBe(28);
+		await expect(second.x - first.right).toBe(-8);
 		await expect(home.querySelector('span')).toHaveStyle({ borderRadius: '12px' });
 		await expect(home).toHaveStyle({ zIndex: '1' });
 		await userEvent.click(previous);
@@ -400,5 +401,46 @@ export const DefaultActionBehavior: StoryObj<typeof ButtonBar> = {
 		await expect(buttons[1].getBoundingClientRect().left - buttons[0].getBoundingClientRect().right).toBe(-2);
 		await userEvent.click(buttons[0]);
 		for (const button of buttons) await expect(button).not.toHaveAttribute('aria-pressed');
+	},
+};
+
+const matchingButtonSizes = [
+	{ bar: 's', button: 'small' },
+	{ bar: 'm', button: 'medium' },
+	{ bar: 'l', button: 'large' },
+] as const;
+export const MatchesButtonHeights: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
+	render: () => (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+			{matchingButtonSizes.map((size) => (
+				<div key={size.bar} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+					<Button label={size.button} size={size.button} />
+					<ButtonBar buttons={listView} buttonSize={size.bar} aria-label={size.button} />
+				</div>
+			))}
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const size of matchingButtonSizes) {
+			const button = canvas.getByRole('button', { name: size.button });
+			const bar = canvas.getByRole('group', { name: size.button });
+			await expect(Math.abs(bar.getBoundingClientRect().height - button.getBoundingClientRect().height)).toBeLessThan(
+				0.1,
+			);
+			const inner = within(bar).getByRole('button', { name: 'Previous' });
+			await expect(inner.getBoundingClientRect().width).toBe(inner.getBoundingClientRect().height);
+		}
+	},
+};
+export const BorderCompensatedHeight: StoryObj<typeof ButtonBar> = {
+	tags: ['tests'],
+	args: { borderWidth: 2 },
+	render: Default.render,
+	play: async ({ canvasElement }) => {
+		const group = within(canvasElement).getByRole('group', { name: 'Actions' });
+		await expect(group.getBoundingClientRect().height).toBe(36);
+		await expect(within(group).getByRole('button', { name: 'Previous' })).toHaveStyle({ height: '24px' });
 	},
 };

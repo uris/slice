@@ -73,13 +73,13 @@ Reduced-motion preferences use the persistent stacked layout even when `behavior
 | `inputId` | `string` | `generated` | ID of the native input. The visible label targets this ID automatically. |
 | `inputName` | `string` | `label, name, or Text input` | Optional accessible-name override. Without it, the associated `label` names the input; an unlabeled input uses `name` or `Text input`. |
 | `inputType` | `'text'  /  'password'` | `text` | Native input type. Password inputs include a visibility control unless `showPasswordToggle` is false. |
-| `label` | `string` | `undefined` | Visible label, associated with the native input. Whitespace-only labels are omitted. |
+| `label` | `string` | `undefined` | Visible label, associated with the native input. Inline labels have a decorative divider before the value. Whitespace-only labels are omitted. |
 | `labelBackgroundColor` | `ColorValue` | `core-surface-primary` | Backing color for the `outlined` label, with 4px side padding, 2px top padding, and a 1em line height. Other variants keep the label background transparent and ignore this prop. |
 | `labelColor` | `ColorValue` | `core-text-primary` | Visible label color. `textColorDisabled` takes precedence when disabled. |
 | `labelSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Typography size of the simple variant’s label. Stacked and outlined labels use `stackedLabelTextSize`. |
 | `maxLength` | `number` | `undefined` | Maximum length accepted by the native input. |
 | `name` | `string` | `undefined` | Native form field name. Also supplies the accessible-name fallback when neither `label` nor `inputName` is provided. |
-| `padding` | `number  /  string` | `automatic spacing tokens` | Outlined fields default to `8px` plus half the label font size on top, `16px` side padding, and `8px` bottom padding. Other variants use `spacing-s` vertically and `spacing-m` horizontally, with a `spacing-xs` reduction at icon edges. Explicit values, including zero, are applied exactly. |
+| `padding` | `number  /  string` | `automatic spacing tokens` | Outlined fields default to `8px` plus half the label font size on both top and bottom to center the value, with `16px` side padding. Other variants use `spacing-s` vertically and `spacing-m` horizontally, with a `spacing-xs` reduction at icon edges. Explicit values, including zero, are applied exactly. |
 | `placeholder` | `string` | `placeholder` | Hint shown while the field is empty. |
 | `readOnly` | `boolean` | `false` | Prevents editing while retaining focus and text selection. |
 | `showPasswordToggle` | `boolean` | `true` | Shows the password visibility action when `inputType` is `password`. The control is disabled while the field is empty. |

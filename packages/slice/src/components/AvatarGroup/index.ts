@@ -1,2 +1,2 @@
 export { AvatarGroup } from './AvatarGroup';
-export type { AvatarGroupProps, AvatarInfo } from './_types';
+export type { AvatarGroupProps, AvatarGroupMore, AvatarInfo } from './_types';

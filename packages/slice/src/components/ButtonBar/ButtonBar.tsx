@@ -10,7 +10,12 @@ import { type ToolTip, ToolTipType } from '../sharedTypes';
 import css from './ButtonBar.module.css';
 import type { ButtonBarProps } from './_types';
 
-const sizes = { s: 24, m: 36, l: 44, xl: 56 };
+const sizes = {
+	s: 'calc(max(1lh, var(--bb-icon-size)) + 2 * var(--spacing-xs) + 2px)',
+	m: '36px',
+	l: '48px',
+	xl: '56px',
+};
 
 export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<ButtonBarProps>) {
 	const props = resolveColorProps(rawProps);
@@ -21,7 +26,7 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 		toggle = false,
 		buttonSize = 'm',
 		buttonGap = -2,
-		padding = 4,
+		padding,
 		selectionRadius = '50%',
 		iconSize = 20,
 		borderWidth = 0,
@@ -43,12 +48,13 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 		typeof candidate === 'number' && Number.isInteger(candidate) && candidate >= 0 && candidate < buttons.length
 			? candidate
 			: null;
-	const size =
-		typeof buttonSize === 'number'
-			? Number.isFinite(buttonSize) && buttonSize > 0
-				? buttonSize
-				: sizes.m
-			: (sizes[buttonSize] ?? sizes.m);
+	const getButtonSize = () => {
+		if (typeof buttonSize === 'number' && Number.isFinite(buttonSize) && buttonSize > 0) {
+			return `${buttonSize}px`;
+		}
+		const height = sizes[buttonSize as keyof typeof sizes] ?? sizes.m;
+		return `max(0px, calc(${height} - 2 * var(--spacing-xs) - 2 * var(--bb-border-width)))`;
+	};
 	const cssVars = {
 		'--bb-border-width': `${borderWidth}px`,
 		'--bb-border-radius': setStyle(borderRadius),
@@ -56,9 +62,10 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 		'--bb-bg-color': backgroundColor,
 		'--bb-bg-color-hover': backgroundColorHover,
 		'--bb-bg-color-selected': backgroundColorSelected,
-		'--bb-button-size': `${size}px`,
+		'--bb-button-size': getButtonSize(),
+		'--bb-icon-size': `${iconSize}px`,
 		'--bb-button-gap': `${buttonGap}px`,
-		'--bb-padding': `${padding}px`,
+		'--bb-padding': padding === undefined ? 'var(--spacing-xs)' : setStyle(padding),
 		'--bb-selection-radius': setStyle(selectionRadius),
 	} as React.CSSProperties;
 

@@ -78,3 +78,19 @@
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }
+
+/* Keep full overflow counts inside the frame, including at compact sizes. */
+.overflowLabel {
+	font-size: min(
+		1em,
+		calc(
+			(var(--avatar-size) - var(--avatar-border) * 2 - var(--avatar-outer-border-size) * 2) /
+			(var(--avatar-label-length) * 0.7)
+		)
+	);
+	white-space: nowrap;
+}
+
+.wrapper.overflow[role="button"]:focus-visible {
+	outline: none;
+}

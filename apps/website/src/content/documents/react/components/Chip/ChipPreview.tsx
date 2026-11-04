@@ -9,15 +9,20 @@ export function DefaultChipPreview() {
 
 export function RemovableChipPreview() {
 	const [showTag, setShowTag] = useState(true);
-	return showTag ? (
-		<Chip
-			label="Design"
-			textSize="m"
-			borderWidth={0}
-			backgroundColor="core-surface-secondary"
-			onRemove={() => setShowTag(false)}
-		/>
-	) : null;
+	return (
+		<>
+			{showTag && (
+				<Chip
+					key="design"
+					label="Design"
+					textSize="m"
+					borderWidth={0}
+					backgroundColor="core-surface-secondary"
+					onRemove={() => setShowTag(false)}
+				/>
+			)}
+		</>
+	);
 }
 
 export function SelectableChipPreview() {

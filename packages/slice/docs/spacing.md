@@ -28,9 +28,9 @@ Use the existing grid: `xxs=2`, `xs=4`, `s=8`, `m=16`, `l=24`, `xl=32`, `xxl=64`
 
 | Component | Standard |
 | --- | --- |
-| DropDown | 8px top/bottom, 16px left, 12px right (16px - 4px, chevron on the right). Underline mode still removes top and side padding. |
+| DropDown | 8px top/bottom, 16px left, 12px right (16px - 4px, chevron on the right). Outlined box fields use 8px plus half the label font size on top, 16px sides, and 8px bottom. Underline mode uses the same insets as box mode. Borderless mode defaults to bottom padding only. Explicit shorthand/side padding remains exact; sides take precedence. Supporting text aligns with the first field content, including the border inset, with 4px top padding. |
 | RadioButton | Framed: 8px vertical, 16px horizontal, with 12px left only when the radio icon is present. `hideRadio` uses 16px on both sides. `noFrame` padding is zero. |
-| TextField | Outlined: 8px plus half the label font size on top, 16px sides, 8px bottom. Simple and stacked: 8px vertical / 16px horizontal. For simple and stacked fields, left edge 12px when a leading icon is present; in simple fields it precedes the label. Their right edge is 12px when the outermost trailing element is an icon control or its reserved slot, otherwise 16px. Explicit `padding` is applied as given; no automatic side overrides. |
+| TextField | Outlined: 8px plus half the label font size on both top and bottom to center the value, 16px sides. Simple and stacked: 8px vertical / 16px horizontal. For simple and stacked fields, left edge 12px when a leading icon is present; in simple fields it precedes the label. Their right edge is 12px when the outermost trailing element is an icon control or its reserved slot, otherwise 16px. Explicit `padding` is applied as given; no automatic side overrides. |
 | Toast | 8px vertical / 16px horizontal, with the token-based 4px reduction on the close-icon side. |
 | Tip | 4px vertical / 8px horizontal (`--spacing-xs` / `--spacing-s`). A compact exception. |
 | Switch | 44x22px track, 2px inset (`--spacing-xxs`). Knob size is derived from the track height minus twice the resolved inset (18px by default). |
@@ -38,7 +38,7 @@ Use the existing grid: `xxs=2`, `xs=4`, `s=8`, `m=16`, `l=24`, `xl=32`, `xxl=64`
 | Button | Regular horizontal baselines 24px (medium/large) and 16px (small), 4px less on icon edges. Round buttons have zero side padding. Text buttons use 4px side padding without an icon and zero on an icon edge, at every size. Vertical text-button padding is zero. |
 | Chip | 8px vertical / 16px horizontal, 4px icon-side reduction for defaults. Keep the `paddingTop`/`paddingTops` alias and its precedence. Explicit `paddingSides` is exact. |
 | FileList (compact) | 4px base padding, 2px leading inset for the file icon (4px - 2px). Same 2px inset on the trailing edge when a remove icon is present, otherwise 4px. |
-| TextArea | 16px content inset on all sides (16px wrapper padding, zero textarea padding). Scrollbar clearance is a separate layout concern. |
+| TextArea | 16px top, bottom, and left / 8px right wrapper padding for scrollbar clearance, zero textarea padding. Supporting text shares the horizontal inset with 4px top padding. |
 | PromptInput | Content padding follows the grid. Border inset is derived from border width and stays as is. The unused `.clear` rule was removed. |
 
 ## Deliberate exceptions

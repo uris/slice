@@ -23,7 +23,7 @@ Buttons are independent actions by default. Enable `toggle` for selection: butto
 `onClick`, then `onChange`. With `toggle={false}`, items are independent actions without
 pressed state or change notifications. Items render no labels.
 
-`buttonSize` controls the circular hit area; `iconSize` controls its icon. The bar
+`buttonSize` presets match Button’s overall height: medium is 36px and large is 48px. Small follows the default outlined Button’s content height (31px with the default theme); extra large is 56px. The inner circles subtract the default 4px inset on each side and the outer border. Positive numeric sizes instead specify the inner circle diameter. `iconSize` controls its icon. The bar
 uses padding (4px by default) uniformly inside its wrapper, and buttonGap (-2px by default) between buttons. Set padding to 0 for no inset. Negative
 buttonGap values overlap buttons and their hit areas. selectionRadius shapes each
 hover/selection highlight and its inset focus indicator; the default is 50% (a circle). `backgroundColor` colors the bar; hover and
@@ -157,7 +157,7 @@ when the viewer prefers reduced motion.
 <td>
 <code>m</code>
 </td>
-<td>Circular button diameter: s=24px, m=36px, l=44px, xl=56px. Supply a positive finite number for a custom pixel diameter. Invalid runtime values fall back to 36px. Choose a diameter that accommodates iconSize.</td>
+<td>Overall height presets: s matches the default outlined small Button (31px with the default theme), m=36px, l=48px, xl=56px. Default wrapper padding and borders are compensated inside these heights. A positive finite number sets the inner circle diameter instead. Invalid runtime values use m.</td>
 </tr>
 <tr>
 <td>
@@ -193,7 +193,7 @@ when the viewer prefers reduced motion.
 <td>
 <code>4</code>
 </td>
-<td>Uniform wrapper inset in pixels. Set 0 for no inset. Independent of buttonGap.</td>
+<td>Uniform wrapper inset in pixels; defaults to spacing-xs (4px). Explicit overrides are exact and change the overall height without shrinking the inner circles further. Set 0 for no inset. Independent of buttonGap.</td>
 </tr>
 <tr>
 <td>

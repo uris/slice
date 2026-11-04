@@ -65,7 +65,7 @@ export { Avatar } from './components/Avatar/index';
 export type { AvatarProps } from './components/Avatar/index';
 
 export { AvatarGroup } from './components/AvatarGroup';
-export type { AvatarGroupProps, AvatarInfo } from './components/AvatarGroup';
+export type { AvatarGroupProps, AvatarGroupMore, AvatarInfo } from './components/AvatarGroup';
 
 export { Badge } from './components/Badge';
 export type { BadgeProps } from './components/Badge';
@@ -86,8 +86,8 @@ export type {
 export { CheckBox } from './components/CheckBox';
 export type { CheckBoxProps } from './components/CheckBox';
 
-export { DivInput } from './components/DivInput';
-export type { DivInputProps } from './components/DivInput';
+export { ContentEditable } from './components/ContentEditable';
+export type { ContentEditableProps, ContentEditableEditEndReason } from './components/ContentEditable';
 
 export { Dot } from './components/Dot';
 export type { DotProps } from './components/Dot';

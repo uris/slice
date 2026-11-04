@@ -1,119 +1,151 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as TextAreaStories from './TextArea.stories';
-import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={TextAreaStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # TextArea
-        Renders a multi-line text input with optional send/submit behavior.
+# TextArea
 
-        ## Base element
-        `HTMLDivElement`
+Make room for notes, comments, and longer messages, with content that can grow as you write.
 
-        The component renders a styled wrapper around a native `textarea`.
+## Usage
 
-        ## Interface
-        `TextAreaProps`
+Give the field a `label` and a meaningful `name`, then receive edits through `onChange`.
 
-        ## Related types
-        `Tip`
-
-        ## Props
-        <table style={{ width: '100%' }}>
-            <colgroup>
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '97%' }} />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th className={"left"}>Prop</th>
-                    <th className={"left"}>Type</th>
-                    <th className={"left"}>Default</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><code>value</code></td><td><code>string</code></td><td><code>''</code></td><td>Controlled textarea value.</td></tr>
-                <tr><td><code>name</code></td><td><code>string</code></td><td><code>'text_area'</code></td><td>Name applied to the native textarea.</td></tr>
-                <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Wrapper width.</td></tr>
-                <tr><td><code>minWidth</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Minimum wrapper width.</td></tr>
-                <tr><td><code>rows</code></td><td><code>number</code></td><td><code>6</code></td><td>Initial visible row count before auto-resizing.</td></tr>
-                <tr><td><code>focused</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Programmatically focuses or blurs the textarea.</td></tr>
-                <tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>'Enter text here...'</code></td><td>Placeholder text shown when empty.</td></tr>
-                <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>var(--spacing-m)</code></td><td>Inner padding for the textarea area.</td></tr>
-                <tr><td><code>error</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the warning border state when not focused.</td></tr>
-                <tr><td><code>border</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the standard outline border when there is no error and the field is not focused.</td></tr>
-                <tr><td><code>resizable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Controls whether the textarea can be manually resized.</td></tr>
-                <tr><td><code>hasSend</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the send button overlay.</td></tr>
-                <tr><td><code>sendOffset</code></td><td><code>{`{ bottom: number; right: number }`}</code></td><td><code>{`{ bottom: 6, right: 6 }`}</code></td><td>Offsets the send button from the bottom-right corner.</td></tr>
-                <tr><td><code>sendSize</code></td><td><code>number</code></td><td><code>36</code></td><td>Size of the send button container.</td></tr>
-                <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Background color override.</td></tr>
-                <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>4</code></td><td>Wrapper border radius in pixels.</td></tr>
-                <tr><td><code>returnSubmits</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Submits on Enter instead of inserting a newline.</td></tr>
-                <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Textarea text size token.</td></tr>
-                <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables editing and submit interaction.</td></tr>
-                <tr><td><code>submitClears</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Clears the textarea after submit.</td></tr>
-                <tr><td><code>onChange</code></td><td><code>{`(value: string) => void`}</code></td><td><code>-</code></td><td>Called whenever the textarea value changes.</td></tr>
-                <tr><td><code>onSubmit</code></td><td><code>{`(value: string) => void`}</code></td><td><code>-</code></td><td>Called when the send action runs or Enter submits.</td></tr>
-                <tr><td><code>onFocus</code></td><td><code>{`(value: string) => void`}</code></td><td><code>-</code></td><td>Called with the current textarea value when the field receives focus.</td></tr>
-                <tr><td><code>onBlur</code></td><td><code>{`(value: string) => void`}</code></td><td><code>-</code></td><td>Called with the current textarea value when the field loses focus.</td></tr>
-                <tr><td><code>onKeyDown</code></td><td><code>{`(e: React.KeyboardEvent<HTMLTextAreaElement>) => void`}</code></td><td><code>-</code></td><td>Called for textarea keydown events after internal submit handling.</td></tr>
-                <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Standard div props passed through to the wrapper element.</td></tr>
-            </tbody>
-        </table>
-
-        ## Notes
-        - The component auto-resizes to fit its content as the user types.
-        - Focus state takes precedence over `error` for border color.
-        - When `returnSubmits` is enabled, pressing Enter triggers `onSubmit` and prevents a newline.
-        - When `submitClears` is enabled, the local textarea state is reset after submit.
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
-```
+```tsx
 import { TextArea } from '@apple-pie/slice';
 
-export function TextAreaExample() {
-    return (
-        <TextArea
-            name="comment"
-            value="Initial notes"
-            placeholder="Write your note"
-            onChange={(value) => console.log(value)}
-            id="textarea-example"
-            data-testid="textarea-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
+<TextArea name="notes" label="Notes" rows={3} placeholder="Add a note" onChange={myHandler} />;
+```
+
+### Control the value
+
+Use `value` with `onChange` for application state, or `defaultValue` for local editing. Use a client component when server rendering with frameworks such as Next.js.
+
+```tsx
+import { useState } from 'react';
+
+function NotesField() {
+  const [notes, setNotes] = useState('');
+  return <TextArea name="notes" label="Notes" value={notes} onChange={setNotes} />;
 }
 ```
-        </RenderSource>
 
-        <RenderSource>
-```
-import { TextArea } from '@apple-pie/slice';
+### Choose a height
 
-export function MessageTextAreaExample() {
-    return (
-        <TextArea
-            hasSend
-            returnSubmits
-            submitClears
-            placeholder="Write a message"
-            onSubmit={(value) => console.log('submitted:', value)}
-        />
-    );
-}
+Limit growing content with `maxHeight`, set a fixed `height`, or turn off `autoGrow` to allow native resizing.
+
+```tsx
+<>
+  <TextArea label="Notes" rows={3} maxHeight={240} />
+  <TextArea label="Description" height={180} />
+  <TextArea label="Comment" rows={3} autoGrow={false} resizable />
+</>;
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+### Send a message
+
+Use `showSendButton` for a send action and `returnSubmits` for Enter submission.
+
+```tsx
+<TextArea
+  name="message"
+  inputName="Message"
+  rows={3}
+  showSendButton
+  returnSubmits
+  onSubmit={myHandler}
+/>;
+```
+
+### Add field guidance
+
+Provide a `tip` for normal editing and an `errorMessage` for validation feedback.
+
+```tsx
+<TextArea
+  name="description"
+  label="Description"
+  tip="Include the context your team needs."
+  error={hasError}
+  errorMessage="Add more detail before continuing."
+  onChange={myHandler}
+/>;
+```
+
+## Behavior
+
+With `returnSubmits`, Shift+Enter inserts a newline. Enter used to confirm composed text does not submit, and `onKeyDown` can cancel submission.
+
+Sending keeps focus in the textarea. Empty or whitespace-only messages cannot be sent.
+
+Native form reset restores `defaultValue` in local fields. For controlled fields, reset the application’s `value` state.
+
+## Accessibility
+
+The visible `label` is associated with the native textarea. Use `inputName` for a more specific accessible name; without a label, it falls back to `name`, then `Text input`.
+
+The visible `tip` or `errorMessage` supplies the accessible description. Error state marks the textarea invalid. The value keeps its normal color.
+
+The send action is a native button named by `sendActionName`. Disabled fields prevent editing and sending; `readOnly` retains focus and text selection while preventing changes.
+
+Reduced-motion preferences disable color and focus transitions. Auto-grow follows content directly without a height animation.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `autoGrow` | `boolean` | `true` | Grows and shrinks with content when `height` is `auto`. `rows` sets the starting height; `maxHeight` caps growth. Native resizing is disabled while growing. |
+| `backgroundColor` | `ColorValue` | `core-surface-secondary` | Field background. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Outline color while not focused or in an error state. |
+| `borderColorError` | `ColorValue` | `feedback-warning` | Outline color when `error` is `true`, including while focused. |
+| `borderColorFocused` | `ColorValue` | `core-link-primary` | Outline color while focused, unless `error` is `true`. |
+| `borderRadius` | `number  /  string` | `4` | Field corner radius. Numbers are pixels; CSS values pass through. |
+| `borderStyle` | `'box'  /  'underline'  /  'none'` | `box` | Choose a full outline, bottom line, or no outline. |
+| `defaultValue` | `string` | `empty string` | Initial text for local editing. Native form reset restores this initial value without emitting `onChange`. |
+| `disabled` | `boolean` | `false` | Disables the textarea and send button. |
+| `error` | `boolean` | `false` | Applies the error outline and displays `errorMessage` instead of `tip`. The value keeps its normal text color. Validation remains application-owned. |
+| `errorMessage` | `string` | `undefined` | Text beneath the field when `error` is `true`. Empty or whitespace-only text is hidden, without falling back to `tip`. |
+| `focused` | `boolean` | `undefined` | Optional focus request. Changes to `true` focus the enabled textarea; changes to `false` blur it. Omit for ordinary user-driven focus. |
+| `height` | `number  /  string` | `auto` | Field height, including padding and send space. An explicit height takes precedence over `autoGrow` and disables native resizing. Overflow scrolls inside the textarea. |
+| `inputAttributes` | `TextAreaProps['inputAttributes']` | `{}` | Native settings such as `autoComplete`, `spellCheck`, `required`, `minLength`, `wrap`, and `form`. Autocomplete follows the browser or form default; use `autoComplete: 'off'` to request no suggestions. Managed values, identifiers, styling, callbacks, and raw ARIA are excluded. |
+| `inputId` | `string` | `generated` | Native textarea ID. The visible label targets it automatically. |
+| `inputName` | `string` | `label, name, then Text input` | Accessible-name override. Native form naming uses the separate `name` prop. |
+| `label` | `string` | `undefined` | Visible label above the field, associated with the textarea. Its horizontal inset matches the value and supporting text. Empty text is hidden. |
+| `labelColor` | `ColorValue` | `core-text-primary` | Visible label color, replaced by `textColorDisabled` while disabled. |
+| `labelSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Typography size of the visible label. |
+| `maxHeight` | `number  /  string` | `none` | Maximum field height, including padding and send space. Content scrolls when the field reaches this limit. |
+| `maxLength` | `number` | `undefined` | Maximum length accepted by the native textarea. |
+| `minWidth` | `number  /  string` | `0` | Minimum component width. Numbers are pixels; CSS strings remain intact. |
+| `name` | `string` | `undefined` | Native form field name. Provide a meaningful name for form data and browser guidance. |
+| `padding` | `number  /  string` | `var(--spacing-m) var(--spacing-s) var(--spacing-m) var(--spacing-m)` | Field padding, `16px` on the top, bottom, and left; `8px` on the right for scrollbar clearance. Explicit numbers and CSS shorthands, including zero, are exact. Supporting text uses the same horizontal inset and `4px` top padding. |
+| `placeholder` | `string` | `Enter text here...` | Hint while empty. Supply a label or `inputName` to describe the field. |
+| `readOnly` | `boolean` | `false` | Keeps the value focusable and selectable while blocking edits and submission. |
+| `resizable` | `boolean` | `true` | Allows native vertical resizing when `autoGrow` is `false` and `height` is `auto`. Otherwise the resize handle is hidden. |
+| `returnSubmits` | `boolean` | `false` | Plain Enter calls `onSubmit` instead of inserting a newline. Shift+Enter remains a newline. Without `onSubmit`, Enter retains normal textarea behavior. |
+| `rows` | `number` | `6` | Starting line count, also the minimum content height during auto-grow. Values are rounded down and clamped to at least one. |
+| `sendActionName` | `string` | `Send` | Accessible action name for the send button. Empty text falls back to `Send`. |
+| `sendOffset` | `{ bottom: number; right: number }` | `{ bottom: 10, right: 10 }` | Send-button offsets from the field edges, in pixels. Space beneath the text keeps the button clear of the value. |
+| `sendSize` | `number` | `36` | Send-button width and height in pixels. |
+| `showSendButton` | `boolean` | `false` | Shows a native send button. It is disabled for empty or whitespace-only text, disabled/read-only fields, or when no `onSubmit` is provided. |
+| `submitClears` | `boolean` | `true` | Requests an empty value after submission through `onChange`. Local fields clear immediately; controlled fields wait for the parent to update `value`. |
+| `textColor` | `ColorValue` | `core-text-primary` | Value color, including during errors. |
+| `textColorDisabled` | `ColorValue` | `core-text-disabled` | Value and label color while disabled. |
+| `textColorError` | `ColorValue` | `feedback-warning` | Error message color. Does not recolor the value. |
+| `textColorPlaceholder` | `ColorValue` | `core-text-disabled` | Placeholder color. |
+| `textSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Textarea typography size. Auto-grow remeasures when it changes. |
+| `tip` | `string` | `undefined` | Helpful text beneath the field when `error` is `false`. Empty or whitespace-only text is hidden. |
+| `value` | `string` | `undefined` | Controlled text. Edits and submission clearing are requests through `onChange`; update this prop to display the new text. |
+| `width` | `number  /  string` | `100%` | Component width, including label and supporting text. Numbers are pixels; CSS strings pass through. |
+| `...divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Other native attributes and handlers apply to the field wrapper. `className` is appended and `style` is merged. Raw ARIA and managed callbacks are excluded; use the named props instead. |
+
+## Events
+
+| Event | Type | Description |
+| --- | --- | --- |
+| `onBlur` | `(value: string) => void` | Reports the current textarea value when the textarea loses focus. Focus changes on the send button do not masquerade as textarea events. |
+| `onChange` | `(value: string) => void` | Reports edits and an empty string when `submitClears` requests clearing. Prop changes and native form reset do not emit it. |
+| `onFocus` | `(value: string) => void` | Reports the current value when the textarea receives focus. |
+| `onKeyDown` | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | Runs before built-in Enter submission. Call `preventDefault()` to cancel it. |
+| `onPaste` | `(event: React.ClipboardEvent<HTMLTextAreaElement>) => void` | Native paste event while editable. Call `preventDefault()` to replace or block pasted text. |
+| `onSubmit` | `(value: string) => void` | Reports nonempty text from the send button or plain Enter with `returnSubmits`. After sending, focus stays in or returns to the textarea. |
+| `...divEvents` | `React.DOMAttributes<HTMLDivElement>` | Other native handlers apply to the field wrapper. No Motion gesture or animation lifecycle callbacks are part of the documented API. |

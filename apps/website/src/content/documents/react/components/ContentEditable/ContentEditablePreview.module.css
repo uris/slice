@@ -1,0 +1,19 @@
+.article {
+	width: 100%;
+	max-width: 480px;
+	min-width: 0;
+}
+.title {
+	margin: 0 0 var(--spacing-s);
+}
+.body {
+	margin: 0 0 var(--spacing-xs);
+	font-size: 14px;
+	line-height: 1.6;
+	color: var(--core-text-secondary);
+}
+.timestamp {
+	font-size: 12px;
+	line-height: 1.5;
+	color: var(--core-text-tertiary);
+}

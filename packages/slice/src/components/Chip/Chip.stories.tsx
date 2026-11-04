@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Chip } from 'src/components/Chip';
 import { FlexDiv } from 'src/components/FlexDiv';
 import { runChipButtonVariantPlay, runChipDisabledPlay, runChipLayoutVariantsPlay } from 'src/components/playHelpers';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
 
 const meta: Meta<typeof Chip> = {
 	title: 'Components/Chip',
@@ -287,9 +287,9 @@ export const RemovalSemantics: StoryObj<typeof Chip> = {
 		await expect(remove.querySelector('svg')).toHaveAttribute('aria-label', 'x icon');
 		await expect(remove.closest('button')?.parentElement?.closest('button')).toBeNull();
 		await userEvent.click(remove);
-		await expect(args.onRemove).toHaveBeenCalledTimes(1);
+		await waitFor(() => expect(args.onRemove).toHaveBeenCalledTimes(1));
 		await expect(args.onClick).not.toHaveBeenCalled();
-		await expect(action).toBeInTheDocument();
+		await expect(action).not.toBeInTheDocument();
 	},
 };
 export const RemoveOnly: StoryObj<typeof Chip> = {
@@ -300,7 +300,7 @@ export const RemoveOnly: StoryObj<typeof Chip> = {
 		await expect(buttons).toHaveLength(1);
 		await expect(buttons[0]).toHaveAccessibleName('Clear filter');
 		await userEvent.click(buttons[0]);
-		await expect(args.onRemove).toHaveBeenCalledTimes(1);
+		await waitFor(() => expect(args.onRemove).toHaveBeenCalledTimes(1));
 	},
 };
 export const DisabledRemovable: StoryObj<typeof Chip> = {
@@ -321,16 +321,19 @@ export const Removable: StoryObj<typeof Chip> = {
 	args: { onRemove: fn() },
 	render: (args) => {
 		const [visible, setVisible] = useState(true);
-		return visible ? (
-			<Chip
-				{...args}
-				onRemove={(event) => {
-					args.onRemove?.(event);
-					setVisible(false);
-				}}
-			/>
-		) : (
-			<></>
+		return (
+			<>
+				{visible && (
+					<Chip
+						{...args}
+						key="removable"
+						onRemove={(event) => {
+							args.onRemove?.(event);
+							setVisible(false);
+						}}
+					/>
+				)}
+			</>
 		);
 	},
 };
@@ -374,8 +377,8 @@ export const KeyboardRemoval: StoryObj<typeof Chip> = {
 		const remove = within(canvasElement).getByRole('button', { name: 'Remove Chip Label' });
 		remove.focus();
 		await userEvent.keyboard('{Enter}');
-		await userEvent.keyboard(' ');
-		await expect(args.onRemove).toHaveBeenCalledTimes(2);
+		await waitFor(() => expect(args.onRemove).toHaveBeenCalledTimes(1));
+		await expect(remove).not.toBeInTheDocument();
 		await expect(args.onClick).not.toHaveBeenCalled();
 	},
 };
@@ -432,5 +435,47 @@ export const OpticalIconOnly: StoryObj<typeof Chip> = {
 			paddingLeft: '12px',
 			paddingRight: '12px',
 		});
+	},
+};
+
+export const RemovalTransition: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: Removable.render,
+	args: { onRemove: fn(), transition: { duration: 0.4 } },
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button', { name: 'Remove Chip Label' });
+		const chip = button.parentElement;
+		if (!chip) throw new Error('Missing chip wrapper');
+		await userEvent.click(button);
+		await expect(args.onRemove).not.toHaveBeenCalled();
+		await expect(chip).toBeInTheDocument();
+		await expect(chip).toHaveAttribute('inert');
+		await waitFor(() => expect(Number(getComputedStyle(chip).opacity)).toBeLessThan(1));
+		await waitFor(() => expect(chip).not.toBeInTheDocument());
+		await expect(args.onRemove).toHaveBeenCalledTimes(1);
+		await expect(args.onRemove).toHaveBeenCalledWith(expect.objectContaining({ currentTarget: button }));
+	},
+};
+export const ReducedMotionRemoval: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: Removable.render,
+	args: { onRemove: fn(), transition: { duration: 10 } },
+	beforeEach: () => {
+		const original = window.matchMedia.bind(window);
+		const mock = spyOn(window, 'matchMedia').mockImplementation((query) => {
+			const media = original(query);
+			if (query !== '(prefers-reduced-motion: reduce)') return media;
+			Object.defineProperty(media, 'matches', { value: true });
+			return media;
+		});
+		return () => mock.mockRestore();
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const chip = canvas.getByRole('button', { name: 'Remove Chip Label' }).parentElement;
+		if (!chip) throw new Error('Missing chip wrapper');
+		await userEvent.click(canvas.getByRole('button', { name: 'Remove Chip Label' }));
+		await waitFor(() => expect(chip).not.toBeInTheDocument(), { timeout: 500 });
 	},
 };

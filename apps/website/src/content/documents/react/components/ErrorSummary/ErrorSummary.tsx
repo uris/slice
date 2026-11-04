@@ -2,120 +2,253 @@ import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
+import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
 import { ErrorSummaryPreview } from './ErrorSummaryPreview';
-import { dynamicCode, usageCode } from './code';
+import { announcementCode, entryCode, fieldsCode, focusCode, liveCode, motionCode, usageCode } from './code';
 export function ErrorSummaryDoc() {
 	return (
 		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">ErrorSummary component</H1>
 			<P clipWidth>
-				{'Bring validation messages together so people can see what needs attention before they continue.'}
+				Bring validation messages together so people can see what needs attention and get back to the right field.
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-errorsummary--default"
 				components={[
 					{ label: 'One error', component: <ErrorSummaryPreview /> },
+					{ label: 'Live validation', component: <ErrorSummaryPreview variant="validation" /> },
 					{ label: 'Multiple errors', component: <ErrorSummaryPreview variant="multiple" /> },
+					{ label: 'Navigate to fields', component: <ErrorSummaryPreview variant="fields" /> },
 				]}
 			/>
+			<TipBox inline noBorder title="Tip:">
+				In the field example, activate an error title to move to its field. Enter a value to clear that error. In live
+				validation, any text creates an error; clearing the field hides it.
+			</TipBox>
 			<H2 id="usage">Usage</H2>
 			<P>
-				Pair the summary with fields such as <Code openURL="/docs/react/textfield/">TextField</Code> and keep their
-				validation state in your application.
+				Place the summary above the fields, typically at the top of a large form. It collects errors across fields; each
+				field can retain its own error message.
 			</P>
 			<P>
-				{'Pass '}
+				{'Pass your current validation errors through '}
 				<Code>{'entries'}</Code>
-				{' with a short title and optional supporting messages.'}
+				{'. Each entry has a title and optional supporting messages.'}
 			</P>
 			<CodeBlock filename="ErrorSummaryExample.tsx" language="tsx" code={usageCode.trim()} />
-			<H3>Update validation messages</H3>
+			<H3>Connect errors to fields</H3>
 			<P>
-				{'Pass the current validation result as '}
-				<Code>{'entries'}</Code>
-				{'. An empty array hides the panel.'}
+				{'Set '}
+				<Code>{'fieldName'}</Code>
+				{' to the native '}
+				<Code>{'name'}</Code>
+				{' used by a field such as '}
+				<Code>{'TextField'}</Code>
+				{', '}
+				<Code>{'TextArea'}</Code>
+				{', or '}
+				<Code>{'DropDown'}</Code>
+				{'. Activating the title focuses that control and scrolls its parent into view.'}
 			</P>
-			<CodeBlock filename="ErrorSummaryExample2.tsx" language="tsx" code={dynamicCode.trim()} />
+			<CodeBlock filename="ContactForm.tsx" language="tsx" code={fieldsCode.trim()} />
+			<H3>Show errors as you type</H3>
+			<P>This example treats every entered value as invalid. Your app supplies its own validation rules.</P>
+			<CodeBlock filename="LiveValidation.tsx" language="tsx" code={liveCode.trim()} />
+			<H3>Choose announcement urgency</H3>
+			<P>
+				{'Use '}
+				<Code>{'announcement="assertive"'}</Code>
+				{' for errors that need immediate attention, or '}
+				<Code>{'announcement="off"'}</Code>
+				{' when your app already announces them.'}
+			</P>
+			<CodeBlock filename="AnnounceErrors.tsx" language="tsx" code={announcementCode.trim()} />
 			<H2 id="behavior">Behavior</H2>
 			<P>
-				{'The panel is present only when '}
+				{
+					'Entries appear as unnumbered groups. Supporting messages become bullet lists, with blank messages omitted. The panel expands to its content without a fixed height limit.'
+				}
+			</P>
+			<P>
+				{
+					'Field navigation searches the surrounding form first, or the current document when there is no form. It uses the first visible, enabled control with the matching '
+				}
+				<Code>{'name'}</Code>
+				{'. Missing, hidden, or disabled targets are skipped.'}
+			</P>
+			<P>
+				{'Validation and when to show errors remain application-controlled. Clear '}
 				<Code>{'entries'}</Code>
-				{' contains at least one item. Strings and arrays in '}
-				<Code>{'message'}</Code>
-				{' both become bullet lists.'}
-			</P>
-			<P>
-				{'With '}
-				<Code>{'autoNumber'}</Code>
-				{', multiple entries receive numbered titles. A single entry keeps its title without a number.'}
-			</P>
-			<P>
-				{'Showing and hiding uses a fixed opacity and maximum-height animation. Content taller than '}
-				<Code>{'500px'}</Code>
-				{' can currently be clipped.'}
+				{' to hide the panel.'}
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
 				{
-					'Titles and message lists provide visible structure, but the component does not currently add alert or live-region semantics, move focus, or link errors back to fields.'
+					'The mounted summary announces updates politely by default without moving focus. Keep it mounted while updating '
 				}
+				<Code>{'entries'}</Code>
+				{'; its live region stays in place when the panel is empty. '}
+				<Code>{'summaryName'}</Code>
+				{' supplies its accessible name.'}
 			</P>
 			<P>
+				{'Field titles with '}
+				<Code>{'fieldName'}</Code>
+				{' are native buttons, so Enter and Space activate them. A forwarded '}
+				<Code>{'ref'}</Code>
 				{
-					'If updates need announcing, use an application-owned live region around the summary. Keep it mounted while entries change.'
+					' lets your app focus the summary when needed. Reduced-motion preferences disable panel movement and fading, and use immediate scrolling for field navigation, including when the preference changes during an animation.'
 				}
 			</P>
-			<P>{'The show/hide animation currently has no component-specific reduced-motion handling.'}</P>
 			<H2 id="props">Props</H2>
-			<P>All component props are optional. Color props accept Slice theme tokens or CSS colors.</P>
-			<Definition id={'autoNumber'}>
-				<Prop>autoNumber</Prop>
-				<TypeDef>{'boolean'}</TypeDef>
-				<DefaultVal>{'true'}</DefaultVal>
+			<P>All props are optional. Colors accept Slice theme tokens or CSS colors.</P>
+			<Definition id="announcement">
+				<Prop>announcement</Prop>
+				<TypeDef>{"'polite' | 'assertive' | 'off'"}</TypeDef>
+				<DefaultVal>{'polite'}</DefaultVal>
 			</Definition>
-			<P>{'Prefixes entry titles with numbers when there is more than one entry. A single entry is never numbered.'}</P>
-			<Definition id={'backgroundColor'}>
+			<P>
+				{'Controls announcements of updated errors. '}
+				<Code>{'polite'}</Code>
+				{' waits for a pause, '}
+				<Code>{'assertive'}</Code>
+				{' requests immediate attention, and '}
+				<Code>{'off'}</Code>
+				{' disables announcements.'}
+			</P>
+			<Definition id="backgroundColor">
 				<Prop>backgroundColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
 				<DefaultVal>{'feedback-warning at 10% opacity'}</DefaultVal>
 			</Definition>
-			<P>{'Background of the summary panel.'}</P>
-			<Definition id={'entries'}>
+			<P>{'Panel background.'}</P>
+			<Definition id="borderColor">
+				<Prop>borderColor</Prop>
+				<TypeDef>{'ColorValue'}</TypeDef>
+				<DefaultVal>{'feedback-warning'}</DefaultVal>
+			</Definition>
+			<P>
+				{'Panel border color, independent of '}
+				<Code>{'textColor'}</Code>
+				{'.'}
+			</P>
+			<Definition id="borderRadius">
+				<Prop>borderRadius</Prop>
+				<TypeDef>{'number | string'}</TypeDef>
+				<DefaultVal>{'corner-xs (4px)'}</DefaultVal>
+			</Definition>
+			<P>{'Panel corner radius in pixels or CSS units.'}</P>
+			<Definition id="borderWidth">
+				<Prop>borderWidth</Prop>
+				<TypeDef>{'number | string'}</TypeDef>
+				<DefaultVal>{'1'}</DefaultVal>
+			</Definition>
+			<P>{'Border width in pixels or CSS units. Zero removes the border.'}</P>
+			<Definition id="entries">
 				<Prop>entries</Prop>
 				<TypeDef>{'ErrorMessage[]'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
-				{'Errors shaped as '}
-				<Code>{'{ title: string; message?: string | string[] }'}</Code>
-				{'. Each optional message is rendered as a list item. Missing or empty entries hide the panel.'}
+				{
+					'Current validation errors. An empty or omitted array hides the visible panel while retaining its announcement region.'
+				}
 			</P>
-			<Definition id={'textColor'}>
+			<CodeBlock filename="ErrorMessage.ts" language="typescript" code={entryCode.trim()} />
+			<P>
+				{'Use '}
+				<Code>{'id'}</Code>
+				{' for stable identity when entries change or reorder. Without it, identity is derived from '}
+				<Code>{'fieldName'}</Code>
+				{' or '}
+				<Code>{'title'}</Code>
+				{'. Duplicate titles and messages are supported.'}
+			</P>
+			<P>
+				{''}
+				<Code>{'title'}</Code>
+				{' is the error group\u2019s label. '}
+				<Code>{'message'}</Code>
+				{' accepts one string or multiple strings. Optional '}
+				<Code>{'fieldName'}</Code>
+				{' connects the title to a control\u2019s native '}
+				<Code>{'name'}</Code>
+				{'; it is separate from an accessible name such as '}
+				<Code>{'inputName'}</Code>
+				{'.'}
+			</P>
+			<Definition id="gap">
+				<Prop>gap</Prop>
+				<TypeDef>{'number | string'}</TypeDef>
+				<DefaultVal>{'spacing-xs (4px)'}</DefaultVal>
+			</Definition>
+			<P>{'Space between error groups, in pixels or CSS units.'}</P>
+			<Definition id="padding">
+				<Prop>padding</Prop>
+				<TypeDef>{'number | string'}</TypeDef>
+				<DefaultVal>{'spacing-m (16px)'}</DefaultVal>
+			</Definition>
+			<P>{'Panel padding. Numeric values become pixels; CSS shorthands and zero are applied exactly.'}</P>
+			<Definition id="summaryName">
+				<Prop>summaryName</Prop>
+				<TypeDef>{'string'}</TypeDef>
+				<DefaultVal>{'Errors to review'}</DefaultVal>
+			</Definition>
+			<P>{'Accessible name for the summary. Blank names use the fallback.'}</P>
+			<Definition id="textColor">
 				<Prop>textColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
 				<DefaultVal>{'feedback-warning'}</DefaultVal>
 			</Definition>
-			<P>{'Color of titles, messages, and the panel border.'}</P>
-			<Definition id={'textSize'}>
+			<P>{'Color of titles, messages, and field actions.'}</P>
+			<Definition id="textSize">
 				<Prop>textSize</Prop>
 				<TypeDef>{"'xs' | 's' | 'm' | 'l' | 'xl'"}</TypeDef>
 				<DefaultVal>{'m'}</DefaultVal>
 			</Definition>
-			<P>{'Typography size for entry titles and messages.'}</P>
-			<Definition id={'divAttributes'}>
+			<P>{'Slice body text size for titles and messages.'}</P>
+			<Definition id="divAttributes">
 				<Prop>...divAttributes</Prop>
 				<TypeDef>{'React.HTMLAttributes<HTMLDivElement>'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
-				{'Native attributes apply to the visible panel. The wrapper renders only while entries are present. '}
+				{'Native attributes and events apply to the persistent outer wrapper. '}
 				<Code>{'className'}</Code>
 				{' is appended and '}
 				<Code>{'style'}</Code>
-				{' is merged; component CSS variables take priority.'}
+				{
+					' is merged; component CSS variables take priority. Content, roles, and raw ARIA attributes are managed internally.'
+				}
+			</P>
+			<H2 id="motion">Motion</H2>
+			<P>
+				Appearance and removal use an internal <Code>AnimatePresence</Code> and Motion element. The summary fades in
+				while its height expands from <Code>0</Code> to <Code>auto</Code>, and reverses on removal.
+			</P>
+			<CodeBlock filename="SummaryMotion.tsx" language="tsx" code={motionCode.trim()} />
+			<Definition id="motionValues">
+				<Prop>motionValues</Prop>
+				<TypeDef>{'Variants'}</TypeDef>
+				<DefaultVal>Fade and height expansion</DefaultVal>
+			</Definition>
+			<P>
+				Motion variants merged into the internal <Code>initial</Code>, <Code>animate</Code>, and <Code>exit</Code>{' '}
+				states. Defaults use <Code>{'height: 0'}</Code> and <Code>{'opacity: 0'}</Code> for entry/exit, with{' '}
+				<Code>{'height: "auto"'}</Code> and <Code>{'opacity: 1'}</Code> when visible. Partial object overrides retain
+				the other default values.
+			</P>
+			<Definition id="transition">
+				<Prop>transition</Prop>
+				<TypeDef>{'Transition'}</TypeDef>
+				<DefaultVal>{'Water'}</DefaultVal>
+			</Definition>
+			<P>
+				Motion <Code>transition</Code> settings are merged with Slice’s <Code openURL="/docs/react/motion/">Water</Code>{' '}
+				transition. Reduced-motion preferences override animation settings.
 			</P>
 			<H2 id="events">Events</H2>
 			<P>No component-specific callbacks.</P>
@@ -124,9 +257,21 @@ export function ErrorSummaryDoc() {
 				<TypeDef>{'React.DOMAttributes<HTMLDivElement>'}</TypeDef>
 			</Definition>
 			<P>
-				Other native handlers apply to the outer wrapper. No Motion gesture or animation lifecycle callbacks are part of
-				the documented component API.
+				{
+					'Native events apply to the outer wrapper. Field actions bubble normally. Motion gesture and animation lifecycle callbacks are not part of the public component API.'
+				}
 			</P>
+			<H2 id="ref">Ref</H2>
+			<Definition id="summaryRef">
+				<Prop>ref</Prop>
+				<TypeDef>{'React.Ref<HTMLDivElement>'}</TypeDef>
+			</Definition>
+			<P>
+				{'Points to the persistent outer wrapper. With visible errors it can receive programmatic focus. Call '}
+				<Code>{'focus()'}</Code>
+				{' after the errors have rendered, such as from a review action.'}
+			</P>
+			<CodeBlock filename="FocusErrors.tsx" language="tsx" code={focusCode.trim()} />
 		</FlexDiv>
 	);
 }
@@ -139,14 +284,29 @@ export const trackedItems: TrackedItem[] = [
 		id: 'props',
 		title: 'Props',
 		items: [
-			{ id: 'autoNumber', title: 'autoNumber', code: true },
+			{ id: 'announcement', title: 'announcement', code: true },
 			{ id: 'backgroundColor', title: 'backgroundColor', code: true },
+			{ id: 'borderColor', title: 'borderColor', code: true },
+			{ id: 'borderRadius', title: 'borderRadius', code: true },
+			{ id: 'borderWidth', title: 'borderWidth', code: true },
 			{ id: 'entries', title: 'entries', code: true },
+			{ id: 'gap', title: 'gap', code: true },
+			{ id: 'padding', title: 'padding', code: true },
+			{ id: 'summaryName', title: 'summaryName', code: true },
 			{ id: 'textColor', title: 'textColor', code: true },
 			{ id: 'textSize', title: 'textSize', code: true },
 			{ id: 'divAttributes', title: '...divAttributes', code: true },
 		],
 	},
+	{
+		id: 'motion',
+		title: 'Motion',
+		items: [
+			{ id: 'motionValues', title: 'motionValues', code: true },
+			{ id: 'transition', title: 'transition', code: true },
+		],
+	},
 	{ id: 'events', title: 'Events', items: [{ id: 'nativeEvents', title: '...divEvents', code: true }] },
+	{ id: 'ref', title: 'Ref', items: [{ id: 'summaryRef', title: 'ref', code: true }] },
 ];
 export default ErrorSummaryDoc;

@@ -1,7 +1,7 @@
 'use client';
 
-import { type Transition, motion } from 'motion/react';
-import React, { useRef } from 'react';
+import { AnimatePresence, type Transition, motion, useIsPresent } from 'motion/react';
+import React, { useRef, useState } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
@@ -12,6 +12,10 @@ import { Icon } from '../Icon';
 import { type ToolTip, ToolTipType } from '../sharedTypes';
 import css from './Chip.module.css';
 import type { ChipProps } from './_types';
+
+function ChipPresence({ children }: { children: (isPresent: boolean) => React.ReactNode }) {
+	return children(useIsPresent());
+}
 
 export const Chip = React.memo((rawProps: ChipProps) => {
 	const props = resolveColorProps(rawProps);
@@ -58,6 +62,8 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 	} = props;
 	const rootRef = useRef<HTMLDivElement | null>(null);
 	const reduceMotion = usePrefersReducedMotion();
+	const [removed, setRemoved] = useState(false);
+	const pendingRemoval = useRef<(() => void) | null>(null);
 	const theme = useTheme().current;
 	const waterCurve = theme.motion['motion-water']
 		.match(/cubic-bezier\(([^)]+)\)/)?.[1]
@@ -206,38 +212,61 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 	const removalName = removeLabel ?? (readableLabel ? `Remove ${readableLabel}` : 'Remove chip');
 
 	return (
-		<motion.div
-			ref={rootRef}
-			className={`${css.chip}${className ? ` ${className}` : ''}`}
-			style={{ ...cssVars, ...style }}
-			layout={animateLayout}
-			transition={{ layout: layoutTransition }}
-			data-selected={selected === true ? 'true' : undefined}
-			data-removable={onRemove ? 'true' : undefined}
+		<AnimatePresence
+			initial={false}
+			onExitComplete={() => {
+				const notify = pendingRemoval.current;
+				pendingRemoval.current = null;
+				notify?.();
+			}}
 		>
-			{primary}
-			{onRemove && (
-				<button
-					className={css.remove}
-					type="button"
-					aria-label={removalName}
-					disabled={disabled}
-					onClick={(event) => {
-						event.stopPropagation();
-						onRemove(event);
-						onToolTip?.(null);
-					}}
-				>
-					<motion.span
-						layout={animateLayout ? 'position' : false}
-						transition={{ layout: layoutTransition }}
-						className={css.icon}
-						aria-hidden="true"
-					>
-						<Icon name="x" size={iconSize} strokeColor="currentColor" pointer={false} tabIndex={-1} />
-					</motion.span>
-				</button>
+			{!removed && (
+				<ChipPresence key="chip">
+					{(isPresent) => (
+						<motion.div
+							ref={rootRef}
+							className={`${css.chip}${className ? ` ${className}` : ''}`}
+							style={{ ...cssVars, ...style }}
+							layout={animateLayout}
+							initial={false}
+							animate={{ opacity: 1, scale: 1 }}
+							exit={reduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+							transition={{ ...layoutTransition, layout: layoutTransition }}
+							inert={!isPresent}
+							aria-hidden={!isPresent || undefined}
+							data-selected={selected === true ? 'true' : undefined}
+							data-removable={onRemove ? 'true' : undefined}
+						>
+							{primary}
+							{onRemove && (
+								<button
+									className={css.remove}
+									type="button"
+									aria-label={removalName}
+									disabled={disabled}
+									onClick={(event) => {
+										event.stopPropagation();
+										if (pendingRemoval.current) return;
+										const removalEvent = { ...event, currentTarget: event.currentTarget };
+										pendingRemoval.current = () => onRemove(removalEvent);
+										setRemoved(true);
+										onToolTip?.(null);
+									}}
+								>
+									<motion.span
+										layout={animateLayout ? 'position' : false}
+										transition={{ layout: layoutTransition }}
+										className={css.icon}
+										aria-hidden="true"
+									>
+										<Icon name="x" size={iconSize} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+									</motion.span>
+								</button>
+							)}
+						</motion.div>
+					)}
+				</ChipPresence>
 			)}
-		</motion.div>
+		</AnimatePresence>
 	);
 });

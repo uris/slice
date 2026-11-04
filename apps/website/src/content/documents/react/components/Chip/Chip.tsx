@@ -76,7 +76,10 @@ export function ChipDoc() {
 				main action. Static content has no button role or automatic tab stop. After removing a focused chip, your app
 				should move focus to a useful nearby control.
 			</P>
-			<P>Color and layout transitions use Water motion. Both are disabled when the user prefers reduced motion.</P>
+			<P>
+				Color and layout transitions use Water motion. These and exit transitions are disabled when the user prefers
+				reduced motion.
+			</P>
 			<H2 id={'props'}>Props</H2>
 			<P>All component props are optional. Color props accept Slice theme tokens or CSS colors.</P>
 			<Definition id={'backgroundColor'}>
@@ -304,6 +307,11 @@ export function ChipDoc() {
 				Chip uses <Code openURL="https://motion.dev/">Motion</Code> layout animation on a <Code>motion.div</Code>{' '}
 				wrapper to resize smoothly when its label changes.
 			</P>
+			<P>
+				Chip manages removal presence internally; no parent presence wrapper is needed. Pressing remove fades the chip
+				out and scales it to 0.9, then calls <Code>onRemove</Code> once. Exiting chips cannot receive input and are
+				hidden from assistive technology. Reduced motion removes them immediately.
+			</P>
 
 			<Definition id={'layout'}>
 				<Prop>layout</Prop>
@@ -320,8 +328,8 @@ export function ChipDoc() {
 				<DefaultVal>{'150ms, Water easing'}</DefaultVal>
 			</Definition>
 			<P>
-				Motion layout transition options. Defaults to 150ms with the theme’s Water easing. Does not change CSS color
-				transitions.
+				Motion layout and exit transition options. Defaults to 150ms with the theme’s Water easing. Does not change CSS
+				color transitions.
 			</P>
 			<H2 id={'events'}>Events</H2>
 			<Definition id={'onClick'}>
@@ -337,8 +345,8 @@ export function ChipDoc() {
 				<TypeDef>{'React.MouseEventHandler<HTMLButtonElement>'}</TypeDef>
 			</Definition>
 			<P>
-				Shows the remove button and handles its activation. Does not call onClick or remove the chip automatically.
-				Disabled chips do not call it.
+				Shows the remove button and handles its activation. Exits the chip, then calls this callback once. Does not call
+				onClick. Disabled chips do not call it.
 			</P>
 			<Definition id={'onToolTip'}>
 				<Method>onToolTip</Method>
