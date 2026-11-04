@@ -35,6 +35,7 @@ export function MoreAvatarsPreview() {
 					maxHeight={520}
 					onClose={() => dialog.current?.close()}
 					backgroundColor={'core-surface-primary-tint'}
+					borderWidth={0}
 				>
 					{people && (
 						<ul className={styles.people}>
