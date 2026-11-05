@@ -131,15 +131,15 @@ describe('TextInput', () => {
         expect(state.props.placeholderTextColor).toBe('pink');
     });
     it('resolves input icon tokens on regular inputs and forwards them to the glass icon renderer', () => {
-        const view = render(tree({ icon: 'home', iconColor: 'core-icon-secondary' }));
+        const view = render(tree({ icon: 'basic.home', iconColor: 'core-icon-secondary' }));
         expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-icon-secondary']);
         state.supportsLiquidGlass = true;
-        view.rerender(tree({ icon: 'home', iconColor: 'core-icon-secondary', liquidGlassBackground: {} }));
+        view.rerender(tree({ icon: 'basic.home', iconColor: 'core-icon-secondary', liquidGlassBackground: {} }));
         expect(screen.getByTestId('icon').dataset.color).toBe('core-icon-secondary');
     });
     it('leaves glass icon tint with the native renderer across focus and theme updates', () => {
         state.supportsLiquidGlass = true;
-        const props = { icon: 'search', hideIconOnFocus: false, textColor: 'purple', liquidGlassBackground: {} };
+        const props = { icon: 'basic.search', hideIconOnFocus: false, textColor: 'purple', liquidGlassBackground: {} };
         const view = render(tree(props));
         expect(screen.getByTestId('icon').dataset.glass).toBe('true');
         expect(screen.getByTestId('icon').dataset.color).toBeUndefined();
@@ -152,7 +152,7 @@ describe('TextInput', () => {
     });
     it('preserves explicit glass icon colors and restores native tint when removed', () => {
         state.supportsLiquidGlass = true;
-        const props = { icon: 'search', hideIconOnFocus: false, liquidGlassBackground: {} };
+        const props = { icon: 'basic.search', hideIconOnFocus: false, liquidGlassBackground: {} };
         const view = render(tree({ ...props, iconColor: 'red' }));
         expect(screen.getByTestId('icon').dataset.color).toBe('red');
         view.rerender(tree(props));
@@ -205,7 +205,7 @@ describe('TextInput', () => {
 
     it('nests the icon and editor inside supported glass and preserves them during glass updates', () => {
         state.supportsLiquidGlass = true;
-        const view = render(tree({ icon: 'home', hideIconOnFocus: false, defaultValue: 'Keep me', liquidGlassBackground: {} }));
+        const view = render(tree({ icon: 'basic.home', hideIconOnFocus: false, defaultValue: 'Keep me', liquidGlassBackground: {} }));
         const input = screen.getByRole('textbox') as HTMLInputElement;
         expect(input.closest('[data-testid="glass"]')).toBe(screen.getByTestId('glass'));
         expect(screen.getByTestId('icon').closest('[data-testid="glass"]')).toBe(screen.getByTestId('glass'));
@@ -214,7 +214,7 @@ describe('TextInput', () => {
         expect(state.glass.style).not.toHaveProperty('position', 'absolute');
         fireEvent.change(input, { target: { value: 'Edited' } });
         fireEvent.focus(input);
-        view.rerender(tree({ icon: 'home', hideIconOnFocus: false, defaultValue: 'Keep me', borderRadius: 12, liquidGlassBackground: {
+        view.rerender(tree({ icon: 'basic.home', hideIconOnFocus: false, defaultValue: 'Keep me', borderRadius: 12, liquidGlassBackground: {
             glassStyle: 'clear', glassTintColor: 'red', fallbackColor: 'blue',
         } }, 'dark'));
         expect(state.glass).toMatchObject({ cornerRadius: 12, glassStyle: 'clear', glassTintColor: 'red', fallbackColor: 'blue' });
@@ -228,7 +228,7 @@ describe('TextInput', () => {
     it.each(['ios', 'android', 'web'])('keeps an ordinary editor without glass when not opted in on %s', (platform) => {
         state.platform = platform;
         state.supportsLiquidGlass = true;
-        render(tree({ icon: 'home' }));
+        render(tree({ icon: 'basic.home' }));
         expect(screen.queryByTestId('glass')).toBeNull();
         expect(screen.getByRole('textbox')).toBeTruthy();
         expect(screen.getByTestId('icon').dataset.glass).toBe('false');
@@ -236,7 +236,7 @@ describe('TextInput', () => {
     it.each(['android', 'web'])('keeps the fallback on %s even if capability is incorrectly reported', (platform) => {
         state.platform = platform;
         state.supportsLiquidGlass = true;
-        render(tree({ icon: 'home', liquidGlassBackground: {} }));
+        render(tree({ icon: 'basic.home', liquidGlassBackground: {} }));
         expect(screen.queryByTestId('glass')).toBeNull();
         expect(screen.getByTestId('icon').dataset.glass).toBe('false');
     });
@@ -347,7 +347,7 @@ describe('TextInput', () => {
 		{ size: 'l' as const, height: 56 },
 		{ size: 68, height: 68 },
 	])('uses size $size as a minimum height without fixing multiline height', ({ size, height }) => {
-		render(tree({ size, multiline: true, icon: 'home', iconSize: 18 }));
+		render(tree({ size, multiline: true, icon: 'basic.home', iconSize: 18 }));
 		const wrapperStyle = Object.assign({}, ...state.wrapper.style.flat(Infinity));
 		expect(wrapperStyle.minHeight).toBe(height);
 		expect(wrapperStyle).not.toHaveProperty('height');
@@ -368,7 +368,7 @@ describe('TextInput', () => {
 		expect(Object.assign({}, ...state.wrapper.style.flat(Infinity)).minHeight).toBe(48);
 	});
 	it('keeps placeholder overrides separate from the icon foreground across focus changes', () => {
-		render(tree({ icon: 'home', hideIconOnFocus: false, placeholderTextColor: 'pink' }));
+		render(tree({ icon: 'basic.home', hideIconOnFocus: false, placeholderTextColor: 'pink' }));
 		expect(state.props.placeholderTextColor).toBe('pink');
 		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-primary']);
 		fireEvent.focus(screen.getByRole('textbox'));
@@ -411,7 +411,7 @@ describe('TextInput', () => {
 		const onFocus = vi.fn(),
 			onBlur = vi.fn(),
 			didFocus = vi.fn();
-		render(tree({ icon: 'home', onFocus, onBlur, didFocus }));
+		render(tree({ icon: 'basic.home', onFocus, onBlur, didFocus }));
 		expect(screen.getByTestId('icon').dataset.accessible).toBe('false');
 		fireEvent.focus(screen.getByRole('textbox'));
 		expect(screen.queryByTestId('icon')).toBeNull();
@@ -441,25 +441,25 @@ describe('TextInput', () => {
 		expect(state.focus).toHaveBeenCalledTimes(1);
 	});
 	it('keeps icons visible on focus when requested and supports explicit colors and sizes', () => {
-		render(tree({ icon: 'home', hideIconOnFocus: false, iconColor: 'red', iconSize: 20 }));
+		render(tree({ icon: 'basic.home', hideIconOnFocus: false, iconColor: 'red', iconSize: 20 }));
 		fireEvent.focus(screen.getByRole('textbox'));
 		expect(screen.getByTestId('icon').dataset).toMatchObject({ color: 'red', size: '20' });
 	});
 	it('uses the text foreground for icons across focus and theme changes', () => {
-		const view = render(tree({ icon: 'home', hideIconOnFocus: false }));
+		const view = render(tree({ icon: 'basic.home', hideIconOnFocus: false }));
 		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-primary']);
 		fireEvent.focus(screen.getByRole('textbox'));
 		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-primary']);
-		view.rerender(tree({ icon: 'home', hideIconOnFocus: false }, 'dark'));
+		view.rerender(tree({ icon: 'basic.home', hideIconOnFocus: false }, 'dark'));
 		expect(screen.getByTestId('icon').dataset.color).toBe(darkTheme.colors['core-text-primary']);
 		expect(state.props.placeholderTextColor).toBe(darkTheme.colors['core-text-secondary']);
 	});
 	it('follows textColor overrides unless iconColor is explicitly set', () => {
-		const view = render(tree({ icon: 'home', hideIconOnFocus: false, textColor: 'purple' }));
+		const view = render(tree({ icon: 'basic.home', hideIconOnFocus: false, textColor: 'purple' }));
 		expect(screen.getByTestId('icon').dataset.color).toBe('purple');
 		fireEvent.focus(screen.getByRole('textbox'));
 		expect(screen.getByTestId('icon').dataset.color).toBe('purple');
-		view.rerender(tree({ icon: 'home', hideIconOnFocus: false, textColor: 'purple', iconColor: 'orange' }));
+		view.rerender(tree({ icon: 'basic.home', hideIconOnFocus: false, textColor: 'purple', iconColor: 'orange' }));
 		expect(screen.getByTestId('icon').dataset.color).toBe('orange');
 	});
 

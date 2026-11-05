@@ -78,7 +78,7 @@ final class GlassTextSmoke: UIResponder, UIApplicationDelegate, UIWindowSceneDel
             placeholderGlass.reactContentView.addSubview(systemPlaceholder)
         }
         let icon = GlassIconSurface(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        icon.configure(name: "home", tintToken: "core-icon-primary", foreground: nil, toggled: false, filled: false)
+        icon.configure(name: "basic.home", tintToken: "core-icon-primary", foreground: nil, toggled: false, filled: false)
         check(icon.imageView.image?.renderingMode == .alwaysTemplate, "Icon loads from native template bundle")
         check(icon.imageView.tintColor == SliceColors.uiColor(named: "core-icon-primary"), "Icon uses actual Slice color asset")
         icon.configure(name: "like", tintToken: "core-icon-secondary", foreground: .red, toggled: true, filled: true)
@@ -191,7 +191,7 @@ final class GlassTextScrollController: UIViewController {
         let iconGlass = makeGlass()
         let iconContainer = UIView(frame: iconGlass.bounds)
         iconGlass.reactContentView.addSubview(iconContainer)
-        let names = ["home", "settings", "like", "search"]
+        let names = ["basic.home", "basic.gear", "basic.thumbs-up", "basic.search"]
         let iconTokens = ["core-icon-primary", "core-icon-secondary", "core-icon-tertiary", "core-icon-primary"]
         for (index, name) in names.enumerated() {
             let icon = GlassIconSurface(frame: CGRect(x: 24 + index * 76, y: 10, width: 24, height: 24))

@@ -1,746 +1,5174 @@
 [
   {
-    "name": "android",
+    "name": "brands.android",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-616e64726f6964-normal"
+    "asset": "slice-icon-6272616e64732e616e64726f6964-normal"
   },
   {
-    "name": "@",
+    "name": "brands.npm",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-40-normal"
+    "asset": "slice-icon-6272616e64732e6e706d-normal"
   },
   {
-    "name": "fullscreen",
+    "name": "brands.github",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-66756c6c73637265656e-normal"
+    "asset": "slice-icon-6272616e64732e676974687562-normal"
   },
   {
-    "name": "pause",
+    "name": "brands.open-ai",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-7061757365-normal"
+    "asset": "slice-icon-6272616e64732e6f70656e2d6169-normal"
   },
   {
-    "name": "pause circle",
+    "name": "system.view",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-706175736520636972636c65-normal"
+    "asset": "slice-icon-73797374656d2e76696577-normal"
   },
   {
-    "name": "pause circle",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-706175736520636972636c65-normal-filled"
-  },
-  {
-    "name": "play",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-706c6179-normal"
-  },
-  {
-    "name": "play circle",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-706c617920636972636c65-normal"
-  },
-  {
-    "name": "play circle",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-706c617920636972636c65-normal-filled"
-  },
-  {
-    "name": "npm",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6e706d-normal"
-  },
-  {
-    "name": "github",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-676974687562-normal"
-  },
-  {
-    "name": "openAI",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6f70656e4149-normal"
-  },
-  {
-    "name": "talk",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-74616c6b-normal"
-  },
-  {
-    "name": "talk",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-74616c6b-normal-filled"
-  },
-  {
-    "name": "speaker",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-737065616b6572-normal"
-  },
-  {
-    "name": "speaker",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-737065616b6572-normal-filled"
-  },
-  {
-    "name": "speaker muted",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-737065616b6572206d75746564-normal"
-  },
-  {
-    "name": "speaker muted",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-737065616b6572206d75746564-normal-filled"
-  },
-  {
-    "name": "speaker high",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-737065616b65722068696768-normal"
-  },
-  {
-    "name": "speaker high",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-737065616b65722068696768-normal-filled"
-  },
-  {
-    "name": "speaker low",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-737065616b6572206c6f77-normal"
-  },
-  {
-    "name": "speaker low",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-737065616b6572206c6f77-normal-filled"
-  },
-  {
-    "name": "laptop",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6c6170746f70-normal"
-  },
-  {
-    "name": "laptop",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-6c6170746f70-normal-filled"
-  },
-  {
-    "name": "moon full",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6d6f6f6e2066756c6c-normal"
-  },
-  {
-    "name": "moon full",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-6d6f6f6e2066756c6c-normal-filled"
-  },
-  {
-    "name": "sun",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-73756e-normal"
-  },
-  {
-    "name": "sun",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-73756e-normal-filled"
-  },
-  {
-    "name": "keyboard",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6b6579626f617264-normal"
-  },
-  {
-    "name": "sidebar",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-73696465626172-normal"
-  },
-  {
-    "name": "sidebar",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-73696465626172-normal-filled"
-  },
-  {
-    "name": "sidebar split",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-736964656261722073706c6974-normal"
-  },
-  {
-    "name": "sidebar split",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-736964656261722073706c6974-normal-filled"
-  },
-  {
-    "name": "target",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-746172676574-normal"
-  },
-  {
-    "name": "video off",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-766964656f206f6666-normal"
-  },
-  {
-    "name": "video",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-766964656f-normal"
-  },
-  {
-    "name": "mic",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6d6963-normal"
-  },
-  {
-    "name": "mic",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-6d6963-normal-filled"
-  },
-  {
-    "name": "mic muted",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6d6963206d75746564-normal"
-  },
-  {
-    "name": "camera",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-63616d657261-normal"
-  },
-  {
-    "name": "highlight",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-686967686c69676874-normal"
-  },
-  {
-    "name": "like",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6c696b65-normal"
-  },
-  {
-    "name": "unlike",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-756e6c696b65-normal"
-  },
-  {
-    "name": "stop",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-73746f70-normal"
-  },
-  {
-    "name": "copy",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-636f7079-normal"
-  },
-  {
-    "name": "font smaller",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-666f6e7420736d616c6c6572-normal"
-  },
-  {
-    "name": "font larger",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-666f6e74206c6172676572-normal"
-  },
-  {
-    "name": "bar chart",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-626172206368617274-normal"
-  },
-  {
-    "name": "briefcase",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-627269656663617365-normal"
-  },
-  {
-    "name": "globe location",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-676c6f6265206c6f636174696f6e-normal"
-  },
-  {
-    "name": "focus",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-666f637573-normal"
-  },
-  {
-    "name": "chart arrow",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6368617274206172726f77-normal"
-  },
-  {
-    "name": "document editor",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-646f63756d656e7420656469746f72-normal"
-  },
-  {
-    "name": "settings",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-73657474696e6773-normal"
-  },
-  {
-    "name": "light bulb",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6c696768742062756c62-normal"
-  },
-  {
-    "name": "issue",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6973737565-normal"
-  },
-  {
-    "name": "chart",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6368617274-normal"
-  },
-  {
-    "name": "chat",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-63686174-normal"
-  },
-  {
-    "name": "exclamation",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6578636c616d6174696f6e-normal"
-  },
-  {
-    "name": "undo",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-756e646f-normal"
-  },
-  {
-    "name": "character beam",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-636861726163746572206265616d-normal"
-  },
-  {
-    "name": "edit",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-65646974-normal"
-  },
-  {
-    "name": "text document",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-7465787420646f63756d656e74-normal"
-  },
-  {
-    "name": "mail",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6d61696c-normal"
-  },
-  {
-    "name": "concise",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-636f6e63697365-normal"
-  },
-  {
-    "name": "moderate",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6d6f646572617465-normal"
-  },
-  {
-    "name": "expanded",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-657870616e646564-normal"
-  },
-  {
-    "name": "open circle",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6f70656e20636972636c65-normal"
-  },
-  {
-    "name": "view",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-76696577-normal"
-  },
-  {
-    "name": "view",
+    "name": "system.view",
     "state": "on",
     "filled": false,
-    "asset": "slice-icon-76696577-on"
+    "asset": "slice-icon-73797374656d2e76696577-on"
   },
   {
-    "name": "apple",
+    "name": "brands.apple",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-6170706c65-normal"
+    "asset": "slice-icon-6272616e64732e6170706c65-normal"
   },
   {
-    "name": "linkedin",
+    "name": "brands.linkedin",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-6c696e6b6564696e-normal"
+    "asset": "slice-icon-6272616e64732e6c696e6b6564696e-normal"
   },
   {
-    "name": "google",
+    "name": "brands.google",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-676f6f676c65-normal"
+    "asset": "slice-icon-6272616e64732e676f6f676c65-normal"
   },
   {
-    "name": "google mono",
+    "name": "brands.google-mono",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-676f6f676c65206d6f6e6f-normal"
+    "asset": "slice-icon-6272616e64732e676f6f676c652d6d6f6e6f-normal"
   },
   {
-    "name": "dollar",
+    "name": "system.blank",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-646f6c6c6172-normal"
+    "asset": "slice-icon-73797374656d2e626c616e6b-normal"
   },
   {
-    "name": "trash bin",
+    "name": "system.check-circle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-74726173682062696e-normal"
+    "asset": "slice-icon-73797374656d2e636865636b2d636972636c65-normal"
   },
   {
-    "name": "recent",
+    "name": "system.circle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-726563656e74-normal"
+    "asset": "slice-icon-73797374656d2e636972636c65-normal"
   },
   {
-    "name": "refresh",
+    "name": "system.checkbox-checked",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-72656672657368-normal"
+    "asset": "slice-icon-73797374656d2e636865636b626f782d636865636b6564-normal"
   },
   {
-    "name": "document",
+    "name": "system.checkbox",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-646f63756d656e74-normal"
+    "asset": "slice-icon-73797374656d2e636865636b626f78-normal"
   },
   {
-    "name": "navigate right",
+    "name": "system.checkbox-partial",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-6e61766967617465207269676874-normal"
+    "asset": "slice-icon-73797374656d2e636865636b626f782d7061727469616c-normal"
   },
   {
-    "name": "navigate left",
+    "name": "ai.wand",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-6e61766967617465206c656674-normal"
+    "asset": "slice-icon-61692e77616e64-normal"
   },
   {
-    "name": "arrow right",
+    "name": "ai.sparkle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-6172726f77207269676874-normal"
+    "asset": "slice-icon-61692e737061726b6c65-normal"
   },
   {
-    "name": "arrow left",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6172726f77206c656674-normal"
-  },
-  {
-    "name": "",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-empty-normal"
-  },
-  {
-    "name": "arrow up",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6172726f77207570-normal"
-  },
-  {
-    "name": "arrow down",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6172726f7720646f776e-normal"
-  },
-  {
-    "name": "notification",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6e6f74696669636174696f6e-normal"
-  },
-  {
-    "name": "alert",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-616c657274-normal"
-  },
-  {
-    "name": "blank",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-626c616e6b-normal"
-  },
-  {
-    "name": "check",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-636865636b-normal"
-  },
-  {
-    "name": "help",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-68656c70-normal"
-  },
-  {
-    "name": "menu",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-6d656e75-normal"
-  },
-  {
-    "name": "attach",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-617474616368-normal"
-  },
-  {
-    "name": "person",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-706572736f6e-normal"
-  },
-  {
-    "name": "upload",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-75706c6f6164-normal"
-  },
-  {
-    "name": "download",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-646f776e6c6f6164-normal"
-  },
-  {
-    "name": "check circle",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-636865636b20636972636c65-normal"
-  },
-  {
-    "name": "share",
-    "state": "normal",
-    "filled": false,
-    "asset": "slice-icon-7368617265-normal"
-  },
-  {
-    "name": "share",
+    "name": "ai.sparkle",
     "state": "normal",
     "filled": true,
-    "asset": "slice-icon-7368617265-normal-filled"
+    "asset": "slice-icon-61692e737061726b6c65-normal-filled"
   },
   {
-    "name": "search",
+    "name": "alerts.alert-circle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-736561726368-normal"
+    "asset": "slice-icon-616c657274732e616c6572742d636972636c65-normal"
   },
   {
-    "name": "x",
+    "name": "alerts.alert-octagon",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-78-normal"
+    "asset": "slice-icon-616c657274732e616c6572742d6f637461676f6e-normal"
   },
   {
-    "name": "plus",
+    "name": "alerts.alert-triangle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-706c7573-normal"
+    "asset": "slice-icon-616c657274732e616c6572742d747269616e676c65-normal"
   },
   {
-    "name": "circle",
+    "name": "alerts.bell-check",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-636972636c65-normal"
+    "asset": "slice-icon-616c657274732e62656c6c2d636865636b-normal"
   },
   {
-    "name": "circle fill",
+    "name": "alerts.bell-minus",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-636972636c652066696c6c-normal"
+    "asset": "slice-icon-616c657274732e62656c6c2d6d696e7573-normal"
   },
   {
-    "name": "plus circle",
+    "name": "alerts.bell-plus",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-706c757320636972636c65-normal"
+    "asset": "slice-icon-616c657274732e62656c6c2d706c7573-normal"
   },
   {
-    "name": "chevron down",
+    "name": "alerts.bell-slash",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-63686576726f6e20646f776e-normal"
+    "asset": "slice-icon-616c657274732e62656c6c2d736c617368-normal"
   },
   {
-    "name": "chevron up",
+    "name": "alerts.bell",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-63686576726f6e207570-normal"
+    "asset": "slice-icon-616c657274732e62656c6c-normal"
   },
   {
-    "name": "checkbox checked",
+    "name": "alerts.check-circle-2",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-636865636b626f7820636865636b6564-normal"
+    "asset": "slice-icon-616c657274732e636865636b2d636972636c652d32-normal"
   },
   {
-    "name": "checkbox",
+    "name": "alerts.cross-circle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-636865636b626f78-normal"
+    "asset": "slice-icon-616c657274732e63726f73732d636972636c65-normal"
   },
   {
-    "name": "checkbox partial",
+    "name": "alerts.cross-octagon",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-636865636b626f78207061727469616c-normal"
+    "asset": "slice-icon-616c657274732e63726f73732d6f637461676f6e-normal"
   },
   {
-    "name": "filter",
+    "name": "alerts.info",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-66696c746572-normal"
+    "asset": "slice-icon-616c657274732e696e666f-normal"
   },
   {
-    "name": "more",
+    "name": "alerts.minus-octagon",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-6d6f7265-normal"
+    "asset": "slice-icon-616c657274732e6d696e75732d6f637461676f6e-normal"
   },
   {
-    "name": "people",
+    "name": "alerts.notification-indicator",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-70656f706c65-normal"
+    "asset": "slice-icon-616c657274732e6e6f74696669636174696f6e2d696e64696361746f72-normal"
   },
   {
-    "name": "wand",
+    "name": "alerts.question",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-77616e64-normal"
+    "asset": "slice-icon-616c657274732e7175657374696f6e-normal"
   },
   {
-    "name": "wallet",
+    "name": "arrows.arrow-bottom-circle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-77616c6c6574-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d636972636c65-normal"
   },
   {
-    "name": "invoice",
+    "name": "arrows.arrow-bottom-left-circle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-696e766f696365-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d6c6566742d636972636c65-normal"
   },
   {
-    "name": "payment",
+    "name": "arrows.arrow-bottom-left-rec",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-7061796d656e74-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d6c6566742d726563-normal"
   },
   {
-    "name": "heart",
+    "name": "arrows.arrow-bottom-left",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-6865617274-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d6c656674-normal"
   },
   {
-    "name": "clock",
+    "name": "arrows.arrow-bottom-rec",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-636c6f636b-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d726563-normal"
   },
   {
-    "name": "book",
+    "name": "arrows.arrow-bottom-right-circle",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-626f6f6b-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d72696768742d636972636c65-normal"
   },
   {
-    "name": "sparkle",
+    "name": "arrows.arrow-bottom-right-rec",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-737061726b6c65-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d72696768742d726563-normal"
   },
   {
-    "name": "sparkle",
-    "state": "normal",
-    "filled": true,
-    "asset": "slice-icon-737061726b6c65-normal-filled"
-  },
-  {
-    "name": "inbox",
+    "name": "arrows.arrow-bottom-right",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-696e626f78-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d7269676874-normal"
   },
   {
-    "name": "home",
+    "name": "arrows.arrow-bottom",
     "state": "normal",
     "filled": false,
-    "asset": "slice-icon-686f6d65-normal"
+    "asset": "slice-icon-6172726f77732e6172726f772d626f74746f6d-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-ccw-lb-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d6c622d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-ccw-lb",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d6c62-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-ccw-lt-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d6c742d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-ccw-lt",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d6c74-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-ccw-rb-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d72622d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-ccw-rb",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d7262-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-ccw-rt-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d72742d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-ccw-rt",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d7274-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-cw-lb-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d6c622d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-cw-lb",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d6c62-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-cw-lt-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d6c742d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-cw-lt",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d6c74-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-cw-rb-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d72622d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-cw-rb",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d7262-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-cw-rt-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d72742d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-corner-cw-rt",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d7274-normal"
+  },
+  {
+    "name": "arrows.arrow-left-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d6c6566742d636972636c65-normal"
+  },
+  {
+    "name": "arrows.arrow-left-curved-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d6c6566742d6375727665642d636972636c65-normal"
+  },
+  {
+    "name": "arrows.arrow-left-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d6c6566742d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-left",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d6c656674-normal"
+  },
+  {
+    "name": "arrows.arrow-right-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d72696768742d636972636c65-normal"
+  },
+  {
+    "name": "arrows.arrow-right-curved-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d72696768742d6375727665642d636972636c65-normal"
+  },
+  {
+    "name": "arrows.arrow-right-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d72696768742d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d7269676874-normal"
+  },
+  {
+    "name": "arrows.arrow-swap-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d737761702d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-swap",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d73776170-normal"
+  },
+  {
+    "name": "arrows.arrow-top-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f702d636972636c65-normal"
+  },
+  {
+    "name": "arrows.arrow-top-left-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f702d6c6566742d636972636c65-normal"
+  },
+  {
+    "name": "arrows.arrow-top-left-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f702d6c6566742d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-top-left",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f702d6c656674-normal"
+  },
+  {
+    "name": "arrows.arrow-top-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f702d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-top-right-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f702d72696768742d636972636c65-normal"
+  },
+  {
+    "name": "arrows.arrow-top-right-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f702d72696768742d726563-normal"
+  },
+  {
+    "name": "arrows.arrow-top-right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f702d7269676874-normal"
+  },
+  {
+    "name": "arrows.arrow-top",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f772d746f70-normal"
+  },
+  {
+    "name": "arrows.arrows-expand-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f77732d657870616e642d322d726563-normal"
+  },
+  {
+    "name": "arrows.arrows-expand-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f77732d657870616e642d32-normal"
+  },
+  {
+    "name": "arrows.arrows-expand-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f77732d657870616e642d726563-normal"
+  },
+  {
+    "name": "arrows.arrows-expand",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f77732d657870616e64-normal"
+  },
+  {
+    "name": "arrows.arrows-move-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f77732d6d6f76652d322d726563-normal"
+  },
+  {
+    "name": "arrows.arrows-move-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f77732d6d6f76652d32-normal"
+  },
+  {
+    "name": "arrows.arrows-move-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f77732d6d6f76652d726563-normal"
+  },
+  {
+    "name": "arrows.arrows-move",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6172726f77732d6d6f7665-normal"
+  },
+  {
+    "name": "arrows.chevron-down-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e2d646f776e2d726563-normal"
+  },
+  {
+    "name": "arrows.chevron-down",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e2d646f776e-normal"
+  },
+  {
+    "name": "arrows.chevron-left-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e2d6c6566742d726563-normal"
+  },
+  {
+    "name": "arrows.chevron-left",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e2d6c656674-normal"
+  },
+  {
+    "name": "arrows.chevron-right-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e2d72696768742d726563-normal"
+  },
+  {
+    "name": "arrows.chevron-right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e2d7269676874-normal"
+  },
+  {
+    "name": "arrows.chevron-up-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e2d75702d726563-normal"
+  },
+  {
+    "name": "arrows.chevron-up",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e2d7570-normal"
+  },
+  {
+    "name": "arrows.chevrons-down-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e732d646f776e2d726563-normal"
+  },
+  {
+    "name": "arrows.chevrons-down",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e732d646f776e-normal"
+  },
+  {
+    "name": "arrows.chevrons-left-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e732d6c6566742d726563-normal"
+  },
+  {
+    "name": "arrows.chevrons-left",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e732d6c656674-normal"
+  },
+  {
+    "name": "arrows.chevrons-right-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e732d72696768742d726563-normal"
+  },
+  {
+    "name": "arrows.chevrons-right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e732d7269676874-normal"
+  },
+  {
+    "name": "arrows.chevrons-up-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e732d75702d726563-normal"
+  },
+  {
+    "name": "arrows.chevrons-up",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e63686576726f6e732d7570-normal"
+  },
+  {
+    "name": "arrows.code-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e636f64652d726563-normal"
+  },
+  {
+    "name": "arrows.code",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e636f6465-normal"
+  },
+  {
+    "name": "arrows.export-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6578706f72742d32-normal"
+  },
+  {
+    "name": "arrows.export-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6578706f72742d33-normal"
+  },
+  {
+    "name": "arrows.export-4",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6578706f72742d34-normal"
+  },
+  {
+    "name": "arrows.export",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6578706f7274-normal"
+  },
+  {
+    "name": "arrows.external-link-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e65787465726e616c2d6c696e6b2d32-normal"
+  },
+  {
+    "name": "arrows.external-link-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e65787465726e616c2d6c696e6b2d726563-normal"
+  },
+  {
+    "name": "arrows.external-link",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e65787465726e616c2d6c696e6b-normal"
+  },
+  {
+    "name": "arrows.forward-all-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e666f72776172642d616c6c2d726563-normal"
+  },
+  {
+    "name": "arrows.forward-all",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e666f72776172642d616c6c-normal"
+  },
+  {
+    "name": "arrows.forward-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e666f72776172642d726563-normal"
+  },
+  {
+    "name": "arrows.forward",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e666f7277617264-normal"
+  },
+  {
+    "name": "arrows.import-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e696d706f72742d32-normal"
+  },
+  {
+    "name": "arrows.import-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e696d706f72742d33-normal"
+  },
+  {
+    "name": "arrows.import-4",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e696d706f72742d34-normal"
+  },
+  {
+    "name": "arrows.import",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e696d706f7274-normal"
+  },
+  {
+    "name": "arrows.log-in-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6c6f672d696e2d32-normal"
+  },
+  {
+    "name": "arrows.log-in-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6c6f672d696e2d33-normal"
+  },
+  {
+    "name": "arrows.log-in",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6c6f672d696e-normal"
+  },
+  {
+    "name": "arrows.log-out-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6c6f672d6f75742d32-normal"
+  },
+  {
+    "name": "arrows.log-out-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6c6f672d6f75742d33-normal"
+  },
+  {
+    "name": "arrows.log-out",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6c6f672d6f7574-normal"
+  },
+  {
+    "name": "arrows.maximize-2-flipped-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6d6178696d697a652d322d666c69707065642d726563-normal"
+  },
+  {
+    "name": "arrows.maximize-2-flipped",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6d6178696d697a652d322d666c6970706564-normal"
+  },
+  {
+    "name": "arrows.maximize-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6d6178696d697a652d322d726563-normal"
+  },
+  {
+    "name": "arrows.maximize-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6d6178696d697a652d32-normal"
+  },
+  {
+    "name": "arrows.maximize-flipped-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6d6178696d697a652d666c69707065642d726563-normal"
+  },
+  {
+    "name": "arrows.maximize-flipped",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6d6178696d697a652d666c6970706564-normal"
+  },
+  {
+    "name": "arrows.maximize-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6d6178696d697a652d726563-normal"
+  },
+  {
+    "name": "arrows.maximize",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e6d6178696d697a65-normal"
+  },
+  {
+    "name": "arrows.redo-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7265646f2d322d726563-normal"
+  },
+  {
+    "name": "arrows.redo-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7265646f2d32-normal"
+  },
+  {
+    "name": "arrows.redo-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7265646f2d726563-normal"
+  },
+  {
+    "name": "arrows.redo",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7265646f-normal"
+  },
+  {
+    "name": "arrows.refresh-ccw-alert-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726566726573682d6363772d616c6572742d726563-normal"
+  },
+  {
+    "name": "arrows.refresh-ccw-alert",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726566726573682d6363772d616c657274-normal"
+  },
+  {
+    "name": "arrows.refresh-ccw-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726566726573682d6363772d726563-normal"
+  },
+  {
+    "name": "arrows.refresh-ccw",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726566726573682d636377-normal"
+  },
+  {
+    "name": "arrows.refresh-cw-alert-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726566726573682d63772d616c6572742d726563-normal"
+  },
+  {
+    "name": "arrows.refresh-cw-alert",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726566726573682d63772d616c657274-normal"
+  },
+  {
+    "name": "arrows.refresh-cw-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726566726573682d63772d726563-normal"
+  },
+  {
+    "name": "arrows.refresh-cw",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726566726573682d6377-normal"
+  },
+  {
+    "name": "arrows.reply-all-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7265706c792d616c6c2d726563-normal"
+  },
+  {
+    "name": "arrows.reply-all",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7265706c792d616c6c-normal"
+  },
+  {
+    "name": "arrows.reply-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7265706c792d726563-normal"
+  },
+  {
+    "name": "arrows.reply",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7265706c79-normal"
+  },
+  {
+    "name": "arrows.rotate-ccw-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726f746174652d6363772d726563-normal"
+  },
+  {
+    "name": "arrows.rotate-ccw",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726f746174652d636377-normal"
+  },
+  {
+    "name": "arrows.rotate-cw-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726f746174652d63772d726563-normal"
+  },
+  {
+    "name": "arrows.rotate-cw",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e726f746174652d6377-normal"
+  },
+  {
+    "name": "arrows.scale",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7363616c65-normal"
+  },
+  {
+    "name": "arrows.trend-down-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7472656e642d646f776e2d726563-normal"
+  },
+  {
+    "name": "arrows.trend-down",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7472656e642d646f776e-normal"
+  },
+  {
+    "name": "arrows.trend-up-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7472656e642d75702d726563-normal"
+  },
+  {
+    "name": "arrows.trend-up",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e7472656e642d7570-normal"
+  },
+  {
+    "name": "arrows.undo-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e756e646f2d322d726563-normal"
+  },
+  {
+    "name": "arrows.undo-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e756e646f2d32-normal"
+  },
+  {
+    "name": "arrows.undo-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e756e646f2d726563-normal"
+  },
+  {
+    "name": "arrows.undo",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6172726f77732e756e646f-normal"
+  },
+  {
+    "name": "basic.activity-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e61637469766974792d32-normal"
+  },
+  {
+    "name": "basic.activity-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e61637469766974792d726563-normal"
+  },
+  {
+    "name": "basic.airplay",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e616972706c6179-normal"
+  },
+  {
+    "name": "basic.anchor-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e616e63686f722d726563-normal"
+  },
+  {
+    "name": "basic.anchor",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e616e63686f72-normal"
+  },
+  {
+    "name": "basic.archive",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e61726368697665-normal"
+  },
+  {
+    "name": "basic.at-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e61742d726563-normal"
+  },
+  {
+    "name": "basic.at",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6174-normal"
+  },
+  {
+    "name": "basic.atom",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e61746f6d-normal"
+  },
+  {
+    "name": "basic.award",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6177617264-normal"
+  },
+  {
+    "name": "basic.baby-carriage",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626162792d6361727269616765-normal"
+  },
+  {
+    "name": "basic.barchart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6261726368617274-normal"
+  },
+  {
+    "name": "basic.bed-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6265642d32-normal"
+  },
+  {
+    "name": "basic.bed-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6265642d33-normal"
+  },
+  {
+    "name": "basic.bluetooth-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626c7565746f6f74682d726563-normal"
+  },
+  {
+    "name": "basic.bluetooth",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626c7565746f6f7468-normal"
+  },
+  {
+    "name": "basic.book-open",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f6f6b2d6f70656e-normal"
+  },
+  {
+    "name": "basic.book",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f6f6b-normal"
+  },
+  {
+    "name": "basic.bookmark-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f6f6b6d61726b2d636865636b-normal"
+  },
+  {
+    "name": "basic.bookmark-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f6f6b6d61726b2d6d696e7573-normal"
+  },
+  {
+    "name": "basic.bookmark-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f6f6b6d61726b2d706c7573-normal"
+  },
+  {
+    "name": "basic.bookmark-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f6f6b6d61726b2d736c617368-normal"
+  },
+  {
+    "name": "basic.bookmark",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f6f6b6d61726b-normal"
+  },
+  {
+    "name": "basic.bookmarks",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f6f6b6d61726b73-normal"
+  },
+  {
+    "name": "basic.box-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f782d32-normal"
+  },
+  {
+    "name": "basic.box",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e626f78-normal"
+  },
+  {
+    "name": "basic.brackets-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e627261636b6574732d726563-normal"
+  },
+  {
+    "name": "basic.brackets",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e627261636b657473-normal"
+  },
+  {
+    "name": "basic.briefcase-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6272696566636173652d32-normal"
+  },
+  {
+    "name": "basic.briefcase",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e627269656663617365-normal"
+  },
+  {
+    "name": "basic.broadcast-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e62726f6164636173742d726563-normal"
+  },
+  {
+    "name": "basic.broadcast",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e62726f616463617374-normal"
+  },
+  {
+    "name": "basic.brush",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6272757368-normal"
+  },
+  {
+    "name": "basic.cast",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e63617374-normal"
+  },
+  {
+    "name": "basic.check-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e636865636b2d636972636c65-normal"
+  },
+  {
+    "name": "basic.check-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e636865636b2d726563-normal"
+  },
+  {
+    "name": "basic.check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e636865636b-normal"
+  },
+  {
+    "name": "basic.checkbox-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e636865636b626f782d636972636c65-normal"
+  },
+  {
+    "name": "basic.checkbox-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e636865636b626f782d726563-normal"
+  },
+  {
+    "name": "basic.copy",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e636f7079-normal"
+  },
+  {
+    "name": "basic.copyright",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e636f70797269676874-normal"
+  },
+  {
+    "name": "basic.cross-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e63726f73732d726563-normal"
+  },
+  {
+    "name": "basic.cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e63726f7373-normal"
+  },
+  {
+    "name": "basic.crosshair",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e63726f737368616972-normal"
+  },
+  {
+    "name": "basic.cut",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e637574-normal"
+  },
+  {
+    "name": "basic.dashboard-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e64617368626f6172642d32-normal"
+  },
+  {
+    "name": "basic.dashboard",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e64617368626f617264-normal"
+  },
+  {
+    "name": "basic.dumbell",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e64756d62656c6c-normal"
+  },
+  {
+    "name": "basic.email",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e656d61696c-normal"
+  },
+  {
+    "name": "basic.emails",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e656d61696c73-normal"
+  },
+  {
+    "name": "basic.emotion-happy",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e656d6f74696f6e2d6861707079-normal"
+  },
+  {
+    "name": "basic.emotion-neutral",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e656d6f74696f6e2d6e65757472616c-normal"
+  },
+  {
+    "name": "basic.emotion-sad",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e656d6f74696f6e2d736164-normal"
+  },
+  {
+    "name": "basic.emotion-smile",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e656d6f74696f6e2d736d696c65-normal"
+  },
+  {
+    "name": "basic.emotion-wow",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e656d6f74696f6e2d776f77-normal"
+  },
+  {
+    "name": "basic.filter-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e66696c7465722d32-normal"
+  },
+  {
+    "name": "basic.filter-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e66696c7465722d726563-normal"
+  },
+  {
+    "name": "basic.filter",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e66696c746572-normal"
+  },
+  {
+    "name": "basic.fire",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e66697265-normal"
+  },
+  {
+    "name": "basic.flag-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e666c61672d32-normal"
+  },
+  {
+    "name": "basic.flag-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e666c61672d33-normal"
+  },
+  {
+    "name": "basic.flag",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e666c6167-normal"
+  },
+  {
+    "name": "basic.gear-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e676561722d32-normal"
+  },
+  {
+    "name": "basic.gear",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e67656172-normal"
+  },
+  {
+    "name": "basic.gift",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e67696674-normal"
+  },
+  {
+    "name": "basic.glasses",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e676c6173736573-normal"
+  },
+  {
+    "name": "basic.hashtag-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e686173687461672d636972636c65-normal"
+  },
+  {
+    "name": "basic.hashtag-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e686173687461672d726563-normal"
+  },
+  {
+    "name": "basic.hashtag",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e68617368746167-normal"
+  },
+  {
+    "name": "basic.heart-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e68656172742d736c617368-normal"
+  },
+  {
+    "name": "basic.heart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6865617274-normal"
+  },
+  {
+    "name": "basic.home-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e686f6d652d32-normal"
+  },
+  {
+    "name": "basic.home-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e686f6d652d33-normal"
+  },
+  {
+    "name": "basic.home-4",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e686f6d652d34-normal"
+  },
+  {
+    "name": "basic.home",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e686f6d65-normal"
+  },
+  {
+    "name": "basic.inbox-filled",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e696e626f782d66696c6c6564-normal"
+  },
+  {
+    "name": "basic.inbox-in",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e696e626f782d696e-normal"
+  },
+  {
+    "name": "basic.inbox-out",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e696e626f782d6f7574-normal"
+  },
+  {
+    "name": "basic.inbox",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e696e626f78-normal"
+  },
+  {
+    "name": "basic.infinity-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e696e66696e6974792d726563-normal"
+  },
+  {
+    "name": "basic.infinity",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e696e66696e697479-normal"
+  },
+  {
+    "name": "basic.invoice",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e696e766f696365-normal"
+  },
+  {
+    "name": "basic.layers",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6c6179657273-normal"
+  },
+  {
+    "name": "basic.lifebuoy",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6c69666562756f79-normal"
+  },
+  {
+    "name": "basic.loader-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6c6f616465722d322d726563-normal"
+  },
+  {
+    "name": "basic.loader-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6c6f616465722d32-normal"
+  },
+  {
+    "name": "basic.loader-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6c6f616465722d726563-normal"
+  },
+  {
+    "name": "basic.loader",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6c6f61646572-normal"
+  },
+  {
+    "name": "basic.loading-trolley",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6c6f6164696e672d74726f6c6c6579-normal"
+  },
+  {
+    "name": "basic.megaphone",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d65676170686f6e65-normal"
+  },
+  {
+    "name": "basic.menu-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d656e752d322d726563-normal"
+  },
+  {
+    "name": "basic.menu-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d656e752d32-normal"
+  },
+  {
+    "name": "basic.menu-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d656e752d726563-normal"
+  },
+  {
+    "name": "basic.menu",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d656e75-normal"
+  },
+  {
+    "name": "basic.minus-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d696e75732d636972636c65-normal"
+  },
+  {
+    "name": "basic.minus-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d696e75732d726563-normal"
+  },
+  {
+    "name": "basic.minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d696e7573-normal"
+  },
+  {
+    "name": "basic.modules",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d6f64756c6573-normal"
+  },
+  {
+    "name": "basic.more-horiz-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d6f72652d686f72697a2d726563-normal"
+  },
+  {
+    "name": "basic.more-horiz",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d6f72652d686f72697a-normal"
+  },
+  {
+    "name": "basic.more-vert-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d6f72652d766572742d726563-normal"
+  },
+  {
+    "name": "basic.more-vert",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d6f72652d76657274-normal"
+  },
+  {
+    "name": "basic.newspaper",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6e6577737061706572-normal"
+  },
+  {
+    "name": "basic.nut",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6e7574-normal"
+  },
+  {
+    "name": "basic.planet",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e706c616e6574-normal"
+  },
+  {
+    "name": "basic.plus-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e706c75732d636972636c65-normal"
+  },
+  {
+    "name": "basic.plus-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e706c75732d726563-normal"
+  },
+  {
+    "name": "basic.plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e706c7573-normal"
+  },
+  {
+    "name": "basic.power-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e706f7765722d726563-normal"
+  },
+  {
+    "name": "basic.power",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e706f776572-normal"
+  },
+  {
+    "name": "basic.presentation-chart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e70726573656e746174696f6e2d6368617274-normal"
+  },
+  {
+    "name": "basic.presentation-line",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e70726573656e746174696f6e2d6c696e65-normal"
+  },
+  {
+    "name": "basic.receipt",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e72656365697074-normal"
+  },
+  {
+    "name": "basic.rocket-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e726f636b65742d32-normal"
+  },
+  {
+    "name": "basic.rocket",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e726f636b6574-normal"
+  },
+  {
+    "name": "basic.search",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736561726368-normal"
+  },
+  {
+    "name": "basic.send-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e73656e642d32-normal"
+  },
+  {
+    "name": "basic.send",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e73656e64-normal"
+  },
+  {
+    "name": "basic.share",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7368617265-normal"
+  },
+  {
+    "name": "basic.shopping-bag-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e73686f7070696e672d6261672d32-normal"
+  },
+  {
+    "name": "basic.shopping-bag",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e73686f7070696e672d626167-normal"
+  },
+  {
+    "name": "basic.shopping-basket",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e73686f7070696e672d6261736b6574-normal"
+  },
+  {
+    "name": "basic.shopping-cart-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e73686f7070696e672d636172742d32-normal"
+  },
+  {
+    "name": "basic.shopping-cart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e73686f7070696e672d63617274-normal"
+  },
+  {
+    "name": "basic.slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736c617368-normal"
+  },
+  {
+    "name": "basic.sliders-horiz-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736c69646572732d686f72697a2d32-normal"
+  },
+  {
+    "name": "basic.sliders-horiz",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736c69646572732d686f72697a-normal"
+  },
+  {
+    "name": "basic.sliders-vert-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736c69646572732d766572742d32-normal"
+  },
+  {
+    "name": "basic.sliders-vert",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736c69646572732d76657274-normal"
+  },
+  {
+    "name": "basic.sort-number-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736f72742d6e756d6265722d726563-normal"
+  },
+  {
+    "name": "basic.sort-number-reverse-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736f72742d6e756d6265722d726576657273652d726563-normal"
+  },
+  {
+    "name": "basic.sort-number-reverse",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736f72742d6e756d6265722d72657665727365-normal"
+  },
+  {
+    "name": "basic.sort-number",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736f72742d6e756d626572-normal"
+  },
+  {
+    "name": "basic.sort-text-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736f72742d746578742d726563-normal"
+  },
+  {
+    "name": "basic.sort-text-reverse-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736f72742d746578742d726576657273652d726563-normal"
+  },
+  {
+    "name": "basic.sort-text-reverse",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736f72742d746578742d72657665727365-normal"
+  },
+  {
+    "name": "basic.sort-text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e736f72742d74657874-normal"
+  },
+  {
+    "name": "basic.star-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e737461722d736c617368-normal"
+  },
+  {
+    "name": "basic.star",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e73746172-normal"
+  },
+  {
+    "name": "basic.sticker",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e737469636b6572-normal"
+  },
+  {
+    "name": "basic.swatchbook",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e737761746368626f6f6b-normal"
+  },
+  {
+    "name": "basic.tag-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7461672d32-normal"
+  },
+  {
+    "name": "basic.tag",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e746167-normal"
+  },
+  {
+    "name": "basic.tags-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e746167732d32-normal"
+  },
+  {
+    "name": "basic.tags",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e74616773-normal"
+  },
+  {
+    "name": "basic.target",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e746172676574-normal"
+  },
+  {
+    "name": "basic.terminal",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7465726d696e616c-normal"
+  },
+  {
+    "name": "basic.thumbs-down-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7468756d62732d646f776e2d32-normal"
+  },
+  {
+    "name": "basic.thumbs-down",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7468756d62732d646f776e-normal"
+  },
+  {
+    "name": "basic.thumbs-up-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7468756d62732d75702d32-normal"
+  },
+  {
+    "name": "basic.thumbs-up",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7468756d62732d7570-normal"
+  },
+  {
+    "name": "basic.ticket",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7469636b6574-normal"
+  },
+  {
+    "name": "basic.toggle-off",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e746f67676c652d6f6666-normal"
+  },
+  {
+    "name": "basic.toggle-on",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e746f67676c652d6f6e-normal"
+  },
+  {
+    "name": "basic.trash-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e74726173682d32-normal"
+  },
+  {
+    "name": "basic.trash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7472617368-normal"
+  },
+  {
+    "name": "basic.trophy",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e74726f706879-normal"
+  },
+  {
+    "name": "basic.truck",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e747275636b-normal"
+  },
+  {
+    "name": "basic.umbrella",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e756d6272656c6c61-normal"
+  },
+  {
+    "name": "basic.weight",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e776569676874-normal"
+  },
+  {
+    "name": "basic.wheelchair-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e776865656c63686169722d726563-normal"
+  },
+  {
+    "name": "basic.wheelchair",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e776865656c6368616972-normal"
+  },
+  {
+    "name": "basic.wifi-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e776966692d726563-normal"
+  },
+  {
+    "name": "basic.wifi-slash-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e776966692d736c6173682d726563-normal"
+  },
+  {
+    "name": "basic.wifi-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e776966692d736c617368-normal"
+  },
+  {
+    "name": "basic.wifi",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e77696669-normal"
+  },
+  {
+    "name": "basic.wrench",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7772656e6368-normal"
+  },
+  {
+    "name": "basic.yin-yang",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e79696e2d79616e67-normal"
+  },
+  {
+    "name": "basic.zoom-in",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7a6f6f6d2d696e-normal"
+  },
+  {
+    "name": "basic.zoom-out",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e7a6f6f6d2d6f7574-normal"
+  },
+  {
+    "name": "brands.appstore",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e61707073746f7265-normal"
+  },
+  {
+    "name": "brands.behance",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e626568616e6365-normal"
+  },
+  {
+    "name": "brands.dribbble",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e6472696262626c65-normal"
+  },
+  {
+    "name": "brands.facebook",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e66616365626f6f6b-normal"
+  },
+  {
+    "name": "brands.figma",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e6669676d61-normal"
+  },
+  {
+    "name": "brands.framer",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e6672616d6572-normal"
+  },
+  {
+    "name": "brands.googleplay",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e676f6f676c65706c6179-normal"
+  },
+  {
+    "name": "brands.illustrator",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e696c6c7573747261746f72-normal"
+  },
+  {
+    "name": "brands.instagram",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e696e7374616772616d-normal"
+  },
+  {
+    "name": "brands.messanger",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e6d657373616e676572-normal"
+  },
+  {
+    "name": "brands.notion",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e6e6f74696f6e-normal"
+  },
+  {
+    "name": "brands.photoshop",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e70686f746f73686f70-normal"
+  },
+  {
+    "name": "brands.pinterest",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e70696e746572657374-normal"
+  },
+  {
+    "name": "brands.producthunt",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e70726f6475637468756e74-normal"
+  },
+  {
+    "name": "brands.sketch",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e736b65746368-normal"
+  },
+  {
+    "name": "brands.soundcloud",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e736f756e64636c6f7564-normal"
+  },
+  {
+    "name": "brands.spotify",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e73706f74696679-normal"
+  },
+  {
+    "name": "brands.twitter",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e74776974746572-normal"
+  },
+  {
+    "name": "brands.windows",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e77696e646f7773-normal"
+  },
+  {
+    "name": "brands.youtube",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6272616e64732e796f7574756265-normal"
+  },
+  {
+    "name": "call.call-add",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d616464-normal"
+  },
+  {
+    "name": "call.call-calling",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d63616c6c696e67-normal"
+  },
+  {
+    "name": "call.call-decline",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d6465636c696e65-normal"
+  },
+  {
+    "name": "call.call-end",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d656e64-normal"
+  },
+  {
+    "name": "call.call-incoming",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d696e636f6d696e67-normal"
+  },
+  {
+    "name": "call.call-missed",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d6d6973736564-normal"
+  },
+  {
+    "name": "call.call-muted",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d6d75746564-normal"
+  },
+  {
+    "name": "call.call-on-hold",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d6f6e2d686f6c64-normal"
+  },
+  {
+    "name": "call.call-outgoing",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d6f7574676f696e67-normal"
+  },
+  {
+    "name": "call.call-received",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d7265636569766564-normal"
+  },
+  {
+    "name": "call.call-redirected",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d72656469726563746564-normal"
+  },
+  {
+    "name": "call.call-remove",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d72656d6f7665-normal"
+  },
+  {
+    "name": "call.call-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e63616c6c2d736c617368-normal"
+  },
+  {
+    "name": "call.dialpad",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e6469616c706164-normal"
+  },
+  {
+    "name": "call.phone",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e70686f6e65-normal"
+  },
+  {
+    "name": "call.voicemail",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-63616c6c2e766f6963656d61696c-normal"
+  },
+  {
+    "name": "chat.comment-2-alert",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d616c657274-normal"
+  },
+  {
+    "name": "chat.comment-2-cancel",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d63616e63656c-normal"
+  },
+  {
+    "name": "chat.comment-2-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d636865636b-normal"
+  },
+  {
+    "name": "chat.comment-2-dots",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d646f7473-normal"
+  },
+  {
+    "name": "chat.comment-2-info",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d696e666f-normal"
+  },
+  {
+    "name": "chat.comment-2-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d6d696e7573-normal"
+  },
+  {
+    "name": "chat.comment-2-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d706c7573-normal"
+  },
+  {
+    "name": "chat.comment-2-question",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d7175657374696f6e-normal"
+  },
+  {
+    "name": "chat.comment-2-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d736c617368-normal"
+  },
+  {
+    "name": "chat.comment-2-text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d322d74657874-normal"
+  },
+  {
+    "name": "chat.comment-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d32-normal"
+  },
+  {
+    "name": "chat.comment-alert",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d616c657274-normal"
+  },
+  {
+    "name": "chat.comment-cancel",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d63616e63656c-normal"
+  },
+  {
+    "name": "chat.comment-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d636865636b-normal"
+  },
+  {
+    "name": "chat.comment-dots",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d646f7473-normal"
+  },
+  {
+    "name": "chat.comment-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d6d696e7573-normal"
+  },
+  {
+    "name": "chat.comment-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d706c7573-normal"
+  },
+  {
+    "name": "chat.comment-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d736c617368-normal"
+  },
+  {
+    "name": "chat.comment-text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e742d74657874-normal"
+  },
+  {
+    "name": "chat.comment",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e74-normal"
+  },
+  {
+    "name": "chat.comments-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e74732d32-normal"
+  },
+  {
+    "name": "chat.comments",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-636861742e636f6d6d656e7473-normal"
+  },
+  {
+    "name": "documents.clipboard-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e636c6970626f6172642d636865636b-normal"
+  },
+  {
+    "name": "documents.clipboard-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e636c6970626f6172642d63726f7373-normal"
+  },
+  {
+    "name": "documents.clipboard-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e636c6970626f6172642d6d696e7573-normal"
+  },
+  {
+    "name": "documents.clipboard-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e636c6970626f6172642d706c7573-normal"
+  },
+  {
+    "name": "documents.clipboard-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e636c6970626f6172642d736c617368-normal"
+  },
+  {
+    "name": "documents.clipboard-text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e636c6970626f6172642d74657874-normal"
+  },
+  {
+    "name": "documents.clipboard",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e636c6970626f617264-normal"
+  },
+  {
+    "name": "documents.file-agreement",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d61677265656d656e74-normal"
+  },
+  {
+    "name": "documents.file-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d636865636b-normal"
+  },
+  {
+    "name": "documents.file-code",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d636f6465-normal"
+  },
+  {
+    "name": "documents.file-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d63726f7373-normal"
+  },
+  {
+    "name": "documents.file-download",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d646f776e6c6f6164-normal"
+  },
+  {
+    "name": "documents.file-draft",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d6472616674-normal"
+  },
+  {
+    "name": "documents.file-heart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d6865617274-normal"
+  },
+  {
+    "name": "documents.file-invoice",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d696e766f696365-normal"
+  },
+  {
+    "name": "documents.file-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d6d696e7573-normal"
+  },
+  {
+    "name": "documents.file-move",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d6d6f7665-normal"
+  },
+  {
+    "name": "documents.file-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d706c7573-normal"
+  },
+  {
+    "name": "documents.file-scan",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d7363616e-normal"
+  },
+  {
+    "name": "documents.file-shredder",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d7368726564646572-normal"
+  },
+  {
+    "name": "documents.file-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d736c617368-normal"
+  },
+  {
+    "name": "documents.file-text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d74657874-normal"
+  },
+  {
+    "name": "documents.file-upload",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c652d75706c6f6164-normal"
+  },
+  {
+    "name": "documents.file",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e66696c65-normal"
+  },
+  {
+    "name": "documents.folder-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d636865636b-normal"
+  },
+  {
+    "name": "documents.folder-cloud",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d636c6f7564-normal"
+  },
+  {
+    "name": "documents.folder-compressed",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d636f6d70726573736564-normal"
+  },
+  {
+    "name": "documents.folder-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d63726f7373-normal"
+  },
+  {
+    "name": "documents.folder-download",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d646f776e6c6f6164-normal"
+  },
+  {
+    "name": "documents.folder-heart",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d6865617274-normal"
+  },
+  {
+    "name": "documents.folder-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d6d696e7573-normal"
+  },
+  {
+    "name": "documents.folder-move",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d6d6f7665-normal"
+  },
+  {
+    "name": "documents.folder-music",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d6d75736963-normal"
+  },
+  {
+    "name": "documents.folder-open",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d6f70656e-normal"
+  },
+  {
+    "name": "documents.folder-photo",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d70686f746f-normal"
+  },
+  {
+    "name": "documents.folder-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d706c7573-normal"
+  },
+  {
+    "name": "documents.folder-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d736c617368-normal"
+  },
+  {
+    "name": "documents.folder-upload",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c6465722d75706c6f6164-normal"
+  },
+  {
+    "name": "documents.folder",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e666f6c646572-normal"
+  },
+  {
+    "name": "documents.note-2-text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e6e6f74652d322d74657874-normal"
+  },
+  {
+    "name": "documents.note-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e6e6f74652d32-normal"
+  },
+  {
+    "name": "documents.note-text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e6e6f74652d74657874-normal"
+  },
+  {
+    "name": "documents.note",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e6e6f7465-normal"
+  },
+  {
+    "name": "documents.notebook",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-646f63756d656e74732e6e6f7465626f6f6b-normal"
+  },
+  {
+    "name": "editor.align-bottom-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d626f74746f6d2d726563-normal"
+  },
+  {
+    "name": "editor.align-bottom",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d626f74746f6d-normal"
+  },
+  {
+    "name": "editor.align-center-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d63656e7465722d322d726563-normal"
+  },
+  {
+    "name": "editor.align-center-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d63656e7465722d32-normal"
+  },
+  {
+    "name": "editor.align-center-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d63656e7465722d726563-normal"
+  },
+  {
+    "name": "editor.align-center",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d63656e746572-normal"
+  },
+  {
+    "name": "editor.align-justify-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6a7573746966792d322d726563-normal"
+  },
+  {
+    "name": "editor.align-justify-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6a7573746966792d32-normal"
+  },
+  {
+    "name": "editor.align-justify-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6a7573746966792d726563-normal"
+  },
+  {
+    "name": "editor.align-justify",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6a757374696679-normal"
+  },
+  {
+    "name": "editor.align-left-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6c6566742d322d726563-normal"
+  },
+  {
+    "name": "editor.align-left-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6c6566742d32-normal"
+  },
+  {
+    "name": "editor.align-left-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6c6566742d726563-normal"
+  },
+  {
+    "name": "editor.align-left",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6c656674-normal"
+  },
+  {
+    "name": "editor.align-middle-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6d6964646c652d726563-normal"
+  },
+  {
+    "name": "editor.align-middle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d6d6964646c65-normal"
+  },
+  {
+    "name": "editor.align-right-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d72696768742d322d726563-normal"
+  },
+  {
+    "name": "editor.align-right-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d72696768742d32-normal"
+  },
+  {
+    "name": "editor.align-right-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d72696768742d726563-normal"
+  },
+  {
+    "name": "editor.align-right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d7269676874-normal"
+  },
+  {
+    "name": "editor.align-top-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d746f702d726563-normal"
+  },
+  {
+    "name": "editor.align-top",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e616c69676e2d746f70-normal"
+  },
+  {
+    "name": "editor.border-bottom",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d626f74746f6d-normal"
+  },
+  {
+    "name": "editor.border-clear",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d636c656172-normal"
+  },
+  {
+    "name": "editor.border-common",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d636f6d6d6f6e-normal"
+  },
+  {
+    "name": "editor.border-horizontal",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d686f72697a6f6e74616c-normal"
+  },
+  {
+    "name": "editor.border-inner",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d696e6e6572-normal"
+  },
+  {
+    "name": "editor.border-left",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d6c656674-normal"
+  },
+  {
+    "name": "editor.border-outer",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d6f75746572-normal"
+  },
+  {
+    "name": "editor.border-right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d7269676874-normal"
+  },
+  {
+    "name": "editor.border-top",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d746f70-normal"
+  },
+  {
+    "name": "editor.border-vertical",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e626f726465722d766572746963616c-normal"
+  },
+  {
+    "name": "editor.chart-bar",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e63686172742d626172-normal"
+  },
+  {
+    "name": "editor.chart-column",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e63686172742d636f6c756d6e-normal"
+  },
+  {
+    "name": "editor.chart-line",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e63686172742d6c696e65-normal"
+  },
+  {
+    "name": "editor.chart-pie",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e63686172742d706965-normal"
+  },
+  {
+    "name": "editor.column-spacing-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e636f6c756d6e2d73706163696e672d726563-normal"
+  },
+  {
+    "name": "editor.column-spacing",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e636f6c756d6e2d73706163696e67-normal"
+  },
+  {
+    "name": "editor.droplet-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e64726f706c65742d736c617368-normal"
+  },
+  {
+    "name": "editor.droplet",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e64726f706c6574-normal"
+  },
+  {
+    "name": "editor.edit-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e656469742d32-normal"
+  },
+  {
+    "name": "editor.edit-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e656469742d33-normal"
+  },
+  {
+    "name": "editor.edit-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e656469742d736c617368-normal"
+  },
+  {
+    "name": "editor.edit",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e65646974-normal"
+  },
+  {
+    "name": "editor.first-line-1-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e66697273742d6c696e652d312d726563-normal"
+  },
+  {
+    "name": "editor.first-line-1",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e66697273742d6c696e652d31-normal"
+  },
+  {
+    "name": "editor.first-line-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e66697273742d6c696e652d322d726563-normal"
+  },
+  {
+    "name": "editor.first-line-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e66697273742d6c696e652d32-normal"
+  },
+  {
+    "name": "editor.first-line-3-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e66697273742d6c696e652d332d726563-normal"
+  },
+  {
+    "name": "editor.first-line-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e66697273742d6c696e652d33-normal"
+  },
+  {
+    "name": "editor.functions-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e66756e6374696f6e732d726563-normal"
+  },
+  {
+    "name": "editor.functions",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e66756e6374696f6e73-normal"
+  },
+  {
+    "name": "editor.indent-decrease-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e696e64656e742d64656372656173652d726563-normal"
+  },
+  {
+    "name": "editor.indent-decrease",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e696e64656e742d6465637265617365-normal"
+  },
+  {
+    "name": "editor.indent-first-line-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e696e64656e742d66697273742d6c696e652d726563-normal"
+  },
+  {
+    "name": "editor.indent-first-line",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e696e64656e742d66697273742d6c696e65-normal"
+  },
+  {
+    "name": "editor.indent-increase-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e696e64656e742d696e6372656173652d726563-normal"
+  },
+  {
+    "name": "editor.indent-increase",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e696e64656e742d696e637265617365-normal"
+  },
+  {
+    "name": "editor.letter-spacing-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c65747465722d73706163696e672d322d726563-normal"
+  },
+  {
+    "name": "editor.letter-spacing-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c65747465722d73706163696e672d32-normal"
+  },
+  {
+    "name": "editor.letter-spacing-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c65747465722d73706163696e672d726563-normal"
+  },
+  {
+    "name": "editor.letter-spacing",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c65747465722d73706163696e67-normal"
+  },
+  {
+    "name": "editor.line-height-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c696e652d6865696768742d322d726563-normal"
+  },
+  {
+    "name": "editor.line-height-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c696e652d6865696768742d32-normal"
+  },
+  {
+    "name": "editor.line-height-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c696e652d6865696768742d726563-normal"
+  },
+  {
+    "name": "editor.line-height",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c696e652d686569676874-normal"
+  },
+  {
+    "name": "editor.link-1-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c696e6b2d312d726563-normal"
+  },
+  {
+    "name": "editor.link-1",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c696e6b2d31-normal"
+  },
+  {
+    "name": "editor.link-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c696e6b2d322d726563-normal"
+  },
+  {
+    "name": "editor.link-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c696e6b2d32-normal"
+  },
+  {
+    "name": "editor.list-ordered-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d6f7264657265642d726563-normal"
+  },
+  {
+    "name": "editor.list-ordered",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d6f726465726564-normal"
+  },
+  {
+    "name": "editor.list-unordered-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d322d726563-normal"
+  },
+  {
+    "name": "editor.list-unordered-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d32-normal"
+  },
+  {
+    "name": "editor.list-unordered-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d33-normal"
+  },
+  {
+    "name": "editor.list-unordered-4-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d342d726563-normal"
+  },
+  {
+    "name": "editor.list-unordered-4",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d34-normal"
+  },
+  {
+    "name": "editor.list-unordered-5-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d352d726563-normal"
+  },
+  {
+    "name": "editor.list-unordered-5",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d35-normal"
+  },
+  {
+    "name": "editor.list-unordered-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d726563-normal"
+  },
+  {
+    "name": "editor.list-unordered",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e6c6973742d756e6f726465726564-normal"
+  },
+  {
+    "name": "editor.page-break",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e706167652d627265616b-normal"
+  },
+  {
+    "name": "editor.paint-bucket",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061696e742d6275636b6574-normal"
+  },
+  {
+    "name": "editor.paint-tool",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061696e742d746f6f6c-normal"
+  },
+  {
+    "name": "editor.paperclip-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061706572636c69702d322d726563-normal"
+  },
+  {
+    "name": "editor.paperclip-2-slash-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061706572636c69702d322d736c6173682d726563-normal"
+  },
+  {
+    "name": "editor.paperclip-2-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061706572636c69702d322d736c617368-normal"
+  },
+  {
+    "name": "editor.paperclip-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061706572636c69702d32-normal"
+  },
+  {
+    "name": "editor.paperclip-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061706572636c69702d726563-normal"
+  },
+  {
+    "name": "editor.paperclip-slash-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061706572636c69702d736c6173682d726563-normal"
+  },
+  {
+    "name": "editor.paperclip-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061706572636c69702d736c617368-normal"
+  },
+  {
+    "name": "editor.paperclip",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7061706572636c6970-normal"
+  },
+  {
+    "name": "editor.pen-tool-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e70656e2d746f6f6c2d32-normal"
+  },
+  {
+    "name": "editor.pen-tool",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e70656e2d746f6f6c-normal"
+  },
+  {
+    "name": "editor.pharagraph-spacing-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e706861726167726170682d73706163696e672d726563-normal"
+  },
+  {
+    "name": "editor.pharagraph-spacing",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e706861726167726170682d73706163696e67-normal"
+  },
+  {
+    "name": "editor.printer-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7072696e7465722d736c617368-normal"
+  },
+  {
+    "name": "editor.printer",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7072696e746572-normal"
+  },
+  {
+    "name": "editor.quotes-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e71756f7465732d32-normal"
+  },
+  {
+    "name": "editor.quotes",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e71756f746573-normal"
+  },
+  {
+    "name": "editor.ruler",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e72756c6572-normal"
+  },
+  {
+    "name": "editor.script-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7363726970742d726563-normal"
+  },
+  {
+    "name": "editor.script",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e736372697074-normal"
+  },
+  {
+    "name": "editor.small-caps-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e736d616c6c2d636170732d322d726563-normal"
+  },
+  {
+    "name": "editor.small-caps-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e736d616c6c2d636170732d32-normal"
+  },
+  {
+    "name": "editor.small-caps-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e736d616c6c2d636170732d726563-normal"
+  },
+  {
+    "name": "editor.small-caps",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e736d616c6c2d63617073-normal"
+  },
+  {
+    "name": "editor.special-charachers-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7370656369616c2d636861726163686572732d726563-normal"
+  },
+  {
+    "name": "editor.special-charachers",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e7370656369616c2d63686172616368657273-normal"
+  },
+  {
+    "name": "editor.text-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d322d726563-normal"
+  },
+  {
+    "name": "editor.text-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d32-normal"
+  },
+  {
+    "name": "editor.text-block",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d626c6f636b-normal"
+  },
+  {
+    "name": "editor.text-bold-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d626f6c642d726563-normal"
+  },
+  {
+    "name": "editor.text-bold",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d626f6c64-normal"
+  },
+  {
+    "name": "editor.text-format",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d666f726d6174-normal"
+  },
+  {
+    "name": "editor.text-italic-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d6974616c69632d726563-normal"
+  },
+  {
+    "name": "editor.text-italic",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d6974616c6963-normal"
+  },
+  {
+    "name": "editor.text-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d726563-normal"
+  },
+  {
+    "name": "editor.text-slash-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d736c6173682d322d726563-normal"
+  },
+  {
+    "name": "editor.text-slash-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d736c6173682d32-normal"
+  },
+  {
+    "name": "editor.text-slash-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d736c6173682d726563-normal"
+  },
+  {
+    "name": "editor.text-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d736c617368-normal"
+  },
+  {
+    "name": "editor.text-strikethrough-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d737472696b657468726f7567682d726563-normal"
+  },
+  {
+    "name": "editor.text-strikethrough",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d737472696b657468726f756768-normal"
+  },
+  {
+    "name": "editor.text-underline-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d756e6465726c696e652d726563-normal"
+  },
+  {
+    "name": "editor.text-underline",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e746578742d756e6465726c696e65-normal"
+  },
+  {
+    "name": "editor.text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e74657874-normal"
+  },
+  {
+    "name": "editor.vector",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e766563746f72-normal"
+  },
+  {
+    "name": "editor.wrap-text-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e777261702d746578742d726563-normal"
+  },
+  {
+    "name": "editor.wrap-text",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656469746f722e777261702d74657874-normal"
+  },
+  {
+    "name": "electronics.battery-1",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e626174746572792d31-normal"
+  },
+  {
+    "name": "electronics.battery-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e626174746572792d32-normal"
+  },
+  {
+    "name": "electronics.battery-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e626174746572792d33-normal"
+  },
+  {
+    "name": "electronics.battery-charging",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e626174746572792d6368617267696e67-normal"
+  },
+  {
+    "name": "electronics.battery-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e626174746572792d736c617368-normal"
+  },
+  {
+    "name": "electronics.battery",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e62617474657279-normal"
+  },
+  {
+    "name": "electronics.bulb-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e62756c622d736c617368-normal"
+  },
+  {
+    "name": "electronics.bulb",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e62756c62-normal"
+  },
+  {
+    "name": "electronics.dashboard-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e64617368626f6172642d32-normal"
+  },
+  {
+    "name": "electronics.dashboard",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e64617368626f617264-normal"
+  },
+  {
+    "name": "electronics.devices",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e64657669636573-normal"
+  },
+  {
+    "name": "electronics.diskette",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6469736b65747465-normal"
+  },
+  {
+    "name": "electronics.flashcard",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e666c61736863617264-normal"
+  },
+  {
+    "name": "electronics.glasses-vr",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e676c61737365732d7672-normal"
+  },
+  {
+    "name": "electronics.hard-drive",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e686172642d6472697665-normal"
+  },
+  {
+    "name": "electronics.headphones-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6865616470686f6e65732d32-normal"
+  },
+  {
+    "name": "electronics.headphones",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6865616470686f6e6573-normal"
+  },
+  {
+    "name": "electronics.keyboard-hide",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6b6579626f6172642d68696465-normal"
+  },
+  {
+    "name": "electronics.keyboard-show",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6b6579626f6172642d73686f77-normal"
+  },
+  {
+    "name": "electronics.keyboard",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6b6579626f617264-normal"
+  },
+  {
+    "name": "electronics.laptop",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6c6170746f70-normal"
+  },
+  {
+    "name": "electronics.memory-card",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6d656d6f72792d63617264-normal"
+  },
+  {
+    "name": "electronics.monitor",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6d6f6e69746f72-normal"
+  },
+  {
+    "name": "electronics.mouse",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e6d6f757365-normal"
+  },
+  {
+    "name": "electronics.plug-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e706c75672d736c617368-normal"
+  },
+  {
+    "name": "electronics.plug",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e706c7567-normal"
+  },
+  {
+    "name": "electronics.processor",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e70726f636573736f72-normal"
+  },
+  {
+    "name": "electronics.smartphone",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e736d61727470686f6e65-normal"
+  },
+  {
+    "name": "electronics.speaker",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e737065616b6572-normal"
+  },
+  {
+    "name": "electronics.tablet",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e7461626c6574-normal"
+  },
+  {
+    "name": "electronics.thermometer",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e746865726d6f6d65746572-normal"
+  },
+  {
+    "name": "electronics.watch-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e77617463682d32-normal"
+  },
+  {
+    "name": "electronics.watch",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e7761746368-normal"
+  },
+  {
+    "name": "electronics.weighter-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e77656967687465722d32-normal"
+  },
+  {
+    "name": "electronics.weighter",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-656c656374726f6e6963732e7765696768746572-normal"
+  },
+  {
+    "name": "financial.cash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e63617368-normal"
+  },
+  {
+    "name": "financial.credit-card-income",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6372656469742d636172642d696e636f6d65-normal"
+  },
+  {
+    "name": "financial.credit-card-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6372656469742d636172642d6d696e7573-normal"
+  },
+  {
+    "name": "financial.credit-card-outcome",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6372656469742d636172642d6f7574636f6d65-normal"
+  },
+  {
+    "name": "financial.credit-card-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6372656469742d636172642d706c7573-normal"
+  },
+  {
+    "name": "financial.credit-card-scan",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6372656469742d636172642d7363616e-normal"
+  },
+  {
+    "name": "financial.credit-card-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6372656469742d636172642d736c617368-normal"
+  },
+  {
+    "name": "financial.credit-card",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6372656469742d63617264-normal"
+  },
+  {
+    "name": "financial.dollar-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e646f6c6c61722d636972636c65-normal"
+  },
+  {
+    "name": "financial.dollar",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e646f6c6c6172-normal"
+  },
+  {
+    "name": "financial.euro-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6575726f2d636972636c65-normal"
+  },
+  {
+    "name": "financial.euro",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e6575726f-normal"
+  },
+  {
+    "name": "financial.pos",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e706f73-normal"
+  },
+  {
+    "name": "financial.procent-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e70726f63656e742d636972636c65-normal"
+  },
+  {
+    "name": "financial.procent",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e70726f63656e74-normal"
+  },
+  {
+    "name": "financial.wallet-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e77616c6c65742d6d696e7573-normal"
+  },
+  {
+    "name": "financial.wallet-move",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e77616c6c65742d6d6f7665-normal"
+  },
+  {
+    "name": "financial.wallet-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e77616c6c65742d706c7573-normal"
+  },
+  {
+    "name": "financial.wallet",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-66696e616e6369616c2e77616c6c6574-normal"
+  },
+  {
+    "name": "food.coffee",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6f642e636f66666565-normal"
+  },
+  {
+    "name": "food.cutlery-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6f642e6375746c6572792d32-normal"
+  },
+  {
+    "name": "food.cutlery-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6f642e6375746c6572792d33-normal"
+  },
+  {
+    "name": "food.cutlery-4",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6f642e6375746c6572792d34-normal"
+  },
+  {
+    "name": "food.cutlery",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6f642e6375746c657279-normal"
+  },
+  {
+    "name": "food.glass-cocktail",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6f642e676c6173732d636f636b7461696c-normal"
+  },
+  {
+    "name": "food.glass-wine",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-666f6f642e676c6173732d77696e65-normal"
+  },
+  {
+    "name": "grid.align-bottom-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e616c69676e2d626f74746f6d2d32-normal"
+  },
+  {
+    "name": "grid.align-horizontally",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e616c69676e2d686f72697a6f6e74616c6c79-normal"
+  },
+  {
+    "name": "grid.align-left-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e616c69676e2d6c6566742d33-normal"
+  },
+  {
+    "name": "grid.align-right-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e616c69676e2d72696768742d33-normal"
+  },
+  {
+    "name": "grid.align-top-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e616c69676e2d746f702d32-normal"
+  },
+  {
+    "name": "grid.align-vertically",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e616c69676e2d766572746963616c6c79-normal"
+  },
+  {
+    "name": "grid.crop-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e63726f702d726563-normal"
+  },
+  {
+    "name": "grid.crop-rotate-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e63726f702d726f746174652d726563-normal"
+  },
+  {
+    "name": "grid.crop-rotate",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e63726f702d726f74617465-normal"
+  },
+  {
+    "name": "grid.crop",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e63726f70-normal"
+  },
+  {
+    "name": "grid.distribute-horizontally",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e646973747269627574652d686f72697a6f6e74616c6c79-normal"
+  },
+  {
+    "name": "grid.distribute-vertically",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e646973747269627574652d766572746963616c6c79-normal"
+  },
+  {
+    "name": "grid.elements-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e656c656d656e74732d32-normal"
+  },
+  {
+    "name": "grid.elements-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e656c656d656e74732d33-normal"
+  },
+  {
+    "name": "grid.elements-4",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e656c656d656e74732d34-normal"
+  },
+  {
+    "name": "grid.elements-5",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e656c656d656e74732d35-normal"
+  },
+  {
+    "name": "grid.elements-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e656c656d656e74732d706c7573-normal"
+  },
+  {
+    "name": "grid.elements",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e656c656d656e7473-normal"
+  },
+  {
+    "name": "grid.fat-rows",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e6661742d726f7773-normal"
+  },
+  {
+    "name": "grid.frame-bounds-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e6672616d652d626f756e64732d726563-normal"
+  },
+  {
+    "name": "grid.frame-bounds",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e6672616d652d626f756e6473-normal"
+  },
+  {
+    "name": "grid.frame",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e6672616d65-normal"
+  },
+  {
+    "name": "grid.grid-02",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3032-normal"
+  },
+  {
+    "name": "grid.grid-03",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3033-normal"
+  },
+  {
+    "name": "grid.grid-04",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3034-normal"
+  },
+  {
+    "name": "grid.grid-05",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3035-normal"
+  },
+  {
+    "name": "grid.grid-06",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3036-normal"
+  },
+  {
+    "name": "grid.grid-07",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3037-normal"
+  },
+  {
+    "name": "grid.grid-08",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3038-normal"
+  },
+  {
+    "name": "grid.grid-09",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3039-normal"
+  },
+  {
+    "name": "grid.grid-10",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3130-normal"
+  },
+  {
+    "name": "grid.grid-11",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3131-normal"
+  },
+  {
+    "name": "grid.grid-12",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3132-normal"
+  },
+  {
+    "name": "grid.grid-13",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3133-normal"
+  },
+  {
+    "name": "grid.grid-14",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3134-normal"
+  },
+  {
+    "name": "grid.grid-15",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3135-normal"
+  },
+  {
+    "name": "grid.grid-16",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e677269642d3136-normal"
+  },
+  {
+    "name": "grid.grid",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e67726964-normal"
+  },
+  {
+    "name": "grid.iframe",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e696672616d65-normal"
+  },
+  {
+    "name": "grid.kanban",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e6b616e62616e-normal"
+  },
+  {
+    "name": "grid.padding",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e70616464696e67-normal"
+  },
+  {
+    "name": "grid.selection-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e73656c656374696f6e2d726563-normal"
+  },
+  {
+    "name": "grid.selection",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e73656c656374696f6e-normal"
+  },
+  {
+    "name": "grid.slider-horizontal-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e736c696465722d686f72697a6f6e74616c2d32-normal"
+  },
+  {
+    "name": "grid.slider-horizontal",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e736c696465722d686f72697a6f6e74616c-normal"
+  },
+  {
+    "name": "grid.slider-vertical-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e736c696465722d766572746963616c2d32-normal"
+  },
+  {
+    "name": "grid.slider-vertical",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e736c696465722d766572746963616c-normal"
+  },
+  {
+    "name": "grid.stack",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e737461636b-normal"
+  },
+  {
+    "name": "grid.transform",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-677269642e7472616e73666f726d-normal"
+  },
+  {
+    "name": "images.apperture",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e617070657274757265-normal"
+  },
+  {
+    "name": "images.camera-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e63616d6572612d736c617368-normal"
+  },
+  {
+    "name": "images.camera",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e63616d657261-normal"
+  },
+  {
+    "name": "images.color-filter",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e636f6c6f722d66696c746572-normal"
+  },
+  {
+    "name": "images.image-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d32-normal"
+  },
+  {
+    "name": "images.image-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d33-normal"
+  },
+  {
+    "name": "images.image-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d636865636b-normal"
+  },
+  {
+    "name": "images.image-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d63726f7373-normal"
+  },
+  {
+    "name": "images.image-download",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d646f776e6c6f6164-normal"
+  },
+  {
+    "name": "images.image-edit",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d65646974-normal"
+  },
+  {
+    "name": "images.image-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d706c7573-normal"
+  },
+  {
+    "name": "images.image-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d736c617368-normal"
+  },
+  {
+    "name": "images.image-upload",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d6167652d75706c6f6164-normal"
+  },
+  {
+    "name": "images.image",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e696d616765-normal"
+  },
+  {
+    "name": "images.lightning-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e6c696768746e696e672d736c617368-normal"
+  },
+  {
+    "name": "images.lightning",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-696d616765732e6c696768746e696e67-normal"
+  },
+  {
+    "name": "maps.360-degrees",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e3336302d64656772656573-normal"
+  },
+  {
+    "name": "maps.compass",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e636f6d70617373-normal"
+  },
+  {
+    "name": "maps.direction-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e646972656374696f6e2d32-normal"
+  },
+  {
+    "name": "maps.direction",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e646972656374696f6e-normal"
+  },
+  {
+    "name": "maps.globe-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e676c6f62652d32-normal"
+  },
+  {
+    "name": "maps.globe",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e676c6f6265-normal"
+  },
+  {
+    "name": "maps.gps-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e6770732d736c617368-normal"
+  },
+  {
+    "name": "maps.gps",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e677073-normal"
+  },
+  {
+    "name": "maps.map-view",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e6d61702d76696577-normal"
+  },
+  {
+    "name": "maps.pin-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e70696e2d32-normal"
+  },
+  {
+    "name": "maps.pin-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e70696e2d33-normal"
+  },
+  {
+    "name": "maps.pin-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e70696e2d636865636b-normal"
+  },
+  {
+    "name": "maps.pin-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e70696e2d63726f7373-normal"
+  },
+  {
+    "name": "maps.pin-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e70696e2d6d696e7573-normal"
+  },
+  {
+    "name": "maps.pin-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e70696e2d706c7573-normal"
+  },
+  {
+    "name": "maps.pin-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e70696e2d736c617368-normal"
+  },
+  {
+    "name": "maps.pin",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e70696e-normal"
+  },
+  {
+    "name": "maps.route",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d6170732e726f757465-normal"
+  },
+  {
+    "name": "media.book-library",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e626f6f6b2d6c696272617279-normal"
+  },
+  {
+    "name": "media.book-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e626f6f6b2d706c7573-normal"
+  },
+  {
+    "name": "media.book-queue",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e626f6f6b2d7175657565-normal"
+  },
+  {
+    "name": "media.captions-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e63617074696f6e732d32-normal"
+  },
+  {
+    "name": "media.captions",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e63617074696f6e73-normal"
+  },
+  {
+    "name": "media.cd",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6364-normal"
+  },
+  {
+    "name": "media.equalizer",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e657175616c697a6572-normal"
+  },
+  {
+    "name": "media.fast-forward",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e666173742d666f7277617264-normal"
+  },
+  {
+    "name": "media.fast-rewind",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e666173742d726577696e64-normal"
+  },
+  {
+    "name": "media.film-board",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e66696c6d2d626f617264-normal"
+  },
+  {
+    "name": "media.film-reel",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e66696c6d2d7265656c-normal"
+  },
+  {
+    "name": "media.film-tape",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e66696c6d2d74617065-normal"
+  },
+  {
+    "name": "media.forward-10-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e666f72776172642d31302d726563-normal"
+  },
+  {
+    "name": "media.forward-10",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e666f72776172642d3130-normal"
+  },
+  {
+    "name": "media.forward-15-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e666f72776172642d31352d726563-normal"
+  },
+  {
+    "name": "media.forward-15",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e666f72776172642d3135-normal"
+  },
+  {
+    "name": "media.forward-5-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e666f72776172642d352d726563-normal"
+  },
+  {
+    "name": "media.forward-5",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e666f72776172642d35-normal"
+  },
+  {
+    "name": "media.games",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e67616d6573-normal"
+  },
+  {
+    "name": "media.label-4k",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6c6162656c2d346b-normal"
+  },
+  {
+    "name": "media.label-explicit",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6c6162656c2d6578706c69636974-normal"
+  },
+  {
+    "name": "media.label-hd",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6c6162656c2d6864-normal"
+  },
+  {
+    "name": "media.label-hq",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6c6162656c2d6871-normal"
+  },
+  {
+    "name": "media.maximize-3-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d6178696d697a652d332d726563-normal"
+  },
+  {
+    "name": "media.maximize-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d6178696d697a652d33-normal"
+  },
+  {
+    "name": "media.mic-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d69632d736c617368-normal"
+  },
+  {
+    "name": "media.mic",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d6963-normal"
+  },
+  {
+    "name": "media.minimize-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d696e696d697a652d726563-normal"
+  },
+  {
+    "name": "media.minimize",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d696e696d697a65-normal"
+  },
+  {
+    "name": "media.miniplayer",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d696e69706c61796572-normal"
+  },
+  {
+    "name": "media.music-library",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d757369632d6c696272617279-normal"
+  },
+  {
+    "name": "media.music-note-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d757369632d6e6f74652d32-normal"
+  },
+  {
+    "name": "media.music-note-3",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d757369632d6e6f74652d33-normal"
+  },
+  {
+    "name": "media.music-note",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d757369632d6e6f7465-normal"
+  },
+  {
+    "name": "media.music-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d757369632d706c7573-normal"
+  },
+  {
+    "name": "media.music-queue",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6d757369632d7175657565-normal"
+  },
+  {
+    "name": "media.new-release",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e6e65772d72656c65617365-normal"
+  },
+  {
+    "name": "media.pause-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e70617573652d636972636c65-normal"
+  },
+  {
+    "name": "media.pause",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7061757365-normal"
+  },
+  {
+    "name": "media.play-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c61792d636972636c65-normal"
+  },
+  {
+    "name": "media.play-next",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c61792d6e657874-normal"
+  },
+  {
+    "name": "media.play-previous",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c61792d70726576696f7573-normal"
+  },
+  {
+    "name": "media.play-slowmotion",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c61792d736c6f776d6f74696f6e-normal"
+  },
+  {
+    "name": "media.play",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c6179-normal"
+  },
+  {
+    "name": "media.playlist-play",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c61796c6973742d706c6179-normal"
+  },
+  {
+    "name": "media.playlist-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c61796c6973742d706c7573-normal"
+  },
+  {
+    "name": "media.playlist",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c61796c697374-normal"
+  },
+  {
+    "name": "media.radio",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e726164696f-normal"
+  },
+  {
+    "name": "media.record",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265636f7264-normal"
+  },
+  {
+    "name": "media.repeat-on",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706561742d6f6e-normal"
+  },
+  {
+    "name": "media.repeat",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e726570656174-normal"
+  },
+  {
+    "name": "media.replay-10-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706c61792d31302d726563-normal"
+  },
+  {
+    "name": "media.replay-10",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706c61792d3130-normal"
+  },
+  {
+    "name": "media.replay-15-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706c61792d31352d726563-normal"
+  },
+  {
+    "name": "media.replay-15",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706c61792d3135-normal"
+  },
+  {
+    "name": "media.replay-5-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706c61792d352d726563-normal"
+  },
+  {
+    "name": "media.replay-5",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706c61792d35-normal"
+  },
+  {
+    "name": "media.replay-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706c61792d726563-normal"
+  },
+  {
+    "name": "media.replay",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7265706c6179-normal"
+  },
+  {
+    "name": "media.shuffle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e73687566666c65-normal"
+  },
+  {
+    "name": "media.soundwave-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e736f756e64776176652d726563-normal"
+  },
+  {
+    "name": "media.soundwave",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e736f756e6477617665-normal"
+  },
+  {
+    "name": "media.stop-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e73746f702d636972636c65-normal"
+  },
+  {
+    "name": "media.stop",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e73746f70-normal"
+  },
+  {
+    "name": "media.tv",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7476-normal"
+  },
+  {
+    "name": "media.verified",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e7665726966696564-normal"
+  },
+  {
+    "name": "media.video-camera-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766964656f2d63616d6572612d736c617368-normal"
+  },
+  {
+    "name": "media.video-camera",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766964656f2d63616d657261-normal"
+  },
+  {
+    "name": "media.video-library",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766964656f2d6c696272617279-normal"
+  },
+  {
+    "name": "media.video-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766964656f2d706c7573-normal"
+  },
+  {
+    "name": "media.video-queue",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766964656f2d7175657565-normal"
+  },
+  {
+    "name": "media.volume-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766f6c756d652d63726f7373-normal"
+  },
+  {
+    "name": "media.volume-high",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766f6c756d652d68696768-normal"
+  },
+  {
+    "name": "media.volume-low",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766f6c756d652d6c6f77-normal"
+  },
+  {
+    "name": "media.volume-mute",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766f6c756d652d6d757465-normal"
+  },
+  {
+    "name": "media.volume-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e766f6c756d652d736c617368-normal"
+  },
+  {
+    "name": "media.webcam-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e77656263616d2d736c617368-normal"
+  },
+  {
+    "name": "media.webcam",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e77656263616d-normal"
+  },
+  {
+    "name": "security.bug",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e627567-normal"
+  },
+  {
+    "name": "security.eye-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e6579652d736c617368-normal"
+  },
+  {
+    "name": "security.eye",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e657965-normal"
+  },
+  {
+    "name": "security.face-id-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e666163652d69642d726563-normal"
+  },
+  {
+    "name": "security.face-id",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e666163652d6964-normal"
+  },
+  {
+    "name": "security.fingerprint-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e66696e6765727072696e742d322d726563-normal"
+  },
+  {
+    "name": "security.fingerprint-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e66696e6765727072696e742d32-normal"
+  },
+  {
+    "name": "security.fingerprint-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e66696e6765727072696e742d726563-normal"
+  },
+  {
+    "name": "security.fingerprint",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e66696e6765727072696e74-normal"
+  },
+  {
+    "name": "security.key",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e6b6579-normal"
+  },
+  {
+    "name": "security.lock-2-opened",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e6c6f636b2d322d6f70656e6564-normal"
+  },
+  {
+    "name": "security.lock-2-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e6c6f636b2d322d736c617368-normal"
+  },
+  {
+    "name": "security.lock-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e6c6f636b2d32-normal"
+  },
+  {
+    "name": "security.lock-opened",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e6c6f636b2d6f70656e6564-normal"
+  },
+  {
+    "name": "security.lock-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e6c6f636b2d736c617368-normal"
+  },
+  {
+    "name": "security.lock",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e6c6f636b-normal"
+  },
+  {
+    "name": "security.scan-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e7363616e2d726563-normal"
+  },
+  {
+    "name": "security.scan",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e7363616e-normal"
+  },
+  {
+    "name": "security.server-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e7365727665722d32-normal"
+  },
+  {
+    "name": "security.server",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e736572766572-normal"
+  },
+  {
+    "name": "security.shield-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e736869656c642d636865636b-normal"
+  },
+  {
+    "name": "security.shield-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e736869656c642d63726f7373-normal"
+  },
+  {
+    "name": "security.shield",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-73656375726974792e736869656c64-normal"
+  },
+  {
+    "name": "time.calendar-arrow-right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d6172726f772d7269676874-normal"
+  },
+  {
+    "name": "time.calendar-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d63726f7373-normal"
+  },
+  {
+    "name": "time.calendar-dates",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d6461746573-normal"
+  },
+  {
+    "name": "time.calendar-event",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d6576656e74-normal"
+  },
+  {
+    "name": "time.calendar-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d6d696e7573-normal"
+  },
+  {
+    "name": "time.calendar-note",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d6e6f7465-normal"
+  },
+  {
+    "name": "time.calendar-number",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d6e756d626572-normal"
+  },
+  {
+    "name": "time.calendar-person",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d706572736f6e-normal"
+  },
+  {
+    "name": "time.calendar-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e6461722d706c7573-normal"
+  },
+  {
+    "name": "time.calendar",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e63616c656e646172-normal"
+  },
+  {
+    "name": "time.clock-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e636c6f636b2d636865636b-normal"
+  },
+  {
+    "name": "time.clock-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e636c6f636b2d63726f7373-normal"
+  },
+  {
+    "name": "time.clock-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e636c6f636b2d6d696e7573-normal"
+  },
+  {
+    "name": "time.clock-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e636c6f636b2d706c7573-normal"
+  },
+  {
+    "name": "time.clock-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e636c6f636b2d736c617368-normal"
+  },
+  {
+    "name": "time.clock-zzz",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e636c6f636b2d7a7a7a-normal"
+  },
+  {
+    "name": "time.clock",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e636c6f636b-normal"
+  },
+  {
+    "name": "time.history-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e686973746f72792d726563-normal"
+  },
+  {
+    "name": "time.history",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e686973746f7279-normal"
+  },
+  {
+    "name": "time.speed-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e73706565642d726563-normal"
+  },
+  {
+    "name": "time.speed",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e7370656564-normal"
+  },
+  {
+    "name": "time.stopwatch-slash",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e73746f7077617463682d736c617368-normal"
+  },
+  {
+    "name": "time.stopwatch",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e73746f707761746368-normal"
+  },
+  {
+    "name": "time.time",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e74696d65-normal"
+  },
+  {
+    "name": "time.timer-2-rec",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e74696d65722d322d726563-normal"
+  },
+  {
+    "name": "time.timer-2",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e74696d65722d32-normal"
+  },
+  {
+    "name": "time.timer",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-74696d652e74696d6572-normal"
+  },
+  {
+    "name": "users.user-alert",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d616c657274-normal"
+  },
+  {
+    "name": "users.user-arrow-bl",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d6172726f772d626c-normal"
+  },
+  {
+    "name": "users.user-arrow-bottom",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d6172726f772d626f74746f6d-normal"
+  },
+  {
+    "name": "users.user-arrow-right",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d6172726f772d7269676874-normal"
+  },
+  {
+    "name": "users.user-arrow-top",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d6172726f772d746f70-normal"
+  },
+  {
+    "name": "users.user-arrow-tr",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d6172726f772d7472-normal"
+  },
+  {
+    "name": "users.user-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d636865636b-normal"
+  },
+  {
+    "name": "users.user-circle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d636972636c65-normal"
+  },
+  {
+    "name": "users.user-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d63726f7373-normal"
+  },
+  {
+    "name": "users.user-minus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d6d696e7573-normal"
+  },
+  {
+    "name": "users.user-plus",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d706c7573-normal"
+  },
+  {
+    "name": "users.user-square",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e757365722d737175617265-normal"
+  },
+  {
+    "name": "users.user",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e75736572-normal"
+  },
+  {
+    "name": "users.users",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-75736572732e7573657273-normal"
+  },
+  {
+    "name": "weather.cloud-check",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e636c6f75642d636865636b-normal"
+  },
+  {
+    "name": "weather.cloud-cross",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e636c6f75642d63726f7373-normal"
+  },
+  {
+    "name": "weather.cloud-download",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e636c6f75642d646f776e6c6f6164-normal"
+  },
+  {
+    "name": "weather.cloud-drizzle",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e636c6f75642d6472697a7a6c65-normal"
+  },
+  {
+    "name": "weather.cloud-lightning",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e636c6f75642d6c696768746e696e67-normal"
+  },
+  {
+    "name": "weather.cloud-snow",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e636c6f75642d736e6f77-normal"
+  },
+  {
+    "name": "weather.cloud-upload",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e636c6f75642d75706c6f6164-normal"
+  },
+  {
+    "name": "weather.cloud",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e636c6f7564-normal"
+  },
+  {
+    "name": "weather.moon",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e6d6f6f6e-normal"
+  },
+  {
+    "name": "weather.sun",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e73756e-normal"
+  },
+  {
+    "name": "weather.sunrise",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e73756e72697365-normal"
+  },
+  {
+    "name": "weather.sunset",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-776561746865722e73756e736574-normal"
   }
 ]

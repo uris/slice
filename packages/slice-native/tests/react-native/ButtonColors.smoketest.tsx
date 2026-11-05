@@ -54,12 +54,12 @@ function Screen({ preference, setPreference }: { preference: 'light' | 'dark'; s
       <Text style={{ color: colors['core-text-secondary'] }}>{preference} · Presses: {presses} · Scroll outside buttons</Text>
     </View>
     <View pointerEvents="box-none" style={{ position: 'absolute', top: insets.top + 195, left: 24, right: 24, gap: 16 }}>
-      {cycleStep % 2 === 0 && <Button presence={{ entering: FadeIn.duration(350), exiting: FadeOut.duration(350) }} label="Link colors glass" icon="home" iconColor="core-link-primary" textColor="core-link-primary" liquidGlassBackground={{ glassStyle }} onPress={press} />}
-      <Button label="Separate colors" icon="home" iconColor={iconColor} textColor={textColor} liquidGlassBackground={{ glassStyle }} onPress={press} />
-      <Button icon="@" iconColor="core-link-primary" textColor="core-text-primary" liquidGlassBackground={{ glassStyle }} onPress={press} accessibilityLabel="Icon only with separate colors" />
-      <Button label="Palette literals" icon="home" iconColor={colors['core-link-primary']} textColor={colors['core-text-primary']} liquidGlassBackground={{ glassStyle }} onPress={press} />
-      <Button label="Disabled split" icon="home" iconColor="feedback-positive" textColor="core-text-primary" liquidGlassBackground={{ glassStyle }} disabled />
-      <Button label="Regular split" icon="home" iconColor="core-link-primary" textColor="core-text-primary" onPress={press} />
+      {cycleStep % 2 === 0 && <Button presence={{ entering: FadeIn.duration(350), exiting: FadeOut.duration(350) }} label="Link colors glass" icon="basic.home" iconColor="core-link-primary" textColor="core-link-primary" liquidGlassBackground={{ glassStyle }} onPress={press} />}
+      <Button label="Separate colors" icon="basic.home" iconColor={iconColor} textColor={textColor} liquidGlassBackground={{ glassStyle }} onPress={press} />
+      <Button icon="basic.at" iconColor="core-link-primary" textColor="core-text-primary" liquidGlassBackground={{ glassStyle }} onPress={press} accessibilityLabel="Icon only with separate colors" />
+      <Button label="Palette literals" icon="basic.home" iconColor={colors['core-link-primary']} textColor={colors['core-text-primary']} liquidGlassBackground={{ glassStyle }} onPress={press} />
+      <Button label="Disabled split" icon="basic.home" iconColor="feedback-positive" textColor="core-text-primary" liquidGlassBackground={{ glassStyle }} disabled />
+      <Button label="Regular split" icon="basic.home" iconColor="core-link-primary" textColor="core-text-primary" onPress={press} />
     </View>
   </View>;
 }

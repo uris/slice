@@ -268,15 +268,15 @@ import SliceNative
 
 // SwiftUI (glass button style requires iOS 26+):
 Button {} label: {
-    SliceNativeIcon.home.image()
+    SliceNativeIcon.basicHome.image()
 }
 .buttonStyle(.glass)
 .tint(SliceColors.coreIconPrimary)
 
 // UIKit:
-configuration.image = SliceNativeIcon.home.uiImage()
+configuration.image = SliceNativeIcon.basicHome.uiImage()
 // Optional baked variants, falling back to the base artwork when unavailable:
-imageView.image = SliceNativeIcon.view.uiImage(toggled: true, filled: false)
+imageView.image = SliceNativeIcon.systemView.uiImage(toggled: true, filled: false)
 // String names match the shared registry:
 let wallet = SliceNativeIcon(rawValue: "wallet")?.uiImage()
 ```
@@ -346,7 +346,7 @@ buttons without that opt-in retain the regular React Native rendering.
 ```tsx
 <Button
   label="Save"
-  icon="check"
+  icon="basic.check"
   liquidGlassBackground
   tintColor="core-text-primary"
   size="m"
@@ -554,7 +554,7 @@ default size is 56 points. Supply an `accessibilityLabel` for an icon-only FAB.
 
 ```tsx
 <FabButton accessibilityLabel="Add task" onPress={addTask} />
-<FabButton label="Create task" icon="plus" size={64} onPress={addTask} />
+<FabButton label="Create task" icon="basic.plus" size={64} onPress={addTask} />
 <FabButton borderRadius={16} shadowStyle={{ elevation: 8, marginBottom: 16 }} />
 ```
 
@@ -651,8 +651,8 @@ token or React Native `ColorValue`. The existing placeholder prop name remains
 ```tsx
 <Button label="Save" liquidGlassBackground tintColor="core-text-primary" />
 <Text textColor="core-text-secondary">Details</Text>
-<Icon name="search" iconColor="core-icon-secondary" />
-<TextInput liquidGlassBackground icon="search"
+<Icon name="basic.search" iconColor="core-icon-secondary" />
+<TextInput liquidGlassBackground icon="basic.search"
   iconColor="core-icon-secondary" textColor="core-text-primary"
   placeholderTextColor="core-text-secondary" />
 ```
@@ -682,9 +682,9 @@ Button `iconColor` and `textColor` can differ. `tintColor` remains a shorthand
 fallback for either foreground when its specific prop is omitted:
 
 ```tsx
-<Button label="Save" icon="home" liquidGlassBackground
+<Button label="Save" icon="basic.home" liquidGlassBackground
   iconColor="core-icon-secondary" textColor="core-text-primary" />
-<Icon name="search" iconColor="core-icon-secondary" />
+<Icon name="basic.search" iconColor="core-icon-secondary" />
 ```
 
 Each foreground uses the shared regular/glass resolver independently. Regular

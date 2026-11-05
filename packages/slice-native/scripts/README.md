@@ -37,10 +37,15 @@ The web package has a separate [scripts directory](../../slice/scripts/README.md
   validates source/manifest coverage, unique asset names, 1×/2×/3× PNG dimensions,
   template metadata, Swift enum coverage, and the pod's resource declaration.
   Run `node scripts/check-ios-icons.mjs --pixels` to additionally use Chromium to
-  check monochrome pixels, intentional blank artwork, wallet cutouts, and toggle
-  masks. These checks do not test glass contrast or runtime bundle loading.
+  check monochrome pixels, intentional blank artwork, and toggle masks. These checks do not test glass contrast or runtime bundle loading.
 
 ## Workflow
+
+When the shared web icon catalog changes, run `npm run generate` before native
+lint, tests, and Storybook validation. Commit the regenerated SVG registry, icon
+constants, iOS templates, manifest, and Swift accessors together. Native CI runs
+tests before its build, so checked-in artwork must already match the web catalog.
+Use qualified icon names such as `basic.home` and `system.view` in native callers.
 
 ### Native button presence regression
 

@@ -28,16 +28,16 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {};
 export const Secondary: Story = { args: { variant: 'secondary' } };
 export const Disabled: Story = { args: { disabled: true } };
-export const WithIcon: Story = { args: { icon: 'home', label: 'Go home' } };
-export const IconOnly: Story = { args: { label: undefined, icon: 'home', accessibilityLabel: 'Go home' } };
+export const WithIcon: Story = { args: { icon: 'basic.home', label: 'Go home' } };
+export const IconOnly: Story = { args: { label: undefined, icon: 'basic.home', accessibilityLabel: 'Go home' } };
 
 // Browser stories use the regular fallback. Check these on an iOS 26+ native build.
 export const GlassLabel: Story = { args: { liquidGlassBackground: true } };
 export const GlassWithIcon: Story = {
-	args: { liquidGlassBackground: {}, icon: 'home', tintColor: 'core-text-primary' },
+	args: { liquidGlassBackground: {}, icon: 'basic.home', tintColor: 'core-text-primary' },
 };
 export const GlassIconOnly: Story = {
-	args: { label: undefined, icon: 'home', accessibilityLabel: 'Go home', liquidGlassBackground: {} },
+	args: { label: undefined, icon: 'basic.home', accessibilityLabel: 'Go home', liquidGlassBackground: {} },
 };
 export const GlassClear: Story = {
 	args: { liquidGlassBackground: { glassStyle: 'clear' }, tintColor: 'core-text-light' },

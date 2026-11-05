@@ -114,7 +114,7 @@ describe('native Liquid Glass Button', () => {
 	it('uses native label/icon assets and excludes solid background, borders, variant and children', () => {
 		render(
 			button({
-				icon: 'home',
+				icon: 'basic.home',
 				iconPosition: 'right',
 				iconSize: 18,
 				size: 'l',
@@ -126,7 +126,7 @@ describe('native Liquid Glass Button', () => {
 		);
 		expect(state.native).toMatchObject({
 			label: 'Save',
-			iconName: 'home',
+			iconName: 'basic.home',
 			iconPosition: 'right',
 			iconSize: 18,
 			minimumSize: 56,
@@ -364,10 +364,10 @@ describe('native Liquid Glass Button', () => {
 		render(
 			button({
 				label: undefined,
-				icon: 'home',
+				icon: 'basic.home',
 				accessibilityLabel: 'Go home',
 				accessibilityHint: 'Opens home',
-				testID: 'home',
+				testID: 'basic.home',
 				layout,
 				presence: { entering, exiting },
 				animatedStyle,
@@ -375,11 +375,11 @@ describe('native Liquid Glass Button', () => {
 		);
 		expect(state.native).toMatchObject({
 			label: '',
-			iconName: 'home',
+			iconName: 'basic.home',
 			accessibilityLabel: 'Go home',
 			accessibilityHint: 'Opens home',
 			accessibilityRole: 'button',
-			testID: 'home',
+			testID: 'basic.home',
 			paddingLeading: 0,
 			paddingTrailing: 0,
 			themePreference: 'system',
@@ -407,11 +407,11 @@ it('resolves button foreground literals to assets and falls back for unmatched c
 });
 
 it('resolves separate native label/icon tokens and uses tintColor only as their fallback', () => {
-    const view = render(button({ icon: 'home', tintColor: 'core-text-primary', iconColor: 'core-icon-secondary', textColor: 'core-text-tertiary' }));
+    const view = render(button({ icon: 'basic.home', tintColor: 'core-text-primary', iconColor: 'core-icon-secondary', textColor: 'core-text-tertiary' }));
     expect(state.native).toMatchObject({ textTintToken: 'core-text-tertiary', iconTintToken: 'core-icon-secondary' });
-    view.rerender(button({ icon: 'home', tintColor: 'core-text-secondary' }));
+    view.rerender(button({ icon: 'basic.home', tintColor: 'core-text-secondary' }));
     expect(state.native).toMatchObject({ textTintToken: 'core-text-secondary', iconTintToken: 'core-text-secondary' });
-    view.rerender(button({ icon: 'home', textColor: 'red', iconColor: 'red' }));
+    view.rerender(button({ icon: 'basic.home', textColor: 'red', iconColor: 'red' }));
     expect(state.native).toMatchObject({ textTintToken: 'core-text-primary', iconTintToken: 'core-icon-primary' });
 });
 

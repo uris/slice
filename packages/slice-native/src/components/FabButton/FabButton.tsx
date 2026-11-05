@@ -17,7 +17,7 @@ export function FabButton(props: Readonly<FabButtonProps>) {
 	}
 	return (
 		<View style={[styles.shadowWrapper, viewStyle, corners, styles.unclipped]}>
-			<Button icon="plus" size={56} {...buttonProps} liquidGlassBackground={false} />
+			<Button icon="basic.plus" size={56} {...buttonProps} liquidGlassBackground={false} />
 		</View>
 	);
 }

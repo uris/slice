@@ -3,7 +3,7 @@ import { Icon } from './index';
 const meta = {
 	title: 'Components/Icon',
 	component: Icon,
-	args: { name: 'home', size: 32, accessibilityLabel: 'Home' },
+	args: { name: 'basic.home', size: 32, accessibilityLabel: 'Home' },
 	parameters: {
 		docs: {
 			description: {
@@ -17,4 +17,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const Filled: Story = { args: { fill: true } };
-export const Toggled: Story = { args: { name: 'view', toggle: true } };
+export const Toggled: Story = { args: { name: 'system.view', toggle: true } };

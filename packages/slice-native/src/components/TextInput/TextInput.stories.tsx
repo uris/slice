@@ -33,7 +33,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
-export const WithIcon: Story = { args: { icon: 'home' } };
+export const WithIcon: Story = { args: { icon: 'basic.home' } };
 export const ReadOnly: Story = { args: { editable: false, defaultValue: 'Read-only text' } };
 export const Controlled: Story = {
 	render: function ControlledInput(args) {

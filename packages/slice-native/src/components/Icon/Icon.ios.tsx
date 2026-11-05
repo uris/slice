@@ -56,7 +56,7 @@ export const Icon = memo(function Icon(props: IconProps) {
 
 function TemplateIcon(props: IconProps) {
 	const {
-		name = 'home',
+		name = 'basic.home',
 		size = 20,
 		stroke: _stroke,
 		iconColor,

@@ -107,7 +107,7 @@ function Screen({
 						iconColor="core-icon-secondary"
 						textColor="core-text-primary"
 						placeholderTextColor="core-text-secondary"
-						icon="search"
+						icon="basic.search"
 						hideIconOnFocus={false}
 						value={first}
 						onChangeText={setFirst}
@@ -124,7 +124,7 @@ function Screen({
 						iconColor={colors['core-icon-primary']}
 						textColor={colors['core-text-primary']}
 						placeholderTextColor={colors['core-text-secondary']}
-						icon="edit"
+						icon="editor.edit"
 						hideIconOnFocus={false}
 						value={second}
 						onChangeText={setSecond}
@@ -137,7 +137,7 @@ function Screen({
 					<TextInput
 						accessibilityLabel="Regular input baseline"
 						placeholder="Search tasks — regular"
-						icon="search"
+						icon="basic.search"
 						hideIconOnFocus={false}
 						value={regular}
 						onChangeText={setRegular}
