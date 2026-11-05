@@ -632,10 +632,12 @@ export const AppearingLabel: Story = {
 		const slot = label.parentElement as HTMLElement;
 		const wrapper = input.closest('[data-variant]');
 		if (!wrapper) throw new Error('Missing wrapper');
+		// Font metrics and the collapsed transform must settle before recording a baseline.
+		await document.fonts.ready;
 		await waitFor(() => {
 			const field = wrapper.getBoundingClientRect();
 			const value = input.getBoundingClientRect();
-			expect(Math.abs(value.top + value.height / 2 - field.top - field.height / 2)).toBeLessThan(1);
+			expect(value.top + value.height / 2 - field.top - field.height / 2).toBeCloseTo(0, 1);
 		});
 		const initialHeight = wrapper.getBoundingClientRect().height;
 		const labelStyle = getComputedStyle(slot);
@@ -650,9 +652,9 @@ export const AppearingLabel: Story = {
 			expect(getComputedStyle(slot).opacity).toBe('1');
 			expect(label.getBoundingClientRect().height).toBeGreaterThan(10);
 			expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(2, 0);
+			expect(input.getBoundingClientRect().top - initialInputTop).toBeCloseTo(adjustment / 2, 0);
 		});
 		expect(wrapper.getBoundingClientRect().height).toBe(initialHeight);
-		expect(input.getBoundingClientRect().top - initialInputTop).toBeCloseTo(adjustment / 2, 0);
 		expect(input).toHaveAttribute('placeholder', 'Your email address');
 		expect(input).toHaveFocus();
 		await userEvent.clear(input);
@@ -842,10 +844,12 @@ export const AppearingValueAndIconMoveTogether: Story = {
 		if (!wrapper) throw new Error('Missing wrapper');
 		const icon = wrapper.querySelector('[class*="leadingIcon"]');
 		if (!icon) throw new Error('Missing icon');
+		// Font metrics and the collapsed transform must settle before recording a baseline.
+		await document.fonts.ready;
 		await waitFor(() => {
 			const value = input.getBoundingClientRect();
 			const field = wrapper.getBoundingClientRect();
-			expect(Math.abs(value.top + value.height / 2 - field.top - field.height / 2)).toBeLessThan(1);
+			expect(value.top + value.height / 2 - field.top - field.height / 2).toBeCloseTo(0, 1);
 		});
 		const initialTop = input.getBoundingClientRect().top;
 		const initialIconTop = icon.getBoundingClientRect().top;
