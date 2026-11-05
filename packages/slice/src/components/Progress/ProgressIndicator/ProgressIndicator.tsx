@@ -5,10 +5,12 @@ import type React from 'react';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../../hooks';
 import { useTrackRenders } from '../../../hooks/useTrackRenders/useTrackRenders';
+import { resolveColorProps } from '../../../utils/functions/resolveColorProps';
 import css from './ProgressIndicator.module.css';
 import type { ProgressIndicatorProps } from './_types';
 
-export function ProgressIndicator(props: Readonly<ProgressIndicatorProps>) {
+export function ProgressIndicator(rawProps: Readonly<ProgressIndicatorProps>) {
+	const props = resolveColorProps(rawProps);
 	const theme = useTheme();
 	const {
 		size = 20,

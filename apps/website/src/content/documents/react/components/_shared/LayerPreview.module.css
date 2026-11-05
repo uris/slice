@@ -1,0 +1,24 @@
+.stage {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-width: 0;
+	height: 280px;
+	overflow: hidden;
+	transform: translateZ(0);
+	border-radius: var(--corner-m);
+}
+.dialogStage {
+	composes: stage;
+	height: 340px;
+}
+.copy {
+	margin: 0;
+}
+.scrollCopy {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-m);
+}

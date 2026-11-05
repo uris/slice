@@ -128,12 +128,16 @@ export function filterClasses(classNames: string[]): string {
 
 /**
  * Normalize a style value or fallback into a CSS-ready string.
+ * Missing and non-finite numbers use the fallback; valid numbers (including zero) use px.
  */
-export function setStyle(value: string | number | undefined, defaultVal: number | string | undefined = undefined) {
-	const useValue = value ?? defaultVal;
-	if (!useValue) return 'unset';
+export function setStyle(
+	value: string | number | undefined | null,
+	defaultVal: number | string | undefined | null = undefined,
+) {
+	const useValue = value == null || (typeof value === 'number' && !Number.isFinite(value)) ? defaultVal : value;
+	if (useValue == null || useValue === '') return 'unset';
 	if (typeof useValue === 'string') return useValue;
-	return `${useValue}px`;
+	return Number.isFinite(useValue) ? `${useValue}px` : 'unset';
 }
 
 /**

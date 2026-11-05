@@ -1,5 +1,7 @@
 # Slice monorepo
 
+Repository guidance: [AGENTS.md](AGENTS.md).
+
 Slice's web and React Native libraries, documentation apps, and website.
 
 | Workspace | Purpose |

@@ -1,33 +1,46 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
-export type RadioButtonOption<T = string> = {
-	fieldName?: string;
-	label?: string;
-	value?: T;
-};
+export type RadioButtonOption<T = string> = { fieldName?: string; label?: string; value?: T };
 
 type RadioButtonBaseProps<T = string> = {
+	actionName?: string;
+	align?: 'top' | 'middle' | 'bottom';
 	children?: React.ReactNode;
 	label?: string;
+	checked?: boolean;
+	defaultChecked?: boolean;
+	disabled?: boolean;
 	fieldName?: string;
 	value?: T;
-	selected?: boolean;
-	controlType?: 'radio' | 'checkbox';
-	deselect?: boolean;
-	tabIndex?: number;
-	wrap?: boolean;
-	list?: boolean;
-	hideRadio?: boolean;
-	iconColor?: string;
-	noFrame?: boolean;
+	formValue?: string | number;
+	iconChecked?: string;
+	iconUnChecked?: string;
+	iconColor?: ColorValue;
+	iconColorSelected?: ColorValue;
+	iconSize?: number;
 	gap?: number;
-	icon?: string;
-	checkedIcon?: string;
-	onChange?: (option: RadioButtonOption<T>, selected: boolean) => void;
+	textColor?: ColorValue;
+	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
+	textTopOffset?: number;
+	backgroundColor?: ColorValue;
+	backgroundColorSelected?: ColorValue;
+	borderColor?: ColorValue;
+	borderWidth?: number;
+	borderRadius?: number | string;
+	padding?: number | string;
+	onChange?: (option: RadioButtonOption<T>, checked: boolean) => void;
 };
-
 export type RadioButtonProps<T = string> = Omit<
-	React.ButtonHTMLAttributes<HTMLButtonElement>,
-	keyof RadioButtonBaseProps
+	React.InputHTMLAttributes<HTMLInputElement>,
+	| keyof RadioButtonBaseProps<T>
+	| 'list'
+	| 'type'
+	| 'role'
+	| 'size'
+	| 'color'
+	| 'aria-label'
+	| 'aria-labelledby'
+	| 'aria-checked'
 > &
 	RadioButtonBaseProps<T>;

@@ -1,50 +1,110 @@
 .chip {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	padding: var(--ui-chip-padding) !important;
-	width: min-content;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	width: max-content;
+	overflow: hidden;
 	min-height: 30px;
-	gap: var(--ui-chip-gap);
+	gap: 0;
 	background: var(--ui-chip-bg-color);
 	line-height: 1em;
-	color: var(--ui-chip-label-color);
-	border: var(--ui-chip-border-size) solid var(--ui-chip-border-color);
+	color: var(--ui-chip-text-color);
+	border: var(--ui-chip-border-width) solid var(--ui-chip-border-color);
 	border-radius: var(--ui-chip-border-radius);
-	transition: all var(--motion-water-duration) var(--motion-water) 0s;
+	transition: color var(--motion-water-duration) var(--motion-water), background-color var(--motion-water-duration)
+		var(--motion-water), border-color var(--motion-water-duration) var(--motion-water);
 	cursor: var(--ui-chip-cursor);
 	white-space: nowrap;
 	user-select: none;
 	-webkit-user-select: none;
-	&:hover {
-		border-color: var(--ui-chip-border-color-hover);
-		background: var(--ui-chip-bg-color-hover);
-		color: var(--ui-chip-label-color-hover);
-	}
+	appearance: none;
+	-webkit-appearance: none;
+	outline: none;
 }
-
+.chip:hover,
+.chip:focus-within {
+	border-color: var(--ui-chip-border-color-hover);
+	background: var(--ui-chip-bg-color-hover);
+	color: var(--ui-chip-text-color-hover);
+}
+.action,
+.remove {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	background: transparent;
+	border: 0;
+	border-radius: inherit;
+	color: inherit;
+	font: inherit;
+	line-height: inherit;
+	margin: 0;
+	outline: none;
+	appearance: none;
+	-webkit-appearance: none;
+}
+.action {
+	padding: var(--ui-chip-padding-top) var(--ui-chip-padding-right) var(--ui-chip-padding-bottom)
+		var(--ui-chip-padding-left);
+	cursor: inherit;
+}
+.content {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ui-chip-gap);
+}
+.chip[data-removable="true"] .action {
+	padding-right: var(--ui-chip-gap);
+}
+.remove {
+	align-self: stretch;
+	padding: var(--ui-chip-padding-top) var(--ui-chip-padding-right) var(--ui-chip-padding-bottom) 0;
+	cursor: pointer;
+}
+.remove:disabled {
+	cursor: default;
+}
+.action:focus-visible,
+.remove:focus-visible {
+	box-shadow: inset 0 0 0 2px var(--core-outline-special);
+}
 .icon {
-	composes: row from "../../utils/styling/flexBox.module.css";
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	height: var(--ui-chip-icon-size);
-	min-height: var(--ui-chip-icon-size);
 	width: var(--ui-chip-icon-size);
-	min-width: var(--ui-chip-icon-size);
+	flex-shrink: 0;
+	color: var(--ui-chip-icon-color);
+	transition: color var(--motion-water-duration) var(--motion-water);
 }
-
+.chip:hover .icon,
+.chip:focus-within .icon {
+	color: var(--ui-chip-icon-color-hover);
+}
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }
-
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
-
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
 }
-
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
-
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+@media (prefers-reduced-motion: reduce) {
+	.chip,
+	.icon {
+		transition: none;
+	}
 }

@@ -14,6 +14,29 @@ Use Node.js 24. Install dependencies once from the repository root with `npm ins
   the existing plain theme modules and generates artwork from web sources. Do not import
   browser stores, providers, or CSS into native. Extracting shared packages is a later step.
 
+## Code readability
+
+Avoid nested ternary expressions. Extract branching logic into a named statement
+or helper with explicit `if`/`return` branches, even when this takes more lines.
+For complex derived values, prefer a local `const getValue = () => { ... }` helper
+and use its result in the rendering or style object. Keep JSX and configuration
+objects easy to scan rather than embedding several decisions in one expression.
+A simple two-way ternary is fine when it remains easy to read.
+
+```tsx
+const getTextColor = () => {
+  if (disabled) return textColorDisabled;
+  if (error) return textColorError;
+  if (isFocused) return textColorFocused;
+  return textColorBlurred;
+};
+
+const textColor = getTextColor();
+```
+
+Apply this when writing or editing code; avoid unrelated repository-wide rewrites.
+Do not add memoization solely to make an extracted helper look optimized.
+
 ## Commands
 
 Run a workspace's command with `npm run <script> --workspace=<name>`.

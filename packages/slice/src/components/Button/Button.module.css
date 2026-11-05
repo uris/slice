@@ -6,7 +6,10 @@
 	appearance: none;
 	-webkit-appearance: none;
 	background-image: none;
-	outline: none;
+	&:focus-visible {
+		outline: 2px solid var(--core-outline-special);
+		outline-offset: 3px;
+	}
 }
 
 .label {
@@ -19,9 +22,6 @@
 	display: -webkit-box;
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
-	&:hover {
-		text-decoration: var(--ui-button-decoration);
-	}
 }
 
 .count {
@@ -58,4 +58,23 @@
 
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
+}
+
+.labelHidden {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.centerProgress {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.button:hover .label,
+.button:focus-visible .label {
+	text-decoration: var(--ui-button-decoration);
 }

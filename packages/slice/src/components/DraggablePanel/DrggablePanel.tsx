@@ -3,8 +3,10 @@
 import React, { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useObserveResize, useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import { corners } from '../../theme/corners/corners';
 import { pointerPosition, setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './DraggablePanel.module.css';
 import type { Constraint } from './_types';
 
@@ -17,7 +19,7 @@ type Info = {
 
 type ResizeHandle = {
 	width?: number;
-	color?: string;
+	color?: ColorValue;
 	offsetX?: boolean;
 };
 
@@ -32,22 +34,18 @@ type DraggablePanelBaseProps = {
 	resizeHandle?: Partial<ResizeHandle>;
 	borderRight?: any;
 	borderLeft?: any;
-	backgroundColor?: string;
+	backgroundColor?: ColorValue;
 	drags?: 'left' | 'right' | false;
 	dragHandle?: boolean;
 	dragHandleStyle?: DragHandleProps;
 	disableOnContext?: boolean;
 	isTouchDevice?: boolean;
 	/**
-	 * Overrides the CSS transition duration used only for the panel's very
-	 * first open (its initial mount, when it animates from a closed/zero
-	 * width to its settled starting width). A number is treated as
-	 * milliseconds; a string is used as-is (e.g. `'0.5s'`). Pass `0` to have
-	 * the panel appear already open at its starting width, with no reveal
-	 * animation. Leave `undefined` (the default) to use the same
-	 * `--motion-water-duration` timing as every other width transition.
-	 * Any transition *after* that first open (drags, later `isClosed`
-	 * toggles, constraint changes) always uses the normal duration.
+	 * Overrides the initial width transition while relative constraints are
+	 * resolved after mount. Fixed pixel widths render at their initial size
+	 * on the server and do not need an opening transition. Numbers are in
+	 * milliseconds; strings are CSS durations (e.g. '0.5s'). Later width
+	 * changes use the normal --motion-water-duration timing.
 	 */
 	transitionDurationOnInit?: string | number;
 };
@@ -77,7 +75,8 @@ function resolveConstraints(sizeConstraints: Constraint, containerWidth?: number
 	};
 }
 
-export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
+export const DraggablePanel = React.memo((rawProps: DraggablePanelProps) => {
+	const props = resolveColorProps(rawProps);
 	const theme = useTheme();
 	const {
 		children,
@@ -308,13 +307,7 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 		if (!isOver.current) setHighlight(false);
 	}, [doDrag, onResizeEnd, onResize, setHighlight]);
 
-	// the panel's very first open (mount -> settled starting width, per
-	// `normalizeWidth`'s `!mounted` guard above) can use its own transition
-	// duration via `transitionDurationOnInit`, instead of the normal
-	// `--motion-water-duration` used for every subsequent width change
-	// (drags, later `isClosed` toggles, constraint changes). Track whether
-	// that first open has already happened with state (not a ref) so the
-	// `transition` memo below correctly re-derives once it has.
+	// Relative initial widths settle after mount, when container measurements exist.
 	const [initialOpenSettled, setInitialOpenSettled] = useState(false);
 	useEffect(() => {
 		if (mounted) setInitialOpenSettled(true);
@@ -322,14 +315,14 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 
 	// resolve the width transition
 	const transition = useMemo(() => {
-		const usingInitDuration = mounted && !initialOpenSettled && transitionDurationOnInit !== undefined;
+		const usingInitDuration = !initialOpenSettled && transitionDurationOnInit !== undefined;
 		if (usingInitDuration) {
 			const duration =
 				typeof transitionDurationOnInit === 'number' ? `${transitionDurationOnInit}ms` : transitionDurationOnInit;
 			return `width ${duration} var(--motion-water)`;
 		}
 		return 'width var(--motion-water-duration) var(--motion-water)';
-	}, [mounted, initialOpenSettled, transitionDurationOnInit]);
+	}, [initialOpenSettled, transitionDurationOnInit]);
 
 	// capture the starting drag measurements and attach drag listeners
 	const initDrag = useCallback(
@@ -391,9 +384,10 @@ export const DraggablePanel = React.memo((props: DraggablePanelProps) => {
 	// normalize the initial width to a true CSS value
 	const normalizeWidth = useCallback(
 		(width: number | string) => {
-			if (!mounted) return '0px';
 			if (typeof width === 'number') {
 				if (width <= 1 && width >= 0) {
+					// Only relative widths require a client-side container measurement.
+					if (!mounted) return '0px';
 					if (contWidth) return `${contWidth * width}px`;
 					return 0;
 				}
@@ -501,10 +495,11 @@ export type DragHandleProps = {
 	height?: number;
 	radius?: number | string;
 	stroke?: number;
-	strokeColor?: string;
-	color?: string;
+	strokeColor?: ColorValue;
+	color?: ColorValue;
 };
-export const DragHandle = React.memo((props: Readonly<DragHandleProps>) => {
+export const DragHandle = React.memo((rawProps: Readonly<DragHandleProps>) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		width = 6,
 		height = 6,

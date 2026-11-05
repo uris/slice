@@ -1,104 +1,385 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { FlexDiv } from 'src/components/FlexDiv';
-import { SliceIcons } from 'src/components/Icon/_types';
-import { fn } from 'storybook/test';
-import { AnimationPreset } from '../IconButton/_types';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { FlexDiv } from '../FlexDiv';
+import { SliceIcons } from '../Icon/_types';
+import { installReducedMotionPreference } from '../playHelpers';
+import type { ToolTip } from '../sharedTypes';
 import { ToggleButton } from './ToggleButton';
 
-const categories = Object.values(SliceIcons);
-const icons = categories.flatMap((category) => Object.values(category));
-
-const meta: Meta<typeof ToggleButton> = {
+const meta = {
 	title: 'Components/ToggleButton',
 	component: ToggleButton,
+	render: (args) => (
+		<FlexDiv padding={64}>
+			<ToggleButton {...args} />
+		</FlexDiv>
+	),
 	argTypes: {
-		icon: {
-			control: { type: 'select' },
-			options: icons,
-		},
+		icon: { control: 'select', options: Object.values(SliceIcons).flatMap(Object.values) },
+		buttonSize: { control: 'select', options: ['s', 'm', 'l', 'xl', 48] },
+		textSize: { control: 'select', options: ['xs', 's', 'm', 'l', 'xl'] },
+		textColor: { control: 'text' },
+		textColorHover: { control: 'text' },
+		textColorSelected: { control: 'text' },
+		iconColor: { control: 'text' },
+		iconColorHover: { control: 'text' },
+		iconColorSelected: { control: 'text' },
+		backgroundColor: { control: 'text' },
+		backgroundColorHover: { control: 'text' },
+		backgroundColorSelected: { control: 'text' },
+		borderColor: { control: 'text' },
+		borderRadius: { control: 'text' },
+		motionValues: { control: 'object' },
+		transition: { control: 'object' },
 	},
 	args: {
-		label: 'Light Mode',
-		textSize: 'm',
-		buttonSize: 'm',
+		label: 'Highlight',
 		icon: 'sun',
-		iconOn: 'x',
-		fill: true,
-		selected: false,
-		iconColor: 'var(--core-text-primary)',
-		iconColorOn: 'var(--core-surface-primary)',
-		backgroundColor: 'var(--core-surface-secondary)',
-		backgroundColorOn: 'var(--core-link-primary)',
+		buttonSize: 'm',
 		iconSize: 20,
-		tooltip: undefined,
-		gap: 4,
-		unselect: true,
+		textSize: 's',
+		selected: undefined,
+		defaultSelected: false,
+		deselect: true,
 		disabled: false,
-		presetAnimations: AnimationPreset.Rotate,
+		hover: true,
+		iconFill: false,
+		toggleIcon: false,
+		gap: 4,
+		borderWidth: 0,
+		borderRadius: 4,
+		borderColor: 'core-outline-primary',
+		backgroundColor: 'core-surface-secondary',
+		backgroundColorHover: 'core-surface-secondary',
+		backgroundColorSelected: 'core-text-special',
+		iconColor: 'core-text-primary',
+		iconColorHover: 'core-text-primary',
+		iconColorSelected: 'core-surface-primary',
+		textColor: 'core-text-primary',
+		textColorHover: 'core-text-primary',
+		textColorSelected: 'core-surface-primary',
 		onChange: fn(),
-		onSelect: fn(),
+		onClick: fn(),
 		onToolTip: fn(),
 	},
-};
-
+} satisfies Meta<typeof ToggleButton>;
 export default meta;
-
-export const Default: StoryObj<typeof ToggleButton> = {
-	render: (args) => {
-		const [selected, setSelected] = useState(Boolean(args.selected));
-
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-				<ToggleButton
-					{...args}
-					selected={selected}
-					onChange={(next) => {
-						setSelected(next);
-						args.onChange?.(next);
-					}}
-					onSelect={() => {
-						args.onSelect?.();
-					}}
-				/>
-			</FlexDiv>
+type Story = StoryObj<typeof meta>;
+export const Default: Story = {
+	play: async ({ canvasElement, args }) => {
+		const c = within(canvasElement);
+		const b = c.getByRole('button', { name: 'Highlight' });
+		await expect(c.getAllByRole('button')).toHaveLength(1);
+		await userEvent.click(c.getByText('Highlight'));
+		await expect(b).toHaveAttribute('aria-pressed', 'true');
+		await expect(args.onChange).toHaveBeenLastCalledWith(true);
+		b.focus();
+		await userEvent.keyboard(' ');
+		await expect(b).toHaveAttribute('aria-pressed', 'false');
+		await userEvent.keyboard('{Enter}');
+		await expect(b).toHaveAttribute('aria-pressed', 'true');
+		await expect(c.queryByRole('img')).not.toBeInTheDocument();
+		await expect(b.querySelector('svg')).toHaveAttribute('tabindex', '-1');
+	},
+};
+export const Disabled: Story = {
+	tags: ['tests'],
+	args: { disabled: true, tooltip: 'Highlight' },
+	play: async ({ canvasElement, args }) => {
+		const c = within(canvasElement);
+		const b = c.getByRole('button');
+		await expect(b).toBeDisabled();
+		await userEvent.click(c.getByText('Highlight'));
+		await userEvent.hover(b);
+		await expect(args.onChange).not.toHaveBeenCalled();
+		await expect(args.onClick).not.toHaveBeenCalled();
+		await expect(args.onToolTip).not.toHaveBeenCalled();
+	},
+};
+export const Controlled: Story = {
+	tags: ['tests'],
+	args: { selected: false },
+	play: async ({ canvasElement, args }) => {
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.click(b);
+		await expect(args.onChange).toHaveBeenCalledWith(true);
+		await expect(b).toHaveAttribute('aria-pressed', 'false');
+	},
+};
+export const KeepSelection: Story = {
+	tags: ['tests'],
+	args: { defaultSelected: true, deselect: false },
+	play: async ({ canvasElement, args }) => {
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.click(b);
+		await expect(b).toHaveAttribute('aria-pressed', 'true');
+		await expect(args.onChange).not.toHaveBeenCalled();
+		await expect(args.onClick).toHaveBeenCalledOnce();
+	},
+};
+export const Cancelled: Story = {
+	tags: ['tests'],
+	args: { onClick: fn((event) => event.preventDefault()) },
+	play: async ({ canvasElement, args }) => {
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.click(b);
+		await expect(b).toHaveAttribute('aria-pressed', 'false');
+		await expect(args.onChange).not.toHaveBeenCalled();
+	},
+};
+export const TextOnly: Story = {
+	tags: ['tests'],
+	args: { icon: undefined, label: 'Follow' },
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		await userEvent.click(c.getByRole('button', { name: 'Follow' }));
+		await expect(c.getByRole('button')).toHaveAttribute('aria-pressed', 'true');
+		await expect(canvasElement.querySelector('svg')).not.toBeInTheDocument();
+	},
+};
+export const IconOnly: Story = {
+	tags: ['tests'],
+	args: { label: undefined, actionName: 'Highlight' },
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).getByRole('button', { name: 'Highlight' })).toBeInTheDocument();
+	},
+};
+export const SelectedIcon: Story = {
+	tags: ['tests'],
+	args: { icon: 'play', iconSelected: 'pause', label: 'Playback' },
+	play: async ({ canvasElement }) => {
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.click(b);
+		await expect(b.querySelector('svg')).toHaveAttribute('aria-label', 'pause icon');
+	},
+};
+export const Tooltip: Story = {
+	tags: ['tests'],
+	args: { tooltip: 'Highlight', onFocus: fn(), onBlur: fn() },
+	play: async ({ canvasElement, args }) => {
+		const b = within(canvasElement).getByRole('button');
+		b.focus();
+		await expect(args.onFocus).toHaveBeenCalled();
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(
+			expect.objectContaining({ payload: { label: 'Highlight' }, event: undefined }),
+		);
+		b.blur();
+		await expect(args.onBlur).toHaveBeenCalled();
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(null);
+	},
+};
+export const CustomColors: Story = {
+	tags: ['tests'],
+	args: {
+		backgroundColorSelected: '#123456',
+		textColorSelected: '#abcdef',
+		iconColorSelected: '#fedcba',
+		transition: { duration: 0 },
+	},
+	play: async ({ canvasElement }) => {
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.click(b);
+		await waitFor(() =>
+			expect(getComputedStyle(b.querySelector('[class*="background"]') as HTMLElement).backgroundColor).toBe(
+				'rgb(18, 52, 86)',
+			),
+		);
+		await waitFor(() =>
+			expect(getComputedStyle(b.querySelector('[class*="label"]') as HTMLElement).color).toBe('rgb(171, 205, 239)'),
+		);
+		await waitFor(() =>
+			expect(getComputedStyle(b.querySelector('[class*="icon"]') as HTMLElement).color).toBe('rgb(254, 220, 186)'),
 		);
 	},
 };
+export const Animated: Story = {
+	args: { motionValues: { unselected: { rotate: 0 }, selected: { rotate: 135 } }, transition: { duration: 0.2 } },
+};
+export const ReducedMotion: Story = {
+	args: {
+		motionValues: { unselected: { rotate: 0 }, selected: { rotate: [0, 90, 180] } },
+		transition: { delay: 1, duration: 2, repeat: Number.POSITIVE_INFINITY },
+	},
+};
+function GroupedExample() {
+	const [theme, setTheme] = useState('system');
+	return (
+		<FlexDiv gap={12}>
+			{[
+				{ label: 'System', icon: 'laptop', value: 'system' },
+				{ label: 'Light', icon: 'sun', value: 'light' },
+				{ label: 'Dark', icon: 'moon full', value: 'dark' },
+			].map((option) => (
+				<ToggleButton
+					key={option.value}
+					label={option.label}
+					icon={option.icon}
+					selected={theme === option.value}
+					deselect={false}
+					onChange={(next) => {
+						if (next) setTheme(option.value);
+					}}
+				/>
+			))}
+		</FlexDiv>
+	);
+}
+export const Grouped: Story = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv padding={64}>
+			<GroupedExample />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		await userEvent.click(c.getByRole('button', { name: 'Light' }));
+		await expect(c.getByRole('button', { name: 'Light' })).toHaveAttribute('aria-pressed', 'true');
+		await expect(c.getByRole('button', { name: 'System' })).toHaveAttribute('aria-pressed', 'false');
+	},
+};
 
-export const Grouped: StoryObj<typeof ToggleButton> = {
-	render: () => {
-		const [theme, setTheme] = useState<'system' | 'light' | 'dark'>('system');
+export const CustomPadding: Story = {
+	tags: ['tests'],
+	args: { padding: '2px 12px', paddingLeft: 20 },
+	play: async ({ canvasElement }) => {
+		const b = within(canvasElement).getByRole('button');
+		const styles = getComputedStyle(b);
+		await expect(styles.paddingTop).toBe('2px');
+		await expect(styles.paddingRight).toBe('12px');
+		await expect(styles.paddingLeft).toBe('20px');
+	},
+};
 
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} width={'viewport'} height={'viewport'} padding={64}>
-				<FlexDiv justify={'center'} align={'start'} padding={64} gap={12} width={'fit'}>
-					<ToggleButton
-						label="System"
-						icon="laptop"
-						fill
-						selected={theme === 'system'}
-						unselect={false}
-						onSelect={() => setTheme('system')}
-					/>
-					<ToggleButton
-						label="Light"
-						icon="sun"
-						fill
-						selected={theme === 'light'}
-						unselect={false}
-						onSelect={() => setTheme('light')}
-					/>
-					<ToggleButton
-						label="Dark"
-						icon="moon full"
-						fill
-						selected={theme === 'dark'}
-						unselect={false}
-						onSelect={() => setTheme('dark')}
-					/>
-				</FlexDiv>
-			</FlexDiv>
-		);
+export const SmallSize: Story = {
+	tags: ['tests'],
+	args: { buttonSize: 's' },
+	play: async ({ canvasElement }) => {
+		const b = within(canvasElement).getByRole('button');
+		await expect(b.getBoundingClientRect().height).toBe(24);
+	},
+};
+
+export const LabelOutside: Story = {
+	tags: ['tests'],
+	// Exercise the outside-label default instead of inheriting the meta's selected text color.
+	args: { labelOutside: true, textColorSelected: undefined, transition: { duration: 0 } },
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		const b = c.getByRole('button');
+		const frame = b.querySelector('[class*="frame"]') as HTMLElement;
+		const background = b.querySelector('[class*="background"]') as HTMLElement;
+		const label = c.getByText('Highlight');
+		await expect(frame.getBoundingClientRect().width).toBe(36);
+		await expect(background.getBoundingClientRect().width).toBeLessThan(b.getBoundingClientRect().width);
+		await expect(label.getBoundingClientRect().left).toBeGreaterThanOrEqual(frame.getBoundingClientRect().right);
+		const textColor = getComputedStyle(label).color;
+		const backgroundColor = getComputedStyle(background).backgroundColor;
+		await userEvent.click(label);
+		await expect(b).toHaveAttribute('aria-pressed', 'true');
+		await waitFor(() => expect(getComputedStyle(background).backgroundColor).not.toBe(backgroundColor));
+		await waitFor(() => expect(getComputedStyle(label).color).toBe(textColor));
+		await expect(c.getAllByRole('button')).toHaveLength(1);
+	},
+};
+export const LabelOutsideWithoutIcon: Story = { ...TextOnly, args: { ...TextOnly.args, labelOutside: true } };
+
+export const ContentAndNaming: Story = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv gap={16}>
+			<ToggleButton label="Follow">Other</ToggleButton>
+			<ToggleButton>{0}</ToggleButton>
+			<ToggleButton icon="sun" />
+			<ToggleButton label="Follow" actionName="Follow Jane" />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		await expect(c.getByRole('button', { name: 'Follow' })).toHaveTextContent('Follow');
+		for (const name of ['0', 'Action', 'Follow Jane'])
+			await expect(c.getByRole('button', { name })).toBeInTheDocument();
+	},
+};
+function SelectionUpdatesExample() {
+	const [selected, setSelected] = useState(false);
+	return (
+		<>
+			<ToggleButton label="Controlled" selected={selected} />
+			<ToggleButton label="Local" defaultSelected />
+			<button type="button" onClick={() => setSelected((value) => !value)}>
+				Toggle controlled state
+			</button>
+		</>
+	);
+}
+export const SelectionUpdates: Story = {
+	tags: ['tests'],
+	render: () => <SelectionUpdatesExample />,
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		const local = c.getByRole('button', { name: 'Local' });
+		await userEvent.click(local);
+		await expect(local).toHaveAttribute('aria-pressed', 'false');
+		await userEvent.click(c.getByRole('button', { name: 'Toggle controlled state' }));
+		await expect(c.getByRole('button', { name: 'Controlled' })).toHaveAttribute('aria-pressed', 'true');
+		await expect(local).toHaveAttribute('aria-pressed', 'false');
+		await userEvent.click(c.getByRole('button', { name: 'Toggle controlled state' }));
+		await expect(c.getByRole('button', { name: 'Controlled' })).toHaveAttribute('aria-pressed', 'false');
+	},
+};
+export const ZeroPadding: Story = {
+	tags: ['tests'],
+	args: { padding: 0, paddingLeft: 12 },
+	play: async ({ canvasElement }) => {
+		const styles = getComputedStyle(within(canvasElement).getByRole('button'));
+		await expect(styles.paddingTop).toBe('0px');
+		await expect(styles.paddingRight).toBe('0px');
+		await expect(styles.paddingLeft).toBe('12px');
+	},
+};
+function InlineTooltipExample() {
+	const [tip, setTip] = useState<ToolTip | null>(null);
+	return (
+		<>
+			<ToggleButton label="Highlight" tooltip="Highlight" onToolTip={(next) => setTip(next)} />
+			<output data-testid="tooltip">{tip?.payload?.label ?? 'none'}</output>
+		</>
+	);
+}
+export const InlineTooltip: Story = {
+	tags: ['tests'],
+	render: () => <InlineTooltipExample />,
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		const button = c.getByRole('button');
+		await userEvent.hover(button);
+		await expect(c.getByTestId('tooltip')).toHaveTextContent('Highlight');
+		await userEvent.unhover(button);
+		await expect(c.getByTestId('tooltip')).toHaveTextContent('none');
+	},
+};
+let motionPreference: ReturnType<typeof installReducedMotionPreference>;
+export const LiveReducedMotion: Story = {
+	tags: ['tests'],
+	args: {
+		motionValues: { unselected: { rotate: 0 }, selected: { rotate: [0, 90, 180] } },
+		transition: { duration: 2, delay: 1, repeat: Number.POSITIVE_INFINITY },
+	},
+	beforeEach: () => {
+		motionPreference = installReducedMotionPreference();
+		return () => motionPreference.restore();
+	},
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button');
+		await userEvent.click(button);
+		const icon = button.querySelector('[class*="icon"]') as HTMLElement;
+		await waitFor(() => expect(icon.style.transform).toContain('180deg'));
+		motionPreference.set(false);
+		await userEvent.click(button);
+		motionPreference.set(true);
+		await waitFor(() => expect(icon.style.transform).not.toContain('180deg'));
+		await expect(document.activeElement).toBe(button);
 	},
 };

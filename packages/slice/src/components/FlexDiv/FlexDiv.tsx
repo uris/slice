@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import React, { useCallback, useMemo } from 'react';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './FlexDiv.module.css';
 import { type FlexDivProps, layoutSets } from './_types';
 
@@ -40,7 +41,8 @@ function setFlex(style: string) {
 }
 
 export const FlexDiv = React.memo(
-	React.forwardRef<HTMLDivElement, FlexDivProps>((props, ref) => {
+	React.forwardRef<HTMLDivElement, FlexDivProps>((rawProps, ref) => {
+		const props = resolveColorProps(rawProps);
 		const {
 			children,
 			preset = 'default',

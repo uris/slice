@@ -82,7 +82,7 @@ export const Grouper = React.memo((props: GrouperProps) => {
 			<div className={css.content}>
 				<div className={css.title}>
 					{title}
-					<Badge hideNull={hideNull} count={count} variant={'light'} />
+					<Badge hideZero={hideNull} count={count} variant={'light'} />
 					{showFilterBadge && <Icon name="filter" size={16} strokeColor={theme.current.colors['core-text-disabled']} />}
 				</div>
 				{hasIcon && (

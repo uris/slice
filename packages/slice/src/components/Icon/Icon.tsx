@@ -4,11 +4,13 @@ import React, { useMemo } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { accessibleKeyDown } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Icon.module.css';
 import type { IconProps } from './_types';
 import { STATIC_ICON_REGISTRY } from './iconRegistry';
 
-export const Icon = React.memo((props: IconProps) => {
+export const Icon = React.memo((rawProps: IconProps) => {
+	const props = resolveColorProps(rawProps);
 	const theme = useTheme();
 
 	const {

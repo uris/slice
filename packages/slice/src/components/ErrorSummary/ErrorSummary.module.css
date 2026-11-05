@@ -1,64 +1,80 @@
-.errorBox {
-	composes: columnStart from "../../utils/styling/flexBox.module.css";
+.wrapper {
+	box-sizing: border-box;
 	width: 100%;
-	background: var(--error-bg-color);
-	border: 1px solid var(--error-text-color);
-	border-radius: var(--corner-xs);
+	min-width: 0;
+	flex: 0 1 auto;
+}
+.wrapper:empty {
+	position: absolute;
+	width: 1px;
+	height: 1px;
 	overflow: hidden;
-	gap: 0;
+	clip-path: inset(50%);
 }
-
-.errorBox.errorBox {
-	padding: var(--spacing-m) !important;
+.clip {
+	overflow: hidden;
 }
-
-.error {
-	composes: columnStart from "../../utils/styling/flexBox.module.css";
+.panel {
+	box-sizing: border-box;
 	width: 100%;
-	&:last-child {
-		margin-bottom: 0;
-	}
+	min-width: 0;
+	padding: var(--error-padding);
+	background-color: var(--error-bg-color);
+	color: var(--error-text-color);
+	border: var(--error-border-width) solid var(--error-border-color);
+	border-radius: var(--error-border-radius);
+	overflow-wrap: anywhere;
 }
-
-.error.error {
-	margin-bottom: var(--spacing-xs) !important;
-}
-
-.p {
+.entries {
+	display: flex;
+	flex-direction: column;
+	gap: var(--error-gap);
 	margin: 0;
 	padding: 0;
-	color: var(--error-text-color);
+	list-style: none;
 }
-
-.ul {
-	padding: 0;
+.entry {
+	min-width: 0;
+}
+.title,
+.field {
+	font: inherit;
+	font-weight: 600;
+}
+.field {
+	display: inline;
 	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	text-align: start;
+	cursor: pointer;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
 }
-
-.li {
-	color: var(--error-text-color);
-	line-height: 1.5em;
+.field:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
 }
-.li.li {
-	margin: 0 0 0 1.2em;
+.messages {
+	margin: 0;
+	padding: 0 0 0 1.2em;
+	list-style: disc;
+	line-height: 1.5;
 }
-
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }
-
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
-
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
 }
-
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
-
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }

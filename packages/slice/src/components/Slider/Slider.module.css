@@ -1,21 +1,76 @@
 .wrapper {
 	position: relative;
 	display: flex;
-	justify-content: flex-start;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 0 var(--slider-padding);
+	padding: 0;
 	margin: 0;
 	width: var(--slider-width);
-	height: auto;
-	min-height: var(--slider-touch-height);
+	min-height: var(--slider-hit-height);
 	cursor: var(--slider-cursor);
 	opacity: var(--slider-opacity);
 	background: transparent;
 }
 
+.control {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	box-sizing: border-box;
+	appearance: none;
+	-webkit-appearance: none;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: inherit;
+	touch-action: pan-y;
+}
+
+.control::-webkit-slider-runnable-track {
+	height: var(--slider-hit-height);
+	background: transparent;
+	border: 0;
+}
+
+.control::-webkit-slider-thumb {
+	appearance: none;
+	-webkit-appearance: none;
+	width: var(--slider-native-thumb-size);
+	height: var(--slider-hit-height);
+	background: transparent;
+	border: 0;
+}
+
+.control::-moz-range-track {
+	height: var(--slider-hit-height);
+	background: transparent;
+	border: 0;
+}
+
+.control::-moz-range-thumb {
+	width: var(--slider-native-thumb-size);
+	height: var(--slider-hit-height);
+	background: transparent;
+	border: 0;
+}
+
+.trackWrapper {
+	position: relative;
+	box-sizing: border-box;
+	flex: 1;
+	min-width: 0;
+	min-height: var(--slider-hit-height);
+	margin: 0 var(--slider-padding);
+	display: flex;
+	align-items: center;
+	border-radius: var(--corner-xs);
+	pointer-events: none;
+}
+
 .trackBg {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
 	position: relative;
 	width: 100%;
 	height: var(--slider-height);
@@ -25,43 +80,44 @@
 }
 
 .track {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
 	position: absolute;
-	top: 0;
-	bottom: 0;
-	width: 0;
+	inset: 0 auto 0 0;
+	width: var(--slider-progress);
 	background-color: var(--slider-progress-color);
-	overflow: visible;
-	border-radius: var(--corner-round);
+	border-radius: inherit;
 }
 
 .trackHead {
 	position: absolute;
+	box-sizing: border-box;
 	display: var(--slider-head-display);
 	background-color: var(--slider-head-color);
 	border: var(--slider-track-head-border);
 	border-radius: var(--slider-head-radius);
-	max-width: var(--slider-head-width);
-	max-height: var(--slider-head-size);
-	min-width: var(--slider-head-width);
-	min-height: var(--slider-head-size);
+	width: var(--slider-head-size);
+	height: var(--slider-head-size);
+	left: var(--slider-progress);
 	top: 50%;
-	transform: translateY(-50%) translateX(-50%);
+	transform: translate(-50%, -50%);
 }
 
-.trackWrapper {
-	position: relative;
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	width: 100%;
-	height: var(--slider-height);
-	min-height: var(--slider-touch-height);
-	background-color: transparent;
-	border-radius: var(--corner-xs);
-	overflow: visible;
-	outline: none;
+.control:focus-visible ~ .trackWrapper {
+	box-shadow: inset 0 0 0 2px var(--core-outline-special);
 }
 
-.trackWrapper:focus-visible {
-	outline: 2px solid var(--core-link-primary);
-	outline-offset: 2px;
+.wrapper[data-head-on-hover] .trackHead {
+	opacity: 0;
+	transition: opacity var(--motion-water-duration) var(--motion-water);
+}
+
+.wrapper[data-head-on-hover]:hover .trackHead,
+.control:focus-visible ~ .trackWrapper .trackHead,
+.wrapper[data-dragging] .trackHead {
+	opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wrapper[data-head-on-hover] .trackHead {
+		transition: none;
+	}
 }

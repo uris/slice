@@ -3,6 +3,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { fileIconName, nameAndExtension } from '../../utils/functions/files';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { FileIcon } from '../FileIcon';
 import { Icon } from '../Icon';
 import { ProgressIndicator } from '../Progress';
@@ -45,7 +46,8 @@ function displayClose(uploading: boolean | undefined): React.CSSProperties {
 	return { display: 'none' };
 }
 
-export const FileList = React.memo((props: FileListProps) => {
+export const FileList = React.memo((rawProps: FileListProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		files = [],
 		onChange,

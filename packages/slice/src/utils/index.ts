@@ -1,7 +1,9 @@
-export { copyToClipboard, hexToRgb } from './functions/misc';
+export { copyToClipboard, hexToRgb, setStyle } from './functions/misc';
 export { debounce } from './functions/debounce';
 export { rafThrottle } from './functions/rafThrottle';
 export * from './functions/colors';
+export { resolveColor } from '../theme/colors/resolveColor';
+export type { ColorToken, ColorValue } from '../theme/colors/resolveColor';
 export {
 	AudioVisualizer,
 	BrowserChannel,

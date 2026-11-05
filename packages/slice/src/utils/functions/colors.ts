@@ -63,3 +63,49 @@ export const addOpacity = (color: string, opacity: number) => {
 
 	return color;
 };
+
+/**
+ * Resolve a missing or transparent color to an explicit RGBA value with zero alpha.
+ * Use the first resolvable reference color's RGB channels, falling back to transparent
+ * white in dark themes or transparent black in light themes. Nontransparent inputs
+ * are returned unchanged. This is a general color utility; animation is one use case.
+ */
+export function resolveTransparent(
+	color: string | null | undefined,
+	referenceColors: (string | null | undefined)[],
+	colors: Record<string, string>,
+	isDark: boolean,
+): string {
+	if (color && color.trim().toLowerCase() !== 'transparent') return color;
+	for (const reference of referenceColors) {
+		if (!reference || reference.trim().toLowerCase() === 'transparent') continue;
+		let resolved = reference.trim();
+		const visited = new Set<string>();
+		while (!visited.has(resolved)) {
+			visited.add(resolved);
+			const token = resolved.match(/^var\(--([\w-]+)\)$/)?.[1] ?? resolved;
+			if (!colors[token]) break;
+			resolved = colors[token];
+		}
+		// Discard existing alpha while retaining the color's RGB channels.
+		if (/^#[\da-f]{4}$/i.test(resolved)) resolved = resolved.slice(0, 4);
+		else if (/^#[\da-f]{8}$/i.test(resolved)) resolved = resolved.slice(0, 7);
+		let transparent = addOpacity(resolved, 0);
+		// Optional browser capabilities keep this shared utility usable without DOM types.
+		const browser = globalThis as typeof globalThis & {
+			document?: { createElement: (tag: 'canvas') => { getContext: (kind: '2d') => { fillStyle: string } | null } };
+			CSS?: { supports: (property: string, value: string) => boolean };
+		};
+		if (transparent === resolved && browser.document && browser.CSS && !resolved.includes('var(')) {
+			// A detached canvas normalizes named colors and HSL without changing the DOM.
+			const context = browser.document.createElement('canvas').getContext('2d');
+			if (context && browser.CSS.supports('color', resolved) && resolved.toLowerCase() !== 'currentcolor') {
+				context.fillStyle = resolved;
+				transparent = addOpacity(context.fillStyle, 0);
+			}
+		}
+
+		if (/^rgba\(.+, 0\)$/.test(transparent)) return transparent;
+	}
+	return addOpacity(isDark ? '#ffffff' : '#000000', 0);
+}

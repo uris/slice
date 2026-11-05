@@ -1,135 +1,115 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
-import * as TextfieldStories from './Textfield.stories';
-import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as TextFieldStories from './Textfield.stories';
 
-<Meta of={TextfieldStories} />
+<Meta of={TextFieldStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # TextField
-        Renders a single-line text input with optional label, validation, clear control, and password visibility toggle.
+# TextField
 
-        ## Base element
-        `HTMLDivElement`
+Capture a short answer, search query, or password with an associated label and optional actions.
 
-        The component renders a styled wrapper around a native `input`.
+## Usage
 
-        ## Interface
-        `TextFieldProps`
-
-        ## Props
-        <table style={{ width: '100%' }}>
-            <colgroup>
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '97%' }} />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th className={"left"}>Prop</th>
-                    <th className={"left"}>Type</th>
-                    <th className={"left"}>Default</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><code>value</code></td><td><code>string</code></td><td><code>''</code></td><td>Controlled input value.</td></tr>
-                <tr><td><code>name</code></td><td><code>string</code></td><td><code>'input_name'</code></td><td>Name and aria label for the native input.</td></tr>
-                <tr><td><code>label</code></td><td><code>string</code></td><td><code>-</code></td><td>Optional label shown before the field content. No label row is rendered when this prop is omitted.</td></tr>
-                <tr><td><code>labelSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Typography size for the label.</td></tr>
-                <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Typography size for the input text.</td></tr>
-                <tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>'placeholder'</code></td><td>Placeholder text shown when the field is empty.</td></tr>
-                <tr><td><code>focused</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Programmatically focuses or blurs the input.</td></tr>
-                <tr><td><code>editable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Prevents editing while still rendering the field.</td></tr>
-                <tr><td><code>maxLength</code></td><td><code>number</code></td><td><code>-</code></td><td>Maximum character count.</td></tr>
-                <tr><td><code>size</code></td><td><code>{`{ width?: number | string; height?: number | string }`}</code></td><td><code>{`{ width: '100%', height: 'auto' }`}</code></td><td>Wrapper width and height.</td></tr>
-                <tr><td><code>padding</code></td><td><code>{`string | number`}</code></td><td><code>8px 16px; icon edges 12px</code></td><td>Exact wrapper padding override, including zero and CSS shorthands. Omitted padding uses theme spacing with icon-edge compensation.</td></tr>
-                <tr><td><code>borderRadius</code></td><td><code>{`number | string`}</code></td><td><code>8</code></td><td>Wrapper corner radius.</td></tr>
-                <tr><td><code>textAlign</code></td><td><code>{`'left' | 'center'`}</code></td><td><code>'left'</code></td><td>Input text alignment.</td></tr>
-                <tr><td><code>borderType</code></td><td><code>{`'box' | 'underline' | 'none'`}</code></td><td><code>'box'</code></td><td>Border rendering mode.</td></tr>
-                <tr><td><code>borderColorFocused</code></td><td><code>string</code></td><td><code>'var(--core-link-primary)'</code></td><td>Border color while focused.</td></tr>
-                <tr><td><code>borderColorBlurred</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Border color while blurred.</td></tr>
-                <tr><td><code>borderColorError</code></td><td><code>string</code></td><td><code>'var(--feedback-warning)'</code></td><td>Border color for the invalid state.</td></tr>
-                <tr><td><code>backgroundColorFocused</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Background color while focused.</td></tr>
-                <tr><td><code>backgroundColorBlurred</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Background color while blurred.</td></tr>
-                <tr><td><code>textColorFocused</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Main text color while focused.</td></tr>
-                <tr><td><code>textColorBlurred</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Main text color while blurred.</td></tr>
-                <tr><td><code>textColorError</code></td><td><code>string</code></td><td><code>'var(--feedback-warning)'</code></td><td>Main text color for the invalid state.</td></tr>
-                <tr><td><code>textColorPlaceholder</code></td><td><code>string</code></td><td><code>'var(--core-text-disabled)'</code></td><td>Placeholder color.</td></tr>
-                <tr><td><code>textColorDisabled</code></td><td><code>string</code></td><td><code>'var(--core-text-disabled)'</code></td><td>Disabled text color.</td></tr>
-                <tr><td><code>labelColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Label color.</td></tr>
-                <tr><td><code>error</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Marks the field as invalid and switches border/text colors to their error variants.</td></tr>
-                <tr><td><code>inline</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Removes the filled background styling.</td></tr>
-                <tr><td><code>iconLeft</code></td><td><code>{`{ name?: string; size?: number; color?: string }`}</code></td><td><code>null</code></td><td>Optional icon shown before the input.</td></tr>
-                <tr><td><code>clearButton</code></td><td><code>{`{ size?: number } | null`}</code></td><td><code>{`{ size: 20 }`}</code></td><td>Configures the clear control. Set to <code>null</code> to remove it.</td></tr>
-                <tr><td><code>clearBlurs</code></td><td><code>boolean</code></td><td><code>false</code></td><td>When false, clearing keeps the input focused.</td></tr>
-                <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables interaction.</td></tr>
-                <tr><td><code>actionButton</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the trailing action button.</td></tr>
-                <tr><td><code>inputType</code></td><td><code>{`'text' | 'password'`}</code></td><td><code>'text'</code></td><td>Input type. Password mode can show the visibility toggle.</td></tr>
-                <tr><td><code>noShow</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Hides the password visibility toggle.</td></tr>
-                <tr><td><code>onChange</code></td><td><code>{`(value: string) => void`}</code></td><td><code>-</code></td><td>Called whenever the value changes.</td></tr>
-                <tr><td><code>onBlur</code></td><td><code>{`(value: string) => void`}</code></td><td><code>-</code></td><td>Called with the current value on blur.</td></tr>
-                <tr><td><code>onFocus</code></td><td><code>{`(value: string) => void`}</code></td><td><code>-</code></td><td>Called with the current value on focus.</td></tr>
-                <tr><td><code>onKeydown</code></td><td><code>{`(key: string, event: React.KeyboardEvent) => void`}</code></td><td><code>-</code></td><td>Called for keydown events after internal Enter handling.</td></tr>
-                <tr><td><code>onSubmit</code></td><td><code>{`(value: string) => void`}</code></td><td><code>-</code></td><td>Called when Enter is pressed.</td></tr>
-                <tr><td><code>onPaste</code></td><td><code>{`(value: React.ClipboardEvent<HTMLInputElement>) => void`}</code></td><td><code>-</code></td><td>Called for paste events on the input.</td></tr>
-                <tr><td><code>onClear</code></td><td><code>{`() => void`}</code></td><td><code>-</code></td><td>Called after the clear control resets the value.</td></tr>
-                <tr><td><code>onAction</code></td><td><code>{`() => void`}</code></td><td><code>-</code></td><td>Called when the trailing action button is pressed.</td></tr>
-                <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Standard div props passed through to the wrapper element.</td></tr>
-            </tbody>
-        </table>
-
-        ## Notes
-        - Pressing Enter triggers <code>onSubmit</code>, then blurs the input.
-        - The clear control only renders its icon while the field is focused and has content.
-        - In password mode, the visibility toggle is shown unless <code>noShow</code> is true.
-        - Use the <code>error</code> prop to render the error colors; the component no longer performs a built-in validation pass.
-        - The style API is flattened. Use the state-specific props directly instead of grouped objects.
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
 ```
 import { TextField } from '@apple-pie/slice';
 
-export function TextFieldExample() {
-    return (
-        <TextField
-            name="email"
-            label="Work Email"
-            value="dev@example.com"
-            placeholder="name@company.com"
-            onChange={(value) => console.log(value)}
-            id="textfield-example"
-            data-testid="textfield-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+<TextField name="query" label="Search" placeholder="Search projects" onChange={myHandler} />
 ```
-        </RenderSource>
 
-        <RenderSource>
-```
-import { TextField } from '@apple-pie/slice';
+### Control text
 
-export function PasswordFieldExample() {
-    return (
-        <TextField
-            inputType="password"
-            value="secret"
-            focused={true}
-            actionButton={true}
-            onAction={() => console.log('translate')}
-        />
-    );
-}
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+<TextField label="Search" value={query} onChange={setQuery} />
+```
+
+### Add an action
+
+```
+<TextField label="Search" actionButton actionLabel="Search" onChange={setQuery} onAction={myHandler} />
+```
+
+## Behavior
+
+With `behavior="appear"`, typing moves the label above the value; clearing returns it to the placeholder position. Focus alone does not move it, and the field keeps the same height.
+
+With `onSubmit`, Enter submits once and blurs the input. Without it, the surrounding form handles submission. `onKeyDown` can cancel submission; Enter used to confirm composed text does not submit.
+
+Native form reset restores `defaultValue` in uncontrolled fields. For controlled fields, reset the application's `value` state.
+
+## Accessibility
+
+The native input is associated with its visible `label`. Use `inputName` for a more specific accessible name; without a label, it falls back to `name` and then `Text input`. ARIA attributes are managed internally.
+
+Disabled state covers the input and every auxiliary action. `readOnly` keeps the input focusable for copying while blocking edits, clearing, and the action button; password visibility can still be changed.
+
+Icons are decorative. The clear control is not focusable while hidden or empty. The password action switches between `Show password` and `Hide password`. Error state marks the input invalid.
+
+Reduced-motion preferences use the persistent stacked layout even when `behavior="appear"` is requested: the label stays above the value and the original placeholder remains below when empty. Color transitions and action fading also stop, including live changes; keyboard focus is retained.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `actionButton` | `boolean` | `false` | Shows an optional action button using `actionLabel`. Handle activation through `onAction`. |
+| `actionLabel` | `string` | `Action` | Visible action text. Omitted or blank labels use `Action`. |
+| `backgroundColorBlurred` | `ColorValue` | `core-surface-secondary` | Background when the input is not focused. `inline` removes it. |
+| `backgroundColorFocused` | `ColorValue` | `core-surface-secondary` | Background while the input is focused. `inline` removes it. |
+| `behavior` | `'persistent'  /  'appear'` | `persistent` | Applies only to `stacked`. `persistent` keeps the label above the input, with the placeholder below when empty. `appear` uses the label as the empty-field placeholder, then moves it into position when a value exists. Reduced motion uses the persistent layout. |
+| `borderColorBlurred` | `ColorValue` | `core-outline-primary` | Border color when the input is not focused. |
+| `borderColorError` | `ColorValue` | `feedback-warning` | Border color when `error` is true; takes priority over focus. |
+| `borderColorFocused` | `ColorValue` | `core-link-primary` | Border color while focused, unless `error` is true. |
+| `borderRadius` | `number  /  string` | `8` | Corner radius. Numbers are pixels; strings accept CSS radii. |
+| `borderStyle` | `'box'  /  'underline'  /  'none'` | `box` | Chooses a full outline, underline, or no border. |
+| `clearBlurs` | `boolean` | `false` | True blurs the input after requesting a clear. False keeps or restores input focus. |
+| `clearButton` | `{ size?: number }  /  null` | `{ size: 20 }` | Size of the clear icon and its reserved slot in pixels. Use `null` to remove the control. It is visible only when the field contains text and focus is within the field. |
+| `defaultValue` | `string` | `empty string` | Initial text for an uncontrolled field. Native form reset restores this initial value without emitting `onChange`. |
+| `disabled` | `boolean` | `false` | Disables the input, clear control, action button, and password-visibility control. |
+| `error` | `boolean` | `false` | Applies error border styling. Validation remains application-owned. |
+| `errorMessage` | `string` | `undefined` | Text beneath the field when `error` is true. Empty text is hidden, and `tip` stays hidden in an error state. The visible message describes the input for assistive technology. |
+| `focused` | `boolean` | `undefined` | Optional focus request. Changes to `true` focus the enabled input; changes to `false` blur it. Omit it for ordinary user-driven focus. |
+| `height` | `number  /  string` | `auto` | Wrapper height in pixels or CSS units. |
+| `iconLeft` | `{ name?: string; size?: number; color?: ColorValue }` | `undefined` | Optional leading icon configuration. `size` is pixels; `color` accepts tokens or CSS colors. |
+| `inline` | `boolean` | `false` | Removes the field background; border configuration remains active. |
+| `inputAttributes` | `TextFieldProps['inputAttributes']` | `{}` | Native input settings such as `autoComplete`, `inputMode`, `required`, `minLength`, `pattern`, and `form`. Autocomplete follows the browser or form default unless specified; use `inputAttributes={{ autoComplete: 'off' }}` to request no suggestions, or a token such as `given-name` to guide autofill. Managed values, events, identifiers, styling, and raw ARIA attributes are excluded; use the named component props instead. |
+| `inputId` | `string` | `generated` | ID of the native input. The visible label targets this ID automatically. |
+| `inputName` | `string` | `label, name, or Text input` | Optional accessible-name override. Without it, the associated `label` names the input; an unlabeled input uses `name` or `Text input`. |
+| `inputType` | `'text'  /  'password'` | `text` | Native input type. Password inputs include a visibility control unless `showPasswordToggle` is false. |
+| `label` | `string` | `undefined` | Visible label, associated with the native input. Inline labels have a decorative divider before the value. Whitespace-only labels are omitted. |
+| `labelBackgroundColor` | `ColorValue` | `core-surface-primary` | Backing color for the `outlined` label, with 4px side padding, 2px top padding, and a 1em line height. Other variants keep the label background transparent and ignore this prop. |
+| `labelColor` | `ColorValue` | `core-text-primary` | Visible label color. `textColorDisabled` takes precedence when disabled. |
+| `labelSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Typography size of the simple variant’s label. Stacked and outlined labels use `stackedLabelTextSize`. |
+| `maxLength` | `number` | `undefined` | Maximum length accepted by the native input. |
+| `name` | `string` | `undefined` | Native form field name. Also supplies the accessible-name fallback when neither `label` nor `inputName` is provided. |
+| `padding` | `number  /  string` | `automatic spacing tokens` | Outlined fields default to `8px` plus half the label font size on both top and bottom to center the value, with `16px` side padding. Other variants use `spacing-s` vertically and `spacing-m` horizontally, with a `spacing-xs` reduction at icon edges. Explicit values, including zero, are applied exactly. |
+| `placeholder` | `string` | `placeholder` | Hint shown while the field is empty. |
+| `readOnly` | `boolean` | `false` | Prevents editing while retaining focus and text selection. |
+| `showPasswordToggle` | `boolean` | `true` | Shows the password visibility action when `inputType` is `password`. The control is disabled while the field is empty. |
+| `stackedGap` | `number` | `2` | Gap between a stacked label and the value or placeholder, in pixels. Negative values are clamped to zero. |
+| `stackedLabelTextSize` | `keyof Type` | `body-xs-regular` | Slice typography preset for `stacked` and `outlined` labels, such as `body-xs-regular` or `body-s-medium`. Simple labels use `labelSize`. |
+| `textAlign` | `'left'  /  'center'` | `left` | Horizontal alignment inside the input. |
+| `textColorBlurred` | `ColorValue` | `core-text-primary` | Input text color when not focused or disabled, including error states. |
+| `textColorDisabled` | `ColorValue` | `core-text-disabled` | Text color of the input and visible label while disabled. |
+| `textColorError` | `ColorValue` | `feedback-warning` | Error message text color; the input value keeps its normal color. |
+| `textColorFocused` | `ColorValue` | `core-text-primary` | Input text color while focused, unless disabled. Error state does not change the value color. |
+| `textColorPlaceholder` | `ColorValue` | `core-text-disabled` | Placeholder text color. |
+| `textSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Typography size of the native input text. |
+| `tip` | `string` | `undefined` | Helpful text beneath the field when `error` is false. Empty text is hidden. The visible message describes the input for assistive technology. |
+| `value` | `string` | `undefined` | Controlled text. The field reports edits through `onChange` and waits for the parent to update this value. |
+| `variant` | `'simple'  /  'stacked'  /  'outlined'` | `simple` | Label layout. `simple` places it beside the value; `stacked` places it above; `outlined` places it on the top border. Stacked and outlined labels align with the value, including when a leading icon is present. |
+| `width` | `number  /  string` | `100%` | Wrapper width in pixels or CSS units. `auto` uses content sizing where the browser supports it. |
+| `...divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Native outer-wrapper attributes; managed callbacks use the named props. Raw ARIA attributes are excluded. |
+
+## Motion
+
+`transition` is merged with Slice’s Water transition for the optional action fade. Focus-color transitions use Water CSS timing. Reduced motion disables both and takes priority over custom timing.
+
+## Events
+
+- `onAction`: `() => void`. Runs when the nonempty, editable field’s action button is activated. Keep text in application state through `onChange` when the action needs it.
+- `onBlur`: `(value: string) => void`. Reports the input’s current value once when it loses focus, including the blur after Enter submission.
+- `onChange`: `(value: string) => void`. Reports edits and clear requests. Controlled fields keep displaying their current `value` until it is updated. Initialization, prop updates, and form reset do not emit this callback.
+- `onClear`: `() => void`. Runs once after a valid clear request and the empty-string `onChange` callback.
+- `onFocus`: `(value: string) => void`. Reports the current value on native input focus.
+- `onKeyDown`: `(event: React.KeyboardEvent<HTMLInputElement>) => void`. Runs before built-in keyboard handling. Call `preventDefault` to cancel Enter submission and blur.
+- `onPaste`: `(event: React.ClipboardEvent<HTMLInputElement>) => void`. Receives paste events while editing is allowed. Call `preventDefault` to replace native paste behavior.
+- `onSubmit`: `(value: string) => void`. Runs on Enter, outside IME composition. When supplied, it prevents implicit form submission, then the input blurs. Without it, native form behavior remains available.
+- Other native div events apply to the outer wrapper. Native input events belong in `inputAttributes` unless a named callback is provided. No drag or animation lifecycle callbacks are exposed.

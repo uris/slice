@@ -1,0 +1,42 @@
+.option {
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	flex: var(--tab-bar-tab-flex);
+	width: var(--tab-bar-tab-width);
+	min-width: 0;
+	gap: var(--tab-bar-icon-gap);
+	padding: var(--tab-bar-padding);
+	margin: 0;
+	border: 0;
+	outline: none;
+	appearance: none;
+	background: transparent;
+	color: var(--core-text-primary);
+	font: inherit;
+	white-space: nowrap;
+	overflow: hidden;
+	cursor: pointer;
+	transition: color var(--motion-water-duration) var(--motion-water), background-color var(--motion-water-duration)
+		var(--motion-water);
+}
+.option.selected {
+	color: var(--core-text-special);
+}
+.option:disabled {
+	color: var(--core-text-disabled);
+	cursor: default;
+}
+.icon {
+	display: inline-flex;
+	flex: 0 0 var(--tab-bar-icon-size);
+	width: var(--tab-bar-icon-size);
+	height: var(--tab-bar-icon-size);
+}
+@media (prefers-reduced-motion: reduce) {
+	.option {
+		transition: none;
+	}
+}

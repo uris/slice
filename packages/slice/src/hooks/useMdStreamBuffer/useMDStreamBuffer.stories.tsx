@@ -239,7 +239,7 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 					value={raw}
 					onChange={setRaw}
 					rows={3}
-					border={true}
+					borderStyle="box"
 					resizable={true}
 					backgroundColor={'var(--core-surface-primary)'}
 				/>
@@ -259,7 +259,7 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 						label={'Chunk size:'}
 						value={chunkSize}
 						onChange={setChunkSize}
-						size={{ width: 'auto' }}
+						width={'auto'}
 						clearButton={null}
 					/>
 					<TextField
@@ -267,7 +267,7 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 						label={'Interval ms:'}
 						value={intervalMs}
 						onChange={setIntervalMs}
-						size={{ width: 'auto' }}
+						width={'auto'}
 						clearButton={null}
 					/>
 					<TextField
@@ -275,7 +275,7 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 						label={'Healthy end marker:'}
 						value={endMarker}
 						onChange={setEndMarker}
-						size={{ width: 'auto' }}
+						width={'auto'}
 						clearButton={null}
 					/>
 				</FlexDiv>

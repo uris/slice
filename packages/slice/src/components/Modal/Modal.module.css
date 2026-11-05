@@ -100,3 +100,7 @@
 .xl {
 	composes: body-xl-medium from "../../utils/styling/type.module.css";
 }
+
+.close button:focus-visible {
+	outline: none;
+}

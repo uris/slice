@@ -1,105 +1,202 @@
+.field {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: stretch;
+	flex: 0 1 auto;
+	min-width: 0;
+	max-width: 100%;
+}
+.message {
+	padding: var(--spacing-xs) var(--tf-message-right, 0px) 0 var(--tf-message-left, 0px);
+	overflow-wrap: anywhere;
+}
 .wrapper {
 	position: relative;
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	padding: var(--tf-padding) !important;
-	gap: 8px;
-	overflow: visible;
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	box-sizing: border-box;
+	flex: 0 1 auto;
+	min-width: 0;
+	max-width: 100%;
 	width: var(--tf-width);
 	height: var(--tf-height);
+	padding: var(--tf-padding);
+	gap: 8px;
 	border-radius: var(--tf-border-radius);
 	background: var(--tf-bg-color);
 	box-shadow: var(--tf-box-shadow);
-	transition: all var(--motion-water-duration) var(--motion-water) 0s;
+	transition: background-color var(--motion-water-duration) var(--motion-water), box-shadow var(--motion-water-duration)
+		var(--motion-water);
 }
-
 .container {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	flex: 1;
-	height: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	flex: 1 1 auto;
+	min-width: 0;
 	gap: 8px;
 }
-
 .label {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
+	flex: 0 0 auto;
 	color: var(--tf-label-color);
-	height: auto;
-	overflow: hidden;
 	white-space: nowrap;
 }
-
 .input {
-	color: var(--tf-text-color);
-	background-color: transparent;
-	box-sizing: border-box;
-	outline: none;
-	border: 0;
-	padding: 0;
-	height: 100%;
+	flex: 1 1 auto;
+	min-width: 0;
 	width: var(--tf-input-width);
 	field-sizing: var(--tf-field-size);
+	box-sizing: border-box;
+	color: var(--tf-text-color);
+	background: transparent;
+	outline: none;
+	border: 0;
+	margin: 0;
+	padding: 0;
 	text-align: var(--tf-text-align);
-	&::placeholder {
-		color: var(--tf-placeholder-color);
-	}
-	&:focus::placeholder {
-		color: var(--tf-placeholder-color);
-	}
-	&:disabled {
-		color: var(--core-text-disabled);
-	}
-	&:-webkit-autofill,
-	&:-webkit-autofill:hover,
-	&:-webkit-autofill:focus,
-	&:-webkit-autofill:active {
-		box-shadow: 0 0 0 50px var(--core-button-disabled) inset !important;
-		-webkit-text-fill-color: var(--core-text-primary);
-	}
-	&:-webkit-autofill::placeholder {
-		color: var(--tf-placeholder-color);
-	}
-	&:-webkit-autofill::backdrop {
-		color: transparent;
-	}
+	transition: color var(--motion-water-duration) var(--motion-water);
 }
-
+.input::placeholder {
+	color: var(--tf-placeholder-color);
+}
+.input:-webkit-autofill {
+	-webkit-text-fill-color: var(--tf-text-color);
+}
+.leadingIcon {
+	display: inline-flex;
+	flex: 0 0 var(--tf-icon-size);
+	width: var(--tf-icon-size);
+	height: var(--tf-icon-size);
+}
 .showPassword {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	min-height: 18px;
-	min-width: 18px;
-	max-height: 18px;
-	max-width: 18px;
-	opacity: var(--tf-show-opacity);
-	&:hover {
-		opacity: var(--tf-show-opacity-hover);
-	}
+	display: inline-flex;
+	flex: 0 0 18px;
+	width: 18px;
+	height: 18px;
 }
-
 .clearButton {
-	composes: row from "../../utils/styling/flexBox.module.css";
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 var(--tf-clear-size);
+	width: var(--tf-clear-size);
+	height: var(--tf-clear-size);
+	padding: 0;
+	margin: 0;
 	border: 0;
 	background: transparent;
 	appearance: none;
-	-webkit-appearance: none;
-	outline: none;
 	cursor: pointer;
+	visibility: hidden;
 }
-
+.wrapper:focus-within .clearButton[data-has-value] {
+	visibility: visible;
+}
+.clearButton:disabled {
+	cursor: default;
+	opacity: 0.5;
+}
+.action {
+	display: inline-flex;
+	flex: 0 0 auto;
+}
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }
-
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
-
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
 }
-
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
-
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+@media (prefers-reduced-motion: reduce) {
+	.wrapper,
+	.input {
+		transition: none;
+	}
+}
+
+.textColumn {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+.labelSlot {
+	display: grid;
+	grid-template-rows: 1fr;
+	margin-bottom: var(--tf-stacked-gap);
+}
+.labelSlot > .label {
+	min-height: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.wrapper[data-variant="stacked"] .container {
+	align-items: flex-end;
+}
+.wrapper[data-appear] .labelSlot {
+	transition: opacity var(--motion-water-duration) var(--motion-water), transform var(--motion-water-duration)
+		var(--motion-water);
+}
+.wrapper[data-appear] :is(.input, .leadingIcon, .clearButton, .showPassword, .action) {
+	transform: translateY(0);
+	transition: color var(--motion-water-duration) var(--motion-water), transform var(--motion-water-duration)
+		var(--motion-water);
+}
+.wrapper[data-collapsed-label] :is(.input, .leadingIcon, .clearButton, .showPassword, .action) {
+	transform: translateY(calc(-0.5 * var(--tf-label-space, 0px)));
+}
+.wrapper[data-appear] .clearButton {
+	transform: none;
+	opacity: 0;
+	transition: none;
+}
+.wrapper[data-appear]:focus-within .clearButton[data-has-value] {
+	opacity: 1;
+	transition: opacity var(--motion-water-duration) var(--motion-water) 100ms, visibility 0s linear 100ms;
+}
+.wrapper[data-collapsed-label] .labelSlot {
+	opacity: 0;
+	transform: translateY(8px);
+	pointer-events: none;
+}
+.wrapper[data-variant="outlined"] .labelSlot {
+	position: absolute;
+	top: calc(-1 * var(--tf-column-top, var(--spacing-s)) - var(--spacing-xxs) / 2);
+	left: calc(-1 * var(--spacing-xs));
+	max-width: calc(100% + var(--spacing-xs) + var(--spacing-xs));
+	margin: 0;
+	padding: var(--spacing-xxs) var(--spacing-xs) 0;
+	background: var(--tf-label-background);
+	transform: translateY(-50%);
+}
+.wrapper[data-variant="outlined"] .labelSlot > .label {
+	line-height: 1em;
+}
+@media (prefers-reduced-motion: reduce) {
+	.wrapper[data-appear]:focus-within .clearButton[data-has-value],
+	.wrapper[data-appear] .labelSlot,
+	.wrapper[data-appear] :is(.input, .leadingIcon, .clearButton, .showPassword, .action) {
+		transition: none;
+	}
+	.wrapper[data-collapsed-label] :is(.input, .leadingIcon, .clearButton, .showPassword, .action) {
+		transform: none;
+	}
+}
+
+.separator {
+	flex: 0 0 auto;
+	color: var(--core-text-disabled);
+	pointer-events: none;
+	user-select: none;
 }

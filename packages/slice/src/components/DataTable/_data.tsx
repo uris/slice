@@ -17,7 +17,7 @@ export const sampleTableData: SampleTableData[] = [
 	{
 		name: 'John Appleseed',
 		age: 25,
-		pic: 'https://www.slice-uikit.com/public/images/profile-male-02.jpg',
+		pic: '/public/images/profile-male-02.jpg',
 		country: 'Portugal',
 		compensation: 175000,
 		started: new Date('2001-02-10'),

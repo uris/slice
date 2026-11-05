@@ -18,8 +18,34 @@ import {FlexDiv} from '../../components/FlexDiv';
             copyToClipboard,
             debounce,
             hexToRgb,
+            resolveColor,
             tintFromColor,
         } from '@apple-pie/slice/utils';
+        ```
+        </RenderSource>
+
+        ## Theme color tokens
+
+        Component color props accept `ColorValue`: a `keyof Colors` token with autocomplete,
+        or any CSS color string. For example, `background="core-surface-primary"` and
+        `textColor="core-text-primary"` resolve to CSS variables and follow the active theme.
+        Hex colors, named colors, `var(...)`, and existing semantic Label backgrounds still work.
+        Numeric icon fill opacity is unchanged. Raw React `style` objects use normal CSS values;
+        call `resolveColor()` yourself when passing a token through `style`.
+
+        <RenderSource language={"tsx"}>
+        ```
+        import { Button, FlexDiv, type ColorValue } from '@apple-pie/slice';
+        import { resolveColor } from '@apple-pie/slice/utils';
+
+        const color: ColorValue = 'core-text-primary';
+        const cssColor = resolveColor(color); // 'var(--core-text-primary)'
+        const customColor = resolveColor('#ff00aa'); // '#ff00aa'
+
+        <FlexDiv background="core-surface-primary">
+            <Button label="Continue" textColor={color} iconColor="core-icon-primary" />
+            <span style={{ color: cssColor }}>Themed text</span>
+        </FlexDiv>
         ```
         </RenderSource>
 

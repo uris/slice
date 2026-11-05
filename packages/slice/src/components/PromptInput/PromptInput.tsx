@@ -4,12 +4,14 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTheme } from '../../hooks';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Button } from '../Button';
 import { type FileItem, FileList } from '../FileList';
 import css from './PromptInput.module.css';
 import type { PromptProps } from './_types';
 
-const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((props, ref) => {
+const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps, ref) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		children,
 		attachments = [],

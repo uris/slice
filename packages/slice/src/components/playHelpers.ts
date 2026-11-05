@@ -136,140 +136,6 @@ export async function runCheckBoxPlay<TArgs>({ args, canvasElement }: PlayContex
 	}
 }
 
-export async function runDivInputPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const textbox = canvas.getByRole('textbox');
-	await userEvent.click(textbox);
-	await userEvent.type(textbox, 'abc');
-	await userEvent.paste('pasted');
-	await userEvent.keyboard('{Enter}');
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).toHaveBeenCalled();
-	}
-}
-
-export async function runDivInputWithoutHandlersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const textbox = canvas.getByRole('textbox');
-	// no onChange/onSubmit/onFocus/onBlur/onDblClick/onClick passed, so this
-	// exercises every default-arg no-op (`() => null`) branch; the assertions
-	// below just confirm none of them throw when actually invoked.
-	await userEvent.click(textbox);
-	await userEvent.type(textbox, 'abc');
-	fireEvent.doubleClick(textbox);
-	await userEvent.keyboard('{Enter}');
-	await userEvent.tab();
-}
-
-export async function runDivInputCustomClassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const textbox = canvas.getByRole('textbox');
-	// exercises the wrapper's `className ? ... : ''` true branch
-	await expect(textbox.parentElement).toHaveClass('story-custom-class');
-}
-
-export async function runDivInputEmptyPlaceholderPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const textbox = canvas.getByRole('textbox');
-	// placeholder='' exercises the placeholder-tracking effect's `if
-	// (placeholder)` false branch. Typing then clearing all text lands
-	// handleSetValue in the `stripped.length === 0 && placeholder && ...`
-	// chain with placeholder falsy, falling through to the trailing else
-	// branch and its `textString || ''` fallback (textString is '').
-	await userEvent.click(textbox);
-	await userEvent.type(textbox, 'abc');
-	await userEvent.clear(textbox);
-}
-
-export async function runDivInputClearWithPlaceholderPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const textbox = canvas.getByRole('textbox');
-	// placeholder stays truthy (default), so typing then clearing all text
-	// takes the full `stripped.length === 0 && placeholder && ref.current`
-	// AND-chain true, restoring the placeholder text and cursor.
-	await userEvent.click(textbox);
-	await userEvent.type(textbox, 'abc');
-	await userEvent.clear(textbox);
-}
-
-export async function runDivInputAngleBracketBlockedPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const textbox = canvas.getByRole('textbox');
-	await userEvent.click(textbox);
-	// exercises handleKeyDown's `e.key === '<' || e.key === '>'` block
-	fireEvent.keyDown(textbox, { key: '<' });
-	fireEvent.keyDown(textbox, { key: '>' });
-}
-
-export async function runDivInputPasteGuardsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const textbox = canvas.getByRole('textbox');
-	await userEvent.click(textbox);
-
-	// no clipboardData at all -> handlePaste's `!e.clipboardData` true branch
-	fireEvent.paste(textbox);
-
-	// clipboardData present but with no text/plain payload -> `!textData`
-	// true branch
-	const emptyTransfer = new DataTransfer();
-	fireEvent.paste(textbox, { clipboardData: emptyTransfer });
-
-	// a real text payload but no active selection range -> `!selection?.
-	// rangeCount` true branch
-	globalThis.getSelection()?.removeAllRanges();
-	const textTransfer = new DataTransfer();
-	textTransfer.setData('text/plain', 'pasted text');
-	fireEvent.paste(textbox, { clipboardData: textTransfer });
-}
-
-export async function runDivInputNullableStyleDefaultsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// unfocused, with padding/textAlign/clamp/backgroundColor all forced to
-	// `null` (not `undefined`, since JS default-parameter values only trigger
-	// on `undefined`) to exercise cssVars' `?? fallback` expressions on their
-	// not-focused side.
-	await expect(canvasElement.querySelector('[role="textbox"]')).toBeInTheDocument();
-}
-
-export async function runDivInputNullableBackgroundWhileFocusedPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// focus=true with backgroundColor=null exercises the
-	// `isEditable && isFocused` true side of the wrapper-background `??`
-	// fallback, which every other story leaves on its false (unfocused) side.
-	await expect(canvasElement.querySelector('[role="textbox"]')).toBeInTheDocument();
-}
-
-export async function runDivInputNumericWidthPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// width as a number exercises setWidth's `typeof width === 'string'`
-	// false branch (`${width}px`), instead of the string 'auto' every other
-	// story uses.
-	await expect(canvasElement.querySelector('[role="textbox"]')).toBeInTheDocument();
-}
-
-export async function runDivInputNullableValuePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// A runtime null value must show the placeholder without reaching
-	// cleanString as null, both on initial render and in the syncing effect.
-	const canvas = within(canvasElement);
-	const textbox = canvas.getByRole('textbox');
-	await expect(textbox).toHaveTextContent('Placeholder');
-}
-
 export async function runDotPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
@@ -297,89 +163,6 @@ export async function runDraggablePanelPlay<TArgs>({ canvasElement, args }: Play
 	}
 	if (isFn(storyArgs.onResizeEnd)) {
 		await expect(storyArgs.onResizeEnd).toHaveBeenCalled();
-	}
-}
-
-export async function runDropDownPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const select = canvas.getByRole('combobox') as HTMLSelectElement;
-	const options = Array.from(select.querySelectorAll('option'));
-
-	// native change to a different option - handleChange's `index !== i` is
-	// true, so onChange/onOption fire
-	await userEvent.selectOptions(select, '2');
-	if (isFn(storyArgs.onChange)) {
-		await waitFor(() => expect(storyArgs.onChange).toHaveBeenCalledTimes(1));
-	}
-	if (isFn(storyArgs.onOption)) {
-		await waitFor(() => expect(storyArgs.onOption).toHaveBeenCalledTimes(1));
-	}
-
-	// each <option> also wires a direct onMouseUp handler straight to
-	// handleChange, independent of the native change event - firing it again
-	// for the option that's already selected hits the `index !== i` false
-	// (no-op) branch instead
-	if (options[2]) fireEvent.mouseUp(options[2]);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalledTimes(1);
-	}
-
-	// and firing it for a genuinely different option exercises the same
-	// onMouseUp wiring on the true branch too
-	if (options[1]) fireEvent.mouseUp(options[1]);
-	if (isFn(storyArgs.onChange)) {
-		await waitFor(() => expect(storyArgs.onChange).toHaveBeenCalledTimes(2));
-	}
-}
-
-export async function runDropDownDisplayTextPlay(
-	{ canvasElement }: { canvasElement: HTMLElement },
-	expectedText: string,
-) {
-	await expectCanvas(canvasElement);
-	// the same text also exists inside the native <select>'s <option> elements,
-	// so a canvas-wide getByText match is ambiguous - the visible face text has
-	// no better accessible hook (it's a plain presentational span mirroring the
-	// native select's value), so scope to it by class name instead
-	const faceText = canvasElement.querySelector('[class*="faceText"]');
-	await waitFor(() => expect(faceText).toHaveTextContent(expectedText));
-}
-
-export async function runDropDownRendersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await expect(canvas.getByRole('combobox')).toBeInTheDocument();
-}
-
-export async function runDropDownDisabledMouseDownPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const select = canvas.getByRole('combobox');
-	// the select never gets a native `disabled` attribute (disabling is done via
-	// preventDefault on mousedown so the custom face/border styling stays
-	// consistent) - firing mousedown directly exercises that guard
-	fireEvent.mouseDown(select);
-	await expect(select).toBeInTheDocument();
-}
-
-export async function runErrorSummaryPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const entries = Array.isArray(storyArgs.entries) ? storyArgs.entries : [];
-
-	for (const entry of entries) {
-		if (
-			entry &&
-			typeof entry === 'object' &&
-			'title' in entry &&
-			typeof (entry as { title?: unknown }).title === 'string'
-		) {
-			const title = (entry as { title: string }).title;
-			await expect(canvas.getByText((content) => content.includes(title))).toBeInTheDocument();
-		}
 	}
 }
 
@@ -470,137 +253,6 @@ export async function runIconPlay<TArgs>({ args, canvasElement }: PlayContext<TA
 	}
 }
 
-export async function runIconButtonPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const button = canvas.getByRole('button');
-	await userEvent.click(button);
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalled();
-	}
-}
-
-export async function runIconButtonWithoutHandlersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const button = canvas.getByRole('button');
-	// no onClick/onToolTip passed, exercising both default-arg no-ops
-	await userEvent.click(button);
-}
-
-export async function runIconButtonCustomClassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button');
-	// exercises the wrapper's `className ? ... : ''` true branch
-	await expect(button).toHaveClass('story-iconbutton-class');
-}
-
-export async function runIconButtonDisabledPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const button = canvas.getByRole('button');
-	// disabled=true exercises handleClick's `if (disabled) return;` true
-	// branch, plus every disabled-gated ternary in cssVars/opacity
-	await userEvent.click(button);
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).not.toHaveBeenCalled();
-	}
-}
-
-export async function runIconButtonHoverLeaveWithTooltipPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const button = canvas.getByRole('button');
-	// a real mouseleave (unhover) - nothing in this file previously fired
-	// one - exercises handleMouseLeave's `if (tooltip)` true branch
-	await userEvent.hover(button);
-	await userEvent.unhover(button);
-	if (isFn(storyArgs.onToolTip)) {
-		await waitFor(() => expect(storyArgs.onToolTip).toHaveBeenCalledWith(null));
-	}
-}
-
-export async function runIconButtonHoverLeaveWithoutTooltipPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const button = canvas.getByRole('button');
-	// tooltip left unset - exercises handleMouseLeave's `if (tooltip)` false
-	// branch
-	await userEvent.hover(button);
-	await userEvent.unhover(button);
-	await expect(button).toBeInTheDocument();
-}
-
-export async function runIconButtonNoHoverEffectPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// hover=false exercises bgHoverColor's `if (hover)` false branch, and
-	// reaches its trailing `backgroundColor ?? 'transparent'` with a real
-	// (truthy) backgroundColor
-	await expect(button).toBeInTheDocument();
-}
-
-export async function runIconButtonNullColorsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// backgroundColor/iconColor forced to `null` (not `undefined`, which the
-	// destructured defaults already absorb), with hover=false, exercises
-	// bgColorNormal's, bgHoverColor's, and setIconColor's `?? fallback`
-	// branches
-	await expect(button?.style.getPropertyValue('--ib-bg-color')).toBe('var(--core-surface-secondary)');
-}
-
-export async function runIconButtonNoRoundNoBorderRadiusPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// round=false exercises `round ? '100%' : ...`'s false branch; borderRadius
-	// forced to `null` exercises setStyle's fallback to corner-none (0 resolves to `unset`)
-	await expect(button?.style.getPropertyValue('--ib-border-radius')).toBe('unset');
-}
-
-export async function runIconButtonBorderedPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// border=true exercises `border ? '1px' : 0`'s true branch, which every
-	// other story leaves at the default false
-	await expect(button?.style.getPropertyValue('--ib-border')).toBe('1px');
-}
-
-export async function runIconButtonInvalidSizePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// buttonSize forced to a falsy value exercises size's `if (!buttonSize)
-	// return frameSize;` true branch
-	await expect(canvasElement.querySelector('button')).toBeInTheDocument();
-}
-
-export async function runIconButtonSmallSizePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// buttonSize='s' exercises the `buttonSize === 's'` true branch
-	await expect(button?.style.getPropertyValue('--ib-button-size')).toBe('24px');
-}
-
-export async function runIconButtonUnmatchedSizePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// buttonSize set to a value matching none of 's'/'m'/'l'/'xl' exercises
-	// the final `if (buttonSize === 'xl')`'s false branch, leaving `size`
-	// undefined and exercising `${size ?? 0}px`'s fallback
-	await expect(button?.style.getPropertyValue('--ib-button-size')).toBe('0px');
-}
-
-export async function runIconButtonLabelAndCountPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// label set exercises `label && <div>...</div>`'s true branch; a nonzero
-	// count exercises `count !== 0 && <div>...</div>`'s true branch
-	await expect(canvas.getByText('Label text')).toBeInTheDocument();
-	await expect(canvas.getByText('5')).toBeInTheDocument();
-}
-
 export async function runLogosPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
@@ -624,11 +276,10 @@ export async function runOverlayPlay<TArgs>({ args, canvasElement }: PlayContext
 export async function runPagerPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
-	const bullets = canvasElement.querySelectorAll('input[type="button"]');
+	const bullets = canvasElement.querySelectorAll('button');
 	await expect(bullets.length).toBeGreaterThan(0);
 	const target = bullets.length > 1 ? bullets[1] : bullets[0];
 	await userEvent.click(target as HTMLElement);
-	fireEvent.keyDown(target, { key: 'Enter' });
 	if (isFn(storyArgs.onChange)) {
 		await expect(storyArgs.onChange).toHaveBeenCalled();
 	}
@@ -640,92 +291,32 @@ export async function runProgressIndicatorPlay<TArgs>({ canvasElement }: PlayCon
 	await expect(canvas.getByRole('img', { name: /Loading spinner/i })).toBeInTheDocument();
 }
 
-export async function runRadioButtonPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const optionLabel = storyArgs.label ?? undefined;
-	if (typeof optionLabel === 'string') {
-		await userEvent.click(canvas.getByText(optionLabel));
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-}
-
-export async function runRadioButtonWithoutHandlerPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	// no onChange provided - exercises its default no-op parameter branch
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const button = canvas.getByRole('radio');
-	await userEvent.click(button);
-}
-
-export async function runRadioButtonNoDeselectPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	// selected + deselect=false - clicking an already-selected option must be a
-	// no-op, exercising handleChange's `isSelected && !deselect` true branch
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const button = canvas.getByRole('radio');
-	await userEvent.click(button);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).not.toHaveBeenCalled();
-	}
-}
-
-export async function runRadioButtonNoLabelPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	// no `label` prop - exercises setAriaLabel's fallback chain (string
-	// children, or the final 'Radio Button' default) and `{label ?? children}`
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const button = canvas.getByRole('radio');
-	await userEvent.click(button);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-}
-
-export async function runRadioButtonListPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	await userEvent.click(canvas.getByText('Option 1'));
-	await userEvent.click(canvas.getByText('Option 2'));
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-}
-
 export async function runSliderPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
 	const slider = canvas.getByRole('slider');
 	if (slider) {
-		fireEvent.mouseDown(slider, { clientX: 20 });
-		fireEvent.mouseMove(document.documentElement, { clientX: 60 });
-		fireEvent.mouseUp(document.documentElement, { clientX: 60 });
+		fireEvent.pointerDown(slider, { pointerId: 1, button: 0, isPrimary: true });
+		fireEvent.input(slider, { target: { value: '60' } });
+		fireEvent.pointerUp(slider, { pointerId: 1 });
 	}
 	if (isFn(storyArgs.onChange)) {
 		await expect(storyArgs.onChange).toHaveBeenCalled();
 	}
-	if (isFn(storyArgs.onDragChange)) {
-		await expect(storyArgs.onDragChange).toHaveBeenCalled();
+	if (isFn(storyArgs.onChangeEnd)) {
+		await expect(storyArgs.onChangeEnd).toHaveBeenCalled();
 	}
 }
 
 export async function runSliderWithoutHandlersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	// no onChange/onDragChange provided - exercises both handlers' default
-	// no-op parameter branches. A throw here would mean the defaults weren't
-	// applied.
+	// Interaction remains safe when both numeric callbacks are omitted.
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const slider = canvas.getByRole('slider');
-	fireEvent.mouseDown(slider, { clientX: 20 });
-	fireEvent.mouseMove(document.documentElement, { clientX: 60 });
-	fireEvent.mouseUp(document.documentElement, { clientX: 60 });
+	fireEvent.pointerDown(slider, { pointerId: 1, button: 0, isPrimary: true });
+	fireEvent.input(slider, { target: { value: '60' } });
+	fireEvent.pointerUp(slider, { pointerId: 1 });
 }
 
 export async function runSliderKeyboardPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
@@ -773,32 +364,31 @@ export async function runSliderDisabledPlay<TArgs>({ args, canvasElement }: Play
 	const slider = canvas.getByRole('slider');
 	slider.focus();
 	fireEvent.keyDown(slider, { key: 'End' });
-	fireEvent.mouseDown(slider, { clientX: 20 });
-	fireEvent.mouseMove(document.documentElement, { clientX: 60 });
-	fireEvent.mouseUp(document.documentElement, { clientX: 60 });
+	fireEvent.pointerDown(slider, { pointerId: 1, button: 0, isPrimary: true });
+	fireEvent.input(slider, { target: { value: '60' } });
+	fireEvent.pointerUp(slider, { pointerId: 1 });
 	if (isFn(storyArgs.onChange)) {
 		await expect(storyArgs.onChange).not.toHaveBeenCalled();
 	}
-	if (isFn(storyArgs.onDragChange)) {
-		await expect(storyArgs.onDragChange).not.toHaveBeenCalled();
+	if (isFn(storyArgs.onChangeEnd)) {
+		await expect(storyArgs.onChangeEnd).not.toHaveBeenCalled();
 	}
 }
 
 export async function runSliderEdgeDragPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	// drag far past both edges of the track - exercises updateSlider's
-	// `pos > sliderWidth` and `pos < 0` clamping branches
+	// Verify endpoint input requests; physical beyond-track dragging is checked in the browser.
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
 	const slider = canvas.getByRole('slider');
 
-	fireEvent.mouseDown(slider, { clientX: 0 });
-	fireEvent.mouseMove(document.documentElement, { clientX: 100000 });
-	fireEvent.mouseUp(document.documentElement, { clientX: 100000 });
+	fireEvent.pointerDown(slider, { pointerId: 1, button: 0, isPrimary: true });
+	fireEvent.input(slider, { target: { value: '100' } });
+	fireEvent.pointerUp(slider, { pointerId: 1 });
 
-	fireEvent.mouseDown(slider, { clientX: 0 });
-	fireEvent.mouseMove(document.documentElement, { clientX: -100000 });
-	fireEvent.mouseUp(document.documentElement, { clientX: -100000 });
+	fireEvent.pointerDown(slider, { pointerId: 1, button: 0, isPrimary: true });
+	fireEvent.input(slider, { target: { value: '0' } });
+	fireEvent.pointerUp(slider, { pointerId: 1 });
 
 	if (isFn(storyArgs.onChange)) {
 		await expect(storyArgs.onChange).toHaveBeenCalled();
@@ -806,19 +396,18 @@ export async function runSliderEdgeDragPlay<TArgs>({ args, canvasElement }: Play
 }
 
 export async function runSliderCollapsedRangePlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	// scaleMin === scaleMax - exercises stepIncrement's and valueToPercent's
-	// `range <= 0` guards
+	// An equal-bound range stays fixed and emits no changes.
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
 	const slider = canvas.getByRole('slider');
 	slider.focus();
 	fireEvent.keyDown(slider, { key: 'ArrowRight' });
-	fireEvent.mouseDown(slider, { clientX: 20 });
-	fireEvent.mouseMove(document.documentElement, { clientX: 60 });
-	fireEvent.mouseUp(document.documentElement, { clientX: 60 });
+	fireEvent.pointerDown(slider, { pointerId: 1, button: 0, isPrimary: true });
+	fireEvent.input(slider, { target: { value: '60' } });
+	fireEvent.pointerUp(slider, { pointerId: 1 });
 	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
+		await expect(storyArgs.onChange).not.toHaveBeenCalled();
 	}
 }
 
@@ -834,285 +423,6 @@ export async function runSpacerPlay<TArgs>({ args, canvasElement }: PlayContext<
 		await expect(expected).not.toBe('');
 		await expect(computed.width).toBe(expected);
 		await expect(computed.height).toBe(expected);
-	}
-}
-
-export async function runSwitchPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const el = canvasElement.querySelector('[style*="--switch-width"]') as HTMLElement | null;
-	if (el) {
-		await userEvent.click(el);
-		await userEvent.click(el);
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-}
-
-export async function runTabBarPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-
-	const darkTab = canvas.getByRole('tab', { name: /dark/i });
-	const lightTab = canvas.getByRole('tab', { name: /light/i });
-
-	await userEvent.click(darkTab);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onTabChange)) {
-		await expect(storyArgs.onTabChange).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onToolTip)) {
-		// handleOptionClick clears any active tooltip before switching tabs
-		await expect(storyArgs.onToolTip).toHaveBeenCalledWith(null);
-	}
-
-	// keyboard navigation: every handled key, wrapping in both directions, plus
-	// one unhandled key that hits the switch's default (nextIndex stays null,
-	// so handleOptionKeyDown returns before calling handleOptionClick/focusOption)
-	lightTab.focus();
-	await userEvent.keyboard('{ArrowRight}');
-	await waitFor(() => expect(document.activeElement).toBe(darkTab));
-	await userEvent.keyboard('{ArrowRight}');
-	await waitFor(() => expect(document.activeElement).toBe(lightTab));
-	await userEvent.keyboard('{ArrowLeft}');
-	await waitFor(() => expect(document.activeElement).toBe(darkTab));
-	await userEvent.keyboard('{ArrowUp}');
-	await waitFor(() => expect(document.activeElement).toBe(lightTab));
-	await userEvent.keyboard('{ArrowDown}');
-	await waitFor(() => expect(document.activeElement).toBe(darkTab));
-	await userEvent.keyboard('{Home}');
-	await waitFor(() => expect(document.activeElement).toBe(lightTab));
-	await userEvent.keyboard('{End}');
-	await waitFor(() => expect(document.activeElement).toBe(darkTab));
-	await userEvent.keyboard('a');
-	await waitFor(() => expect(document.activeElement).toBe(darkTab));
-
-	if (storyArgs.hasClose && isFn(storyArgs.onClose)) {
-		const buttons = canvas.getAllByRole('button');
-		await userEvent.click(buttons[buttons.length - 1]);
-		await expect(storyArgs.onClose).toHaveBeenCalled();
-	}
-}
-
-export async function runTabBarRendersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await expect(canvas.getAllByRole('tab').length).toBeGreaterThan(0);
-}
-
-export async function runTabBarSelectedValueNoMatchPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// selectedValue matches nothing, so the sync effect falls back to `selected`
-	// (index 1 / Dark) instead of leaving index at 0
-	const darkTab = canvas.getByRole('tab', { name: /dark/i });
-	await waitFor(() => expect(darkTab).toHaveAttribute('aria-selected', 'true'));
-}
-
-export async function runTabBarTooltipAndCountPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const lightTab = canvas.getByRole('tab', { name: /light/i });
-	const darkTab = canvas.getByRole('tab', { name: /dark/i });
-
-	// hovering an option with a toolTip fires onToolTip with the tip payload;
-	// leaving it clears it back to null
-	await userEvent.hover(lightTab);
-	if (isFn(storyArgs.onToolTip)) {
-		await waitFor(() => expect(storyArgs.onToolTip).toHaveBeenCalled());
-	}
-	await userEvent.unhover(lightTab);
-	if (isFn(storyArgs.onToolTip)) {
-		await waitFor(() => expect(storyArgs.onToolTip).toHaveBeenCalledWith(null));
-	}
-
-	// the Dark option has no toolTip - hovering still clears any active
-	// tooltip unconditionally, but leaving it exercises handleMouseLeave's
-	// `if (toolTip)` false branch (no further onToolTip call from the leave)
-	await userEvent.hover(darkTab);
-	const callsAfterHover = mockCallCount(storyArgs.onToolTip);
-	await userEvent.unhover(darkTab);
-	await new Promise((resolve) => setTimeout(resolve, 10));
-	await expect(mockCallCount(storyArgs.onToolTip)).toBe(callsAfterHover);
-
-	// a nonzero count renders the Badge
-	await expect(canvas.getByText('3')).toBeInTheDocument();
-}
-
-export async function runTabBarWithoutHandlersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// no onChange/onTabChange/onClose/onToolTip passed, exercising every
-	// default-arg no-op
-	const tabs = canvas.getAllByRole('tab');
-	await userEvent.click(tabs[tabs.length - 1]);
-}
-
-export async function runTabBarCustomClassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// exercises the wrapper's `className ? ... : ''` true branch
-	await expect(canvasElement.querySelector('[role="tablist"]')).toHaveClass('story-tabbar-class');
-}
-
-export async function runTabBarNoBorderPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const wrapper = canvasElement.querySelector('[role="tablist"]') as HTMLElement | null;
-	// border=false exercises `border ? '1px' : '0'`'s false branch
-	await expect(wrapper?.style.getPropertyValue('--tab-bar-border-bottom')).toBe('0');
-}
-
-export async function runTabBarCompactWidthPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// tabWidth='compact' exercises setTabWidth's `tabWidth === 'compact'`
-	// true branch, which every other story leaves at the default 'fill'
-	await expect(canvasElement.querySelectorAll('[role="tab"]').length).toBeGreaterThan(0);
-}
-
-export async function runTabBarNumericWidthPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// a numeric tabWidth (neither 'compact' nor 'fill') exercises both
-	// setTabWidth's and setTabFlex's trailing else branches
-	const tab = canvasElement.querySelector('[role="tab"]') as HTMLElement | null;
-	await expect(tab?.style.getPropertyValue('--tab-bar-option-width')).toBe('120px');
-	await expect(tab?.style.getPropertyValue('--tab-bar-option-flex')).toBe('unset');
-}
-
-export async function runTabBarNullIconGapPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const tab = canvasElement.querySelector('[role="tab"]') as HTMLElement | null;
-	// iconGap forced to `null` (not `undefined`, which the destructured
-	// default already absorbs) exercises Option's `iconGap ?? 0` fallback
-	await expect(tab?.style.getPropertyValue('--tab-bar-option-gap')).toBe('0px');
-}
-
-export async function runTabBarMemoComparatorFullPassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// toggling a TabBar-level prop that ISN'T one of Option's own
-	// React.memo-compared fields (iconFill) still forces renderedOptions to
-	// recompute (it's in that useMemo's deps) and pass fresh Option elements
-	// down - since none of the *compared* fields actually changed, Option's
-	// custom comparator walks its entire `&&` chain and returns true,
-	// exercising every one of its branches in a single pass.
-	const toggle = canvas.getByRole('button', { name: /toggle icon fill/i });
-	await userEvent.click(toggle);
-	await expect(canvas.getAllByRole('tab').length).toBeGreaterThan(0);
-}
-
-export async function runTextAreaPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const input = canvas.getByRole('textbox');
-	await userEvent.click(input);
-	await userEvent.type(input, 'abc');
-	await userEvent.tab();
-	if (isFn(storyArgs.onFocus)) {
-		await expect(storyArgs.onFocus).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onBlur)) {
-		await expect(storyArgs.onBlur).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-	if (storyArgs.returnSubmits === true) {
-		await userEvent.type(input, '{enter}');
-		if (isFn(storyArgs.onSubmit)) {
-			await expect(storyArgs.onSubmit).toHaveBeenCalled();
-		}
-	}
-}
-
-export async function runTextAreaWithoutHandlersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	// no onChange/onFocus/onBlur/onSubmit/onKeyDown provided - exercises all
-	// five handlers' default no-op parameter branches
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const input = canvas.getByRole('textbox');
-	await userEvent.click(input);
-	await userEvent.type(input, 'abc{enter}');
-	await userEvent.tab();
-}
-
-export async function runTextAreaSendButtonPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	// exercises handleSubmit via the send button's onMouseDown, and (with the
-	// default submitClears=true) its `if (submitClears) setText('')` true branch
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const input = canvas.getByRole('textbox') as HTMLTextAreaElement;
-	const sendButton = canvasElement.querySelector('[class*="send"]') as HTMLElement | null;
-	await expect(sendButton).toBeInTheDocument();
-	if (sendButton) {
-		fireEvent.mouseDown(sendButton);
-	}
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).toHaveBeenCalled();
-	}
-	await expect(input.value).toBe('');
-}
-
-export async function runTextAreaNoClearOnSubmitPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	// submitClears=false - exercises `if (submitClears) setText('')`'s false
-	// branch: the text must survive a submit
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const input = canvas.getByRole('textbox') as HTMLTextAreaElement;
-	await userEvent.click(input);
-	await userEvent.type(input, 'keep me');
-	const sendButton = canvasElement.querySelector('[class*="send"]') as HTMLElement | null;
-	if (sendButton) {
-		fireEvent.mouseDown(sendButton);
-	}
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).toHaveBeenCalled();
-	}
-	await expect(input.value).toContain('keep me');
-}
-
-export async function runTextFieldPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const input = canvasElement.querySelector('input') as HTMLInputElement | null;
-	await expect(input).toBeInTheDocument();
-	if (!input) return;
-	await userEvent.click(input);
-	await userEvent.type(input, 'a');
-	await userEvent.tab();
-	await userEvent.click(input);
-	await userEvent.type(input, 'bc');
-	await userEvent.keyboard('{Enter}');
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onFocus)) {
-		await expect(storyArgs.onFocus).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onBlur)) {
-		await expect(storyArgs.onBlur).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onValidate) && storyArgs.value === '') {
-		await expect(storyArgs.onValidate).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).toHaveBeenCalled();
-	}
-	if (storyArgs.actionButton === true) {
-		await userEvent.click(canvas.getByText('Translate'));
-		if (isFn(storyArgs.onAction)) {
-			await expect(storyArgs.onAction).toHaveBeenCalled();
-		}
-	}
-	if (storyArgs.inputType === 'password') {
-		await userEvent.click(canvas.getByRole('button', { name: /view icon/i }));
 	}
 }
 
@@ -1139,7 +449,8 @@ export async function runButtonBarPlay<TArgs>({ args, canvasElement }: PlayConte
 		await expect(storyArgs.onClick).toHaveBeenCalled();
 	}
 	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
+		if (storyArgs.toggle === false) await expect(storyArgs.onChange).not.toHaveBeenCalled();
+		else await expect(storyArgs.onChange).toHaveBeenCalled();
 	}
 	if (isFn(storyArgs.onToolTip)) {
 		await expect(storyArgs.onToolTip).toHaveBeenCalled();
@@ -1166,9 +477,7 @@ export async function runButtonBarNoTogglePlay<TArgs>({ args, canvasElement }: P
 }
 
 export async function runButtonBarWithoutHandlersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	// no onClick/onChange/onToolTip provided - exercises the three handlers'
-	// default-parameter no-op branches. If the defaults weren't applied,
-	// hovering/clicking would throw instead of completing.
+	// Optional handlers may be omitted while interaction still updates local state.
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const buttons = canvas.getAllByRole('button');
@@ -1184,15 +493,14 @@ export async function runButtonBarCustomClassPlay<TArgs>({ args, canvasElement }
 }
 
 export async function runButtonBarSizeEdgeCasesPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	// a falsy buttonSize (falls back to frameSize) and a value outside the
-	// 's' | 'm' | 'l' | 'xl' union (falls through every check to an implicit
-	// undefined) can both still occur at runtime from untyped/JS callers -
-	// this only needs to confirm the component renders without throwing for
-	// either, since the interesting behavior is the useMemo branch taken.
+	// Invalid runtime size values fall back to the medium frame.
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const buttons = canvas.getAllByRole('button');
 	await expect(buttons.length).toBeGreaterThan(0);
+	for (const button of buttons) {
+		await expect(button).toHaveStyle({ width: '28px', height: '28px' });
+	}
 }
 
 export async function runButtonBarMissingTipPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
@@ -1222,12 +530,8 @@ export async function runChipPlay<TArgs>({ args, canvasElement }: PlayContext<TA
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
-	const chipLabel =
-		typeof storyArgs.children === 'string' || typeof storyArgs.children === 'number'
-			? String(storyArgs.children)
-			: typeof storyArgs.label === 'string' || typeof storyArgs.label === 'number'
-				? String(storyArgs.label)
-				: null;
+	const content = storyArgs.label ?? storyArgs.children;
+	const chipLabel = typeof content === 'string' || typeof content === 'number' ? String(content) : null;
 	if (!chipLabel) return;
 	const chip = canvas.getByText(chipLabel);
 	await userEvent.hover(chip);
@@ -2026,7 +1330,7 @@ export async function runVideoControllerQuitOutsidePlay({ canvasElement }: { can
 
 	// quit='outside' renders a dedicated close IconButton alongside the video
 	// instead of (or in addition to) the overlay-click/inline-quit-button paths
-	const closeButton = canvas.getByRole('button', { name: /x icon/i });
+	const closeButton = canvas.getByRole('button', { name: 'Close video' });
 	await userEvent.click(closeButton);
 	await waitFor(() => expect(canvasElement.querySelector('video')).not.toBeInTheDocument());
 }
@@ -2781,7 +2085,8 @@ export async function runChipDisabledPlay<TArgs>({ canvasElement, args }: PlayCo
 	}
 
 	// disabled forces the icon and border/bg colors to the disabled palette
-	await expect(coloredIconFill(canvasElement)).toBe('var(--core-text-disabled)');
+	const disabledChip = canvasElement.querySelector('[class*="chip"]') as HTMLElement;
+	await expect(disabledChip.style.getPropertyValue('--ui-chip-icon-color')).toBe('var(--core-text-disabled)');
 	const wrapper = canvasElement.querySelector('[class*="chip"]') as HTMLElement | null;
 	await expect(wrapper?.style.getPropertyValue('--ui-chip-border-color')).toBe('var(--core-text-disabled)');
 	await expect(wrapper?.style.getPropertyValue('--ui-chip-cursor')).toBe('default');
@@ -2789,24 +2094,24 @@ export async function runChipDisabledPlay<TArgs>({ canvasElement, args }: PlayCo
 
 export async function runChipButtonVariantPlay({ canvasElement }: { canvasElement: HTMLElement }) {
 	await expectCanvas(canvasElement);
-	const wrapper = canvasElement.querySelector('[class*="button-chip"]') as HTMLElement | null;
-	await expect(wrapper).toBeInTheDocument();
-	if (!wrapper) return;
-
-	// no tooltip prop -> the enter branch skips building a tip, but a
-	// button-variant chip still tracks hover state for its icon color
-	await expect(wrapper.style.getPropertyValue('--ui-chip-cursor')).toBe('pointer');
-	const before = coloredIconFill(canvasElement);
-	await userEvent.hover(wrapper);
-	await waitFor(() => expect(coloredIconFill(canvasElement)).not.toBe(before));
-	await expect(coloredIconFill(canvasElement)).toBe('var(--core-text-special)');
-
+	const wrapper = within(canvasElement).getByRole('button');
+	const icon = wrapper.querySelector('svg')?.parentElement;
+	if (!icon) throw new Error('Chip icon wrapper is missing');
+	icon.style.transition = 'none';
+	wrapper.blur();
 	await userEvent.unhover(wrapper);
-	await waitFor(() => expect(coloredIconFill(canvasElement)).toBe(before));
-
-	// keyboard activation goes through the same handleClick as a real click
-	fireEvent.keyDown(wrapper, { key: 'Enter' });
-	fireEvent.keyDown(wrapper, { key: ' ' });
+	const before = getComputedStyle(icon).color;
+	// DOM-simulated hover does not activate CSS :hover; focus-visible uses the same palette.
+	wrapper.focus();
+	await waitFor(() => expect(getComputedStyle(icon).color).not.toBe(before));
+	await expect(wrapper.parentElement?.style.getPropertyValue('--ui-chip-icon-color-hover')).toBe(
+		'var(--core-text-special)',
+	);
+	wrapper.blur();
+	await userEvent.unhover(wrapper);
+	await waitFor(() => expect(getComputedStyle(icon).color).toBe(before));
+	wrapper.focus();
+	await userEvent.keyboard('{Enter}');
 }
 
 export async function runChipLayoutVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
@@ -2822,12 +2127,12 @@ export async function runChipLayoutVariantsPlay({ canvasElement }: { canvasEleme
 	await expect(bareChip).toBeInTheDocument();
 	await expect(bareChip?.querySelector('[class*="icon"]')).not.toBeInTheDocument();
 
-	// children take priority over label for the rendered text
+	// children render when label is absent
 	await expect(canvas.getByText('Children Label')).toBeInTheDocument();
 
-	// an explicit borderWidth overrides the borderSize fallback
+	// borderWidth controls the rendered border
 	const customBorder = canvasElement.querySelector('[class*="custom-border"]') as HTMLElement | null;
-	await expect(customBorder?.style.getPropertyValue('--ui-chip-border-size')).toBe('3px');
+	await expect(customBorder?.style.getPropertyValue('--ui-chip-border-width')).toBe('3px');
 }
 
 export async function runTipShowsAndHidesPlay({ canvasElement, args }: PlayContext) {
@@ -2890,82 +2195,6 @@ export async function runTipStyleVariantsPlay({ canvasElement }: { canvasElement
 
 	const customBg = canvasElement.querySelector('[class*="custom-bg"]') as HTMLElement | null;
 	await expect(customBg?.style.getPropertyValue('--tooltip-background')).toBe('#123456');
-}
-
-export async function runRadioButtonListDeselectPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const option1 = canvas.getByText('Option 1');
-
-	await userEvent.click(option1);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenLastCalledWith([expect.objectContaining({ value: 'option1' })], [0]);
-	}
-
-	// clicking the already-selected option again exercises the
-	// `deselect`/state=false branch of doSingleSelection - note the second
-	// arg is `[]`, not `null`: doSingleSelection's `state ? [selection] : []`
-	// only ever produces `null` via setSelected, not via the onChange call
-	await userEvent.click(option1);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenLastCalledWith([], []);
-	}
-	const radio = canvas.getByRole('radio', { name: /option 1/i });
-	await expect(radio).toHaveAttribute('aria-checked', 'false');
-}
-
-export async function runRadioButtonListMultiSelectTogglePlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const option1 = canvas.getByText('Option 1');
-	const option2 = canvas.getByText('Option 2');
-
-	await userEvent.click(option1);
-	await userEvent.click(option2);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenLastCalledWith(
-			[expect.objectContaining({ value: 'option1' }), expect.objectContaining({ value: 'option2' })],
-			[0, 1],
-		);
-	}
-
-	// unchecking option 1 exercises the removal (`!state && selected`) branch
-	// of doMultiSelection
-	await userEvent.click(option1);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenLastCalledWith([expect.objectContaining({ value: 'option2' })], [1]);
-	}
-	const checkbox1 = canvas.getByRole('checkbox', { name: /option 1/i });
-	await expect(checkbox1).toHaveAttribute('aria-checked', 'false');
-}
-
-export async function runRadioButtonListSelectedOptionsEffectPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-
-	// selectedOptions matches by fieldName - both stub options share the
-	// same fieldName, so the matching effect selects both indexes
-	const radios = canvas.getAllByRole('radio');
-	for (const radio of radios) {
-		await expect(radio).toHaveAttribute('aria-checked', 'true');
-	}
-	await expect(canvas.getByText('Pick one')).toBeInTheDocument();
-}
-
-export async function runRadioButtonListLayoutVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const wrapper = canvasElement.querySelector('[class*="wrapper"]') as HTMLElement | null;
-	await expect(wrapper?.style.getPropertyValue('--rb-list-flex-wrap')).toBe('wrap');
-	await expect(wrapper?.style.getPropertyValue('--rb-list-margin-bottom')).toBe('24px');
-	await expect(wrapper?.style.getPropertyValue('--rb-list-width')).toBe('200px');
-
-	// tabIndexSeed offsets every option's tabIndex by its position
-	const options = canvas.getAllByRole('checkbox');
-	await expect(options[0]).toHaveAttribute('tabIndex', '5');
-	await expect(options[1]).toHaveAttribute('tabIndex', '6');
 }
 
 export async function runButtonDisabledInteractionsPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
@@ -3129,121 +2358,6 @@ export async function runOverlayOpacityVariantsPlay({ canvasElement }: { canvasE
 		// right-click is blocked on every overlay regardless of type/opacity
 		const dispatched = fireEvent.contextMenu(darkExplicit);
 		await expect(dispatched).toBe(false);
-	}
-}
-
-export async function runTextFieldDisabledGuardsPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const input = canvasElement.querySelector('input') as HTMLInputElement | null;
-	await expect(input).toBeInTheDocument();
-	if (!input) return;
-	await expect(input).toBeDisabled();
-
-	// every handler's own `if (disabled) return` guard should suppress its
-	// callback even when the event is dispatched directly
-	fireEvent.focus(input);
-	if (isFn(storyArgs.onFocus)) await expect(storyArgs.onFocus).not.toHaveBeenCalled();
-
-	fireEvent.keyDown(input, { key: 'Enter' });
-	if (isFn(storyArgs.onSubmit)) await expect(storyArgs.onSubmit).not.toHaveBeenCalled();
-
-	fireEvent.change(input, { target: { value: 'zzz' } });
-	if (isFn(storyArgs.onChange)) await expect(storyArgs.onChange).not.toHaveBeenCalled();
-
-	fireEvent.blur(input);
-	if (isFn(storyArgs.onBlur)) await expect(storyArgs.onBlur).not.toHaveBeenCalled();
-
-	const clearBtn = canvasElement.querySelector('button[aria-label="Clear text"]') as HTMLElement | null;
-	if (clearBtn) fireEvent.click(clearBtn);
-	if (isFn(storyArgs.onClear)) await expect(storyArgs.onClear).not.toHaveBeenCalled();
-}
-
-export async function runTextFieldClearButtonRefocusPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-
-	const keepFocusWrapper = canvasElement.querySelector('[class*="refocus-keep"]') as HTMLElement | null;
-	await expect(keepFocusWrapper).toBeInTheDocument();
-	if (keepFocusWrapper) {
-		const input = keepFocusWrapper.querySelector('input') as HTMLInputElement | null;
-		const clearBtn = keepFocusWrapper.querySelector('button[aria-label="Clear text"]') as HTMLElement | null;
-		if (input && clearBtn) {
-			await userEvent.click(clearBtn);
-			await expect(input.value).toBe('');
-			// clearBlurs=false re-focuses the input after clearing
-			await waitFor(() => expect(document.activeElement).toBe(input));
-		}
-	}
-
-	const blursWrapper = canvasElement.querySelector('[class*="refocus-blurs"]') as HTMLElement | null;
-	await expect(blursWrapper).toBeInTheDocument();
-	if (blursWrapper) {
-		const input = blursWrapper.querySelector('input') as HTMLInputElement | null;
-		const clearBtn = blursWrapper.querySelector('button[aria-label="Clear text"]') as HTMLElement | null;
-		if (input && clearBtn) {
-			await userEvent.click(clearBtn);
-			await expect(input.value).toBe('');
-			// clearBlurs=true skips the refocus - the button keeps focus instead
-			await expect(document.activeElement).not.toBe(input);
-		}
-	}
-}
-
-export async function runTextFieldPasswordTogglePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const input = canvasElement.querySelector('input') as HTMLInputElement | null;
-	await expect(input).toBeInTheDocument();
-	if (!input) return;
-	await expect(input).toHaveAttribute('type', 'password');
-
-	const toggle = canvasElement.querySelector('[class*="showPassword"] button') as HTMLElement | null;
-	await expect(toggle).toBeInTheDocument();
-	if (!toggle) return;
-
-	await userEvent.click(toggle);
-	await expect(input).toHaveAttribute('type', 'text');
-
-	await userEvent.click(toggle);
-	await expect(input).toHaveAttribute('type', 'password');
-}
-
-export async function runTextFieldStyleVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-
-	const underline = canvasElement.querySelector('[class*="underline-border"]') as HTMLElement | null;
-	await expect(underline?.style.getPropertyValue('--tf-box-shadow')).toBe('0 1px 0 0 var(--core-outline-primary)');
-
-	const noBorder = canvasElement.querySelector('[class*="none-border"]') as HTMLElement | null;
-	await expect(noBorder?.style.getPropertyValue('--tf-box-shadow')).toBe('unset');
-
-	const errorState = canvasElement.querySelector('[class*="error-state"]') as HTMLElement | null;
-	await expect(errorState?.style.getPropertyValue('--tf-color')).toBe('var(--feedback-warning)');
-	await expect(errorState?.style.getPropertyValue('--tf-box-shadow')).toBe('0 0 0 1px var(--feedback-warning)');
-
-	const iconLeft = canvasElement.querySelector('[class*="icon-left"]') as HTMLElement | null;
-	await expect(iconLeft?.querySelector('svg, path')).toBeInTheDocument();
-
-	const emptyLabel = canvasElement.querySelector('[class*="empty-label"]') as HTMLElement | null;
-	await expect(emptyLabel?.style.getPropertyValue('--tf-padding-label-left')).toBe('unset');
-
-	const noLabel = canvasElement.querySelector('[class*="no-label"]') as HTMLElement | null;
-	await expect(noLabel?.style.getPropertyValue('--tf-padding-label-left')).toBe('0');
-
-	const autoWidth = canvasElement.querySelector('[class*="auto-width"]') as HTMLElement | null;
-	await expect(autoWidth?.style.getPropertyValue('--tf-field-size')).toBe('content');
-
-	const unsetWidth = canvasElement.querySelector('[class*="unset-width"]') as HTMLElement | null;
-	await expect(unsetWidth?.style.getPropertyValue('--tf-input-width')).not.toBe('100%');
-
-	const paddingChecks: Array<[string, string]> = [
-		['padding-multi', '10px 20px'],
-		['padding-single', '10px'],
-		['padding-token', 'var(--spacing-m)'],
-		['padding-number', '30px'],
-	];
-	for (const [testClass, expected] of paddingChecks) {
-		const node = canvasElement.querySelector(`[class*="${testClass}"]`) as HTMLElement | null;
-		await expect(node?.style.getPropertyValue('--tf-padding')).toBe(expected);
 	}
 }
 
@@ -3484,4 +2598,34 @@ export async function runDraggablePanelInstantInitialOpenPlay({ canvasElement }:
 	const computed = Number.parseInt(getComputedStyle(panel).width, 10);
 	const specified = Number.parseInt(panel.style.width, 10);
 	await expect(computed).toBe(specified);
+}
+
+/** Story-only fixture for exercising live JS motion preferences; restored after each story. */
+export function installReducedMotionPreference(initial = true) {
+	const original = window.matchMedia;
+	const query = '(prefers-reduced-motion: reduce)';
+	const events = new EventTarget();
+	let reduced = initial;
+	const media = {
+		media: query,
+		get matches() {
+			return reduced;
+		},
+		onchange: null,
+		addEventListener: events.addEventListener.bind(events),
+		removeEventListener: events.removeEventListener.bind(events),
+		dispatchEvent: events.dispatchEvent.bind(events),
+		addListener: (listener: EventListener) => events.addEventListener('change', listener),
+		removeListener: (listener: EventListener) => events.removeEventListener('change', listener),
+	} as unknown as MediaQueryList;
+	window.matchMedia = (value) => (value === query ? media : original.call(window, value));
+	return {
+		set(value: boolean) {
+			reduced = value;
+			events.dispatchEvent(new MediaQueryListEvent('change', { matches: reduced, media: query }));
+		},
+		restore() {
+			window.matchMedia = original;
+		},
+	};
 }

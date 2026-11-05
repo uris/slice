@@ -115,4 +115,28 @@ describe('useDoubleClick', () => {
 		expect(onDblClick).toHaveBeenCalledWith('double');
 		expect(onClick).not.toHaveBeenCalled();
 	});
+	it('cancels a pending single click on unmount', () => {
+		const onClick = vi.fn();
+		const onDblClick = vi.fn();
+		const { result, unmount } = renderHook(() => useDoubleClick(onClick, onDblClick));
+		result.current[0]('pending');
+		expect(vi.getTimerCount()).toBe(1);
+		unmount();
+		expect(vi.getTimerCount()).toBe(0);
+		vi.advanceTimersByTime(200);
+		expect(onClick).not.toHaveBeenCalled();
+		expect(onDblClick).not.toHaveBeenCalled();
+	});
+	it('unmounts safely with no pending click or after a click fires', () => {
+		const onClick = vi.fn();
+		const first = renderHook(() => useDoubleClick(onClick, vi.fn()));
+		first.unmount();
+		const second = renderHook(() => useDoubleClick(onClick, vi.fn()));
+		second.result.current[0]('completed');
+		vi.advanceTimersByTime(200);
+		second.unmount();
+		expect(onClick).toHaveBeenCalledTimes(1);
+		expect(vi.getTimerCount()).toBe(0);
+	});
+
 });

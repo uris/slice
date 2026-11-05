@@ -6,10 +6,12 @@ import { useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { filterClasses, setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Tip.module.css';
 import { type PosCoords, type ToolTipProps, tipBasePos } from './_types';
 
-const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((props, ref) => {
+const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((rawProps, ref) => {
+	const props = resolveColorProps(rawProps);
 	const {
 		tip,
 		textSize = 's',

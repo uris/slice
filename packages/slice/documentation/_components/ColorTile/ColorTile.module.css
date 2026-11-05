@@ -32,7 +32,7 @@
 	display: -webkit-box;
 	overflow: hidden;
 	white-space: nowrap;
-	-webkit-line-clamp: var(--div-input-line-clamp);
+	-webkit-line-clamp: var(--content-editable-line-clamp);
 	-webkit-box-orient: vertical;
 }
 

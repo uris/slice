@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 /* Note: T is the shape of a single row of data the table is bound to. */
 /* Note: V is the type of the value resolved for the column's cell - either */
@@ -57,15 +58,15 @@ export interface DataTableProps<T> {
 	margin?: number | string;
 	headerSticky: boolean;
 	freezeColumn: boolean;
-	backgroundColor?: string;
-	backgroundColorHoverRow?: string;
-	freezeColumnBackgroundColor?: string;
-	headerBackgroundColor?: string;
-	candyStripeBackgroundColor?: string;
-	handleHoverColor?: string;
+	backgroundColor?: ColorValue;
+	backgroundColorHoverRow?: ColorValue;
+	freezeColumnBackgroundColor?: ColorValue;
+	headerBackgroundColor?: ColorValue;
+	candyStripeBackgroundColor?: ColorValue;
+	handleHoverColor?: ColorValue;
 	borderStyle?: 'box' | 'row' | 'none';
 	borderRadius?: number | string;
-	borderColor?: string;
+	borderColor?: ColorValue;
 	tableData?: T[];
 	colResize?: boolean;
 	/* Fires when a column resize drag ends, with its new width in px. Not persisted internally -

@@ -1,271 +1,334 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FlexDiv } from 'src/components/FlexDiv';
-import { SliceIcons } from 'src/components/Icon/_types';
-import { AnimationType, type ButtonAnimation, IconButton } from 'src/components/IconButton';
-import {
-	runIconButtonBorderedPlay,
-	runIconButtonCustomClassPlay,
-	runIconButtonDisabledPlay,
-	runIconButtonHoverLeaveWithTooltipPlay,
-	runIconButtonHoverLeaveWithoutTooltipPlay,
-	runIconButtonInvalidSizePlay,
-	runIconButtonLabelAndCountPlay,
-	runIconButtonNoHoverEffectPlay,
-	runIconButtonNoRoundNoBorderRadiusPlay,
-	runIconButtonNullColorsPlay,
-	runIconButtonPlay,
-	runIconButtonSmallSizePlay,
-	runIconButtonUnmatchedSizePlay,
-	runIconButtonWithoutHandlersPlay,
-} from 'src/components/playHelpers';
-import { fn } from 'storybook/test';
-import { corners } from '../../theme/corners/corners';
+import { useState } from 'react';
+import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
+import { FlexDiv } from '../FlexDiv';
+import { SliceIcons } from '../Icon/_types';
+import { installReducedMotionPreference } from '../playHelpers';
+import { IconButton } from './IconButton';
+import type { IconButtonProps } from './_types';
 
-const customAnimation: ButtonAnimation = {
-	animation: [{ type: AnimationType.Rotate, value: { off: 0, on: 135 } }],
-	transition: {
-		on: { duration: 0.25, ease: 'linear' },
-		off: { duration: 0.25, ease: 'easeInOut' },
-	},
-};
-
-const categories = Object.values(SliceIcons);
-const icons = categories.flatMap((category) => Object.values(category));
-const meta: Meta<typeof IconButton> = {
+const meta = {
 	title: 'Components/IconButton',
 	component: IconButton,
+	render: (args) => (
+		<FlexDiv padding={64}>
+			<IconButton {...args} />
+		</FlexDiv>
+	),
 	argTypes: {
-		backgroundColor: { type: 'string', control: 'text' },
-		iconColor: { type: 'string', control: 'text' },
-		icon: {
-			control: { type: 'select' }, // Dropdown selection
-			options: icons, // Enum values as options
-		},
+		icon: { control: 'select', options: Object.values(SliceIcons).flatMap(Object.values) },
+		buttonSize: { control: 'select', options: ['s', 'm', 'l', 'xl', 48] },
+		backgroundColor: { control: 'text' },
+		backgroundColorHover: { control: 'text' },
+		backgroundColorSelected: { control: 'text' },
+		iconColor: { control: 'text' },
+		iconColorHover: { control: 'text' },
+		iconColorSelected: { control: 'text' },
+		borderColor: { control: 'text' },
+		motionValues: { control: 'object' },
+		transition: { control: 'object' },
 	},
 	args: {
-		frameSize: 36,
+		actionName: 'More options',
+		icon: 'more',
+		buttonSize: 'm',
 		iconSize: 20,
-		icon: 'plus',
-		borderRadius: corners['corner-xs'],
-		tooltip: undefined,
-		color: 'transparent',
-		colorOn: undefined,
-		backgroundColor: 'transparent',
-		backgroundColorHover: undefined,
-		backgroundColorOn: undefined,
-		transition: undefined,
-		variants: undefined,
-		initial: undefined,
-		animate: undefined,
-		exit: undefined,
-		label: undefined,
+		borderRadius: '50%',
+		borderWidth: 0,
+		borderColor: 'core-outline-primary',
+		backgroundColor: 'core-surface-secondary',
+		backgroundColorHover: 'core-outline-primary',
+		backgroundColorSelected: 'core-outline-primary',
+		iconColor: 'core-text-primary',
+		iconColorHover: 'core-text-primary',
+		iconColorSelected: 'core-text-primary',
+		toggle: false,
+		defaultSelected: false,
+		selected: undefined,
 		hover: true,
-		count: 0,
-		toggle: true,
+		iconFill: false,
 		toggleIcon: false,
-		isToggled: false,
 		disabled: false,
+		count: 0,
 		showDot: false,
-		border: false,
-		presetAnimations: undefined,
-		customAnimations: undefined,
+		tooltip: undefined,
 		onClick: fn(),
+		onChange: fn(),
 		onToolTip: fn(),
 	},
-};
-
+} satisfies Meta<typeof IconButton>;
 export default meta;
-
-export const Default: StoryObj<typeof IconButton> = {
-	render: (args) => {
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-				<IconButton {...args} />
-			</FlexDiv>
-		);
-	},
-};
-
-export const Animated: StoryObj<typeof IconButton> = {
-	render: (args) => {
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-				<IconButton {...args} customAnimations={customAnimation} />
-			</FlexDiv>
-		);
-	},
-};
-
-export const Test: StoryObj<typeof IconButton> = {
+type Story = StoryObj<typeof meta>;
+export const Default: Story = {};
+export const Toggle: Story = {
 	tags: ['tests'],
-	render: (args) => {
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-				<IconButton {...args} />
-			</FlexDiv>
-		);
-	},
+	args: { toggle: true, actionName: 'Highlight' },
 	play: async ({ canvasElement, args }) => {
-		await runIconButtonPlay({ canvasElement, args });
+		const c = within(canvasElement);
+		const b = c.getByRole('button', { name: 'Highlight' });
+		await expect(b).toHaveAttribute('aria-pressed', 'false');
+		await userEvent.click(b);
+		await expect(b).toHaveAttribute('aria-pressed', 'true');
+		await expect(args.onChange).toHaveBeenLastCalledWith(true);
+		await b.focus();
+		await userEvent.keyboard(' ');
+		await expect(b).toHaveAttribute('aria-pressed', 'false');
+		await userEvent.keyboard('{Enter}');
+		await expect(b).toHaveAttribute('aria-pressed', 'true');
+		await expect(c.queryByRole('img')).not.toBeInTheDocument();
+		await expect(b.querySelector('svg')).toHaveAttribute('tabindex', '-1');
 	},
 };
-
-export const WithoutHandlers: StoryObj<typeof IconButton> = {
+export const Controlled: Story = {
 	tags: ['tests'],
-	args: {
-		...meta.args,
-		onClick: undefined,
-		onToolTip: undefined,
-	},
-	render: Default.render,
-	play: async ({ canvasElement }) => {
-		await runIconButtonWithoutHandlersPlay({ canvasElement });
-	},
-};
-
-export const CustomClassName: StoryObj<typeof IconButton> = {
-	tags: ['tests'],
-	args: {
-		...meta.args,
-		className: 'story-iconbutton-class',
-	},
-	render: Default.render,
-	play: async ({ canvasElement }) => {
-		await runIconButtonCustomClassPlay({ canvasElement });
-	},
-};
-
-export const Disabled: StoryObj<typeof IconButton> = {
-	tags: ['tests'],
-	args: {
-		...meta.args,
-		disabled: true,
-	},
-	render: Default.render,
+	args: { toggle: true, selected: false },
 	play: async ({ canvasElement, args }) => {
-		await runIconButtonDisabledPlay({ canvasElement, args });
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.click(b);
+		await expect(args.onChange).toHaveBeenCalledWith(true);
+		await expect(b).toHaveAttribute('aria-pressed', 'false');
 	},
 };
-
-export const HoverLeaveWithTooltip: StoryObj<typeof IconButton> = {
+function ControlledExample() {
+	const [selected, setSelected] = useState(false);
+	return <IconButton actionName="Highlight" icon="sun" toggle selected={selected} onChange={setSelected} />;
+}
+export const ControlledSelection: Story = {
+	render: () => (
+		<FlexDiv padding={64}>
+			<ControlledExample />
+		</FlexDiv>
+	),
+};
+export const Cancelled: Story = {
 	tags: ['tests'],
-	args: {
-		...meta.args,
-		tooltip: 'Tip text',
-	},
-	render: Default.render,
+	args: { toggle: true, onClick: fn((event) => event.preventDefault()) },
 	play: async ({ canvasElement, args }) => {
-		await runIconButtonHoverLeaveWithTooltipPlay({ canvasElement, args });
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.click(b);
+		await expect(b).toHaveAttribute('aria-pressed', 'false');
+		await expect(args.onChange).not.toHaveBeenCalled();
 	},
 };
-
-export const HoverLeaveWithoutTooltip: StoryObj<typeof IconButton> = {
+export const Disabled: Story = {
 	tags: ['tests'],
-	args: {
-		...meta.args,
-	},
-	render: Default.render,
-	play: async ({ canvasElement }) => {
-		await runIconButtonHoverLeaveWithoutTooltipPlay({ canvasElement });
+	args: { disabled: true, toggle: true, tooltip: 'More options' },
+	play: async ({ canvasElement, args }) => {
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.click(b);
+		await userEvent.hover(b);
+		await expect(b).toBeDisabled();
+		await expect(args.onClick).not.toHaveBeenCalled();
+		await expect(args.onChange).not.toHaveBeenCalled();
+		await expect(args.onToolTip).not.toHaveBeenCalled();
 	},
 };
-
-export const NoHoverEffect: StoryObj<typeof IconButton> = {
+export const Tooltip: Story = {
+	tags: ['tests'],
+	args: { tooltip: 'More options', onMouseEnter: fn(), onFocus: fn(), onBlur: fn() },
+	play: async ({ canvasElement, args }) => {
+		const c = within(canvasElement);
+		const b = c.getByRole('button');
+		await userEvent.hover(b);
+		await expect(args.onMouseEnter).toHaveBeenCalled();
+		await expect(args.onToolTip).toHaveBeenCalledWith(
+			expect.objectContaining({ payload: { label: 'More options' }, ref: expect.anything(), event: expect.anything() }),
+		);
+		await userEvent.unhover(b);
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(null);
+		b.focus();
+		await expect(args.onFocus).toHaveBeenCalled();
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(expect.objectContaining({ event: undefined }));
+		await userEvent.hover(b);
+		await userEvent.unhover(b);
+		await expect(args.onToolTip).not.toHaveBeenLastCalledWith(null);
+		b.blur();
+		await expect(args.onBlur).toHaveBeenCalled();
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(null);
+	},
+};
+export const NoHover: Story = {
 	tags: ['tests'],
 	args: {
-		...meta.args,
 		hover: false,
+		backgroundColor: '#123456',
+		backgroundColorHover: '#ffffff',
+		iconColor: '#112233',
+		iconColorHover: '#ffffff',
+		transition: { duration: 0 },
 	},
-	render: Default.render,
 	play: async ({ canvasElement }) => {
-		await runIconButtonNoHoverEffectPlay({ canvasElement });
+		const b = within(canvasElement).getByRole('button');
+		await userEvent.hover(b);
+		await waitFor(() =>
+			expect(getComputedStyle(b.querySelector('[class*="background"]') as HTMLElement).backgroundColor).toBe(
+				'rgb(18, 52, 86)',
+			),
+		);
+		await waitFor(() =>
+			expect(getComputedStyle(b.querySelector('[class*="icon"]') as HTMLElement).color).toBe('rgb(17, 34, 51)'),
+		);
+	},
+};
+export const SelectedNoHover: Story = {
+	...NoHover,
+	args: {
+		...NoHover.args,
+		toggle: true,
+		defaultSelected: true,
+		backgroundColorSelected: '#123456',
+		iconColorSelected: '#112233',
+	},
+};
+export const CustomSize: Story = {
+	tags: ['tests'],
+	args: { buttonSize: 48, borderWidth: 2, borderRadius: 0 },
+	play: async ({ canvasElement }) => {
+		const b = within(canvasElement).getByRole('button');
+		await expect(b).toHaveStyle({ width: '48px', height: '48px', borderRadius: '0px', borderWidth: '2px' });
+	},
+};
+export const InvalidSize: Story = {
+	tags: ['tests'],
+	args: { buttonSize: Number.NaN, iconSize: -1, borderWidth: -2 },
+	play: async ({ canvasElement }) => {
+		const b = within(canvasElement).getByRole('button');
+		await expect(b).toHaveStyle({ width: '36px', borderWidth: '0px' });
+	},
+};
+export const Count: Story = {
+	tags: ['tests'],
+	args: { count: 12, showDot: true, actionName: '12 updates' },
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		await expect(c.getByRole('button', { name: '12 updates' })).toBeInTheDocument();
+		await expect(c.getByText('12')).toBeInTheDocument();
+		await expect(c.queryByRole('status')).not.toBeInTheDocument();
+	},
+};
+export const Animated: Story = {
+	args: {
+		toggle: true,
+		motionValues: { unselected: { rotate: 0 }, selected: { rotate: 135 } },
+		transition: { duration: 0.2 },
+	},
+};
+export const FallbackActionName: Story = {
+	tags: ['tests'],
+	args: { actionName: undefined },
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).getByRole('button', { name: 'Action' })).toBeInTheDocument();
+	},
+};
+export const EmptyActionName: Story = { ...FallbackActionName, args: { actionName: '   ' } };
+
+export const ReducedMotion: Story = {
+	args: {
+		toggle: true,
+		motionValues: { unselected: { rotate: 0 }, selected: { rotate: [0, 90, 180] } },
+		transition: { duration: 2, delay: 1, repeat: Number.POSITIVE_INFINITY },
 	},
 };
 
-export const NullColors: StoryObj<typeof IconButton> = {
+export const ActionOnly: Story = {
 	tags: ['tests'],
-	args: {
-		...meta.args,
-		hover: false,
-		backgroundColor: null as unknown as string,
-		iconColor: null as unknown as string,
-	},
-	render: Default.render,
-	play: async ({ canvasElement }) => {
-		await runIconButtonNullColorsPlay({ canvasElement });
+	play: async ({ canvasElement, args }) => {
+		const button = within(canvasElement).getByRole('button');
+		await userEvent.click(button);
+		await expect(args.onClick).toHaveBeenCalledOnce();
+		await expect(args.onChange).not.toHaveBeenCalled();
+		await expect(button).not.toHaveAttribute('aria-pressed');
 	},
 };
-
-export const NoRoundNoBorderRadius: StoryObj<typeof IconButton> = {
+function SelectionUpdatesExample() {
+	const [selected, setSelected] = useState(false);
+	return (
+		<>
+			<IconButton actionName="Controlled" toggle selected={selected} />
+			<IconButton actionName="Local" toggle defaultSelected />
+			<button type="button" onClick={() => setSelected((value) => !value)}>
+				Toggle controlled state
+			</button>
+		</>
+	);
+}
+export const SelectionUpdates: Story = {
 	tags: ['tests'],
-	args: {
-		...meta.args,
-		round: false,
-		borderRadius: null as unknown as number,
-	},
-	render: Default.render,
+	render: () => <SelectionUpdatesExample />,
 	play: async ({ canvasElement }) => {
-		await runIconButtonNoRoundNoBorderRadiusPlay({ canvasElement });
+		const c = within(canvasElement);
+		const local = c.getByRole('button', { name: 'Local' });
+		await userEvent.click(local);
+		await expect(local).toHaveAttribute('aria-pressed', 'false');
+		await userEvent.click(c.getByRole('button', { name: 'Toggle controlled state' }));
+		await expect(c.getByRole('button', { name: 'Controlled' })).toHaveAttribute('aria-pressed', 'true');
+		await expect(local).toHaveAttribute('aria-pressed', 'false');
+		await userEvent.click(c.getByRole('button', { name: 'Toggle controlled state' }));
+		await expect(c.getByRole('button', { name: 'Controlled' })).toHaveAttribute('aria-pressed', 'false');
 	},
 };
-
-export const Bordered: StoryObj<typeof IconButton> = {
+function TooltipLifecycleExample({ onToolTip }: Pick<IconButtonProps, 'onToolTip'>) {
+	const [disabled, setDisabled] = useState(false);
+	const [visible, setVisible] = useState(true);
+	return (
+		<>
+			{visible && <IconButton actionName="Open menu" tooltip="Menu" onToolTip={onToolTip} disabled={disabled} />}
+			<button type="button" onClick={() => setDisabled((value) => !value)}>
+				Toggle disabled
+			</button>
+			<button type="button" onClick={() => setVisible(false)}>
+				Remove action
+			</button>
+		</>
+	);
+}
+export const TooltipLifecycle: Story = {
 	tags: ['tests'],
-	args: {
-		...meta.args,
-		border: true,
-	},
-	render: Default.render,
-	play: async ({ canvasElement }) => {
-		await runIconButtonBorderedPlay({ canvasElement });
+	render: (args) => <TooltipLifecycleExample onToolTip={args.onToolTip} />,
+	play: async ({ canvasElement, args }) => {
+		const c = within(canvasElement);
+		await userEvent.hover(c.getByRole('button', { name: 'Open menu' }));
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(expect.objectContaining({ payload: { label: 'Menu' } }));
+		fireEvent.click(c.getByRole('button', { name: 'Toggle disabled' }));
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(null);
+		fireEvent.click(c.getByRole('button', { name: 'Toggle disabled' }));
+		await waitFor(() => expect(c.getByRole('button', { name: 'Open menu' })).not.toBeDisabled());
+		c.getByRole('button', { name: 'Open menu' }).focus();
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(expect.objectContaining({ payload: { label: 'Menu' } }));
+		fireEvent.click(c.getByRole('button', { name: 'Remove action' }));
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(null);
 	},
 };
-
-export const InvalidButtonSize: StoryObj<typeof IconButton> = {
+let motionPreference: ReturnType<typeof installReducedMotionPreference>;
+export const LiveReducedMotion: Story = {
 	tags: ['tests'],
 	args: {
-		...meta.args,
-		buttonSize: '' as unknown as 's',
+		toggle: true,
+		motionValues: { unselected: { rotate: 0 }, selected: { rotate: [0, 90, 180] } },
+		transition: { duration: 2, delay: 1, repeat: Number.POSITIVE_INFINITY },
 	},
-	render: Default.render,
+	beforeEach: () => {
+		motionPreference = installReducedMotionPreference();
+		return () => motionPreference.restore();
+	},
 	play: async ({ canvasElement }) => {
-		await runIconButtonInvalidSizePlay({ canvasElement });
+		const button = within(canvasElement).getByRole('button');
+		await userEvent.click(button);
+		const icon = button.querySelector('[class*="icon"]') as HTMLElement;
+		await waitFor(() => expect(icon.style.transform).toContain('180deg'));
+		motionPreference.set(false);
+		await userEvent.click(button);
+		motionPreference.set(true);
+		await waitFor(() => expect(icon.style.transform).not.toContain('180deg'));
+		await expect(document.activeElement).toBe(button);
 	},
 };
-
-export const SmallButtonSize: StoryObj<typeof IconButton> = {
+export const TrimmedActionName: Story = {
 	tags: ['tests'],
-	args: {
-		...meta.args,
-		buttonSize: 's',
-	},
-	render: Default.render,
+	args: { actionName: '  Open profile  ' },
 	play: async ({ canvasElement }) => {
-		await runIconButtonSmallSizePlay({ canvasElement });
-	},
-};
-
-export const UnmatchedButtonSize: StoryObj<typeof IconButton> = {
-	tags: ['tests'],
-	args: {
-		...meta.args,
-		buttonSize: 'huge' as unknown as 'xl',
-	},
-	render: Default.render,
-	play: async ({ canvasElement }) => {
-		await runIconButtonUnmatchedSizePlay({ canvasElement });
-	},
-};
-
-export const LabelAndCount: StoryObj<typeof IconButton> = {
-	tags: ['tests'],
-	args: {
-		...meta.args,
-		label: 'Label text',
-		count: 5,
-	},
-	render: Default.render,
-	play: async ({ canvasElement }) => {
-		await runIconButtonLabelAndCountPlay({ canvasElement });
+		const button = within(canvasElement).getByRole('button', { name: 'Open profile' });
+		await expect(button).toHaveAttribute('aria-label', 'Open profile');
+		await expect(button).not.toHaveAttribute('aria-labelledby');
 	},
 };

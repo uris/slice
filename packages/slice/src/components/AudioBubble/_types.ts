@@ -1,12 +1,13 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export type AudioBubbleBaseProps = {
 	audioStream?: MediaStream | MediaStreamTrack | null;
 	playing?: boolean;
 	size?: number;
-	backgroundColor?: string;
+	backgroundColor?: ColorValue;
 	glow?: boolean;
-	glowColor?: string;
+	glowColor?: ColorValue;
 	glowSize?: number;
 	glowOffset?: number;
 	minScale?: number;

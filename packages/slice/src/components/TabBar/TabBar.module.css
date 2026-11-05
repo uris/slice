@@ -1,71 +1,54 @@
 .wrapper {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	justify-content: var(--tab-bar-justify) !important;
-	gap: var(--tab-bar-gap);
-	border-bottom: var(--tab-bar-border-bottom) solid var(--tab-bar-border-color);
-	height: var(--tab-bar-height);
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	flex: 0 1 auto;
+	box-sizing: border-box;
+	min-width: 0;
 	width: var(--tab-bar-width);
-	cursor: pointer;
+	height: var(--tab-bar-height);
 }
-
-.option {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	gap: var(--tab-bar-option-gap);
-	color: var(--tab-bar-option-color);
-	padding: var(--tab-bar-option-padding) !important;
-	height: 100%;
-	width: var(--tab-bar-option-width);
-	flex: var(--tab-bar-option-flex);
-	white-space: nowrap;
-	box-shadow: 0 var(--tab-bar-option-border) 0 0 var(--core-text-special);
-	cursor: var(--tab-bar-option-cursor);
-	-webkit-user-select: none;
-	user-select: none;
-	appearance: none;
-	-webkit-appearance: none;
-	background-image: none;
-	background-color: transparent;
-	border: 0;
-	outline: none;
-	text-align: left;
+.list {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	justify-content: var(--tab-bar-justify);
+	flex: 1 1 auto;
+	min-width: 0;
+	gap: var(--tab-bar-gap);
+	border-bottom: var(--tab-bar-border) solid var(--tab-bar-border-color);
 }
-
-.icon {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	max-height: var(--tab-bar-icon-size);
-	min-height: var(--tab-bar-icon-size);
-	max-width: var(--tab-bar-icon-size);
-	min-width: var(--tab-bar-icon-size);
+.indicator {
+	position: absolute;
+	bottom: calc(-1 * var(--tab-bar-border));
+	left: 0;
+	height: 1px;
+	background: var(--core-text-special);
+	pointer-events: none;
 }
-
 .close {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	height: 100%;
-	padding: var(--tab-bar-close-padding) !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	flex: 0 0 auto;
+	width: var(--tab-bar-close-width);
+	padding: var(--tab-bar-padding);
 	border-left: 1px solid var(--core-outline-primary);
-	width: min-content;
 }
-
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }
-
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
-
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
 }
-
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
-
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
-}
-
-.selected {
-	font-weight: 520 !important;
 }

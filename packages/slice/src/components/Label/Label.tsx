@@ -5,6 +5,7 @@ import { useCallback, useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Label.module.css';
 import { LabelBackground, type LabelProps } from './_types';
 
@@ -15,7 +16,8 @@ function resolveSemanticBackground(backgroundColor: LabelProps['backgroundColor'
 	return Object.values(LabelBackground).find((value) => value === backgroundColor);
 }
 
-export function Label(props: Readonly<LabelProps>) {
+export function Label(rawProps: Readonly<LabelProps>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		children,
 		label,

@@ -53,7 +53,7 @@ import {FlexDiv} from '../../components/FlexDiv';
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>didClick</code></td><td><code>{`(payload: T) => (() => void)`}</code></td><td><code>-</code></td><td>Queues single-click handling and returns a cleanup callback that clears the pending timer.</td></tr>
+            <tr><td><code>didClick</code></td><td><code>{`(payload: T) => (() => void)`}</code></td><td><code>-</code></td><td>Queues single-click handling and returns an optional cancellation callback. Pending clicks are also canceled automatically on unmount.</td></tr>
             <tr><td><code>didDblClick</code></td><td><code>{`(payload: Y) => void`}</code></td><td><code>-</code></td><td>Cancels any pending single-click timer and runs the double-click callback.</td></tr>
           </tbody>
         </table>

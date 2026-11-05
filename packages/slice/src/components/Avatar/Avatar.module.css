@@ -10,13 +10,17 @@
 	width: var(--avatar-size);
 	border: var(--avatar-outer-border-size) solid var(--avatar-outer-border-color);
 	border-radius: 100%;
-	outline: 0;
+
+	&[role="button"]:focus-visible {
+		outline: 2px solid var(--core-outline-special);
+		outline-offset: 3px;
+	}
 }
 
 .user {
 	composes: row from "../../utils/styling/flexBox.module.css";
-	composes: body-m-regular from "../../utils/styling/type.module.css";
-	font-size: var(--avatar-font-size) !important;
+	position: relative;
+	overflow: hidden;
 	height: 100%;
 	width: 100%;
 	line-height: 1em;
@@ -25,16 +29,68 @@
 	border: var(--avatar-border) solid var(--avatar-border-color);
 	background-color: var(--avatar-bg-color);
 	color: var(--avatar-color);
-	background-image: var(--avatar-bg-image);
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-origin: border-box;
-	cursor: pointer;
+	cursor: var(--avatar-cursor);
 	user-select: none;
 	-webkit-user-select: none;
 	transition: border-color var(--motion-water-duration) var(--motion-water) 0s;
+
+	/* Keep the fallback fill out of transparent borders once the photo is ready. */
+	&:has(> .image[data-loaded="true"]) {
+		background-clip: padding-box;
+	}
+
 	&:hover {
 		border-color: var(--avatar-border-color-hover);
 	}
+}
+
+.image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	opacity: 0;
+	pointer-events: none;
+
+	&[data-loaded="true"] {
+		opacity: 1;
+	}
+}
+
+.xs {
+	composes: body-xs-regular from "../../utils/styling/type.module.css";
+}
+
+.s {
+	composes: body-s-regular from "../../utils/styling/type.module.css";
+}
+
+.m {
+	composes: body-m-regular from "../../utils/styling/type.module.css";
+}
+
+.l {
+	composes: body-l-regular from "../../utils/styling/type.module.css";
+}
+
+.xl {
+	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+
+/* Keep full overflow counts inside the frame, including at compact sizes. */
+.overflowLabel {
+	font-size: min(
+		1em,
+		calc(
+			(var(--avatar-size) - var(--avatar-border) * 2 - var(--avatar-outer-border-size) * 2) /
+			(var(--avatar-label-length) * 0.7)
+		)
+	);
+	white-space: nowrap;
+}
+
+.wrapper.overflow[role="button"]:focus-visible {
+	outline: none;
 }

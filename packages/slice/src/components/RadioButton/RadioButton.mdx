@@ -1,121 +1,91 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import * as RadioButtonStories from './RadioButton.stories';
-import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
-<Meta of={RadioButtonStories} />
+<Meta of={RadioButtonStories}/>
+<Unstyled>
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # RadioButton
-        Renders a single radio or checkbox-style option with typed value support.
+# RadioButton
 
-        ## Base element
-        `HTMLButtonElement`
+Choose one option with a selection icon and a label. Styling and multiline alignment
+follow CheckBox; selection and form behavior use a native radio input.
 
-        ## Interface
-        `RadioButtonProps<T = string>`
+## Usage
 
-        ## Related types
-        `RadioButtonOption<T = string>`
-
-        ## Typing
-        `RadioButton` is generic. The `value` prop uses the same `T` that comes back through `onChange`.
-
-        `onChange` receives that same typed value:
-
-        `(option: RadioButtonOption<T>, selected: boolean) => void`
-
-        ## Props
-        <table style={{ width: '100%' }}>
-            <colgroup>
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '97%' }} />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th className={"left"}>Prop</th>
-                    <th className={"left"}>Type</th>
-                    <th className={"left"}>Default</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td><code>-</code></td><td>Fallback content rendered when <code>label</code> is not provided.</td></tr>
-                <tr><td><code>label</code></td><td><code>string</code></td><td><code>-</code></td><td>Visible label text.</td></tr>
-                <tr><td><code>fieldName</code></td><td><code>string</code></td><td><code>-</code></td><td>Logical field identifier included in the <code>onChange</code> payload.</td></tr>
-                <tr><td><code>value</code></td><td><code>T</code></td><td><code>-</code></td><td>Typed option value included in the <code>onChange</code> payload.</td></tr>
-                <tr><td><code>selected</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Controlled selected state.</td></tr>
-                <tr><td><code>controlType</code></td><td><code>{`'radio' | 'checkbox'`}</code></td><td><code>'radio'</code></td><td>ARIA role applied to the button.</td></tr>
-                <tr><td><code>deselect</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Whether clicking an already selected control can clear it.</td></tr>
-                <tr><td><code>tabIndex</code></td><td><code>number</code></td><td><code>0</code></td><td>Tab index applied to the root button.</td></tr>
-                <tr><td><code>wrap</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Adjusts layout so the control can wrap within a multi-column group.</td></tr>
-                <tr><td><code>list</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Uses list-style layout sizing rather than wrapped tile sizing.</td></tr>
-                <tr><td><code>hideRadio</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Hides the icon while preserving the selection behavior.</td></tr>
-                <tr><td><code>icon</code></td><td><code>string</code></td><td><code>'circle'</code></td><td>Icon shown when the control is not selected.</td></tr>
-                <tr><td><code>checkedIcon</code></td><td><code>string</code></td><td><code>'check circle'</code></td><td>Icon shown when the control is selected.</td></tr>
-                <tr><td><code>iconColor</code></td><td><code>string</code></td><td><code>-</code></td><td>Explicit icon color override.</td></tr>
-                <tr><td><code>noFrame</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Removes the framed button styling when enabled.</td></tr>
-                <tr><td><code>gap</code></td><td><code>number</code></td><td><code>6</code></td><td>Gap between the icon and label content.</td></tr>
-                <tr><td><code>onChange</code></td><td><code>{`(option: RadioButtonOption<T>, selected: boolean) => void`}</code></td><td><code>-</code></td><td>Called when the control toggles. Returns the resolved typed option payload.</td></tr>
-                <tr><td><code>...buttonAttributes</code></td><td><code>{`ButtonHTMLAttributes<HTMLButtonElement>`}</code></td><td><code>-</code></td><td>Standard button props passed through to the root element.</td></tr>
-            </tbody>
-        </table>
-
-        ## Notes
-        - The component is generic, so `value` and `onChange` stay typed when you use `RadioButton<T>`.
-        - `icon` is the unchecked icon and `checkedIcon` is the selected icon.
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
+</Unstyled>
+<RenderSource>
 ```
 import { RadioButton } from '@apple-pie/slice';
 
-export function RadioButtonExample() {
-    return (
-        <RadioButton
-            label="Email alerts"
-            fieldName="alerts"
-            value="email-alerts"
-            selected={true}
-            onChange={(option, selected) => console.log(option, selected)}
-            id="radiobutton-example"
-            data-testid="radiobutton-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+<fieldset>
+  <legend>Billing</legend>
+  <RadioButton label="Monthly" name="billing" value="monthly" defaultChecked />
+  <RadioButton label="Annual" name="billing" value="annual" />
+</fieldset>
 ```
-        </RenderSource>
+</RenderSource>
+<Unstyled>
 
-        <RenderSource>
-```
-import { RadioButton } from '@apple-pie/slice';
+## Behavior
 
-type DeliveryValue = {
-    id: number;
-    method: 'email' | 'sms';
-};
+Inside RadioButtonList, the group owns selection, shared name, and group-disabled
+state. Each choice needs a unique non-null value; explicit child styles override
+group defaults. Use the group value/defaultValue rather than child checked props.
 
-export function TypedRadioButtonExample() {
-    return (
-        <RadioButton<DeliveryValue>
-            label="Email"
-            fieldName="delivery"
-            value={{ id: 1, method: 'email' }}
-            onChange={(nextOption, selected) => {
-                console.log(nextOption.value?.method, selected);
-            }}
-        />
-    );
-}
-```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+Same-name options are exclusive; activating a checked radio leaves it checked.
+Use checked/onChange for controlled selection or defaultChecked for local state.
+label takes priority over children. Use align=top and textTopOffset for multiline
+content. A typed value is returned in callback metadata; formValue supplies its
+serialized representation when needed. String/number values are submitted directly.
+Uncontrolled controls support native form reset. Controlled state needs application
+reset handling. Use CheckBox for independently toggled choices.
+
+## Accessibility
+
+The visible label names and activates a native radio. actionName supplies an alternate
+description, with Option as the unnamed fallback. Icons are decorative. Group choices
+under a fieldset/legend or an appropriately named group and give them the same name.
+Tab enters the group, Space selects, and arrow keys select enabled siblings. Enter
+retains native form behavior. Focus is visible, disabled choices are skipped, and
+required participates in native validation. Reduced motion disables color transitions.
+
+## Props
+
+All props are optional; colors accept theme tokens or CSS colors.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `actionName` | `string` | `undefined` | Optional action description in place of the visible content. |
+| `align` | `'top' \| 'middle' \| 'bottom'` | `middle` | Aligns the icon with the content. Use top for a multiline label. |
+| `backgroundColor` | `ColorValue` | `transparent` | Unselected background. |
+| `backgroundColorSelected` | `ColorValue` | `transparent` | Checked background. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Border color. |
+| `borderRadius` | `number \| string` | `8` | Corner radius; numbers are pixels. |
+| `borderWidth` | `number` | `0` | Border width in pixels. Negative or nonfinite numbers become zero. |
+| `checked` | `boolean` | `undefined` | Controlled selection. Update this from onChange; activation does not mutate the supplied value. |
+| `children` | `React.ReactNode` | `undefined` | Content used when label is absent. Keep nested content noninteractive. |
+| `defaultChecked` | `boolean` | `false` | Initial selection for an uncontrolled radio. Use checked for external control. |
+| `disabled` | `boolean` | `false` | Blocks interaction and dims the whole control. |
+| `fieldName` | `string` | `undefined` | Option identifier included in callback metadata. Native name instead identifies the radio group and form field. |
+| `formValue` | `string \| number` | `undefined` | Explicit form submission value. Falls back to value when value is a string or number; otherwise the native value is on. |
+| `gap` | `number` | `6` | Pixel gap between icon and content. Zero is supported; negative values become zero and nonfinite values fall back to 6px. |
+| `iconChecked` | `string` | `check circle` | Icon while checked. |
+| `iconColor` | `ColorValue` | `core-text-primary` | Unselected icon color. |
+| `iconColorSelected` | `ColorValue` | `undefined (iconColor)` | Checked icon color. Falls back to iconColor. |
+| `iconSize` | `number` | `20` | Icon size in pixels. Zero removes the icon and its gap. Negative or nonfinite values fall back to 20px. |
+| `iconUnChecked` | `string` | `circle` | Icon while unchecked. |
+| `label` | `string` | `undefined` | Visible text. Takes priority over children. |
+| `padding` | `number \| string` | `0` | Uniform surface padding. Numbers are pixels; strings accept CSS shorthand. |
+| `textColor` | `ColorValue` | `core-text-primary` | Content color. |
+| `textSize` | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'` | `m` | Content size. |
+| `textTopOffset` | `number` | `0` | Manual content alignment in pixels. Positive values add top padding; negative values add bottom padding to raise the text. Does not move the icon. |
+| `value` | `T` | `undefined` | Typed callback metadata, with T defaulting to string. String and number values also supply the native form value unless formValue is provided. |
+| `...inputAttributes` | `React.InputHTMLAttributes<HTMLInputElement>` | `undefined` | Native input attributes such as name, id, form, required, tabIndex, and data attributes apply to the radio input. name groups choices and identifies the submitted field. className and style apply to the outer label; component CSS variables take priority. The input type is always radio. |
+
+## Events
+
+- **onChange**: `(option: RadioButtonOption<T>, checked: boolean) => void`. Runs when this option becomes checked. The option contains fieldName, label, and value. Selecting another option does not emit false for the previously checked input; controlled groups should update all checked props together.
+- **onClick**: `React.MouseEventHandler<HTMLInputElement>`. Native input click, including label-forwarded clicks. Calling event.preventDefault() cancels selection and the component change callback.
+- **...inputEvents**: `React.DOMAttributes<HTMLInputElement>`. Other native input handlers pass through. Keyboard and form behavior remain native; there are no drag or animation lifecycle callbacks.
+
+</Unstyled>

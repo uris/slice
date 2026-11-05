@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { StrictMode, useRef, useState } from 'react';
 import { Button } from 'src/components/Button/Button';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import {
@@ -12,13 +13,14 @@ import {
 	runButtonShowDotAndCountPlay,
 	runButtonTextVariantChildrenPlay,
 } from 'src/components/playHelpers';
-import { fn } from 'storybook/test';
+import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import type { ButtonHandle } from './_types';
 
 const meta: Meta<typeof Button> = {
 	title: 'Components/Button',
 	component: Button,
 	argTypes: {
-		labelColor: { type: 'string', control: 'text' },
+		textColor: { type: 'string', control: 'text' },
 		iconColor: { type: 'string', control: 'text' },
 		children: {
 			table: {
@@ -30,7 +32,7 @@ const meta: Meta<typeof Button> = {
 		size: 'large',
 		variant: 'solid',
 		label: 'Button Label',
-		labelSize: 'm',
+		textSize: 'm',
 		iconRight: 'arrow right',
 		iconLeft: undefined,
 		count: undefined,
@@ -132,7 +134,7 @@ export const RoundIconOnly: StoryObj<typeof Button> = {
 	},
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
-			<Button {...args} label={undefined} />
+			<Button {...args} label={undefined} aria-label="Home" />
 		</FlexDiv>
 	),
 	play: runButtonRoundIconOnlyPlay,
@@ -178,4 +180,303 @@ export const ProgressFlow: StoryObj<typeof Button> = {
 	},
 	render: Default.render,
 	play: runButtonProgressFlowPlay,
+};
+
+export const NativeDisabledGuardsRef: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { disabled: true },
+	render: function DisabledExample(args) {
+		const ref = useRef<ButtonHandle>(null);
+		return (
+			<>
+				<Button {...args} ref={ref} />
+				<button type="button" onClick={() => ref.current?.triggerClick()}>
+					Trigger method
+				</button>
+			</>
+		);
+	},
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('button', { name: 'Button Label' })).toBeDisabled();
+		await userEvent.click(canvas.getByRole('button', { name: 'Trigger method' }));
+		await expect(args.onClick).not.toHaveBeenCalled();
+	},
+};
+
+export const StateDisabledCannotBeOverridden: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { state: 'disabled', disabled: false },
+	render: Default.render,
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).getByRole('button')).toBeDisabled();
+	},
+};
+
+export const TriggerRisingEdge: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: function TriggerExample(args) {
+		const [trigger, setTrigger] = useState(false);
+		const [version, setVersion] = useState(0);
+		return (
+			<>
+				<Button {...args} trigger={trigger} title={String(version)} onClick={(event) => args.onClick?.(event)} />
+				<button type="button" onClick={() => setTrigger(true)}>
+					Fire trigger
+				</button>
+				<button type="button" onClick={() => setVersion((value) => value + 1)}>
+					Rerender
+				</button>
+				<button type="button" onClick={() => setTrigger(false)}>
+					Reset trigger
+				</button>
+			</>
+		);
+	},
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Fire trigger' }));
+		await expect(args.onClick).toHaveBeenCalledTimes(1);
+		await userEvent.hover(canvas.getByRole('button', { name: 'Button Label' }));
+		await userEvent.click(canvas.getByRole('button', { name: 'Rerender' }));
+		await expect(args.onClick).toHaveBeenCalledTimes(1);
+		await userEvent.click(canvas.getByRole('button', { name: 'Reset trigger' }));
+		await userEvent.click(canvas.getByRole('button', { name: 'Fire trigger' }));
+		await expect(args.onClick).toHaveBeenCalledTimes(2);
+	},
+};
+
+export const ControlledWorking: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: function WorkingExample(args) {
+		const [working, setWorking] = useState(false);
+		return (
+			<>
+				<Button
+					{...args}
+					label="Save changes"
+					iconRight={undefined}
+					working={working}
+					onClick={(event) => {
+						args.onClick?.(event);
+						setWorking(true);
+					}}
+				/>
+				<button type="button" onClick={() => setWorking(false)}>
+					Finish work
+				</button>
+			</>
+		);
+	},
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button', { name: 'Save changes' });
+		const width = button.getBoundingClientRect().width;
+		await userEvent.click(button);
+		await expect(button).toHaveAttribute('aria-busy', 'true');
+		await expect(button).toBeDisabled();
+		await expect(button.getBoundingClientRect().width).toBeCloseTo(width, 0);
+		await expect(canvas.getByRole('button', { name: 'Save changes' })).toBe(button);
+		await userEvent.click(canvas.getByRole('button', { name: 'Finish work' }));
+		await expect(button).toHaveAttribute('aria-busy', 'false');
+		await expect(button).toBeEnabled();
+		await expect(args.onClick).toHaveBeenCalledTimes(1);
+	},
+};
+
+export const TimedProgressWithBothIcons: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { progress: true, duration: 0.1, iconLeft: 'home' },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		const button = within(canvasElement).getByRole('button');
+		await userEvent.click(button);
+		await expect(button).toHaveAttribute('aria-busy', 'true');
+		await expect(button).toBeDisabled();
+		await expect(args.onClick).not.toHaveBeenCalled();
+		await waitFor(() => expect(args.onClick).toHaveBeenCalledTimes(1));
+		await expect(args.onClick).toHaveBeenCalledWith(undefined);
+		await expect(button).toBeEnabled();
+	},
+};
+
+export const ComposedTooltipHandlers: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { tooltip: 'Save your changes', onMouseEnter: fn(), onMouseLeave: fn(), onFocus: fn(), onBlur: fn() },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		const button = within(canvasElement).getByRole('button');
+		await userEvent.hover(button);
+		await expect(args.onMouseEnter).toHaveBeenCalled();
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(
+			expect.objectContaining({ payload: { label: 'Save your changes' } }),
+		);
+		await userEvent.unhover(button);
+		await expect(args.onMouseLeave).toHaveBeenCalled();
+		button.focus();
+		await expect(args.onFocus).toHaveBeenCalled();
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(
+			expect.objectContaining({ payload: { label: 'Save your changes' } }),
+		);
+		button.blur();
+		await expect(args.onBlur).toHaveBeenCalled();
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(null);
+	},
+};
+
+export const DecorativeIconsAndKeyboardFocus: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Button Label' });
+		await userEvent.tab();
+		await expect(button).toHaveFocus();
+		await expect(getComputedStyle(button).outlineStyle).toBe('solid');
+		for (const icon of Array.from(button.querySelectorAll('svg'))) await expect(icon).toHaveAttribute('tabindex', '-1');
+		await userEvent.keyboard('{Enter}');
+		await expect(args.onClick).toHaveBeenCalledTimes(1);
+	},
+};
+
+export const ZeroCountHasNoStrayText: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { count: 0 },
+	render: Default.render,
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).queryByText('0')).toBeNull();
+	},
+};
+
+export const SmallRoundGeometry: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { round: true, size: 'small', iconLeft: 'home', iconRight: undefined },
+	render: (args) => <Button {...args} label={undefined} aria-label="Home" />,
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Home' });
+		await expect(button.getBoundingClientRect().width).toBe(button.getBoundingClientRect().height);
+	},
+};
+
+export const ActualFillWidth: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: () => (
+		<div style={{ display: 'flex', width: 320 }}>
+			<Button label="Continue" width="fill" />
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).getByRole('button').getBoundingClientRect().width).toBe(320);
+	},
+};
+
+export const TextVariantColorOverrides: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { variant: 'text', backgroundColor: '#2563eb', textColor: '#ffffff', textSize: 'l' },
+	render: Default.render,
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button');
+		await expect(button.style.background).toBe('rgb(37, 99, 235)');
+		await expect(button.style.color).toBe('rgb(255, 255, 255)');
+	},
+};
+
+export const InitialTriggerInStrictMode: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { trigger: true },
+	render: (args) => (
+		<StrictMode>
+			<Button {...args} />
+		</StrictMode>
+	),
+	play: async ({ args }) => {
+		await expect(args.onClick).toHaveBeenCalledTimes(1);
+	},
+};
+
+export const InitialTimedTriggerInStrictMode: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { trigger: true, progress: true, duration: 0.1 },
+	render: (args) => (
+		<StrictMode>
+			<Button {...args} />
+		</StrictMode>
+	),
+	play: async ({ args }) => {
+		await waitFor(() => expect(args.onClick).toHaveBeenCalledTimes(1));
+	},
+};
+
+export const NativeFormBehavior: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: (args) => (
+		<form
+			onSubmit={(event) => {
+				event.preventDefault();
+				args.onClick?.(undefined);
+			}}
+		>
+			<Button label="Regular action" />
+			<Button label="Submit form" type="submit" />
+		</form>
+	),
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Regular action' }));
+		await expect(args.onClick).not.toHaveBeenCalled();
+		await userEvent.click(canvas.getByRole('button', { name: 'Submit form' }));
+		await expect(args.onClick).toHaveBeenCalledTimes(1);
+	},
+};
+
+export const CanceledLink: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { link: 'https://example.com', onClick: fn((event) => event?.preventDefault()) },
+	render: Default.render,
+	play: async ({ canvasElement, args }) => {
+		const open = spyOn(window, 'open').mockImplementation(() => null);
+		try {
+			await userEvent.click(within(canvasElement).getByRole('button'));
+			await expect(args.onClick).toHaveBeenCalled();
+			await expect(open).not.toHaveBeenCalled();
+		} finally {
+			open.mockRestore();
+		}
+	},
+};
+
+export const DisabledCancelsTimedAction: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: function CancelExample(args) {
+		const [disabled, setDisabled] = useState(false);
+		return (
+			<>
+				<Button {...args} label="Timed action" progress duration={0.25} disabled={disabled} />
+				<button type="button" onClick={() => setDisabled(true)}>
+					Disable action
+				</button>
+			</>
+		);
+	},
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Timed action' }));
+		await userEvent.click(canvas.getByRole('button', { name: 'Disable action' }));
+		await new Promise((resolve) => setTimeout(resolve, 300));
+		await expect(args.onClick).not.toHaveBeenCalled();
+	},
+};
+
+export const MotionEventSignatures: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: {
+		initial: 'hidden',
+		animate: 'visible',
+		variants: { hidden: { opacity: 0 }, visible: { opacity: 1 } },
+		transition: { duration: 0.05 },
+		onAnimationStart: fn(),
+	},
+	render: Default.render,
+	play: async ({ args }) => {
+		await waitFor(() => expect((args.onAnimationStart as ReturnType<typeof fn>).mock.calls[0]?.[0]).toBe('visible'));
+	},
 };

@@ -22,18 +22,20 @@ function UseObserveResizeDemo(props: Readonly<ResizeDemoProps>) {
 			<FlexDiv direction={'column'} align={'center'} height={'auto'} gap={12}>
 				Change Width
 				<Slider
+					aria-label="Width"
 					width={width}
-					scaleMin={300}
-					scaleMax={400}
+					min={300}
+					max={400}
 					value={width}
 					trackHeadSize={0}
 					onChange={(v, _) => setWidth(v)}
 				/>
 				Change Height
 				<Slider
+					aria-label="Height"
 					width={width}
-					scaleMin={150}
-					scaleMax={300}
+					min={150}
+					max={300}
 					value={height}
 					trackHeadSize={0}
 					onChange={(v, _) => setHeight(v)}

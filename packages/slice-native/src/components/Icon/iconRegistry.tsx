@@ -7,7 +7,7 @@ export interface IconRenderProps {
 	stroke: number;
 	strokeColor: ColorValue;
 	fillColor: number;
-	coverUp: string;
+	coverUp: ColorValue;
 }
 
 export type IconLineRenderer = (props: IconRenderProps) => JSX.Element;

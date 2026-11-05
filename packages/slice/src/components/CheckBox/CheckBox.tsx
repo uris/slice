@@ -1,100 +1,116 @@
 'use client';
 
-import { motion } from 'motion/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { accessibleKeyDown } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import css from './CheckBox.module.css';
 import type { CheckBoxProps } from './_types';
 
-export const CheckBox = React.memo((props: CheckBoxProps) => {
+export const CheckBox = React.memo((rawProps: CheckBoxProps) => {
+	const props = resolveColorProps(rawProps);
 	const {
-		size = 20,
+		align = 'middle',
+		children,
+		label,
 		checked = false,
 		disabled = false,
-		color = undefined,
-		children = undefined,
-		onChange = () => null,
-		...divAttributes
+		iconChecked = 'checkbox checked',
+		iconUnChecked = 'checkbox',
+		iconPartial = 'checkbox partial',
+		iconColor,
+		iconColorSelected,
+		iconSize = 20,
+		gap = 6,
+		textColor,
+		textSize = 'm',
+		textTopOffset = 0,
+		onChange,
+		onClick,
+		onKeyDown,
+		tabIndex = 0,
+		'aria-label': ariaLabel,
+		'aria-labelledby': ariaLabelledBy,
+		className,
+		style,
+		...rest
 	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
 	const [state, setState] = useState<'mixed' | boolean>(checked);
+	const contentId = useId();
+	const content = label ?? children;
+	const hasContent = content !== undefined && content !== null && content !== false;
 
-	// sync the local checkbox state from the controlled prop
 	useEffect(() => setState(checked), [checked]);
 
-	// resolve which checkbox icon should be shown for the current state
-	const iconName = useMemo(() => {
-		if (state === true) return 'checkbox checked';
-		if (state === 'mixed') return 'checkbox partial';
-		return 'checkbox';
-	}, [state]);
+	const iconName = state === true ? iconChecked : state === 'mixed' ? iconPartial : iconUnChecked;
+	const selectedIconColor = state !== false ? iconColorSelected : undefined;
+	const resolvedIconColor =
+		selectedIconColor ??
+		iconColor ??
+		(disabled
+			? 'var(--core-icon-disabled)'
+			: state === 'mixed'
+				? 'var(--core-icon-primary)'
+				: state
+					? 'var(--core-text-special)'
+					: 'var(--core-icon-secondary)');
+	const resolvedTextColor = textColor ?? (disabled ? 'var(--core-text-disabled)' : 'var(--core-text-primary)');
+	const offset = Number.isFinite(textTopOffset) ? textTopOffset : 0;
+	// Padding reserves space; compensate for flex alignment so the visible text moves by the full signed offset.
+	const textShift = align === 'top' ? Math.min(offset, 0) : align === 'bottom' ? Math.max(offset, 0) : offset / 2;
+	const cssVars = {
+		'--cb-align': align === 'top' ? 'flex-start' : align === 'bottom' ? 'flex-end' : 'center',
+		'--cb-icon-size': `${iconSize}px`,
+		'--cb-gap': `${gap}px`,
+		'--cb-text-color': resolvedTextColor,
+		'--cb-text-padding-top': `${Math.max(offset, 0)}px`,
+		'--cb-text-padding-bottom': `${Math.max(-offset, 0)}px`,
+		'--cb-text-shift': `${textShift}px`,
+		'--cb-cursor': disabled ? 'default' : 'pointer',
+	} as React.CSSProperties;
 
-	// resolve the checkbox icon color
-	const iconColor = useMemo(() => {
-		if (color) return color;
-		if (disabled) return 'var(--core-icon-disabled)';
-		if (state === 'mixed') return 'var(--core-icon-primary)';
-		if (!state) return 'var(--core-icon-secondary';
-		return 'var(--core-text-special)';
-	}, [color, disabled, state]);
-
-	// resolve label color
-	const labelColor = useMemo(() => {
-		if (color) return color;
-		if (disabled) return 'var(--core-text-disabled)';
-		return 'var(--core-text-primary)';
-	}, [color, disabled]);
-
-	// compose CSS custom properties for checkbox sizing and label color
-	const cssVars = useMemo(() => {
-		return {
-			'--cb-size': `${size}px`,
-			'--cb-label-color': labelColor,
-		} as React.CSSProperties;
-	}, [size, labelColor]);
-
-	// toggle the checkbox and report the updated value
-	const handleToggle = useCallback(() => {
+	const handleToggle = () => {
 		if (disabled) return;
-		let newState = false;
-		switch (state) {
-			case true:
-				break;
-			case 'mixed':
-			case false:
-				newState = true;
-				break;
-		}
-		setState(newState);
-		onChange(newState);
-	}, [state, disabled, onChange]);
+		const next = state !== true;
+		setState(next);
+		onChange?.(next);
+	};
 
 	/* START.DEBUG */
-	useTrackRenders(props, 'Checkbox');
+	useTrackRenders(props, 'CheckBox');
 	/* END.DEBUG */
 
 	return (
-		<motion.div
-			id={divId}
-			className={`${css.wrapper}${divClass}`}
-			style={{ ...divStyle, ...cssVars }}
-			onClick={handleToggle}
-			onKeyDown={(e) => accessibleKeyDown(e, handleToggle)}
-			tabIndex={disabled ? -1 : 0}
-			role={'checkbox'}
+		<div
+			{...rest}
+			className={`${css.wrapper}${className ? ` ${className}` : ''}`}
+			style={{ ...style, ...cssVars }}
+			role="checkbox"
 			aria-checked={state}
 			aria-disabled={disabled}
-			aria-label={String(children as string)}
-			{...(rest as any)}
+			aria-label={ariaLabel ?? (ariaLabelledBy ? undefined : label)}
+			aria-labelledby={
+				ariaLabelledBy ?? (ariaLabel === undefined && label === undefined && hasContent ? contentId : undefined)
+			}
+			tabIndex={disabled ? -1 : tabIndex}
+			onClick={(event) => {
+				onClick?.(event);
+				if (!event.defaultPrevented) handleToggle();
+			}}
+			onKeyDown={(event) => {
+				onKeyDown?.(event);
+				if (!event.defaultPrevented) accessibleKeyDown(event, handleToggle);
+			}}
 		>
-			<div className={css.icon}>
-				<Icon name={iconName} strokeColor={iconColor} size={size} />
-			</div>
-			{children && <span className={css.label}>{children}</span>}
-		</motion.div>
+			<span className={css.icon} aria-hidden="true">
+				<Icon name={iconName} strokeColor={resolvedIconColor} size={iconSize} pointer={false} tabIndex={-1} />
+			</span>
+			{hasContent && (
+				<span id={contentId} className={`${css.label} ${css[textSize]}`}>
+					{content}
+				</span>
+			)}
+		</div>
 	);
 });

@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
 export type ModalAction<T = string> = {
@@ -21,13 +22,13 @@ type ModalBaseProps<T = string> = {
 	maxWidth?: number | string;
 	maxHeight?: number | string;
 	borderRadius?: number | string;
-	borderColor?: string;
+	borderColor?: ColorValue;
 	borderWidth?: number | string;
-	backgroundColor?: string;
+	backgroundColor?: ColorValue;
 	padding?: number | string;
 	title?: string;
-	titleColor?: string;
-	titleBorderColor?: string;
+	titleColor?: ColorValue;
+	titleBorderColor?: ColorValue;
 	titleBorderWidth?: number;
 	titleIcon?: string;
 	titleIconFill?: boolean;
@@ -35,11 +36,11 @@ type ModalBaseProps<T = string> = {
 	contentTextSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	close?: boolean;
 	actions?: ModalAction<T>[];
-	actionsBorderColor?: string;
+	actionsBorderColor?: ColorValue;
 	actionsBorderWidth?: number;
 	autoBorderBottom?: boolean;
-	scrollHandleColor?: string;
-	scrollHandleColorHover?: string;
+	scrollHandleColor?: ColorValue;
+	scrollHandleColorHover?: ColorValue;
 	onAction?: (value?: T) => void;
 	onResolve?: (value?: T) => void;
 	onReject?: (value?: Error) => void;

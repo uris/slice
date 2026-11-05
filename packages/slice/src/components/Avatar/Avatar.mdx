@@ -1,116 +1,90 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
 import * as AvatarStories from './Avatar.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={AvatarStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Avatar
-        Renders a user profile image or fallback initials. Use it for identity surfaces where an image may or may not be available.
+<Unstyled>
 
-        ## Base element
-        `HTMLDivElement`
+# Avatar
 
-        ## Interface
-        `React.HTMLAttributes<HTMLDivElement> & AvatarProps`
+Put people at the center of your interface with a recognizable photo or clear initials.
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>var(--core-surface-secondary)</code></td><td>Background color token/value.</td></tr>
-            <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>var(--core-outline-primary)</code></td><td>Inner border color token/value.</td></tr>
-            <tr><td><code>borderColorHover</code></td><td><code>string</code></td><td><code>var(--core-outline-special)</code></td><td>Inner border color token/value applied on hover.</td></tr>
-            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>0</code></td><td>Inner border width in pixels.</td></tr>
-            <tr><td><code>textColor</code></td><td><code>string</code></td><td><code>var(--core-text-primary)</code></td><td>Text color for initials.</td></tr>
-            <tr><td><code>email</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Email fallback used for the tooltip label and first-character initial when <code>name</code> is not provided.</td></tr>
-            <tr><td><code>fontSize</code></td><td><code>number | string</code></td><td><code>undefined</code></td><td>Font size in px or CSS units. Use <code>'auto'</code> or a number less than or equal to <code>1</code> to derive size from the rendered frame.</td></tr>
-            <tr><td><code>frame</code></td><td><code>number | string</code></td><td><code>34</code></td><td>Inner frame size used for layout and derived font sizing.</td></tr>
-            <tr><td><code>image</code></td><td><code>string</code></td><td><code>''</code></td><td>Image URL. When present, the avatar renders the image instead of initials.</td></tr>
-            <tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Display name used for the tooltip label and initials. Multi-word names render first and last initials.</td></tr>
-            <tr><td><code>outerBorderColor</code></td><td><code>string</code></td><td><code>var(--core-surface-primary)</code></td><td>Optional outer ring color token/value. Mainly used in avatar groups to keep overlapping avatars visually separated so they do not fully blend together.</td></tr>
-            <tr><td><code>outerBorderSize</code></td><td><code>number</code></td><td><code>undefined</code></td><td>Optional outer ring width. Mainly used in avatar groups to keep overlapping avatars visually separated so they do not fully blend together.</td></tr>
-            <tr><td><code>size</code></td><td><code>number | string</code></td><td><code>34</code></td><td>Outer rendered size.</td></tr>
-            <tr><td><code>tabIndex</code></td><td><code>number</code></td><td><code>0</code></td><td>Keyboard tab index when interactive.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>HTMLAttributes</code><br/><code>HTMLDivElement</code>   </td><td><code>-</code></td><td>Native <code>div</code> props pass through (for example <code>id</code>, <code>data-testid</code>, <code>style</code>, <code>aria-*</code>).</td></tr>
-          </tbody>
-        </table>
+## Usage
 
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onClick</code></td><td><code>(e: React.MouseEvent&lt;HTMLDivElement&gt;) =&gt; void</code></td></tr>
-            <tr><td><code>onKeyDown</code></td><td><code>(e: React.KeyboardEvent&lt;HTMLDivElement&gt;) =&gt; void</code></td></tr>
-            <tr><td><code>onToolTip</code></td><td><code>(tip: ToolTip | null) =&gt; void</code></td></tr>
-          </tbody>
-        </table>
+</Unstyled>
+<RenderSource>
+```
+import { Avatar } from '@apple-pie/slice';
 
-        ## Code Examples
-        </Unstyled>
+export function Profile() {
+    return <Avatar name="Jane Smith" image="/images/jane.jpg" size={40} lazyLoad />;
+}
+```
+</RenderSource>
+<Unstyled>
 
-        <RenderSource>
-        ```
-        import { Avatar } from '@apple-pie/slice';
-        
-        export function AvatarWithImage() {
-            return (
-                <Avatar
-                    name="John Doe"
-                    image="/images/profile-male-02.jpg"
-                    size={40}
-                    frame={40}
-                />
-            );
-        }
-        ```
-        </RenderSource>
+## Carry typed data
 
-        <RenderSource>
-        ```
-        import { Avatar } from '@apple-pie/slice';
-        
-        export function AvatarWithDivProps() {
-            return (
-                <Avatar
-                    name="Jane Smith"
-                    email="jane.smith@example.com"
-                    image=""
-                    borderWidth={1}
-                    id="assignee-avatar"
-                    data-testid="assignee-avatar"
-                    aria-label="Assignee avatar"
-                    onClick={() => {}}
-                    onKeyDown={() => {}}
-                />
-            );
-        }
-        ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+Pass application data through `info`. Avatar infers T from the value; explicit `Avatar<User>` and `AvatarProps<User>` are also supported. T defaults to unknown. Every event callback receives the same data as its second argument. Existing one-argument handlers continue to work.
+
+</Unstyled>
+<RenderSource>
+```
+const user = { id: 'user-42', name: 'Jane Smith' };
+
+<Avatar
+    name={user.name}
+    info={user}
+    onClick={(_event, info) => {
+        if (info) openProfile(info.id);
+    }}
+/>
+```
+</RenderSource>
+<Unstyled>
+
+## Behavior
+
+- Initials remain visible while photos load and when loading fails. Photos fill the circle with a centered crop.
+- Names and emails are trimmed. Names use the first and last word's initials; a single name uses one. Empty names fall back to the first email character. Initials display in uppercase.
+- `size` sets avatar dimensions; `textSize` selects a theme typography token independently.
+- `lazyLoad` opts into native browser lazy loading. The default is eager loading.
+- Clickable avatars have a button role, keyboard focus, and a visible focus ring. Enter and Space dispatch a click. `onKeyDown` can cancel activation with `preventDefault()`.
+- Hover and focus emit tooltip payloads containing `payload.label` and an anchor `ref`. Pointer entry also includes `event`. The tooltip clears when both hover and focus end. Supply your own tooltip UI.
+
+## Props
+
+All props are optional. ColorValue accepts Slice color tokens and CSS colors.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `info` | `T` | `undefined` | Optional application data passed unchanged as the second argument to every callback. Inferred from the value; never forwarded to the DOM or used for labels. |
+| `name` | `string` | `undefined` | Display name used for initials, the tooltip label, and the accessible label. Takes priority over email. |
+| `email` | `string` | `undefined` | Identity fallback when the trimmed name is empty. Uses the first character for initials and the full email for labels. |
+| `image` | `string` | `''` | Photo URL displayed as a centered, cover-fitted image. Initials remain visible until the photo loads successfully. Omit it or pass an empty string to show initials only. |
+| `lazyLoad` | `boolean` | `false` | Opt into native browser lazy loading with loading="lazy". By default photos use loading="eager". Initials remain visible until the photo is ready. |
+| `size` | `number \| string` | `34` | Width and height of the avatar. Numbers use pixels; strings accept CSS sizes such as 2.5rem. |
+| `textSize` | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'` | `m` | Theme typography size for the initials. Independent of the avatar dimensions, with no layout measurement required. |
+| `textColor` | `ColorValue` | `core-text-primary` | Color of the initials. |
+| `backgroundColor` | `ColorValue` | `core-surface-secondary` | Fill behind the initials or image. Also remains visible when an image is transparent. |
+| `borderWidth` | `number` | `0` | Inner border width in pixels. Set a positive width to make normal and hover border colors visible. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Inner border color at rest. Once a photo loads, the fallback background stays inside the border so transparent borders remain clear. |
+| `borderColorHover` | `ColorValue` | `core-outline-special` | Inner border color on pointer hover, whether or not the avatar is clickable. |
+| `outerBorderWidth` | `number` | `0` | Outer ring width in pixels. Useful for separating overlapping avatars in a group. |
+| `outerBorderColor` | `ColorValue` | `core-surface-primary` | Outer ring color. Set outerBorderWidth above zero to show it. |
+| `tabIndex` | `number` | `0` | Tab order for clickable avatars. Use -1 to remove the avatar from sequential keyboard navigation. Ignored when onClick is absent. |
+| `divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Additional attributes are forwarded to the outer div, including id, className, style, title, data-* and aria-* attributes. className is appended and style is merged with the component styles. Avatar owns its content and does not accept children. |
+
+## Events
+
+| Event | Type | Description |
+| --- | --- | --- |
+| `onClick` | `(e: React.MouseEvent<HTMLDivElement>, info: T \| undefined) => void` | Pointer or keyboard activation. Always receives a click event. |
+| `onKeyDown` | `(e: React.KeyboardEvent<HTMLDivElement>, info: T \| undefined) => void` | Runs before built-in activation. Call preventDefault() to cancel. |
+| `onToolTip` | `(tip: ToolTip \| null, info: T \| undefined) => void` | Tooltip payload on hover or focus; null when both end. |
+
+All callbacks receive the original event or tooltip first and info second. When info is omitted, the second argument is undefined, including tooltip dismissal with null. Native div events (including capture handlers such as onClickCapture) retain their specific React event types and also receive info. Custom hover and focus callbacks run alongside internal tooltip handling.
+The default accessible label is `User Avatar - [name or email]`, falling back to `Unknown User`. Override it with `aria-label` to describe an action.
+
+</Unstyled>

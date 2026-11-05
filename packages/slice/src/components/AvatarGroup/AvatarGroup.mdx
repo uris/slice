@@ -17,6 +17,18 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         ## Interface
         `React.HTMLAttributes<HTMLDivElement> & AvatarGroupProps`
 
+        Pass individual `<Avatar>` children or an `avatars` array. When `children !== undefined`, children replace the array, including `null` and empty children. Group appearance props provide defaults; explicitly defined child props override them. Fragments and components that render avatars inherit the same defaults.
+
+        Child native events bubble to the container normally. A child handler runs before the container's bubbling handler and can call `event.stopPropagation()`. Each child's handlers retain its own `info`. A child's `onToolTip` overrides the group's default callback.
+
+        Set `limit={5}` to show at most five people followed by a matching `+N` avatar for the remaining people. The overflow avatar is additional to the limit. Omit `limit` to show everyone. Zero shows only the overflow avatar; finite limits are floored and clamped to zero, and non-finite limits mean unlimited.
+
+        Children are counted after flattening arrays and fragments and removing empty nodes. Supply one avatar per child slot; avatars rendered inside a custom component cannot be counted individually.
+
+        `onMore({ more, all, source })` runs on click or keyboard activation of the overflow avatar. The lists preserve order and exclude the generated overflow avatar. For `source: 'avatars'`, they contain the original records; for `source: 'children'`, they contain flattened React nodes with their props and handlers intact. Without `onMore`, the overflow avatar is informational.
+
+        Give records unique, stable IDs to preserve avatars when reordering. IDs are not DOM attributes.
+
         ## Props
         <table style={{width: '100%'}}>
           <colgroup>
@@ -34,16 +46,21 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>avatars</code></td><td><code>AvatarInfo[] | null</code></td><td><code>[]</code></td><td>List of avatar records rendered in order. Each item supports <code>first</code>, <code>last</code>, <code>email</code>, <code>image</code>, <code>avatar</code>, <code>textColor</code>, and <code>backgroundColor</code>.</td></tr>
+            <tr><td><code>avatars</code></td><td><code>AvatarInfo[] | null</code></td><td><code>[]</code></td><td>List of avatar records rendered in order. Each item supports an optional stable <code>id</code>, <code>first</code>, <code>last</code>, <code>email</code>, <code>image</code>, <code>textColor</code>, and <code>backgroundColor</code>.</td></tr>
+            <tr><td><code>backgroundColor</code></td><td><code>ColorValue</code></td><td><code>undefined</code></td><td>Default avatar fill, including the overflow avatar. Explicit record or child colors override it. When undefined, Avatar uses its normal theme fallback. Does not color the container.</td></tr>
             <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Optional inner border color override passed to each child avatar.</td></tr>
             <tr><td><code>borderColorHover</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Optional hover border color override passed to each child avatar.</td></tr>
             <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>3</code></td><td>Inner border width applied to each child avatar.</td></tr>
+            <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td><code>undefined</code></td><td>Avatar children replacing the array. Child props override group defaults.</td></tr>
             <tr><td><code>gap</code></td><td><code>number</code></td><td><code>0</code></td><td>Additional spacing between avatar wrappers.</td></tr>
+            <tr><td><code>lazyLoad</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Native browser lazy loading for every photo. Initials stay visible while loading or on failure.</td></tr>
+            <tr><td><code>limit</code></td><td><code>number</code></td><td><code>undefined</code></td><td>Maximum visible people, plus an overflow avatar when more remain.</td></tr>
             <tr><td><code>margin</code></td><td><code>number</code></td><td><code>0</code></td><td>Outer margin value for the group layout token.</td></tr>
             <tr><td><code>overlap</code></td><td><code>number</code></td><td><code>8</code></td><td>Horizontal overlap amount between adjacent avatars. Positive values create tighter stacking.</td></tr>
             <tr><td><code>outerBorderColor</code></td><td><code>string</code></td><td><code>var(--core-surface-primary)</code></td><td>Outer ring color passed to each child avatar.</td></tr>
-            <tr><td><code>outerBorderSize</code></td><td><code>number</code></td><td><code>3</code></td><td>Outer ring width applied to each child avatar.</td></tr>
+            <tr><td><code>outerBorderWidth</code></td><td><code>number</code></td><td><code>3</code></td><td>Outer ring width applied to each child avatar.</td></tr>
             <tr><td><code>size</code></td><td><code>number</code></td><td><code>32</code></td><td>Avatar width/height in pixels for each item in the group.</td></tr>
+            <tr><td><code>textSize</code></td><td><code>xs | s | m | l | xl</code></td><td><code>m</code></td><td>Theme typography size for every avatar's initials.</td></tr>
             <tr><td><code>...divAttributes</code></td><td><code>HTMLAttributes</code><br/><code>HTMLDivElement</code></td><td><code>-</code></td><td>Native <code>div</code> props pass through to the group root (for example <code>id</code>, <code>data-testid</code>, <code>className</code>, <code>style</code>, <code>aria-*</code>).</td></tr>
           </tbody>
         </table>
@@ -61,6 +78,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             </tr>
           </thead>
           <tbody>
+            <tr><td><code>onMore</code></td><td><code>(details: AvatarGroupMore) =&gt; void</code></td></tr>
             <tr><td><code>onToolTip</code></td><td><code>(tip: ToolTip | null) =&gt; void</code></td></tr>
           </tbody>
         </table>
@@ -74,12 +92,14 @@ import { AvatarGroup } from '@apple-pie/slice';
 
 const avatars = [
     {
+        id: 'john',
         first: 'John',
         last: 'Appleseed',
         image: '/images/profile-male-02.jpg',
         email: 'john@email.com',
     },
     {
+        id: 'jane',
         first: 'Jane',
         last: 'Appleseed',
         email: 'jane@email.com',
@@ -94,7 +114,7 @@ export function TeamAvatars() {
             size={38}
             overlap={8}
             borderWidth={3}
-            outerBorderSize={3}
+            outerBorderWidth={3}
         />
     );
 }
@@ -106,9 +126,9 @@ export function TeamAvatars() {
 import { AvatarGroup } from '@apple-pie/slice';
 
 const compactAvatars = [
-    { first: 'Avery', last: 'User', email: 'a@email.com' },
-    { first: 'Bailey', last: 'User', email: 'b@email.com' },
-    { first: 'Casey', last: 'User', email: 'c@email.com' },
+    { id: 'avery', first: 'Avery', last: 'User', email: 'a@email.com' },
+    { id: 'bailey', first: 'Bailey', last: 'User', email: 'b@email.com' },
+    { id: 'casey', first: 'Casey', last: 'User', email: 'c@email.com' },
 ];
 
 export function CompactGroup() {
@@ -116,10 +136,12 @@ export function CompactGroup() {
         <AvatarGroup
             avatars={compactAvatars}
             size={28}
+            textSize="s"
+            lazyLoad
             overlap={10}
             gap={0}
             borderWidth={1}
-            outerBorderSize={2}
+            outerBorderWidth={2}
             id="compact-avatar-group"
             data-testid="compact-avatar-group"
             className="participants"

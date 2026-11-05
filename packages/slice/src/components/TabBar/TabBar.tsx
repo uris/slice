@@ -1,350 +1,248 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { motion } from 'motion/react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
-import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { setStyle } from '../../utils/functions/misc';
-import { Badge } from '../Badge';
-import { Icon } from '../Icon';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { getWaterTransition } from '../../utils/styling/getWaterTransition';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import { IconButton } from '../IconButton';
-import { type ToolTip, ToolTipType } from '../sharedTypes';
+import { Tab, type TabOption, type TabProps } from '../Tab';
 import css from './TabBar.module.css';
-import type { TabBarProps, TabOption, TabOptionProps } from './_types';
-import { placeholderOptions } from './_types';
+import type { TabBarProps } from './_types';
+import { TabContext, useClientLayoutEffect, withoutAria } from './shared';
 
-export const TabBar = React.memo((props: TabBarProps) => {
+function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 	const {
-		options = placeholderOptions,
-		selected = 0,
-		border = true,
+		children,
+		tabBarName,
+		options = [],
+		value,
+		defaultValue,
 		underline = true,
-		height = '100%',
+		border = true,
+		height = 'auto',
 		width = '100%',
-		tabWidth = 'fill',
+		tabWidth = 'compact',
+		closeWidth = 'auto',
 		padding = 'var(--spacing-s)',
-		iconFill = false,
 		iconSize = 20,
+		iconFill = false,
 		iconGap = 8,
-		tabGap = 0,
+		tabGap = 8,
 		disabled = false,
 		hasClose = false,
-		closeWidth = 'auto',
-		selectedValue = null,
 		justify = 'start',
 		borderColor = 'var(--core-outline-secondary)',
 		textSize = 'm',
-		onChange = () => null,
-		onTabChange = () => null,
-		onClose = () => null,
-		onToolTip = () => null,
-		...divAttributes
-	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
-
-	const [index, setIndex] = useState<number>(selected);
-	const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
-
-	// sync the active tab from the controlled index or selected value
-	useEffect(() => {
-		let selectedIndex = 0;
-		if (selectedValue && options) {
-			selectedIndex = options.findIndex((option) => option.value === selectedValue);
-			setIndex(selectedIndex === -1 ? selected : selectedIndex);
-		} else {
-			setIndex(selected);
-		}
-	}, [selected, selectedValue, options]);
-
-	// update the active tab and notify both tab change callbacks
-	const handleClick = useCallback(
-		(i: number) => {
-			setIndex(i);
-			onChange(i);
-			onTabChange(options[i]);
-		},
-		[onChange, onTabChange, options],
+		transition,
+		onChange,
+		onClose,
+		onToolTip,
+		className,
+		style,
+		...attributes
+	} = resolveColorProps(rawProps);
+	const accessibleName = tabBarName?.trim() || 'Tabs';
+	const theme = useTheme();
+	const reduced = usePrefersReducedMotion();
+	const timing = useMemo(
+		() =>
+			reduced
+				? { type: 'tween' as const, duration: 0, delay: 0, repeat: 0 }
+				: getWaterTransition(theme.current.motion, transition),
+		[reduced, theme.current.motion, transition],
 	);
-
-	// clear any active tooltip before switching tabs
-	const handleOptionClick = useCallback(
-		(i: number) => {
-			onToolTip(null);
-			handleClick(i);
-		},
-		[onToolTip, handleClick],
-	);
-
-	const focusOption = useCallback((nextIndex: number) => {
-		optionRefs.current[nextIndex]?.focus();
+	const [localValue, setLocalValue] = useState<T | null | undefined>(() => {
+		if (defaultValue !== undefined) return defaultValue;
+		if (children === undefined) return options.find((option) => !option.disabled)?.value;
+		const findFirst = (nodes: React.ReactNode): T | undefined => {
+			for (const child of React.Children.toArray(nodes)) {
+				if (!React.isValidElement<TabProps<T>>(child)) continue;
+				if (child.type === Tab && !child.props.disabled) return child.props.value;
+				const nested = findFirst(child.props.children);
+				if (nested !== undefined) return nested;
+			}
+			return undefined;
+		};
+		return findFirst(children);
+	});
+	const controlled = value !== undefined;
+	const active = controlled ? value : localValue;
+	const listRef = useRef<HTMLDivElement>(null);
+	const entries = useRef(new Map<HTMLButtonElement, TabOption<unknown>>());
+	const [revision, setRevision] = useState(0);
+	const [firstValue, setFirstValue] = useState<unknown>();
+	const [indicator, setIndicator] = useState<{ x: number; width: number } | null>(null);
+	const register = useCallback((element: HTMLButtonElement, option: TabOption<unknown>) => {
+		entries.current.set(element, option);
+		setRevision((n) => n + 1);
+		return () => {
+			entries.current.delete(element);
+			setRevision((n) => n + 1);
+		};
 	}, []);
-
-	const handleOptionKeyDown = useCallback(
-		(event: React.KeyboardEvent<HTMLButtonElement>, optionIndex: number) => {
-			if (options.length < 1) return;
-			let nextIndex: number | null = null;
+	const select = useCallback(
+		(option: TabOption<unknown>) => {
+			if (disabled || option.disabled || Object.is(active, option.value)) return;
+			if (!controlled) setLocalValue(() => option.value as T);
+			onToolTip?.(null);
+			onChange?.(option.value as T, option as TabOption<T>);
+		},
+		[disabled, active, controlled, onChange, onToolTip],
+	);
+	const enabledTabs = useCallback(
+		() =>
+			Array.from(listRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]') ?? []).filter(
+				(el) => !el.disabled && entries.current.has(el),
+			),
+		[],
+	);
+	const navigate = useCallback(
+		(event: React.KeyboardEvent<HTMLButtonElement>) => {
+			if (disabled) return;
+			const tabs = enabledTabs();
+			const index = tabs.indexOf(event.currentTarget);
+			let next: number;
 			switch (event.key) {
 				case 'ArrowRight':
-				case 'ArrowDown':
-					nextIndex = (optionIndex + 1) % options.length;
+					next = (index + 1) % tabs.length;
 					break;
 				case 'ArrowLeft':
-				case 'ArrowUp':
-					nextIndex = (optionIndex - 1 + options.length) % options.length;
+					next = (index - 1 + tabs.length) % tabs.length;
 					break;
 				case 'Home':
-					nextIndex = 0;
+					next = 0;
 					break;
 				case 'End':
-					nextIndex = options.length - 1;
+					next = tabs.length - 1;
 					break;
 				default:
-					break;
+					return;
 			}
-			if (nextIndex === null) return;
 			event.preventDefault();
-			handleOptionClick(nextIndex);
-			focusOption(nextIndex);
+			const target = tabs[next];
+			if (target) {
+				target.focus();
+				const option = entries.current.get(target);
+				if (option) select(option);
+			}
 		},
-		[options.length, handleOptionClick, focusOption],
+		[disabled, enabledTabs, select],
 	);
-
-	// derive the rendered tab options from the options list
-	const renderedOptions = useMemo(
-		() =>
-			options.map((option: TabOption, i: number) => (
-				<Option
-					key={`${i}_option_${option.name}`}
-					name={option.name}
-					index={i}
-					toolTip={option.toolTip}
-					selected={i === index}
-					padding={padding}
-					icon={option.icon}
-					iconSize={iconSize}
-					iconGap={iconGap}
-					disabled={disabled}
-					count={option.count}
-					onClick={handleOptionClick}
-					onKeyDown={handleOptionKeyDown}
-					onToolTip={onToolTip}
-					underline={underline}
-					iconFill={iconFill}
-					tabWidth={tabWidth}
-					textSize={textSize}
-					borderColor={borderColor}
-					buttonRef={(element) => {
-						optionRefs.current[i] = element;
-					}}
-				/>
-			)),
-		[
-			options,
-			index,
-			padding,
-			iconSize,
-			iconGap,
-			disabled,
-			underline,
-			tabWidth,
-			onToolTip,
-			handleOptionClick,
-			iconFill,
-			handleOptionKeyDown,
-			borderColor,
-			textSize,
-		],
+	useClientLayoutEffect(() => {
+		const first = enabledTabs()[0];
+		const firstOption = first && entries.current.get(first);
+		const selectedOption = enabledTabs()
+			.map((element) => entries.current.get(element))
+			.find((option) => Object.is(option?.value, active));
+		setFirstValue(() => selectedOption?.value ?? firstOption?.value);
+		if (!controlled && active === undefined && firstOption) setLocalValue(() => firstOption.value as T);
+	}, [revision, enabledTabs, controlled, active, disabled]);
+	useClientLayoutEffect(() => {
+		const list = listRef.current;
+		if (!list) return;
+		const measure = () => {
+			const target = Array.from(entries.current).find(
+				([el, option]) => el.isConnected && !el.disabled && Object.is(option.value, active),
+			)?.[0];
+			if (!target || disabled || !underline) {
+				setIndicator(null);
+				return;
+			}
+			const next = { x: target.offsetLeft, width: target.offsetWidth };
+			setIndicator((previous) => (previous?.x === next.x && previous.width === next.width ? previous : next));
+		};
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(list);
+		for (const element of entries.current.keys()) observer.observe(element);
+		return () => observer.disconnect();
+	}, [
+		revision,
+		active,
+		disabled,
+		underline,
+		children,
+		options,
+		padding,
+		iconSize,
+		iconGap,
+		tabGap,
+		tabWidth,
+		textSize,
+		width,
+	]);
+	const context = useMemo(
+		() => ({ value: active, firstValue, iconFill, disabled, register, select, navigate, onToolTip }),
+		[active, firstValue, iconFill, disabled, register, select, navigate, onToolTip],
 	);
-
-	// compose CSS custom properties for tab bar layout and close control spacing
-	const cssVars = useMemo(() => {
-		return {
-			'--tab-bar-gap': `${tabGap}px`,
-			'--tab-bar-height': `${setStyle(height)}px`,
-			'--tab-bar-width': setStyle(width),
-			'--tab-bar-border-bottom': `${border ? '1px' : '0'}`,
-			'--tab-bar-border-color': borderColor,
-			'--tab-bar-justify': justify,
-			'--tab-bar-close-width': `${closeWidth}px`,
-			'--tab-bar-close-padding': setStyle(padding, 'var(--spacing-s)'),
-		} as React.CSSProperties;
-	}, [tabGap, height, width, border, closeWidth, padding, borderColor, justify]);
-
+	const vars = {
+		'--tab-bar-height': setStyle(height),
+		'--tab-bar-width': setStyle(width),
+		'--tab-bar-gap': setStyle(tabGap),
+		'--tab-bar-padding': setStyle(padding),
+		'--tab-bar-icon-size': setStyle(iconSize),
+		'--tab-bar-icon-gap': setStyle(iconGap),
+		'--tab-bar-tab-width': tabWidth === 'fill' ? 'auto' : tabWidth === 'compact' ? 'max-content' : setStyle(tabWidth),
+		'--tab-bar-tab-flex': tabWidth === 'fill' ? '1 1 0' : tabWidth === 'compact' ? '0 1 auto' : '0 0 auto',
+		'--tab-bar-border': border ? '1px' : '0px',
+		'--tab-bar-border-color': borderColor,
+		'--tab-bar-justify': justify === 'start' ? 'flex-start' : justify === 'end' ? 'flex-end' : 'center',
+		'--tab-bar-close-width': setStyle(closeWidth),
+	} as React.CSSProperties;
 	return (
-		<div
-			id={divId}
-			className={`${css.wrapper}${divClass}`}
-			style={{ ...divStyle, ...cssVars }}
-			role="tablist"
-			aria-orientation="horizontal"
-			{...rest}
-		>
-			{renderedOptions}
-			{hasClose && (
-				<div className={css.close}>
-					<IconButton
-						iconSize={iconSize - 4}
-						frameSize={iconSize}
-						toggle={false}
-						hover={true}
-						icon={'x'}
-						onClick={onClose}
-						iconFill={iconFill}
-					/>
+		<TabContext.Provider value={context}>
+			<div className={`${css.wrapper}${className ? ` ${className}` : ''}`} style={{ ...style, ...vars }}>
+				<div
+					{...withoutAria(attributes)}
+					ref={listRef}
+					role="tablist"
+					aria-label={accessibleName}
+					aria-orientation="horizontal"
+					aria-disabled={disabled || undefined}
+					className={`${css.list} ${css[textSize]}`}
+					data-icon-fill={iconFill || undefined}
+				>
+					{children !== undefined
+						? children
+						: options.map((option, i) => (
+								<Tab
+									{...option}
+									key={
+										typeof option.value === 'string' || typeof option.value === 'number'
+											? `${typeof option.value}:${option.value}`
+											: (option.id ?? i)
+									}
+								/>
+							))}
+					{indicator && (
+						<motion.div
+							key={reduced ? 'static' : 'animated'}
+							aria-hidden="true"
+							className={css.indicator}
+							initial={false}
+							animate={indicator}
+							transition={timing}
+						/>
+					)}
 				</div>
-			)}
-		</div>
-	);
-});
-
-TabBar.displayName = 'TabBar';
-
-const Option = React.memo(
-	(props: TabOptionProps) => {
-		const theme = useTheme();
-		const {
-			name = 'Option',
-			index = 0,
-			icon = null,
-			selected = false,
-			onClick = () => null,
-			onToolTip = () => null,
-			padding = 'var(--spacing-s)',
-			iconSize = 20,
-			iconGap = 6,
-			disabled = false,
-			toolTip = null,
-			underline = true,
-			tabWidth = 'fill',
-			borderColor = 'var(--core-outline-secondary)',
-			count = 0,
-			iconFill = false,
-			textSize = 'm',
-			onKeyDown = () => null,
-			buttonRef,
-		} = props;
-		const ref = useRef<HTMLButtonElement>(null);
-
-		// resolve the option icon color from selection and disabled state
-		const strokeColor = useMemo(() => {
-			if (!disabled && selected) return theme.current.colors['core-text-special'];
-			if (disabled) return theme.current.colors['core-text-disabled'];
-			return theme.current.colors['core-text-primary'];
-		}, [disabled, selected, theme]);
-
-		// show the option tooltip when the pointer enters the option
-		const handleMouseOver = useCallback(
-			(e: React.MouseEvent) => {
-				onToolTip(null);
-				if (toolTip && ref.current) {
-					const tip: ToolTip = {
-						type: ToolTipType.button,
-						payload: { label: toolTip },
-						event: e,
-						ref,
-					};
-					onToolTip(tip);
-				}
-			},
-			[toolTip, onToolTip],
-		);
-
-		// clear tooltip state when the pointer leaves the option
-		const handleMouseLeave = useCallback(() => {
-			if (toolTip) onToolTip(null);
-		}, [toolTip, onToolTip]);
-
-		// resolve the option text color from selection and disabled state
-		const textColor = useMemo(() => {
-			if (disabled) return 'var(--core-text-disabled)';
-			if (selected) return 'var(--core-text-special)';
-			return 'var(--core-text-primary)';
-		}, [disabled, selected]);
-
-		// resolve the option width mode
-		const setTabWidth = useMemo(() => {
-			if (tabWidth === 'compact') return 'min-content';
-			if (tabWidth === 'fill') return 'unset';
-			return `${tabWidth}px`;
-		}, [tabWidth]);
-
-		// resolve the option flex mode
-		const setTabFlex = useMemo(() => {
-			if (tabWidth === 'fill') return '1';
-			return 'unset';
-		}, [tabWidth]);
-
-		// resolve the underline visibility for the current option state
-		const setUnderline = useMemo(() => {
-			if (selected && underline && !disabled) return '1px';
-			return '0';
-		}, [underline, disabled, selected]);
-
-		// compose CSS custom properties for option spacing, sizing, and color
-		const cssVars = useMemo(() => {
-			return {
-				'--tab-bar-option-border': setUnderline,
-				'--tab-bar-option-border-color': borderColor,
-				'--tab-bar-option-padding': setStyle(padding, 'var(--spacing-s)'),
-				'--tab-bar-option-icon-size': `${iconSize}px`,
-				'--tab-bar-option-cursor': disabled ? 'default' : 'pointer',
-				'--tab-bar-option-gap': `${iconGap ?? 0}px`,
-				'--tab-bar-option-color': textColor,
-				'--tab-bar-option-width': setTabWidth,
-				'--tab-bar-option-flex': setTabFlex,
-			} as React.CSSProperties;
-		}, [padding, iconSize, disabled, textColor, iconGap, setTabFlex, setTabWidth, setUnderline, borderColor]);
-
-		/* START.DEBUG */
-		useTrackRenders(props, 'TabBar');
-		/* END.DEBUG */
-
-		return (
-			<button
-				type="button"
-				className={`${css.option} ${css[textSize]} ${selected ? css.selected : ''}`}
-				style={cssVars}
-				ref={(element) => {
-					ref.current = element;
-					buttonRef?.(element);
-				}}
-				role="tab"
-				aria-selected={selected}
-				tabIndex={selected ? 0 : -1}
-				onMouseEnter={handleMouseOver}
-				onMouseLeave={handleMouseLeave}
-				onClick={() => onClick(index)}
-				onKeyDown={(e) => onKeyDown(e, index)}
-			>
-				{icon && (
-					<div className={css.icon}>
-						<Icon name={icon} fill={iconFill} size={iconSize} strokeColor={strokeColor} />
+				{hasClose && (
+					<div className={css.close}>
+						<IconButton
+							actionName="Close tabs"
+							icon="x"
+							iconSize={Math.max(0, iconSize - 4)}
+							buttonSize={iconSize}
+							disabled={disabled}
+							onClick={onClose}
+							iconFill={iconFill}
+						/>
 					</div>
 				)}
-				{name}
-				{count !== 0 && <Badge variant={'light'} hideNull={false} count={count} />}
-			</button>
-		);
-	},
-	(prevProps, nextProps) => {
-		// Custom comparison for performance
-		return (
-			prevProps.selected === nextProps.selected &&
-			prevProps.underline === nextProps.underline &&
-			prevProps.tabWidth === nextProps.tabWidth &&
-			prevProps.disabled === nextProps.disabled &&
-			prevProps.iconGap === nextProps.iconGap &&
-			prevProps.iconSize === nextProps.iconSize &&
-			prevProps.count === nextProps.count &&
-			prevProps.icon === nextProps.icon &&
-			prevProps.borderColor === nextProps.borderColor &&
-			prevProps.textSize === nextProps.textSize &&
-			prevProps.padding === nextProps.padding &&
-			prevProps.name === nextProps.name &&
-			prevProps.index === nextProps.index
-		);
-	},
-);
-
-Option.displayName = 'TabOption';
+			</div>
+		</TabContext.Provider>
+	);
+}
+export const TabBar = React.memo(TabBarComponent) as <T = string>(props: TabBarProps<T>) => React.JSX.Element;

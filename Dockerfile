@@ -17,8 +17,11 @@ FROM dependencies AS landing-build
 COPY . .
 RUN npm run build:landing
 
-FROM static-server AS landing
-COPY --from=landing-build /app/apps/website/out/ /usr/share/nginx/html/
+FROM landing-build AS landing
+ENV NODE_ENV=production
+WORKDIR /app/apps/website
+EXPOSE 80
+CMD ["../../node_modules/.bin/next", "start", "--hostname", "0.0.0.0", "--port", "80"]
 
 FROM dependencies AS react-build
 COPY . .

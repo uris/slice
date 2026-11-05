@@ -1,140 +1,93 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
-import * as RadioButtonListStories from './RadioButtonList.stories';
-import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
+import {Meta,Unstyled} from '@storybook/addon-docs/blocks';
+import * as Stories from './RadioButtonList.stories';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
-<Meta of={RadioButtonListStories} />
+<Meta of={Stories}/>
+<Unstyled>
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # RadioButtonList
-        Renders a typed list of `RadioButton` options and manages single or multi-selection state.
+# RadioButtonList
 
-        ## Base element
-        `HTMLDivElement`
+Compose related choices for one selection. Use CheckBox for multiple selection.
 
-        ## Interface
-        `RadioButtonListProps<T = string>`
+## Usage
 
-        ## Related types
-        `RadioButtonOption<T = string>`
-
-        ## Typing
-        `RadioButtonList` is generic. The `options` array and the `onChange` callback use the same `T`.
-
-        `onChange` receives:
-
-        `(options: RadioButtonOption<T>[] | null, indexes: number[] | null) => void`
-
-        ## Props
-        <table style={{ width: '100%' }}>
-            <colgroup>
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '1%' }} />
-                <col style={{ width: '97%' }} />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th className={"left"}>Prop</th>
-                    <th className={"left"}>Type</th>
-                    <th className={"left"}>Default</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><code>options</code></td><td><code>RadioButtonOption&lt;T&gt;[]</code></td><td><code>[]</code></td><td>Options rendered as `RadioButton` items.</td></tr>
-                <tr><td><code>selectedIndexes</code></td><td><code>{`number[] | null`}</code></td><td><code>null</code></td><td>Controlled selected index list.</td></tr>
-                <tr><td><code>selectedOptions</code></td><td><code>{`string[] | null`}</code></td><td><code>null</code></td><td>Alternative controlled selection based on matching `option.fieldName` values.</td></tr>
-                <tr><td><code>label</code></td><td><code>{`string | null`}</code></td><td><code>null</code></td><td>Optional group label rendered above the list.</td></tr>
-                <tr><td><code>deselect</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Whether clicking a selected item can clear it.</td></tr>
-                <tr><td><code>multiSelect</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Enables checkbox-style multi-selection. Otherwise the list behaves like a radio group.</td></tr>
-                <tr><td><code>wrap</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Allows the rendered buttons to wrap.</td></tr>
-                <tr><td><code>spacer</code></td><td><code>{`'xl' | 'lg' | 'md' | 'sm' | 'custom' | 'none'`}</code></td><td><code>'none'</code></td><td>Spacing mode used for framed layouts.</td></tr>
-                <tr><td><code>custom</code></td><td><code>number</code></td><td><code>0</code></td><td>Custom spacing value used when <code>spacer="custom"</code>.</td></tr>
-                <tr><td><code>gap</code></td><td><code>number</code></td><td><code>16</code></td><td>Gap between rendered options.</td></tr>
-                <tr><td><code>tabIndexSeed</code></td><td><code>number</code></td><td><code>0</code></td><td>Base value used to generate the tab index for each child button.</td></tr>
-                <tr><td><code>hideRadio</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Hides the child radio/check icons.</td></tr>
-                <tr><td><code>toggleIcon</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Passes icon toggling behavior through to each child `RadioButton`.</td></tr>
-                <tr><td><code>iconColor</code></td><td><code>string</code></td><td><code>-</code></td><td>Default icon color for unselected items.</td></tr>
-                <tr><td><code>iconSelectedColor</code></td><td><code>string</code></td><td><code>-</code></td><td>Icon color used for selected items.</td></tr>
-                <tr><td><code>noFrame</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Removes framed child styling when enabled.</td></tr>
-                <tr><td><code>icon</code></td><td><code>string</code></td><td><code>'circle'</code></td><td>Base icon passed to each child `RadioButton`.</td></tr>
-                <tr><td><code>checkedIcon</code></td><td><code>string</code></td><td><code>'check circle'</code></td><td>Selected icon passed to each child `RadioButton`.</td></tr>
-                <tr><td><code>width</code></td><td><code>number | string</code></td><td><code>'min-content'</code></td><td>Sets the list width.</td></tr>
-                <tr><td><code>onChange</code></td><td><code>{`(options: RadioButtonOption<T>[] | null, indexes: number[] | null) => void`}</code></td><td><code>-</code></td><td>Called with the selected option objects and their indexes.</td></tr>
-                <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Standard div props passed through to the root element.</td></tr>
-            </tbody>
-        </table>
-
-        ## Notes
-        - `selectedIndexes` and `selectedOptions` both drive controlled selection.
-        - `selectedOptions` matches against each option's `fieldName`.
-        - In single-select mode, the root uses `role="radiogroup"`.
-        - In multi-select mode, the root uses `role="group"` and children render as checkbox-style controls.
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
+</Unstyled>
+<RenderSource>
 ```
-import { RadioButtonList } from '@apple-pie/slice';
+import { RadioButton, RadioButtonList } from '@apple-pie/slice';
 
-export function RadioButtonListExample() {
-    return (
-        <RadioButtonList
-            label="Notification Channels"
-            options={[
-                { label: 'Email', fieldName: 'email', value: 'email' },
-                { label: 'SMS', fieldName: 'sms', value: 'sms' },
-            ]}
-            selectedIndexes={[0]}
-            onChange={(options, indexes) => console.log(options, indexes)}
-            id="radiobuttonlist-example"
-            data-testid="radiobuttonlist-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+<RadioButtonList label="Billing" defaultValue="monthly">
+  <RadioButton value="monthly" label="Monthly" />
+  <RadioButton value="annual" label="Annual" />
+</RadioButtonList>
 ```
-        </RenderSource>
+</RenderSource>
+<Unstyled>
 
-        <RenderSource>
-```
-import { RadioButtonList, type RadioButtonOption } from '@apple-pie/slice';
+## Composition and selection
 
-type DeliveryValue = {
-    id: number;
-    method: 'email' | 'sms';
-};
+value/onChange controls one selection; defaultValue initializes local selection.
+Each grouped RadioButton needs a unique, non-null value. Values identify choices,
+so selection survives reordering. Children can appear inside wrappers or custom
+components. Children take priority over options; the array is shorthand over the
+same group context. Group styles are defaults; explicit child styles override them.
+The group owns selection, shared name, and disabled state. A disabled child remains
+disabled, and disabled=false cannot override a disabled group.
 
-const options: RadioButtonOption<DeliveryValue>[] = [
-    {
-        fieldName: 'delivery-email',
-        label: 'Email',
-        value: { id: 1, method: 'email' },
-    },
-    {
-        fieldName: 'delivery-sms',
-        label: 'SMS',
-        value: { id: 2, method: 'sms' },
-    },
-];
+## Forms
 
-export function TypedRadioButtonListExample() {
-    return (
-        <RadioButtonList<DeliveryValue>
-            label="Delivery Method"
-            options={options}
-            onChange={(selectedOptions, selectedIndexes) => {
-                console.log(selectedOptions?.[0]?.value?.method, selectedIndexes);
-            }}
-        />
-    );
-}
-```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+Set name for native form submission. Child formValue serializes object-valued
+choices when needed. Uncontrolled groups reset to their initial defaultValue;
+controlled forms should reset application state. Reset does not emit onChange.
+
+## Accessibility
+
+label names the radiogroup, or use aria-label without a visible heading. Each
+radio's label names and activates it; icons are decorative. Tab enters the group,
+Space selects, and arrows select enabled choices. Focus is visible. Native input
+props such as required belong on child radios. Reduced motion disables color
+transitions while selection remains immediate.
+
+## Props
+
+All group props are optional. Each choice needs a value. Colors accept theme tokens
+or CSS colors. Option styles below provide defaults for child radios.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `align` | `'top' \| 'middle' \| 'bottom'` | `middle` | Aligns the icon with the content. Use top for a multiline label. |
+| `backgroundColor` | `ColorValue` | `transparent` | Unselected background. |
+| `backgroundColorSelected` | `ColorValue` | `transparent` | Checked background. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Border color. |
+| `borderRadius` | `number \| string` | `8` | Corner radius; numbers are pixels. |
+| `borderWidth` | `number` | `0` | Border width in pixels. Negative or nonfinite numbers become zero. |
+| `children` | `React.ReactNode` | `undefined` | Composed RadioButton choices, optionally inside wrappers or custom components. Each grouped radio needs a unique, non-null value. Children take priority over options when supplied. |
+| `defaultValue` | `T \| null` | `null` | Initial local selection. Later changes do not reset it. Use value for external control. |
+| `direction` | `'row' \| 'column'` | `column` | Layout direction, independent of borders or frames. |
+| `disabled` | `boolean` | `false` | Disables all descendant choices. A child cannot override a disabled group. |
+| `gap` | `number` | `16` | Pixel spacing between direct group children and the optional heading. Custom layout wrappers control spacing inside themselves. |
+| `iconChecked` | `string` | `check circle` | Icon while checked. |
+| `iconColor` | `ColorValue` | `core-text-primary` | Unselected icon color. |
+| `iconColorSelected` | `ColorValue` | `undefined (iconColor)` | Checked icon color. Falls back to iconColor. |
+| `iconSize` | `number` | `20` | Icon size in pixels. Zero removes the icon and its gap. Negative or nonfinite values fall back to 20px. |
+| `iconUnChecked` | `string` | `circle` | Icon while unchecked. |
+| `itemGap` | `number` | `6` | Default pixel gap between each radio’s icon and text. A child gap prop overrides it. |
+| `label` | `string` | `undefined` | Visible heading and accessible group name. |
+| `marginBottom` | `number \| string` | `0` | Space below the group. Numbers are pixels; strings accept CSS lengths. |
+| `name` | `string` | `generated unique name` | Shared native radio group and form field name. The group supplies it to every descendant radio. Use distinct names for independent groups. |
+| `options` | `RadioButtonListOption<T>[]` | `[]` | Data shorthand for composed choices. Each option accepts RadioButton props with a required value, excluding checked, defaultChecked, and name. Rendered through the same group context as explicit children. |
+| `padding` | `number \| string` | `0` | Uniform surface padding. Numbers are pixels; strings accept CSS shorthand. |
+| `textColor` | `ColorValue` | `core-text-primary` | Content color. |
+| `textSize` | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'` | `m` | Content size. |
+| `textTopOffset` | `number` | `0` | Manual content alignment in pixels. Positive values add top padding; negative values add bottom padding to raise the text. Does not move the icon. |
+| `value` | `T \| null` | `undefined` | Controlled selection; null clears it. Choices match using Object.is. Prefer unique primitive values; keep object references stable. A value without a matching choice leaves no input checked. |
+| `width` | `number \| string` | `min-content` | Group width; numbers are pixels and strings accept CSS dimensions. |
+| `wrap` | `boolean` | `false` | Allows direct children to wrap. Most useful with direction=row and a constrained width. |
+| `...divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Other native attributes apply to the outer group. className is appended and style is merged; component CSS variables take priority over overlapping variable fields. The role stays radiogroup. |
+
+## Events
+
+- **onChange**: `(value: T, option: RadioButtonOption<T>) => void`. Requests a newly selected value. The second argument contains fieldName, label, and value metadata. Runs after the child’s onChange. Repeat activation, prop changes, and form reset do not emit another change.
+- **...divEvents**: `React.DOMAttributes<HTMLDivElement>`. Other native handlers apply to the outer group. Keyboard selection remains native to the radio inputs; there are no drag or animation lifecycle callbacks.
+
+</Unstyled>

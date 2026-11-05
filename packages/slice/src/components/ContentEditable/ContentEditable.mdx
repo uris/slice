@@ -1,0 +1,80 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as ContentEditableStories from './ContentEditable.stories';
+
+<Meta of={ContentEditableStories} />
+
+# ContentEditable
+
+Edit titles and labels right where they live. Your app owns activation and persistence. Pass plain text through `value` or `defaultValue`; `children` and rich HTML are not supported.
+
+## Usage
+
+```tsx
+import { useState } from 'react';
+import { ContentEditable, useDoubleClick } from '@apple-pie/slice';
+
+function ProjectTitle() {
+  const [title, setTitle] = useState('Quarterly planning');
+  const [editing, setEditing] = useState(false);
+  const [click, doubleClick] = useDoubleClick(() => {}, () => setEditing(true));
+
+  return (
+    <article>
+      <h2 style={{ fontSize: 24, fontWeight: 600 }}>
+        <ContentEditable
+          name="Project title"
+          value={title}
+          isEditable={editing}
+          onClick={click}
+          onDoubleClick={doubleClick}
+          onEditStart={() => setEditing(true)}
+          onCommit={setTitle}
+          onEditEnd={() => setEditing(false)}
+        />
+      </h2>
+      <p>Bring ideas, milestones, and priorities together.</p>
+      <time dateTime="2026-11-03T09:30:00-08:00">Nov 3, 2026 · 9:30 AM</time>
+    </article>
+  );
+}
+```
+
+## Behavior
+
+The root is a `span`, suitable inside headings, paragraphs, and other text. The surface is inline and sizes to its text by default, inheriting surrounding typography. Text wraps freely within the available width. Set `clamp={1}` for one displayed line or `clamp={n}` to limit display to n lines. Editing removes the clamp; Enter still commits instead of inserting a newline.
+
+The component holds the draft during editing. Blur, Enter, and external edit-mode exit commit changed text once. Escape cancels; unchanged exits still call `onEditEnd`. External `value` updates wait until the session ends. Update `value` in `onCommit`, rather than on every keystroke. `defaultValue` supports local committed text when `value` is omitted. Placeholders never become saved text. Paste inserts plain text and replaces line breaks and tabs with spaces. This is direct editing, not a form field.
+
+## Accessibility
+
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `backgroundColor` | `ColorValue` | `core-surface-secondary` | Background while editing. Static text has a transparent background. |
+| `borderRadius` | `number ∣ string` | `4` | Corner radius in pixels or CSS units. |
+| `clamp` | `number` | `0` | Maximum displayed lines outside edit mode. Text wraps without a limit by default. Use `1` for a single line; editing removes the clamp. Nonpositive or nonfinite values disable clamping. |
+| `defaultValue` | `string` | `empty string` | Initial text when `value` is omitted. Commits update the local value. |
+| `isEditable` | `boolean` | `false` | Starts and focuses an edit session when set to `true`. Your app controls activation and resets it to `false` in `onEditEnd`. Setting it to `false` during editing finishes and commits any changes. |
+| `name` | `string` | `Editable text` | Accessible name while editing. Blank names use the fallback. |
+| `padding` | `number ∣ string` | `0` | Uniform pixel padding or a CSS padding value. Explicit values are used as provided. |
+| `placeholder` | `string` | `Untitled` | Visual hint for empty text. It is never inserted into the value or saved. |
+| `selectOnEdit` | `boolean` | `false` | Selects all text when editing starts. Otherwise, preserves an existing caret inside the text or places it at the end. |
+| `textAlign` | `'left' ∣ 'center' ∣ 'right'` | `left` | Horizontal text alignment. |
+| `textColor` | `ColorValue` | `inherit` | Text color. Inherits surrounding text color when omitted. |
+| `textColorPlaceholder` | `ColorValue` | `core-text-tertiary` | Color of the empty-text hint. |
+| `textSize` | `'xs' ∣ 's' ∣ 'm' ∣ 'l' ∣ 'xl'` | `inherit` | Slice body text size. Inherits surrounding typography when omitted. |
+| `value` | `string` | `undefined` | Committed display value. Updates are deferred during an active edit so they do not replace the draft or move the caret. Update this in `onCommit`, rather than on each keystroke. |
+| `width` | `number ∣ string` | `auto` | Sizes to its text by default, constrained to the available width. Set a pixel or CSS width when a specific size is needed. |
+| `spanAttributes` | `React.HTMLAttributes<HTMLSpanElement>` | `undefined` | Native attributes apply directly to the text surface. `className` is appended and `style` is merged. Component-owned content, editability, and ARIA attributes are excluded; use `name` for its accessible label. |
+
+## Events
+
+| Event | Type | Description |
+| --- | --- | --- |
+| `onChange` | `(draft: string) => void` | Reports draft changes without committing. Clearing text reports an empty string. |
+| `onCommit` | `(value: string, previousValue: string) => void` | Runs once when changed text is committed through blur, Enter, or external edit-mode exit. Does not run for unchanged text or Escape. |
+| `onEditEnd` | `(reason: 'blur' ∣ 'enter' ∣ 'escape' ∣ 'external') => void` | Runs whenever an edit session ends, including cancellation or unchanged text. Use it to exit edit mode. The reason type is exported as `ContentEditableEditEndReason`. |
+| `onEditStart` | `() => void` | Requests editing when Enter or F2 is pressed outside edit mode. Set `isEditable` to `true` in this callback. Composition input and prevented key events do not activate editing. |
+| `nativeEvents` | `React.DOMAttributes<HTMLSpanElement>` | Native events such as `onClick`, `onDoubleClick`, `onFocus`, `onBlur`, `onKeyDown`, and `onPaste` receive their normal React events. Clicks bubble normally. Preventing the default in `onKeyDown` or `onPaste` skips the corresponding internal action. |

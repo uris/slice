@@ -1,0 +1,28 @@
+.dialog {
+	padding: 0;
+	border: 0;
+	border-radius: var(--corner-m);
+	background: transparent;
+	color: var(--core-text-primary);
+	width: min(420px, calc(100vw - 32px));
+	max-height: calc(100vh - 32px);
+}
+.dialog::backdrop {
+	background: rgb(0 0 0 / 65%);
+}
+.summary {
+	margin: 0 0 var(--spacing-m);
+}
+.people {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-s);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.person {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-s);
+}

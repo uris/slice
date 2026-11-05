@@ -1,0 +1,33 @@
+:root {
+	color-scheme: dark;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	--slice-font-family: var(--font-funnel-sans);
+	--font-family: var(--slice-font-family);
+	--font-special: var(--font-jetbrains-mono);
+	--font-mono: var(--font-geist-mono);
+}
+
+/* scrolling handled internally */
+html,
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+/* default to funnel sans on all body text */
+body {
+	font-family: var(--font-family), sans-serif;
+}
+
+/* default to border box */
+* {
+	box-sizing: border-box;
+}
+
+/* default to geist for code display */
+code,
+pre {
+	font-family: var(--font-mono), monospace;
+}

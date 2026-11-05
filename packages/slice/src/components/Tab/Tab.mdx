@@ -1,0 +1,62 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as TabStories from './Tab.stories';
+
+<Meta of={TabStories} />
+
+# Tab
+
+An individual choice inside [TabBar](?path=/docs/components-tabbar--docs), with a label, optional icon, and count.
+
+## Usage
+
+```
+import { Tab, TabBar } from '@apple-pie/slice';
+
+<TabBar tabBarName="Project views" defaultValue="overview">
+  <Tab value="overview" label="Overview" />
+  <Tab value="activity" label="Activity" icon="home" count={12} />
+</TabBar>
+```
+
+## Behavior
+
+Tab requires TabBar context. The group owns selection, shared sizing, and underline animation. Each value must be unique and non-null; stable primitive values are recommended. Individual disabled tabs cannot activate, and group disabling takes precedence. Label takes priority over children. Text weight stays the same when selected and content overflow is clipped.
+
+## Accessibility
+
+Each Tab is a native button with tab semantics. Its label or children supplies its name; selected state, disabled state, tab order, and ARIA are managed internally. Icons are decorative. The group handles Left/Right and Home/End navigation and skips disabled tabs. Reduced motion disables color transitions and the group’s underline movement.
+
+Supply id and panelId when your application renders panels:
+
+```
+<>
+  <TabBar tabBarName="Project views" defaultValue="overview">
+    <Tab value="overview" id="overview-tab" panelId="overview-panel" label="Overview" />
+  </TabBar>
+  <div id="overview-panel" role="tabpanel" aria-labelledby="overview-tab">
+    Overview content
+  </div>
+</>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `React.ReactNode` | `undefined` | Custom label content when label is not supplied. |
+| `count` | `number` | `undefined` | Optional count badge. Zero hides the badge. |
+| `disabled` | `boolean` | `false` | Disables this choice. Keyboard navigation skips it; a disabled group cannot be overridden by a child. |
+| `icon` | `string  /  null` | `undefined` | Optional decorative icon before the label. |
+| `id` | `string` | `generated` | ID of the tab button. Supply a stable ID when a panel references it through aria-labelledby. |
+| `label` | `string` | `undefined` | Tab text. Takes priority over children; the fallback is Tab. |
+| `panelId` | `string` | `undefined` | ID of the corresponding panel, used as the button’s aria-controls. Your application renders the panel. |
+| `toolTip` | `string` | `undefined` | Tooltip text sent to the group’s onToolTip callback. Your application displays the tooltip. |
+| `value` | `T` | `required` | Unique, non-null identity for this tab. Prefer stable strings or numbers. Object values are matched by reference. |
+| `buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | `undefined` | Other native button attributes and events apply to this tab. Selection, disabled state, role, type, ARIA attributes, and tab order are managed by the group. onClick and onKeyDown run before group handling; preventDefault cancels it. |
+
+## Events
+
+- `onClick` runs before group selection handling. Call preventDefault to cancel activation.
+- `onKeyDown` runs before group keyboard handling. Call preventDefault to handle a key yourself.
+- Other native button events apply to this Tab. There are no incidental Motion drag or animation callbacks.
+- Handle `onChange(value, option)` and `onToolTip(tip)` on TabBar for selection and tooltip data.

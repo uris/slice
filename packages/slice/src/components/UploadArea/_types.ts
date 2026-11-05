@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { FileItem } from '../FileList';
 
 export const imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'heic', 'heif'];
@@ -21,19 +22,19 @@ export enum FileTypes {
 type UploadAreaBaseProps = {
 	icon?: string;
 	iconSize?: number;
-	iconColor?: string;
-	iconColorHover?: string;
+	iconColor?: ColorValue;
+	iconColorHover?: ColorValue;
 	width?: number | string;
 	height?: number | string;
 	title?: string;
 	message?: string;
 	busyMessage?: string;
-	backgroundColor?: string;
-	backgroundColorHover?: string;
+	backgroundColor?: ColorValue;
+	backgroundColorHover?: ColorValue;
 	borderWidth?: number;
 	border?: number;
-	borderColor?: string | null;
-	borderColorHover?: string | null;
+	borderColor?: ColorValue | null;
+	borderColorHover?: ColorValue | null;
 	borderStyle?: string;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	padding?: number | string;

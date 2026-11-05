@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 export type CustomVideoControls = {
 	play?: boolean;
@@ -42,8 +43,8 @@ type VideoBaseProps = {
 	height?: number | string;
 	borderRadius?: number | string;
 	borderSize?: number | string;
-	borderColor?: string;
-	backgroundColor?: string;
+	borderColor?: ColorValue;
+	backgroundColor?: ColorValue;
 	objectFit?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
 	showProgressIndicator?: boolean;
 	onPlay?: () => void;

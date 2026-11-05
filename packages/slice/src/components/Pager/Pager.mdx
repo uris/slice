@@ -1,88 +1,61 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as PagerStories from './Pager.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={PagerStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Pager
-        Renders pagination bullets and handles active-page navigation.
+# Pager
 
-        ## Base element
-        `HTMLDivElement`
+Navigate pages with compact dots, distance scaling, and a masked sliding window.
 
-        ## Interface
-        `PagerProps`
+## Usage
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>color</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `color`.</td></tr>
-            <tr><td><code>colorHover</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `colorHover`.</td></tr>
-            <tr><td><code>colorOn</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `colorOn`.</td></tr>
-            <tr><td><code>gap</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `gap`.</td></tr>
-            <tr><td><code>index</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `index`.</td></tr>
-            <tr><td><code>pages</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `pages`.</td></tr>
-            <tr><td><code>size</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `size`.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onChange</code></td><td><code>{`(index: number) => void`}</code></td></tr>
-          </tbody>
-        </table>
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource language={"tsx"}>
 ```
 import { Pager } from '@apple-pie/slice';
 
-export function PagerExample() {
-    return (
-        <Pager
-            pages={5}
-            index={2}
-            onChange={(idx) => console.log(idx)}
-            id="pager-example"
-            data-testid="pager-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+<Pager pages={20} maxVisiblePages={5} showMoreOn={4} />
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+Use controlled `selectedIndex` with `onChange`, or `defaultSelectedIndex` for the initial uncontrolled page. Indices start at zero. Re-selecting the current page does not emit a change.
+
+Each dot uses `max(minScale, scale * scaleFactor ** distance)`; `scaleFactor={1}` keeps all dots equally sized. `showMoreOn` is a one-based visible-dot position, mirrored when moving backward. With five visible dots, it defaults to dot 4 forward and dot 2 backward. Each triggered shift reveals enough pages to center the selection, limited by the available pages at either end. Even-sized windows use the right of the two middle positions. Sliding is enabled for at least five total pages.
+
+## Accessibility
+
+The outer div is a named group; use `aria-label` to describe it. Native page buttons have labels, ordinary tab order, visible keyboard focus, and `aria-current="page"` on the selection. Enter and Space activate once. Outgoing dots are inert and hidden from assistive technology. Reduced motion disables Water sliding, scaling, and color transitions, including live preference changes.
+
+## Props
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>color</code></td><td><code>{`ColorValue`}</code></td><td><code>core-text-disabled</code></td><td>Color of unselected dots. Accepts a theme token or CSS color.</td></tr>
+    <tr><td><code>colorHover</code></td><td><code>{`ColorValue`}</code></td><td><code>core-text-disabled</code></td><td>Color of an unselected dot on hover. Accepts a theme token or CSS color.</td></tr>
+    <tr><td><code>colorOn</code></td><td><code>{`ColorValue`}</code></td><td><code>core-text-primary</code></td><td>Color of the selected dot, including on hover. Accepts a theme token or CSS color.</td></tr>
+    <tr><td><code>defaultSelectedIndex</code></td><td><code>{`number`}</code></td><td><code>0</code></td><td>Initial page for uncontrolled use. Indices start at zero; later changes do not reset the selection.</td></tr>
+    <tr><td><code>gap</code></td><td><code>{`number`}</code></td><td><code>8</code></td><td>Gap between dot positions in pixels. Negative values become zero; non-finite values use 8.</td></tr>
+    <tr><td><code>maxVisiblePages</code></td><td><code>{`number`}</code></td><td><code>undefined</code></td><td>Maximum number of dot positions in the masked window. Omit to show all pages. Pagers with fewer than five total pages always show all pages. Positive fractions use whole pages, with a minimum of one; invalid or nonpositive values show all pages.</td></tr>
+    <tr><td><code>minScale</code></td><td><code>{`number`}</code></td><td><code>0.5</code></td><td>Smallest dot scale. Positive values are capped at scale; invalid or nonpositive values use 0.5, also capped at scale.</td></tr>
+    <tr><td><code>opacityScales</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Fade dots by scaleFactor for each page away from selection. The selected dot stays opaque; fading continues below the minimum size floor. Uses the shared transition and respects reduced motion.</td></tr>
+    <tr><td><code>pages</code></td><td><code>{`number`}</code></td><td><code>2</code></td><td>Total page count. Fractions use whole pages; negative and non-finite values produce an empty pager.</td></tr>
+    <tr><td><code>scale</code></td><td><code>{`number`}</code></td><td><code>1</code></td><td>Scale of the selected dot, relative to size. Invalid or nonpositive values use 1. Dot positions reserve this maximum size, keeping spacing steady.</td></tr>
+    <tr><td><code>scaleFactor</code></td><td><code>{`number`}</code></td><td><code>0.8</code></td><td>Multiplier for each page of distance from the selection. Values are clamped between 0 and 1; non-finite values use 0.8. Use 1 for equally sized dots.</td></tr>
+    <tr><td><code>selectedIndex</code></td><td><code>{`number`}</code></td><td><code>undefined</code></td><td>Controlled page index, starting at zero. Update it through onChange. Indices are rounded down and clamped to available pages; non-finite values use zero.</td></tr>
+    <tr><td><code>showMoreOn</code></td><td><code>number</code></td><td><code>undefined</code></td><td>One-based visible-dot trigger, mirrored backward. A triggered shift centers the selection where possible, stopping at the available pages. Must be a whole number below the visible count; invalid or omitted values use the second-to-last dot forward and second dot backward. Requires five or more total pages.</td></tr>
+    <tr><td><code>size</code></td><td><code>{`number`}</code></td><td><code>10</code></td><td>Base dot diameter in pixels, before scaling. Invalid or nonpositive values use 10.</td></tr>
+    <tr><td><code>...divAttributes</code></td><td><code>{`React.HTMLAttributes<HTMLDivElement>`}</code></td><td><code>undefined</code></td><td>Other attributes apply to the outer group. Use aria-label to name the pager. className is appended; style is merged. Internal geometry and color variables take priority. Children are not supported.</td></tr>
+  </tbody>
+</table>
+
+## Motion
+
+`transition` accepts Motion's `Transition` settings, merged with Slice’s Water transition. One prop controls sliding, scaling, opacity, and color changes. Reduced motion makes all changes immediate.
+
+```
+<Pager pages={20} maxVisiblePages={5} transition={{ duration: 0.4 }} />
+```
+
+## Events
+
+`onChange(index)` runs once for a different user-selected page. Controlled prop changes do not emit it. Native div events pass through as a group; Motion gestures are not part of this API.

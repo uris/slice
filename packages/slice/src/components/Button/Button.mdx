@@ -1,119 +1,97 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
 import * as ButtonStories from './Button.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ButtonStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Button
-        Renders a versatile button supporting variants, icons, loading/progress, and interaction states.
+<Unstyled>
 
-        Use `size="small"` for the compact button layout. `text` is a `variant`, not a `size`.
+# Button
 
-        ## Base element
-        `HTMLButtonElement`
+Labels, icons, and busy states for actions. The default is a medium outline button with type="button".
 
-        ## Interface
-        `ButtonProps`
+## Usage
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>animate</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `animate`.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>-</code></td><td>Background color override for the normal state.</td></tr>
-            <tr><td><code>backgroundColorDisabled</code></td><td><code>string</code></td><td><code>-</code></td><td>Background color override for the disabled state.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>-</code></td><td>Sizing/layout setting for `borderRadius`.</td></tr>
-            <tr><td><code>children</code></td><td><code>ReactNode</code></td><td><code>-</code></td><td>Optional inline button content. When provided, it is rendered instead of <code>label</code>.</td></tr>
-            <tr><td><code>count</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `count`.</td></tr>
-            <tr><td><code>destructive</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `destructive`.</td></tr>
-            <tr><td><code>duration</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `duration`.</td></tr>
-            <tr><td><code>exit</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `exit`.</td></tr>
-            <tr><td><code>fill</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `fill`.</td></tr>
-            <tr><td><code>iconColor</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `iconColor`.</td></tr>
-            <tr><td><code>iconLeft</code></td><td><code>string</code></td><td><code>-</code></td><td>Icon configuration for `iconLeft`.</td></tr>
-            <tr><td><code>iconRight</code></td><td><code>string</code></td><td><code>-</code></td><td>Icon configuration for `iconRight`.</td></tr>
-            <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `iconSize`.</td></tr>
-            <tr><td><code>initial</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `initial`.</td></tr>
-            <tr><td><code>label</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `label`.</td></tr>
-            <tr><td><code>labelColor</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `labelColor`.</td></tr>
-            <tr><td><code>labelSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>-</code></td><td>Typography size token for the button label.</td></tr>
-            <tr><td><code>paddingLeft</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `paddingLeft`.</td></tr>
-            <tr><td><code>paddingRight</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `paddingRight`.</td></tr>
-            <tr><td><code>progress</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `progress`.</td></tr>
-            <tr><td><code>round</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `round`.</td></tr>
-            <tr><td><code>showDot</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `showDot`.</td></tr>
-            <tr><td><code>size</code></td><td><code>{`'large' | 'medium' | 'small'`}</code></td><td><code>-</code></td><td>Sizing/layout setting for `size`.</td></tr>
-            <tr><td><code>state</code></td><td><code>{`'normal' | 'hover' | 'disabled'`}</code></td><td><code>-</code></td><td>Controls `state`.</td></tr>
-            <tr><td><code>tooltip</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `tooltip`.</td></tr>
-            <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>-</code></td><td>Controls `transition`.</td></tr>
-            <tr><td><code>trigger</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `trigger`.</td></tr>
-            <tr><td><code>underline</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `underline`.</td></tr>
-            <tr><td><code>variant</code></td><td><code>{`'solid' | 'outline' | 'text'`}</code></td><td><code>-</code></td><td>Controls `variant`.</td></tr>
-            <tr><td><code>variants</code></td><td><code>Variants</code></td><td><code>-</code></td><td>Controls `variants`.</td></tr>
-            <tr><td><code>width</code></td><td><code>string</code></td><td><code>-</code></td><td>Sizing/layout setting for `width`.</td></tr>
-            <tr><td><code>working</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `working`.</td></tr>
-            <tr><td><code>...buttonAttributes</code></td><td><code>{`ButtonHTMLAttributes<HTMLButtonElement>`}</code></td><td><code>-</code></td><td>Native `button` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`, `disabled`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onToolTip</code></td><td><code>{`(tip: ToolTip | null) => void`}</code></td></tr>
-            <tr><td><code>onClick</code></td><td><code>{`(e: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => void`}</code></td></tr>
-          </tbody>
-        </table>
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
+</Unstyled>
+<RenderSource>
 ```
 import { Button } from '@apple-pie/slice';
 
-export function ButtonExample() {
-    return (
-        <Button
-            variant="solid"
-            size="small"
-            onClick={() => console.log('clicked')}
-            id="button-example"
-            data-testid="button-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        >
-            Save Changes
-        </Button>
-    );
-}
+<Button label="Continue" onClick={continueToNextStep} />
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+</RenderSource>
+<Unstyled>
+
+## Behavior
+
+- Children override label. Decorative icons do not add tab stops.
+- Use working for an application-controlled busy state. It blocks repeated activation and does not emit a completion click.
+- progress with a positive finite duration delays onClick and supplies undefined when it completes. It does not submit forms or follow links on completion.
+- disabled, state="disabled", and busy state block pointer, keyboard, ref, and trigger activation.
+- trigger activates once when becoming true. Reset it to false before requesting another activation.
+- link uses window.open after an ordinary onClick unless the event is prevented. The element remains a button.
+
+## Accessibility
+
+Native Enter/Space behavior and a focus ring are provided. Give icon-only actions an aria-label. Busy state sets aria-busy; the label remains accessible. Provide application feedback for success and errors.
+
+## Props
+
+ColorValue accepts Slice color tokens and CSS colors. Native button attributes are supported; Motion-owned event names use Motion callback signatures.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `animate` | `string` | `undefined` | Named Motion variant to animate toward. Define the values in variants. |
+| `backgroundColor` | `ColorValue` | `variant background` | Background color in normal and hover states. Overrides the preset for every variant; fill takes priority while enabled. |
+| `backgroundColorDisabled` | `ColorValue` | `variant disabled background` | Background color when disabled. Independent of backgroundColor. |
+| `borderRadius` | `number \| string` | `corner-round` | Corner radius. Numbers use pixels; strings accept CSS lengths. |
+| `children` | `React.ReactNode` | `undefined` | Custom label content. Takes priority over label; use non-interactive content inside the button. |
+| `count` | `number` | `undefined` | Optional count badge. Zero and invalid numbers are hidden; numbers above 99 show 99+. Hidden while busy. |
+| `destructive` | `boolean` | `false` | Uses the warning color preset for destructive actions. Explicit color overrides still apply. |
+| `disabled` | `boolean` | `false` | Native disabled state. Blocks pointer, keyboard, ref, and trigger activation. Also cancels a pending timed action. |
+| `duration` | `number` | `undefined` | Timed progress delay in seconds. Requires progress and a positive, finite value. Has no effect on controlled working state. |
+| `exit` | `string` | `undefined` | Named Motion variant for exit animation. Requires an AnimatePresence parent to animate removal. |
+| `fill` | `boolean` | `false` | Uses core-surface-primary for the enabled background, ahead of variant and backgroundColor. This controls the fill color, not width. |
+| `iconColor` | `ColorValue` | `variant icon color` | Color of both icons. Overrides the preset in all states. |
+| `iconFill` | `boolean` | `false` | Fills icon shapes that support a filled appearance. |
+| `iconLeft` | `string` | `undefined` | Registered icon name displayed before the label. |
+| `iconRight` | `string` | `undefined` | Registered icon name displayed after the label. |
+| `iconSize` | `number` | `20` | Icon and spinner size in pixels. |
+| `initial` | `string` | `undefined` | Named Motion variant used for the initial appearance. |
+| `label` | `string` | `undefined` | Visible action label when children is not supplied. |
+| `link` | `string` | `undefined` | URL opened after a normal activation with window.open. onClick can cancel navigation with event.preventDefault(). Timed progress does not navigate on completion. |
+| `paddingLeft` | `number` | `automatic` | Left padding in pixels, overriding the size, variant, and round defaults. |
+| `paddingRight` | `number` | `automatic` | Right padding in pixels, overriding the size, variant, and round defaults. |
+| `progress` | `boolean` | `false` | Enables delayed activation when duration is positive and finite. The spinner runs first, then onClick receives undefined once. Without a valid duration, activation is immediate. |
+| `round` | `boolean` | `false` | Makes the default-width button circular. Intended for icon-only actions with an accessible label. |
+| `showDot` | `boolean` | `false` | Shows a status dot. Hidden while busy. |
+| `size` | `'large' \| 'medium' \| 'small'` | `medium` | Layout size: large is 48px high, medium is 36px, and small fits the content with compact padding. Typography is controlled separately by textSize. |
+| `state` | `'normal' \| 'hover' \| 'disabled'` | `normal` | Forces the hover or disabled presentation. Use disabled for ordinary application disabling; either disabled mechanism blocks activation. |
+| `target` | `'_blank' \| '_self' \| '_parent' \| '_top'` | `_self` | Window target used with link. |
+| `textColor` | `ColorValue` | `variant text color` | Text color in normal and hover states. Disabled text retains the disabled preset. |
+| `textSize` | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'` | `m` | Theme typography size for the label or children. |
+| `tooltip` | `string` | `undefined` | Label sent to onToolTip on hover or focus. The component does not display a tooltip by itself. |
+| `transition` | `Transition` | `undefined` | Motion transition options. Duration here is measured in seconds and controls animation, independently of the progress delay. |
+| `trigger` | `boolean` | `false` | Requests one activation when it becomes true, including an initially true value. Reset to false before triggering again. Requests made while disabled or busy are ignored, not queued. |
+| `type` | `'button' \| 'submit' \| 'reset'` | `button` | Native form behavior. Use submit or reset inside a form; the default avoids accidental submission. |
+| `underline` | `boolean` | `false` | Underlines the label on hover and keyboard focus. |
+| `variant` | `'solid' \| 'outline' \| 'text'` | `outline` | Visual preset. Solid emphasizes the action, outline adds a border, and text uses a transparent background unless overridden. |
+| `variants` | `Variants` | `undefined` | Named Motion animation definitions used by initial, animate, and exit. |
+| `width` | `string` | `min-content` | CSS width, or fill to take the available parent width. Min-content sizes to the content; the label truncates when constrained. |
+| `working` | `boolean` | `false` | Controlled busy state. Shows a spinner and blocks repeated activation until false. Changing this prop does not call onClick or determine whether an operation succeeded. |
+| `buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | `undefined` | Other native attributes pass through, including form, name, value, title, data-* and aria-*. className is appended and style is merged; component styles take priority for the properties they manage. Disabled and busy attributes remain consistent with the component state. |
+
+## Events
+
+| Event | Type | Description |
+| --- | --- | --- |
+| `onAnimationStart` | `HTMLMotionProps<'button'>['onAnimationStart']` | Motion animation-start callback. Receives an animation definition, not a native AnimationEvent. |
+| `onClick` | `(event: React.MouseEvent<HTMLButtonElement> \| undefined) => void` | Receives the click event for normal pointer or keyboard activation. Receives undefined for ref/trigger activation and after timed progress. Controlled working does not emit a completion click. |
+| `onToolTip` | `(tip: ToolTip \| null) => void` | Receives type, payload.label, and the button ref on hover or focus. Hover also includes the pointer event. Null clears the tooltip after hover and focus end, or on activation. |
+| `buttonEvents` | `React.DOMAttributes<HTMLButtonElement>` | Other native handlers pass through. onMouseEnter, onMouseLeave, onFocus, and onBlur run alongside internal hover and tooltip behavior. The animation callback above uses Motion’s signature. |
+
+## Ref
+
+The forwarded ref is a ButtonHandle, not a DOM element. Its triggerClick() method requests activation with an undefined event and honors disabled/busy state. It does not focus the element or submit/reset a form.
+
+</Unstyled>

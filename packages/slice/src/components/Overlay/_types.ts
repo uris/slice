@@ -1,11 +1,12 @@
 import type { Transition } from 'motion/react';
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type OverlayBaseProps = {
 	children?: React.ReactNode;
 	show?: boolean;
 	opacity?: number;
-	color?: string;
+	color?: ColorValue;
 	type?: 'clear' | 'dark';
 	global?: boolean;
 	overlay?: any;

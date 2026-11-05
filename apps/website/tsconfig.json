@@ -24,10 +24,25 @@
 			"@apple-pie/slice/components/*": ["../../packages/slice/src/components/*/index.ts"],
 			"@apple-pie/slice/providers": ["../../packages/slice/src/providers/index.ts"],
 			"@apple-pie/slice/hooks": ["../../packages/slice/src/hooks/index.ts"],
+			"@apple-pie/slice/stores": ["../../packages/slice/src/stores/index.ts"],
+			"@apple-pie/slice/stores/*": ["../../packages/slice/src/stores/*/index.ts"],
 			"@apple-pie/slice/theme": ["../../packages/slice/src/theme/index.ts"],
-			"@apple-pie/slice/utils": ["../../packages/slice/src/utils/index.ts"]
+			"@apple-pie/slice/utils": ["../../packages/slice/src/utils/index.ts"],
+			"@/*": ["./*"],
+			"@/src/*": ["./src/*"],
+			"@/components/*": ["./src/components/*"],
+			"@/docs/*": ["./src/docs/*"],
+			"@/documents/*": ["./src/content/documents/*"]
 		}
 	},
-	"include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts", ".next/dev/types/**/*.ts"],
+	"include": [
+		"next-env.d.ts",
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"app/**/*.ts",
+		"app/**/*.tsx",
+		".next/types/**/*.ts",
+		".next/dev/types/**/*.ts"
+	],
 	"exclude": ["node_modules", "out", "dist"]
 }

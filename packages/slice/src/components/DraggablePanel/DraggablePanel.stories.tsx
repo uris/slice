@@ -224,7 +224,12 @@ function DraggablePanelWithChildren(args: Readonly<DraggablePanelProps>) {
 				backgroundColor={'var(--core-surface-primary-tint)'}
 			/>
 			<FlexDiv width={'auto'} height={'fill'} justify={'start'} padding={24}>
-				<IconButton icon={closed ? 'arrow right' : 'arrow left'} iconSize={20} onClick={() => setClosed(!closed)} />
+				<IconButton
+					actionName={closed ? 'Expand panel' : 'Collapse panel'}
+					icon={closed ? 'arrow right' : 'arrow left'}
+					iconSize={20}
+					onClick={() => setClosed(!closed)}
+				/>
 			</FlexDiv>
 		</FlexDiv>
 	);

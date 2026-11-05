@@ -4,10 +4,12 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { corners } from '../../theme/corners/corners';
 import { AudioVisualizer, type AudioVisualizerOptions } from '../../utils';
 import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Level.module.css';
 import type { LevelProps } from './_types';
 
-function BaseLevel(props: Readonly<LevelProps>) {
+function BaseLevel(rawProps: Readonly<LevelProps>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		width = 100,
 		height = 4,

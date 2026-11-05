@@ -1,5 +1,8 @@
 # Slice Native working practices
 
+Read the [root AGENTS.md](../../AGENTS.md) for repository-wide instructions and
+contributor resources, alongside the native-specific guidance below.
+
 These instructions apply to work under `packages/slice-native/`. Keep this file current when
 the user agrees to a new convention or architectural decision. Record established
 decisions, not speculative plans. Explicit user instructions take precedence.

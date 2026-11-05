@@ -1,0 +1,44 @@
+.button {
+	display: flex;
+	box-sizing: border-box;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	font-family: var(--font-special), monospace;
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 1em;
+	letter-spacing: 0.94%;
+	padding: 12px 8px 10px 8px;
+	margin: 0;
+	border-style: solid;
+	text-transform: uppercase;
+	text-decoration: none;
+	outline: none;
+	cursor: pointer;
+	color: var(--label-color);
+	gap: 8px;
+
+	&:focus-visible {
+		outline: 2px solid var(--label-color);
+		outline-offset: 3px;
+	}
+}
+
+.primary {
+	border-width: 0;
+	background-color: var(--bg-color);
+	border-color: var(--border-color);
+}
+
+.secondary {
+	border-width: 1px;
+	background-color: var(--bg-color);
+	border-color: var(--border-color);
+}
+
+.text {
+	border-width: 0;
+	background-color: transparent;
+	border-color: transparent;
+}

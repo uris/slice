@@ -11,10 +11,15 @@ export {
 	motion,
 	elevations,
 	Elevation,
+	resolveColor,
+	breakpoints,
+	FormFactor,
 } from './theme';
 export type {
 	SliceTheme,
 	Colors,
+	ColorToken,
+	ColorValue,
 	Type,
 	Corners,
 	Elevations,
@@ -60,23 +65,13 @@ export { Avatar } from './components/Avatar/index';
 export type { AvatarProps } from './components/Avatar/index';
 
 export { AvatarGroup } from './components/AvatarGroup';
-export type { AvatarGroupProps, AvatarInfo } from './components/AvatarGroup';
+export type { AvatarGroupProps, AvatarGroupMore, AvatarInfo } from './components/AvatarGroup';
 
 export { Badge } from './components/Badge';
 export type { BadgeProps } from './components/Badge';
 
-export {
-	IconButton,
-	AnimationPreset,
-	AnimationType,
-} from './components/IconButton';
-export type {
-	IconButtonProps,
-	AnimationValue,
-	MotionValue,
-	TransitionValue,
-	ButtonAnimation,
-} from './components/IconButton';
+export { IconButton } from './components/IconButton';
+export type { IconButtonProps } from './components/IconButton';
 
 export { Camera } from './components/Camera';
 export type {
@@ -91,8 +86,8 @@ export type {
 export { CheckBox } from './components/CheckBox';
 export type { CheckBoxProps } from './components/CheckBox';
 
-export { DivInput } from './components/DivInput';
-export type { DivInputProps } from './components/DivInput';
+export { ContentEditable } from './components/ContentEditable';
+export type { ContentEditableProps, ContentEditableEditEndReason } from './components/ContentEditable';
 
 export { Dot } from './components/Dot';
 export type { DotProps } from './components/Dot';
@@ -143,7 +138,7 @@ export type {
 } from './components/RadioButton';
 
 export { RadioButtonList } from './components/RadioButtonList';
-export type { RadioButtonListProps } from './components/RadioButtonList';
+export type { RadioButtonListProps, RadioButtonListOption } from './components/RadioButtonList';
 
 export { Slider } from './components/Slider';
 export type { SliderProps } from './components/Slider';
@@ -157,7 +152,9 @@ export { ToggleButton } from './components/ToggleButton';
 export type { ToggleButtonProps } from './components/ToggleButton';
 
 export { TabBar } from './components/TabBar';
-export type { TabOption, TabBarProps } from './components/TabBar';
+export { Tab } from './components/Tab';
+export type { TabBarProps } from './components/TabBar';
+export type { TabOption, TabProps } from './components/Tab';
 
 export { TextArea } from './components/TextArea';
 export type { TextAreaProps } from './components/TextArea';

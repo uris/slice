@@ -1,12 +1,13 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type IconBaseProps = {
 	name?: string;
 	size?: number;
 	stroke?: number;
-	strokeColor?: string;
+	strokeColor?: ColorValue;
 	fillColor?: number;
-	coverUp?: string;
+	coverUp?: ColorValue;
 	toggle?: boolean;
 	pointer?: boolean;
 	disabled?: boolean;

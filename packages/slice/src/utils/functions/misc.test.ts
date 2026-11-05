@@ -190,6 +190,24 @@ describe('filterClasses', () => {
 });
 
 describe('setStyle', () => {
+	it('preserves zero and negative dimensions', () => {
+		expect(setStyle(0)).toBe('0px');
+		expect(setStyle(-12)).toBe('-12px');
+		expect(setStyle(null, 0)).toBe('0px');
+	});
+
+	it.each([NaN, Infinity, -Infinity])('uses a valid fallback for %s', (value) => {
+		expect(setStyle(value, 12)).toBe('12px');
+		expect(setStyle(value, 'min-content')).toBe('min-content');
+		expect(setStyle(value)).toBe('unset');
+		expect(setStyle(value, NaN)).toBe('unset');
+	});
+
+	it('preserves CSS expressions and treats empty strings as unset', () => {
+		expect(setStyle('')).toBe('unset');
+		expect(setStyle('calc(100% - 2px)')).toBe('calc(100% - 2px)');
+	});
+
 	it('returns "unset" when both value and default are missing', () => {
 		expect(setStyle(undefined)).toBe('unset');
 	});

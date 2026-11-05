@@ -25,6 +25,7 @@ export { useAudioRecorder } from './useAudioRecorder/useAudioRecorder';
 export {
 	useWindow,
 	FormFactor,
+	breakpoints,
 	type BreakPoints,
 	type WindowGeolocation,
 	type WindowGeolocationError,

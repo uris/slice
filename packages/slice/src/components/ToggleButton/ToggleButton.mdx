@@ -1,114 +1,132 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import * as ToggleButtonStories from './ToggleButton.stories';
-import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ToggleButtonStories} />
+<Unstyled>
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # ToggleButton
-        A small composition on top of `IconButton` that pairs an icon toggle with an adjacent label.
-        Use it for simple selected/unselected controls or grouped settings toggles where the icon remains the primary visual affordance.
+# ToggleButton
 
-        ## Base element
-        `div`
+Make on/off actions clear with a label, an optional icon, and a selected state.
 
-        ## Interface
-        `ToggleButtonProps`
+## Usage
 
-        ## Props
-        <table style={{ width: '100%' }}>
-          <colgroup>
-            <col style={{ width: '1%' }} />
-            <col style={{ width: '1%' }} />
-            <col style={{ width: '1%' }} />
-            <col style={{ width: '97%' }} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td><code>-</code></td><td>Optional custom label content. Takes precedence over <code>label</code>.</td></tr>
-            <tr><td><code>label</code></td><td><code>string</code></td><td><code>-</code></td><td>Text label rendered next to the icon button.</td></tr>
-            <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>-</code></td><td>Label text size.</td></tr>
-            <tr><td><code>buttonSize</code></td><td><code>{`'s' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Named size passed through to the composed <code>IconButton</code>.</td></tr>
-            <tr><td><code>frameSize</code></td><td><code>number</code></td><td><code>-</code></td><td>Reserved sizing prop on the public interface.</td></tr>
-            <tr><td><code>icon</code></td><td><code>string</code></td><td><code>-</code></td><td>Icon name for the button portion.</td></tr>
-            <tr><td><code>iconOn</code></td><td><code>string</code></td><td><code>-</code></td><td>Optional alternate icon used while <code>selected</code> is <code>true</code>.</td></tr>
-            <tr><td><code>iconTwo</code></td><td><code>string</code></td><td><code>-</code></td><td>Reserved secondary icon prop on the public interface.</td></tr>
-            <tr><td><code>selected</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Controlled selected state.</td></tr>
-            <tr><td><code>iconColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Default icon color while unselected.</td></tr>
-            <tr><td><code>iconColorOn</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary)'</code></td><td>Icon color while selected.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Button background while unselected.</td></tr>
-            <tr><td><code>backgroundColorHover</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Button background while hovered.</td></tr>
-            <tr><td><code>backgroundColorOn</code></td><td><code>string</code></td><td><code>'var(--core-text-special)'</code></td><td>Button background while selected.</td></tr>
-            <tr><td><code>gap</code></td><td><code>number</code></td><td><code>4</code></td><td>Gap between the icon button and label.</td></tr>
-            <tr><td><code>border</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Enables the underlying icon button border treatment.</td></tr>
-            <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>20</code></td><td>Icon size passed through to <code>IconButton</code>.</td></tr>
-            <tr><td><code>tooltip</code></td><td><code>string</code></td><td><code>-</code></td><td>Tooltip text shown from the icon button.</td></tr>
-            <tr><td><code>fill</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Enables the icon fill treatment when supported by the chosen icon.</td></tr>
-            <tr><td><code>unselect</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When <code>false</code>, clicking an already-selected toggle does nothing.</td></tr>
-            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables the composed icon button.</td></tr>
-            <tr><td><code>presetAnimations</code></td><td><code>AnimationPreset</code></td><td><code>-</code></td><td>Passes a named animation preset through to the underlying <code>IconButton</code>.</td></tr>
-            <tr><td><code>customAnimations</code></td><td><code>ButtonAnimation</code></td><td><code>-</code></td><td>Passes custom animation configuration through to the underlying <code>IconButton</code>.</td></tr>
-          </tbody>
-        </table>
+</Unstyled>
+<RenderSource>
+```
+import { ToggleButton } from '@apple-pie/slice';
 
-        ## Events
-        <table style={{ width: '100%' }}>
-          <colgroup>
-            <col style={{ width: '1%' }} />
-            <col style={{ width: '99%' }} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onChange</code></td><td><code>{`(state: boolean) => void`}</code></td></tr>
-            <tr><td><code>onSelect</code></td><td><code>{`() => void`}</code></td></tr>
-            <tr><td><code>onToolTip</code></td><td><code>{`(tip: ToolTip | null) => void`}</code></td></tr>
-          </tbody>
-        </table>
+<ToggleButton icon="sun" label="Highlight" />
+```
+</RenderSource>
+<Unstyled>
 
-        ## Behavior
-        - `ToggleButton` is controlled through `selected`.
-        - Clicking toggles the next state and calls `onChange(nextState)`.
-        - `onSelect()` only fires when the next state becomes `true`.
-        - When `unselect={false}`, an already-selected toggle cannot be turned off by clicking it again.
-        - Visual button behavior such as sizing, hover states, and tooltip rendering comes from the underlying `IconButton`.
+### Control selection
 
-        ## Code Example
-        </Unstyled>
+Use selected/onChange for controlled state, or defaultSelected for local state.
+Set deselect=false to keep an active selection.
 
-        <RenderSource language={"tsx"}>
-        ```
-        import { useState } from 'react';
-        import { ToggleButton } from '@apple-pie/slice';
+</Unstyled>
+<RenderSource>
+```
+<ToggleButton label="Highlight" selected={selected} onChange={setSelected} />
+```
+</RenderSource>
+<Unstyled>
 
-        export function ThemeToggleExample() {
-            const [selected, setSelected] = useState(false);
+### Animate an icon on toggle
 
-            return (
-                <ToggleButton
-                    label="System"
-                    icon="keyboard"
-                    selected={selected}
-                    unselect={false}
-                    onChange={setSelected}
-                />
-            );
-        }
-        ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+Give selected and unselected different animation targets, such as rotation or scale.
+
+</Unstyled>
+<RenderSource>
+```
+<ToggleButton
+  icon="sun"
+  label="Highlight"
+  motionValues={{ unselected: { rotate: 0 }, selected: { rotate: 135 } }}
+  transition={{ duration: 0.2 }}
+/>
+```
+</RenderSource>
+<Unstyled>
+
+## Behavior
+
+Icon and text are one button. label takes priority over children. onClick runs first;
+preventDefault cancels selection. Selected colors win over hover colors. Default
+padding compensates for internal icon space on the left, or both sides for an
+icon-only toggle. Explicit padding is authoritative.
+
+## Accessibility
+
+Enter and Space activate the native button; keyboard focus is visible and aria-pressed
+exposes selection. Disabled blocks both icon and label and removes the Tab stop.
+The visible string label or numeric content names the action. Use actionName for
+rich or icon-only content; missing or blank names fall back to “Action”. Direct
+aria-label/aria-labelledby props are not exposed. Icons are decorative and not tabbable.
+Reduced motion disables icon and color animation, including custom delays/repeats,
+while preserving keyboard focus on live preference changes.
+
+## Props
+
+All props are optional. Colors accept Slice theme tokens or CSS colors. Numeric
+padding values are pixels; negative values become zero.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `actionName` | `string` | `undefined` | Optional action description in place of the visible text. |
+| `backgroundColor` | `ColorValue` | `core-surface-secondary` | Resting background. |
+| `backgroundColorHover` | `ColorValue` | `core-surface-secondary` | Hover background while unselected. |
+| `backgroundColorSelected` | `ColorValue` | `core-text-special` | Selected background; takes priority over hover. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Border color. |
+| `borderRadius` | `number \| string` | `4` | Corner radius. Numbers are pixels; zero gives square corners. |
+| `borderWidth` | `number` | `0` | Border width in pixels. Negative or nonfinite values become zero. |
+| `buttonSize` | `'s' \| 'm' \| 'l' \| 'xl' \| number` | `m` | Minimum frame height and width: s=24, m=36, l=44, xl=56px. A positive finite number sets a custom minimum. Content and padding can make the button larger; invalid sizes fall back to 36px. |
+| `children` | `React.ReactNode` | `undefined` | Content used when label is absent. Keep it noninteractive; the whole control is one button. |
+| `defaultSelected` | `boolean` | `false` | Initial local selection. Later changes are ignored; use selected for external control. |
+| `deselect` | `boolean` | `true` | Allows clearing an active selection. False keeps it selected without another onChange; onClick still runs. |
+| `disabled` | `boolean` | `false` | Disables the whole control, dims icon and text, and dismisses an open tooltip. |
+| `gap` | `number` | `4` | Pixel gap between icon and text. Negative or nonfinite values resolve to zero or the 4px default respectively. |
+| `hover` | `boolean` | `true` | Enables background, icon, and text hover colors. |
+| `icon` | `string` | `undefined` | Optional icon before the content. |
+| `iconColor` | `ColorValue` | `core-text-primary` | Resting icon color. |
+| `iconColorHover` | `ColorValue` | `core-text-primary` | Hover icon color while unselected. |
+| `iconColorSelected` | `ColorValue` | `core-surface-primary` | Selected icon color; takes priority over hover. |
+| `iconFill` | `boolean` | `false` | Uses the icon’s filled appearance. |
+| `iconSelected` | `string` | `undefined` | Alternate icon when selected. Requires icon; otherwise the original icon remains. |
+| `iconSize` | `number` | `20` | Icon size in pixels. Negative or nonfinite values fall back to 20px; zero hides its geometry. |
+| `label` | `string` | `undefined` | Visible text. Takes priority over children. |
+| `labelOutside` | `boolean` | `false` | Applies background, border, and radius only to the icon. Label clicks still toggle the same control. Falls back to the whole button without an icon. Outer padding defaults to 4px horizontally and zero vertically. |
+| `padding` | `number \| string` | `undefined` | Uniform padding. Defaults to zero vertical padding and spacing-s + spacing-xs horizontally (12px by default), with spacing-xs subtracted on an icon edge; icon-only content adjusts both edges. An explicit value disables this optical adjustment. Numbers are pixels. |
+| `paddingBottom` | `number \| string` | `undefined` | Bottom padding; overrides padding. |
+| `paddingLeft` | `number \| string` | `undefined` | Left padding; overrides padding and the default icon adjustment. |
+| `paddingRight` | `number \| string` | `undefined` | Right padding; overrides padding and the default icon-only adjustment. |
+| `paddingTop` | `number \| string` | `undefined` | Top padding; overrides padding. |
+| `selected` | `boolean` | `undefined` | Controlled selection. Update it from onChange; activation requests a change without mutating this value. |
+| `textColor` | `ColorValue` | `core-text-primary` | Resting text color. |
+| `textColorHover` | `ColorValue` | `core-text-primary` | Hover text color while unselected. |
+| `textColorSelected` | `ColorValue` | `textColor when labelOutside; otherwise core-surface-primary` | Selected text color; takes priority over hover. |
+| `textSize` | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'` | `s` | Visible text size. |
+| `toggleIcon` | `boolean` | `false` | Uses the icon’s alternate selected shape when available. Use iconSelected to choose a different icon name. |
+| `tooltip` | `string` | `undefined` | Optional tooltip text requested through onToolTip. Your application renders the tooltip. |
+| `...buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | `undefined` | Other native attributes apply to the single button. className is appended; style is merged, with component sizing, border, and padding variables taking priority. type defaults to button. |
+
+## Motion
+
+transition settings are merged with Slice’s Water transition. One transition drives
+icon animation and background, icon, and text colors.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `motionValues` | `Variants` | `undefined` | Inner-icon animation targets named selected and unselected, merged with neutral rotate=0, scale=1, and opacity=1 values. Variant functions receive the selection boolean. Per-variant transition settings are ignored; use transition. |
+| `transition` | `Transition` | `undefined` | Shared timing for icon animation and background, icon, and text colors. Partial settings are merged with Slice’s Water transition. |
+
+## Events
+
+- **onChange**: `(selected: boolean) => void`. Requests the next selection after an uncancelled activation. Does not run when deselect=false keeps an active selection.
+- **onClick**: `React.MouseEventHandler<HTMLButtonElement>`. Runs before selection handling. Calling event.preventDefault() cancels the change. Disabled buttons do not activate.
+- **onToolTip**: `(tip: ToolTip | null) => void`. Requests a tooltip on hover or focus. ToolTip carries type, payload.label, and the button ref; event is present for mouse requests and absent for focus. Sends null on activation, when both hover and focus end, on disable, tooltip changes or callback removal, or unmount.
+- **...buttonEvents**: `React.DOMAttributes<HTMLButtonElement>`. Other native button handlers are composed with internal behavior. Preventing default on mouse entry or focus suppresses that internal handling. No drag or pan gestures are implemented.
+
+</Unstyled>

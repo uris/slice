@@ -38,7 +38,14 @@ function TipDemo(props: Readonly<TipProps>) {
 	return (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
 			Hover me!
-			<IconButton icon={'home'} tooltip={'Home Button'} onToolTip={actions.push} toggle={false} hover={true} />
+			<IconButton
+				actionName={'Home Button'}
+				icon={'home'}
+				tooltip={'Home Button'}
+				onToolTip={actions.push}
+				toggle={false}
+				hover={true}
+			/>
 			<Tip {...props} coords={coords} tip={tip} ref={tipRef} />
 		</FlexDiv>
 	);
