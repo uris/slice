@@ -20,6 +20,8 @@ const header =
 let registry = readFileSync(new URL('iconRegistry.tsx', source), 'utf8');
 registry = registry.replace("import type React from 'react';\n", '');
 registry = registry.replace("import type { JSX } from 'react';\n", '');
+// The generated registry uses React Native's ColorValue, never the web theme module.
+registry = registry.replace("import type { ColorValue } from '../../theme/colors/resolveColor';\n", '');
 registry = registry.replace(/<(\/?)([a-z][a-zA-Z]*)(?=[\s/>])/g, (match, closing, tag) => {
 	if (!elements[tag]) throw new Error(`Unsupported SVG element: ${tag}`);
 	return `<${closing}${elements[tag]}`;

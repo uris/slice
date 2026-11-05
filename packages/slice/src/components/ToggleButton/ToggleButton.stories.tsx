@@ -265,7 +265,8 @@ export const SmallSize: Story = {
 
 export const LabelOutside: Story = {
 	tags: ['tests'],
-	args: { labelOutside: true, transition: { duration: 0 } },
+	// Exercise the outside-label default instead of inheriting the meta's selected text color.
+	args: { labelOutside: true, textColorSelected: undefined, transition: { duration: 0 } },
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);
 		const b = c.getByRole('button');
@@ -276,8 +277,10 @@ export const LabelOutside: Story = {
 		await expect(background.getBoundingClientRect().width).toBeLessThan(b.getBoundingClientRect().width);
 		await expect(label.getBoundingClientRect().left).toBeGreaterThanOrEqual(frame.getBoundingClientRect().right);
 		const textColor = getComputedStyle(label).color;
+		const backgroundColor = getComputedStyle(background).backgroundColor;
 		await userEvent.click(label);
 		await expect(b).toHaveAttribute('aria-pressed', 'true');
+		await waitFor(() => expect(getComputedStyle(background).backgroundColor).not.toBe(backgroundColor));
 		await waitFor(() => expect(getComputedStyle(label).color).toBe(textColor));
 		await expect(c.getAllByRole('button')).toHaveLength(1);
 	},
