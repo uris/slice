@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { SliceIcon } from '../Icon/_types';
 
 type GrouperBaseProps = {
 	title?: string;
@@ -6,7 +7,7 @@ type GrouperBaseProps = {
 	toggle?: boolean;
 	open?: boolean;
 	hasIcon?: boolean;
-	iconName?: string;
+	iconName?: SliceIcon;
 	iconSize?: number;
 	frameSize?: number;
 	border?: number;

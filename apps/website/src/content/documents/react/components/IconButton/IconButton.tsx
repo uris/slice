@@ -171,8 +171,8 @@ export function IconButtonDoc() {
 			</P>
 			<Definition id={'icon'}>
 				<Prop>icon</Prop>
-				<TypeDef>{'string'}</TypeDef>
-				<DefaultVal>{'more'}</DefaultVal>
+				<TypeDef>{'SliceIcon'}</TypeDef>
+				<DefaultVal>{'basic.more-horiz'}</DefaultVal>
 			</Definition>
 			<P>{'Icon name.'}</P>
 			<Definition id={'iconColor'}>

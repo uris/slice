@@ -181,7 +181,7 @@ export const FileList = React.memo((rawProps: FileListProps) => {
 							onKeyDown={(e) => accessibleKeyDown(e, () => handleRemove(i.index))}
 							tabIndex={0}
 						>
-							<Icon name={'x'} style={{ pointerEvents: 'none' }} />
+							<Icon name={'basic.cross'} style={{ pointerEvents: 'none' }} />
 						</div>
 					)}
 				</div>

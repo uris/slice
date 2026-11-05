@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StrictMode, useRef, useState } from 'react';
 import { Button } from 'src/components/Button/Button';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { SliceIcons } from 'src/components/Icon/_types';
 import {
 	runButtonDisabledInteractionsPlay,
 	runButtonFillAndCustomWidthPlay,
@@ -33,7 +34,7 @@ const meta: Meta<typeof Button> = {
 		variant: 'solid',
 		label: 'Button Label',
 		textSize: 'm',
-		iconRight: 'arrow right',
+		iconRight: SliceIcons.arrows.arrowRight,
 		iconLeft: undefined,
 		count: undefined,
 		showDot: undefined,
@@ -129,7 +130,7 @@ export const RoundIconOnly: StoryObj<typeof Button> = {
 	tags: ['tests'],
 	args: {
 		round: true,
-		iconLeft: 'home',
+		iconLeft: 'basic.home',
 		iconRight: undefined,
 	},
 	render: (args) => (
@@ -286,7 +287,7 @@ export const ControlledWorking: StoryObj<typeof Button> = {
 
 export const TimedProgressWithBothIcons: StoryObj<typeof Button> = {
 	tags: ['tests'],
-	args: { progress: true, duration: 0.1, iconLeft: 'home' },
+	args: { progress: true, duration: 0.1, iconLeft: 'basic.home' },
 	render: Default.render,
 	play: async ({ canvasElement, args }) => {
 		const button = within(canvasElement).getByRole('button');
@@ -349,7 +350,7 @@ export const ZeroCountHasNoStrayText: StoryObj<typeof Button> = {
 
 export const SmallRoundGeometry: StoryObj<typeof Button> = {
 	tags: ['tests'],
-	args: { round: true, size: 'small', iconLeft: 'home', iconRight: undefined },
+	args: { round: true, size: 'small', iconLeft: 'basic.home', iconRight: undefined },
 	render: (args) => <Button {...args} label={undefined} aria-label="Home" />,
 	play: async ({ canvasElement }) => {
 		const button = within(canvasElement).getByRole('button', { name: 'Home' });

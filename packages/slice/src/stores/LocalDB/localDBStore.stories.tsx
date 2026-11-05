@@ -90,7 +90,7 @@ function LocalDBStoreDemo() {
 									Id: {message.id}, Message: {message.message}
 								</div>
 								<Button
-									iconLeft={'trash bin'}
+									iconLeft={'basic.trash'}
 									round
 									size={'medium'}
 									destructive={true}

@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { SliceIcon } from '../Icon/_types';
 
 export interface DefaultNoVideoPosterProps {
 	size?: number | string;
@@ -7,8 +8,8 @@ export interface DefaultNoVideoPosterProps {
 }
 
 export interface ToolbarButtonProps {
-	icon: string;
-	iconActive?: string;
+	icon: SliceIcon;
+	iconActive?: SliceIcon;
 	onClick: () => void;
 	active?: boolean;
 	label?: string;

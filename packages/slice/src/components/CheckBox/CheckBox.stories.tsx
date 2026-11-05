@@ -38,9 +38,9 @@ const meta: Meta<typeof CheckBox> = {
 		align: 'middle',
 		iconColorSelected: undefined,
 		iconSize: 20,
-		iconChecked: 'checkbox checked',
-		iconUnChecked: 'checkbox',
-		iconPartial: 'checkbox partial',
+		iconChecked: 'system.checkbox-checked',
+		iconUnChecked: 'system.checkbox',
+		iconPartial: 'system.checkbox-partial',
 		gap: 6,
 		textSize: 'm',
 		textTopOffset: 0,
@@ -142,16 +142,21 @@ export const AccessibleLabelOverride: StoryObj<typeof CheckBox> = {
 
 export const CustomIcons: StoryObj<typeof CheckBox> = {
 	tags: ['tests'],
-	args: { checked: 'mixed', iconPartial: 'arrow left', iconChecked: 'home', iconUnChecked: 'arrow right' },
+	args: {
+		checked: 'mixed',
+		iconPartial: 'arrows.arrow-left',
+		iconChecked: 'basic.home',
+		iconUnChecked: 'arrows.arrow-right',
+	},
 	render: Default.render,
 	play: async ({ canvasElement, args }) => {
 		const checkbox = within(canvasElement).getByRole('checkbox');
-		await expect(checkbox.querySelector('svg')).toHaveAttribute('aria-label', 'arrow left icon');
+		await expect(checkbox.querySelector('svg')).toHaveAttribute('aria-label', 'arrows.arrow-left icon');
 		await userEvent.click(checkbox);
-		await expect(checkbox.querySelector('svg')).toHaveAttribute('aria-label', 'home icon');
+		await expect(checkbox.querySelector('svg')).toHaveAttribute('aria-label', 'basic.home icon');
 		await expect(args.onChange).toHaveBeenLastCalledWith(true);
 		await userEvent.click(checkbox);
-		await expect(checkbox.querySelector('svg')).toHaveAttribute('aria-label', 'arrow right icon');
+		await expect(checkbox.querySelector('svg')).toHaveAttribute('aria-label', 'arrows.arrow-right icon');
 		await expect(args.onChange).toHaveBeenLastCalledWith(false);
 	},
 };
@@ -251,7 +256,7 @@ export const MixedStateDefaults: StoryObj<typeof CheckBox> = {
 	play: async ({ canvasElement, args }) => {
 		const checkbox = within(canvasElement).getByRole('checkbox');
 		await expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
-		await expect(checkbox.querySelector('svg')).toHaveAttribute('aria-label', 'checkbox partial icon');
+		await expect(checkbox.querySelector('svg')).toHaveAttribute('aria-label', 'system.checkbox-partial icon');
 		await expect(checkbox.querySelector('[stroke]')).toHaveAttribute('stroke', 'var(--core-icon-primary)');
 		await userEvent.click(checkbox);
 		await expect(checkbox).toHaveAttribute('aria-checked', 'true');

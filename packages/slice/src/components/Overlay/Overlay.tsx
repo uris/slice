@@ -1,81 +1,121 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
-import React, { useCallback, useMemo } from 'react';
+import {
+	AnimatePresence,
+	type Transition,
+	type Variants,
+	motion,
+	useAnimationControls,
+	usePresence,
+} from 'motion/react';
+import React, { useEffect, useMemo } from 'react';
+import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { getWaterTransition } from '../../utils/styling/getWaterTransition';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import css from './Overlay.module.css';
 import type { OverlayProps } from './_types';
 
-const defaultTransition = { ease: 'easeOut', duration: 0.25 };
+const withoutAria = (attributes: object) =>
+	Object.fromEntries(Object.entries(attributes).filter(([key]) => !key.startsWith('aria-') && key !== 'role'));
+
+type LayerProps = Omit<OverlayProps, 'show' | 'opacity' | 'transition'> & { opacity: number; transition: Transition };
+function OverlayLayer({
+	children,
+	opacity,
+	backgroundColor,
+	transition,
+	motionValues,
+	className,
+	style,
+	position = 'fixed',
+	pointerEvents = 'auto',
+	...attributes
+}: LayerProps) {
+	const [isPresent, safeToRemove] = usePresence();
+	const reducedMotion = usePrefersReducedMotion();
+	const controls = useAnimationControls();
+	const variants = useMemo(() => {
+		const defaults = { initial: { opacity: 0 }, animate: { opacity }, exit: { opacity: 0 } };
+		const merged: Variants = { ...defaults, ...motionValues };
+		for (const state of ['initial', 'animate', 'exit'] as const) {
+			const override = motionValues?.[state];
+			if (override && typeof override !== 'function') merged[state] = { ...defaults[state], ...override };
+		}
+		return merged;
+	}, [opacity, motionValues]);
+	useEffect(() => {
+		if (reducedMotion) {
+			if (!isPresent) safeToRemove?.();
+			return;
+		}
+		let active = true;
+		const state = isPresent ? 'animate' : 'exit';
+		const target = variants[state];
+		const definition = typeof target === 'function' ? state : target;
+		void controls.start(definition, transition).then(() => {
+			if (active && !isPresent) safeToRemove?.();
+		});
+		return () => {
+			active = false;
+			controls.stop();
+		};
+	}, [controls, isPresent, reducedMotion, safeToRemove, transition, variants]);
+	if (reducedMotion && !isPresent) return null;
+	const rootStyle = {
+		...style,
+		'--overlay-background': backgroundColor,
+		position,
+		pointerEvents,
+	} as React.CSSProperties;
+	return (
+		<div
+			{...withoutAria(attributes)}
+			data-overlay=""
+			data-pointer-events={pointerEvents}
+			className={`${css.overlay}${className ? ` ${className}` : ''}`}
+			style={rootStyle}
+		>
+			{reducedMotion ? (
+				<div data-overlay-backdrop="" aria-hidden="true" className={css.backdrop} style={{ opacity }} />
+			) : (
+				<motion.div
+					data-overlay-backdrop=""
+					aria-hidden="true"
+					className={css.backdrop}
+					initial="initial"
+					animate={controls}
+					variants={variants}
+					transition={transition}
+				/>
+			)}
+			{children}
+		</div>
+	);
+}
 
 export const Overlay = React.memo((rawProps: OverlayProps) => {
 	const props = resolveColorProps(rawProps);
-	const {
-		children,
-		show = false,
-		type = 'clear',
-		global = false,
-		overlay,
-		color = 'rgb(0,0,0)',
-		opacity = undefined,
-		transition = defaultTransition,
-		onClick = () => null,
-		toggleOverlay = () => null,
-		...divAttributes
-	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
-
-	// resolve the visual opacity from the configured overlay type
-	const computedOpacity = useMemo(() => {
-		if (type === 'clear') return 0;
-		if (opacity !== undefined) return opacity;
-		if (type === 'dark') return 0.8;
-		return 0;
-	}, [type, opacity]);
-
-	// handle overlay clicks and close the global overlay when needed
-	const handleClick = useCallback(() => {
-		if (global) toggleOverlay(false);
-		onClick();
-	}, [global, toggleOverlay, onClick]);
-
-	// block the native context menu over the overlay surface
-	const handleContextMenu = useCallback((e: React.MouseEvent) => {
-		e.preventDefault();
-	}, []);
-
-	// compose CSS custom properties for the overlay color
-	const cssVars = useMemo(() => {
-		return {
-			'--overlay-color': color ?? 'rgb(0,0,0)',
-		} as React.CSSProperties;
-	}, [color]);
-
+	const { show = false, backgroundColor = 'rgb(0,0,0)', opacity = 0, transition, ...attributes } = props;
+	const { current } = useTheme();
+	const timing = useMemo(() => getWaterTransition(current.motion, transition), [current.motion, transition]);
+	const effectiveOpacity = Number.isFinite(opacity) ? Math.min(1, Math.max(0, opacity)) : 0;
 	/* START.DEBUG */
 	useTrackRenders(props, 'Overlay');
 	/* END.DEBUG */
-
 	return (
-		<AnimatePresence initial={false}>
+		<AnimatePresence>
 			{show && (
-				<motion.div
-					id={divId}
-					className={`${css.overlay}${divClass}`}
-					style={{ ...divStyle, ...cssVars }}
-					initial={{ opacity: 0 }}
-					animate={{ opacity: computedOpacity }}
-					exit={{ opacity: 0 }}
-					onClick={handleClick}
-					transition={transition}
-					onContextMenu={handleContextMenu}
-					{...(rest as any)}
-				>
-					{children}
-				</motion.div>
+				<OverlayLayer
+					key="overlay"
+					{...attributes}
+					backgroundColor={backgroundColor}
+					opacity={effectiveOpacity}
+					transition={timing}
+				/>
 			)}
 		</AnimatePresence>
 	);
 });
+Overlay.displayName = 'Overlay';

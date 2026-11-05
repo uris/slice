@@ -1,18 +1,20 @@
-import type { Transition } from 'motion/react';
+import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type OverlayBaseProps = {
 	children?: React.ReactNode;
 	show?: boolean;
+	backgroundColor?: ColorValue;
 	opacity?: number;
-	color?: ColorValue;
-	type?: 'clear' | 'dark';
-	global?: boolean;
-	overlay?: any;
-	onClick?: () => void;
+	position?: 'fixed' | 'absolute';
+	pointerEvents?: 'auto' | 'none';
 	transition?: Transition;
-	toggleOverlay?: (state: boolean) => void;
+	motionValues?: Variants;
 };
 
-export type OverlayProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof OverlayBaseProps> & OverlayBaseProps;
+export type OverlayProps = Omit<
+	React.HTMLAttributes<HTMLDivElement>,
+	keyof OverlayBaseProps | keyof React.AriaAttributes | 'role' | 'color' | 'dangerouslySetInnerHTML'
+> &
+	OverlayBaseProps;

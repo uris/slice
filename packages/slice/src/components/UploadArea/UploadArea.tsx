@@ -13,7 +13,7 @@ import { type UploadAreaProps, allTypes } from './_types';
 const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawProps, ref) => {
 	const props = resolveColorProps(rawProps);
 	const {
-		icon = 'upload',
+		icon = 'arrows.export',
 		iconColor = 'var(--core-text-primary)',
 		iconColorHover = 'var(--core-text-special)',
 		title = 'Upload Files',

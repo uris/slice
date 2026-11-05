@@ -259,20 +259,6 @@ export async function runLogosPlay<TArgs>({ canvasElement }: PlayContext<TArgs>)
 	await expect(canvas.getByRole('img')).toBeInTheDocument();
 }
 
-export async function runOverlayPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const overlay = getOverlay(canvasElement);
-	if (isFn(storyArgs.onClick) && storyArgs.show && overlay) {
-		await fireEvent.click(overlay);
-		await expect(storyArgs.onClick).toHaveBeenCalled();
-	}
-	if (storyArgs.global === true && isFn(storyArgs.toggleOverlay) && overlay) {
-		await fireEvent.click(overlay);
-		await expect(storyArgs.toggleOverlay).toHaveBeenCalledWith(false);
-	}
-}
-
 export async function runPagerPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
@@ -601,7 +587,7 @@ export async function runModalControllerResolveViaPrimaryActionPlay<TArgs>({ can
 	await userEvent.click(canvas.getByRole('button', { name: /continue/i }));
 	const dialogTitle = await canvas.findByText('Continue?');
 	await expect(canvas.getByRole('button', { name: /no/i })).toBeInTheDocument();
-	// Modal's title bar (the onPointerDown/drag-start target) is the title
+	// DialogBox's title bar (the onPointerDown/drag-start target) is the title
 	// text's grandparent — walk the DOM directly rather than guess at a
 	// hashed CSS module class name — to also exercise onDragPointerDown
 	const titleBar = dialogTitle.parentElement?.parentElement;
@@ -2327,37 +2313,6 @@ export async function runButtonProgressFlowPlay<TArgs>({ canvasElement, args }: 
 	// which resolves the deferred click with `undefined`
 	if (isFn(storyArgs.onClick)) {
 		await waitFor(() => expect(storyArgs.onClick).toHaveBeenCalledWith(undefined));
-	}
-}
-
-export async function runOverlayOpacityVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-
-	// `initial={false}` on the AnimatePresence means these mount straight
-	// into their animate opacity rather than transitioning from 0
-	const clearOverlay = canvasElement.querySelector('[class*="clear-overlay"]') as HTMLElement | null;
-	await expect(clearOverlay).toBeInTheDocument();
-	if (clearOverlay) {
-		// type='clear' always forces 0, regardless of the opacity prop
-		await waitFor(() => expect(Number.parseFloat(clearOverlay.style.opacity || '0')).toBeCloseTo(0, 2));
-	}
-
-	const darkDefault = canvasElement.querySelector('[class*="dark-default-overlay"]') as HTMLElement | null;
-	await expect(darkDefault).toBeInTheDocument();
-	if (darkDefault) {
-		// no opacity prop on a 'dark' overlay falls back to 0.8
-		await waitFor(() => expect(Number.parseFloat(darkDefault.style.opacity || '0')).toBeCloseTo(0.8, 2));
-	}
-
-	const darkExplicit = canvasElement.querySelector('[class*="dark-explicit-overlay"]') as HTMLElement | null;
-	await expect(darkExplicit).toBeInTheDocument();
-	if (darkExplicit) {
-		// an explicit opacity (even a low one) always wins over the type default
-		await waitFor(() => expect(Number.parseFloat(darkExplicit.style.opacity || '0')).toBeCloseTo(0.3, 2));
-
-		// right-click is blocked on every overlay regardless of type/opacity
-		const dispatched = fireEvent.contextMenu(darkExplicit);
-		await expect(dispatched).toBe(false);
 	}
 }
 

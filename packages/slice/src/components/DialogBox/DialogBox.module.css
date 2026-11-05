@@ -1,0 +1,186 @@
+.wrapper {
+	position: relative;
+	min-width: min(var(--modal-min-width), 100%);
+	width: max-content;
+	box-sizing: border-box;
+	align-self: center;
+	min-height: var(--modal-min-height);
+	max-height: var(--modal-max-height);
+	max-width: min(var(--modal-max-width), 100%);
+	background: var(--modal-background-color);
+	border: var(--modal-border-width) solid var(--modal-border-color);
+	border-radius: var(--modal-border-radius);
+	box-shadow: var(--surface-shadow-soft);
+	overflow: hidden;
+}
+
+.title {
+	padding: var(--modal-padding);
+	padding-bottom: 0;
+	width: 100%;
+	gap: var(--spacing-m);
+	border-bottom: var(--modal-title-border-width) solid var(--modal-title-border-color);
+}
+
+.titleBlock {
+	color: var(--modal-title-color);
+	flex: 1;
+	min-width: 0;
+	gap: var(--spacing-xs);
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.titleIcon {
+	height: 20px;
+	width: 20px;
+	min-height: 20px;
+	min-width: 20px;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.contentWrapper {
+	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
+	display: flex;
+	box-sizing: border-box;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	overflow: hidden;
+	overflow-y: auto;
+	min-height: unset;
+	/* keeps scrollHandleColor/scrollHandleColorHover props working as before */
+	--scrollbar-bg: var(--modal-background-color);
+	--scrollbar-thumb: var(--modal-scroll-handle);
+	--scrollbar-thumb-hover: var(--modal-scroll-handle-hover);
+}
+
+.content {
+	color: var(--core-text-tertiary);
+	padding: var(--modal-padding);
+	width: 100%;
+}
+
+.actions {
+	background-color: var(--modal-actions-background-color, color-mix(in srgb, var(--modal-background-color) 90%, black));
+	padding: var(--modal-padding);
+	padding-top: var(--modal-padding-adjust);
+	width: 100%;
+	user-select: none;
+	-webkit-user-select: none;
+	flex-shrink: 0;
+	flex-wrap: wrap;
+	gap: var(--spacing-xs);
+	border-top: var(--modal-actions-border-width) solid var(--modal-actions-border-color);
+}
+
+.leftActions {
+	gap: var(--spacing-s);
+	flex-wrap: wrap;
+	min-width: 0;
+}
+
+.rightActions {
+	gap: var(--spacing-s);
+	flex-wrap: wrap;
+	min-width: 0;
+}
+
+.xs {
+	composes: body-xs-medium from "../../utils/styling/type.module.css";
+}
+
+.s {
+	composes: body-s-medium from "../../utils/styling/type.module.css";
+}
+
+.m {
+	composes: body-m-medium from "../../utils/styling/type.module.css";
+}
+
+.l {
+	composes: body-l-medium from "../../utils/styling/type.module.css";
+}
+
+.xl {
+	composes: body-xl-medium from "../../utils/styling/type.module.css";
+}
+
+.close button:focus-visible {
+	outline: none;
+}
+
+.wrapper .heading {
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	overflow-wrap: anywhere;
+	min-width: 0;
+}
+
+.titleIcon {
+	flex: 0 0 20px;
+}
+
+.content {
+	overflow-wrap: anywhere;
+	min-width: 0;
+	flex: 0 0 auto;
+}
+
+.wrapper,
+.title,
+.titleBlock,
+.titleIcon,
+.contentWrapper,
+.content,
+.actions,
+.leftActions,
+.rightActions {
+	display: flex;
+	box-sizing: border-box;
+	margin: 0;
+}
+
+.wrapper {
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: space-between;
+}
+
+.title,
+.actions {
+	align-items: center;
+	justify-content: space-between;
+}
+
+.titleBlock,
+.leftActions {
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.rightActions {
+	margin-left: auto;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.titleIcon {
+	align-items: center;
+	justify-content: center;
+}
+
+.contentWrapper,
+.content {
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+}
+
+/* Keep the scrollbar inset after the shared margin reset above. */
+.contentWrapper {
+	margin-right: 2px;
+}

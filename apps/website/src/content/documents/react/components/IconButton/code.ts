@@ -1,14 +1,14 @@
 export const usageCode = `
 import { IconButton } from '@apple-pie/slice';
 
-<IconButton icon="more" actionName="More options" onClick={myHandler} />
+<IconButton icon="basic.more-horiz" actionName="More options" onClick={myHandler} />
 `;
 export const exampleCode = `
-<IconButton icon="sun" actionName="Highlight" toggle selected={selected} onChange={setSelected} />
+<IconButton icon="weather.sun" actionName="Highlight" toggle selected={selected} onChange={setSelected} />
 `;
 export const motionCode = `
 <IconButton
-  icon="sun"
+  icon="weather.sun"
   actionName="Highlight"
   toggle
   motionValues={{ unselected: { rotate: 0 }, selected: { rotate: 135 } }}

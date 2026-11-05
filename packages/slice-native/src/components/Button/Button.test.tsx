@@ -171,7 +171,7 @@ describe('Button', () => {
 		{ size: 'l' as const, height: 56 },
 		{ size: 64, height: 64 },
 	])('uses size $size as a minimum height while preserving label and icon sizing', ({ size, height }) => {
-		render(button('Save', { size, icon: 'home', iconSize: 18 }));
+		render(button('Save', { size, icon: 'basic.home', iconSize: 18 }));
 		expect(wrapperStyle()).toMatchObject({ minHeight: height, width: 'auto' });
 		expect(wrapperStyle()).not.toHaveProperty('height');
 		expect(screen.getByTestId('icon').dataset.size).toBe('18');
@@ -183,17 +183,17 @@ describe('Button', () => {
 		{ size: 'l' as const, height: 56 },
 		{ size: 60, height: 60 },
 	])('matches icon-only width to size $size', ({ size, height }) => {
-		render(button(undefined, { size, icon: 'home', accessibilityLabel: 'Go home' }));
+		render(button(undefined, { size, icon: 'basic.home', accessibilityLabel: 'Go home' }));
 		expect(wrapperStyle()).toMatchObject({ minHeight: height, width: height, borderRadius: 1000 });
 		expect(screen.getByTestId('icon').dataset.size).toBe('24');
 	});
 	it('updates size and label-dependent width when props change', () => {
-		const view = render(button('Save', { size: 's', icon: 'home' }));
+		const view = render(button('Save', { size: 's', icon: 'basic.home' }));
 		expect(wrapperStyle()).toMatchObject({ minHeight: 40, width: 'auto' });
-		view.rerender(button(undefined, { size: 'l', icon: 'home', accessibilityLabel: 'Save' }));
+		view.rerender(button(undefined, { size: 'l', icon: 'basic.home', accessibilityLabel: 'Save' }));
 		expect(wrapperStyle()).toMatchObject({ minHeight: 56, width: 56 });
 		expect(pressableStyle()).toMatchObject({ paddingLeft: 0, paddingRight: 0 });
-		view.rerender(button(0, { size: 72, icon: 'home' }));
+		view.rerender(button(0, { size: 72, icon: 'basic.home' }));
 		expect(wrapperStyle()).toMatchObject({ minHeight: 72, width: 'auto' });
 		expect(screen.getByTestId('label').textContent).toBe('0');
 	});
@@ -229,30 +229,30 @@ describe('Button', () => {
 		expect(screen.getByTestId('label').dataset.color).toBe(lightTheme.colors['core-text-disabled']);
 	});
 	it('uses secondary styling and updates colors when the theme changes', () => {
-		const view = render(button('Save', { variant: 'secondary', icon: 'home' }));
+		const view = render(button('Save', { variant: 'secondary', icon: 'basic.home' }));
 		expect(wrapperStyle()).toMatchObject({
 			backgroundColor: lightTheme.colors['core-surface-primary'],
 			borderWidth: 1,
 			borderColor: lightTheme.colors['core-outline-secondary'],
 		});
 		expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-icon-primary']);
-		view.rerender(button('Save', { variant: 'secondary', icon: 'home' }, 'dark'));
+		view.rerender(button('Save', { variant: 'secondary', icon: 'basic.home' }, 'dark'));
 		expect(wrapperStyle().backgroundColor).toBe(darkTheme.colors['core-surface-primary']);
 		expect(screen.getByTestId('label').dataset.color).toBe(darkTheme.colors['core-text-primary']);
 		expect(screen.getByTestId('icon').dataset.color).toBe(darkTheme.colors['core-link-primary']);
 	});
 	it.each(['left', 'right'] as const)('places the icon on the %s with matching padding', (iconPosition) => {
-		render(button('Save', { icon: 'home', iconPosition, iconSize: 20 }));
+		render(button('Save', { icon: 'basic.home', iconPosition, iconSize: 20 }));
 		const children = screen.getByRole('button').children;
 		expect(children[iconPosition === 'left' ? 0 : 1]).toBe(screen.getByTestId('icon'));
-		expect(screen.getByTestId('icon').dataset).toMatchObject({ name: 'home', size: '20', accessible: 'false' });
+		expect(screen.getByTestId('icon').dataset).toMatchObject({ name: 'basic.home', size: '20', accessible: 'false' });
 		expect(pressableStyle()).toMatchObject({
 			paddingLeft: iconPosition === 'left' ? 16 : 22,
 			paddingRight: iconPosition === 'right' ? 16 : 22,
 		});
 	});
 	it('supports an accessible icon-only button and disabled icon colors', () => {
-		render(button(undefined, { icon: 'home', disabled: true, accessibilityLabel: 'Go home' }));
+		render(button(undefined, { icon: 'basic.home', disabled: true, accessibilityLabel: 'Go home' }));
 		expect(screen.getByRole('button', { name: 'Go home' })).toBeTruthy();
 		expect(screen.queryByTestId('label')).toBeNull();
 		expect(wrapperStyle()).toMatchObject({ width: 48, minHeight: 48, borderRadius: 1000 });
@@ -282,9 +282,9 @@ describe('Button', () => {
 		expect(pressableStyle().paddingHorizontal).toBe(16);
 	});
 	it.each([undefined, 'Save'])('fills and rounds the ripple host for content %s', (label) => {
-        const view = render(button(label, { icon: 'home', borderRadius: 12 }));
+        const view = render(button(label, { icon: 'basic.home', borderRadius: 12 }));
         expect(pressableStyle()).toMatchObject({ flex: 1, alignSelf: 'stretch', overflow: 'hidden', borderRadius: 12 });
-        view.rerender(button(label, { icon: 'home', borderRadius: 0 }));
+        view.rerender(button(label, { icon: 'basic.home', borderRadius: 0 }));
         expect(pressableStyle().borderRadius).toBe(0);
     });
 
@@ -304,16 +304,16 @@ describe('Button', () => {
 });
 
 it('resolves independent text and icon colors with shared tint as their fallback', () => {
-    const view = render(button(undefined, { label: 'Save', icon: 'home', tintColor: 'core-text-primary',
+    const view = render(button(undefined, { label: 'Save', icon: 'basic.home', tintColor: 'core-text-primary',
         iconColor: 'core-icon-secondary', textColor: 'red' }));
     expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-icon-secondary']);
     expect(screen.getByTestId('label').dataset.color).toBe('red');
     expect(state.pressable).not.toHaveProperty('iconColor');
     expect(state.pressable).not.toHaveProperty('textColor');
-    view.rerender(button(undefined, { label: 'Save', icon: 'home', tintColor: 'core-text-secondary', textColor: 'core-text-tertiary' }));
+    view.rerender(button(undefined, { label: 'Save', icon: 'basic.home', tintColor: 'core-text-secondary', textColor: 'core-text-tertiary' }));
     expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-secondary']);
     expect(screen.getByTestId('label').dataset.color).toBe(lightTheme.colors['core-text-tertiary']);
-    view.rerender(button(undefined, { label: 'Save', icon: 'home', disabled: true, iconColor: 'red', textColor: 'blue' }));
+    view.rerender(button(undefined, { label: 'Save', icon: 'basic.home', disabled: true, iconColor: 'red', textColor: 'blue' }));
     expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-disabled']);
     expect(screen.getByTestId('label').dataset.color).toBe(lightTheme.colors['core-text-disabled']);
 });
@@ -333,12 +333,12 @@ describe('regular button style overrides', () => {
  });
  it('gives explicit props priority and restores style values when props are removed', () => {
   const style = { backgroundColor: 'purple', borderRadius: 8, borderTopLeftRadius: 20, borderWidth: 3, borderTopWidth: 6, borderColor: 'red', borderTopColor: 'pink', minHeight: 24, padding: 10, columnGap: 12 };
-  const view = render(button(undefined, { icon: 'home', style, size: 64, borderRadius: 0, borderWidth: 0, borderColor: 'transparent', backgroundColor: 'transparent', contentInsets: { top: 0, leading: 0 }, iconGap: 0 }));
+  const view = render(button(undefined, { icon: 'basic.home', style, size: 64, borderRadius: 0, borderWidth: 0, borderColor: 'transparent', backgroundColor: 'transparent', contentInsets: { top: 0, leading: 0 }, iconGap: 0 }));
   expect(wrapperStyle()).toMatchObject({ minHeight: 64, width: 64, borderRadius: 0, borderWidth: 0, borderColor: 'transparent', backgroundColor: 'transparent' });
   for (const key of ['borderTopLeftRadius', 'borderTopWidth', 'borderTopColor']) expect(wrapperStyle()).not.toHaveProperty(key);
   expect(pressableStyle()).toMatchObject({ borderRadius: 0, paddingStart: 0, paddingTop: 0, paddingBottom: 10, paddingEnd: 10, gap: 0, columnGap: 0 });
   const element = screen.getByRole('button');
-  view.rerender(button(undefined, { icon: 'home', style }));
+  view.rerender(button(undefined, { icon: 'basic.home', style }));
   expect(wrapperStyle()).toMatchObject({ borderRadius: 8, borderTopLeftRadius: 20, minHeight: 24, width: 24, borderWidth: 3, borderTopWidth: 6, backgroundColor: 'purple' });
   expect(pressableStyle()).toMatchObject({ borderRadius: 8, borderTopLeftRadius: 20, paddingStart: 10, paddingTop: 10 });
   expect(screen.getByRole('button')).toBe(element);
@@ -361,7 +361,7 @@ it('preserves zero size and style values instead of substituting defaults', () =
  const view = render(button('Save', { style: { minHeight: 0, borderRadius: 0, borderWidth: 0, padding: 0, gap: 0 } }));
  expect(wrapperStyle()).toMatchObject({ minHeight: 0, borderRadius: 0, borderWidth: 0 });
  expect(pressableStyle()).toMatchObject({ paddingStart: 0, paddingEnd: 0, paddingTop: 0, paddingBottom: 0, gap: 0 });
- view.rerender(button(undefined, { icon: 'home', size: 0, style: { minHeight: 32, width: 32 } }));
+ view.rerender(button(undefined, { icon: 'basic.home', size: 0, style: { minHeight: 32, width: 32 } }));
  expect(wrapperStyle()).toMatchObject({ minHeight: 0, width: 0 });
 });
 
@@ -401,28 +401,28 @@ it('clips the painted surface as well as the ripple host to the resolved corners
 
 it.each(['light', 'dark'] as const)('defaults primary label and icon to core-text-light in the %s theme', (preference) => {
  const palette = { light: lightTheme, dark: darkTheme }[preference].colors;
- const view = render(button('Save', { icon: 'home' }, preference));
+ const view = render(button('Save', { icon: 'basic.home' }, preference));
  expect(screen.getByTestId('label').dataset.color).toBe(palette['core-text-light']);
  expect(screen.getByTestId('icon').dataset.color).toBe(palette['core-text-light']);
- view.rerender(button(undefined, { icon: 'home', variant: 'primary', accessibilityLabel: 'Save', liquidGlassBackground: { fallbackColor: 'blue' } }, preference));
+ view.rerender(button(undefined, { icon: 'basic.home', variant: 'primary', accessibilityLabel: 'Save', liquidGlassBackground: { fallbackColor: 'blue' } }, preference));
  expect(screen.getByTestId('icon').dataset.color).toBe(palette['core-text-light']);
- view.rerender(button('Save', { icon: 'home', variant: 'secondary' }, preference));
+ view.rerender(button('Save', { icon: 'basic.home', variant: 'secondary' }, preference));
  expect(screen.getByTestId('label').dataset.color).toBe(palette['core-text-primary']);
  const expectedIcon = { light: palette['core-icon-primary'], dark: palette['core-link-primary'] }[preference];
  expect(screen.getByTestId('icon').dataset.color).toBe(expectedIcon);
- view.rerender(button('Save', { icon: 'home', variant: 'primary' }, preference));
+ view.rerender(button('Save', { icon: 'basic.home', variant: 'primary' }, preference));
  expect(screen.getByTestId('label').dataset.color).toBe(palette['core-text-light']);
  expect(screen.getByTestId('icon').dataset.color).toBe(palette['core-text-light']);
 });
 
 it('keeps primary foreground overrides ahead of the default light color', () => {
- const view = render(button('Save', { icon: 'home', tintColor: 'blue' }));
+ const view = render(button('Save', { icon: 'basic.home', tintColor: 'blue' }));
  expect(screen.getByTestId('label').dataset.color).toBe('blue');
  expect(screen.getByTestId('icon').dataset.color).toBe('blue');
- view.rerender(button('Save', { icon: 'home', tintColor: 'blue', textColor: 'red', iconColor: 'green' }));
+ view.rerender(button('Save', { icon: 'basic.home', tintColor: 'blue', textColor: 'red', iconColor: 'green' }));
  expect(screen.getByTestId('label').dataset.color).toBe('red');
  expect(screen.getByTestId('icon').dataset.color).toBe('green');
- view.rerender(button('Save', { icon: 'home', style: { color: 'purple' } }));
+ view.rerender(button('Save', { icon: 'basic.home', style: { color: 'purple' } }));
  expect(screen.getByTestId('label').dataset.color).toBe('purple');
  expect(screen.getByTestId('icon').dataset.color).toBe(lightTheme.colors['core-text-light']);
 });

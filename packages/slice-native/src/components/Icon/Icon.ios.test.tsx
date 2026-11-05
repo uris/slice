@@ -16,7 +16,7 @@ vi.mock('react-native', async () => ({
 	},
 }));
 vi.mock('./IconSvg', () => ({ Icon: (props: any) => { state.svg = props; return <span data-testid="svg" />; } }));
-vi.mock('./iconRegistry', () => ({ STATIC_ICON_REGISTRY: new Map([['home', {}], ['like', {}]]) }));
+vi.mock('./iconRegistry', () => ({ STATIC_ICON_REGISTRY: new Map([['basic.home', {}], ['basic.thumbs-up', {}]]) }));
 vi.mock('../../specs/GlassIconNativeComponent', () => ({ default: (props: any) => { state.native = props; return <span data-testid="native" />; } }));
 afterEach(cleanup);
 
@@ -28,8 +28,8 @@ describe('Icon in glass', () => {
 	it('uses templates through intermediate views and preserves SVG outside supported glass', () => {
 		const view = render(icon());
 		expect(screen.getByTestId('native')).toBeTruthy();
-		expect(state.native).toMatchObject({ iconName: 'home', tintToken: 'core-icon-primary', accessible: false, pointerEvents: 'none' });
-		expect(state.wrapper).toMatchObject({ accessibilityLabel: 'home icon', accessibilityRole: 'image' });
+		expect(state.native).toMatchObject({ iconName: 'basic.home', tintToken: 'core-icon-primary', accessible: false, pointerEvents: 'none' });
+		expect(state.wrapper).toMatchObject({ accessibilityLabel: 'basic.home icon', accessibilityRole: 'image' });
 		view.rerender(icon({}, false));
 		expect(screen.getByTestId('svg')).toBeTruthy();
 	});
@@ -41,12 +41,12 @@ describe('Icon in glass', () => {
 		},
 	);
 	it('updates template variants, explicit foregrounds, geometry and accessibility', () => {
-		const view = render(icon({ name: 'like', size: 32, toggle: true, fill: true, fillColor: 1, iconColor: '#ff0000', accessibilityLabel: 'Favorite' }));
-		expect(state.native).toMatchObject({ iconName: 'like', toggled: true, filled: true, tintToken: 'core-icon-primary' });
+		const view = render(icon({ name: 'basic.thumbs-up', size: 32, toggle: true, fill: true, fillColor: 1, iconColor: '#ff0000', accessibilityLabel: 'Favorite' }));
+		expect(state.native).toMatchObject({ iconName: 'basic.thumbs-up', toggled: true, filled: true, tintToken: 'core-icon-primary' });
 		expect(state.wrapper.style[0]).toMatchObject({ width: 32, height: 32 });
 		expect(state.wrapper.accessibilityLabel).toBe('Favorite');
-		view.rerender(icon({ name: 'home', toggle: false }));
-		expect(state.native).toMatchObject({ iconName: 'home', toggled: false, filled: false });
+		view.rerender(icon({ name: 'basic.home', toggle: false }));
+		expect(state.native).toMatchObject({ iconName: 'basic.home', toggled: false, filled: false });
 		expect(state.native.foregroundColor).toBeUndefined();
 	});
 	it('keeps press handlers, disables presses, and applies disabled opacity once', () => {

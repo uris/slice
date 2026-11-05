@@ -15,15 +15,15 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import { Button } from '../Button';
 
 const listView: BarButton[] = [
-	{ icon: 'arrow left', action: 'previous', tip: 'Previous' },
-	{ icon: 'arrow right', action: 'next', tip: 'Next' },
+	{ icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
+	{ icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
 ];
 
 // Explicit three-item fixture for selection regressions; the public demo stays two actions.
 const selectionButtons: BarButton[] = [
-	{ icon: 'arrow left', action: 'previous', tip: 'Previous' },
-	{ icon: 'home', action: 'home', tip: 'Home' },
-	{ icon: 'arrow right', action: 'next', tip: 'Next' },
+	{ icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
+	{ icon: 'basic.home', action: 'home', tip: 'Home' },
+	{ icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
 ];
 
 const meta: Meta<typeof ButtonBar> = {
@@ -194,7 +194,7 @@ export const CustomClassName: StoryObj<typeof ButtonBar> = {
 export const MissingTipFallback: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
 	args: {
-		buttons: [{ icon: 'home', action: 'gallery' } as unknown as BarButton, ...listView],
+		buttons: [{ icon: 'basic.home', action: 'gallery' } as unknown as BarButton, ...listView],
 	},
 	render: (args) => (
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>

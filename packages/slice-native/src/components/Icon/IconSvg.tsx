@@ -12,7 +12,7 @@ export const Icon = memo((props: IconProps) => {
 	const optionalTheme = useOptionalSliceTheme();
 	if (optionalTheme) dark = optionalTheme.name === 'darkMode';
 	const {
-		name = 'home',
+		name = 'basic.home',
 		size = 20,
 		stroke = 1.5,
 		iconColor,

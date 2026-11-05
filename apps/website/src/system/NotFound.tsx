@@ -16,7 +16,7 @@ export default function NotFound() {
 				textSize={'l'}
 				underline
 				textColor={'var(--core-link-primary)'}
-				iconLeft={'home'}
+				iconLeft={'basic.home'}
 				iconColor={'var(--core-link-primary)'}
 				onClick={() => {
 					window.open('/', '_top');

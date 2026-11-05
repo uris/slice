@@ -149,7 +149,7 @@ function WSStoreDemo() {
 							addLogEntry('send [Outbound Event]', messageToSend);
 							setMessageToSend('');
 						}}
-						iconLeft={'arrow right'}
+						iconLeft={'arrows.arrow-right'}
 						state={isConnected && messageToSend.trim() ? 'normal' : 'disabled'}
 					/>
 				</FlexDiv>

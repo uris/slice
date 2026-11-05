@@ -1,14 +1,14 @@
 export const usageCode = `
 import { ToggleButton } from '@apple-pie/slice';
 
-<ToggleButton icon="sun" label="Highlight" />
+<ToggleButton icon="weather.sun" label="Highlight" />
 `;
 export const exampleCode = `
-<ToggleButton icon="sun" label="Highlight" selected={selected} onChange={setSelected} />
+<ToggleButton icon="weather.sun" label="Highlight" selected={selected} onChange={setSelected} />
 `;
 export const motionCode = `
 <ToggleButton
-  icon="sun"
+  icon="weather.sun"
   label="Highlight"
   motionValues={{ unselected: { rotate: 0 }, selected: { rotate: 135 } }}
   transition={{ duration: 0.2 }}
@@ -16,5 +16,5 @@ export const motionCode = `
 `;
 
 export const outsideCode = `
-<ToggleButton icon="sun" label="Highlight" labelOutside />
+<ToggleButton icon="weather.sun" label="Highlight" labelOutside />
 `;

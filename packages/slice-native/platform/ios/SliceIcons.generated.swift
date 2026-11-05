@@ -6,114 +6,866 @@ private final class SliceIconBundleToken {}
 
 /// Parallel native template library; React Native SliceIcon is unchanged.
 public enum SliceNativeIcon: String, CaseIterable {
-    case `android` = "android"
-    case `atSign` = "@"
-    case `fullscreen` = "fullscreen"
-    case `pause` = "pause"
-    case `pauseCircle` = "pause circle"
-    case `play` = "play"
-    case `playCircle` = "play circle"
-    case `npm` = "npm"
-    case `github` = "github"
-    case `openAI` = "openAI"
-    case `talk` = "talk"
-    case `speaker` = "speaker"
-    case `speakerMuted` = "speaker muted"
-    case `speakerHigh` = "speaker high"
-    case `speakerLow` = "speaker low"
-    case `laptop` = "laptop"
-    case `moonFull` = "moon full"
-    case `sun` = "sun"
-    case `keyboard` = "keyboard"
-    case `sidebar` = "sidebar"
-    case `sidebarSplit` = "sidebar split"
-    case `target` = "target"
-    case `videoOff` = "video off"
-    case `video` = "video"
-    case `mic` = "mic"
-    case `micMuted` = "mic muted"
-    case `camera` = "camera"
-    case `highlight` = "highlight"
-    case `like` = "like"
-    case `unlike` = "unlike"
-    case `stop` = "stop"
-    case `copy` = "copy"
-    case `fontSmaller` = "font smaller"
-    case `fontLarger` = "font larger"
-    case `barChart` = "bar chart"
-    case `briefcase` = "briefcase"
-    case `globeLocation` = "globe location"
-    case `focus` = "focus"
-    case `chartArrow` = "chart arrow"
-    case `documentEditor` = "document editor"
-    case `settings` = "settings"
-    case `lightBulb` = "light bulb"
-    case `issue` = "issue"
-    case `chart` = "chart"
-    case `chat` = "chat"
-    case `exclamation` = "exclamation"
-    case `undo` = "undo"
-    case `characterBeam` = "character beam"
-    case `edit` = "edit"
-    case `textDocument` = "text document"
-    case `mail` = "mail"
-    case `concise` = "concise"
-    case `moderate` = "moderate"
-    case `expanded` = "expanded"
-    case `openCircle` = "open circle"
-    case `view` = "view"
-    case `apple` = "apple"
-    case `linkedin` = "linkedin"
-    case `google` = "google"
-    case `googleMono` = "google mono"
-    case `dollar` = "dollar"
-    case `trashBin` = "trash bin"
-    case `recent` = "recent"
-    case `refresh` = "refresh"
-    case `document` = "document"
-    case `navigateRight` = "navigate right"
-    case `navigateLeft` = "navigate left"
-    case `arrowRight` = "arrow right"
-    case `arrowLeft` = "arrow left"
-    case `unnamed` = ""
-    case `arrowUp` = "arrow up"
-    case `arrowDown` = "arrow down"
-    case `notification` = "notification"
-    case `alert` = "alert"
-    case `blank` = "blank"
-    case `check` = "check"
-    case `help` = "help"
-    case `menu` = "menu"
-    case `attach` = "attach"
-    case `person` = "person"
-    case `upload` = "upload"
-    case `download` = "download"
-    case `checkCircle` = "check circle"
-    case `share` = "share"
-    case `search` = "search"
-    case `x` = "x"
-    case `plus` = "plus"
-    case `circle` = "circle"
-    case `circleFill` = "circle fill"
-    case `plusCircle` = "plus circle"
-    case `chevronDown` = "chevron down"
-    case `chevronUp` = "chevron up"
-    case `checkboxChecked` = "checkbox checked"
-    case `checkbox` = "checkbox"
-    case `checkboxPartial` = "checkbox partial"
-    case `filter` = "filter"
-    case `more` = "more"
-    case `people` = "people"
-    case `wand` = "wand"
-    case `wallet` = "wallet"
-    case `invoice` = "invoice"
-    case `payment` = "payment"
-    case `heart` = "heart"
-    case `clock` = "clock"
-    case `book` = "book"
-    case `sparkle` = "sparkle"
-    case `inbox` = "inbox"
-    case `home` = "home"
+    case `brandsAndroid` = "brands.android"
+    case `brandsNpm` = "brands.npm"
+    case `brandsGithub` = "brands.github"
+    case `brandsOpenAi` = "brands.open-ai"
+    case `systemView` = "system.view"
+    case `brandsApple` = "brands.apple"
+    case `brandsLinkedin` = "brands.linkedin"
+    case `brandsGoogle` = "brands.google"
+    case `brandsGoogleMono` = "brands.google-mono"
+    case `systemBlank` = "system.blank"
+    case `systemCheckCircle` = "system.check-circle"
+    case `systemCircle` = "system.circle"
+    case `systemCheckboxChecked` = "system.checkbox-checked"
+    case `systemCheckbox` = "system.checkbox"
+    case `systemCheckboxPartial` = "system.checkbox-partial"
+    case `aiWand` = "ai.wand"
+    case `aiSparkle` = "ai.sparkle"
+    case `alertsAlertCircle` = "alerts.alert-circle"
+    case `alertsAlertOctagon` = "alerts.alert-octagon"
+    case `alertsAlertTriangle` = "alerts.alert-triangle"
+    case `alertsBellCheck` = "alerts.bell-check"
+    case `alertsBellMinus` = "alerts.bell-minus"
+    case `alertsBellPlus` = "alerts.bell-plus"
+    case `alertsBellSlash` = "alerts.bell-slash"
+    case `alertsBell` = "alerts.bell"
+    case `alertsCheckCircle2` = "alerts.check-circle-2"
+    case `alertsCrossCircle` = "alerts.cross-circle"
+    case `alertsCrossOctagon` = "alerts.cross-octagon"
+    case `alertsInfo` = "alerts.info"
+    case `alertsMinusOctagon` = "alerts.minus-octagon"
+    case `alertsNotificationIndicator` = "alerts.notification-indicator"
+    case `alertsQuestion` = "alerts.question"
+    case `arrowsArrowBottomCircle` = "arrows.arrow-bottom-circle"
+    case `arrowsArrowBottomLeftCircle` = "arrows.arrow-bottom-left-circle"
+    case `arrowsArrowBottomLeftRec` = "arrows.arrow-bottom-left-rec"
+    case `arrowsArrowBottomLeft` = "arrows.arrow-bottom-left"
+    case `arrowsArrowBottomRec` = "arrows.arrow-bottom-rec"
+    case `arrowsArrowBottomRightCircle` = "arrows.arrow-bottom-right-circle"
+    case `arrowsArrowBottomRightRec` = "arrows.arrow-bottom-right-rec"
+    case `arrowsArrowBottomRight` = "arrows.arrow-bottom-right"
+    case `arrowsArrowBottom` = "arrows.arrow-bottom"
+    case `arrowsArrowCornerCcwLbRec` = "arrows.arrow-corner-ccw-lb-rec"
+    case `arrowsArrowCornerCcwLb` = "arrows.arrow-corner-ccw-lb"
+    case `arrowsArrowCornerCcwLtRec` = "arrows.arrow-corner-ccw-lt-rec"
+    case `arrowsArrowCornerCcwLt` = "arrows.arrow-corner-ccw-lt"
+    case `arrowsArrowCornerCcwRbRec` = "arrows.arrow-corner-ccw-rb-rec"
+    case `arrowsArrowCornerCcwRb` = "arrows.arrow-corner-ccw-rb"
+    case `arrowsArrowCornerCcwRtRec` = "arrows.arrow-corner-ccw-rt-rec"
+    case `arrowsArrowCornerCcwRt` = "arrows.arrow-corner-ccw-rt"
+    case `arrowsArrowCornerCwLbRec` = "arrows.arrow-corner-cw-lb-rec"
+    case `arrowsArrowCornerCwLb` = "arrows.arrow-corner-cw-lb"
+    case `arrowsArrowCornerCwLtRec` = "arrows.arrow-corner-cw-lt-rec"
+    case `arrowsArrowCornerCwLt` = "arrows.arrow-corner-cw-lt"
+    case `arrowsArrowCornerCwRbRec` = "arrows.arrow-corner-cw-rb-rec"
+    case `arrowsArrowCornerCwRb` = "arrows.arrow-corner-cw-rb"
+    case `arrowsArrowCornerCwRtRec` = "arrows.arrow-corner-cw-rt-rec"
+    case `arrowsArrowCornerCwRt` = "arrows.arrow-corner-cw-rt"
+    case `arrowsArrowLeftCircle` = "arrows.arrow-left-circle"
+    case `arrowsArrowLeftCurvedCircle` = "arrows.arrow-left-curved-circle"
+    case `arrowsArrowLeftRec` = "arrows.arrow-left-rec"
+    case `arrowsArrowLeft` = "arrows.arrow-left"
+    case `arrowsArrowRightCircle` = "arrows.arrow-right-circle"
+    case `arrowsArrowRightCurvedCircle` = "arrows.arrow-right-curved-circle"
+    case `arrowsArrowRightRec` = "arrows.arrow-right-rec"
+    case `arrowsArrowRight` = "arrows.arrow-right"
+    case `arrowsArrowSwapRec` = "arrows.arrow-swap-rec"
+    case `arrowsArrowSwap` = "arrows.arrow-swap"
+    case `arrowsArrowTopCircle` = "arrows.arrow-top-circle"
+    case `arrowsArrowTopLeftCircle` = "arrows.arrow-top-left-circle"
+    case `arrowsArrowTopLeftRec` = "arrows.arrow-top-left-rec"
+    case `arrowsArrowTopLeft` = "arrows.arrow-top-left"
+    case `arrowsArrowTopRec` = "arrows.arrow-top-rec"
+    case `arrowsArrowTopRightCircle` = "arrows.arrow-top-right-circle"
+    case `arrowsArrowTopRightRec` = "arrows.arrow-top-right-rec"
+    case `arrowsArrowTopRight` = "arrows.arrow-top-right"
+    case `arrowsArrowTop` = "arrows.arrow-top"
+    case `arrowsArrowsExpand2Rec` = "arrows.arrows-expand-2-rec"
+    case `arrowsArrowsExpand2` = "arrows.arrows-expand-2"
+    case `arrowsArrowsExpandRec` = "arrows.arrows-expand-rec"
+    case `arrowsArrowsExpand` = "arrows.arrows-expand"
+    case `arrowsArrowsMove2Rec` = "arrows.arrows-move-2-rec"
+    case `arrowsArrowsMove2` = "arrows.arrows-move-2"
+    case `arrowsArrowsMoveRec` = "arrows.arrows-move-rec"
+    case `arrowsArrowsMove` = "arrows.arrows-move"
+    case `arrowsChevronDownRec` = "arrows.chevron-down-rec"
+    case `arrowsChevronDown` = "arrows.chevron-down"
+    case `arrowsChevronLeftRec` = "arrows.chevron-left-rec"
+    case `arrowsChevronLeft` = "arrows.chevron-left"
+    case `arrowsChevronRightRec` = "arrows.chevron-right-rec"
+    case `arrowsChevronRight` = "arrows.chevron-right"
+    case `arrowsChevronUpRec` = "arrows.chevron-up-rec"
+    case `arrowsChevronUp` = "arrows.chevron-up"
+    case `arrowsChevronsDownRec` = "arrows.chevrons-down-rec"
+    case `arrowsChevronsDown` = "arrows.chevrons-down"
+    case `arrowsChevronsLeftRec` = "arrows.chevrons-left-rec"
+    case `arrowsChevronsLeft` = "arrows.chevrons-left"
+    case `arrowsChevronsRightRec` = "arrows.chevrons-right-rec"
+    case `arrowsChevronsRight` = "arrows.chevrons-right"
+    case `arrowsChevronsUpRec` = "arrows.chevrons-up-rec"
+    case `arrowsChevronsUp` = "arrows.chevrons-up"
+    case `arrowsCodeRec` = "arrows.code-rec"
+    case `arrowsCode` = "arrows.code"
+    case `arrowsExport2` = "arrows.export-2"
+    case `arrowsExport3` = "arrows.export-3"
+    case `arrowsExport4` = "arrows.export-4"
+    case `arrowsExport` = "arrows.export"
+    case `arrowsExternalLink2` = "arrows.external-link-2"
+    case `arrowsExternalLinkRec` = "arrows.external-link-rec"
+    case `arrowsExternalLink` = "arrows.external-link"
+    case `arrowsForwardAllRec` = "arrows.forward-all-rec"
+    case `arrowsForwardAll` = "arrows.forward-all"
+    case `arrowsForwardRec` = "arrows.forward-rec"
+    case `arrowsForward` = "arrows.forward"
+    case `arrowsImport2` = "arrows.import-2"
+    case `arrowsImport3` = "arrows.import-3"
+    case `arrowsImport4` = "arrows.import-4"
+    case `arrowsImport` = "arrows.import"
+    case `arrowsLogIn2` = "arrows.log-in-2"
+    case `arrowsLogIn3` = "arrows.log-in-3"
+    case `arrowsLogIn` = "arrows.log-in"
+    case `arrowsLogOut2` = "arrows.log-out-2"
+    case `arrowsLogOut3` = "arrows.log-out-3"
+    case `arrowsLogOut` = "arrows.log-out"
+    case `arrowsMaximize2FlippedRec` = "arrows.maximize-2-flipped-rec"
+    case `arrowsMaximize2Flipped` = "arrows.maximize-2-flipped"
+    case `arrowsMaximize2Rec` = "arrows.maximize-2-rec"
+    case `arrowsMaximize2` = "arrows.maximize-2"
+    case `arrowsMaximizeFlippedRec` = "arrows.maximize-flipped-rec"
+    case `arrowsMaximizeFlipped` = "arrows.maximize-flipped"
+    case `arrowsMaximizeRec` = "arrows.maximize-rec"
+    case `arrowsMaximize` = "arrows.maximize"
+    case `arrowsRedo2Rec` = "arrows.redo-2-rec"
+    case `arrowsRedo2` = "arrows.redo-2"
+    case `arrowsRedoRec` = "arrows.redo-rec"
+    case `arrowsRedo` = "arrows.redo"
+    case `arrowsRefreshCcwAlertRec` = "arrows.refresh-ccw-alert-rec"
+    case `arrowsRefreshCcwAlert` = "arrows.refresh-ccw-alert"
+    case `arrowsRefreshCcwRec` = "arrows.refresh-ccw-rec"
+    case `arrowsRefreshCcw` = "arrows.refresh-ccw"
+    case `arrowsRefreshCwAlertRec` = "arrows.refresh-cw-alert-rec"
+    case `arrowsRefreshCwAlert` = "arrows.refresh-cw-alert"
+    case `arrowsRefreshCwRec` = "arrows.refresh-cw-rec"
+    case `arrowsRefreshCw` = "arrows.refresh-cw"
+    case `arrowsReplyAllRec` = "arrows.reply-all-rec"
+    case `arrowsReplyAll` = "arrows.reply-all"
+    case `arrowsReplyRec` = "arrows.reply-rec"
+    case `arrowsReply` = "arrows.reply"
+    case `arrowsRotateCcwRec` = "arrows.rotate-ccw-rec"
+    case `arrowsRotateCcw` = "arrows.rotate-ccw"
+    case `arrowsRotateCwRec` = "arrows.rotate-cw-rec"
+    case `arrowsRotateCw` = "arrows.rotate-cw"
+    case `arrowsScale` = "arrows.scale"
+    case `arrowsTrendDownRec` = "arrows.trend-down-rec"
+    case `arrowsTrendDown` = "arrows.trend-down"
+    case `arrowsTrendUpRec` = "arrows.trend-up-rec"
+    case `arrowsTrendUp` = "arrows.trend-up"
+    case `arrowsUndo2Rec` = "arrows.undo-2-rec"
+    case `arrowsUndo2` = "arrows.undo-2"
+    case `arrowsUndoRec` = "arrows.undo-rec"
+    case `arrowsUndo` = "arrows.undo"
+    case `basicActivity2` = "basic.activity-2"
+    case `basicActivityRec` = "basic.activity-rec"
+    case `basicAirplay` = "basic.airplay"
+    case `basicAnchorRec` = "basic.anchor-rec"
+    case `basicAnchor` = "basic.anchor"
+    case `basicArchive` = "basic.archive"
+    case `basicAtRec` = "basic.at-rec"
+    case `basicAt` = "basic.at"
+    case `basicAtom` = "basic.atom"
+    case `basicAward` = "basic.award"
+    case `basicBabyCarriage` = "basic.baby-carriage"
+    case `basicBarchart` = "basic.barchart"
+    case `basicBed2` = "basic.bed-2"
+    case `basicBed3` = "basic.bed-3"
+    case `basicBluetoothRec` = "basic.bluetooth-rec"
+    case `basicBluetooth` = "basic.bluetooth"
+    case `basicBookOpen` = "basic.book-open"
+    case `basicBook` = "basic.book"
+    case `basicBookmarkCheck` = "basic.bookmark-check"
+    case `basicBookmarkMinus` = "basic.bookmark-minus"
+    case `basicBookmarkPlus` = "basic.bookmark-plus"
+    case `basicBookmarkSlash` = "basic.bookmark-slash"
+    case `basicBookmark` = "basic.bookmark"
+    case `basicBookmarks` = "basic.bookmarks"
+    case `basicBox2` = "basic.box-2"
+    case `basicBox` = "basic.box"
+    case `basicBracketsRec` = "basic.brackets-rec"
+    case `basicBrackets` = "basic.brackets"
+    case `basicBriefcase2` = "basic.briefcase-2"
+    case `basicBriefcase` = "basic.briefcase"
+    case `basicBroadcastRec` = "basic.broadcast-rec"
+    case `basicBroadcast` = "basic.broadcast"
+    case `basicBrush` = "basic.brush"
+    case `basicCast` = "basic.cast"
+    case `basicCheckCircle` = "basic.check-circle"
+    case `basicCheckRec` = "basic.check-rec"
+    case `basicCheck` = "basic.check"
+    case `basicCheckboxCircle` = "basic.checkbox-circle"
+    case `basicCheckboxRec` = "basic.checkbox-rec"
+    case `basicCopy` = "basic.copy"
+    case `basicCopyright` = "basic.copyright"
+    case `basicCrossRec` = "basic.cross-rec"
+    case `basicCross` = "basic.cross"
+    case `basicCrosshair` = "basic.crosshair"
+    case `basicCut` = "basic.cut"
+    case `basicDashboard2` = "basic.dashboard-2"
+    case `basicDashboard` = "basic.dashboard"
+    case `basicDumbell` = "basic.dumbell"
+    case `basicEmail` = "basic.email"
+    case `basicEmails` = "basic.emails"
+    case `basicEmotionHappy` = "basic.emotion-happy"
+    case `basicEmotionNeutral` = "basic.emotion-neutral"
+    case `basicEmotionSad` = "basic.emotion-sad"
+    case `basicEmotionSmile` = "basic.emotion-smile"
+    case `basicEmotionWow` = "basic.emotion-wow"
+    case `basicFilter2` = "basic.filter-2"
+    case `basicFilterRec` = "basic.filter-rec"
+    case `basicFilter` = "basic.filter"
+    case `basicFire` = "basic.fire"
+    case `basicFlag2` = "basic.flag-2"
+    case `basicFlag3` = "basic.flag-3"
+    case `basicFlag` = "basic.flag"
+    case `basicGear2` = "basic.gear-2"
+    case `basicGear` = "basic.gear"
+    case `basicGift` = "basic.gift"
+    case `basicGlasses` = "basic.glasses"
+    case `basicHashtagCircle` = "basic.hashtag-circle"
+    case `basicHashtagRec` = "basic.hashtag-rec"
+    case `basicHashtag` = "basic.hashtag"
+    case `basicHeartSlash` = "basic.heart-slash"
+    case `basicHeart` = "basic.heart"
+    case `basicHome2` = "basic.home-2"
+    case `basicHome3` = "basic.home-3"
+    case `basicHome4` = "basic.home-4"
+    case `basicHome` = "basic.home"
+    case `basicInboxFilled` = "basic.inbox-filled"
+    case `basicInboxIn` = "basic.inbox-in"
+    case `basicInboxOut` = "basic.inbox-out"
+    case `basicInbox` = "basic.inbox"
+    case `basicInfinityRec` = "basic.infinity-rec"
+    case `basicInfinity` = "basic.infinity"
+    case `basicInvoice` = "basic.invoice"
+    case `basicLayers` = "basic.layers"
+    case `basicLifebuoy` = "basic.lifebuoy"
+    case `basicLoader2Rec` = "basic.loader-2-rec"
+    case `basicLoader2` = "basic.loader-2"
+    case `basicLoaderRec` = "basic.loader-rec"
+    case `basicLoader` = "basic.loader"
+    case `basicLoadingTrolley` = "basic.loading-trolley"
+    case `basicMegaphone` = "basic.megaphone"
+    case `basicMenu2Rec` = "basic.menu-2-rec"
+    case `basicMenu2` = "basic.menu-2"
+    case `basicMenuRec` = "basic.menu-rec"
+    case `basicMenu` = "basic.menu"
+    case `basicMinusCircle` = "basic.minus-circle"
+    case `basicMinusRec` = "basic.minus-rec"
+    case `basicMinus` = "basic.minus"
+    case `basicModules` = "basic.modules"
+    case `basicMoreHorizRec` = "basic.more-horiz-rec"
+    case `basicMoreHoriz` = "basic.more-horiz"
+    case `basicMoreVertRec` = "basic.more-vert-rec"
+    case `basicMoreVert` = "basic.more-vert"
+    case `basicNewspaper` = "basic.newspaper"
+    case `basicNut` = "basic.nut"
+    case `basicPlanet` = "basic.planet"
+    case `basicPlusCircle` = "basic.plus-circle"
+    case `basicPlusRec` = "basic.plus-rec"
+    case `basicPlus` = "basic.plus"
+    case `basicPowerRec` = "basic.power-rec"
+    case `basicPower` = "basic.power"
+    case `basicPresentationChart` = "basic.presentation-chart"
+    case `basicPresentationLine` = "basic.presentation-line"
+    case `basicReceipt` = "basic.receipt"
+    case `basicRocket2` = "basic.rocket-2"
+    case `basicRocket` = "basic.rocket"
+    case `basicSearch` = "basic.search"
+    case `basicSend2` = "basic.send-2"
+    case `basicSend` = "basic.send"
+    case `basicShare` = "basic.share"
+    case `basicShoppingBag2` = "basic.shopping-bag-2"
+    case `basicShoppingBag` = "basic.shopping-bag"
+    case `basicShoppingBasket` = "basic.shopping-basket"
+    case `basicShoppingCart2` = "basic.shopping-cart-2"
+    case `basicShoppingCart` = "basic.shopping-cart"
+    case `basicSlash` = "basic.slash"
+    case `basicSlidersHoriz2` = "basic.sliders-horiz-2"
+    case `basicSlidersHoriz` = "basic.sliders-horiz"
+    case `basicSlidersVert2` = "basic.sliders-vert-2"
+    case `basicSlidersVert` = "basic.sliders-vert"
+    case `basicSortNumberRec` = "basic.sort-number-rec"
+    case `basicSortNumberReverseRec` = "basic.sort-number-reverse-rec"
+    case `basicSortNumberReverse` = "basic.sort-number-reverse"
+    case `basicSortNumber` = "basic.sort-number"
+    case `basicSortTextRec` = "basic.sort-text-rec"
+    case `basicSortTextReverseRec` = "basic.sort-text-reverse-rec"
+    case `basicSortTextReverse` = "basic.sort-text-reverse"
+    case `basicSortText` = "basic.sort-text"
+    case `basicStarSlash` = "basic.star-slash"
+    case `basicStar` = "basic.star"
+    case `basicSticker` = "basic.sticker"
+    case `basicSwatchbook` = "basic.swatchbook"
+    case `basicTag2` = "basic.tag-2"
+    case `basicTag` = "basic.tag"
+    case `basicTags2` = "basic.tags-2"
+    case `basicTags` = "basic.tags"
+    case `basicTarget` = "basic.target"
+    case `basicTerminal` = "basic.terminal"
+    case `basicThumbsDown2` = "basic.thumbs-down-2"
+    case `basicThumbsDown` = "basic.thumbs-down"
+    case `basicThumbsUp2` = "basic.thumbs-up-2"
+    case `basicThumbsUp` = "basic.thumbs-up"
+    case `basicTicket` = "basic.ticket"
+    case `basicToggleOff` = "basic.toggle-off"
+    case `basicToggleOn` = "basic.toggle-on"
+    case `basicTrash2` = "basic.trash-2"
+    case `basicTrash` = "basic.trash"
+    case `basicTrophy` = "basic.trophy"
+    case `basicTruck` = "basic.truck"
+    case `basicUmbrella` = "basic.umbrella"
+    case `basicWeight` = "basic.weight"
+    case `basicWheelchairRec` = "basic.wheelchair-rec"
+    case `basicWheelchair` = "basic.wheelchair"
+    case `basicWifiRec` = "basic.wifi-rec"
+    case `basicWifiSlashRec` = "basic.wifi-slash-rec"
+    case `basicWifiSlash` = "basic.wifi-slash"
+    case `basicWifi` = "basic.wifi"
+    case `basicWrench` = "basic.wrench"
+    case `basicYinYang` = "basic.yin-yang"
+    case `basicZoomIn` = "basic.zoom-in"
+    case `basicZoomOut` = "basic.zoom-out"
+    case `brandsAppstore` = "brands.appstore"
+    case `brandsBehance` = "brands.behance"
+    case `brandsDribbble` = "brands.dribbble"
+    case `brandsFacebook` = "brands.facebook"
+    case `brandsFigma` = "brands.figma"
+    case `brandsFramer` = "brands.framer"
+    case `brandsGoogleplay` = "brands.googleplay"
+    case `brandsIllustrator` = "brands.illustrator"
+    case `brandsInstagram` = "brands.instagram"
+    case `brandsMessanger` = "brands.messanger"
+    case `brandsNotion` = "brands.notion"
+    case `brandsPhotoshop` = "brands.photoshop"
+    case `brandsPinterest` = "brands.pinterest"
+    case `brandsProducthunt` = "brands.producthunt"
+    case `brandsSketch` = "brands.sketch"
+    case `brandsSoundcloud` = "brands.soundcloud"
+    case `brandsSpotify` = "brands.spotify"
+    case `brandsTwitter` = "brands.twitter"
+    case `brandsWindows` = "brands.windows"
+    case `brandsYoutube` = "brands.youtube"
+    case `callCallAdd` = "call.call-add"
+    case `callCallCalling` = "call.call-calling"
+    case `callCallDecline` = "call.call-decline"
+    case `callCallEnd` = "call.call-end"
+    case `callCallIncoming` = "call.call-incoming"
+    case `callCallMissed` = "call.call-missed"
+    case `callCallMuted` = "call.call-muted"
+    case `callCallOnHold` = "call.call-on-hold"
+    case `callCallOutgoing` = "call.call-outgoing"
+    case `callCallReceived` = "call.call-received"
+    case `callCallRedirected` = "call.call-redirected"
+    case `callCallRemove` = "call.call-remove"
+    case `callCallSlash` = "call.call-slash"
+    case `callDialpad` = "call.dialpad"
+    case `callPhone` = "call.phone"
+    case `callVoicemail` = "call.voicemail"
+    case `chatComment2Alert` = "chat.comment-2-alert"
+    case `chatComment2Cancel` = "chat.comment-2-cancel"
+    case `chatComment2Check` = "chat.comment-2-check"
+    case `chatComment2Dots` = "chat.comment-2-dots"
+    case `chatComment2Info` = "chat.comment-2-info"
+    case `chatComment2Minus` = "chat.comment-2-minus"
+    case `chatComment2Plus` = "chat.comment-2-plus"
+    case `chatComment2Question` = "chat.comment-2-question"
+    case `chatComment2Slash` = "chat.comment-2-slash"
+    case `chatComment2Text` = "chat.comment-2-text"
+    case `chatComment2` = "chat.comment-2"
+    case `chatCommentAlert` = "chat.comment-alert"
+    case `chatCommentCancel` = "chat.comment-cancel"
+    case `chatCommentCheck` = "chat.comment-check"
+    case `chatCommentDots` = "chat.comment-dots"
+    case `chatCommentMinus` = "chat.comment-minus"
+    case `chatCommentPlus` = "chat.comment-plus"
+    case `chatCommentSlash` = "chat.comment-slash"
+    case `chatCommentText` = "chat.comment-text"
+    case `chatComment` = "chat.comment"
+    case `chatComments2` = "chat.comments-2"
+    case `chatComments` = "chat.comments"
+    case `documentsClipboardCheck` = "documents.clipboard-check"
+    case `documentsClipboardCross` = "documents.clipboard-cross"
+    case `documentsClipboardMinus` = "documents.clipboard-minus"
+    case `documentsClipboardPlus` = "documents.clipboard-plus"
+    case `documentsClipboardSlash` = "documents.clipboard-slash"
+    case `documentsClipboardText` = "documents.clipboard-text"
+    case `documentsClipboard` = "documents.clipboard"
+    case `documentsFileAgreement` = "documents.file-agreement"
+    case `documentsFileCheck` = "documents.file-check"
+    case `documentsFileCode` = "documents.file-code"
+    case `documentsFileCross` = "documents.file-cross"
+    case `documentsFileDownload` = "documents.file-download"
+    case `documentsFileDraft` = "documents.file-draft"
+    case `documentsFileHeart` = "documents.file-heart"
+    case `documentsFileInvoice` = "documents.file-invoice"
+    case `documentsFileMinus` = "documents.file-minus"
+    case `documentsFileMove` = "documents.file-move"
+    case `documentsFilePlus` = "documents.file-plus"
+    case `documentsFileScan` = "documents.file-scan"
+    case `documentsFileShredder` = "documents.file-shredder"
+    case `documentsFileSlash` = "documents.file-slash"
+    case `documentsFileText` = "documents.file-text"
+    case `documentsFileUpload` = "documents.file-upload"
+    case `documentsFile` = "documents.file"
+    case `documentsFolderCheck` = "documents.folder-check"
+    case `documentsFolderCloud` = "documents.folder-cloud"
+    case `documentsFolderCompressed` = "documents.folder-compressed"
+    case `documentsFolderCross` = "documents.folder-cross"
+    case `documentsFolderDownload` = "documents.folder-download"
+    case `documentsFolderHeart` = "documents.folder-heart"
+    case `documentsFolderMinus` = "documents.folder-minus"
+    case `documentsFolderMove` = "documents.folder-move"
+    case `documentsFolderMusic` = "documents.folder-music"
+    case `documentsFolderOpen` = "documents.folder-open"
+    case `documentsFolderPhoto` = "documents.folder-photo"
+    case `documentsFolderPlus` = "documents.folder-plus"
+    case `documentsFolderSlash` = "documents.folder-slash"
+    case `documentsFolderUpload` = "documents.folder-upload"
+    case `documentsFolder` = "documents.folder"
+    case `documentsNote2Text` = "documents.note-2-text"
+    case `documentsNote2` = "documents.note-2"
+    case `documentsNoteText` = "documents.note-text"
+    case `documentsNote` = "documents.note"
+    case `documentsNotebook` = "documents.notebook"
+    case `editorAlignBottomRec` = "editor.align-bottom-rec"
+    case `editorAlignBottom` = "editor.align-bottom"
+    case `editorAlignCenter2Rec` = "editor.align-center-2-rec"
+    case `editorAlignCenter2` = "editor.align-center-2"
+    case `editorAlignCenterRec` = "editor.align-center-rec"
+    case `editorAlignCenter` = "editor.align-center"
+    case `editorAlignJustify2Rec` = "editor.align-justify-2-rec"
+    case `editorAlignJustify2` = "editor.align-justify-2"
+    case `editorAlignJustifyRec` = "editor.align-justify-rec"
+    case `editorAlignJustify` = "editor.align-justify"
+    case `editorAlignLeft2Rec` = "editor.align-left-2-rec"
+    case `editorAlignLeft2` = "editor.align-left-2"
+    case `editorAlignLeftRec` = "editor.align-left-rec"
+    case `editorAlignLeft` = "editor.align-left"
+    case `editorAlignMiddleRec` = "editor.align-middle-rec"
+    case `editorAlignMiddle` = "editor.align-middle"
+    case `editorAlignRight2Rec` = "editor.align-right-2-rec"
+    case `editorAlignRight2` = "editor.align-right-2"
+    case `editorAlignRightRec` = "editor.align-right-rec"
+    case `editorAlignRight` = "editor.align-right"
+    case `editorAlignTopRec` = "editor.align-top-rec"
+    case `editorAlignTop` = "editor.align-top"
+    case `editorBorderBottom` = "editor.border-bottom"
+    case `editorBorderClear` = "editor.border-clear"
+    case `editorBorderCommon` = "editor.border-common"
+    case `editorBorderHorizontal` = "editor.border-horizontal"
+    case `editorBorderInner` = "editor.border-inner"
+    case `editorBorderLeft` = "editor.border-left"
+    case `editorBorderOuter` = "editor.border-outer"
+    case `editorBorderRight` = "editor.border-right"
+    case `editorBorderTop` = "editor.border-top"
+    case `editorBorderVertical` = "editor.border-vertical"
+    case `editorChartBar` = "editor.chart-bar"
+    case `editorChartColumn` = "editor.chart-column"
+    case `editorChartLine` = "editor.chart-line"
+    case `editorChartPie` = "editor.chart-pie"
+    case `editorColumnSpacingRec` = "editor.column-spacing-rec"
+    case `editorColumnSpacing` = "editor.column-spacing"
+    case `editorDropletSlash` = "editor.droplet-slash"
+    case `editorDroplet` = "editor.droplet"
+    case `editorEdit2` = "editor.edit-2"
+    case `editorEdit3` = "editor.edit-3"
+    case `editorEditSlash` = "editor.edit-slash"
+    case `editorEdit` = "editor.edit"
+    case `editorFirstLine1Rec` = "editor.first-line-1-rec"
+    case `editorFirstLine1` = "editor.first-line-1"
+    case `editorFirstLine2Rec` = "editor.first-line-2-rec"
+    case `editorFirstLine2` = "editor.first-line-2"
+    case `editorFirstLine3Rec` = "editor.first-line-3-rec"
+    case `editorFirstLine3` = "editor.first-line-3"
+    case `editorFunctionsRec` = "editor.functions-rec"
+    case `editorFunctions` = "editor.functions"
+    case `editorIndentDecreaseRec` = "editor.indent-decrease-rec"
+    case `editorIndentDecrease` = "editor.indent-decrease"
+    case `editorIndentFirstLineRec` = "editor.indent-first-line-rec"
+    case `editorIndentFirstLine` = "editor.indent-first-line"
+    case `editorIndentIncreaseRec` = "editor.indent-increase-rec"
+    case `editorIndentIncrease` = "editor.indent-increase"
+    case `editorLetterSpacing2Rec` = "editor.letter-spacing-2-rec"
+    case `editorLetterSpacing2` = "editor.letter-spacing-2"
+    case `editorLetterSpacingRec` = "editor.letter-spacing-rec"
+    case `editorLetterSpacing` = "editor.letter-spacing"
+    case `editorLineHeight2Rec` = "editor.line-height-2-rec"
+    case `editorLineHeight2` = "editor.line-height-2"
+    case `editorLineHeightRec` = "editor.line-height-rec"
+    case `editorLineHeight` = "editor.line-height"
+    case `editorLink1Rec` = "editor.link-1-rec"
+    case `editorLink1` = "editor.link-1"
+    case `editorLink2Rec` = "editor.link-2-rec"
+    case `editorLink2` = "editor.link-2"
+    case `editorListOrderedRec` = "editor.list-ordered-rec"
+    case `editorListOrdered` = "editor.list-ordered"
+    case `editorListUnordered2Rec` = "editor.list-unordered-2-rec"
+    case `editorListUnordered2` = "editor.list-unordered-2"
+    case `editorListUnordered3` = "editor.list-unordered-3"
+    case `editorListUnordered4Rec` = "editor.list-unordered-4-rec"
+    case `editorListUnordered4` = "editor.list-unordered-4"
+    case `editorListUnordered5Rec` = "editor.list-unordered-5-rec"
+    case `editorListUnordered5` = "editor.list-unordered-5"
+    case `editorListUnorderedRec` = "editor.list-unordered-rec"
+    case `editorListUnordered` = "editor.list-unordered"
+    case `editorPageBreak` = "editor.page-break"
+    case `editorPaintBucket` = "editor.paint-bucket"
+    case `editorPaintTool` = "editor.paint-tool"
+    case `editorPaperclip2Rec` = "editor.paperclip-2-rec"
+    case `editorPaperclip2SlashRec` = "editor.paperclip-2-slash-rec"
+    case `editorPaperclip2Slash` = "editor.paperclip-2-slash"
+    case `editorPaperclip2` = "editor.paperclip-2"
+    case `editorPaperclipRec` = "editor.paperclip-rec"
+    case `editorPaperclipSlashRec` = "editor.paperclip-slash-rec"
+    case `editorPaperclipSlash` = "editor.paperclip-slash"
+    case `editorPaperclip` = "editor.paperclip"
+    case `editorPenTool2` = "editor.pen-tool-2"
+    case `editorPenTool` = "editor.pen-tool"
+    case `editorPharagraphSpacingRec` = "editor.pharagraph-spacing-rec"
+    case `editorPharagraphSpacing` = "editor.pharagraph-spacing"
+    case `editorPrinterSlash` = "editor.printer-slash"
+    case `editorPrinter` = "editor.printer"
+    case `editorQuotes2` = "editor.quotes-2"
+    case `editorQuotes` = "editor.quotes"
+    case `editorRuler` = "editor.ruler"
+    case `editorScriptRec` = "editor.script-rec"
+    case `editorScript` = "editor.script"
+    case `editorSmallCaps2Rec` = "editor.small-caps-2-rec"
+    case `editorSmallCaps2` = "editor.small-caps-2"
+    case `editorSmallCapsRec` = "editor.small-caps-rec"
+    case `editorSmallCaps` = "editor.small-caps"
+    case `editorSpecialCharachersRec` = "editor.special-charachers-rec"
+    case `editorSpecialCharachers` = "editor.special-charachers"
+    case `editorText2Rec` = "editor.text-2-rec"
+    case `editorText2` = "editor.text-2"
+    case `editorTextBlock` = "editor.text-block"
+    case `editorTextBoldRec` = "editor.text-bold-rec"
+    case `editorTextBold` = "editor.text-bold"
+    case `editorTextFormat` = "editor.text-format"
+    case `editorTextItalicRec` = "editor.text-italic-rec"
+    case `editorTextItalic` = "editor.text-italic"
+    case `editorTextRec` = "editor.text-rec"
+    case `editorTextSlash2Rec` = "editor.text-slash-2-rec"
+    case `editorTextSlash2` = "editor.text-slash-2"
+    case `editorTextSlashRec` = "editor.text-slash-rec"
+    case `editorTextSlash` = "editor.text-slash"
+    case `editorTextStrikethroughRec` = "editor.text-strikethrough-rec"
+    case `editorTextStrikethrough` = "editor.text-strikethrough"
+    case `editorTextUnderlineRec` = "editor.text-underline-rec"
+    case `editorTextUnderline` = "editor.text-underline"
+    case `editorText` = "editor.text"
+    case `editorVector` = "editor.vector"
+    case `editorWrapTextRec` = "editor.wrap-text-rec"
+    case `editorWrapText` = "editor.wrap-text"
+    case `electronicsBattery1` = "electronics.battery-1"
+    case `electronicsBattery2` = "electronics.battery-2"
+    case `electronicsBattery3` = "electronics.battery-3"
+    case `electronicsBatteryCharging` = "electronics.battery-charging"
+    case `electronicsBatterySlash` = "electronics.battery-slash"
+    case `electronicsBattery` = "electronics.battery"
+    case `electronicsBulbSlash` = "electronics.bulb-slash"
+    case `electronicsBulb` = "electronics.bulb"
+    case `electronicsDashboard2` = "electronics.dashboard-2"
+    case `electronicsDashboard` = "electronics.dashboard"
+    case `electronicsDevices` = "electronics.devices"
+    case `electronicsDiskette` = "electronics.diskette"
+    case `electronicsFlashcard` = "electronics.flashcard"
+    case `electronicsGlassesVr` = "electronics.glasses-vr"
+    case `electronicsHardDrive` = "electronics.hard-drive"
+    case `electronicsHeadphones2` = "electronics.headphones-2"
+    case `electronicsHeadphones` = "electronics.headphones"
+    case `electronicsKeyboardHide` = "electronics.keyboard-hide"
+    case `electronicsKeyboardShow` = "electronics.keyboard-show"
+    case `electronicsKeyboard` = "electronics.keyboard"
+    case `electronicsLaptop` = "electronics.laptop"
+    case `electronicsMemoryCard` = "electronics.memory-card"
+    case `electronicsMonitor` = "electronics.monitor"
+    case `electronicsMouse` = "electronics.mouse"
+    case `electronicsPlugSlash` = "electronics.plug-slash"
+    case `electronicsPlug` = "electronics.plug"
+    case `electronicsProcessor` = "electronics.processor"
+    case `electronicsSmartphone` = "electronics.smartphone"
+    case `electronicsSpeaker` = "electronics.speaker"
+    case `electronicsTablet` = "electronics.tablet"
+    case `electronicsThermometer` = "electronics.thermometer"
+    case `electronicsWatch2` = "electronics.watch-2"
+    case `electronicsWatch` = "electronics.watch"
+    case `electronicsWeighter2` = "electronics.weighter-2"
+    case `electronicsWeighter` = "electronics.weighter"
+    case `financialCash` = "financial.cash"
+    case `financialCreditCardIncome` = "financial.credit-card-income"
+    case `financialCreditCardMinus` = "financial.credit-card-minus"
+    case `financialCreditCardOutcome` = "financial.credit-card-outcome"
+    case `financialCreditCardPlus` = "financial.credit-card-plus"
+    case `financialCreditCardScan` = "financial.credit-card-scan"
+    case `financialCreditCardSlash` = "financial.credit-card-slash"
+    case `financialCreditCard` = "financial.credit-card"
+    case `financialDollarCircle` = "financial.dollar-circle"
+    case `financialDollar` = "financial.dollar"
+    case `financialEuroCircle` = "financial.euro-circle"
+    case `financialEuro` = "financial.euro"
+    case `financialPos` = "financial.pos"
+    case `financialProcentCircle` = "financial.procent-circle"
+    case `financialProcent` = "financial.procent"
+    case `financialWalletMinus` = "financial.wallet-minus"
+    case `financialWalletMove` = "financial.wallet-move"
+    case `financialWalletPlus` = "financial.wallet-plus"
+    case `financialWallet` = "financial.wallet"
+    case `foodCoffee` = "food.coffee"
+    case `foodCutlery2` = "food.cutlery-2"
+    case `foodCutlery3` = "food.cutlery-3"
+    case `foodCutlery4` = "food.cutlery-4"
+    case `foodCutlery` = "food.cutlery"
+    case `foodGlassCocktail` = "food.glass-cocktail"
+    case `foodGlassWine` = "food.glass-wine"
+    case `gridAlignBottom2` = "grid.align-bottom-2"
+    case `gridAlignHorizontally` = "grid.align-horizontally"
+    case `gridAlignLeft3` = "grid.align-left-3"
+    case `gridAlignRight3` = "grid.align-right-3"
+    case `gridAlignTop2` = "grid.align-top-2"
+    case `gridAlignVertically` = "grid.align-vertically"
+    case `gridCropRec` = "grid.crop-rec"
+    case `gridCropRotateRec` = "grid.crop-rotate-rec"
+    case `gridCropRotate` = "grid.crop-rotate"
+    case `gridCrop` = "grid.crop"
+    case `gridDistributeHorizontally` = "grid.distribute-horizontally"
+    case `gridDistributeVertically` = "grid.distribute-vertically"
+    case `gridElements2` = "grid.elements-2"
+    case `gridElements3` = "grid.elements-3"
+    case `gridElements4` = "grid.elements-4"
+    case `gridElements5` = "grid.elements-5"
+    case `gridElementsPlus` = "grid.elements-plus"
+    case `gridElements` = "grid.elements"
+    case `gridFatRows` = "grid.fat-rows"
+    case `gridFrameBoundsRec` = "grid.frame-bounds-rec"
+    case `gridFrameBounds` = "grid.frame-bounds"
+    case `gridFrame` = "grid.frame"
+    case `gridGrid02` = "grid.grid-02"
+    case `gridGrid03` = "grid.grid-03"
+    case `gridGrid04` = "grid.grid-04"
+    case `gridGrid05` = "grid.grid-05"
+    case `gridGrid06` = "grid.grid-06"
+    case `gridGrid07` = "grid.grid-07"
+    case `gridGrid08` = "grid.grid-08"
+    case `gridGrid09` = "grid.grid-09"
+    case `gridGrid10` = "grid.grid-10"
+    case `gridGrid11` = "grid.grid-11"
+    case `gridGrid12` = "grid.grid-12"
+    case `gridGrid13` = "grid.grid-13"
+    case `gridGrid14` = "grid.grid-14"
+    case `gridGrid15` = "grid.grid-15"
+    case `gridGrid16` = "grid.grid-16"
+    case `gridGrid` = "grid.grid"
+    case `gridIframe` = "grid.iframe"
+    case `gridKanban` = "grid.kanban"
+    case `gridPadding` = "grid.padding"
+    case `gridSelectionRec` = "grid.selection-rec"
+    case `gridSelection` = "grid.selection"
+    case `gridSliderHorizontal2` = "grid.slider-horizontal-2"
+    case `gridSliderHorizontal` = "grid.slider-horizontal"
+    case `gridSliderVertical2` = "grid.slider-vertical-2"
+    case `gridSliderVertical` = "grid.slider-vertical"
+    case `gridStack` = "grid.stack"
+    case `gridTransform` = "grid.transform"
+    case `imagesApperture` = "images.apperture"
+    case `imagesCameraSlash` = "images.camera-slash"
+    case `imagesCamera` = "images.camera"
+    case `imagesColorFilter` = "images.color-filter"
+    case `imagesImage2` = "images.image-2"
+    case `imagesImage3` = "images.image-3"
+    case `imagesImageCheck` = "images.image-check"
+    case `imagesImageCross` = "images.image-cross"
+    case `imagesImageDownload` = "images.image-download"
+    case `imagesImageEdit` = "images.image-edit"
+    case `imagesImagePlus` = "images.image-plus"
+    case `imagesImageSlash` = "images.image-slash"
+    case `imagesImageUpload` = "images.image-upload"
+    case `imagesImage` = "images.image"
+    case `imagesLightningSlash` = "images.lightning-slash"
+    case `imagesLightning` = "images.lightning"
+    case `maps360Degrees` = "maps.360-degrees"
+    case `mapsCompass` = "maps.compass"
+    case `mapsDirection2` = "maps.direction-2"
+    case `mapsDirection` = "maps.direction"
+    case `mapsGlobe2` = "maps.globe-2"
+    case `mapsGlobe` = "maps.globe"
+    case `mapsGpsSlash` = "maps.gps-slash"
+    case `mapsGps` = "maps.gps"
+    case `mapsMapView` = "maps.map-view"
+    case `mapsPin2` = "maps.pin-2"
+    case `mapsPin3` = "maps.pin-3"
+    case `mapsPinCheck` = "maps.pin-check"
+    case `mapsPinCross` = "maps.pin-cross"
+    case `mapsPinMinus` = "maps.pin-minus"
+    case `mapsPinPlus` = "maps.pin-plus"
+    case `mapsPinSlash` = "maps.pin-slash"
+    case `mapsPin` = "maps.pin"
+    case `mapsRoute` = "maps.route"
+    case `mediaBookLibrary` = "media.book-library"
+    case `mediaBookPlus` = "media.book-plus"
+    case `mediaBookQueue` = "media.book-queue"
+    case `mediaCaptions2` = "media.captions-2"
+    case `mediaCaptions` = "media.captions"
+    case `mediaCd` = "media.cd"
+    case `mediaEqualizer` = "media.equalizer"
+    case `mediaFastForward` = "media.fast-forward"
+    case `mediaFastRewind` = "media.fast-rewind"
+    case `mediaFilmBoard` = "media.film-board"
+    case `mediaFilmReel` = "media.film-reel"
+    case `mediaFilmTape` = "media.film-tape"
+    case `mediaForward10Rec` = "media.forward-10-rec"
+    case `mediaForward10` = "media.forward-10"
+    case `mediaForward15Rec` = "media.forward-15-rec"
+    case `mediaForward15` = "media.forward-15"
+    case `mediaForward5Rec` = "media.forward-5-rec"
+    case `mediaForward5` = "media.forward-5"
+    case `mediaGames` = "media.games"
+    case `mediaLabel4k` = "media.label-4k"
+    case `mediaLabelExplicit` = "media.label-explicit"
+    case `mediaLabelHd` = "media.label-hd"
+    case `mediaLabelHq` = "media.label-hq"
+    case `mediaMaximize3Rec` = "media.maximize-3-rec"
+    case `mediaMaximize3` = "media.maximize-3"
+    case `mediaMicSlash` = "media.mic-slash"
+    case `mediaMic` = "media.mic"
+    case `mediaMinimizeRec` = "media.minimize-rec"
+    case `mediaMinimize` = "media.minimize"
+    case `mediaMiniplayer` = "media.miniplayer"
+    case `mediaMusicLibrary` = "media.music-library"
+    case `mediaMusicNote2` = "media.music-note-2"
+    case `mediaMusicNote3` = "media.music-note-3"
+    case `mediaMusicNote` = "media.music-note"
+    case `mediaMusicPlus` = "media.music-plus"
+    case `mediaMusicQueue` = "media.music-queue"
+    case `mediaNewRelease` = "media.new-release"
+    case `mediaPauseCircle` = "media.pause-circle"
+    case `mediaPause` = "media.pause"
+    case `mediaPlayCircle` = "media.play-circle"
+    case `mediaPlayNext` = "media.play-next"
+    case `mediaPlayPrevious` = "media.play-previous"
+    case `mediaPlaySlowmotion` = "media.play-slowmotion"
+    case `mediaPlay` = "media.play"
+    case `mediaPlaylistPlay` = "media.playlist-play"
+    case `mediaPlaylistPlus` = "media.playlist-plus"
+    case `mediaPlaylist` = "media.playlist"
+    case `mediaRadio` = "media.radio"
+    case `mediaRecord` = "media.record"
+    case `mediaRepeatOn` = "media.repeat-on"
+    case `mediaRepeat` = "media.repeat"
+    case `mediaReplay10Rec` = "media.replay-10-rec"
+    case `mediaReplay10` = "media.replay-10"
+    case `mediaReplay15Rec` = "media.replay-15-rec"
+    case `mediaReplay15` = "media.replay-15"
+    case `mediaReplay5Rec` = "media.replay-5-rec"
+    case `mediaReplay5` = "media.replay-5"
+    case `mediaReplayRec` = "media.replay-rec"
+    case `mediaReplay` = "media.replay"
+    case `mediaShuffle` = "media.shuffle"
+    case `mediaSoundwaveRec` = "media.soundwave-rec"
+    case `mediaSoundwave` = "media.soundwave"
+    case `mediaStopCircle` = "media.stop-circle"
+    case `mediaStop` = "media.stop"
+    case `mediaTv` = "media.tv"
+    case `mediaVerified` = "media.verified"
+    case `mediaVideoCameraSlash` = "media.video-camera-slash"
+    case `mediaVideoCamera` = "media.video-camera"
+    case `mediaVideoLibrary` = "media.video-library"
+    case `mediaVideoPlus` = "media.video-plus"
+    case `mediaVideoQueue` = "media.video-queue"
+    case `mediaVolumeCross` = "media.volume-cross"
+    case `mediaVolumeHigh` = "media.volume-high"
+    case `mediaVolumeLow` = "media.volume-low"
+    case `mediaVolumeMute` = "media.volume-mute"
+    case `mediaVolumeSlash` = "media.volume-slash"
+    case `mediaWebcamSlash` = "media.webcam-slash"
+    case `mediaWebcam` = "media.webcam"
+    case `securityBug` = "security.bug"
+    case `securityEyeSlash` = "security.eye-slash"
+    case `securityEye` = "security.eye"
+    case `securityFaceIdRec` = "security.face-id-rec"
+    case `securityFaceId` = "security.face-id"
+    case `securityFingerprint2Rec` = "security.fingerprint-2-rec"
+    case `securityFingerprint2` = "security.fingerprint-2"
+    case `securityFingerprintRec` = "security.fingerprint-rec"
+    case `securityFingerprint` = "security.fingerprint"
+    case `securityKey` = "security.key"
+    case `securityLock2Opened` = "security.lock-2-opened"
+    case `securityLock2Slash` = "security.lock-2-slash"
+    case `securityLock2` = "security.lock-2"
+    case `securityLockOpened` = "security.lock-opened"
+    case `securityLockSlash` = "security.lock-slash"
+    case `securityLock` = "security.lock"
+    case `securityScanRec` = "security.scan-rec"
+    case `securityScan` = "security.scan"
+    case `securityServer2` = "security.server-2"
+    case `securityServer` = "security.server"
+    case `securityShieldCheck` = "security.shield-check"
+    case `securityShieldCross` = "security.shield-cross"
+    case `securityShield` = "security.shield"
+    case `timeCalendarArrowRight` = "time.calendar-arrow-right"
+    case `timeCalendarCross` = "time.calendar-cross"
+    case `timeCalendarDates` = "time.calendar-dates"
+    case `timeCalendarEvent` = "time.calendar-event"
+    case `timeCalendarMinus` = "time.calendar-minus"
+    case `timeCalendarNote` = "time.calendar-note"
+    case `timeCalendarNumber` = "time.calendar-number"
+    case `timeCalendarPerson` = "time.calendar-person"
+    case `timeCalendarPlus` = "time.calendar-plus"
+    case `timeCalendar` = "time.calendar"
+    case `timeClockCheck` = "time.clock-check"
+    case `timeClockCross` = "time.clock-cross"
+    case `timeClockMinus` = "time.clock-minus"
+    case `timeClockPlus` = "time.clock-plus"
+    case `timeClockSlash` = "time.clock-slash"
+    case `timeClockZzz` = "time.clock-zzz"
+    case `timeClock` = "time.clock"
+    case `timeHistoryRec` = "time.history-rec"
+    case `timeHistory` = "time.history"
+    case `timeSpeedRec` = "time.speed-rec"
+    case `timeSpeed` = "time.speed"
+    case `timeStopwatchSlash` = "time.stopwatch-slash"
+    case `timeStopwatch` = "time.stopwatch"
+    case `timeTime` = "time.time"
+    case `timeTimer2Rec` = "time.timer-2-rec"
+    case `timeTimer2` = "time.timer-2"
+    case `timeTimer` = "time.timer"
+    case `usersUserAlert` = "users.user-alert"
+    case `usersUserArrowBl` = "users.user-arrow-bl"
+    case `usersUserArrowBottom` = "users.user-arrow-bottom"
+    case `usersUserArrowRight` = "users.user-arrow-right"
+    case `usersUserArrowTop` = "users.user-arrow-top"
+    case `usersUserArrowTr` = "users.user-arrow-tr"
+    case `usersUserCheck` = "users.user-check"
+    case `usersUserCircle` = "users.user-circle"
+    case `usersUserCross` = "users.user-cross"
+    case `usersUserMinus` = "users.user-minus"
+    case `usersUserPlus` = "users.user-plus"
+    case `usersUserSquare` = "users.user-square"
+    case `usersUser` = "users.user"
+    case `usersUsers` = "users.users"
+    case `weatherCloudCheck` = "weather.cloud-check"
+    case `weatherCloudCross` = "weather.cloud-cross"
+    case `weatherCloudDownload` = "weather.cloud-download"
+    case `weatherCloudDrizzle` = "weather.cloud-drizzle"
+    case `weatherCloudLightning` = "weather.cloud-lightning"
+    case `weatherCloudSnow` = "weather.cloud-snow"
+    case `weatherCloudUpload` = "weather.cloud-upload"
+    case `weatherCloud` = "weather.cloud"
+    case `weatherMoon` = "weather.moon"
+    case `weatherSun` = "weather.sun"
+    case `weatherSunrise` = "weather.sunrise"
+    case `weatherSunset` = "weather.sunset"
 
     private static let bundle: Bundle = {
         for container in [Bundle(for: SliceIconBundleToken.self), Bundle.main] {
@@ -124,130 +876,868 @@ public enum SliceNativeIcon: String, CaseIterable {
     }()
 
     private static let assets: [String: String] = [
-        "android|normal|false": "slice-icon-616e64726f6964-normal",
-        "@|normal|false": "slice-icon-40-normal",
-        "fullscreen|normal|false": "slice-icon-66756c6c73637265656e-normal",
-        "pause|normal|false": "slice-icon-7061757365-normal",
-        "pause circle|normal|false": "slice-icon-706175736520636972636c65-normal",
-        "pause circle|normal|true": "slice-icon-706175736520636972636c65-normal-filled",
-        "play|normal|false": "slice-icon-706c6179-normal",
-        "play circle|normal|false": "slice-icon-706c617920636972636c65-normal",
-        "play circle|normal|true": "slice-icon-706c617920636972636c65-normal-filled",
-        "npm|normal|false": "slice-icon-6e706d-normal",
-        "github|normal|false": "slice-icon-676974687562-normal",
-        "openAI|normal|false": "slice-icon-6f70656e4149-normal",
-        "talk|normal|false": "slice-icon-74616c6b-normal",
-        "talk|normal|true": "slice-icon-74616c6b-normal-filled",
-        "speaker|normal|false": "slice-icon-737065616b6572-normal",
-        "speaker|normal|true": "slice-icon-737065616b6572-normal-filled",
-        "speaker muted|normal|false": "slice-icon-737065616b6572206d75746564-normal",
-        "speaker muted|normal|true": "slice-icon-737065616b6572206d75746564-normal-filled",
-        "speaker high|normal|false": "slice-icon-737065616b65722068696768-normal",
-        "speaker high|normal|true": "slice-icon-737065616b65722068696768-normal-filled",
-        "speaker low|normal|false": "slice-icon-737065616b6572206c6f77-normal",
-        "speaker low|normal|true": "slice-icon-737065616b6572206c6f77-normal-filled",
-        "laptop|normal|false": "slice-icon-6c6170746f70-normal",
-        "laptop|normal|true": "slice-icon-6c6170746f70-normal-filled",
-        "moon full|normal|false": "slice-icon-6d6f6f6e2066756c6c-normal",
-        "moon full|normal|true": "slice-icon-6d6f6f6e2066756c6c-normal-filled",
-        "sun|normal|false": "slice-icon-73756e-normal",
-        "sun|normal|true": "slice-icon-73756e-normal-filled",
-        "keyboard|normal|false": "slice-icon-6b6579626f617264-normal",
-        "sidebar|normal|false": "slice-icon-73696465626172-normal",
-        "sidebar|normal|true": "slice-icon-73696465626172-normal-filled",
-        "sidebar split|normal|false": "slice-icon-736964656261722073706c6974-normal",
-        "sidebar split|normal|true": "slice-icon-736964656261722073706c6974-normal-filled",
-        "target|normal|false": "slice-icon-746172676574-normal",
-        "video off|normal|false": "slice-icon-766964656f206f6666-normal",
-        "video|normal|false": "slice-icon-766964656f-normal",
-        "mic|normal|false": "slice-icon-6d6963-normal",
-        "mic|normal|true": "slice-icon-6d6963-normal-filled",
-        "mic muted|normal|false": "slice-icon-6d6963206d75746564-normal",
-        "camera|normal|false": "slice-icon-63616d657261-normal",
-        "highlight|normal|false": "slice-icon-686967686c69676874-normal",
-        "like|normal|false": "slice-icon-6c696b65-normal",
-        "unlike|normal|false": "slice-icon-756e6c696b65-normal",
-        "stop|normal|false": "slice-icon-73746f70-normal",
-        "copy|normal|false": "slice-icon-636f7079-normal",
-        "font smaller|normal|false": "slice-icon-666f6e7420736d616c6c6572-normal",
-        "font larger|normal|false": "slice-icon-666f6e74206c6172676572-normal",
-        "bar chart|normal|false": "slice-icon-626172206368617274-normal",
-        "briefcase|normal|false": "slice-icon-627269656663617365-normal",
-        "globe location|normal|false": "slice-icon-676c6f6265206c6f636174696f6e-normal",
-        "focus|normal|false": "slice-icon-666f637573-normal",
-        "chart arrow|normal|false": "slice-icon-6368617274206172726f77-normal",
-        "document editor|normal|false": "slice-icon-646f63756d656e7420656469746f72-normal",
-        "settings|normal|false": "slice-icon-73657474696e6773-normal",
-        "light bulb|normal|false": "slice-icon-6c696768742062756c62-normal",
-        "issue|normal|false": "slice-icon-6973737565-normal",
-        "chart|normal|false": "slice-icon-6368617274-normal",
-        "chat|normal|false": "slice-icon-63686174-normal",
-        "exclamation|normal|false": "slice-icon-6578636c616d6174696f6e-normal",
-        "undo|normal|false": "slice-icon-756e646f-normal",
-        "character beam|normal|false": "slice-icon-636861726163746572206265616d-normal",
-        "edit|normal|false": "slice-icon-65646974-normal",
-        "text document|normal|false": "slice-icon-7465787420646f63756d656e74-normal",
-        "mail|normal|false": "slice-icon-6d61696c-normal",
-        "concise|normal|false": "slice-icon-636f6e63697365-normal",
-        "moderate|normal|false": "slice-icon-6d6f646572617465-normal",
-        "expanded|normal|false": "slice-icon-657870616e646564-normal",
-        "open circle|normal|false": "slice-icon-6f70656e20636972636c65-normal",
-        "view|normal|false": "slice-icon-76696577-normal",
-        "view|on|false": "slice-icon-76696577-on",
-        "apple|normal|false": "slice-icon-6170706c65-normal",
-        "linkedin|normal|false": "slice-icon-6c696e6b6564696e-normal",
-        "google|normal|false": "slice-icon-676f6f676c65-normal",
-        "google mono|normal|false": "slice-icon-676f6f676c65206d6f6e6f-normal",
-        "dollar|normal|false": "slice-icon-646f6c6c6172-normal",
-        "trash bin|normal|false": "slice-icon-74726173682062696e-normal",
-        "recent|normal|false": "slice-icon-726563656e74-normal",
-        "refresh|normal|false": "slice-icon-72656672657368-normal",
-        "document|normal|false": "slice-icon-646f63756d656e74-normal",
-        "navigate right|normal|false": "slice-icon-6e61766967617465207269676874-normal",
-        "navigate left|normal|false": "slice-icon-6e61766967617465206c656674-normal",
-        "arrow right|normal|false": "slice-icon-6172726f77207269676874-normal",
-        "arrow left|normal|false": "slice-icon-6172726f77206c656674-normal",
-        "|normal|false": "slice-icon-empty-normal",
-        "arrow up|normal|false": "slice-icon-6172726f77207570-normal",
-        "arrow down|normal|false": "slice-icon-6172726f7720646f776e-normal",
-        "notification|normal|false": "slice-icon-6e6f74696669636174696f6e-normal",
-        "alert|normal|false": "slice-icon-616c657274-normal",
-        "blank|normal|false": "slice-icon-626c616e6b-normal",
-        "check|normal|false": "slice-icon-636865636b-normal",
-        "help|normal|false": "slice-icon-68656c70-normal",
-        "menu|normal|false": "slice-icon-6d656e75-normal",
-        "attach|normal|false": "slice-icon-617474616368-normal",
-        "person|normal|false": "slice-icon-706572736f6e-normal",
-        "upload|normal|false": "slice-icon-75706c6f6164-normal",
-        "download|normal|false": "slice-icon-646f776e6c6f6164-normal",
-        "check circle|normal|false": "slice-icon-636865636b20636972636c65-normal",
-        "share|normal|false": "slice-icon-7368617265-normal",
-        "share|normal|true": "slice-icon-7368617265-normal-filled",
-        "search|normal|false": "slice-icon-736561726368-normal",
-        "x|normal|false": "slice-icon-78-normal",
-        "plus|normal|false": "slice-icon-706c7573-normal",
-        "circle|normal|false": "slice-icon-636972636c65-normal",
-        "circle fill|normal|false": "slice-icon-636972636c652066696c6c-normal",
-        "plus circle|normal|false": "slice-icon-706c757320636972636c65-normal",
-        "chevron down|normal|false": "slice-icon-63686576726f6e20646f776e-normal",
-        "chevron up|normal|false": "slice-icon-63686576726f6e207570-normal",
-        "checkbox checked|normal|false": "slice-icon-636865636b626f7820636865636b6564-normal",
-        "checkbox|normal|false": "slice-icon-636865636b626f78-normal",
-        "checkbox partial|normal|false": "slice-icon-636865636b626f78207061727469616c-normal",
-        "filter|normal|false": "slice-icon-66696c746572-normal",
-        "more|normal|false": "slice-icon-6d6f7265-normal",
-        "people|normal|false": "slice-icon-70656f706c65-normal",
-        "wand|normal|false": "slice-icon-77616e64-normal",
-        "wallet|normal|false": "slice-icon-77616c6c6574-normal",
-        "invoice|normal|false": "slice-icon-696e766f696365-normal",
-        "payment|normal|false": "slice-icon-7061796d656e74-normal",
-        "heart|normal|false": "slice-icon-6865617274-normal",
-        "clock|normal|false": "slice-icon-636c6f636b-normal",
-        "book|normal|false": "slice-icon-626f6f6b-normal",
-        "sparkle|normal|false": "slice-icon-737061726b6c65-normal",
-        "sparkle|normal|true": "slice-icon-737061726b6c65-normal-filled",
-        "inbox|normal|false": "slice-icon-696e626f78-normal",
-        "home|normal|false": "slice-icon-686f6d65-normal"
+        "brands.android|normal|false": "slice-icon-6272616e64732e616e64726f6964-normal",
+        "brands.npm|normal|false": "slice-icon-6272616e64732e6e706d-normal",
+        "brands.github|normal|false": "slice-icon-6272616e64732e676974687562-normal",
+        "brands.open-ai|normal|false": "slice-icon-6272616e64732e6f70656e2d6169-normal",
+        "system.view|normal|false": "slice-icon-73797374656d2e76696577-normal",
+        "system.view|on|false": "slice-icon-73797374656d2e76696577-on",
+        "brands.apple|normal|false": "slice-icon-6272616e64732e6170706c65-normal",
+        "brands.linkedin|normal|false": "slice-icon-6272616e64732e6c696e6b6564696e-normal",
+        "brands.google|normal|false": "slice-icon-6272616e64732e676f6f676c65-normal",
+        "brands.google-mono|normal|false": "slice-icon-6272616e64732e676f6f676c652d6d6f6e6f-normal",
+        "system.blank|normal|false": "slice-icon-73797374656d2e626c616e6b-normal",
+        "system.check-circle|normal|false": "slice-icon-73797374656d2e636865636b2d636972636c65-normal",
+        "system.circle|normal|false": "slice-icon-73797374656d2e636972636c65-normal",
+        "system.checkbox-checked|normal|false": "slice-icon-73797374656d2e636865636b626f782d636865636b6564-normal",
+        "system.checkbox|normal|false": "slice-icon-73797374656d2e636865636b626f78-normal",
+        "system.checkbox-partial|normal|false": "slice-icon-73797374656d2e636865636b626f782d7061727469616c-normal",
+        "ai.wand|normal|false": "slice-icon-61692e77616e64-normal",
+        "ai.sparkle|normal|false": "slice-icon-61692e737061726b6c65-normal",
+        "ai.sparkle|normal|true": "slice-icon-61692e737061726b6c65-normal-filled",
+        "alerts.alert-circle|normal|false": "slice-icon-616c657274732e616c6572742d636972636c65-normal",
+        "alerts.alert-octagon|normal|false": "slice-icon-616c657274732e616c6572742d6f637461676f6e-normal",
+        "alerts.alert-triangle|normal|false": "slice-icon-616c657274732e616c6572742d747269616e676c65-normal",
+        "alerts.bell-check|normal|false": "slice-icon-616c657274732e62656c6c2d636865636b-normal",
+        "alerts.bell-minus|normal|false": "slice-icon-616c657274732e62656c6c2d6d696e7573-normal",
+        "alerts.bell-plus|normal|false": "slice-icon-616c657274732e62656c6c2d706c7573-normal",
+        "alerts.bell-slash|normal|false": "slice-icon-616c657274732e62656c6c2d736c617368-normal",
+        "alerts.bell|normal|false": "slice-icon-616c657274732e62656c6c-normal",
+        "alerts.check-circle-2|normal|false": "slice-icon-616c657274732e636865636b2d636972636c652d32-normal",
+        "alerts.cross-circle|normal|false": "slice-icon-616c657274732e63726f73732d636972636c65-normal",
+        "alerts.cross-octagon|normal|false": "slice-icon-616c657274732e63726f73732d6f637461676f6e-normal",
+        "alerts.info|normal|false": "slice-icon-616c657274732e696e666f-normal",
+        "alerts.minus-octagon|normal|false": "slice-icon-616c657274732e6d696e75732d6f637461676f6e-normal",
+        "alerts.notification-indicator|normal|false": "slice-icon-616c657274732e6e6f74696669636174696f6e2d696e64696361746f72-normal",
+        "alerts.question|normal|false": "slice-icon-616c657274732e7175657374696f6e-normal",
+        "arrows.arrow-bottom-circle|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d636972636c65-normal",
+        "arrows.arrow-bottom-left-circle|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d6c6566742d636972636c65-normal",
+        "arrows.arrow-bottom-left-rec|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d6c6566742d726563-normal",
+        "arrows.arrow-bottom-left|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d6c656674-normal",
+        "arrows.arrow-bottom-rec|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d726563-normal",
+        "arrows.arrow-bottom-right-circle|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d72696768742d636972636c65-normal",
+        "arrows.arrow-bottom-right-rec|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d72696768742d726563-normal",
+        "arrows.arrow-bottom-right|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d2d7269676874-normal",
+        "arrows.arrow-bottom|normal|false": "slice-icon-6172726f77732e6172726f772d626f74746f6d-normal",
+        "arrows.arrow-corner-ccw-lb-rec|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d6c622d726563-normal",
+        "arrows.arrow-corner-ccw-lb|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d6c62-normal",
+        "arrows.arrow-corner-ccw-lt-rec|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d6c742d726563-normal",
+        "arrows.arrow-corner-ccw-lt|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d6c74-normal",
+        "arrows.arrow-corner-ccw-rb-rec|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d72622d726563-normal",
+        "arrows.arrow-corner-ccw-rb|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d7262-normal",
+        "arrows.arrow-corner-ccw-rt-rec|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d72742d726563-normal",
+        "arrows.arrow-corner-ccw-rt|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d6363772d7274-normal",
+        "arrows.arrow-corner-cw-lb-rec|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d6c622d726563-normal",
+        "arrows.arrow-corner-cw-lb|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d6c62-normal",
+        "arrows.arrow-corner-cw-lt-rec|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d6c742d726563-normal",
+        "arrows.arrow-corner-cw-lt|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d6c74-normal",
+        "arrows.arrow-corner-cw-rb-rec|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d72622d726563-normal",
+        "arrows.arrow-corner-cw-rb|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d7262-normal",
+        "arrows.arrow-corner-cw-rt-rec|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d72742d726563-normal",
+        "arrows.arrow-corner-cw-rt|normal|false": "slice-icon-6172726f77732e6172726f772d636f726e65722d63772d7274-normal",
+        "arrows.arrow-left-circle|normal|false": "slice-icon-6172726f77732e6172726f772d6c6566742d636972636c65-normal",
+        "arrows.arrow-left-curved-circle|normal|false": "slice-icon-6172726f77732e6172726f772d6c6566742d6375727665642d636972636c65-normal",
+        "arrows.arrow-left-rec|normal|false": "slice-icon-6172726f77732e6172726f772d6c6566742d726563-normal",
+        "arrows.arrow-left|normal|false": "slice-icon-6172726f77732e6172726f772d6c656674-normal",
+        "arrows.arrow-right-circle|normal|false": "slice-icon-6172726f77732e6172726f772d72696768742d636972636c65-normal",
+        "arrows.arrow-right-curved-circle|normal|false": "slice-icon-6172726f77732e6172726f772d72696768742d6375727665642d636972636c65-normal",
+        "arrows.arrow-right-rec|normal|false": "slice-icon-6172726f77732e6172726f772d72696768742d726563-normal",
+        "arrows.arrow-right|normal|false": "slice-icon-6172726f77732e6172726f772d7269676874-normal",
+        "arrows.arrow-swap-rec|normal|false": "slice-icon-6172726f77732e6172726f772d737761702d726563-normal",
+        "arrows.arrow-swap|normal|false": "slice-icon-6172726f77732e6172726f772d73776170-normal",
+        "arrows.arrow-top-circle|normal|false": "slice-icon-6172726f77732e6172726f772d746f702d636972636c65-normal",
+        "arrows.arrow-top-left-circle|normal|false": "slice-icon-6172726f77732e6172726f772d746f702d6c6566742d636972636c65-normal",
+        "arrows.arrow-top-left-rec|normal|false": "slice-icon-6172726f77732e6172726f772d746f702d6c6566742d726563-normal",
+        "arrows.arrow-top-left|normal|false": "slice-icon-6172726f77732e6172726f772d746f702d6c656674-normal",
+        "arrows.arrow-top-rec|normal|false": "slice-icon-6172726f77732e6172726f772d746f702d726563-normal",
+        "arrows.arrow-top-right-circle|normal|false": "slice-icon-6172726f77732e6172726f772d746f702d72696768742d636972636c65-normal",
+        "arrows.arrow-top-right-rec|normal|false": "slice-icon-6172726f77732e6172726f772d746f702d72696768742d726563-normal",
+        "arrows.arrow-top-right|normal|false": "slice-icon-6172726f77732e6172726f772d746f702d7269676874-normal",
+        "arrows.arrow-top|normal|false": "slice-icon-6172726f77732e6172726f772d746f70-normal",
+        "arrows.arrows-expand-2-rec|normal|false": "slice-icon-6172726f77732e6172726f77732d657870616e642d322d726563-normal",
+        "arrows.arrows-expand-2|normal|false": "slice-icon-6172726f77732e6172726f77732d657870616e642d32-normal",
+        "arrows.arrows-expand-rec|normal|false": "slice-icon-6172726f77732e6172726f77732d657870616e642d726563-normal",
+        "arrows.arrows-expand|normal|false": "slice-icon-6172726f77732e6172726f77732d657870616e64-normal",
+        "arrows.arrows-move-2-rec|normal|false": "slice-icon-6172726f77732e6172726f77732d6d6f76652d322d726563-normal",
+        "arrows.arrows-move-2|normal|false": "slice-icon-6172726f77732e6172726f77732d6d6f76652d32-normal",
+        "arrows.arrows-move-rec|normal|false": "slice-icon-6172726f77732e6172726f77732d6d6f76652d726563-normal",
+        "arrows.arrows-move|normal|false": "slice-icon-6172726f77732e6172726f77732d6d6f7665-normal",
+        "arrows.chevron-down-rec|normal|false": "slice-icon-6172726f77732e63686576726f6e2d646f776e2d726563-normal",
+        "arrows.chevron-down|normal|false": "slice-icon-6172726f77732e63686576726f6e2d646f776e-normal",
+        "arrows.chevron-left-rec|normal|false": "slice-icon-6172726f77732e63686576726f6e2d6c6566742d726563-normal",
+        "arrows.chevron-left|normal|false": "slice-icon-6172726f77732e63686576726f6e2d6c656674-normal",
+        "arrows.chevron-right-rec|normal|false": "slice-icon-6172726f77732e63686576726f6e2d72696768742d726563-normal",
+        "arrows.chevron-right|normal|false": "slice-icon-6172726f77732e63686576726f6e2d7269676874-normal",
+        "arrows.chevron-up-rec|normal|false": "slice-icon-6172726f77732e63686576726f6e2d75702d726563-normal",
+        "arrows.chevron-up|normal|false": "slice-icon-6172726f77732e63686576726f6e2d7570-normal",
+        "arrows.chevrons-down-rec|normal|false": "slice-icon-6172726f77732e63686576726f6e732d646f776e2d726563-normal",
+        "arrows.chevrons-down|normal|false": "slice-icon-6172726f77732e63686576726f6e732d646f776e-normal",
+        "arrows.chevrons-left-rec|normal|false": "slice-icon-6172726f77732e63686576726f6e732d6c6566742d726563-normal",
+        "arrows.chevrons-left|normal|false": "slice-icon-6172726f77732e63686576726f6e732d6c656674-normal",
+        "arrows.chevrons-right-rec|normal|false": "slice-icon-6172726f77732e63686576726f6e732d72696768742d726563-normal",
+        "arrows.chevrons-right|normal|false": "slice-icon-6172726f77732e63686576726f6e732d7269676874-normal",
+        "arrows.chevrons-up-rec|normal|false": "slice-icon-6172726f77732e63686576726f6e732d75702d726563-normal",
+        "arrows.chevrons-up|normal|false": "slice-icon-6172726f77732e63686576726f6e732d7570-normal",
+        "arrows.code-rec|normal|false": "slice-icon-6172726f77732e636f64652d726563-normal",
+        "arrows.code|normal|false": "slice-icon-6172726f77732e636f6465-normal",
+        "arrows.export-2|normal|false": "slice-icon-6172726f77732e6578706f72742d32-normal",
+        "arrows.export-3|normal|false": "slice-icon-6172726f77732e6578706f72742d33-normal",
+        "arrows.export-4|normal|false": "slice-icon-6172726f77732e6578706f72742d34-normal",
+        "arrows.export|normal|false": "slice-icon-6172726f77732e6578706f7274-normal",
+        "arrows.external-link-2|normal|false": "slice-icon-6172726f77732e65787465726e616c2d6c696e6b2d32-normal",
+        "arrows.external-link-rec|normal|false": "slice-icon-6172726f77732e65787465726e616c2d6c696e6b2d726563-normal",
+        "arrows.external-link|normal|false": "slice-icon-6172726f77732e65787465726e616c2d6c696e6b-normal",
+        "arrows.forward-all-rec|normal|false": "slice-icon-6172726f77732e666f72776172642d616c6c2d726563-normal",
+        "arrows.forward-all|normal|false": "slice-icon-6172726f77732e666f72776172642d616c6c-normal",
+        "arrows.forward-rec|normal|false": "slice-icon-6172726f77732e666f72776172642d726563-normal",
+        "arrows.forward|normal|false": "slice-icon-6172726f77732e666f7277617264-normal",
+        "arrows.import-2|normal|false": "slice-icon-6172726f77732e696d706f72742d32-normal",
+        "arrows.import-3|normal|false": "slice-icon-6172726f77732e696d706f72742d33-normal",
+        "arrows.import-4|normal|false": "slice-icon-6172726f77732e696d706f72742d34-normal",
+        "arrows.import|normal|false": "slice-icon-6172726f77732e696d706f7274-normal",
+        "arrows.log-in-2|normal|false": "slice-icon-6172726f77732e6c6f672d696e2d32-normal",
+        "arrows.log-in-3|normal|false": "slice-icon-6172726f77732e6c6f672d696e2d33-normal",
+        "arrows.log-in|normal|false": "slice-icon-6172726f77732e6c6f672d696e-normal",
+        "arrows.log-out-2|normal|false": "slice-icon-6172726f77732e6c6f672d6f75742d32-normal",
+        "arrows.log-out-3|normal|false": "slice-icon-6172726f77732e6c6f672d6f75742d33-normal",
+        "arrows.log-out|normal|false": "slice-icon-6172726f77732e6c6f672d6f7574-normal",
+        "arrows.maximize-2-flipped-rec|normal|false": "slice-icon-6172726f77732e6d6178696d697a652d322d666c69707065642d726563-normal",
+        "arrows.maximize-2-flipped|normal|false": "slice-icon-6172726f77732e6d6178696d697a652d322d666c6970706564-normal",
+        "arrows.maximize-2-rec|normal|false": "slice-icon-6172726f77732e6d6178696d697a652d322d726563-normal",
+        "arrows.maximize-2|normal|false": "slice-icon-6172726f77732e6d6178696d697a652d32-normal",
+        "arrows.maximize-flipped-rec|normal|false": "slice-icon-6172726f77732e6d6178696d697a652d666c69707065642d726563-normal",
+        "arrows.maximize-flipped|normal|false": "slice-icon-6172726f77732e6d6178696d697a652d666c6970706564-normal",
+        "arrows.maximize-rec|normal|false": "slice-icon-6172726f77732e6d6178696d697a652d726563-normal",
+        "arrows.maximize|normal|false": "slice-icon-6172726f77732e6d6178696d697a65-normal",
+        "arrows.redo-2-rec|normal|false": "slice-icon-6172726f77732e7265646f2d322d726563-normal",
+        "arrows.redo-2|normal|false": "slice-icon-6172726f77732e7265646f2d32-normal",
+        "arrows.redo-rec|normal|false": "slice-icon-6172726f77732e7265646f2d726563-normal",
+        "arrows.redo|normal|false": "slice-icon-6172726f77732e7265646f-normal",
+        "arrows.refresh-ccw-alert-rec|normal|false": "slice-icon-6172726f77732e726566726573682d6363772d616c6572742d726563-normal",
+        "arrows.refresh-ccw-alert|normal|false": "slice-icon-6172726f77732e726566726573682d6363772d616c657274-normal",
+        "arrows.refresh-ccw-rec|normal|false": "slice-icon-6172726f77732e726566726573682d6363772d726563-normal",
+        "arrows.refresh-ccw|normal|false": "slice-icon-6172726f77732e726566726573682d636377-normal",
+        "arrows.refresh-cw-alert-rec|normal|false": "slice-icon-6172726f77732e726566726573682d63772d616c6572742d726563-normal",
+        "arrows.refresh-cw-alert|normal|false": "slice-icon-6172726f77732e726566726573682d63772d616c657274-normal",
+        "arrows.refresh-cw-rec|normal|false": "slice-icon-6172726f77732e726566726573682d63772d726563-normal",
+        "arrows.refresh-cw|normal|false": "slice-icon-6172726f77732e726566726573682d6377-normal",
+        "arrows.reply-all-rec|normal|false": "slice-icon-6172726f77732e7265706c792d616c6c2d726563-normal",
+        "arrows.reply-all|normal|false": "slice-icon-6172726f77732e7265706c792d616c6c-normal",
+        "arrows.reply-rec|normal|false": "slice-icon-6172726f77732e7265706c792d726563-normal",
+        "arrows.reply|normal|false": "slice-icon-6172726f77732e7265706c79-normal",
+        "arrows.rotate-ccw-rec|normal|false": "slice-icon-6172726f77732e726f746174652d6363772d726563-normal",
+        "arrows.rotate-ccw|normal|false": "slice-icon-6172726f77732e726f746174652d636377-normal",
+        "arrows.rotate-cw-rec|normal|false": "slice-icon-6172726f77732e726f746174652d63772d726563-normal",
+        "arrows.rotate-cw|normal|false": "slice-icon-6172726f77732e726f746174652d6377-normal",
+        "arrows.scale|normal|false": "slice-icon-6172726f77732e7363616c65-normal",
+        "arrows.trend-down-rec|normal|false": "slice-icon-6172726f77732e7472656e642d646f776e2d726563-normal",
+        "arrows.trend-down|normal|false": "slice-icon-6172726f77732e7472656e642d646f776e-normal",
+        "arrows.trend-up-rec|normal|false": "slice-icon-6172726f77732e7472656e642d75702d726563-normal",
+        "arrows.trend-up|normal|false": "slice-icon-6172726f77732e7472656e642d7570-normal",
+        "arrows.undo-2-rec|normal|false": "slice-icon-6172726f77732e756e646f2d322d726563-normal",
+        "arrows.undo-2|normal|false": "slice-icon-6172726f77732e756e646f2d32-normal",
+        "arrows.undo-rec|normal|false": "slice-icon-6172726f77732e756e646f2d726563-normal",
+        "arrows.undo|normal|false": "slice-icon-6172726f77732e756e646f-normal",
+        "basic.activity-2|normal|false": "slice-icon-62617369632e61637469766974792d32-normal",
+        "basic.activity-rec|normal|false": "slice-icon-62617369632e61637469766974792d726563-normal",
+        "basic.airplay|normal|false": "slice-icon-62617369632e616972706c6179-normal",
+        "basic.anchor-rec|normal|false": "slice-icon-62617369632e616e63686f722d726563-normal",
+        "basic.anchor|normal|false": "slice-icon-62617369632e616e63686f72-normal",
+        "basic.archive|normal|false": "slice-icon-62617369632e61726368697665-normal",
+        "basic.at-rec|normal|false": "slice-icon-62617369632e61742d726563-normal",
+        "basic.at|normal|false": "slice-icon-62617369632e6174-normal",
+        "basic.atom|normal|false": "slice-icon-62617369632e61746f6d-normal",
+        "basic.award|normal|false": "slice-icon-62617369632e6177617264-normal",
+        "basic.baby-carriage|normal|false": "slice-icon-62617369632e626162792d6361727269616765-normal",
+        "basic.barchart|normal|false": "slice-icon-62617369632e6261726368617274-normal",
+        "basic.bed-2|normal|false": "slice-icon-62617369632e6265642d32-normal",
+        "basic.bed-3|normal|false": "slice-icon-62617369632e6265642d33-normal",
+        "basic.bluetooth-rec|normal|false": "slice-icon-62617369632e626c7565746f6f74682d726563-normal",
+        "basic.bluetooth|normal|false": "slice-icon-62617369632e626c7565746f6f7468-normal",
+        "basic.book-open|normal|false": "slice-icon-62617369632e626f6f6b2d6f70656e-normal",
+        "basic.book|normal|false": "slice-icon-62617369632e626f6f6b-normal",
+        "basic.bookmark-check|normal|false": "slice-icon-62617369632e626f6f6b6d61726b2d636865636b-normal",
+        "basic.bookmark-minus|normal|false": "slice-icon-62617369632e626f6f6b6d61726b2d6d696e7573-normal",
+        "basic.bookmark-plus|normal|false": "slice-icon-62617369632e626f6f6b6d61726b2d706c7573-normal",
+        "basic.bookmark-slash|normal|false": "slice-icon-62617369632e626f6f6b6d61726b2d736c617368-normal",
+        "basic.bookmark|normal|false": "slice-icon-62617369632e626f6f6b6d61726b-normal",
+        "basic.bookmarks|normal|false": "slice-icon-62617369632e626f6f6b6d61726b73-normal",
+        "basic.box-2|normal|false": "slice-icon-62617369632e626f782d32-normal",
+        "basic.box|normal|false": "slice-icon-62617369632e626f78-normal",
+        "basic.brackets-rec|normal|false": "slice-icon-62617369632e627261636b6574732d726563-normal",
+        "basic.brackets|normal|false": "slice-icon-62617369632e627261636b657473-normal",
+        "basic.briefcase-2|normal|false": "slice-icon-62617369632e6272696566636173652d32-normal",
+        "basic.briefcase|normal|false": "slice-icon-62617369632e627269656663617365-normal",
+        "basic.broadcast-rec|normal|false": "slice-icon-62617369632e62726f6164636173742d726563-normal",
+        "basic.broadcast|normal|false": "slice-icon-62617369632e62726f616463617374-normal",
+        "basic.brush|normal|false": "slice-icon-62617369632e6272757368-normal",
+        "basic.cast|normal|false": "slice-icon-62617369632e63617374-normal",
+        "basic.check-circle|normal|false": "slice-icon-62617369632e636865636b2d636972636c65-normal",
+        "basic.check-rec|normal|false": "slice-icon-62617369632e636865636b2d726563-normal",
+        "basic.check|normal|false": "slice-icon-62617369632e636865636b-normal",
+        "basic.checkbox-circle|normal|false": "slice-icon-62617369632e636865636b626f782d636972636c65-normal",
+        "basic.checkbox-rec|normal|false": "slice-icon-62617369632e636865636b626f782d726563-normal",
+        "basic.copy|normal|false": "slice-icon-62617369632e636f7079-normal",
+        "basic.copyright|normal|false": "slice-icon-62617369632e636f70797269676874-normal",
+        "basic.cross-rec|normal|false": "slice-icon-62617369632e63726f73732d726563-normal",
+        "basic.cross|normal|false": "slice-icon-62617369632e63726f7373-normal",
+        "basic.crosshair|normal|false": "slice-icon-62617369632e63726f737368616972-normal",
+        "basic.cut|normal|false": "slice-icon-62617369632e637574-normal",
+        "basic.dashboard-2|normal|false": "slice-icon-62617369632e64617368626f6172642d32-normal",
+        "basic.dashboard|normal|false": "slice-icon-62617369632e64617368626f617264-normal",
+        "basic.dumbell|normal|false": "slice-icon-62617369632e64756d62656c6c-normal",
+        "basic.email|normal|false": "slice-icon-62617369632e656d61696c-normal",
+        "basic.emails|normal|false": "slice-icon-62617369632e656d61696c73-normal",
+        "basic.emotion-happy|normal|false": "slice-icon-62617369632e656d6f74696f6e2d6861707079-normal",
+        "basic.emotion-neutral|normal|false": "slice-icon-62617369632e656d6f74696f6e2d6e65757472616c-normal",
+        "basic.emotion-sad|normal|false": "slice-icon-62617369632e656d6f74696f6e2d736164-normal",
+        "basic.emotion-smile|normal|false": "slice-icon-62617369632e656d6f74696f6e2d736d696c65-normal",
+        "basic.emotion-wow|normal|false": "slice-icon-62617369632e656d6f74696f6e2d776f77-normal",
+        "basic.filter-2|normal|false": "slice-icon-62617369632e66696c7465722d32-normal",
+        "basic.filter-rec|normal|false": "slice-icon-62617369632e66696c7465722d726563-normal",
+        "basic.filter|normal|false": "slice-icon-62617369632e66696c746572-normal",
+        "basic.fire|normal|false": "slice-icon-62617369632e66697265-normal",
+        "basic.flag-2|normal|false": "slice-icon-62617369632e666c61672d32-normal",
+        "basic.flag-3|normal|false": "slice-icon-62617369632e666c61672d33-normal",
+        "basic.flag|normal|false": "slice-icon-62617369632e666c6167-normal",
+        "basic.gear-2|normal|false": "slice-icon-62617369632e676561722d32-normal",
+        "basic.gear|normal|false": "slice-icon-62617369632e67656172-normal",
+        "basic.gift|normal|false": "slice-icon-62617369632e67696674-normal",
+        "basic.glasses|normal|false": "slice-icon-62617369632e676c6173736573-normal",
+        "basic.hashtag-circle|normal|false": "slice-icon-62617369632e686173687461672d636972636c65-normal",
+        "basic.hashtag-rec|normal|false": "slice-icon-62617369632e686173687461672d726563-normal",
+        "basic.hashtag|normal|false": "slice-icon-62617369632e68617368746167-normal",
+        "basic.heart-slash|normal|false": "slice-icon-62617369632e68656172742d736c617368-normal",
+        "basic.heart|normal|false": "slice-icon-62617369632e6865617274-normal",
+        "basic.home-2|normal|false": "slice-icon-62617369632e686f6d652d32-normal",
+        "basic.home-3|normal|false": "slice-icon-62617369632e686f6d652d33-normal",
+        "basic.home-4|normal|false": "slice-icon-62617369632e686f6d652d34-normal",
+        "basic.home|normal|false": "slice-icon-62617369632e686f6d65-normal",
+        "basic.inbox-filled|normal|false": "slice-icon-62617369632e696e626f782d66696c6c6564-normal",
+        "basic.inbox-in|normal|false": "slice-icon-62617369632e696e626f782d696e-normal",
+        "basic.inbox-out|normal|false": "slice-icon-62617369632e696e626f782d6f7574-normal",
+        "basic.inbox|normal|false": "slice-icon-62617369632e696e626f78-normal",
+        "basic.infinity-rec|normal|false": "slice-icon-62617369632e696e66696e6974792d726563-normal",
+        "basic.infinity|normal|false": "slice-icon-62617369632e696e66696e697479-normal",
+        "basic.invoice|normal|false": "slice-icon-62617369632e696e766f696365-normal",
+        "basic.layers|normal|false": "slice-icon-62617369632e6c6179657273-normal",
+        "basic.lifebuoy|normal|false": "slice-icon-62617369632e6c69666562756f79-normal",
+        "basic.loader-2-rec|normal|false": "slice-icon-62617369632e6c6f616465722d322d726563-normal",
+        "basic.loader-2|normal|false": "slice-icon-62617369632e6c6f616465722d32-normal",
+        "basic.loader-rec|normal|false": "slice-icon-62617369632e6c6f616465722d726563-normal",
+        "basic.loader|normal|false": "slice-icon-62617369632e6c6f61646572-normal",
+        "basic.loading-trolley|normal|false": "slice-icon-62617369632e6c6f6164696e672d74726f6c6c6579-normal",
+        "basic.megaphone|normal|false": "slice-icon-62617369632e6d65676170686f6e65-normal",
+        "basic.menu-2-rec|normal|false": "slice-icon-62617369632e6d656e752d322d726563-normal",
+        "basic.menu-2|normal|false": "slice-icon-62617369632e6d656e752d32-normal",
+        "basic.menu-rec|normal|false": "slice-icon-62617369632e6d656e752d726563-normal",
+        "basic.menu|normal|false": "slice-icon-62617369632e6d656e75-normal",
+        "basic.minus-circle|normal|false": "slice-icon-62617369632e6d696e75732d636972636c65-normal",
+        "basic.minus-rec|normal|false": "slice-icon-62617369632e6d696e75732d726563-normal",
+        "basic.minus|normal|false": "slice-icon-62617369632e6d696e7573-normal",
+        "basic.modules|normal|false": "slice-icon-62617369632e6d6f64756c6573-normal",
+        "basic.more-horiz-rec|normal|false": "slice-icon-62617369632e6d6f72652d686f72697a2d726563-normal",
+        "basic.more-horiz|normal|false": "slice-icon-62617369632e6d6f72652d686f72697a-normal",
+        "basic.more-vert-rec|normal|false": "slice-icon-62617369632e6d6f72652d766572742d726563-normal",
+        "basic.more-vert|normal|false": "slice-icon-62617369632e6d6f72652d76657274-normal",
+        "basic.newspaper|normal|false": "slice-icon-62617369632e6e6577737061706572-normal",
+        "basic.nut|normal|false": "slice-icon-62617369632e6e7574-normal",
+        "basic.planet|normal|false": "slice-icon-62617369632e706c616e6574-normal",
+        "basic.plus-circle|normal|false": "slice-icon-62617369632e706c75732d636972636c65-normal",
+        "basic.plus-rec|normal|false": "slice-icon-62617369632e706c75732d726563-normal",
+        "basic.plus|normal|false": "slice-icon-62617369632e706c7573-normal",
+        "basic.power-rec|normal|false": "slice-icon-62617369632e706f7765722d726563-normal",
+        "basic.power|normal|false": "slice-icon-62617369632e706f776572-normal",
+        "basic.presentation-chart|normal|false": "slice-icon-62617369632e70726573656e746174696f6e2d6368617274-normal",
+        "basic.presentation-line|normal|false": "slice-icon-62617369632e70726573656e746174696f6e2d6c696e65-normal",
+        "basic.receipt|normal|false": "slice-icon-62617369632e72656365697074-normal",
+        "basic.rocket-2|normal|false": "slice-icon-62617369632e726f636b65742d32-normal",
+        "basic.rocket|normal|false": "slice-icon-62617369632e726f636b6574-normal",
+        "basic.search|normal|false": "slice-icon-62617369632e736561726368-normal",
+        "basic.send-2|normal|false": "slice-icon-62617369632e73656e642d32-normal",
+        "basic.send|normal|false": "slice-icon-62617369632e73656e64-normal",
+        "basic.share|normal|false": "slice-icon-62617369632e7368617265-normal",
+        "basic.shopping-bag-2|normal|false": "slice-icon-62617369632e73686f7070696e672d6261672d32-normal",
+        "basic.shopping-bag|normal|false": "slice-icon-62617369632e73686f7070696e672d626167-normal",
+        "basic.shopping-basket|normal|false": "slice-icon-62617369632e73686f7070696e672d6261736b6574-normal",
+        "basic.shopping-cart-2|normal|false": "slice-icon-62617369632e73686f7070696e672d636172742d32-normal",
+        "basic.shopping-cart|normal|false": "slice-icon-62617369632e73686f7070696e672d63617274-normal",
+        "basic.slash|normal|false": "slice-icon-62617369632e736c617368-normal",
+        "basic.sliders-horiz-2|normal|false": "slice-icon-62617369632e736c69646572732d686f72697a2d32-normal",
+        "basic.sliders-horiz|normal|false": "slice-icon-62617369632e736c69646572732d686f72697a-normal",
+        "basic.sliders-vert-2|normal|false": "slice-icon-62617369632e736c69646572732d766572742d32-normal",
+        "basic.sliders-vert|normal|false": "slice-icon-62617369632e736c69646572732d76657274-normal",
+        "basic.sort-number-rec|normal|false": "slice-icon-62617369632e736f72742d6e756d6265722d726563-normal",
+        "basic.sort-number-reverse-rec|normal|false": "slice-icon-62617369632e736f72742d6e756d6265722d726576657273652d726563-normal",
+        "basic.sort-number-reverse|normal|false": "slice-icon-62617369632e736f72742d6e756d6265722d72657665727365-normal",
+        "basic.sort-number|normal|false": "slice-icon-62617369632e736f72742d6e756d626572-normal",
+        "basic.sort-text-rec|normal|false": "slice-icon-62617369632e736f72742d746578742d726563-normal",
+        "basic.sort-text-reverse-rec|normal|false": "slice-icon-62617369632e736f72742d746578742d726576657273652d726563-normal",
+        "basic.sort-text-reverse|normal|false": "slice-icon-62617369632e736f72742d746578742d72657665727365-normal",
+        "basic.sort-text|normal|false": "slice-icon-62617369632e736f72742d74657874-normal",
+        "basic.star-slash|normal|false": "slice-icon-62617369632e737461722d736c617368-normal",
+        "basic.star|normal|false": "slice-icon-62617369632e73746172-normal",
+        "basic.sticker|normal|false": "slice-icon-62617369632e737469636b6572-normal",
+        "basic.swatchbook|normal|false": "slice-icon-62617369632e737761746368626f6f6b-normal",
+        "basic.tag-2|normal|false": "slice-icon-62617369632e7461672d32-normal",
+        "basic.tag|normal|false": "slice-icon-62617369632e746167-normal",
+        "basic.tags-2|normal|false": "slice-icon-62617369632e746167732d32-normal",
+        "basic.tags|normal|false": "slice-icon-62617369632e74616773-normal",
+        "basic.target|normal|false": "slice-icon-62617369632e746172676574-normal",
+        "basic.terminal|normal|false": "slice-icon-62617369632e7465726d696e616c-normal",
+        "basic.thumbs-down-2|normal|false": "slice-icon-62617369632e7468756d62732d646f776e2d32-normal",
+        "basic.thumbs-down|normal|false": "slice-icon-62617369632e7468756d62732d646f776e-normal",
+        "basic.thumbs-up-2|normal|false": "slice-icon-62617369632e7468756d62732d75702d32-normal",
+        "basic.thumbs-up|normal|false": "slice-icon-62617369632e7468756d62732d7570-normal",
+        "basic.ticket|normal|false": "slice-icon-62617369632e7469636b6574-normal",
+        "basic.toggle-off|normal|false": "slice-icon-62617369632e746f67676c652d6f6666-normal",
+        "basic.toggle-on|normal|false": "slice-icon-62617369632e746f67676c652d6f6e-normal",
+        "basic.trash-2|normal|false": "slice-icon-62617369632e74726173682d32-normal",
+        "basic.trash|normal|false": "slice-icon-62617369632e7472617368-normal",
+        "basic.trophy|normal|false": "slice-icon-62617369632e74726f706879-normal",
+        "basic.truck|normal|false": "slice-icon-62617369632e747275636b-normal",
+        "basic.umbrella|normal|false": "slice-icon-62617369632e756d6272656c6c61-normal",
+        "basic.weight|normal|false": "slice-icon-62617369632e776569676874-normal",
+        "basic.wheelchair-rec|normal|false": "slice-icon-62617369632e776865656c63686169722d726563-normal",
+        "basic.wheelchair|normal|false": "slice-icon-62617369632e776865656c6368616972-normal",
+        "basic.wifi-rec|normal|false": "slice-icon-62617369632e776966692d726563-normal",
+        "basic.wifi-slash-rec|normal|false": "slice-icon-62617369632e776966692d736c6173682d726563-normal",
+        "basic.wifi-slash|normal|false": "slice-icon-62617369632e776966692d736c617368-normal",
+        "basic.wifi|normal|false": "slice-icon-62617369632e77696669-normal",
+        "basic.wrench|normal|false": "slice-icon-62617369632e7772656e6368-normal",
+        "basic.yin-yang|normal|false": "slice-icon-62617369632e79696e2d79616e67-normal",
+        "basic.zoom-in|normal|false": "slice-icon-62617369632e7a6f6f6d2d696e-normal",
+        "basic.zoom-out|normal|false": "slice-icon-62617369632e7a6f6f6d2d6f7574-normal",
+        "brands.appstore|normal|false": "slice-icon-6272616e64732e61707073746f7265-normal",
+        "brands.behance|normal|false": "slice-icon-6272616e64732e626568616e6365-normal",
+        "brands.dribbble|normal|false": "slice-icon-6272616e64732e6472696262626c65-normal",
+        "brands.facebook|normal|false": "slice-icon-6272616e64732e66616365626f6f6b-normal",
+        "brands.figma|normal|false": "slice-icon-6272616e64732e6669676d61-normal",
+        "brands.framer|normal|false": "slice-icon-6272616e64732e6672616d6572-normal",
+        "brands.googleplay|normal|false": "slice-icon-6272616e64732e676f6f676c65706c6179-normal",
+        "brands.illustrator|normal|false": "slice-icon-6272616e64732e696c6c7573747261746f72-normal",
+        "brands.instagram|normal|false": "slice-icon-6272616e64732e696e7374616772616d-normal",
+        "brands.messanger|normal|false": "slice-icon-6272616e64732e6d657373616e676572-normal",
+        "brands.notion|normal|false": "slice-icon-6272616e64732e6e6f74696f6e-normal",
+        "brands.photoshop|normal|false": "slice-icon-6272616e64732e70686f746f73686f70-normal",
+        "brands.pinterest|normal|false": "slice-icon-6272616e64732e70696e746572657374-normal",
+        "brands.producthunt|normal|false": "slice-icon-6272616e64732e70726f6475637468756e74-normal",
+        "brands.sketch|normal|false": "slice-icon-6272616e64732e736b65746368-normal",
+        "brands.soundcloud|normal|false": "slice-icon-6272616e64732e736f756e64636c6f7564-normal",
+        "brands.spotify|normal|false": "slice-icon-6272616e64732e73706f74696679-normal",
+        "brands.twitter|normal|false": "slice-icon-6272616e64732e74776974746572-normal",
+        "brands.windows|normal|false": "slice-icon-6272616e64732e77696e646f7773-normal",
+        "brands.youtube|normal|false": "slice-icon-6272616e64732e796f7574756265-normal",
+        "call.call-add|normal|false": "slice-icon-63616c6c2e63616c6c2d616464-normal",
+        "call.call-calling|normal|false": "slice-icon-63616c6c2e63616c6c2d63616c6c696e67-normal",
+        "call.call-decline|normal|false": "slice-icon-63616c6c2e63616c6c2d6465636c696e65-normal",
+        "call.call-end|normal|false": "slice-icon-63616c6c2e63616c6c2d656e64-normal",
+        "call.call-incoming|normal|false": "slice-icon-63616c6c2e63616c6c2d696e636f6d696e67-normal",
+        "call.call-missed|normal|false": "slice-icon-63616c6c2e63616c6c2d6d6973736564-normal",
+        "call.call-muted|normal|false": "slice-icon-63616c6c2e63616c6c2d6d75746564-normal",
+        "call.call-on-hold|normal|false": "slice-icon-63616c6c2e63616c6c2d6f6e2d686f6c64-normal",
+        "call.call-outgoing|normal|false": "slice-icon-63616c6c2e63616c6c2d6f7574676f696e67-normal",
+        "call.call-received|normal|false": "slice-icon-63616c6c2e63616c6c2d7265636569766564-normal",
+        "call.call-redirected|normal|false": "slice-icon-63616c6c2e63616c6c2d72656469726563746564-normal",
+        "call.call-remove|normal|false": "slice-icon-63616c6c2e63616c6c2d72656d6f7665-normal",
+        "call.call-slash|normal|false": "slice-icon-63616c6c2e63616c6c2d736c617368-normal",
+        "call.dialpad|normal|false": "slice-icon-63616c6c2e6469616c706164-normal",
+        "call.phone|normal|false": "slice-icon-63616c6c2e70686f6e65-normal",
+        "call.voicemail|normal|false": "slice-icon-63616c6c2e766f6963656d61696c-normal",
+        "chat.comment-2-alert|normal|false": "slice-icon-636861742e636f6d6d656e742d322d616c657274-normal",
+        "chat.comment-2-cancel|normal|false": "slice-icon-636861742e636f6d6d656e742d322d63616e63656c-normal",
+        "chat.comment-2-check|normal|false": "slice-icon-636861742e636f6d6d656e742d322d636865636b-normal",
+        "chat.comment-2-dots|normal|false": "slice-icon-636861742e636f6d6d656e742d322d646f7473-normal",
+        "chat.comment-2-info|normal|false": "slice-icon-636861742e636f6d6d656e742d322d696e666f-normal",
+        "chat.comment-2-minus|normal|false": "slice-icon-636861742e636f6d6d656e742d322d6d696e7573-normal",
+        "chat.comment-2-plus|normal|false": "slice-icon-636861742e636f6d6d656e742d322d706c7573-normal",
+        "chat.comment-2-question|normal|false": "slice-icon-636861742e636f6d6d656e742d322d7175657374696f6e-normal",
+        "chat.comment-2-slash|normal|false": "slice-icon-636861742e636f6d6d656e742d322d736c617368-normal",
+        "chat.comment-2-text|normal|false": "slice-icon-636861742e636f6d6d656e742d322d74657874-normal",
+        "chat.comment-2|normal|false": "slice-icon-636861742e636f6d6d656e742d32-normal",
+        "chat.comment-alert|normal|false": "slice-icon-636861742e636f6d6d656e742d616c657274-normal",
+        "chat.comment-cancel|normal|false": "slice-icon-636861742e636f6d6d656e742d63616e63656c-normal",
+        "chat.comment-check|normal|false": "slice-icon-636861742e636f6d6d656e742d636865636b-normal",
+        "chat.comment-dots|normal|false": "slice-icon-636861742e636f6d6d656e742d646f7473-normal",
+        "chat.comment-minus|normal|false": "slice-icon-636861742e636f6d6d656e742d6d696e7573-normal",
+        "chat.comment-plus|normal|false": "slice-icon-636861742e636f6d6d656e742d706c7573-normal",
+        "chat.comment-slash|normal|false": "slice-icon-636861742e636f6d6d656e742d736c617368-normal",
+        "chat.comment-text|normal|false": "slice-icon-636861742e636f6d6d656e742d74657874-normal",
+        "chat.comment|normal|false": "slice-icon-636861742e636f6d6d656e74-normal",
+        "chat.comments-2|normal|false": "slice-icon-636861742e636f6d6d656e74732d32-normal",
+        "chat.comments|normal|false": "slice-icon-636861742e636f6d6d656e7473-normal",
+        "documents.clipboard-check|normal|false": "slice-icon-646f63756d656e74732e636c6970626f6172642d636865636b-normal",
+        "documents.clipboard-cross|normal|false": "slice-icon-646f63756d656e74732e636c6970626f6172642d63726f7373-normal",
+        "documents.clipboard-minus|normal|false": "slice-icon-646f63756d656e74732e636c6970626f6172642d6d696e7573-normal",
+        "documents.clipboard-plus|normal|false": "slice-icon-646f63756d656e74732e636c6970626f6172642d706c7573-normal",
+        "documents.clipboard-slash|normal|false": "slice-icon-646f63756d656e74732e636c6970626f6172642d736c617368-normal",
+        "documents.clipboard-text|normal|false": "slice-icon-646f63756d656e74732e636c6970626f6172642d74657874-normal",
+        "documents.clipboard|normal|false": "slice-icon-646f63756d656e74732e636c6970626f617264-normal",
+        "documents.file-agreement|normal|false": "slice-icon-646f63756d656e74732e66696c652d61677265656d656e74-normal",
+        "documents.file-check|normal|false": "slice-icon-646f63756d656e74732e66696c652d636865636b-normal",
+        "documents.file-code|normal|false": "slice-icon-646f63756d656e74732e66696c652d636f6465-normal",
+        "documents.file-cross|normal|false": "slice-icon-646f63756d656e74732e66696c652d63726f7373-normal",
+        "documents.file-download|normal|false": "slice-icon-646f63756d656e74732e66696c652d646f776e6c6f6164-normal",
+        "documents.file-draft|normal|false": "slice-icon-646f63756d656e74732e66696c652d6472616674-normal",
+        "documents.file-heart|normal|false": "slice-icon-646f63756d656e74732e66696c652d6865617274-normal",
+        "documents.file-invoice|normal|false": "slice-icon-646f63756d656e74732e66696c652d696e766f696365-normal",
+        "documents.file-minus|normal|false": "slice-icon-646f63756d656e74732e66696c652d6d696e7573-normal",
+        "documents.file-move|normal|false": "slice-icon-646f63756d656e74732e66696c652d6d6f7665-normal",
+        "documents.file-plus|normal|false": "slice-icon-646f63756d656e74732e66696c652d706c7573-normal",
+        "documents.file-scan|normal|false": "slice-icon-646f63756d656e74732e66696c652d7363616e-normal",
+        "documents.file-shredder|normal|false": "slice-icon-646f63756d656e74732e66696c652d7368726564646572-normal",
+        "documents.file-slash|normal|false": "slice-icon-646f63756d656e74732e66696c652d736c617368-normal",
+        "documents.file-text|normal|false": "slice-icon-646f63756d656e74732e66696c652d74657874-normal",
+        "documents.file-upload|normal|false": "slice-icon-646f63756d656e74732e66696c652d75706c6f6164-normal",
+        "documents.file|normal|false": "slice-icon-646f63756d656e74732e66696c65-normal",
+        "documents.folder-check|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d636865636b-normal",
+        "documents.folder-cloud|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d636c6f7564-normal",
+        "documents.folder-compressed|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d636f6d70726573736564-normal",
+        "documents.folder-cross|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d63726f7373-normal",
+        "documents.folder-download|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d646f776e6c6f6164-normal",
+        "documents.folder-heart|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d6865617274-normal",
+        "documents.folder-minus|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d6d696e7573-normal",
+        "documents.folder-move|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d6d6f7665-normal",
+        "documents.folder-music|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d6d75736963-normal",
+        "documents.folder-open|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d6f70656e-normal",
+        "documents.folder-photo|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d70686f746f-normal",
+        "documents.folder-plus|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d706c7573-normal",
+        "documents.folder-slash|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d736c617368-normal",
+        "documents.folder-upload|normal|false": "slice-icon-646f63756d656e74732e666f6c6465722d75706c6f6164-normal",
+        "documents.folder|normal|false": "slice-icon-646f63756d656e74732e666f6c646572-normal",
+        "documents.note-2-text|normal|false": "slice-icon-646f63756d656e74732e6e6f74652d322d74657874-normal",
+        "documents.note-2|normal|false": "slice-icon-646f63756d656e74732e6e6f74652d32-normal",
+        "documents.note-text|normal|false": "slice-icon-646f63756d656e74732e6e6f74652d74657874-normal",
+        "documents.note|normal|false": "slice-icon-646f63756d656e74732e6e6f7465-normal",
+        "documents.notebook|normal|false": "slice-icon-646f63756d656e74732e6e6f7465626f6f6b-normal",
+        "editor.align-bottom-rec|normal|false": "slice-icon-656469746f722e616c69676e2d626f74746f6d2d726563-normal",
+        "editor.align-bottom|normal|false": "slice-icon-656469746f722e616c69676e2d626f74746f6d-normal",
+        "editor.align-center-2-rec|normal|false": "slice-icon-656469746f722e616c69676e2d63656e7465722d322d726563-normal",
+        "editor.align-center-2|normal|false": "slice-icon-656469746f722e616c69676e2d63656e7465722d32-normal",
+        "editor.align-center-rec|normal|false": "slice-icon-656469746f722e616c69676e2d63656e7465722d726563-normal",
+        "editor.align-center|normal|false": "slice-icon-656469746f722e616c69676e2d63656e746572-normal",
+        "editor.align-justify-2-rec|normal|false": "slice-icon-656469746f722e616c69676e2d6a7573746966792d322d726563-normal",
+        "editor.align-justify-2|normal|false": "slice-icon-656469746f722e616c69676e2d6a7573746966792d32-normal",
+        "editor.align-justify-rec|normal|false": "slice-icon-656469746f722e616c69676e2d6a7573746966792d726563-normal",
+        "editor.align-justify|normal|false": "slice-icon-656469746f722e616c69676e2d6a757374696679-normal",
+        "editor.align-left-2-rec|normal|false": "slice-icon-656469746f722e616c69676e2d6c6566742d322d726563-normal",
+        "editor.align-left-2|normal|false": "slice-icon-656469746f722e616c69676e2d6c6566742d32-normal",
+        "editor.align-left-rec|normal|false": "slice-icon-656469746f722e616c69676e2d6c6566742d726563-normal",
+        "editor.align-left|normal|false": "slice-icon-656469746f722e616c69676e2d6c656674-normal",
+        "editor.align-middle-rec|normal|false": "slice-icon-656469746f722e616c69676e2d6d6964646c652d726563-normal",
+        "editor.align-middle|normal|false": "slice-icon-656469746f722e616c69676e2d6d6964646c65-normal",
+        "editor.align-right-2-rec|normal|false": "slice-icon-656469746f722e616c69676e2d72696768742d322d726563-normal",
+        "editor.align-right-2|normal|false": "slice-icon-656469746f722e616c69676e2d72696768742d32-normal",
+        "editor.align-right-rec|normal|false": "slice-icon-656469746f722e616c69676e2d72696768742d726563-normal",
+        "editor.align-right|normal|false": "slice-icon-656469746f722e616c69676e2d7269676874-normal",
+        "editor.align-top-rec|normal|false": "slice-icon-656469746f722e616c69676e2d746f702d726563-normal",
+        "editor.align-top|normal|false": "slice-icon-656469746f722e616c69676e2d746f70-normal",
+        "editor.border-bottom|normal|false": "slice-icon-656469746f722e626f726465722d626f74746f6d-normal",
+        "editor.border-clear|normal|false": "slice-icon-656469746f722e626f726465722d636c656172-normal",
+        "editor.border-common|normal|false": "slice-icon-656469746f722e626f726465722d636f6d6d6f6e-normal",
+        "editor.border-horizontal|normal|false": "slice-icon-656469746f722e626f726465722d686f72697a6f6e74616c-normal",
+        "editor.border-inner|normal|false": "slice-icon-656469746f722e626f726465722d696e6e6572-normal",
+        "editor.border-left|normal|false": "slice-icon-656469746f722e626f726465722d6c656674-normal",
+        "editor.border-outer|normal|false": "slice-icon-656469746f722e626f726465722d6f75746572-normal",
+        "editor.border-right|normal|false": "slice-icon-656469746f722e626f726465722d7269676874-normal",
+        "editor.border-top|normal|false": "slice-icon-656469746f722e626f726465722d746f70-normal",
+        "editor.border-vertical|normal|false": "slice-icon-656469746f722e626f726465722d766572746963616c-normal",
+        "editor.chart-bar|normal|false": "slice-icon-656469746f722e63686172742d626172-normal",
+        "editor.chart-column|normal|false": "slice-icon-656469746f722e63686172742d636f6c756d6e-normal",
+        "editor.chart-line|normal|false": "slice-icon-656469746f722e63686172742d6c696e65-normal",
+        "editor.chart-pie|normal|false": "slice-icon-656469746f722e63686172742d706965-normal",
+        "editor.column-spacing-rec|normal|false": "slice-icon-656469746f722e636f6c756d6e2d73706163696e672d726563-normal",
+        "editor.column-spacing|normal|false": "slice-icon-656469746f722e636f6c756d6e2d73706163696e67-normal",
+        "editor.droplet-slash|normal|false": "slice-icon-656469746f722e64726f706c65742d736c617368-normal",
+        "editor.droplet|normal|false": "slice-icon-656469746f722e64726f706c6574-normal",
+        "editor.edit-2|normal|false": "slice-icon-656469746f722e656469742d32-normal",
+        "editor.edit-3|normal|false": "slice-icon-656469746f722e656469742d33-normal",
+        "editor.edit-slash|normal|false": "slice-icon-656469746f722e656469742d736c617368-normal",
+        "editor.edit|normal|false": "slice-icon-656469746f722e65646974-normal",
+        "editor.first-line-1-rec|normal|false": "slice-icon-656469746f722e66697273742d6c696e652d312d726563-normal",
+        "editor.first-line-1|normal|false": "slice-icon-656469746f722e66697273742d6c696e652d31-normal",
+        "editor.first-line-2-rec|normal|false": "slice-icon-656469746f722e66697273742d6c696e652d322d726563-normal",
+        "editor.first-line-2|normal|false": "slice-icon-656469746f722e66697273742d6c696e652d32-normal",
+        "editor.first-line-3-rec|normal|false": "slice-icon-656469746f722e66697273742d6c696e652d332d726563-normal",
+        "editor.first-line-3|normal|false": "slice-icon-656469746f722e66697273742d6c696e652d33-normal",
+        "editor.functions-rec|normal|false": "slice-icon-656469746f722e66756e6374696f6e732d726563-normal",
+        "editor.functions|normal|false": "slice-icon-656469746f722e66756e6374696f6e73-normal",
+        "editor.indent-decrease-rec|normal|false": "slice-icon-656469746f722e696e64656e742d64656372656173652d726563-normal",
+        "editor.indent-decrease|normal|false": "slice-icon-656469746f722e696e64656e742d6465637265617365-normal",
+        "editor.indent-first-line-rec|normal|false": "slice-icon-656469746f722e696e64656e742d66697273742d6c696e652d726563-normal",
+        "editor.indent-first-line|normal|false": "slice-icon-656469746f722e696e64656e742d66697273742d6c696e65-normal",
+        "editor.indent-increase-rec|normal|false": "slice-icon-656469746f722e696e64656e742d696e6372656173652d726563-normal",
+        "editor.indent-increase|normal|false": "slice-icon-656469746f722e696e64656e742d696e637265617365-normal",
+        "editor.letter-spacing-2-rec|normal|false": "slice-icon-656469746f722e6c65747465722d73706163696e672d322d726563-normal",
+        "editor.letter-spacing-2|normal|false": "slice-icon-656469746f722e6c65747465722d73706163696e672d32-normal",
+        "editor.letter-spacing-rec|normal|false": "slice-icon-656469746f722e6c65747465722d73706163696e672d726563-normal",
+        "editor.letter-spacing|normal|false": "slice-icon-656469746f722e6c65747465722d73706163696e67-normal",
+        "editor.line-height-2-rec|normal|false": "slice-icon-656469746f722e6c696e652d6865696768742d322d726563-normal",
+        "editor.line-height-2|normal|false": "slice-icon-656469746f722e6c696e652d6865696768742d32-normal",
+        "editor.line-height-rec|normal|false": "slice-icon-656469746f722e6c696e652d6865696768742d726563-normal",
+        "editor.line-height|normal|false": "slice-icon-656469746f722e6c696e652d686569676874-normal",
+        "editor.link-1-rec|normal|false": "slice-icon-656469746f722e6c696e6b2d312d726563-normal",
+        "editor.link-1|normal|false": "slice-icon-656469746f722e6c696e6b2d31-normal",
+        "editor.link-2-rec|normal|false": "slice-icon-656469746f722e6c696e6b2d322d726563-normal",
+        "editor.link-2|normal|false": "slice-icon-656469746f722e6c696e6b2d32-normal",
+        "editor.list-ordered-rec|normal|false": "slice-icon-656469746f722e6c6973742d6f7264657265642d726563-normal",
+        "editor.list-ordered|normal|false": "slice-icon-656469746f722e6c6973742d6f726465726564-normal",
+        "editor.list-unordered-2-rec|normal|false": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d322d726563-normal",
+        "editor.list-unordered-2|normal|false": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d32-normal",
+        "editor.list-unordered-3|normal|false": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d33-normal",
+        "editor.list-unordered-4-rec|normal|false": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d342d726563-normal",
+        "editor.list-unordered-4|normal|false": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d34-normal",
+        "editor.list-unordered-5-rec|normal|false": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d352d726563-normal",
+        "editor.list-unordered-5|normal|false": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d35-normal",
+        "editor.list-unordered-rec|normal|false": "slice-icon-656469746f722e6c6973742d756e6f7264657265642d726563-normal",
+        "editor.list-unordered|normal|false": "slice-icon-656469746f722e6c6973742d756e6f726465726564-normal",
+        "editor.page-break|normal|false": "slice-icon-656469746f722e706167652d627265616b-normal",
+        "editor.paint-bucket|normal|false": "slice-icon-656469746f722e7061696e742d6275636b6574-normal",
+        "editor.paint-tool|normal|false": "slice-icon-656469746f722e7061696e742d746f6f6c-normal",
+        "editor.paperclip-2-rec|normal|false": "slice-icon-656469746f722e7061706572636c69702d322d726563-normal",
+        "editor.paperclip-2-slash-rec|normal|false": "slice-icon-656469746f722e7061706572636c69702d322d736c6173682d726563-normal",
+        "editor.paperclip-2-slash|normal|false": "slice-icon-656469746f722e7061706572636c69702d322d736c617368-normal",
+        "editor.paperclip-2|normal|false": "slice-icon-656469746f722e7061706572636c69702d32-normal",
+        "editor.paperclip-rec|normal|false": "slice-icon-656469746f722e7061706572636c69702d726563-normal",
+        "editor.paperclip-slash-rec|normal|false": "slice-icon-656469746f722e7061706572636c69702d736c6173682d726563-normal",
+        "editor.paperclip-slash|normal|false": "slice-icon-656469746f722e7061706572636c69702d736c617368-normal",
+        "editor.paperclip|normal|false": "slice-icon-656469746f722e7061706572636c6970-normal",
+        "editor.pen-tool-2|normal|false": "slice-icon-656469746f722e70656e2d746f6f6c2d32-normal",
+        "editor.pen-tool|normal|false": "slice-icon-656469746f722e70656e2d746f6f6c-normal",
+        "editor.pharagraph-spacing-rec|normal|false": "slice-icon-656469746f722e706861726167726170682d73706163696e672d726563-normal",
+        "editor.pharagraph-spacing|normal|false": "slice-icon-656469746f722e706861726167726170682d73706163696e67-normal",
+        "editor.printer-slash|normal|false": "slice-icon-656469746f722e7072696e7465722d736c617368-normal",
+        "editor.printer|normal|false": "slice-icon-656469746f722e7072696e746572-normal",
+        "editor.quotes-2|normal|false": "slice-icon-656469746f722e71756f7465732d32-normal",
+        "editor.quotes|normal|false": "slice-icon-656469746f722e71756f746573-normal",
+        "editor.ruler|normal|false": "slice-icon-656469746f722e72756c6572-normal",
+        "editor.script-rec|normal|false": "slice-icon-656469746f722e7363726970742d726563-normal",
+        "editor.script|normal|false": "slice-icon-656469746f722e736372697074-normal",
+        "editor.small-caps-2-rec|normal|false": "slice-icon-656469746f722e736d616c6c2d636170732d322d726563-normal",
+        "editor.small-caps-2|normal|false": "slice-icon-656469746f722e736d616c6c2d636170732d32-normal",
+        "editor.small-caps-rec|normal|false": "slice-icon-656469746f722e736d616c6c2d636170732d726563-normal",
+        "editor.small-caps|normal|false": "slice-icon-656469746f722e736d616c6c2d63617073-normal",
+        "editor.special-charachers-rec|normal|false": "slice-icon-656469746f722e7370656369616c2d636861726163686572732d726563-normal",
+        "editor.special-charachers|normal|false": "slice-icon-656469746f722e7370656369616c2d63686172616368657273-normal",
+        "editor.text-2-rec|normal|false": "slice-icon-656469746f722e746578742d322d726563-normal",
+        "editor.text-2|normal|false": "slice-icon-656469746f722e746578742d32-normal",
+        "editor.text-block|normal|false": "slice-icon-656469746f722e746578742d626c6f636b-normal",
+        "editor.text-bold-rec|normal|false": "slice-icon-656469746f722e746578742d626f6c642d726563-normal",
+        "editor.text-bold|normal|false": "slice-icon-656469746f722e746578742d626f6c64-normal",
+        "editor.text-format|normal|false": "slice-icon-656469746f722e746578742d666f726d6174-normal",
+        "editor.text-italic-rec|normal|false": "slice-icon-656469746f722e746578742d6974616c69632d726563-normal",
+        "editor.text-italic|normal|false": "slice-icon-656469746f722e746578742d6974616c6963-normal",
+        "editor.text-rec|normal|false": "slice-icon-656469746f722e746578742d726563-normal",
+        "editor.text-slash-2-rec|normal|false": "slice-icon-656469746f722e746578742d736c6173682d322d726563-normal",
+        "editor.text-slash-2|normal|false": "slice-icon-656469746f722e746578742d736c6173682d32-normal",
+        "editor.text-slash-rec|normal|false": "slice-icon-656469746f722e746578742d736c6173682d726563-normal",
+        "editor.text-slash|normal|false": "slice-icon-656469746f722e746578742d736c617368-normal",
+        "editor.text-strikethrough-rec|normal|false": "slice-icon-656469746f722e746578742d737472696b657468726f7567682d726563-normal",
+        "editor.text-strikethrough|normal|false": "slice-icon-656469746f722e746578742d737472696b657468726f756768-normal",
+        "editor.text-underline-rec|normal|false": "slice-icon-656469746f722e746578742d756e6465726c696e652d726563-normal",
+        "editor.text-underline|normal|false": "slice-icon-656469746f722e746578742d756e6465726c696e65-normal",
+        "editor.text|normal|false": "slice-icon-656469746f722e74657874-normal",
+        "editor.vector|normal|false": "slice-icon-656469746f722e766563746f72-normal",
+        "editor.wrap-text-rec|normal|false": "slice-icon-656469746f722e777261702d746578742d726563-normal",
+        "editor.wrap-text|normal|false": "slice-icon-656469746f722e777261702d74657874-normal",
+        "electronics.battery-1|normal|false": "slice-icon-656c656374726f6e6963732e626174746572792d31-normal",
+        "electronics.battery-2|normal|false": "slice-icon-656c656374726f6e6963732e626174746572792d32-normal",
+        "electronics.battery-3|normal|false": "slice-icon-656c656374726f6e6963732e626174746572792d33-normal",
+        "electronics.battery-charging|normal|false": "slice-icon-656c656374726f6e6963732e626174746572792d6368617267696e67-normal",
+        "electronics.battery-slash|normal|false": "slice-icon-656c656374726f6e6963732e626174746572792d736c617368-normal",
+        "electronics.battery|normal|false": "slice-icon-656c656374726f6e6963732e62617474657279-normal",
+        "electronics.bulb-slash|normal|false": "slice-icon-656c656374726f6e6963732e62756c622d736c617368-normal",
+        "electronics.bulb|normal|false": "slice-icon-656c656374726f6e6963732e62756c62-normal",
+        "electronics.dashboard-2|normal|false": "slice-icon-656c656374726f6e6963732e64617368626f6172642d32-normal",
+        "electronics.dashboard|normal|false": "slice-icon-656c656374726f6e6963732e64617368626f617264-normal",
+        "electronics.devices|normal|false": "slice-icon-656c656374726f6e6963732e64657669636573-normal",
+        "electronics.diskette|normal|false": "slice-icon-656c656374726f6e6963732e6469736b65747465-normal",
+        "electronics.flashcard|normal|false": "slice-icon-656c656374726f6e6963732e666c61736863617264-normal",
+        "electronics.glasses-vr|normal|false": "slice-icon-656c656374726f6e6963732e676c61737365732d7672-normal",
+        "electronics.hard-drive|normal|false": "slice-icon-656c656374726f6e6963732e686172642d6472697665-normal",
+        "electronics.headphones-2|normal|false": "slice-icon-656c656374726f6e6963732e6865616470686f6e65732d32-normal",
+        "electronics.headphones|normal|false": "slice-icon-656c656374726f6e6963732e6865616470686f6e6573-normal",
+        "electronics.keyboard-hide|normal|false": "slice-icon-656c656374726f6e6963732e6b6579626f6172642d68696465-normal",
+        "electronics.keyboard-show|normal|false": "slice-icon-656c656374726f6e6963732e6b6579626f6172642d73686f77-normal",
+        "electronics.keyboard|normal|false": "slice-icon-656c656374726f6e6963732e6b6579626f617264-normal",
+        "electronics.laptop|normal|false": "slice-icon-656c656374726f6e6963732e6c6170746f70-normal",
+        "electronics.memory-card|normal|false": "slice-icon-656c656374726f6e6963732e6d656d6f72792d63617264-normal",
+        "electronics.monitor|normal|false": "slice-icon-656c656374726f6e6963732e6d6f6e69746f72-normal",
+        "electronics.mouse|normal|false": "slice-icon-656c656374726f6e6963732e6d6f757365-normal",
+        "electronics.plug-slash|normal|false": "slice-icon-656c656374726f6e6963732e706c75672d736c617368-normal",
+        "electronics.plug|normal|false": "slice-icon-656c656374726f6e6963732e706c7567-normal",
+        "electronics.processor|normal|false": "slice-icon-656c656374726f6e6963732e70726f636573736f72-normal",
+        "electronics.smartphone|normal|false": "slice-icon-656c656374726f6e6963732e736d61727470686f6e65-normal",
+        "electronics.speaker|normal|false": "slice-icon-656c656374726f6e6963732e737065616b6572-normal",
+        "electronics.tablet|normal|false": "slice-icon-656c656374726f6e6963732e7461626c6574-normal",
+        "electronics.thermometer|normal|false": "slice-icon-656c656374726f6e6963732e746865726d6f6d65746572-normal",
+        "electronics.watch-2|normal|false": "slice-icon-656c656374726f6e6963732e77617463682d32-normal",
+        "electronics.watch|normal|false": "slice-icon-656c656374726f6e6963732e7761746368-normal",
+        "electronics.weighter-2|normal|false": "slice-icon-656c656374726f6e6963732e77656967687465722d32-normal",
+        "electronics.weighter|normal|false": "slice-icon-656c656374726f6e6963732e7765696768746572-normal",
+        "financial.cash|normal|false": "slice-icon-66696e616e6369616c2e63617368-normal",
+        "financial.credit-card-income|normal|false": "slice-icon-66696e616e6369616c2e6372656469742d636172642d696e636f6d65-normal",
+        "financial.credit-card-minus|normal|false": "slice-icon-66696e616e6369616c2e6372656469742d636172642d6d696e7573-normal",
+        "financial.credit-card-outcome|normal|false": "slice-icon-66696e616e6369616c2e6372656469742d636172642d6f7574636f6d65-normal",
+        "financial.credit-card-plus|normal|false": "slice-icon-66696e616e6369616c2e6372656469742d636172642d706c7573-normal",
+        "financial.credit-card-scan|normal|false": "slice-icon-66696e616e6369616c2e6372656469742d636172642d7363616e-normal",
+        "financial.credit-card-slash|normal|false": "slice-icon-66696e616e6369616c2e6372656469742d636172642d736c617368-normal",
+        "financial.credit-card|normal|false": "slice-icon-66696e616e6369616c2e6372656469742d63617264-normal",
+        "financial.dollar-circle|normal|false": "slice-icon-66696e616e6369616c2e646f6c6c61722d636972636c65-normal",
+        "financial.dollar|normal|false": "slice-icon-66696e616e6369616c2e646f6c6c6172-normal",
+        "financial.euro-circle|normal|false": "slice-icon-66696e616e6369616c2e6575726f2d636972636c65-normal",
+        "financial.euro|normal|false": "slice-icon-66696e616e6369616c2e6575726f-normal",
+        "financial.pos|normal|false": "slice-icon-66696e616e6369616c2e706f73-normal",
+        "financial.procent-circle|normal|false": "slice-icon-66696e616e6369616c2e70726f63656e742d636972636c65-normal",
+        "financial.procent|normal|false": "slice-icon-66696e616e6369616c2e70726f63656e74-normal",
+        "financial.wallet-minus|normal|false": "slice-icon-66696e616e6369616c2e77616c6c65742d6d696e7573-normal",
+        "financial.wallet-move|normal|false": "slice-icon-66696e616e6369616c2e77616c6c65742d6d6f7665-normal",
+        "financial.wallet-plus|normal|false": "slice-icon-66696e616e6369616c2e77616c6c65742d706c7573-normal",
+        "financial.wallet|normal|false": "slice-icon-66696e616e6369616c2e77616c6c6574-normal",
+        "food.coffee|normal|false": "slice-icon-666f6f642e636f66666565-normal",
+        "food.cutlery-2|normal|false": "slice-icon-666f6f642e6375746c6572792d32-normal",
+        "food.cutlery-3|normal|false": "slice-icon-666f6f642e6375746c6572792d33-normal",
+        "food.cutlery-4|normal|false": "slice-icon-666f6f642e6375746c6572792d34-normal",
+        "food.cutlery|normal|false": "slice-icon-666f6f642e6375746c657279-normal",
+        "food.glass-cocktail|normal|false": "slice-icon-666f6f642e676c6173732d636f636b7461696c-normal",
+        "food.glass-wine|normal|false": "slice-icon-666f6f642e676c6173732d77696e65-normal",
+        "grid.align-bottom-2|normal|false": "slice-icon-677269642e616c69676e2d626f74746f6d2d32-normal",
+        "grid.align-horizontally|normal|false": "slice-icon-677269642e616c69676e2d686f72697a6f6e74616c6c79-normal",
+        "grid.align-left-3|normal|false": "slice-icon-677269642e616c69676e2d6c6566742d33-normal",
+        "grid.align-right-3|normal|false": "slice-icon-677269642e616c69676e2d72696768742d33-normal",
+        "grid.align-top-2|normal|false": "slice-icon-677269642e616c69676e2d746f702d32-normal",
+        "grid.align-vertically|normal|false": "slice-icon-677269642e616c69676e2d766572746963616c6c79-normal",
+        "grid.crop-rec|normal|false": "slice-icon-677269642e63726f702d726563-normal",
+        "grid.crop-rotate-rec|normal|false": "slice-icon-677269642e63726f702d726f746174652d726563-normal",
+        "grid.crop-rotate|normal|false": "slice-icon-677269642e63726f702d726f74617465-normal",
+        "grid.crop|normal|false": "slice-icon-677269642e63726f70-normal",
+        "grid.distribute-horizontally|normal|false": "slice-icon-677269642e646973747269627574652d686f72697a6f6e74616c6c79-normal",
+        "grid.distribute-vertically|normal|false": "slice-icon-677269642e646973747269627574652d766572746963616c6c79-normal",
+        "grid.elements-2|normal|false": "slice-icon-677269642e656c656d656e74732d32-normal",
+        "grid.elements-3|normal|false": "slice-icon-677269642e656c656d656e74732d33-normal",
+        "grid.elements-4|normal|false": "slice-icon-677269642e656c656d656e74732d34-normal",
+        "grid.elements-5|normal|false": "slice-icon-677269642e656c656d656e74732d35-normal",
+        "grid.elements-plus|normal|false": "slice-icon-677269642e656c656d656e74732d706c7573-normal",
+        "grid.elements|normal|false": "slice-icon-677269642e656c656d656e7473-normal",
+        "grid.fat-rows|normal|false": "slice-icon-677269642e6661742d726f7773-normal",
+        "grid.frame-bounds-rec|normal|false": "slice-icon-677269642e6672616d652d626f756e64732d726563-normal",
+        "grid.frame-bounds|normal|false": "slice-icon-677269642e6672616d652d626f756e6473-normal",
+        "grid.frame|normal|false": "slice-icon-677269642e6672616d65-normal",
+        "grid.grid-02|normal|false": "slice-icon-677269642e677269642d3032-normal",
+        "grid.grid-03|normal|false": "slice-icon-677269642e677269642d3033-normal",
+        "grid.grid-04|normal|false": "slice-icon-677269642e677269642d3034-normal",
+        "grid.grid-05|normal|false": "slice-icon-677269642e677269642d3035-normal",
+        "grid.grid-06|normal|false": "slice-icon-677269642e677269642d3036-normal",
+        "grid.grid-07|normal|false": "slice-icon-677269642e677269642d3037-normal",
+        "grid.grid-08|normal|false": "slice-icon-677269642e677269642d3038-normal",
+        "grid.grid-09|normal|false": "slice-icon-677269642e677269642d3039-normal",
+        "grid.grid-10|normal|false": "slice-icon-677269642e677269642d3130-normal",
+        "grid.grid-11|normal|false": "slice-icon-677269642e677269642d3131-normal",
+        "grid.grid-12|normal|false": "slice-icon-677269642e677269642d3132-normal",
+        "grid.grid-13|normal|false": "slice-icon-677269642e677269642d3133-normal",
+        "grid.grid-14|normal|false": "slice-icon-677269642e677269642d3134-normal",
+        "grid.grid-15|normal|false": "slice-icon-677269642e677269642d3135-normal",
+        "grid.grid-16|normal|false": "slice-icon-677269642e677269642d3136-normal",
+        "grid.grid|normal|false": "slice-icon-677269642e67726964-normal",
+        "grid.iframe|normal|false": "slice-icon-677269642e696672616d65-normal",
+        "grid.kanban|normal|false": "slice-icon-677269642e6b616e62616e-normal",
+        "grid.padding|normal|false": "slice-icon-677269642e70616464696e67-normal",
+        "grid.selection-rec|normal|false": "slice-icon-677269642e73656c656374696f6e2d726563-normal",
+        "grid.selection|normal|false": "slice-icon-677269642e73656c656374696f6e-normal",
+        "grid.slider-horizontal-2|normal|false": "slice-icon-677269642e736c696465722d686f72697a6f6e74616c2d32-normal",
+        "grid.slider-horizontal|normal|false": "slice-icon-677269642e736c696465722d686f72697a6f6e74616c-normal",
+        "grid.slider-vertical-2|normal|false": "slice-icon-677269642e736c696465722d766572746963616c2d32-normal",
+        "grid.slider-vertical|normal|false": "slice-icon-677269642e736c696465722d766572746963616c-normal",
+        "grid.stack|normal|false": "slice-icon-677269642e737461636b-normal",
+        "grid.transform|normal|false": "slice-icon-677269642e7472616e73666f726d-normal",
+        "images.apperture|normal|false": "slice-icon-696d616765732e617070657274757265-normal",
+        "images.camera-slash|normal|false": "slice-icon-696d616765732e63616d6572612d736c617368-normal",
+        "images.camera|normal|false": "slice-icon-696d616765732e63616d657261-normal",
+        "images.color-filter|normal|false": "slice-icon-696d616765732e636f6c6f722d66696c746572-normal",
+        "images.image-2|normal|false": "slice-icon-696d616765732e696d6167652d32-normal",
+        "images.image-3|normal|false": "slice-icon-696d616765732e696d6167652d33-normal",
+        "images.image-check|normal|false": "slice-icon-696d616765732e696d6167652d636865636b-normal",
+        "images.image-cross|normal|false": "slice-icon-696d616765732e696d6167652d63726f7373-normal",
+        "images.image-download|normal|false": "slice-icon-696d616765732e696d6167652d646f776e6c6f6164-normal",
+        "images.image-edit|normal|false": "slice-icon-696d616765732e696d6167652d65646974-normal",
+        "images.image-plus|normal|false": "slice-icon-696d616765732e696d6167652d706c7573-normal",
+        "images.image-slash|normal|false": "slice-icon-696d616765732e696d6167652d736c617368-normal",
+        "images.image-upload|normal|false": "slice-icon-696d616765732e696d6167652d75706c6f6164-normal",
+        "images.image|normal|false": "slice-icon-696d616765732e696d616765-normal",
+        "images.lightning-slash|normal|false": "slice-icon-696d616765732e6c696768746e696e672d736c617368-normal",
+        "images.lightning|normal|false": "slice-icon-696d616765732e6c696768746e696e67-normal",
+        "maps.360-degrees|normal|false": "slice-icon-6d6170732e3336302d64656772656573-normal",
+        "maps.compass|normal|false": "slice-icon-6d6170732e636f6d70617373-normal",
+        "maps.direction-2|normal|false": "slice-icon-6d6170732e646972656374696f6e2d32-normal",
+        "maps.direction|normal|false": "slice-icon-6d6170732e646972656374696f6e-normal",
+        "maps.globe-2|normal|false": "slice-icon-6d6170732e676c6f62652d32-normal",
+        "maps.globe|normal|false": "slice-icon-6d6170732e676c6f6265-normal",
+        "maps.gps-slash|normal|false": "slice-icon-6d6170732e6770732d736c617368-normal",
+        "maps.gps|normal|false": "slice-icon-6d6170732e677073-normal",
+        "maps.map-view|normal|false": "slice-icon-6d6170732e6d61702d76696577-normal",
+        "maps.pin-2|normal|false": "slice-icon-6d6170732e70696e2d32-normal",
+        "maps.pin-3|normal|false": "slice-icon-6d6170732e70696e2d33-normal",
+        "maps.pin-check|normal|false": "slice-icon-6d6170732e70696e2d636865636b-normal",
+        "maps.pin-cross|normal|false": "slice-icon-6d6170732e70696e2d63726f7373-normal",
+        "maps.pin-minus|normal|false": "slice-icon-6d6170732e70696e2d6d696e7573-normal",
+        "maps.pin-plus|normal|false": "slice-icon-6d6170732e70696e2d706c7573-normal",
+        "maps.pin-slash|normal|false": "slice-icon-6d6170732e70696e2d736c617368-normal",
+        "maps.pin|normal|false": "slice-icon-6d6170732e70696e-normal",
+        "maps.route|normal|false": "slice-icon-6d6170732e726f757465-normal",
+        "media.book-library|normal|false": "slice-icon-6d656469612e626f6f6b2d6c696272617279-normal",
+        "media.book-plus|normal|false": "slice-icon-6d656469612e626f6f6b2d706c7573-normal",
+        "media.book-queue|normal|false": "slice-icon-6d656469612e626f6f6b2d7175657565-normal",
+        "media.captions-2|normal|false": "slice-icon-6d656469612e63617074696f6e732d32-normal",
+        "media.captions|normal|false": "slice-icon-6d656469612e63617074696f6e73-normal",
+        "media.cd|normal|false": "slice-icon-6d656469612e6364-normal",
+        "media.equalizer|normal|false": "slice-icon-6d656469612e657175616c697a6572-normal",
+        "media.fast-forward|normal|false": "slice-icon-6d656469612e666173742d666f7277617264-normal",
+        "media.fast-rewind|normal|false": "slice-icon-6d656469612e666173742d726577696e64-normal",
+        "media.film-board|normal|false": "slice-icon-6d656469612e66696c6d2d626f617264-normal",
+        "media.film-reel|normal|false": "slice-icon-6d656469612e66696c6d2d7265656c-normal",
+        "media.film-tape|normal|false": "slice-icon-6d656469612e66696c6d2d74617065-normal",
+        "media.forward-10-rec|normal|false": "slice-icon-6d656469612e666f72776172642d31302d726563-normal",
+        "media.forward-10|normal|false": "slice-icon-6d656469612e666f72776172642d3130-normal",
+        "media.forward-15-rec|normal|false": "slice-icon-6d656469612e666f72776172642d31352d726563-normal",
+        "media.forward-15|normal|false": "slice-icon-6d656469612e666f72776172642d3135-normal",
+        "media.forward-5-rec|normal|false": "slice-icon-6d656469612e666f72776172642d352d726563-normal",
+        "media.forward-5|normal|false": "slice-icon-6d656469612e666f72776172642d35-normal",
+        "media.games|normal|false": "slice-icon-6d656469612e67616d6573-normal",
+        "media.label-4k|normal|false": "slice-icon-6d656469612e6c6162656c2d346b-normal",
+        "media.label-explicit|normal|false": "slice-icon-6d656469612e6c6162656c2d6578706c69636974-normal",
+        "media.label-hd|normal|false": "slice-icon-6d656469612e6c6162656c2d6864-normal",
+        "media.label-hq|normal|false": "slice-icon-6d656469612e6c6162656c2d6871-normal",
+        "media.maximize-3-rec|normal|false": "slice-icon-6d656469612e6d6178696d697a652d332d726563-normal",
+        "media.maximize-3|normal|false": "slice-icon-6d656469612e6d6178696d697a652d33-normal",
+        "media.mic-slash|normal|false": "slice-icon-6d656469612e6d69632d736c617368-normal",
+        "media.mic|normal|false": "slice-icon-6d656469612e6d6963-normal",
+        "media.minimize-rec|normal|false": "slice-icon-6d656469612e6d696e696d697a652d726563-normal",
+        "media.minimize|normal|false": "slice-icon-6d656469612e6d696e696d697a65-normal",
+        "media.miniplayer|normal|false": "slice-icon-6d656469612e6d696e69706c61796572-normal",
+        "media.music-library|normal|false": "slice-icon-6d656469612e6d757369632d6c696272617279-normal",
+        "media.music-note-2|normal|false": "slice-icon-6d656469612e6d757369632d6e6f74652d32-normal",
+        "media.music-note-3|normal|false": "slice-icon-6d656469612e6d757369632d6e6f74652d33-normal",
+        "media.music-note|normal|false": "slice-icon-6d656469612e6d757369632d6e6f7465-normal",
+        "media.music-plus|normal|false": "slice-icon-6d656469612e6d757369632d706c7573-normal",
+        "media.music-queue|normal|false": "slice-icon-6d656469612e6d757369632d7175657565-normal",
+        "media.new-release|normal|false": "slice-icon-6d656469612e6e65772d72656c65617365-normal",
+        "media.pause-circle|normal|false": "slice-icon-6d656469612e70617573652d636972636c65-normal",
+        "media.pause|normal|false": "slice-icon-6d656469612e7061757365-normal",
+        "media.play-circle|normal|false": "slice-icon-6d656469612e706c61792d636972636c65-normal",
+        "media.play-next|normal|false": "slice-icon-6d656469612e706c61792d6e657874-normal",
+        "media.play-previous|normal|false": "slice-icon-6d656469612e706c61792d70726576696f7573-normal",
+        "media.play-slowmotion|normal|false": "slice-icon-6d656469612e706c61792d736c6f776d6f74696f6e-normal",
+        "media.play|normal|false": "slice-icon-6d656469612e706c6179-normal",
+        "media.playlist-play|normal|false": "slice-icon-6d656469612e706c61796c6973742d706c6179-normal",
+        "media.playlist-plus|normal|false": "slice-icon-6d656469612e706c61796c6973742d706c7573-normal",
+        "media.playlist|normal|false": "slice-icon-6d656469612e706c61796c697374-normal",
+        "media.radio|normal|false": "slice-icon-6d656469612e726164696f-normal",
+        "media.record|normal|false": "slice-icon-6d656469612e7265636f7264-normal",
+        "media.repeat-on|normal|false": "slice-icon-6d656469612e7265706561742d6f6e-normal",
+        "media.repeat|normal|false": "slice-icon-6d656469612e726570656174-normal",
+        "media.replay-10-rec|normal|false": "slice-icon-6d656469612e7265706c61792d31302d726563-normal",
+        "media.replay-10|normal|false": "slice-icon-6d656469612e7265706c61792d3130-normal",
+        "media.replay-15-rec|normal|false": "slice-icon-6d656469612e7265706c61792d31352d726563-normal",
+        "media.replay-15|normal|false": "slice-icon-6d656469612e7265706c61792d3135-normal",
+        "media.replay-5-rec|normal|false": "slice-icon-6d656469612e7265706c61792d352d726563-normal",
+        "media.replay-5|normal|false": "slice-icon-6d656469612e7265706c61792d35-normal",
+        "media.replay-rec|normal|false": "slice-icon-6d656469612e7265706c61792d726563-normal",
+        "media.replay|normal|false": "slice-icon-6d656469612e7265706c6179-normal",
+        "media.shuffle|normal|false": "slice-icon-6d656469612e73687566666c65-normal",
+        "media.soundwave-rec|normal|false": "slice-icon-6d656469612e736f756e64776176652d726563-normal",
+        "media.soundwave|normal|false": "slice-icon-6d656469612e736f756e6477617665-normal",
+        "media.stop-circle|normal|false": "slice-icon-6d656469612e73746f702d636972636c65-normal",
+        "media.stop|normal|false": "slice-icon-6d656469612e73746f70-normal",
+        "media.tv|normal|false": "slice-icon-6d656469612e7476-normal",
+        "media.verified|normal|false": "slice-icon-6d656469612e7665726966696564-normal",
+        "media.video-camera-slash|normal|false": "slice-icon-6d656469612e766964656f2d63616d6572612d736c617368-normal",
+        "media.video-camera|normal|false": "slice-icon-6d656469612e766964656f2d63616d657261-normal",
+        "media.video-library|normal|false": "slice-icon-6d656469612e766964656f2d6c696272617279-normal",
+        "media.video-plus|normal|false": "slice-icon-6d656469612e766964656f2d706c7573-normal",
+        "media.video-queue|normal|false": "slice-icon-6d656469612e766964656f2d7175657565-normal",
+        "media.volume-cross|normal|false": "slice-icon-6d656469612e766f6c756d652d63726f7373-normal",
+        "media.volume-high|normal|false": "slice-icon-6d656469612e766f6c756d652d68696768-normal",
+        "media.volume-low|normal|false": "slice-icon-6d656469612e766f6c756d652d6c6f77-normal",
+        "media.volume-mute|normal|false": "slice-icon-6d656469612e766f6c756d652d6d757465-normal",
+        "media.volume-slash|normal|false": "slice-icon-6d656469612e766f6c756d652d736c617368-normal",
+        "media.webcam-slash|normal|false": "slice-icon-6d656469612e77656263616d2d736c617368-normal",
+        "media.webcam|normal|false": "slice-icon-6d656469612e77656263616d-normal",
+        "security.bug|normal|false": "slice-icon-73656375726974792e627567-normal",
+        "security.eye-slash|normal|false": "slice-icon-73656375726974792e6579652d736c617368-normal",
+        "security.eye|normal|false": "slice-icon-73656375726974792e657965-normal",
+        "security.face-id-rec|normal|false": "slice-icon-73656375726974792e666163652d69642d726563-normal",
+        "security.face-id|normal|false": "slice-icon-73656375726974792e666163652d6964-normal",
+        "security.fingerprint-2-rec|normal|false": "slice-icon-73656375726974792e66696e6765727072696e742d322d726563-normal",
+        "security.fingerprint-2|normal|false": "slice-icon-73656375726974792e66696e6765727072696e742d32-normal",
+        "security.fingerprint-rec|normal|false": "slice-icon-73656375726974792e66696e6765727072696e742d726563-normal",
+        "security.fingerprint|normal|false": "slice-icon-73656375726974792e66696e6765727072696e74-normal",
+        "security.key|normal|false": "slice-icon-73656375726974792e6b6579-normal",
+        "security.lock-2-opened|normal|false": "slice-icon-73656375726974792e6c6f636b2d322d6f70656e6564-normal",
+        "security.lock-2-slash|normal|false": "slice-icon-73656375726974792e6c6f636b2d322d736c617368-normal",
+        "security.lock-2|normal|false": "slice-icon-73656375726974792e6c6f636b2d32-normal",
+        "security.lock-opened|normal|false": "slice-icon-73656375726974792e6c6f636b2d6f70656e6564-normal",
+        "security.lock-slash|normal|false": "slice-icon-73656375726974792e6c6f636b2d736c617368-normal",
+        "security.lock|normal|false": "slice-icon-73656375726974792e6c6f636b-normal",
+        "security.scan-rec|normal|false": "slice-icon-73656375726974792e7363616e2d726563-normal",
+        "security.scan|normal|false": "slice-icon-73656375726974792e7363616e-normal",
+        "security.server-2|normal|false": "slice-icon-73656375726974792e7365727665722d32-normal",
+        "security.server|normal|false": "slice-icon-73656375726974792e736572766572-normal",
+        "security.shield-check|normal|false": "slice-icon-73656375726974792e736869656c642d636865636b-normal",
+        "security.shield-cross|normal|false": "slice-icon-73656375726974792e736869656c642d63726f7373-normal",
+        "security.shield|normal|false": "slice-icon-73656375726974792e736869656c64-normal",
+        "time.calendar-arrow-right|normal|false": "slice-icon-74696d652e63616c656e6461722d6172726f772d7269676874-normal",
+        "time.calendar-cross|normal|false": "slice-icon-74696d652e63616c656e6461722d63726f7373-normal",
+        "time.calendar-dates|normal|false": "slice-icon-74696d652e63616c656e6461722d6461746573-normal",
+        "time.calendar-event|normal|false": "slice-icon-74696d652e63616c656e6461722d6576656e74-normal",
+        "time.calendar-minus|normal|false": "slice-icon-74696d652e63616c656e6461722d6d696e7573-normal",
+        "time.calendar-note|normal|false": "slice-icon-74696d652e63616c656e6461722d6e6f7465-normal",
+        "time.calendar-number|normal|false": "slice-icon-74696d652e63616c656e6461722d6e756d626572-normal",
+        "time.calendar-person|normal|false": "slice-icon-74696d652e63616c656e6461722d706572736f6e-normal",
+        "time.calendar-plus|normal|false": "slice-icon-74696d652e63616c656e6461722d706c7573-normal",
+        "time.calendar|normal|false": "slice-icon-74696d652e63616c656e646172-normal",
+        "time.clock-check|normal|false": "slice-icon-74696d652e636c6f636b2d636865636b-normal",
+        "time.clock-cross|normal|false": "slice-icon-74696d652e636c6f636b2d63726f7373-normal",
+        "time.clock-minus|normal|false": "slice-icon-74696d652e636c6f636b2d6d696e7573-normal",
+        "time.clock-plus|normal|false": "slice-icon-74696d652e636c6f636b2d706c7573-normal",
+        "time.clock-slash|normal|false": "slice-icon-74696d652e636c6f636b2d736c617368-normal",
+        "time.clock-zzz|normal|false": "slice-icon-74696d652e636c6f636b2d7a7a7a-normal",
+        "time.clock|normal|false": "slice-icon-74696d652e636c6f636b-normal",
+        "time.history-rec|normal|false": "slice-icon-74696d652e686973746f72792d726563-normal",
+        "time.history|normal|false": "slice-icon-74696d652e686973746f7279-normal",
+        "time.speed-rec|normal|false": "slice-icon-74696d652e73706565642d726563-normal",
+        "time.speed|normal|false": "slice-icon-74696d652e7370656564-normal",
+        "time.stopwatch-slash|normal|false": "slice-icon-74696d652e73746f7077617463682d736c617368-normal",
+        "time.stopwatch|normal|false": "slice-icon-74696d652e73746f707761746368-normal",
+        "time.time|normal|false": "slice-icon-74696d652e74696d65-normal",
+        "time.timer-2-rec|normal|false": "slice-icon-74696d652e74696d65722d322d726563-normal",
+        "time.timer-2|normal|false": "slice-icon-74696d652e74696d65722d32-normal",
+        "time.timer|normal|false": "slice-icon-74696d652e74696d6572-normal",
+        "users.user-alert|normal|false": "slice-icon-75736572732e757365722d616c657274-normal",
+        "users.user-arrow-bl|normal|false": "slice-icon-75736572732e757365722d6172726f772d626c-normal",
+        "users.user-arrow-bottom|normal|false": "slice-icon-75736572732e757365722d6172726f772d626f74746f6d-normal",
+        "users.user-arrow-right|normal|false": "slice-icon-75736572732e757365722d6172726f772d7269676874-normal",
+        "users.user-arrow-top|normal|false": "slice-icon-75736572732e757365722d6172726f772d746f70-normal",
+        "users.user-arrow-tr|normal|false": "slice-icon-75736572732e757365722d6172726f772d7472-normal",
+        "users.user-check|normal|false": "slice-icon-75736572732e757365722d636865636b-normal",
+        "users.user-circle|normal|false": "slice-icon-75736572732e757365722d636972636c65-normal",
+        "users.user-cross|normal|false": "slice-icon-75736572732e757365722d63726f7373-normal",
+        "users.user-minus|normal|false": "slice-icon-75736572732e757365722d6d696e7573-normal",
+        "users.user-plus|normal|false": "slice-icon-75736572732e757365722d706c7573-normal",
+        "users.user-square|normal|false": "slice-icon-75736572732e757365722d737175617265-normal",
+        "users.user|normal|false": "slice-icon-75736572732e75736572-normal",
+        "users.users|normal|false": "slice-icon-75736572732e7573657273-normal",
+        "weather.cloud-check|normal|false": "slice-icon-776561746865722e636c6f75642d636865636b-normal",
+        "weather.cloud-cross|normal|false": "slice-icon-776561746865722e636c6f75642d63726f7373-normal",
+        "weather.cloud-download|normal|false": "slice-icon-776561746865722e636c6f75642d646f776e6c6f6164-normal",
+        "weather.cloud-drizzle|normal|false": "slice-icon-776561746865722e636c6f75642d6472697a7a6c65-normal",
+        "weather.cloud-lightning|normal|false": "slice-icon-776561746865722e636c6f75642d6c696768746e696e67-normal",
+        "weather.cloud-snow|normal|false": "slice-icon-776561746865722e636c6f75642d736e6f77-normal",
+        "weather.cloud-upload|normal|false": "slice-icon-776561746865722e636c6f75642d75706c6f6164-normal",
+        "weather.cloud|normal|false": "slice-icon-776561746865722e636c6f7564-normal",
+        "weather.moon|normal|false": "slice-icon-776561746865722e6d6f6f6e-normal",
+        "weather.sun|normal|false": "slice-icon-776561746865722e73756e-normal",
+        "weather.sunrise|normal|false": "slice-icon-776561746865722e73756e72697365-normal",
+        "weather.sunset|normal|false": "slice-icon-776561746865722e73756e736574-normal"
     ]
 
     private func assetName(toggled: Bool, filled: Bool) -> String {

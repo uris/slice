@@ -176,7 +176,7 @@ final class PresenceSmoke: UIResponder, UIApplicationDelegate, UIWindowSceneDele
         var style = "clear"
         if index == 4 { style = "regular" }
         return [
-            "iconName": "home", "tintToken": "core-text-light", "glassStyle": style,
+            "iconName": "basic.home", "tintToken": "core-text-light", "glassStyle": style,
             "minimumSize": 48, "paddingLeading": 0, "paddingTrailing": 0,
         ]
     }

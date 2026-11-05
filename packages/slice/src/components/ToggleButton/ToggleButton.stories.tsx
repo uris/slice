@@ -35,7 +35,7 @@ const meta = {
 	},
 	args: {
 		label: 'Highlight',
-		icon: 'sun',
+		icon: 'weather.sun',
 		buttonSize: 'm',
 		iconSize: 20,
 		textSize: 's',
@@ -147,11 +147,11 @@ export const IconOnly: Story = {
 };
 export const SelectedIcon: Story = {
 	tags: ['tests'],
-	args: { icon: 'play', iconSelected: 'pause', label: 'Playback' },
+	args: { icon: 'media.play', iconSelected: 'media.pause', label: 'Playback' },
 	play: async ({ canvasElement }) => {
 		const b = within(canvasElement).getByRole('button');
 		await userEvent.click(b);
-		await expect(b.querySelector('svg')).toHaveAttribute('aria-label', 'pause icon');
+		await expect(b.querySelector('svg')).toHaveAttribute('aria-label', 'media.pause icon');
 	},
 };
 export const Tooltip: Story = {
@@ -206,11 +206,13 @@ function GroupedExample() {
 	const [theme, setTheme] = useState('system');
 	return (
 		<FlexDiv gap={12}>
-			{[
-				{ label: 'System', icon: 'laptop', value: 'system' },
-				{ label: 'Light', icon: 'sun', value: 'light' },
-				{ label: 'Dark', icon: 'moon full', value: 'dark' },
-			].map((option) => (
+			{(
+				[
+					{ label: 'System', icon: 'electronics.laptop', value: 'system' },
+					{ label: 'Light', icon: 'weather.sun', value: 'light' },
+					{ label: 'Dark', icon: 'weather.moon', value: 'dark' },
+				] as const
+			).map((option) => (
 				<ToggleButton
 					key={option.value}
 					label={option.label}
@@ -291,7 +293,7 @@ export const ContentAndNaming: Story = {
 		<FlexDiv gap={16}>
 			<ToggleButton label="Follow">Other</ToggleButton>
 			<ToggleButton>{0}</ToggleButton>
-			<ToggleButton icon="sun" />
+			<ToggleButton icon="weather.sun" />
 			<ToggleButton label="Follow" actionName="Follow Jane" />
 		</FlexDiv>
 	),

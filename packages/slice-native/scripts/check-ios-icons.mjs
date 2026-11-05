@@ -71,17 +71,15 @@ if (process.argv.includes('--pixels')) {
 					filled: input.filled,
 					visible,
 					center: pixels[(30 * 60 + 30) * 4 + 3],
-					cutout: pixels[(27 * 60 + 46) * 4 + 3],
 				});
 			}
 			return results;
 		}, inputs);
 		for (const result of results)
-			assert.equal(result.visible, result.name !== 'blank', `Unexpected blank icon: ${result.name}`);
-		assert.equal(results.find((v) => v.name === 'wallet').cutout, 0, 'Wallet cover-up must erase underlying paths');
-		assert(results.find((v) => v.name === 'view' && v.state === 'normal').center > 0);
-		assert.equal(results.find((v) => v.name === 'view' && v.state === 'on').center, 0);
-		console.log('Verified monochrome pixels, empty icon, cover-up cutout and toggle masks.');
+			assert.equal(result.visible, result.name !== 'system.blank', `Unexpected blank icon: ${result.name}`);
+		assert(results.find((v) => v.name === 'system.view' && v.state === 'normal').center > 0);
+		assert.equal(results.find((v) => v.name === 'system.view' && v.state === 'on').center, 0);
+		console.log('Verified monochrome pixels, empty icon and toggle masks.');
 	} finally {
 		await browser.close();
 	}

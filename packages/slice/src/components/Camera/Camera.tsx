@@ -507,7 +507,7 @@ export const Camera = React.memo(
 					<div className={css.snapshotFrame}>
 						<div className={css.clear}>
 							<Icon
-								name={'x'}
+								name={'basic.cross'}
 								pointer={true}
 								role={'button'}
 								aria-label={'Clear snapshot'}
@@ -538,8 +538,8 @@ export const Camera = React.memo(
 				>
 					<div className={css.controlsLeft}>
 						<ToolbarButton
-							icon={'person'}
-							iconActive={'person'}
+							icon={'users.user'}
+							iconActive={'users.user'}
 							active={profile}
 							label={'User Info'}
 							disabled={false}
@@ -551,22 +551,22 @@ export const Camera = React.memo(
 					</div>
 					<div className={css.controlsCenter}>
 						<ToolbarButton
-							icon={'video'}
-							iconActive={'video off'}
+							icon={'media.video-camera'}
+							iconActive={'media.video-camera-slash'}
 							active={!cameraOn}
 							label={cameraOn ? 'Video' : 'Off'}
 							onClick={() => void toggleVideo()}
 						/>
 						<ToolbarButton
-							icon={'mic'}
-							iconActive={'mic muted'}
+							icon={'media.mic'}
+							iconActive={'media.mic-slash'}
 							active={micMuted}
 							label={micMuted ? 'Muted' : 'Mic'}
 							onClick={() => toggleMic()}
 						/>
 						<ToolbarButton
-							icon={'camera'}
-							iconActive={'camera'}
+							icon={'images.camera'}
+							iconActive={'images.camera'}
 							active={!!snapshot}
 							label={'Photo'}
 							disabled={!cameraOn}
@@ -575,8 +575,8 @@ export const Camera = React.memo(
 					</div>
 					<div className={css.controlsRight}>
 						<ToolbarButton
-							icon={'more'}
-							iconActive={'more'}
+							icon={'basic.more-horiz'}
+							iconActive={'basic.more-horiz'}
 							active={settings}
 							label={'Settings'}
 							disabled={false}

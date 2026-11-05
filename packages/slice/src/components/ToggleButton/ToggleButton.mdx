@@ -16,7 +16,7 @@ Make on/off actions clear with a label, an optional icon, and a selected state.
 ```
 import { ToggleButton } from '@apple-pie/slice';
 
-<ToggleButton icon="sun" label="Highlight" />
+<ToggleButton icon="weather.sun" label="Highlight" />
 ```
 </RenderSource>
 <Unstyled>
@@ -42,7 +42,7 @@ Give selected and unselected different animation targets, such as rotation or sc
 <RenderSource>
 ```
 <ToggleButton
-  icon="sun"
+  icon="weather.sun"
   label="Highlight"
   motionValues={{ unselected: { rotate: 0 }, selected: { rotate: 135 } }}
   transition={{ duration: 0.2 }}

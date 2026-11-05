@@ -22,7 +22,7 @@ final class GlassButtonTintSmoke: UIResponder, UIApplicationDelegate, UIWindowSc
         self.window = window
         window.makeKeyAndVisible()
         let blue = SliceColors.uiColor(named: "core-link-primary")
-        let image = SliceNativeIcon(rawValue: "home")!.uiImage()
+        let image = SliceNativeIcon(rawValue: "basic.home")!.uiImage()
         for index in 0..<3 {
             let button = UIButton(type: .system)
             var configuration = UIButton.Configuration.glass()
@@ -49,7 +49,7 @@ final class GlassButtonTintSmoke: UIResponder, UIApplicationDelegate, UIWindowSc
         }
         let managed = GlassButtonSurface(frame: CGRect(x: 24, y: 410, width: 340, height: 56))
         managed.configure([
-            "label": "Slice lifecycle managed", "iconName": "home", "iconSize": 24,
+            "label": "Slice lifecycle managed", "iconName": "basic.home", "iconSize": 24,
             "tintToken": "core-link-primary", "textTintToken": "core-link-primary",
             "iconTintToken": "core-link-primary", "themePreference": "light",
         ])

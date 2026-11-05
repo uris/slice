@@ -1,0 +1,182 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as DialogBoxStories from './DialogBox.stories';
+
+<Meta of={DialogBoxStories} />
+
+# DialogBox
+
+Bring a decision, its context, and the next action into one compact panel.
+
+## Usage
+
+Compose the title, body, and footer. Buttons keep their own handlers. Use `ModalController` for modal hosting.
+
+```
+import { useState } from 'react';
+import { Button, DialogBox } from '@apple-pie/slice';
+
+function Confirmation() {
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
+  return <>
+    <Button label="Archive project" onClick={() => setOpen(true)} />
+    {open && <DialogBox onClose={close}>
+      <DialogBox.Title>Archive project?</DialogBox.Title>
+      <DialogBox.Content>You can restore this project later.</DialogBox.Content>
+      <DialogBox.Actions>
+        <Button label="Cancel" variant="outline" onClick={close} />
+        <Button label="Archive" onClick={() => { myHandler(); close(); }} />
+      </DialogBox.Actions>
+    </DialogBox>}
+  </>;
+}
+```
+
+### Use props instead
+
+Provide `title`, `actions`, and ordinary body children for the concise alternative.
+
+```
+<DialogBox title="Archive project?"
+  onClose={myCloseHandler}
+  onResolve={myHandler}
+  actions={[
+    { id: 'cancel', label: 'Cancel', promise: 'reject' },
+    { id: 'archive', label: 'Archive', value: 'archive', primary: true },
+  ]}
+  onReject={myRejectHandler}>
+  You can restore this project later.
+</DialogBox>
+```
+
+### Share dialog actions
+
+Call `useDialogBox<T>()` from a descendant component. Match `T` to the parent's value type; the default is `string`.
+
+```
+import { useDialogBox } from '@apple-pie/slice';
+
+function ArchiveActions() {
+  const { close, resolve } = useDialogBox<string>();
+  return <>
+    <Button label="Cancel" variant="outline" onClick={close} />
+    <Button label="Archive" onClick={() => resolve('archive')} />
+  </>;
+}
+
+<DialogBox<string> onResolve={myHandler} onClose={myCloseHandler}>
+  <DialogBox.Title>Archive project?</DialogBox.Title>
+  <DialogBox.Content>You can restore this project later.</DialogBox.Content>
+  <DialogBox.Actions><ArchiveActions /></DialogBox.Actions>
+</DialogBox>
+```
+
+### Longer content
+
+Set `maxHeight` to limit the panel. Its body scrolls while the heading and actions stay in place.
+
+```
+<DialogBox maxHeight={360} onClose={myCloseHandler}>
+  <DialogBox.Title>Project details</DialogBox.Title>
+  <DialogBox.Content><ProjectDetails /></DialogBox.Content>
+  <DialogBox.Actions><Button label="Done" onClick={myCloseHandler} /></DialogBox.Actions>
+</DialogBox>
+```
+
+## Behavior
+
+Composed buttons retain their own handlers. The actions array calls `onAction`, then `onResolve` by default or `onReject` when `promise="reject"`. Rejection errors carry the action value in `cause`. Set `promise="none"` for an action-only callback. Disabled and working array actions do not run callbacks.
+
+The close control calls only `onClose`; your state or a controller removes the panel. Footer separation updates as content or container dimensions change, using Slice's resize observer hook.
+
+## Accessibility
+
+The panel supplies `role="dialog"` and associates its visible heading with the panel. `dialogName` overrides that naming association; without a title or name, the fallback is `Dialog`. Title icons are decorative. Actions need meaningful labels; array actions can use `tooltip` for an icon-only button's accessible name, with `Action` as the fallback.
+
+`ModalController` supplies modal state, initial focus, focus containment and restoration, Escape dismissal, background inertness, and page scroll locking. A custom host owns these behaviors when presenting the panel itself. The panel has no built-in animation.
+
+## Sections
+
+Each section is optional and may appear once. Fragments, arrays, and conditional children are supported. Sections always occupy header, body, and footer positions. Their only prop is `children?: React.ReactNode`; parent styling applies to their layout.
+
+When any section is present, direct content must use these sections. Unsupported children, duplicates, and competing `title`/`DialogBox.Title` or `actions`/`DialogBox.Actions` definitions throw errors. A section cannot render outside its direct parent or through a custom wrapper. Content inside a section can use ordinary React components.
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `DialogBox.Actions` | `DialogBoxSectionProps` | `undefined` | Accepts `children?: React.ReactNode`. Places controls in the footer with the panel’s padding, wrapping, and divider treatment. Controls align right and retain their own handlers; labels and positions never imply an action. |
+| `DialogBox.Content` | `DialogBoxSectionProps` | `undefined` | Accepts `children?: React.ReactNode`. Places content in the scrolling body while the title and actions stay in place. Body text defaults to `core-text-primary`. |
+| `DialogBox.Title` | `DialogBoxSectionProps` | `undefined` | Accepts `children?: React.ReactNode`. Places text or inline content in the panel’s heading and supplies its naming association. Use `dialogName` to override the accessible name. |
+
+## Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `actions` | `DialogBoxAction<T>[]` | `undefined` | Action buttons shown in the footer. Actions default to the right; `position` can move them left. `primary` selects the solid button treatment. `promise` chooses the resolve, reject, or action-only path. Disabled and working actions do not run callbacks. |
+| `actionsBackgroundColor` | `ColorValue` | `backgroundColor mixed with 6% black` | Footer background for composed controls and the actions array. Accepts Slice tokens or CSS colors; defaults to a subtly darker panel background. Use `transparent` for no footer fill. |
+| `actionsBorderColor` | `ColorValue` | `core-outline-primary` | Divider color above the footer. |
+| `actionsBorderWidth` | `number` | `0` | Footer divider width in pixels. Automatic scrolling treatment can add a 1px divider when this is zero. |
+| `autoBorderBottom` | `boolean` | `true` | Adds a footer divider when scrolling is detected and the explicit divider width is zero. |
+| `backgroundColor` | `ColorValue` | `core-surface-secondary` | Panel background. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Outer border color. |
+| `borderRadius` | `number &#124; string` | `corner-m (8px)` | Outer corner radius. |
+| `borderWidth` | `number &#124; string` | `1` | Outer border width in pixels or CSS units. |
+| `children` | `React.ReactNode` | `undefined` | Structural sections, or ordinary body content when using the props alternative. |
+| `close` | `boolean` | `true` | Shows the close button in the title area. |
+| `contentTextSize` | `{"'xs' &#124; 's' &#124; 'm' &#124; 'l' &#124; 'xl'"}` | `m` | Typography size for body content. |
+| `dialogName` | `string` | `undefined` | Accessible name for the dialog. Overrides the visible title’s naming association; without either, the name is `Dialog`. |
+| `maxHeight` | `number &#124; string` | `400` | Maximum panel height in pixels or CSS units. |
+| `maxWidth` | `number &#124; string` | `400` | Maximum panel width. |
+| `minHeight` | `number &#124; string` | `200` | Minimum panel height. |
+| `minWidth` | `number &#124; string` | `300` | Minimum panel width. Lower it for narrower layouts. |
+| `padding` | `number &#124; string` | `16px 24px` | Padding shared by the header, body, and footer. Numbers become pixels; CSS shorthand and expressions are preserved. |
+| `scrollHandleColor` | `ColorValue` | `core-text-disabled` | Content scrollbar thumb color. |
+| `scrollHandleColorHover` | `ColorValue` | `core-text-disabled` | Scrollbar thumb color on hover. |
+| `title` | `string` | `undefined` | Title-area text. The title area also appears when `close` is enabled. |
+| `titleBorderColor` | `ColorValue` | `core-outline-primary` | Divider color beneath the title area. |
+| `titleBorderWidth` | `number` | `0` | Title divider width in pixels. |
+| `titleIcon` | `string` | `undefined` | Icon before the title. |
+| `titleIconFill` | `boolean` | `true` | Requests the filled title icon treatment. |
+| `titleTextColor` | `ColorValue` | `core-text-special` | Title text color. |
+| `titleTextSize` | `{"'xs' &#124; 's' &#124; 'm' &#124; 'l' &#124; 'xl'"}` | `l` | Title-area typography size. |
+| `...divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Native attributes apply to the outer panel div. `className` is appended and `style` is merged. Roles and raw ARIA attributes are excluded; use `dialogName` for naming. |
+
+Each footer array action accepts these fields:
+
+```
+type DialogBoxAction<T = string> = {
+  id: string;
+  label?: string;
+  value?: T;
+  primary?: boolean;
+  iconLeft?: string;
+  iconRight?: string;
+  tooltip?: string;
+  round?: boolean;
+  position?: 'left' | 'right';
+  promise?: 'resolve' | 'reject' | 'none';
+  disabled?: boolean;
+  working?: boolean;
+};
+```
+
+## Events
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `onAction` | `(value?: T) => void` | — | Runs for an actions-array entry before its resolve or reject callback. Custom buttons and shared controls do not call it automatically. |
+| `onClose` | `() => void` | — | Runs when the close button is activated. Rejection uses `onReject` separately. |
+| `onDragPointerDown` | `(event: React.PointerEvent<HTMLDivElement>) => void` | — | Receives pointer-down from the title and footer drag surfaces. A controller can use it to start dragging. |
+| `onReject` | `(value?: Error) => void` | — | Runs for a reject action. Action errors carry the action value in `cause` . |
+| `onResolve` | `(value?: T) => void` | — | Runs for resolve actions, including actions without an explicit `promise` value. |
+| `onToolTip` | `(tip: ToolTip &#124; null) => void` | — | Receives tooltip metadata from the action and close buttons; your app displays the tooltip. |
+| `...divEvents` | `React.DOMAttributes<HTMLDivElement>` | — | Other native handlers apply to the outer panel. The drag callback above is intentional and uses the title/footer surfaces. |
+
+## Shared actions
+
+`useDialogBox<T = string>()` takes no parameters and must run in a descendant of `DialogBox`; outside usage throws an error. Controls remain stable while the parent's callbacks are unchanged. Controls request callbacks; they do not remove a standalone panel themselves and do not call `onAction` automatically.
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `close` | `() => void` | — | Calls the parent’s `onClose`. A modal host dismisses through its close callback. |
+| `reject` | `(error?: Error) => void` | — | Calls `onReject` with the supplied error. A modal host rejects the pending response and dismisses the panel. |
+| `resolve` | `(value?: T) => void` | — | Calls `onResolve` with the supplied value. A modal host resolves the pending response and dismisses the panel. |

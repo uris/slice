@@ -274,7 +274,7 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps,
 									round
 									label={undefined}
 									variant={'outline'}
-									iconLeft={'plus'}
+									iconLeft={'basic.plus'}
 									iconSize={20}
 									state={attachState}
 									onMouseDown={handleClickAttach}
@@ -287,7 +287,7 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps,
 								round
 								label={undefined}
 								variant={stopEnabled ? 'outline' : 'solid'}
-								iconLeft={stopEnabled ? 'stop' : 'arrow up'}
+								iconLeft={stopEnabled ? 'media.stop' : 'arrows.arrow-top'}
 								iconSize={stopEnabled ? 16 : 20}
 								state={sendButtonState}
 								backgroundColorDisabled={'var(--core-outline-primary)'}

@@ -1,9 +1,19 @@
 .overlay {
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: var(--overlay-color);
+	inset: 0;
 	z-index: var(--elevation-overlay);
+	isolation: isolate;
+	pointer-events: auto;
+}
+.backdrop {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background-color: var(--overlay-background);
+	pointer-events: none;
+}
+
+.overlay[data-pointer-events="none"],
+.overlay[data-pointer-events="none"] * {
+	pointer-events: none !important;
 }

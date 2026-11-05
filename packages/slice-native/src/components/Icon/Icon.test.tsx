@@ -66,14 +66,14 @@ describe('Icon', () => {
 
 	it('uses native sizing and accessibility defaults and permits overrides', () => {
 		expect(render({})?.props).toMatchObject({ width: 20, height: 20, viewBox: '0 0 20 20', accessibilityRole: 'image' });
-		expect(render({ size: 32, accessibilityLabel: 'Go home', testID: 'home' })?.props).toMatchObject({
-			width: 32, height: 32, accessibilityLabel: 'Go home', testID: 'home',
+		expect(render({ size: 32, accessibilityLabel: 'Go home', testID: 'basic.home' })?.props).toMatchObject({
+			width: 32, height: 32, accessibilityLabel: 'Go home', testID: 'basic.home',
 		});
 		expect(render({ name: 'missing' })).toBeNull();
 	});
 
 	it('uses the toggled variant and falls back when none exists', () => {
-		for (const name of ['view', 'home']) {
+		for (const name of ['system.view', 'basic.home']) {
 			const definition = STATIC_ICON_REGISTRY.get(name)!;
 			expect(render({ name, toggle: true, stroke: shapeProps.stroke, iconColor: shapeProps.strokeColor, fillColor: shapeProps.fillColor, coverUp: shapeProps.coverUp, fill: true })?.props.children).toEqual(
 				(definition.lineOn ?? definition.line)(shapeProps),
@@ -82,7 +82,7 @@ describe('Icon', () => {
 	});
 
 	it('uses scheme defaults and preserves an explicit zero fill opacity', () => {
-		const line = vi.spyOn(STATIC_ICON_REGISTRY.get('home')!, 'line');
+		const line = vi.spyOn(STATIC_ICON_REGISTRY.get('basic.home')!, 'line');
 		state.scheme = 'dark';
 		render({ fill: true });
 		expect(line).toHaveBeenLastCalledWith({ stroke: 1.5, strokeColor: '#ffffff', fillColor: 0.2, coverUp: '#000000' });
@@ -105,7 +105,7 @@ describe('Icon', () => {
 });
 
 it('uses the provider appearance for palette tokens, cover-ups and default fill opacity', () => {
-    const line = vi.spyOn(STATIC_ICON_REGISTRY.get('home')!, 'line');
+    const line = vi.spyOn(STATIC_ICON_REGISTRY.get('basic.home')!, 'line');
     state.scheme = 'light';
     state.theme = darkTheme;
     render({ fill: true, iconColor: 'core-icon-secondary' });
@@ -121,12 +121,11 @@ it('preserves enabled long-press and press lifecycle handlers without requiring 
     const output = render({ onLongPress, onPressIn, onPressOut });
     expect(output?.props).toMatchObject({ accessibilityRole: 'button', onLongPress, onPressIn, onPressOut });
 });
-it('renders the active compound search artwork using the requested semantic foreground', () => {
+it('renders the shared search artwork with its requested semantic stroke', () => {
     state.theme = lightTheme;
-    const output = render({ name: 'search', iconColor: 'core-icon-secondary' });
-    const shape = output?.props.children as ReactElement<{ fill: string; fillRule: string; d: string }>;
-    expect(shape.props.fill).toBe(lightTheme.colors['core-icon-secondary']);
-    expect(shape.props.fillRule).toBe('evenodd');
-    expect(shape.props.d).toContain('M9 14.5');
-    expect(shape.props.d).toContain('M10 9');
+    const output = render({ name: 'basic.search', iconColor: 'core-icon-secondary' });
+    const shape = output?.props.children as ReactElement<{ stroke: string; strokeWidth: number; fill: string }>;
+    expect(shape.props.stroke).toBe(lightTheme.colors['core-icon-secondary']);
+    expect(shape.props.strokeWidth).toBe(1.5);
+    expect(shape.props.fill).toBe('none');
 });

@@ -1,10 +1,11 @@
 import type React from 'react';
+import type { SliceIcon } from '../Icon/_types';
 
 export type TabOption<T = string> = {
 	value: T;
 	label?: string;
 	children?: React.ReactNode;
-	icon?: string | null;
+	icon?: SliceIcon | null;
 	toolTip?: string;
 	count?: number;
 	disabled?: boolean;

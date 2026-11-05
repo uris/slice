@@ -2,6 +2,7 @@ import type { Transition } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { Type } from '../../theme/type/types';
+import type { SliceIcon } from '../Icon/_types';
 
 type NativeInputAttributes = Omit<
 	React.InputHTMLAttributes<HTMLInputElement>,
@@ -74,7 +75,7 @@ type TextFieldBaseProps = {
 	textColorPlaceholder?: ColorValue;
 	textColorDisabled?: ColorValue;
 	labelColor?: ColorValue;
-	iconLeft?: { name?: string; size?: number; color?: ColorValue };
+	iconLeft?: { name?: SliceIcon; size?: number; color?: ColorValue };
 	clearButton?: { size?: number } | null;
 	clearBlurs?: boolean;
 	disabled?: boolean;

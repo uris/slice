@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef } from 'react';
 import { Button } from 'src/components/Button';
+import { DialogBox } from 'src/components/DialogBox/DialogBox';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
-import { Modal } from 'src/components/Modal/Modal';
 import { ModalController } from 'src/components/ModalController/ModalController';
 import { useModalActions } from 'src/stores/modal';
-import type { ModalAction, ModalProps } from '../../components/Modal/_types';
+import type { DialogBoxAction, DialogBoxProps } from '../../components/DialogBox/_types';
 
 type DemoModalType = { modalId: string; data: string };
 
-const demoActions: ModalAction<DemoModalType>[] = [
+const demoActions: DialogBoxAction<DemoModalType>[] = [
 	{
 		id: 'no',
 		label: 'No',
@@ -25,7 +25,7 @@ const demoActions: ModalAction<DemoModalType>[] = [
 	},
 ];
 
-const demoModalProps: ModalProps<DemoModalType> = {
+const demoDialogBoxProps: DialogBoxProps<DemoModalType> = {
 	title: 'Continue?',
 	actions: demoActions,
 	children: 'Are you sure you want to continue',
@@ -53,8 +53,8 @@ function ModalStoreDemo(args: React.ComponentProps<typeof ModalController>) {
 	const showAsyncModalClick = async () => {
 		const result = await modalResponse<DemoModalType>({
 			id: 'modal-confirm',
-			component: Modal<DemoModalType>,
-			props: demoModalProps,
+			component: DialogBox<DemoModalType>,
+			props: demoDialogBoxProps,
 		}).catch((err) => {
 			const msg = err instanceof Error ? err.message : String(err);
 			alert(msg);
@@ -64,7 +64,7 @@ function ModalStoreDemo(args: React.ComponentProps<typeof ModalController>) {
 
 	return (
 		<FlexDiv absolute justify={'center'} align={'center'} ref={ref}>
-			<Button iconRight={'arrow right'} onClick={showAsyncModalClick}>
+			<Button iconRight={'arrows.arrow-right'} onClick={showAsyncModalClick}>
 				Continue
 			</Button>
 			<ModalController {...args} dragConstraintsRef={ref} draggable={true} />

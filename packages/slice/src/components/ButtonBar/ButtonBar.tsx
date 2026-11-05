@@ -3,8 +3,9 @@
 import React, { useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { setStyle } from '../../utils/functions/misc';
+import { setStyle } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import type { SliceIcon } from '../Icon';
 import { Icon } from '../Icon';
 import { type ToolTip, ToolTipType } from '../sharedTypes';
 import css from './ButtonBar.module.css';
@@ -103,7 +104,7 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 });
 
 interface ButtonProps {
-	icon?: string;
+	icon?: SliceIcon;
 	iconSize: number;
 	toolTip?: string;
 	pressed?: boolean;

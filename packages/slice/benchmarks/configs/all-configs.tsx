@@ -22,7 +22,7 @@ import {
 	Icon,
 	IconButton,
 	Level,
-	Modal,
+	DialogBox,
 	ModalController,
 	Overlay,
 	Pager,
@@ -360,20 +360,19 @@ export const levelConfig: ComponentBenchmarkConfig = {
 	],
 };
 
-export const modalConfig: ComponentBenchmarkConfig = {
-	componentName: 'Modal',
+export const dialogBoxConfig: ComponentBenchmarkConfig = {
+	componentName: 'DialogBox',
 	tests: [
 		{
 			name: 'Mount Time',
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<Modal
-						title="Benchmark Modal"
-						actions={[{ id: 'confirm', label: 'Confirm', primary: true }]}
-					>
-						<div>Modal body content</div>
-					</Modal>,
+                    <DialogBox>
+                        <DialogBox.Title>Benchmark DialogBox</DialogBox.Title>
+                        <DialogBox.Content><div>DialogBox body content</div></DialogBox.Content>
+                        <DialogBox.Actions><Button label="Confirm" /></DialogBox.Actions>
+					</DialogBox>,
 					50,
 				),
 		},
@@ -382,23 +381,23 @@ export const modalConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<Modal
-						title="Benchmark Modal"
+					<DialogBox
+						title="Benchmark DialogBox"
 						actions={[{ id: 'confirm', label: 'Confirm', primary: true }]}
 					>
-						<div>Modal body content</div>
-					</Modal>,
+						<div>DialogBox body content</div>
+					</DialogBox>,
 					(container) => {
 						container.rerender(
-							<Modal
-								title="Updated Modal"
+							<DialogBox
+								title="Updated DialogBox"
 								actions={[
 									{ id: 'cancel', label: 'Cancel' },
 									{ id: 'confirm', label: 'Confirm', primary: true },
 								]}
 							>
 								<div>Updated modal body content</div>
-							</Modal>,
+							</DialogBox>,
 						);
 					},
 					50,
@@ -409,9 +408,9 @@ export const modalConfig: ComponentBenchmarkConfig = {
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<Modal title="Benchmark Modal">
-						<div>Modal body content</div>
-					</Modal>,
+					<DialogBox title="Benchmark DialogBox">
+						<div>DialogBox body content</div>
+					</DialogBox>,
 					10,
 				),
 		},
@@ -456,7 +455,7 @@ export const toggleButtonConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<ToggleButton label="Toggle" icon="check" selected={false} />,
+					<ToggleButton label="Toggle" icon="basic.check" selected={false} />,
 					50,
 				),
 		},
@@ -465,10 +464,10 @@ export const toggleButtonConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<ToggleButton label="Toggle" icon="check" selected={false} />,
+					<ToggleButton label="Toggle" icon="basic.check" selected={false} />,
 					(container) => {
 						container.rerender(
-							<ToggleButton label="Toggle On" icon="check" selected={true} />,
+							<ToggleButton label="Toggle On" icon="basic.check" selected={true} />,
 						);
 					},
 					50,
@@ -479,7 +478,7 @@ export const toggleButtonConfig: ComponentBenchmarkConfig = {
 			type: 'event',
 			fn: () =>
 				measureEventResponseTime(
-					<ToggleButton label="Toggle" icon="check" onChange={() => {}} />,
+					<ToggleButton label="Toggle" icon="basic.check" onChange={() => {}} />,
 					(container) => {
 						const button = container.container.querySelector('button');
 						if (button) fireEvent.click(button);
@@ -492,7 +491,7 @@ export const toggleButtonConfig: ComponentBenchmarkConfig = {
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<ToggleButton label="Toggle" icon="check" selected={false} />,
+					<ToggleButton label="Toggle" icon="basic.check" selected={false} />,
 					10,
 				),
 		},
@@ -621,16 +620,16 @@ export const iconConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<Icon name="home" size={22} />, 50),
+			fn: () => measureMountTime(<Icon name="basic.home" size={22} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<Icon name="home" size={22} />,
+					<Icon name="basic.home" size={22} />,
 					(container) => {
-						container.rerender(<Icon name="search" size={22} />);
+						container.rerender(<Icon name="basic.search" size={22} />);
 					},
 					50,
 				),
@@ -638,7 +637,7 @@ export const iconConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<Icon name="home" />, 10),
+			fn: () => measureMemoryDelta(<Icon name="basic.home" />, 10),
 		},
 	],
 };
@@ -833,13 +832,13 @@ export const buttonConfig: ComponentBenchmarkConfig = {
 			name: 'Memory',
 			type: 'memory',
 			fn: () =>
-				measureMemoryDelta(<Button label="Test" iconLeft="check" count={5} />, 10),
+				measureMemoryDelta(<Button label="Test" iconLeft="basic.check" count={5} />, 10),
 		},
 	],
 };
 
 const mockButtons = [
-	{ icon: 'check', tip: 'check' },
+	{ icon: 'basic.check', tip: 'check' },
 	{ icon: 'close', tip: 'close' },
 	{ icon: 'trash', tip: 'delete' },
 ];
@@ -859,7 +858,7 @@ export const buttonBarConfig: ComponentBenchmarkConfig = {
 				measureRerenderTime(
 					<ButtonBar buttons={mockButtons} />,
 					(container) => {
-						const updatedButtons = [...mockButtons, { icon: 'plus', tip:'plus' }];
+						const updatedButtons = [...mockButtons, { icon: 'basic.plus', tip:'plus' }];
 						container.rerender(<ButtonBar buttons={updatedButtons} buttonSize="l" />);
 					},
 					50,
@@ -922,7 +921,7 @@ export const chipConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<Chip label="Chip" icon="check" />, 10),
+			fn: () => measureMemoryDelta(<Chip label="Chip" icon="basic.check" />, 10),
 		},
 	],
 };
@@ -1310,16 +1309,16 @@ export const iconButtonConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<IconButton actionName="Confirm" icon="check" />, 50),
+			fn: () => measureMountTime(<IconButton actionName="Confirm" icon="basic.check" />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<IconButton actionName="Confirm" icon="check" />,
+					<IconButton actionName="Confirm" icon="basic.check" />,
 					(container) => {
-						container.rerender(<IconButton actionName="Close" icon="x" />);
+						container.rerender(<IconButton actionName="Close" icon="basic.cross" />);
 					},
 					50,
 				),
@@ -1340,7 +1339,7 @@ export const iconButtonConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<IconButton actionName="Confirm" icon="check" />, 10),
+			fn: () => measureMemoryDelta(<IconButton actionName="Confirm" icon="basic.check" />, 10),
 		},
 	],
 };
@@ -1387,7 +1386,7 @@ export const overlayConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<Overlay overlay={false} />,
+					<Overlay show opacity={0} transition={{ duration: 0 }} />,
 					50,
 				),
 		},
@@ -1396,10 +1395,10 @@ export const overlayConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<Overlay overlay={false} />,
+					<Overlay show={false} />,
 					(container) => {
 						container.rerender(
-							<Overlay overlay={true} />,
+							<Overlay show opacity={0.5} transition={{ duration: 0 }} />,
 						);
 					},
 					50,
@@ -1410,7 +1409,7 @@ export const overlayConfig: ComponentBenchmarkConfig = {
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<Overlay overlay={false} />,
+					<Overlay show opacity={0} transition={{ duration: 0 }} />,
 					10,
 				),
 		},
@@ -1895,7 +1894,7 @@ export const allBenchmarkConfigs = [
 	iconConfig,
 	iconButtonConfig,
 	levelConfig,
-	modalConfig,
+	dialogBoxConfig,
 	modalControllerConfig,
 	promptInputConfig,
 	overlayConfig,

@@ -14,8 +14,8 @@ export const variantsCode = `
 
 export const iconsCode = `
 <>
-    <Button label="Continue" iconRight="arrow right" />
-    <Button iconLeft="home" round aria-label="Go home" onClick={goHome} />
+    <Button label="Continue" iconRight="arrows.arrow-right" />
+    <Button iconLeft="basic.home" round aria-label="Go home" onClick={goHome} />
 </>
 `;
 

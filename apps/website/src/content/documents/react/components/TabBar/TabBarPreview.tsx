@@ -15,7 +15,7 @@ export function TabBarPreview({
 			disabled={variant === 'disabled'}
 			tabWidth={variant === 'fill' ? 'fill' : undefined}
 		>
-			<Tab value="overview" label="All messages" icon={extras ? 'inbox' : undefined} />
+			<Tab value="overview" label="All messages" icon={extras ? 'basic.inbox' : undefined} />
 			<Tab value="activity" label="Unread" count={extras ? 12 : undefined} />
 			<Tab value="settings" label="Deleted" />
 		</TabBar>

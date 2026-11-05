@@ -1,13 +1,14 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SliceIcon } from '../Icon/_types';
 import type { ToolTip } from '../sharedTypes';
 
 type IconButtonBaseProps = {
 	actionName?: string;
 	buttonSize?: 's' | 'm' | 'l' | 'xl' | number;
 	iconSize?: number;
-	icon?: string;
+	icon?: SliceIcon;
 	iconFill?: boolean;
 	iconColor?: ColorValue;
 	iconColorHover?: ColorValue;

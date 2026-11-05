@@ -9,7 +9,7 @@ import { Tab, TabBar } from '@apple-pie/slice';
 export const extrasCode = `
 <TabBar tabBarName="Project views" defaultValue="overview">
   <Tab value="overview" label="Overview" />
-  <Tab value="activity" label="Activity" icon="home" count={12} />
+  <Tab value="activity" label="Activity" icon="basic.home" count={12} />
 </TabBar>
 `;
 export const customCode = `

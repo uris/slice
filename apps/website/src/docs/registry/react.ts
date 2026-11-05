@@ -9,7 +9,7 @@ export const reactDocSlugs = [
 	'content-editable',
 	'error-summary',
 	'overlay',
-	'modal',
+	'dialog-box',
 	'modal-controller',
 	'tip',
 	'toast',
@@ -51,9 +51,9 @@ export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
 		title: 'Overlay | Slice UIKit',
 		description: 'Dim the background for focused tasks with the Slice Overlay component for React.',
 	},
-	modal: {
-		title: 'Modal | Slice UIKit',
-		description: 'Present dialog content and typed actions with the Slice Modal component for React.',
+	'dialog-box': {
+		title: 'DialogBox | Slice UIKit',
+		description: 'Present dialog content and typed actions with the Slice DialogBox component for React.',
 	},
 	'modal-controller': {
 		title: 'ModalController | Slice UIKit',

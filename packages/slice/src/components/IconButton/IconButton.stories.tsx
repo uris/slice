@@ -30,7 +30,7 @@ const meta = {
 	},
 	args: {
 		actionName: 'More options',
-		icon: 'more',
+		icon: 'basic.more-horiz',
 		buttonSize: 'm',
 		iconSize: 20,
 		borderRadius: '50%',
@@ -91,7 +91,7 @@ export const Controlled: Story = {
 };
 function ControlledExample() {
 	const [selected, setSelected] = useState(false);
-	return <IconButton actionName="Highlight" icon="sun" toggle selected={selected} onChange={setSelected} />;
+	return <IconButton actionName="Highlight" icon="weather.sun" toggle selected={selected} onChange={setSelected} />;
 }
 export const ControlledSelection: Story = {
 	render: () => (

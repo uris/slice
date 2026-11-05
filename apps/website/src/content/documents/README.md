@@ -82,12 +82,24 @@ Use the existing shared components and this order:
 9. `H2 id="props"`: public props, excluding any documented in a dedicated section.
 10. `H2 id="events"`: custom callbacks and native event support.
 
-Exported compound components should have separate pages for their own APIs. For
-example, [Tab](react/components/Tab/Tab.tsx) documents each choice, while
-[TabBar](react/components/TabBar/TabBar.tsx) documents group selection and layout.
-Link the pages, explain required parent context, and include the necessary parent
-wrapper in the child component’s previews and examples. Avoid repeating the full
-child prop reference on the parent page.
+Follow the [component composition convention](../../../../../packages/slice/docs/component-composition.md)
+when choosing notation and documentation ownership:
+
+- Parent-only sections use dot notation, such as `DialogBox.Title`,
+  `DialogBox.Content`, and `DialogBox.Actions`. Document their supported children,
+  props, and events on the parent page; do not give them standalone slugs or imply
+  they work outside that parent.
+- Independently useful controls remain named exports and have their own pages.
+  For example, a `RadioButton` can stand alone or participate in a
+  `RadioButtonList`. `Tab` and `TabBar` also retain separate API pages. Link related
+  pages and include a required parent in examples when applicable.
+
+Verify current public exports before writing usage snippets; a convention does not
+mean every component has already adopted it. For components
+with both composition and an options/props alternative, show composition first and
+place the concise alternative immediately afterward. Explain supported child types,
+section cardinality, ordering, and mixed-API restrictions where relevant, without
+repeating the full child reference on multiple pages.
 
 Use the established document width and layout rather than redesigning each page.
 Add sections when the content calls for them; keep the main structure consistent.

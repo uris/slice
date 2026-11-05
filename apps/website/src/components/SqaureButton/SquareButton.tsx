@@ -1,6 +1,6 @@
 import { outlineTertiary, surfaceDark, surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
-import { Icon } from '@apple-pie/slice';
+import { Icon, type SliceIcon } from '@apple-pie/slice';
 import type React from 'react';
 import { useMemo } from 'react';
 import styles from './SqaureButton.module.css';
@@ -17,7 +17,7 @@ interface SquareButtonProps {
 	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	disabled?: boolean;
 	decorative?: boolean;
-	icon?: string;
+	icon?: SliceIcon;
 }
 
 export function SquareButton(props: Readonly<SquareButtonProps>) {

@@ -206,8 +206,8 @@ export function RadioButtonDoc() {
 			</P>
 			<Definition id={'iconChecked'}>
 				<Prop>iconChecked</Prop>
-				<TypeDef>{'string'}</TypeDef>
-				<DefaultVal>{'check circle'}</DefaultVal>
+				<TypeDef>{'SliceIcon'}</TypeDef>
+				<DefaultVal>{'system.check-circle'}</DefaultVal>
 			</Definition>
 			<P>
 				{'Icon while '}
@@ -242,8 +242,8 @@ export function RadioButtonDoc() {
 			</P>
 			<Definition id={'iconUnChecked'}>
 				<Prop>iconUnChecked</Prop>
-				<TypeDef>{'string'}</TypeDef>
-				<DefaultVal>{'circle'}</DefaultVal>
+				<TypeDef>{'SliceIcon'}</TypeDef>
+				<DefaultVal>{'system.circle'}</DefaultVal>
 			</Definition>
 			<P>{'Icon while unchecked.'}</P>
 			<Definition id={'label'}>

@@ -6,8 +6,8 @@ export function ButtonBarPreview() {
 	return (
 		<ButtonBar
 			buttons={[
-				{ icon: 'arrow left', action: 'previous', tip: 'Previous' },
-				{ icon: 'arrow right', action: 'next', tip: 'Next' },
+				{ icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
+				{ icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
 			]}
 		/>
 	);

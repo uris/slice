@@ -17,12 +17,12 @@ export const DefaultsAndOverrides: StoryObj = {
 	render: () => (
 		<div style={{ display: 'grid', gap: 16, padding: 32 }}>
 			<TextField className="plain" name="plain" clearButton={null} />
-			<TextField className="icons" name="icons" iconLeft={{ name: 'search', size: 20 }} />
+			<TextField className="icons" name="icons" iconLeft={{ name: 'basic.search', size: 20 }} />
 			<TextField
 				className="labeled"
 				name="labeled"
 				label="Label"
-				iconLeft={{ name: 'search', size: 20 }}
+				iconLeft={{ name: 'basic.search', size: 20 }}
 				actionButton
 			/>
 			<TextField className="password" name="password" inputType="password" actionButton />
@@ -32,7 +32,7 @@ export const DefaultsAndOverrides: StoryObj = {
 			<RadioButton className="radio" label="Radio" borderWidth={1} padding="8px 16px" />
 			<RadioButton className="hidden-radio" label="No icon" borderWidth={1} padding="8px 16px" iconSize={0} />
 			<Button className="text-button" label="Action" variant="text" size="small" />
-			<Chip className="chip" label="Chip" icon="search" paddingLeft={0} paddingRight={0} />
+			<Chip className="chip" label="Chip" icon="basic.search" paddingLeft={0} paddingRight={0} />
 			<Switch className="switch" aria-label="Switch" />
 			<div style={{ '--spacing-xxs': '4px' } as CSSProperties}>
 				<Switch className="themed-switch" aria-label="Themed switch" />

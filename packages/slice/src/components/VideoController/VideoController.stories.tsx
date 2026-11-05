@@ -96,7 +96,7 @@ function VideoControllerDemo(args: any) {
 
 	return (
 		<FlexDiv absolute justify={'center'} align={'center'}>
-			<Button iconRight={'arrow right'} onClick={handleShowVideo}>
+			<Button iconRight={'arrows.arrow-right'} onClick={handleShowVideo}>
 				Show Video
 			</Button>
 			<VideoController {...args} quit={args.quit ?? 'inside'} />

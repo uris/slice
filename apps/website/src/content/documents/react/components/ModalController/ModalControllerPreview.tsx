@@ -1,23 +1,28 @@
 'use client';
-import { Button, Modal, ModalController } from '@apple-pie/slice';
+import { Button, DialogBox, ModalController, useDialogBox } from '@apple-pie/slice';
 import { type ModalComponentProps, getModal, modalActions } from '@apple-pie/slice/stores/modal';
 import { useEffect, useId } from 'react';
 import styles from '../_shared/LayerPreview.module.css';
+function PreviewActions() {
+	const { close, resolve } = useDialogBox();
+	return (
+		<>
+			<Button label="Cancel" variant="outline" onClick={close} />
+			<Button label="Archive" onClick={() => resolve('archive')} />
+		</>
+	);
+}
 function PreviewDialog(props: ModalComponentProps) {
 	return (
-		<Modal
-			{...props}
-			title="Archive project?"
-			minWidth={0}
-			minHeight={180}
-			maxWidth={360}
-			actions={[
-				{ id: 'cancel', label: 'Cancel', promise: 'reject' },
-				{ id: 'archive', label: 'Archive', value: 'archive', primary: true },
-			]}
-		>
-			You can restore this project later. Its files and history will stay together.
-		</Modal>
+		<DialogBox {...props} minWidth={0} minHeight={180} maxWidth={360}>
+			<DialogBox.Title>Archive project?</DialogBox.Title>
+			<DialogBox.Content>
+				You can restore this project later. Its files and history will stay together.
+			</DialogBox.Content>
+			<DialogBox.Actions>
+				<PreviewActions />
+			</DialogBox.Actions>
+		</DialogBox>
 	);
 }
 export function ModalControllerPreview() {

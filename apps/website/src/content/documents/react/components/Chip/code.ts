@@ -1,7 +1,7 @@
 export const usageCode = `
 import { Chip } from '@apple-pie/slice';
 
-<Chip label="Design" icon="home" />
+<Chip label="Design" icon="basic.home" />
 `;
 
 export const actionCode = `

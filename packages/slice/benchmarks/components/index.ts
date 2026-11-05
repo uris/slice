@@ -22,7 +22,7 @@ export { grouperBenchmarkConfig } from './Grouper.bench';
 export { iconBenchmarkConfig } from './Icon.bench';
 export { iconButtonBenchmarkConfig } from './IconButton.bench';
 export { levelBenchmarkConfig } from './Level.bench';
-export { modalBenchmarkConfig } from './Modal.bench';
+export { dialogBoxBenchmarkConfig } from './DialogBox.bench';
 export { modalControllerBenchmarkConfig } from './ModalController.bench';
 export { overlayBenchmarkConfig } from './Overlay.bench';
 export { pagerBenchmarkConfig } from './Pager.bench';

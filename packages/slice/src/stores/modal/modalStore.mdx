@@ -90,7 +90,7 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
         <RenderSource language={"tsx"}>
         ```
         import { useModal, useModalActions } from '@apple-pie/slice/stores/modal';
-        import { Button, Modal } from '@apple-pie/slice';
+        import { Button, DialogBox } from '@apple-pie/slice';
         
         function ModalLauncher() {
             const modal = useModal();
@@ -100,7 +100,7 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
                 <Button
                     onClick={() =>
                         actions.show({
-                            component: Modal,
+                            component: DialogBox,
                             props: {
                                 title: 'Confirmation',
                                 children: 'Continue?',
@@ -108,7 +108,7 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
                         })
                     }
                 >
-                    {modal ? 'Modal Open' : 'Open Modal'}
+                    {modal ? 'DialogBox Open' : 'Open DialogBox'}
                 </Button>
             );
         }
@@ -121,7 +121,7 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
         <RenderSource language={"tsx"}>
         ```
         import { useModalActions } from '@apple-pie/slice/stores/modal';
-        import { Modal } from '@apple-pie/slice';
+        import { DialogBox } from '@apple-pie/slice';
         
         function ConfirmButton() {
             const actions = useModalActions();
@@ -129,7 +129,7 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
             const handleClick = async () => {
                 try {
                     const result = await actions.modalResponse<string>({
-                        component: Modal,
+                        component: DialogBox,
                         props: {
                             title: 'Delete item?',
                             children: 'This action cannot be undone.',
@@ -156,12 +156,12 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
 
         <RenderSource language={"tsx"}>
         ```
-        import { Modal } from '@apple-pie/slice';
+        import { DialogBox } from '@apple-pie/slice';
         import { modalActions, getModal } from '@apple-pie/slice/stores/modal';
         
         export function openSettingsModal() {
             modalActions.show({
-                component: Modal,
+                component: DialogBox,
                 props: {
                     title: 'Settings',
                     children: 'Configure your preferences.',

@@ -46,7 +46,7 @@ const reactComponentSection: ListSection = [
 	{ title: 'IconButton', slug: 'icon-button', code: true },
 	{ title: 'Label', slug: 'label', code: true },
 	{ title: 'Level', slug: 'level', code: true },
-	{ title: 'Modal', slug: 'modal', code: true },
+	{ title: 'DialogBox', slug: 'dialog-box', code: true },
 	{ title: 'ModalController', slug: 'modal-controller', code: true },
 	{ title: 'Overlay', slug: 'overlay', code: true },
 	{ title: 'Pager', slug: 'pager', code: true },

@@ -7,7 +7,7 @@ export function TabPreview({ variant = 'default' }: { variant?: 'default' | 'ext
 			<Tab
 				value="details"
 				label={variant === 'custom' ? undefined : 'Details'}
-				icon={variant === 'extras' ? 'home' : undefined}
+				icon={variant === 'extras' ? 'basic.home' : undefined}
 				count={variant === 'extras' ? 12 : undefined}
 				disabled={variant === 'disabled'}
 			>

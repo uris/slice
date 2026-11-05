@@ -1,6 +1,7 @@
 import type { HTMLMotionProps, Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SliceIcon } from '../Icon/_types';
 import type { ToolTip } from '../sharedTypes';
 
 type ButtonBaseProps = {
@@ -10,8 +11,8 @@ type ButtonBaseProps = {
 	state?: 'normal' | 'hover' | 'disabled';
 	width?: string;
 	label?: string;
-	iconRight?: string;
-	iconLeft?: string;
+	iconRight?: SliceIcon;
+	iconLeft?: SliceIcon;
 	iconFill?: boolean;
 	fill?: boolean;
 	count?: number;

@@ -17,7 +17,7 @@ export const Grouper = React.memo((props: GrouperProps) => {
 		toggle = true,
 		open = true,
 		hasIcon = true,
-		iconName = 'chevron down',
+		iconName = 'arrows.chevron-down',
 		iconSize = 18,
 		frameSize = 64,
 		border = 0,
@@ -83,7 +83,9 @@ export const Grouper = React.memo((props: GrouperProps) => {
 				<div className={css.title}>
 					{title}
 					<Badge hideZero={hideNull} count={count} variant={'light'} />
-					{showFilterBadge && <Icon name="filter" size={16} strokeColor={theme.current.colors['core-text-disabled']} />}
+					{showFilterBadge && (
+						<Icon name="basic.filter" size={16} strokeColor={theme.current.colors['core-text-disabled']} />
+					)}
 				</div>
 				{hasIcon && (
 					<div ref={icon} className={css.icon}>

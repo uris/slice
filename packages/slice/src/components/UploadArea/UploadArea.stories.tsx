@@ -23,7 +23,7 @@ const meta: Meta<typeof UploadArea> = {
 	title: 'Components/UploadArea',
 	component: UploadArea,
 	args: {
-		icon: 'upload',
+		icon: 'arrows.export',
 		iconColor: 'var(--core-text-primary)',
 		iconColorHover: 'var(--core-text-special)',
 		width: '100%',

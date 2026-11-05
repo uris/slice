@@ -24,7 +24,7 @@ const wrapperStyle = () => Object.assign({}, ...[state.wrapper.style].flat(Infin
 describe('FabButton', () => {
  it('defaults to a regular 56-point plus button with a shrink-wrapping, unclipped shadow', () => {
   render(<FabButton accessibilityLabel="Add task" />);
-  expect(state.button).toMatchObject({ icon: 'plus', size: 56, liquidGlassBackground: false, accessibilityLabel: 'Add task' });
+  expect(state.button).toMatchObject({ icon: 'basic.plus', size: 56, liquidGlassBackground: false, accessibilityLabel: 'Add task' });
   expect(wrapperStyle()).toMatchObject({ alignSelf: 'flex-start', alignItems: 'flex-start', overflow: 'visible', borderRadius: 1000, elevation: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.27, shadowRadius: 4.65 });
   expect(wrapperStyle()).not.toHaveProperty('width');
   expect(wrapperStyle()).not.toHaveProperty('height');
@@ -41,8 +41,8 @@ describe('FabButton', () => {
   const presence = { entering: () => undefined };
   const layout = () => undefined;
   const onPress = vi.fn();
-  render(<FabButton icon="home" size={72} style={style} animatedStyle={animatedStyle} presence={presence} layout={layout} onPress={onPress}>Home</FabButton>);
-  expect(state.button).toMatchObject({ icon: 'home', size: 72, children: 'Home' });
+  render(<FabButton icon="basic.home" size={72} style={style} animatedStyle={animatedStyle} presence={presence} layout={layout} onPress={onPress}>Home</FabButton>);
+  expect(state.button).toMatchObject({ icon: 'basic.home', size: 72, children: 'Home' });
   for (const [key, value] of Object.entries({ style, animatedStyle, presence, layout, onPress })) expect(state.button[key]).toBe(value);
   fireEvent.click(screen.getByRole('button'));
   expect(onPress).toHaveBeenCalledOnce();

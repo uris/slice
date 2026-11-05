@@ -1,0 +1,25 @@
+{
+	"brands": {
+		"android": "brands.android",
+		"npm": "brands.npm",
+		"github": "brands.github",
+		"openAi": "brands.open-ai",
+		"apple": "brands.apple",
+		"linkedin": "brands.linkedin",
+		"google": "brands.google",
+		"googleMono": "brands.google-mono"
+	},
+	"system": {
+		"view": "system.view",
+		"blank": "system.blank",
+		"checkCircle": "system.check-circle",
+		"circle": "system.circle",
+		"checkboxChecked": "system.checkbox-checked",
+		"checkbox": "system.checkbox",
+		"checkboxPartial": "system.checkbox-partial"
+	},
+	"ai": {
+		"wand": "ai.wand",
+		"sparkle": "ai.sparkle"
+	}
+}

@@ -1,9 +1,10 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SliceIcon } from '../Icon/_types';
 import type { ToolTip } from '../sharedTypes';
 
 export type BarButton = {
-	icon?: string;
+	icon?: SliceIcon;
 	action?: string;
 	/** Accessible button name and tooltip text. */
 	tip: string;

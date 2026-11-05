@@ -37,10 +37,10 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>coverUp</code></td><td><code>string</code></td><td><code>theme.current.colors['core-surface-primary']</code></td><td>Background color used by icons that need to mask underlying strokes.</td></tr>
             <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Dims the icon and disables keyboard focus.</td></tr>
             <tr><td><code>fillColor</code></td><td><code>number</code></td><td><code>0.2</code></td><td>Opacity value used for filled portions of supported icons.</td></tr>
-            <tr><td><code>name</code></td><td><code>string</code></td><td><code>'home'</code></td><td>Registry name of the icon to render.</td></tr>
+            <tr><td><code>name</code></td><td><code>SliceIcon</code></td><td><code>'basic.home'</code></td><td>Registry name of the icon to render.</td></tr>
             <tr><td><code>pointer</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows a pointer cursor and enables keyboard focus when the icon is interactive.</td></tr>
             <tr><td><code>size</code></td><td><code>number</code></td><td><code>20</code></td><td>Rendered icon size in pixels.</td></tr>
-            <tr><td><code>stroke</code></td><td><code>number</code></td><td><code>1.5</code></td><td>Stroke width passed to the icon definition.</td></tr>
+            <tr><td><code>stroke</code></td><td><code>number</code></td><td><code>1.25</code></td><td>Stroke width passed to the icon definition.</td></tr>
             <tr><td><code>strokeColor</code></td><td><code>string</code></td><td><code>theme.current.colors['core-icon-primary']</code></td><td>Stroke color token or CSS color value.</td></tr>
             <tr><td><code>toggle</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Switches to the toggled icon variant when the registry entry provides one.</td></tr>
             <tr><td><code>...svgAttributes</code></td><td><code>{`SVGAttributes<SVGSVGElement>`}</code></td><td><code>-</code></td><td>Native `svg` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
@@ -78,7 +78,7 @@ import { Icon } from '@apple-pie/slice';
 export function IconExample() {
     return (
         <Icon
-            name="home"
+            name="basic.home"
             size={20}
             strokeColor="var(--core-icon-primary)"
             onClick={() => console.log('clicked')}

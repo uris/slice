@@ -40,7 +40,7 @@ function TipDemo(props: Readonly<TipProps>) {
 			Hover me!
 			<IconButton
 				actionName={'Home Button'}
-				icon={'home'}
+				icon={'basic.home'}
 				tooltip={'Home Button'}
 				onToolTip={actions.push}
 				toggle={false}

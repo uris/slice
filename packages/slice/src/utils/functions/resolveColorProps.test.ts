@@ -8,7 +8,7 @@ describe('resolveColorProps', () => {
 		expect(props.colorOn).toBe('core-text-primary');
 	});
 	it('resolves color states and nested options without mutating frozen props', () => {
-		const iconLeft = Object.freeze({ name: 'home', color: 'core-icon-primary' });
+		const iconLeft = Object.freeze({ name: 'basic.home', color: 'core-icon-primary' });
 		const props = Object.freeze({
 			background: 'core-surface-primary',
 			borderColorHover: 'core-outline-special',
@@ -24,7 +24,7 @@ describe('resolveColorProps', () => {
 			borderColorHover: 'var(--core-outline-special)',
 			backgroundColorDisabled: 'var(--core-button-disabled)',
 			scrollHandle: 'var(--scroll-bar)',
-			iconLeft: { name: 'home', color: 'var(--core-icon-primary)' },
+			iconLeft: { name: 'basic.home', color: 'var(--core-icon-primary)' },
 			resizeHandle: { color: 'var(--core-outline-primary)' },
 			dragHandleStyle: { strokeColor: 'var(--core-outline-secondary)' },
 		});
@@ -36,7 +36,7 @@ describe('resolveColorProps', () => {
 		const props = {
 			color: '#123456', backgroundColor: 'var(--my-color)', borderColor: null,
 			fillColor: 0.2, label: 'core-text-primary', name: 'core-icon-primary',
-			style: { color: 'core-text-primary' }, iconLeft: { name: 'home', color: 'red' },
+			style: { color: 'core-text-primary' }, iconLeft: { name: 'basic.home', color: 'red' },
 		};
 		expect(resolveColorProps(props)).toBe(props);
 		expect(resolveColorProps({ color: undefined })).toEqual({ color: undefined });

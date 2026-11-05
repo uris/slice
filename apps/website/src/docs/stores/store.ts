@@ -2,7 +2,7 @@ import type { DocsStoreType } from '@/docs/stores/types';
 import { createRef } from 'react';
 import { create } from 'zustand';
 
-export const useDocsStore = create<DocsStoreType>((set) => ({
+export const useDocsStore = create<DocsStoreType>((set, get) => ({
 	packageType: null,
 	slug: null,
 	section: null,
@@ -10,6 +10,7 @@ export const useDocsStore = create<DocsStoreType>((set) => ({
 	scrollBoxSize: undefined,
 	visibleItems: new Set<string>(),
 	scrollAmount: 0,
+	scrollDirection: null,
 	actions: {
 		setDocContext: (slug, packageType, section) => {
 			set((state) => {
@@ -32,7 +33,10 @@ export const useDocsStore = create<DocsStoreType>((set) => ({
 		},
 		setScrollAmount: (scrollAmount: number | undefined) => {
 			if (scrollAmount === undefined) return;
-			set({ scrollAmount });
+			const prevScrollAmount = get().scrollAmount;
+			const scrollDiff = scrollAmount - (prevScrollAmount ?? 0);
+			const scrollDirection = scrollDiff > 0 ? 'down' : scrollDiff < 0 ? 'up' : null;
+			set({ scrollAmount, scrollDirection });
 		},
 	},
 }));
@@ -49,3 +53,4 @@ export const useScrollboxWidth = () => useDocsStore((state) => state.scrollBoxSi
 export const useScrollboxSize = () => useDocsStore((state) => state.scrollBoxSize);
 export const useScrollBox = () => useDocsStore((state) => state.scrollBox);
 export const useScrollAmount = () => useDocsStore((state) => state.scrollAmount);
+export const useScrollDirection = () => useDocsStore((state) => state.scrollDirection);

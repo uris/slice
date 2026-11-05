@@ -3,23 +3,43 @@ import { useState } from 'react';
 import { Button, Overlay } from '@apple-pie/slice';
 
 function OverlayExample() {
-  const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
   return <>
-    <Button label="Show overlay" onClick={() => setOpen(true)} />
-    <Overlay show={open} type="dark" opacity={0.45}
-      onClick={() => setOpen(false)} />
+    <Button label="Show overlay" onClick={() => setShow(true)} />
+    <Overlay show={show} onClick={() => setShow(false)} />
   </>;
 }
 `;
-export const foregroundCode = `
-import { Modal } from '@apple-pie/slice';
-
-<>
-  <Overlay show={open} type="dark" onClick={closeDialog} />
-  {open && <section style={{ position: 'fixed', inset: '20%', zIndex: 'var(--elevation-confirm)' }}>
-    <Modal title="Project details" onClose={closeDialog}>
-      Your project content
-    </Modal>
-  </section>}
-</>
+export const menuCode = `
+function ProjectActions() {
+  const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
+  return <>
+    <button type="button" onContextMenu={(event) => {
+      event.preventDefault();
+      setMenu({ x: event.clientX, y: event.clientY });
+    }}>Project actions</button>
+    <Overlay show={menu !== null}
+      onPointerDown={() => setMenu(null)}
+      onContextMenu={(event) => event.preventDefault()}>
+      {menu && <div role="group" aria-label="Project actions"
+        style={{ position: 'absolute', left: menu.x, top: menu.y,
+          background: 'var(--core-surface-secondary)', padding: 16 }}
+        onPointerDown={(event) => event.stopPropagation()}>
+        <button type="button" onClick={myHandler}>Rename project</button>
+        <button type="button" onClick={myHandler}>Duplicate project</button>
+      </div>}
+    </Overlay>
+  </>;
+}
+`;
+export const motionCode = `
+<Overlay show={open} opacity={0.6}
+  transition={{ duration: 0.3 }}
+  motionValues={{
+    initial: { opacity: 0 },
+    animate: { opacity: 0.6 },
+    exit: { opacity: 0 },
+  }}
+  onClick={myHandler}
+/>
 `;

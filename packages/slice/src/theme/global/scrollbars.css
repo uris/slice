@@ -1,5 +1,5 @@
 .slice-scrollbars {
-	/* Consumers override these to theme their own scrollbar (e.g. Modal
+	/* Consumers override these to theme their own scrollbar (e.g. DialogBox
 	   binds them to its scrollHandleColor/scrollHandleColorHover props).
 	   Unoverridden, they fall back to the shared page-level scroll tokens. */
 	--scrollbar-size: 6px;

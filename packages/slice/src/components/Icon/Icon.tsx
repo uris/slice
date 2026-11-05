@@ -14,9 +14,9 @@ export const Icon = React.memo((rawProps: IconProps) => {
 	const theme = useTheme();
 
 	const {
-		name = 'home',
+		name = 'basic.home',
 		size = 20,
-		stroke = 1.5,
+		stroke = 1.25,
 		strokeColor = theme.current.colors['core-icon-primary'],
 		fillColor = undefined,
 		fill = false,

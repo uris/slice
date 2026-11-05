@@ -137,7 +137,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 				{storybookUrl && (
 					<div className={styles.storybookLink}>
 						<SquareButton
-							icon="share"
+							icon="basic.share"
 							label="View on Storybook"
 							variant={SquareButtonType.Secondary}
 							onClick={() => window.open(storybookUrl, '_blank', 'noopener,no"core-text-primary"referrer')}
@@ -168,7 +168,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 						<IconButton
 							backgroundColor={'transparent'}
 							backgroundColorHover={'core-surface-primary'}
-							icon={'arrow left'}
+							icon={'arrows.arrow-left'}
 							actionName="Previous preview"
 							buttonSize={'s'}
 							iconSize={16}
@@ -186,7 +186,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 						<IconButton
 							backgroundColor={'transparent'}
 							backgroundColorHover={'core-surface-primary'}
-							icon={'arrow right'}
+							icon={'arrows.arrow-right'}
 							actionName="Next preview"
 							buttonSize={'s'}
 							iconSize={16}
@@ -217,7 +217,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 					<Caption style={{ padding: 0 }}>{Math.round(scale * 100)}%</Caption>
 					<IconButton
 						actionName="Reset preview zoom"
-						icon={'undo'}
+						icon={'arrows.undo'}
 						iconSize={20}
 						buttonSize={'s'}
 						backgroundColor={'transparent'}

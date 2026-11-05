@@ -11,14 +11,15 @@ import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
+import type { SliceIcon } from '../Icon';
 import { Icon } from '../Icon';
 import { ToolTipType } from '../sharedTypes';
 import css from './IconButton.module.css';
 import type { IconButtonProps } from './_types';
 
 type ActionButtonProps = Omit<IconButtonProps, 'icon'> & {
-	icon?: string | null;
-	iconSelected?: string;
+	icon?: SliceIcon | null;
+	iconSelected?: SliceIcon;
 	iconFrame?: boolean;
 	labelContent?: React.ReactNode;
 	contentClassName?: string;
@@ -82,7 +83,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 		textColorSelected = 'var(--core-text-primary)',
 		buttonSize = 'm',
 		iconSize = 20,
-		icon = 'more',
+		icon = 'basic.more-horiz',
 		iconFill = false,
 		iconColor = 'var(--core-text-primary)',
 		iconColorHover = 'var(--core-text-primary)',

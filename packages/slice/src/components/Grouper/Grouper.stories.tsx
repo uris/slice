@@ -20,7 +20,7 @@ const meta: Meta<typeof Grouper> = {
 		toggle: true,
 		open: true,
 		hasIcon: true,
-		iconName: 'chevron down',
+		iconName: 'arrows.chevron-down',
 		iconSize: 18,
 		frameSize: 64,
 		border: 1,
