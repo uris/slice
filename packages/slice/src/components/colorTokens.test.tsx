@@ -15,15 +15,15 @@ describe('component color tokens', () => {
 	});
 
 	it('resolves button label, background, and nested icon colors', () => {
-		const html = renderToStaticMarkup(<Button variant="solid" label="Test" backgroundColor="core-surface-special" textColor="core-text-accent" iconLeft="home" iconColor="core-icon-error" />);
+		const html = renderToStaticMarkup(<Button variant="solid" label="Test" backgroundColor="core-surface-special" textColor="core-text-accent" iconLeft="basic.home" iconColor="core-icon-error" />);
 		expect(html).toContain('background:var(--core-surface-special)');
 		expect(html).toContain('color:var(--core-text-accent)');
 		expect(html).toContain('var(--core-icon-error)');
 	});
 
 	it('resolves SVG and nested drag handle token props', () => {
-		const html = renderToStaticMarkup(<Icon name="home" strokeColor="core-icon-error" coverUp="core-surface-special" />);
-		expect(html).toContain('fill="var(--core-icon-error)"');
+		const html = renderToStaticMarkup(<Icon name="basic.home" strokeColor="core-icon-error" coverUp="core-surface-special" />);
+		expect(html).toContain('stroke="var(--core-icon-error)"');
 		const handle = renderToStaticMarkup(<DragHandle color="core-surface-special" strokeColor="core-outline-primary" />);
 		expect(handle).toContain('--drag-handle-bg:var(--core-surface-special)');
 		expect(handle).toContain('--drag-handle-border-color:var(--core-outline-primary)');

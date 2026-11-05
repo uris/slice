@@ -1,88 +1,94 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as OverlayStories from './Overlay.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={OverlayStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Overlay
-        Renders an overlay layer for modals, drawers, and other focus-blocking surfaces.
+# Overlay
 
-        ## Base element
-        `HTMLDivElement`
+Catch background clicks while a menu or dialog is open, with a clear or dimmed backdrop.
 
-        ## Interface
-        `OverlayProps`
+## Usage
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>color</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `color`.</td></tr>
-            <tr><td><code>global</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `global`.</td></tr>
-            <tr><td><code>opacity</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `opacity`.</td></tr>
-            <tr><td><code>overlay</code></td><td><code>any</code></td><td><code>-</code></td><td>Controls `overlay`.</td></tr>
-            <tr><td><code>toggleOverlay</code></td><td><code>{`(state: boolean) => void`}</code></td><td><code>-</code></td><td>Boolean flag controlling `toggleOverlay`.</td></tr>
-            <tr><td><code>type</code></td><td><code>{`'clear' | 'dark'`}</code></td><td><code>-</code></td><td>Controls `type`.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onClick</code></td><td><code>{`() => void`}</code></td></tr>
-          </tbody>
-        </table>
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource language={"tsx"}>
 ```
-import { Overlay } from '@apple-pie/slice';
+import { useState } from 'react';
+import { Button, Overlay } from '@apple-pie/slice';
 
-export function OverlayExample() {
-    return (
-        <Overlay
-            overlay={true}
-            opacity={0.4}
-            type="dark"
-            onClick={() => console.log('overlay click')}
-            id="overlay-example"
-            data-testid="overlay-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
+function OverlayExample() {
+  const [open, setOpen] = useState(false);
+  return <>
+    <Button label="Show overlay" onClick={() => setOpen(true)} />
+    <Overlay show={open} opacity={0.45}
+      onClick={() => setOpen(false)} />
+  </>;
 }
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+### Keep menu interactions inside the menu
+
+```
+function ProjectActions() {
+  const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
+  return <>
+    <button type="button" onContextMenu={(event) => {
+      event.preventDefault();
+      setMenu({ x: event.clientX, y: event.clientY });
+    }}>Project actions</button>
+    <Overlay show={menu !== null}
+      onPointerDown={() => setMenu(null)}
+      onContextMenu={(event) => event.preventDefault()}>
+      {menu && <div role="group" aria-label="Project actions"
+        style={{ position: 'absolute', left: menu.x, top: menu.y,
+          background: 'var(--core-surface-secondary)', padding: 16 }}
+        onPointerDown={(event) => event.stopPropagation()}>
+        <button type="button" onClick={myHandler}>Rename project</button>
+        <button type="button" onClick={myHandler}>Duplicate project</button>
+      </div>}
+    </Overlay>
+  </>;
+}
+```
+
+## Behavior
+
+By default, the fixed layer intercepts pointers at every backdrop opacity, including zero. Use `position="absolute"` inside a positioned container to cover that container instead. Set `pointerEvents="none"` to let pointers pass through the layer and its children; keyboard interaction is unaffected. Children remain fully opaque. Native events bubble from children unless they stop the matching event; stopping pointer-down does not stop the later click event. The layer does not dismiss itself or prevent browser context menus automatically. With pointer events enabled, it continues intercepting input during exit until removal.
+
+## Accessibility
+
+The visual backdrop is hidden from assistive technology, while children retain their own semantics. Your app manages menu/dialog naming, keyboard behavior, Escape, focus, and background scroll or keyboard locking. Reduced motion bypasses custom backdrop animation, delays, repeats, and transforms, including live preference changes.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `backgroundColor` | `ColorValue` | `rgb(0,0,0)` | Backdrop color. Accepts Slice tokens or CSS colors. |
+| `children` | `React.ReactNode` | `undefined` | Foreground content inside the layer. Backdrop opacity and animation do not dim these children. |
+| `opacity` | `number` | `0` | Backdrop opacity from zero to one. Zero is visually clear and still intercepts pointers. Values are clamped to that range; nonfinite values use zero. |
+| `pointerEvents` | `'auto' &#124; 'none'` | `auto` | Set to `none` to disable pointer interaction across the overlay and its children. Keyboard focus is unaffected. |
+| `position` | `'fixed' &#124; 'absolute'` | `fixed` | Viewport coverage, or container coverage with `absolute` inside a positioned parent. |
+| `show` | `boolean` | `false` | Shows the controlled layer. Your app changes this value to dismiss it. |
+| `...divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | — | Native attributes and events apply to the interaction div. Positioning and pointer handling follow their component props. Roles and raw ARIA are excluded; foreground content supplies its semantics. |
+
+## Motion
+
+`transition` and `motionValues` configure the backdrop with Slice’s Water transition as the default.
+
+```
+<Overlay show={open} opacity={0.6}
+  transition={{ duration: 0.3 }}
+  motionValues={{
+    initial: { opacity: 0 },
+    animate: { opacity: 0.6 },
+    exit: { opacity: 0 },
+  }}
+  onClick={myHandler}
+/>
+```
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `motionValues` | `Variants` | `Opacity 0 → opacity → 0` | Motion variants merged into the backdrop’s `initial`, `animate`, and `exit` states. Partial object overrides retain omitted defaults. Foreground children are separate from this animation. |
+| `transition` | `Transition` | `Water` | Timing and easing settings merged with Slice’s Water transition. Reduced-motion preferences bypass custom variants and timing. |
+
+## Events
+
+No component-specific callbacks. Native div events receive normal React event payloads and follow normal propagation. Use `onClick`, `onPointerDown`, or another native event to request application-controlled dismissal. Motion gesture and animation-lifecycle callbacks are not part of the public API.

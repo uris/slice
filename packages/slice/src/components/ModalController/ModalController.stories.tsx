@@ -10,15 +10,15 @@ import {
 	runModalControllerResolveViaPrimaryActionPlay,
 	runModalControllerResolveWithoutCallbacksPlay,
 } from 'src/components/playHelpers';
-import { fn } from 'storybook/test';
+import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
 import { modalActions as modalActionsImperative, useModalActions } from '../../stores';
 import { Button } from '../Button';
-import { Modal } from '../Modal';
-import type { ModalAction, ModalProps } from '../Modal/_types';
+import { DialogBox } from '../DialogBox';
+import type { DialogBoxAction, DialogBoxProps } from '../DialogBox/_types';
 
 type DemoModalType = { modalId: string; data: string };
 
-const demoActions: ModalAction<DemoModalType>[] = [
+const demoActions: DialogBoxAction<DemoModalType>[] = [
 	{
 		id: 'no',
 		label: 'No',
@@ -34,7 +34,7 @@ const demoActions: ModalAction<DemoModalType>[] = [
 	},
 ];
 
-const demoModalProps: ModalProps<DemoModalType> = {
+const demoDialogBoxProps: DialogBoxProps<DemoModalType> = {
 	title: 'Continue?',
 	actions: demoActions,
 	children: 'Are you sure you want to continue',
@@ -50,7 +50,7 @@ const demoModalProps: ModalProps<DemoModalType> = {
 // ModalController's `typeof modalProps?.on... === 'function'` guards taking
 // their false branch (the pass-through call is skipped, only the underlying
 // resolve()/reject()/hide()/controls.start() run)
-const demoModalPropsWithoutCallbacks: ModalProps<DemoModalType> = {
+const demoDialogBoxPropsWithoutCallbacks: DialogBoxProps<DemoModalType> = {
 	title: 'Continue?',
 	actions: demoActions,
 	children: 'Are you sure you want to continue',
@@ -117,7 +117,7 @@ export const NotDraggable: StoryObj<typeof ModalController> = {
 
 export const ResolveWithoutCallbacks: StoryObj<typeof ModalController> = {
 	tags: ['tests'],
-	render: () => <ModalControllerDemo modalProps={demoModalPropsWithoutCallbacks} />,
+	render: () => <ModalControllerDemo modalProps={demoDialogBoxPropsWithoutCallbacks} />,
 	play: async ({ canvasElement, args }) => {
 		modalActionsImperative.clear();
 		await runModalControllerResolveWithoutCallbacksPlay({ canvasElement, args });
@@ -126,7 +126,7 @@ export const ResolveWithoutCallbacks: StoryObj<typeof ModalController> = {
 
 export const RejectWithoutCallbacks: StoryObj<typeof ModalController> = {
 	tags: ['tests'],
-	render: () => <ModalControllerDemo modalProps={demoModalPropsWithoutCallbacks} />,
+	render: () => <ModalControllerDemo modalProps={demoDialogBoxPropsWithoutCallbacks} />,
 	play: async ({ canvasElement, args }) => {
 		modalActionsImperative.clear();
 		await runModalControllerRejectWithoutCallbacksPlay({ canvasElement, args });
@@ -135,10 +135,10 @@ export const RejectWithoutCallbacks: StoryObj<typeof ModalController> = {
 
 function ModalControllerDemo({
 	draggable = true,
-	modalProps = demoModalProps,
+	modalProps = demoDialogBoxProps,
 }: {
 	draggable?: boolean;
-	modalProps?: ModalProps<DemoModalType>;
+	modalProps?: DialogBoxProps<DemoModalType>;
 }) {
 	const modalResponse = useModalActions().modalResponse;
 
@@ -146,7 +146,7 @@ function ModalControllerDemo({
 	const showAsyncModalClick = async () => {
 		const result = await modalResponse<DemoModalType>({
 			id: 'modal-confirm',
-			component: Modal<DemoModalType>,
+			component: DialogBox<DemoModalType>,
 			props: modalProps,
 		}).catch((err) => {
 			const msg = err instanceof Error ? err.message : String(err);
@@ -157,10 +157,90 @@ function ModalControllerDemo({
 
 	return (
 		<FlexDiv absolute justify={'center'} align={'center'}>
-			<Button iconRight={'arrow right'} onClick={showAsyncModalClick}>
+			<Button iconRight={'arrows.arrow-right'} onClick={showAsyncModalClick}>
 				Continue
 			</Button>
 			<ModalController draggable={draggable} />
 		</FlexDiv>
 	);
 }
+
+function HostedDialogDemo() {
+	const actions = useModalActions();
+	return (
+		<>
+			<button
+				type="button"
+				onClick={() =>
+					actions.show({
+						id: 'hosted-dialog-test',
+						component: DialogBox,
+						props: { title: 'Hosted dialog', actions: [{ id: 'done', label: 'Done' }] },
+					})
+				}
+			>
+				Open hosted dialog
+			</button>
+			<ModalController draggable={false} transition={{ duration: 0 }} />
+		</>
+	);
+}
+export const ModalFocusAndEscape: StoryObj<typeof ModalController> = {
+	tags: ['tests'],
+	render: () => <HostedDialogDemo />,
+	play: async ({ canvasElement }) => {
+		modalActionsImperative.clear();
+		const canvas = within(canvasElement);
+		const opener = canvas.getByRole('button', { name: 'Open hosted dialog' });
+		const overflow = document.body.style.overflow;
+		await userEvent.click(opener);
+		const dialog = await canvas.findByRole('dialog', { name: 'Hosted dialog' });
+		await expect(dialog).toHaveAttribute('aria-modal', 'true');
+		await expect(opener.inert).toBe(true);
+		await expect(document.body.style.overflow).toBe('hidden');
+		const close = canvas.getByRole('button', { name: 'close' });
+		const done = canvas.getByRole('button', { name: 'Done' });
+		await expect(close).toHaveFocus();
+		await userEvent.tab({ shift: true });
+		await expect(done).toHaveFocus();
+		await userEvent.tab();
+		await expect(close).toHaveFocus();
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+		await expect(opener).toHaveFocus();
+		await expect(opener.inert).toBe(false);
+		await expect(document.body.style.overflow).toBe(overflow);
+	},
+};
+export const BackdropHitTesting: StoryObj<typeof ModalController> = {
+	tags: ['tests'],
+	render: () => <HostedDialogDemo />,
+	play: async ({ canvasElement }) => {
+		modalActionsImperative.clear();
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Open hosted dialog' }));
+		await canvas.findByRole('dialog');
+		const overlay = canvasElement.querySelector('[data-overlay]') as HTMLElement;
+		const bounds = overlay.getBoundingClientRect();
+		await expect(overlay.ownerDocument.elementFromPoint(bounds.left + 8, bounds.top + 8)).toBe(overlay);
+		await userEvent.click(overlay);
+		await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+	},
+};
+
+export const UnfocusedPointerOpener: StoryObj<typeof ModalController> = {
+	tags: ['tests'],
+	render: () => <HostedDialogDemo />,
+	play: async ({ canvasElement }) => {
+		modalActionsImperative.clear();
+		const canvas = within(canvasElement);
+		const opener = canvas.getByRole('button', { name: 'Open hosted dialog' });
+		(document.activeElement as HTMLElement)?.blur();
+		fireEvent.pointerDown(opener);
+		fireEvent.click(opener);
+		await canvas.findByRole('dialog');
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+		await expect(opener).toHaveFocus();
+	},
+};

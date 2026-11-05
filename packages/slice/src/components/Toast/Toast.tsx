@@ -216,7 +216,7 @@ const ToastBase = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
 							onKeyDown={(e) => accessibleKeyDown(e, handleClose)}
 							onClick={handleClose}
 						>
-							<Icon name={'x'} size={20} strokeColor={iconColor} />
+							<Icon name={'basic.cross'} size={20} strokeColor={iconColor} />
 						</div>
 					)}
 				</motion.div>

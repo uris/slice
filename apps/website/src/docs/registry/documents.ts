@@ -20,7 +20,7 @@ const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 		['error-summary', () => import('@/documents/react/components/ErrorSummary/ErrorSummary')],
 
 		['overlay', () => import('@/documents/react/components/Overlay/Overlay')],
-		['modal', () => import('@/documents/react/components/Modal/Modal')],
+		['dialog-box', () => import('@/documents/react/components/DialogBox/DialogBox')],
 		['modal-controller', () => import('@/documents/react/components/ModalController/ModalController')],
 		['tip', () => import('@/documents/react/components/Tip/Tip')],
 		['toast', () => import('@/documents/react/components/Toast/Toast')],

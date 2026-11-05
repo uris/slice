@@ -16,7 +16,7 @@ export function TextFieldPreview({
 		| 'outlined'
 		| 'underline';
 }>) {
-	const icon = variant === 'icon' ? { name: 'person', size: 16 } : undefined;
+	const icon = variant === 'icon' ? { name: 'users.user' as const, size: 16 } : undefined;
 	const stacked = variant === 'stacked' || variant === 'appear' || variant === 'underline';
 	const label = variant === 'simple' ? undefined : 'First name';
 	const placeholder = variant === 'default' ? 'Search projects' : 'Enter first name';

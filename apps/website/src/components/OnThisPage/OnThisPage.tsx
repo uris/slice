@@ -1,8 +1,8 @@
-import { useNewestVisibleItem, useScrollAmount, useScrollBox } from '@/docs/stores/store';
+import { useNewestVisibleItem, useScrollAmount, useScrollBox, useScrollDirection } from '@/docs/stores/store';
 import { surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
 import { motion } from 'motion/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './OnThisPage.module.css';
 
 export type TrackedItem = {
@@ -21,17 +21,20 @@ export function OnThisPage(props: Readonly<OnThisPageProps>) {
 	const selectedId = useNewestVisibleItem();
 	const scrollBox = useScrollBox();
 	const scrollAmount = useScrollAmount();
+	const scrollDirection = useScrollDirection();
 	const [selected, setSelected] = useState<string | null>(null);
 	const [amount, setAmount] = useState<number | null>(null);
+	const [lastActive, setLastActive] = useState<string | null>(null);
 
 	const isSelected = useCallback(
 		(itemId: string) => {
 			if (scrollAmount === 0 && !selected) return items[0]?.id === itemId;
 			if (amount !== null && scrollAmount !== undefined && Math.abs(amount - scrollAmount) <= 1 && selected)
 				return selected === itemId;
-			return selectedId === itemId;
+			if (selectedId) return selectedId === itemId;
+			return lastActive === itemId;
 		},
-		[selectedId, amount, scrollAmount, selected, items],
+		[selectedId, amount, scrollAmount, selected, items, lastActive],
 	);
 
 	const handleScrollToItem = useCallback(
@@ -62,6 +65,22 @@ export function OnThisPage(props: Readonly<OnThisPageProps>) {
 		},
 		[scrollBox],
 	);
+
+	// save the last active id for situation where a section spans more than the scroll box height
+	// where the visibility of the tracked item becomes null since it's target is off-screen
+	// scrolling upwards sets lastActive as the previous item in the list
+	useEffect(() => {
+		if (selectedId && selectedId !== lastActive) {
+			if (scrollDirection === 'down') setLastActive(selectedId);
+			if (scrollDirection === 'up') {
+				const index = items.findIndex((item) => item.id === selectedId);
+				if (index > 0) {
+					const previousItemId = items[index - 1].id;
+					setLastActive(previousItemId);
+				}
+			}
+		}
+	}, [selectedId, lastActive, scrollDirection, items]);
 
 	// render sub items
 	function renderSubItems(items: Omit<TrackedItem[], 'items'> = []) {

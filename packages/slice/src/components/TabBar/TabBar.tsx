@@ -232,7 +232,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 					<div className={css.close}>
 						<IconButton
 							actionName="Close tabs"
-							icon="x"
+							icon="basic.cross"
 							iconSize={Math.max(0, iconSize - 4)}
 							buttonSize={iconSize}
 							disabled={disabled}

@@ -1,4 +1,5 @@
-'use client';
+import type { SliceIcon } from '../Icon';
+('use client');
 
 import { type TargetAndTransition, type Transition, motion, useAnimationControls } from 'motion/react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -17,8 +18,8 @@ import css from './IconButton.module.css';
 import type { IconButtonProps } from './_types';
 
 type ActionButtonProps = Omit<IconButtonProps, 'icon'> & {
-	icon?: string | null;
-	iconSelected?: string;
+	icon?: SliceIcon | null;
+	iconSelected?: SliceIcon;
 	iconFrame?: boolean;
 	labelContent?: React.ReactNode;
 	contentClassName?: string;
@@ -82,7 +83,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 		textColorSelected = 'var(--core-text-primary)',
 		buttonSize = 'm',
 		iconSize = 20,
-		icon = 'more',
+		icon = 'basic.more-horiz',
 		iconFill = false,
 		iconColor = 'var(--core-text-primary)',
 		iconColorHover = 'var(--core-text-primary)',

@@ -16,9 +16,9 @@ const meta: Meta<typeof Icon> = {
 		},
 	},
 	args: {
-		name: 'home',
+		name: 'basic.home',
 		size: 20,
-		stroke: 1.5,
+		stroke: 1.25,
 		strokeColor: 'var(--core-icon-primary)',
 		toggle: false,
 		pointer: true,

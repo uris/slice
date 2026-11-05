@@ -9,6 +9,7 @@ export type DocsStoreType = {
 	scrollBox: RefObject<HTMLDivElement | null>;
 	scrollBoxSize: { height: number | undefined; width: number | undefined } | undefined;
 	scrollAmount: number | undefined;
+	scrollDirection: 'up' | 'down' | null | undefined;
 	visibleItems: Set<string>;
 	actions: {
 		setDocContext: (slug: DocsSlug | null, packageType: Package | null, section: SiteSection | null) => void;

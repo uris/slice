@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Tab } from '../Tab';
+import type { TabOption } from '../Tab/_types';
 import { installReducedMotionPreference } from '../playHelpers';
 import { TabBar } from './TabBar';
 
-const options = [
-	{ value: 'overview', label: 'Overview', icon: 'home' },
+const options: TabOption<string>[] = [
+	{ value: 'overview', label: 'Overview', icon: 'basic.home' },
 	{ value: 'activity', label: 'Recent activity', count: 12 },
 	{ value: 'settings', label: 'Settings' },
 ];
@@ -109,7 +110,7 @@ export const PanelsAndClose: Story = {
 	args: { hasClose: true },
 	render: (args) => (
 		<TabBar {...args}>
-			<Tab value="overview" id="overview-tab" panelId="overview-panel" icon="home" label="Overview" />
+			<Tab value="overview" id="overview-tab" panelId="overview-panel" icon="basic.home" label="Overview" />
 			<Tab value="settings" label="Settings" />
 		</TabBar>
 	),
@@ -353,8 +354,8 @@ export const ClippedContent: Story = {
 		width: 180,
 		tabWidth: 'fill',
 		options: [
-			{ value: 'overview', label: 'Overview', icon: 'home' },
-			{ value: 'activity', label: 'Recent activity', count: 12, icon: 'home' },
+			{ value: 'overview', label: 'Overview', icon: 'basic.home' },
+			{ value: 'activity', label: 'Recent activity', count: 12, icon: 'basic.home' },
 		],
 	},
 	play: async ({ canvasElement }) => {

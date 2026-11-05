@@ -28,7 +28,7 @@ export const Default: Story = {
 	},
 };
 export const IconAndCount: Story = {
-	args: { icon: 'home', count: 12 },
+	args: { icon: 'basic.home', count: 12 },
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		expect(canvas.getByRole('tab', { name: 'Details 12' })).toBeInTheDocument();

@@ -597,7 +597,7 @@ export const Stacked: Story = {
 export const Outlined: Story = {
 	args: {
 		variant: 'outlined',
-		iconLeft: { name: 'search', size: 20 },
+		iconLeft: { name: 'basic.search', size: 20 },
 		padding: '20px 30px',
 		labelBackgroundColor: '#123456',
 	},
@@ -715,7 +715,7 @@ export const StackedTypography: Story = {
 		variant: 'stacked',
 		stackedGap: 8,
 		stackedLabelTextSize: 'body-s-medium',
-		iconLeft: { name: 'search', size: 20 },
+		iconLeft: { name: 'basic.search', size: 20 },
 		labelBackgroundColor: '#123456',
 	},
 	play: async ({ canvasElement }) => {
@@ -740,7 +740,7 @@ export const UnlabeledStacked: Story = {
 
 export const LeadingIconBeforeSimpleLabel: Story = {
 	tags: ['tests'],
-	args: { iconLeft: { name: 'search', size: 20 } },
+	args: { iconLeft: { name: 'basic.search', size: 20 } },
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox', { name: 'Email' });
@@ -784,7 +784,7 @@ export const PasswordPreviewRequiresValue: Story = {
 
 export const OutlinedDefaultPadding: Story = {
 	tags: ['tests'],
-	args: { variant: 'outlined', iconLeft: { name: 'search', size: 20 } },
+	args: { variant: 'outlined', iconLeft: { name: 'basic.search', size: 20 } },
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
@@ -830,7 +830,7 @@ export const AppearingValueAndIconMoveTogether: Story = {
 	args: {
 		variant: 'stacked',
 		behavior: 'appear',
-		iconLeft: { name: 'search', size: 20 },
+		iconLeft: { name: 'basic.search', size: 20 },
 		stackedLabelTextSize: 'body-l-medium',
 		stackedGap: 8,
 	},
@@ -922,7 +922,7 @@ export const SupportingMessageAlignment: Story = {
 						{...args}
 						key={`${variant}-${withIcon}`}
 						variant={variant}
-						iconLeft={withIcon ? { name: 'search', size: 20 } : undefined}
+						iconLeft={withIcon ? { name: 'basic.search', size: 20 } : undefined}
 						padding="12px 24px"
 						tip="Aligned with the field content."
 					/>

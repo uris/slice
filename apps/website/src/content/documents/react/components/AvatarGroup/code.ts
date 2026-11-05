@@ -65,7 +65,6 @@ export const moreCode = `
 import { AvatarGroup, type AvatarGroupMore, type AvatarInfo } from '@apple-pie/slice';
 
 export function TeamAvatars({ people }: { people: AvatarInfo[] }) {
-    
     function handleMore(details: AvatarGroupMore) {
         const {source, more, all} = details
         console.log({source, more, all})

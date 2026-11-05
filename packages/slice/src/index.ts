@@ -110,8 +110,8 @@ export type { GrouperProps } from './components/Grouper';
 export { Overlay } from './components/Overlay';
 export type { OverlayProps } from './components/Overlay';
 
-export { Modal } from './components/Modal';
-export type { ModalAction, ModalProps } from './components/Modal';
+export { DialogBox, useDialogBox } from './components/DialogBox';
+export type { DialogBoxAction, DialogBoxProps, DialogBoxControls, DialogBoxSectionProps } from './components/DialogBox';
 
 export { ModalController } from './components/ModalController';
 export type { ModalControllerProps } from './components/ModalController';
@@ -180,7 +180,7 @@ export { FileIcon, FileIconNames } from './components/FileIcon';
 export type { FileIconProps } from './components/FileIcon/_types';
 
 export { Icon, SliceIcons } from './components/Icon';
-export type { IconProps } from './components/Icon/_types';
+export type { IconProps, SliceIcon } from './components/Icon/_types';
 
 export { ButtonBar } from './components/ButtonBar';
 export type { BarButton, ButtonBarProps } from './components/ButtonBar/_types';

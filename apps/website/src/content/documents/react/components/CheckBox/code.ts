@@ -11,9 +11,9 @@ export const mixedCode = `
 export const customCode = `
 <CheckBox
     label="Email updates"
-    iconChecked="home"
-    iconUnChecked="arrow right"
-    iconPartial="arrow left"
+    iconChecked="basic.home"
+    iconUnChecked="arrows.arrow-right"
+    iconPartial="arrows.arrow-left"
     iconColor="core-icon-secondary"
     iconColorSelected="core-text-special"
     iconSize={24}

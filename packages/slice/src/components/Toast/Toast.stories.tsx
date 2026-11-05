@@ -65,28 +65,28 @@ function ToastDemo(args: Parameters<Exclude<StoryObj<typeof Toast>['render'], un
 		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
 			Click me!
 			<IconButton
-				icon={'home'}
+				icon={'basic.home'}
 				actionName={'Info Toast'}
 				onClick={() => handleToast('Thank you for clicking!', ToastType.Info)}
 				toggle={false}
 				hover={true}
 			/>
 			<IconButton
-				icon={'check'}
+				icon={'basic.check'}
 				actionName={'Success Toast'}
 				onClick={() => handleToast('Saved successfully', ToastType.Success)}
 				toggle={false}
 				hover={true}
 			/>
 			<IconButton
-				icon={'alert'}
+				icon={'alerts.alert-circle'}
 				actionName={'Warning Toast'}
 				onClick={() => handleToast('Careful now', ToastType.Warning)}
 				toggle={false}
 				hover={true}
 			/>
 			<IconButton
-				icon={'x'}
+				icon={'basic.cross'}
 				actionName={'Error Toast'}
 				onClick={() => handleToast('Something failed', ToastType.Error, 'Infinite')}
 				toggle={false}

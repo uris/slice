@@ -39,7 +39,7 @@ Avoid matching on CSS Module class names (`canvasElement.querySelector('[class*=
 Class names are hashed at build time and the substring match can silently fail to find anything —
 that exact bug once made a ModalController test pass for the wrong reason (a `closeButton` guard
 that quietly evaluated to `null` and skipped the click it was supposed to make). The fix ended up
-being a real accessibility improvement: `Modal.tsx`'s icon-only close button was missing an
+being a real accessibility improvement: `DialogBox.tsx`'s icon-only close button was missing an
 `aria-label`, so it had no accessible name to query by in the first place. If you find yourself
 reaching for a class-name selector, ask whether the component is actually missing an aria
 attribute it should have anyway.

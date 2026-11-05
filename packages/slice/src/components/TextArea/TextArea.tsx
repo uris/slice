@@ -305,7 +305,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 							onMouseDown={(event) => event.preventDefault()}
 							onClick={submit}
 						>
-							<Icon name="arrow up" size={20} aria-hidden="true" strokeColor="var(--core-text-light)" />
+							<Icon name="arrows.arrow-top" size={20} aria-hidden="true" strokeColor="var(--core-text-light)" />
 						</button>
 					</div>
 				)}

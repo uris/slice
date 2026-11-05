@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SliceIcon } from '../Icon/_types';
 import type { IconButtonProps } from '../IconButton';
 
 type ToggleButtonBaseProps = {
@@ -11,7 +12,7 @@ type ToggleButtonBaseProps = {
 	textColor?: ColorValue;
 	textColorHover?: ColorValue;
 	textColorSelected?: ColorValue;
-	iconSelected?: string;
+	iconSelected?: SliceIcon;
 	gap?: number;
 	padding?: number | string;
 	paddingTop?: number | string;

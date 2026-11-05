@@ -32,9 +32,9 @@ Already wrapped today, for reference (don't re-add): `localStorage` (`useLocalSt
 
 ## 2. Components — gap check vs. Material Design 3 catalog
 
-Current Slice inventory (45): AudioBubble, Avatar, AvatarGroup, Badge, Button, ButtonBar, Camera, CheckBox, Chip, DataTable, ContentEditable, Dot, DraggablePanel, DropDown, ErrorSummary, FileIcon, FileList, FlexDiv, Grouper, Icon, IconButton, Label, Level, Modal, ModalController, Overlay, Pager, Progress (ProgressIndicator, DoneCheck), PromptInput, RadioButton, RadioButtonList, Slider, Spacer, Switch, TabBar, TextArea, Textfield, Tip, Toast, ToggleButton, UploadArea, Video, VideoController.
+Current Slice inventory (45): AudioBubble, Avatar, AvatarGroup, Badge, Button, ButtonBar, Camera, CheckBox, Chip, DataTable, ContentEditable, Dot, DraggablePanel, DropDown, ErrorSummary, FileIcon, FileList, FlexDiv, Grouper, Icon, IconButton, Label, Level, DialogBox, ModalController, Overlay, Pager, Progress (ProgressIndicator, DoneCheck), PromptInput, RadioButton, RadioButtonList, Slider, Spacer, Switch, TabBar, TextArea, Textfield, Tip, Toast, ToggleButton, UploadArea, Video, VideoController.
 
-Already covered, functionally equivalent to an M3 component (naming differs — no action needed unless you want to formalize the mapping): Tooltip ≈ `Tip`, Menu ≈ `DropDown`, Snackbar ≈ `Toast`, Dialog ≈ `Modal`/`Overlay`.
+Already covered, functionally equivalent to an M3 component (naming differs — no action needed unless you want to formalize the mapping): Tooltip ≈ `Tip`, Menu ≈ `DropDown`, Snackbar ≈ `Toast`, Dialog ≈ `DialogBox`/`Overlay`.
 
 ### Composite / data components (explicitly requested)
 
@@ -74,7 +74,7 @@ Already covered, functionally equivalent to an M3 component (naming differs — 
 **Beyond axe:** automated checks miss keyboard and screen-reader behavior, so a manual pass is still worth doing on these (risk areas based on implementation patterns, not confirmed violations):
 
 - `ContentEditable` — contenteditable-based text input with custom clipboard/paste handling; these often miss proper `role`/`aria-*` wiring that a native `<input>` gets for free.
-- `DropDown`, `Modal`, `Overlay` — focus trap, focus return on close, and ARIA `role`/`aria-modal`/`aria-expanded` correctness are the usual failure points for these.
+- `DropDown`, `DialogBox`, `Overlay` — focus trap, focus return on close, and ARIA `role`/`aria-modal`/`aria-expanded` correctness are the usual failure points for these.
 - `Slider` — keyboard operability and `aria-valuenow`/`aria-valuemin`/`aria-valuemax` announcements.
 - `Switch`, `CheckBox`, `RadioButton` — confirm `role` + `aria-checked` state is exposed correctly for custom-styled controls.
 - `Camera` toolbar — the disabled Photo button is nearly invisible (25% opacity on a bar-colored circle); check the disabled state's contrast and whether the icon color should change with it.

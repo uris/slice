@@ -50,7 +50,7 @@ export const Demo: StoryObj<typeof Toast> = {
 				Click me!
 				<IconButton
 					actionName={'Go Home'}
-					icon={'home'}
+					icon={'basic.home'}
 					tooltip={'Go Home'}
 					onClick={() => handleToast('Thank you for clicking!')}
 					toggle={false}

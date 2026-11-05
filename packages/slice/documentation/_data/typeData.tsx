@@ -171,7 +171,7 @@ export function HeaderRenderer<T>(props: Readonly<HeaderRendererProps<T>>) {
 	const { column, sortKey, center = false } = props;
 	const sortable = !!column.sort;
 	const sorted = !!(sortKey?.key && sortKey.key === column.sort);
-	const sortIcon = sortKey?.dir === 'asc' ? 'arrow up' : 'arrow down';
+	const sortIcon = sortKey?.dir === 'asc' ? 'arrows.arrow-top' : 'arrows.arrow-bottom';
 	return (
 		<div
 			style={{
@@ -186,7 +186,7 @@ export function HeaderRenderer<T>(props: Readonly<HeaderRendererProps<T>>) {
 			<div style={{ ...typeStyles.h6, display: 'flex', justifyContent: center ? 'center' : 'flex-start', flex: 1 }}>
 				{column.title}
 			</div>
-			{sortable && <Icon name={sorted ? sortIcon : 'blank'} pointerEvents={'none'} size={16} />}
+			{sortable && <Icon name={sorted ? sortIcon : 'system.blank'} pointerEvents={'none'} size={16} />}
 		</div>
 	);
 }

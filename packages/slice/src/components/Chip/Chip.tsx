@@ -259,7 +259,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 										className={css.icon}
 										aria-hidden="true"
 									>
-										<Icon name="x" size={iconSize} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+										<Icon name="basic.cross" size={iconSize} strokeColor="currentColor" pointer={false} tabIndex={-1} />
 									</motion.span>
 								</button>
 							)}

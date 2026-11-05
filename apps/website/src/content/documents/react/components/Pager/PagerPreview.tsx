@@ -19,7 +19,7 @@ export function PagerPreview({
 		<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
 			<div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
 				<IconButton
-					icon="arrow left"
+					icon="arrows.arrow-left"
 					actionName="Previous page"
 					buttonSize="s"
 					iconSize={16}
@@ -37,7 +37,7 @@ export function PagerPreview({
 					transition={transition}
 				/>
 				<IconButton
-					icon="arrow right"
+					icon="arrows.arrow-right"
 					actionName="Next page"
 					buttonSize="s"
 					iconSize={16}

@@ -80,7 +80,7 @@ export function VideoController(rawProps: Readonly<VideoControllerProps>) {
 
 	return (
 		<>
-			<Overlay show={!!video} type={'dark'} opacity={overlayOpacity} color={overlayColor} onClick={handleHide} />
+			<Overlay show={!!video} opacity={overlayOpacity} backgroundColor={overlayColor} onClick={handleHide} />
 			<AnimatePresence initial={false}>
 				{video && VideoComponent && (
 					<div className={css.container} ref={ref} style={cssVars}>
@@ -115,7 +115,7 @@ export function VideoController(rawProps: Readonly<VideoControllerProps>) {
 								{quit === 'outside' && (
 									<IconButton
 										actionName="Close video"
-										icon={'x'}
+										icon={'basic.cross'}
 										buttonSize={'l'}
 										onClick={handleHide}
 										backgroundColor={'rgba(255,255,255,0.05)'}

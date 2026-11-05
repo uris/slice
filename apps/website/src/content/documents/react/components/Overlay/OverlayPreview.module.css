@@ -1,0 +1,14 @@
+.menu {
+	position: absolute;
+	top: var(--spacing-l);
+	left: var(--spacing-l);
+	display: flex;
+	flex-direction: column;
+	width: 220px;
+	max-width: calc(100% - var(--spacing-l) - var(--spacing-l));
+	padding: var(--spacing-s);
+	border: 1px solid var(--core-outline-primary);
+	border-radius: var(--corner-m);
+	background-color: var(--core-surface-secondary);
+	box-shadow: var(--surface-shadow-soft);
+}

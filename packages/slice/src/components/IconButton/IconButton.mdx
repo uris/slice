@@ -16,7 +16,7 @@ Compact icon actions with optional toggling, activity dots, and counts.
 ```
 import { IconButton } from '@apple-pie/slice';
 
-<IconButton icon="more" actionName="More options" onClick={myHandler} />
+<IconButton icon="basic.more-horiz" actionName="More options" onClick={myHandler} />
 ```
 </RenderSource>
 <Unstyled>
@@ -30,7 +30,7 @@ The icon animates between them when toggled. This example uses rotation.
 <RenderSource>
 ```
 <IconButton
-  icon="sun"
+  icon="weather.sun"
   actionName="Highlight"
   toggle
   motionValues={{ unselected: { rotate: 0 }, selected: { rotate: 135 } }}

@@ -68,7 +68,7 @@ const meta: Meta<typeof Chip> = {
 		backgroundColor: 'transparent',
 		borderColor: 'var(--core-text-primary)',
 		borderColorDisabled: 'var(--core-text-disabled)',
-		icon: 'wand',
+		icon: 'ai.wand',
 		disabled: false,
 		tooltip: 'Chip tooltip',
 		onClick: fn(),
@@ -118,9 +118,9 @@ export const LayoutVariants: StoryObj<typeof Chip> = {
 	tags: ['tests'],
 	render: () => (
 		<FlexDiv direction={'column'} gap={12}>
-			<Chip label="Right Icon" icon="wand" iconPosition="right" />
+			<Chip label="Right Icon" icon="ai.wand" iconPosition="right" />
 			<Chip className="no-icon-no-label" />
-			<Chip icon="wand">Children Label</Chip>
+			<Chip icon="ai.wand">Children Label</Chip>
 			<Chip className="custom-border" label="Border" borderWidth={3} />
 		</FlexDiv>
 	),
@@ -284,7 +284,7 @@ export const RemovalSemantics: StoryObj<typeof Chip> = {
 		const canvas = within(canvasElement);
 		const action = canvas.getByRole('button', { name: 'Chip Label' });
 		const remove = canvas.getByRole('button', { name: 'Remove Chip Label' });
-		await expect(remove.querySelector('svg')).toHaveAttribute('aria-label', 'x icon');
+		await expect(remove.querySelector('svg')).toHaveAttribute('aria-label', 'basic.cross icon');
 		await expect(remove.closest('button')?.parentElement?.closest('button')).toBeNull();
 		await userEvent.click(remove);
 		await waitFor(() => expect(args.onRemove).toHaveBeenCalledTimes(1));
@@ -428,7 +428,7 @@ export const OpticalCompactIcon: StoryObj<typeof Chip> = {
 };
 export const OpticalIconOnly: StoryObj<typeof Chip> = {
 	tags: ['tests'],
-	args: { label: undefined, icon: 'home', 'aria-label': 'Home' },
+	args: { label: undefined, icon: 'basic.home', 'aria-label': 'Home' },
 	render: Default.render,
 	play: async ({ canvasElement }) => {
 		await expect(within(canvasElement).getByRole('button', { name: 'Home' })).toHaveStyle({

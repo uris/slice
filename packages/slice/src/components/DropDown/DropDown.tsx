@@ -303,7 +303,7 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 					</span>
 				</span>
 				<span className={css.chevron} aria-hidden="true">
-					<Icon name="chevron down" size={iconSize} strokeColor={disabled ? textColorDisabled : iconColor} />
+					<Icon name="arrows.chevron-down" size={iconSize} strokeColor={disabled ? textColorDisabled : iconColor} />
 				</span>
 				<select
 					{...withoutAria(inputAttributes)}

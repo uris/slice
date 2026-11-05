@@ -1,21 +1,24 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SliceIcon } from '../Icon/_types';
 import type { ToolTip } from '../sharedTypes';
 
-export type ModalAction<T = string> = {
+export type DialogBoxAction<T = string> = {
 	id: string;
 	label?: string;
 	value?: T;
 	primary?: boolean;
-	iconLeft?: string;
+	iconLeft?: SliceIcon;
 	tooltip?: string;
-	iconRight?: string;
+	iconRight?: SliceIcon;
 	round?: boolean;
 	position?: 'left' | 'right';
-	promise?: 'resolve' | 'reject';
+	promise?: 'resolve' | 'reject' | 'none';
+	disabled?: boolean;
+	working?: boolean;
 };
 
-type ModalBaseProps<T = string> = {
+type DialogBoxBaseProps<T = string> = {
 	children?: React.ReactNode;
 	minHeight?: number | string;
 	minWidth?: number | string;
@@ -27,15 +30,17 @@ type ModalBaseProps<T = string> = {
 	backgroundColor?: ColorValue;
 	padding?: number | string;
 	title?: string;
-	titleColor?: ColorValue;
+	dialogName?: string;
+	titleTextColor?: ColorValue;
 	titleBorderColor?: ColorValue;
 	titleBorderWidth?: number;
-	titleIcon?: string;
+	titleIcon?: SliceIcon;
 	titleIconFill?: boolean;
 	titleTextSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	contentTextSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	close?: boolean;
-	actions?: ModalAction<T>[];
+	actions?: DialogBoxAction<T>[];
+	actionsBackgroundColor?: ColorValue;
 	actionsBorderColor?: ColorValue;
 	actionsBorderWidth?: number;
 	autoBorderBottom?: boolean;
@@ -45,9 +50,19 @@ type ModalBaseProps<T = string> = {
 	onResolve?: (value?: T) => void;
 	onReject?: (value?: Error) => void;
 	onClose?: () => void;
-	onDragPointerDown?: (e: React.PointerEvent<any>) => void;
+	onDragPointerDown?: React.PointerEventHandler<HTMLDivElement>;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
-export type ModalProps<T = string> = Omit<React.HTMLAttributes<HTMLElement>, keyof ModalBaseProps<T>> &
-	ModalBaseProps<T>;
+export type DialogBoxProps<T = string> = Omit<
+	React.HTMLAttributes<HTMLDivElement>,
+	keyof DialogBoxBaseProps<T> | keyof React.AriaAttributes | 'role' | 'dangerouslySetInnerHTML'
+> &
+	DialogBoxBaseProps<T>;
+
+export type DialogBoxSectionProps = { children?: React.ReactNode };
+export type DialogBoxControls<T = string> = {
+	close: () => void;
+	resolve: (value?: T) => void;
+	reject: (error?: Error) => void;
+};

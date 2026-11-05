@@ -22,8 +22,8 @@ export function App() {
 					</Button>
 					<Button variant={'solid'} link={'https://react-native.slice-uikit.com'} target={'_blank'} paddingLeft={16}>
 						<FlexDiv direction={'row'} align={'center'} justify={'center'} gap={4}>
-							<Icon name={'apple'} />
-							<Icon name={'android'} />
+							<Icon name={'brands.apple'} />
+							<Icon name={'brands.android'} />
 							<span style={{ marginLeft: 4 }}>Native Apps</span>
 						</FlexDiv>
 					</Button>

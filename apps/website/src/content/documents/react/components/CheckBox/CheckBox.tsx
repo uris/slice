@@ -112,8 +112,8 @@ export function CheckBoxDoc() {
 			<P>Space between the icon and text in pixels.</P>
 			<Definition id={'iconChecked'}>
 				<Prop>iconChecked</Prop>
-				<TypeDef>{'string'}</TypeDef>
-				<DefaultVal>{'checkbox checked'}</DefaultVal>
+				<TypeDef>{'SliceIcon'}</TypeDef>
+				<DefaultVal>{'system.checkbox-checked'}</DefaultVal>
 			</Definition>
 			<P>Slice icon name for the checked state.</P>
 			<Definition id={'iconColor'}>
@@ -137,8 +137,8 @@ export function CheckBoxDoc() {
 			</P>
 			<Definition id={'iconPartial'}>
 				<Prop>iconPartial</Prop>
-				<TypeDef>{'string'}</TypeDef>
-				<DefaultVal>{'checkbox partial'}</DefaultVal>
+				<TypeDef>{'SliceIcon'}</TypeDef>
+				<DefaultVal>{'system.checkbox-partial'}</DefaultVal>
 			</Definition>
 			<P>Slice icon name for the mixed state.</P>
 			<Definition id={'iconSize'}>
@@ -149,8 +149,8 @@ export function CheckBoxDoc() {
 			<P>Icon width and height in pixels. Text size is independent.</P>
 			<Definition id={'iconUnChecked'}>
 				<Prop>iconUnChecked</Prop>
-				<TypeDef>{'string'}</TypeDef>
-				<DefaultVal>{'checkbox'}</DefaultVal>
+				<TypeDef>{'SliceIcon'}</TypeDef>
+				<DefaultVal>{'system.checkbox'}</DefaultVal>
 			</Definition>
 			<P>Slice icon name for the unchecked state.</P>
 			<Definition id={'label'}>

@@ -1,6 +1,7 @@
 import type { Transition } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SliceIcon } from '../Icon/_types';
 import type { ToolTip } from '../sharedTypes';
 
 type ChipBaseProps = {
@@ -9,7 +10,7 @@ type ChipBaseProps = {
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	textColor?: ColorValue;
 	textColorHover?: ColorValue;
-	icon?: string;
+	icon?: SliceIcon;
 	iconSize?: number;
 	iconPosition?: 'left' | 'right';
 	iconColor?: ColorValue;

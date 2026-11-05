@@ -6,7 +6,7 @@ export function ToggleButtonPreview({
 }: Readonly<{ variant?: 'default' | 'animated' | 'text' | 'disabled' | 'outside' }>) {
 	return (
 		<ToggleButton
-			icon={variant === 'text' ? undefined : 'sun'}
+			icon={variant === 'text' ? undefined : 'weather.sun'}
 			label={variant === 'text' ? 'Follow' : 'Highlight'}
 			disabled={variant === 'disabled'}
 			labelOutside={variant === 'outside'}

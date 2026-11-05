@@ -1,12 +1,12 @@
 export const usageCode = `
-import { Button, Modal, ModalController } from '@apple-pie/slice';
+import { Button, DialogBox, ModalController } from '@apple-pie/slice';
 import { modalActions, type ModalComponentProps } from '@apple-pie/slice/stores/modal';
 
 function Confirmation(props: ModalComponentProps) {
-  return <Modal {...props} title="Archive project?" actions={[
+  return <DialogBox {...props} title="Archive project?" actions={[
     { id: 'cancel', label: 'Cancel', promise: 'reject' },
     { id: 'archive', label: 'Archive', value: 'archive', primary: true },
-  ]}>You can restore this project later.</Modal>;
+  ]}>You can restore this project later.</DialogBox>;
 }
 
 function App() {

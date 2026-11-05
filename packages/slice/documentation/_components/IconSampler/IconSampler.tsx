@@ -2,14 +2,17 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Icon, IconButton, SliceIcons, Slider, TextField } from '../../../src';
 import css from './IconSampler.module.css';
+
 interface IconSamplerProps {
 	size?: number;
+	stroke?: number;
 	fill?: boolean;
 }
 
 export function IconSampler(props: Readonly<IconSamplerProps>) {
-	const { size = 100, fill = false } = props;
+	const { size = 100, fill = false, stroke = 1.25 } = props;
 	const [iconSize, setIconSize] = useState<number>(size);
+	const [strokeWidth, setStrokeWidth] = useState<number>(stroke);
 	const [showFill, setShowFill] = useState<boolean>(fill);
 	const [sizeKey, setSizeKey] = useState<string>(crypto.randomUUID());
 
@@ -17,6 +20,12 @@ export function IconSampler(props: Readonly<IconSamplerProps>) {
 		const newValue = Math.round(size === '' ? 64 : Number(size));
 		if (size === '') setSizeKey(crypto.randomUUID());
 		setIconSize(newValue);
+	}, []);
+
+	const handleIconStrokeWidth = useCallback((width: number | string) => {
+		const newValue = width === '' ? 1.25 : Number(width);
+		if (width === '') setSizeKey(crypto.randomUUID());
+		setStrokeWidth(newValue);
 	}, []);
 
 	const cssVars = useMemo(() => {
@@ -51,11 +60,21 @@ export function IconSampler(props: Readonly<IconSamplerProps>) {
 				/>
 				<IconButton
 					actionName="Show filled icons"
-					icon={'moon full'}
+					icon={'weather.moon'}
 					iconFill={showFill}
 					toggle
 					selected={showFill}
 					onClick={() => setShowFill(!showFill)}
+				/>
+				<TextField
+					inputName="Icon Stroke"
+					defaultValue={'1.25'}
+					onBlur={(v) => handleIconStrokeWidth(v)}
+					placeholder={'1.25'}
+					clearButton={null}
+					key={`${strokeWidth}:${sizeKey}`}
+					width={75}
+					textAlign={'center'}
 				/>
 			</div>
 			{categories
@@ -75,7 +94,7 @@ export function IconSampler(props: Readonly<IconSamplerProps>) {
 										return (
 											<div className={`${css.wrapper} slice_icon`} key={`slice_icon_${icon}`}>
 												<div className={css.icon}>
-													<Icon name={icon} size={iconSize} fill={showFill} />
+													<Icon name={icon} stroke={strokeWidth} size={iconSize} fill={showFill} />
 												</div>
 												<div className={css.label}>{icon}</div>
 											</div>

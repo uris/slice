@@ -417,7 +417,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 						>
 							<Icon
 								aria-hidden="true"
-								name="x"
+								name="basic.cross"
 								size={clearButton.size ?? 20}
 								strokeColor={theme.current.colors['core-icon-secondary']}
 							/>
@@ -443,7 +443,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 						<div className={css.showPassword}>
 							<IconButton
 								actionName={show ? 'Hide password' : 'Show password'}
-								icon="view"
+								icon="system.view"
 								toggleIcon
 								toggle
 								selected={show}

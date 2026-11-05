@@ -164,7 +164,7 @@ export function ChipDoc() {
 			<P>Space between the icon and text in pixels.</P>
 			<Definition id={'icon'}>
 				<Prop>icon</Prop>
-				<TypeDef>{'string'}</TypeDef>
+				<TypeDef>{'SliceIcon'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>Slice icon name. Omit for text only.</P>

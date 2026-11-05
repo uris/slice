@@ -137,6 +137,7 @@ update those settings to match; editing workflow YAML does not update them autom
 
 - Component style props must follow the naming standard in [contributor-docs/style-prop-naming.md](./docs/style-prop-naming.md) (e.g. `backgroundColor`/`backgroundColorHover`, not `bgColor`/`bgColorHover`). New components must use only the standard names; existing components get renamed to match only as part of an intentional breaking change.
 - Component padding and insets must follow the spacing standard in [contributor-docs/spacing.md](./docs/spacing.md): use the `--spacing-*` tokens, express icon-side reductions with token-based `calc()`, and apply explicit padding overrides exactly (including zero).
+- For parent-only sections versus independently usable controls, follow the [component composition convention](./docs/component-composition.md). Use `Parent.Section` for sections that only make sense within their parent.
 - Keep public exports intentional. New files are not automatically public unless they are wired into the relevant entrypoints and `package.json` `exports`.
 - Put Storybook examples in `*.stories.ts(x)` or `documentation/**`.
 - Do not import story files into production source. That can leak story typings into `dist/types`.

@@ -2,28 +2,28 @@ import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
-import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { ModalPreview } from './ModalPreview';
-import { actionCode, scrollingCode, usageCode } from './code';
-export function ModalDoc() {
+import { DialogBoxPreview } from './DialogBoxPreview';
+import { actionCode, scrollingCode, sharedActionsCode, shorthandCode, usageCode } from './code';
+export function DialogBoxDoc() {
 	return (
 		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
-			<H1 id="title">Modal component</H1>
+			<H1 id="title">DialogBox component</H1>
 			<P clipWidth>{'Bring a decision, its context, and the next action into one compact panel.'}</P>
+			{/* Published Storybook still uses Modal; update the URL after the DialogBox story is deployed. */}
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modal--default"
 				components={[
-					{ label: 'Confirm an action', component: <ModalPreview /> },
-					{ label: 'Scrolling content', component: <ModalPreview scroll /> },
+					{ label: 'Confirm an action', component: <DialogBoxPreview /> },
+					{ label: 'Scrolling content', component: <DialogBoxPreview scroll /> },
 				]}
 			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Render the panel when your app needs it, then close it from the action callbacks. '}
-				<Code>{'Modal<T>'}</Code>
+				<Code>{'DialogBox<T>'}</Code>
 				{' shares the action value type with its callbacks; '}
 				<Code>{'T'}</Code>
 				{' defaults to '}
@@ -35,7 +35,20 @@ export function ModalDoc() {
 				<Code openURL="/docs/react/modal-controller/">ModalController</Code>
 				{'.'}
 			</P>
-			<CodeBlock filename="ModalExample.tsx" language="tsx" code={usageCode.trim()} />
+			<CodeBlock filename="DialogBoxExample.tsx" language="tsx" code={usageCode.trim()} />
+			<H3>Use props instead</H3>
+			<P>
+				For a concise alternative, provide <Code>title</Code> and <Code>actions</Code> and use ordinary children for the
+				body.
+			</P>
+			<CodeBlock filename="DialogBoxPropsExample.tsx" language="tsx" code={shorthandCode.trim()} />
+			<H3>Share dialog actions</H3>
+			<P>
+				Call <Code>useDialogBox&lt;T&gt;()</Code> from a component rendered inside the dialog. Match <Code>T</Code> to
+				the parent’s value type; it defaults to <Code>string</Code>. The controls call the parent’s callbacks and work
+				with standalone state or <Code>ModalController</Code>.
+			</P>
+			<CodeBlock filename="ArchiveActions.tsx" language="tsx" code={sharedActionsCode.trim()} />
 			<H3>Make room for longer content</H3>
 			<P>
 				{'Set '}
@@ -45,7 +58,7 @@ export function ModalDoc() {
 			<CodeBlock filename="scrollingCode.tsx" language="tsx" code={scrollingCode.trim()} />
 			<H2 id="behavior">Behavior</H2>
 			<P>
-				{'Actions call '}
+				{'The actions array calls '}
 				<Code>{'onAction'}</Code>
 				{' first. An action without '}
 				<Code>{'promise'}</Code>
@@ -58,40 +71,74 @@ export function ModalDoc() {
 				{' with an Error whose cause is the action value.'}
 			</P>
 			<P>
-				{'The close control calls '}
-				<Code>{'onReject'}</Code>
-				{' followed by '}
-				<Code>{'onClose'}</Code>
-				{'. The panel does not hide itself; your state or a controller removes it.'}
+				The close control calls <Code>onClose</Code>. Your state or a controller removes the panel. Set an action’s{' '}
+				<Code>promise="none"</Code> when it should call only <Code>onAction</Code>.
 			</P>
 			<P>
-				{'When content is detected as scrolling, '}
-				<Code>{'autoBorderBottom'}</Code>
-				{' can add a divider above the actions. Scroll detection currently runs when content or '}
-				<Code>{'maxHeight'}</Code>
-				{' changes, rather than observing every resize.'}
+				The content area responds to content and container size changes. <Code>autoBorderBottom</Code> adds a footer
+				divider while the body scrolls.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
-				{
-					'This is a panel rather than a complete accessible dialog workflow. It does not supply dialog naming, focus containment, initial focus, Escape dismissal, or focus restoration. Provide that behavior in the surrounding application.'
-				}
+				<Code>DialogBox</Code> supplies <Code>role="dialog"</Code> and associates its visible heading with the panel.
+				Use <Code>dialogName</Code> for a more specific accessible name or when there is no title; the fallback is{' '}
+				<Code>Dialog</Code>. Title icons are decorative.
 			</P>
 			<P>
-				{
-					'Actions and the close affordance use buttons. Give every action a meaningful label, especially icon-only actions. The title and decorative icons still need semantic review.'
-				}
+				<Code openURL="/docs/react/modal-controller/">ModalController</Code> makes the panel modal: it moves focus
+				inside, contains keyboard focus, handles Escape, blocks background interaction, locks scrolling, and restores
+				focus after closing. When presenting the panel yourself, your host owns those behaviors. Only a modal host
+				supplies <Code>aria-modal</Code>.
 			</P>
 			<P>
-				{
-					'The panel has no built-in Motion transition; animation and reduced-motion behavior belong to its presenting layer.'
-				}
+				Give actions meaningful labels, or use the action’s tooltip as its accessible name when displaying only an icon.
+				The panel has no built-in animation; transitions and reduced-motion handling belong to its presenting layer.
+			</P>
+
+			<H2 id="sections">Sections</H2>
+			<P>
+				Each section is optional and may appear once. Fragments, arrays, and conditional children are supported; the
+				parent always places sections in header, body, and footer order. Inside a section, use ordinary React content.
+			</P>
+			<P>
+				When any section is present, all direct content must use these sections. Duplicate sections, unsupported direct
+				children, and competing <Code>title</Code>/<Code>DialogBox.Title</Code> or <Code>actions</Code>/
+				<Code>DialogBox.Actions</Code> definitions throw clear errors. Sections cannot render outside their direct
+				parent or through a custom wrapper.
+			</P>
+			<Definition id="section-actions">
+				<Prop>DialogBox.Actions</Prop>
+				<TypeDef>DialogBoxSectionProps</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Accepts <Code>children?: React.ReactNode</Code>. Places controls in the footer with the panel’s padding,
+				wrapping, and divider treatment. Controls align right and retain their own handlers; labels and positions never
+				imply an action.
+			</P>
+			<Definition id="section-content">
+				<Prop>DialogBox.Content</Prop>
+				<TypeDef>DialogBoxSectionProps</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Accepts <Code>children?: React.ReactNode</Code>. Places content in the scrolling body while the title and
+				actions stay in place. Body text defaults to <Code>core-text-primary</Code>.
+			</P>
+			<Definition id="section-title">
+				<Prop>DialogBox.Title</Prop>
+				<TypeDef>DialogBoxSectionProps</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Accepts <Code>children?: React.ReactNode</Code>. Places text or inline content in the panel’s heading and
+				supplies its naming association. Use <Code>dialogName</Code> to override the accessible name.
 			</P>
 			<H2 id="props">Props</H2>
 			<P>{'All component props are optional. Color props accept Slice tokens or CSS colors.'}</P>
 			<Definition id="actions">
 				<Prop>actions</Prop>
-				<TypeDef>{'ModalAction<T>[]'}</TypeDef>
+				<TypeDef>{'DialogBoxAction<T>[]'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
@@ -101,9 +148,19 @@ export function ModalDoc() {
 				<Code>{'primary'}</Code>
 				{' selects the solid button treatment. '}
 				<Code>{'promise'}</Code>
-				{' chooses the resolve or reject path.'}
+				{' chooses the resolve, reject, or action-only path. Disabled and working actions do not run callbacks.'}
 			</P>
-			<CodeBlock filename="ModalAction.ts" language="typescript" code={actionCode.trim()} />
+			<CodeBlock filename="DialogBoxAction.ts" language="typescript" code={actionCode.trim()} />
+			<Definition id="actionsBackgroundColor">
+				<Prop>actionsBackgroundColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>backgroundColor mixed with 6% black</DefaultVal>
+			</Definition>
+			<P>
+				Footer background for composed controls and the actions array. Accepts Slice tokens or CSS colors. By default,
+				it follows <Code>backgroundColor</Code> with a subtle darker tint. Set <Code>transparent</Code> for no footer
+				fill.
+			</P>
 			<Definition id="actionsBorderColor">
 				<Prop>actionsBorderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
@@ -121,7 +178,7 @@ export function ModalDoc() {
 				<TypeDef>{'boolean'}</TypeDef>
 				<DefaultVal>{'true'}</DefaultVal>
 			</Definition>
-			<P>{'Enables automatic footer separation and extra content-bottom space when scrolling is detected.'}</P>
+			<P>{'Adds a footer divider when scrolling is detected and the explicit divider width is zero.'}</P>
 			<Definition id="backgroundColor">
 				<Prop>backgroundColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
@@ -151,7 +208,7 @@ export function ModalDoc() {
 				<TypeDef>{'React.ReactNode'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>{'Content rendered in the scrollable body.'}</P>
+			<P>{'Structural sections, or ordinary body content when using the props alternative.'}</P>
 			<Definition id="close">
 				<Prop>close</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -164,6 +221,15 @@ export function ModalDoc() {
 				<DefaultVal>{'m'}</DefaultVal>
 			</Definition>
 			<P>{'Typography size for body content.'}</P>
+			<Definition id="dialogName">
+				<Prop>dialogName</Prop>
+				<TypeDef>string</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Accessible name for the dialog. Overrides the visible title’s naming association; without either, the name is{' '}
+				<Code>Dialog</Code>.
+			</P>
 			<Definition id="maxHeight">
 				<Prop>maxHeight</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
@@ -194,11 +260,8 @@ export function ModalDoc() {
 				<DefaultVal>{'16px 24px'}</DefaultVal>
 			</Definition>
 			<P>
-				{
-					'Header/footer padding and body side insets. Body top padding is zero; bottom padding is calculated from scrolling and '
-				}
-				<Code>{'autoBorderBottom'}</Code>
-				{'.'}
+				Padding shared by the header, body, and footer. Numbers become pixels; CSS shorthand and expressions are
+				preserved.
 			</P>
 			<Definition id="scrollHandleColor">
 				<Prop>scrollHandleColor</Prop>
@@ -234,15 +297,9 @@ export function ModalDoc() {
 				<DefaultVal>{'0'}</DefaultVal>
 			</Definition>
 			<P>{'Title divider width in pixels.'}</P>
-			<Definition id="titleColor">
-				<Prop>titleColor</Prop>
-				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-special'}</DefaultVal>
-			</Definition>
-			<P>{'Title text color.'}</P>
 			<Definition id="titleIcon">
 				<Prop>titleIcon</Prop>
-				<TypeDef>{'string'}</TypeDef>
+				<TypeDef>{'SliceIcon'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>{'Icon before the title.'}</P>
@@ -252,6 +309,12 @@ export function ModalDoc() {
 				<DefaultVal>{'true'}</DefaultVal>
 			</Definition>
 			<P>{'Requests the filled title icon treatment.'}</P>
+			<Definition id="titleTextColor">
+				<Prop>titleTextColor</Prop>
+				<TypeDef>{'ColorValue'}</TypeDef>
+				<DefaultVal>{'core-text-special'}</DefaultVal>
+			</Definition>
+			<P>{'Title text color.'}</P>
 			<Definition id="titleTextSize">
 				<Prop>titleTextSize</Prop>
 				<TypeDef>{"'xs' | 's' | 'm' | 'l' | 'xl'"}</TypeDef>
@@ -260,7 +323,7 @@ export function ModalDoc() {
 			<P>{'Title-area typography size.'}</P>
 			<Definition id="divAttributes">
 				<Prop>...divAttributes</Prop>
-				<TypeDef>{'React.HTMLAttributes<HTMLElement>'}</TypeDef>
+				<TypeDef>{'React.HTMLAttributes<HTMLDivElement>'}</TypeDef>
 				<DefaultVal>undefined</DefaultVal>
 			</Definition>
 			<P>
@@ -268,28 +331,32 @@ export function ModalDoc() {
 				<Code>{'className'}</Code>
 				{' is appended and '}
 				<Code>{'style'}</Code>
-				{' is merged. The current public type uses '}
-				<Code>{'HTMLElement'}</Code>
-				{'; dialog semantics are not supplied automatically.'}
+				{' is merged. Roles and raw ARIA attributes are excluded; use '}
+				<Code>dialogName</Code>
+				{' for naming.'}
 			</P>
 			<H2 id="events">Events</H2>
 			<Definition id="onAction">
 				<Method>onAction</Method>
 				<TypeDef>{'(value?: T) => void'}</TypeDef>
 			</Definition>
-			<P>{'Runs for an action before its resolve or reject callback.'}</P>
+			<P>
+				{
+					'Runs for an actions-array entry before its resolve or reject callback. Custom buttons and shared controls do not call it automatically.'
+				}
+			</P>
 			<Definition id="onClose">
 				<Method>onClose</Method>
 				<TypeDef>{'() => void'}</TypeDef>
 			</Definition>
 			<P>
-				{'Runs after '}
-				<Code>{'onReject'}</Code>
-				{' when the close button is activated.'}
+				{'Runs when the close button is activated. Rejection uses '}
+				<Code>onReject</Code>
+				{' separately.'}
 			</P>
 			<Definition id="onDragPointerDown">
 				<Method>onDragPointerDown</Method>
-				<TypeDef>{'(event: React.PointerEvent<any>) => void'}</TypeDef>
+				<TypeDef>{'(event: React.PointerEvent<HTMLDivElement>) => void'}</TypeDef>
 			</Definition>
 			<P>
 				{'Receives pointer-down from the title and footer drag surfaces. A controller can use it to start dragging.'}
@@ -299,7 +366,7 @@ export function ModalDoc() {
 				<TypeDef>{'(value?: Error) => void'}</TypeDef>
 			</Definition>
 			<P>
-				{'Runs for a reject action or the close button. Action errors carry the action value in '}
+				{'Runs for a reject action. Action errors carry the action value in '}
 				<Code>{'cause'}</Code>
 				{'.'}
 			</P>
@@ -326,19 +393,58 @@ export function ModalDoc() {
 					'Other native handlers apply to the outer panel. The drag callback above is intentional and uses the title/footer surfaces.'
 				}
 			</P>
+			<H2 id="use-dialog-box">Shared actions</H2>
+			<P>
+				<Code>useDialogBox&lt;T = string&gt;()</Code> takes no parameters and returns stable controls while the parent’s
+				callbacks remain unchanged. It must run in a descendant of <Code>DialogBox</Code>; calling it outside a dialog
+				throws an error. These controls request callbacks; they do not remove a standalone panel themselves.
+			</P>
+			<Definition id="control-close">
+				<Method>close</Method>
+				<TypeDef>() =&gt; void</TypeDef>
+			</Definition>
+			<P>
+				Calls the parent’s <Code>onClose</Code>. A modal host dismisses through its close callback.
+			</P>
+			<Definition id="control-reject">
+				<Method>reject</Method>
+				<TypeDef>(error?: Error) =&gt; void</TypeDef>
+			</Definition>
+			<P>
+				Calls <Code>onReject</Code> with the supplied error. A modal host rejects the pending response and dismisses the
+				panel.
+			</P>
+			<Definition id="control-resolve">
+				<Method>resolve</Method>
+				<TypeDef>(value?: T) =&gt; void</TypeDef>
+			</Definition>
+			<P>
+				Calls <Code>onResolve</Code> with the supplied value. A modal host resolves the pending response and dismisses
+				the panel.
+			</P>
 		</FlexDiv>
 	);
 }
 export const trackedItems: TrackedItem[] = [
-	{ id: 'title', title: 'Modal component' },
+	{ id: 'title', title: 'DialogBox component' },
 	{ id: 'usage', title: 'Usage' },
 	{ id: 'behavior', title: 'Behavior' },
 	{ id: 'accessibility', title: 'Accessibility' },
+	{
+		id: 'sections',
+		title: 'Sections',
+		items: [
+			{ id: 'section-actions', title: 'DialogBox.Actions', code: true },
+			{ id: 'section-content', title: 'DialogBox.Content', code: true },
+			{ id: 'section-title', title: 'DialogBox.Title', code: true },
+		],
+	},
 	{
 		id: 'props',
 		title: 'Props',
 		items: [
 			{ id: 'actions', title: 'actions', code: true },
+			{ id: 'actionsBackgroundColor', title: 'actionsBackgroundColor', code: true },
 			{ id: 'actionsBorderColor', title: 'actionsBorderColor', code: true },
 			{ id: 'actionsBorderWidth', title: 'actionsBorderWidth', code: true },
 			{ id: 'autoBorderBottom', title: 'autoBorderBottom', code: true },
@@ -349,6 +455,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'close', title: 'close', code: true },
 			{ id: 'contentTextSize', title: 'contentTextSize', code: true },
+			{ id: 'dialogName', title: 'dialogName', code: true },
 			{ id: 'maxHeight', title: 'maxHeight', code: true },
 			{ id: 'maxWidth', title: 'maxWidth', code: true },
 			{ id: 'minHeight', title: 'minHeight', code: true },
@@ -359,9 +466,9 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'prop-title', title: 'title', code: true },
 			{ id: 'titleBorderColor', title: 'titleBorderColor', code: true },
 			{ id: 'titleBorderWidth', title: 'titleBorderWidth', code: true },
-			{ id: 'titleColor', title: 'titleColor', code: true },
 			{ id: 'titleIcon', title: 'titleIcon', code: true },
 			{ id: 'titleIconFill', title: 'titleIconFill', code: true },
+			{ id: 'titleTextColor', title: 'titleTextColor', code: true },
 			{ id: 'titleTextSize', title: 'titleTextSize', code: true },
 			{ id: 'divAttributes', title: '...divAttributes', code: true },
 		],
@@ -379,5 +486,14 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'nativeEvents', title: '...divEvents', code: true },
 		],
 	},
+	{
+		id: 'use-dialog-box',
+		title: 'Shared actions',
+		items: [
+			{ id: 'control-close', title: 'close', code: true },
+			{ id: 'control-reject', title: 'reject', code: true },
+			{ id: 'control-resolve', title: 'resolve', code: true },
+		],
+	},
 ];
-export default ModalDoc;
+export default DialogBoxDoc;

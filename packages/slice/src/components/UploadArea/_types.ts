@@ -1,6 +1,7 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { FileItem } from '../FileList';
+import type { SliceIcon } from '../Icon/_types';
 
 export const imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'heic', 'heif'];
 export const videoTypes = ['mp4', 'avi', 'mov', 'wmv', 'flv'];
@@ -20,7 +21,7 @@ export enum FileTypes {
 }
 
 type UploadAreaBaseProps = {
-	icon?: string;
+	icon?: SliceIcon;
 	iconSize?: number;
 	iconColor?: ColorValue;
 	iconColorHover?: ColorValue;

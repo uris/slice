@@ -461,13 +461,13 @@ export function DefaultHeaderRenderer<T>(props: Readonly<DefaultHeaderRendererPr
 	const { col, sortKey } = props;
 	const sortable = !!col.sort;
 	const sorted = !!(sortKey?.key && sortKey.key === col.sort);
-	const sortIcon = sortKey?.dir === 'asc' ? 'arrow up' : 'arrow down';
+	const sortIcon = sortKey?.dir === 'asc' ? 'arrows.arrow-top' : 'arrows.arrow-bottom';
 	return (
 		<div className={styles.header}>
 			<div className={styles.headerLeft} />
 			<div className={styles.headerTitle}>{col.title}</div>
 			<div className={styles.headerRight}>
-				{sortable && <Icon name={sorted ? sortIcon : 'blank'} pointerEvents={'none'} size={16} />}
+				{sortable && <Icon name={sorted ? sortIcon : 'system.blank'} pointerEvents={'none'} size={16} />}
 			</div>
 		</div>
 	);

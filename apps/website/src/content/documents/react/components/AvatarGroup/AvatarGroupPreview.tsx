@@ -1,6 +1,6 @@
 'use client';
 
-import { Avatar, AvatarGroup, type AvatarGroupMore, Modal } from '@apple-pie/slice';
+import { Avatar, AvatarGroup, type AvatarGroupMore, DialogBox } from '@apple-pie/slice';
 import { useRef, useState } from 'react';
 import styles from './AvatarGroupPreview.module.css';
 import { overflowParticipants } from './data';
@@ -28,7 +28,7 @@ export function MoreAvatarsPreview() {
 				onMore={handleMore}
 			/>
 			<dialog ref={dialog} className={styles.dialog} aria-label="All collaborators">
-				<Modal
+				<DialogBox
 					title="All collaborators"
 					minWidth={0}
 					maxWidth={420}
@@ -54,7 +54,7 @@ export function MoreAvatarsPreview() {
 							))}
 						</ul>
 					)}
-				</Modal>
+				</DialogBox>
 			</dialog>
 		</>
 	);

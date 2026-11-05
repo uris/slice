@@ -346,9 +346,9 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 
 	// memo speaker icon
 	const speakerIcon = useMemo(() => {
-		if (isMuted || currentVolume === 0) return 'speaker muted';
-		if (currentVolume > 0 || !isMuted) return 'speaker';
-		return 'speaker';
+		if (isMuted || currentVolume === 0) return 'media.volume-slash';
+		if (currentVolume > 0 || !isMuted) return 'media.volume-high';
+		return 'media.volume-high';
 	}, [isMuted, currentVolume]);
 
 	// update playback rate based on props
@@ -401,7 +401,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 									<div className={css.left}>
 										<IconButton
 											actionName="Enter fullscreen"
-											icon={'fullscreen'}
+											icon={'arrows.maximize'}
 											iconFill={true}
 											buttonSize={'m'}
 											iconSize={18}
@@ -447,8 +447,8 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 									<ToggleButton
 										actionName="Play"
 										selected={isPlaying}
-										icon={'play'}
-										iconSelected={'pause'}
+										icon={'media.play'}
+										iconSelected={'media.pause'}
 										iconSize={48}
 										buttonSize={'xl'}
 										backgroundColor={'rgba(0,0,0,0.5)'}
@@ -467,8 +467,8 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 										<ToggleButton
 											actionName="Play"
 											selected={isPlaying}
-											icon={'play'}
-											iconSelected={'pause'}
+											icon={'media.play'}
+											iconSelected={'media.pause'}
 											buttonSize={'m'}
 											iconSize={28}
 											backgroundColor={'rgba(255,255,255,0.05)'}
@@ -495,7 +495,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 											<IconButton
 												actionName="Close video"
 												toggle={false}
-												icon={'x'}
+												icon={'basic.cross'}
 												buttonSize={'m'}
 												backgroundColor={'rgba(255,255,255,0.05)'}
 												backgroundColorHover={'rgba(0,0,0,0.7)'}

@@ -32,8 +32,8 @@ export function ButtonDoc() {
 						label: 'Primary buttons',
 						component: (
 							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-								<Button label="Primary" variant="solid" iconRight="arrow right" />
-								<Button label="Primary" variant="solid" iconRight="arrow right" working />
+								<Button label="Primary" variant="solid" iconRight="arrows.arrow-right" />
+								<Button label="Primary" variant="solid" iconRight="arrows.arrow-right" working />
 							</div>
 						),
 					},
@@ -206,13 +206,13 @@ export function ButtonDoc() {
 			<P>Fills icon shapes that support a filled appearance.</P>
 			<Definition id={'iconLeft'}>
 				<Prop>iconLeft</Prop>
-				<TypeDef>{'string'}</TypeDef>
+				<TypeDef>{'SliceIcon'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>Registered icon name displayed before the label.</P>
 			<Definition id={'iconRight'}>
 				<Prop>iconRight</Prop>
-				<TypeDef>{'string'}</TypeDef>
+				<TypeDef>{'SliceIcon'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>Registered icon name displayed after the label.</P>

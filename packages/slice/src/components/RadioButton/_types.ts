@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SliceIcon } from '../Icon/_types';
 
 export type RadioButtonOption<T = string> = { fieldName?: string; label?: string; value?: T };
 
@@ -14,8 +15,8 @@ type RadioButtonBaseProps<T = string> = {
 	fieldName?: string;
 	value?: T;
 	formValue?: string | number;
-	iconChecked?: string;
-	iconUnChecked?: string;
+	iconChecked?: SliceIcon;
+	iconUnChecked?: SliceIcon;
 	iconColor?: ColorValue;
 	iconColorSelected?: ColorValue;
 	iconSize?: number;

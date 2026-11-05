@@ -1,4 +1,5 @@
-'use client';
+import type { SliceIcon } from '../Icon';
+('use client');
 
 import React, { useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
@@ -103,7 +104,7 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 });
 
 interface ButtonProps {
-	icon?: string;
+	icon?: SliceIcon;
 	iconSize: number;
 	toolTip?: string;
 	pressed?: boolean;

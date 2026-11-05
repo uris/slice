@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SliceIcon } from '../Icon/_types';
 
 type CheckBoxBaseProps = {
 	align?: 'top' | 'middle' | 'bottom';
@@ -7,9 +8,9 @@ type CheckBoxBaseProps = {
 	label?: string;
 	checked?: 'mixed' | boolean;
 	disabled?: boolean;
-	iconChecked?: string;
-	iconUnChecked?: string;
-	iconPartial?: string;
+	iconChecked?: SliceIcon;
+	iconUnChecked?: SliceIcon;
+	iconPartial?: SliceIcon;
 	iconColor?: ColorValue;
 	iconColorSelected?: ColorValue;
 	iconSize?: number;

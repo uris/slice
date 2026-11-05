@@ -206,7 +206,7 @@ export function ToggleButtonDoc() {
 			</P>
 			<Definition id={'icon'}>
 				<Prop>icon</Prop>
-				<TypeDef>{'string'}</TypeDef>
+				<TypeDef>{'SliceIcon'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
@@ -258,7 +258,7 @@ export function ToggleButtonDoc() {
 			</P>
 			<Definition id={'iconSelected'}>
 				<Prop>iconSelected</Prop>
-				<TypeDef>{'string'}</TypeDef>
+				<TypeDef>{'SliceIcon'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>

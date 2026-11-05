@@ -3,8 +3,8 @@ import { ButtonBar } from '@apple-pie/slice';
 
 <ButtonBar
     buttons={[
-        { icon: 'arrow left', action: 'previous', tip: 'Previous' },
-        { icon: 'arrow right', action: 'next', tip: 'Next' },
+        { icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
+        { icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
     ]}
     onClick={runAction}
 />

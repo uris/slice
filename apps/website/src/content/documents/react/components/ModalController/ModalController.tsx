@@ -32,7 +32,7 @@ export function ModalControllerDoc() {
 			</P>
 			<P>
 				{'The companion panel is '}
-				<Code openURL="/docs/react/modal/">Modal</Code>
+				<Code openURL="/docs/react/dialog-box/">DialogBox</Code>
 				{'.'}
 			</P>
 			<CodeBlock filename="ModalControllerExample.tsx" language="tsx" code={usageCode.trim()} />
@@ -53,7 +53,7 @@ export function ModalControllerDoc() {
 			</P>
 			<P>
 				{
-					'The controller calls callbacks supplied in the descriptor before settling the store response. Resolve and reject clear the active modal; close calls the store’s dismissal path.'
+					'The controller settles the store response before calling callbacks supplied in the descriptor. Resolve and reject clear the active modal; close calls the store’s dismissal path.'
 				}
 			</P>
 			<P>
@@ -61,22 +61,16 @@ export function ModalControllerDoc() {
 					'The title/footer pointer callback starts dragging when wired to a panel. The fullscreen presentation layer is fixed; the controller does not create a portal.'
 				}
 			</P>
-			<P>
-				Title-bar dragging moved the dialog in Chromium but did not move it in the WebKit preview. Cross-browser drag
-				behavior needs review.
-			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
-				{
-					'Dialog naming, focus containment/restoration, initial focus, Escape handling, and background inertness are not currently implemented by this host. Supply those behaviors in the app until the controller is reviewed.'
-				}
+				<Code openURL="/docs/react/dialog-box/">DialogBox</Code> supplies dialog naming and heading association. This
+				host moves focus inside, contains keyboard focus, handles Escape, makes background content inert, and locks page
+				scrolling. Focus and the previous scrolling state are restored after the panel exits.
 			</P>
 			<P>
-				{
-					'Backdrop dismissal is configured through the overlay, but the fullscreen modal container can intercept pointer input before it reaches that backdrop. Use the panel’s explicit close/action controls.'
-				}
+				Click outside the panel to dismiss it. Reduced-motion preferences bypass panel and backdrop transitions,
+				including live preference changes. Dragging remains a direct pointer interaction.
 			</P>
-			<P>{'The current animation and drag behavior do not observe reduced-motion preferences.'}</P>
 			<H2 id="props">Props</H2>
 			<P>{'All component props are optional. Color props accept Slice tokens or CSS colors.'}</P>
 			<Definition id="dragConstraintsRef">
@@ -104,11 +98,7 @@ export function ModalControllerDoc() {
 			</Definition>
 			<P>{'Backdrop opacity.'}</P>
 			<H2 id="motion">Motion</H2>
-			<P>
-				{
-					'These props configure the internal Motion wrapper. Current defaults use fixed timing rather than Slice’s Water transition.'
-				}
-			</P>
+			<P>{'These props configure the internal Motion wrapper with Slice’s Water transition as the default.'}</P>
 			<CodeBlock filename="DialogMotion.tsx" language="tsx" code={motionCode.trim()} />
 			<Definition id="animate">
 				<Prop>animate</Prop>
@@ -135,13 +125,9 @@ export function ModalControllerDoc() {
 			<Definition id="transition">
 				<Prop>transition</Prop>
 				<TypeDef>{'Transition'}</TypeDef>
-				<DefaultVal>{"{ ease: 'easeOut', duration: 0.25, delay: 0.1 }"}</DefaultVal>
+				<DefaultVal>{'Water'}</DefaultVal>
 			</Definition>
-			<P>
-				{
-					'Timing applied to the dialog wrapper. Supplied settings replace the default object and do not currently configure the backdrop transition.'
-				}
-			</P>
+			<P>{'Timing merged with Slice’s Water transition for both the dialog wrapper and backdrop.'}</P>
 			<Definition id="variants">
 				<Prop>variants</Prop>
 				<TypeDef>{'Variants'}</TypeDef>
