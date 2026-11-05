@@ -342,7 +342,7 @@ export const BodyAndFooterDefaults: StoryObj<typeof DialogBox> = {
 	tags: ['tests'],
 	render: (args) => (
 		<div style={{ color: 'black' }}>
-			<span data-testid="primary-color" style={{ color: 'var(--core-text-primary)', display: 'none' }} />
+			<span data-testid="body-color" style={{ color: 'var(--core-text-tertiary)', display: 'none' }} />
 			<DialogBox {...args} style={{ width: 400 }}>
 				<DialogBox.Title>Project notes</DialogBox.Title>
 				<DialogBox.Content>
@@ -358,7 +358,7 @@ export const BodyAndFooterDefaults: StoryObj<typeof DialogBox> = {
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		await expect(getComputedStyle(canvas.getByText('Body copy')).color).toBe(
-			getComputedStyle(canvas.getByTestId('primary-color')).color,
+			getComputedStyle(canvas.getByTestId('body-color')).color,
 		);
 		const save = canvas.getByRole('button', { name: 'Save' });
 		const group = save.parentElement as HTMLElement;
@@ -379,7 +379,7 @@ export const ActionsBackgroundTint: StoryObj<typeof DialogBox> = {
 			<>
 				<span
 					data-testid="footer-color"
-					style={{ display: 'none', backgroundColor: `color-mix(in srgb, ${background} 94%, black)` }}
+					style={{ display: 'none', backgroundColor: `color-mix(in srgb, ${background} 90%, black)` }}
 				/>
 				<DialogBox {...args} backgroundColor={background}>
 					<DialogBox.Content>
