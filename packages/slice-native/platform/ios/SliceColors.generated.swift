@@ -42,6 +42,9 @@ public enum SliceColors {
     public static var coreButtonDisabled: Color { Color("core-button-disabled", bundle: bundle) }
     public static var coreButtonPrimary: Color { Color("core-button-primary", bundle: bundle) }
     public static var coreDropShadow: Color { Color("core-drop-shadow", bundle: bundle) }
+    public static var coreFillPrimary: Color { Color("core-fill-primary", bundle: bundle) }
+    public static var coreFillSecondary: Color { Color("core-fill-secondary", bundle: bundle) }
+    public static var coreFillTertiary: Color { Color("core-fill-tertiary", bundle: bundle) }
     public static var coreGpLogoPrimary: Color { Color("core-gp-logo-primary", bundle: bundle) }
     public static var coreGpLogoSecondary: Color { Color("core-gp-logo-secondary", bundle: bundle) }
     public static var coreIconDark: Color { Color("core-icon-dark", bundle: bundle) }
@@ -57,6 +60,8 @@ public enum SliceColors {
     public static var coreOutlineSpecial: Color { Color("core-outline-special", bundle: bundle) }
     public static var coreOutlineTertiary: Color { Color("core-outline-tertiary", bundle: bundle) }
     public static var coreSurfaceCoverupTranslucent: Color { Color("core-surface-coverup-translucent", bundle: bundle) }
+    public static var coreSurfaceElevated: Color { Color("core-surface-elevated", bundle: bundle) }
+    public static var coreSurfaceLiquidGlass: Color { Color("core-surface-liquid-glass", bundle: bundle) }
     public static var coreSurfaceOverlayTranslucent: Color { Color("core-surface-overlay-translucent", bundle: bundle) }
     public static var coreSurfacePrimary: Color { Color("core-surface-primary", bundle: bundle) }
     public static var coreSurfacePrimaryTint: Color { Color("core-surface-primary-tint", bundle: bundle) }
@@ -68,6 +73,7 @@ public enum SliceColors {
     public static var coreTextError: Color { Color("core-text-error", bundle: bundle) }
     public static var coreTextLight: Color { Color("core-text-light", bundle: bundle) }
     public static var coreTextPrimary: Color { Color("core-text-primary", bundle: bundle) }
+    public static var coreTextQuaternary: Color { Color("core-text-quaternary", bundle: bundle) }
     public static var coreTextSecondary: Color { Color("core-text-secondary", bundle: bundle) }
     public static var coreTextSpecial: Color { Color("core-text-special", bundle: bundle) }
     public static var coreTextTertiary: Color { Color("core-text-tertiary", bundle: bundle) }
@@ -111,6 +117,9 @@ public enum SliceUIColors {
     public static var coreButtonDisabled: UIColor { SliceColors.uiColor(named: "core-button-disabled") }
     public static var coreButtonPrimary: UIColor { SliceColors.uiColor(named: "core-button-primary") }
     public static var coreDropShadow: UIColor { SliceColors.uiColor(named: "core-drop-shadow") }
+    public static var coreFillPrimary: UIColor { SliceColors.uiColor(named: "core-fill-primary") }
+    public static var coreFillSecondary: UIColor { SliceColors.uiColor(named: "core-fill-secondary") }
+    public static var coreFillTertiary: UIColor { SliceColors.uiColor(named: "core-fill-tertiary") }
     public static var coreGpLogoPrimary: UIColor { SliceColors.uiColor(named: "core-gp-logo-primary") }
     public static var coreGpLogoSecondary: UIColor { SliceColors.uiColor(named: "core-gp-logo-secondary") }
     public static var coreIconDark: UIColor { SliceColors.uiColor(named: "core-icon-dark") }
@@ -126,6 +135,8 @@ public enum SliceUIColors {
     public static var coreOutlineSpecial: UIColor { SliceColors.uiColor(named: "core-outline-special") }
     public static var coreOutlineTertiary: UIColor { SliceColors.uiColor(named: "core-outline-tertiary") }
     public static var coreSurfaceCoverupTranslucent: UIColor { SliceColors.uiColor(named: "core-surface-coverup-translucent") }
+    public static var coreSurfaceElevated: UIColor { SliceColors.uiColor(named: "core-surface-elevated") }
+    public static var coreSurfaceLiquidGlass: UIColor { SliceColors.uiColor(named: "core-surface-liquid-glass") }
     public static var coreSurfaceOverlayTranslucent: UIColor { SliceColors.uiColor(named: "core-surface-overlay-translucent") }
     public static var coreSurfacePrimary: UIColor { SliceColors.uiColor(named: "core-surface-primary") }
     public static var coreSurfacePrimaryTint: UIColor { SliceColors.uiColor(named: "core-surface-primary-tint") }
@@ -137,6 +148,7 @@ public enum SliceUIColors {
     public static var coreTextError: UIColor { SliceColors.uiColor(named: "core-text-error") }
     public static var coreTextLight: UIColor { SliceColors.uiColor(named: "core-text-light") }
     public static var coreTextPrimary: UIColor { SliceColors.uiColor(named: "core-text-primary") }
+    public static var coreTextQuaternary: UIColor { SliceColors.uiColor(named: "core-text-quaternary") }
     public static var coreTextSecondary: UIColor { SliceColors.uiColor(named: "core-text-secondary") }
     public static var coreTextSpecial: UIColor { SliceColors.uiColor(named: "core-text-special") }
     public static var coreTextTertiary: UIColor { SliceColors.uiColor(named: "core-text-tertiary") }

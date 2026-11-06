@@ -39,13 +39,8 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 	}, [type, code]);
 
 	const cssVars = useMemo(() => {
-		return { '--text-color': selected ? surfaceYellow : 'var(--core-text-tertiary)' } as React.CSSProperties;
+		return { '--text-color': selected ? surfaceYellow : 'var(--core-text-secondary)' } as React.CSSProperties;
 	}, [selected]);
-
-	const value = useMemo(() => {
-		if (!code) return title;
-		return `<${title}/>`;
-	}, [code, title]);
 
 	const handleClick = useCallback(() => {
 		if (type !== SidebarListItemType.SectionTitle) onClick?.({ slug, packageType });
@@ -54,7 +49,7 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 	if (!display) return null;
 	return (
 		<div className={styles.wrapper} id={`sidebar.${slug}`}>
-			<input type={'button'} className={className} style={cssVars} onClick={handleClick} value={value} />
+			<input type={'button'} className={className} style={cssVars} onClick={handleClick} value={title} />
 		</div>
 	);
 }

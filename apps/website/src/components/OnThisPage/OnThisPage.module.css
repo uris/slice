@@ -51,7 +51,7 @@
 .section {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-medium);
-	font-size: 13px;
+	font-size: 15px;
 	line-height: var(--line-height-m);
 	letter-spacing: 0.0125em;
 }
@@ -63,6 +63,6 @@
 	font-variant-ligatures: none;
 	line-height: 162.5%;
 	letter-spacing: 0.94%;
-	color: var(--core-text-tertiary);
+	color: var(--core-text-secondary);
 	padding-left: 8px;
 }

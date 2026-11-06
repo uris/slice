@@ -7,7 +7,7 @@ import type { ColorTileProps } from './types';
 const ColorTileBase = (props: Readonly<ColorTileProps>) => {
 	const {
 		core = undefined,
-		token = 'Brand 00',
+		token = 'Core 00',
 		hex = '#ffffff',
 		width = 150,
 		height = 100,

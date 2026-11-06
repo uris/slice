@@ -1,11 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
-import ts from 'typescript';
+import { loadSharedColors } from './shared-colors.mjs';
 
 const root = new URL('../', import.meta.url);
-const source = readFileSync(new URL('../slice/src/theme/colors/colors.ts', root), 'utf8');
-const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
-const { light, dark } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
+const { light, dark } = await loadSharedColors();
 const catalog = new URL('platform/ios/Resources/SliceColors.xcassets/', root);
 const expected = Object.keys(light)
 	.filter((name) => !name.startsWith('surface-shadow-'))

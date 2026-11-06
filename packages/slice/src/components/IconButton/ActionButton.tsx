@@ -13,11 +13,12 @@ import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import type { SliceIcon } from '../Icon';
 import { Icon } from '../Icon';
-import { ToolTipType } from '../sharedTypes';
+import { type ButtonSize, ToolTipType, buttonStyleDefaults } from '../sharedTypes';
 import css from './IconButton.module.css';
 import type { IconButtonProps } from './_types';
 
-type ActionButtonProps = Omit<IconButtonProps, 'icon'> & {
+type ActionButtonProps = Omit<IconButtonProps, 'icon' | 'buttonSize'> & {
+	buttonSize?: ButtonSize;
 	icon?: SliceIcon | null;
 	iconSelected?: SliceIcon;
 	iconFrame?: boolean;
@@ -29,7 +30,7 @@ type ActionButtonProps = Omit<IconButtonProps, 'icon'> & {
 	deselect?: boolean;
 };
 
-const sizes = { s: 24, m: 36, l: 44, xl: 56 };
+const sizes = buttonStyleDefaults.sizes;
 
 /** Keep the native button mounted when a live motion preference changes. */
 function AnimatedSurface({
@@ -131,12 +132,15 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 	const themeMotion = theme.motion;
 	const motionTransition = useMemo(() => getWaterTransition(themeMotion, transition), [themeMotion, transition]);
 	const activeHover = hover && hovered && !disabled;
-	const size =
-		typeof buttonSize === 'number'
-			? Number.isFinite(buttonSize) && buttonSize > 0
-				? buttonSize
-				: sizes.m
-			: (sizes[buttonSize] ?? sizes.m);
+	const getSize = () => {
+		if (buttonSize === 'auto') return 0;
+		if (typeof buttonSize === 'number') {
+			if (Number.isFinite(buttonSize) && buttonSize > 0) return buttonSize;
+			return sizes.m;
+		}
+		return sizes[buttonSize] ?? sizes.m;
+	};
+	const size = getSize();
 	const resolvedIconSize = Number.isFinite(iconSize) && iconSize >= 0 ? iconSize : 20;
 	const radius =
 		typeof borderRadius === 'number'

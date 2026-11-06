@@ -22,9 +22,8 @@
 	line-height: 1.33em;
 	letter-spacing: 1.25%;
 	text-transform: uppercase;
-	color: var(--core-text-disabled);
+	color: var(--core-text-tertiary);
 	gap: 16px;
-	opacity: 0.35;
 
 	&::after {
 		content: "/";

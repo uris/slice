@@ -11,6 +11,7 @@ npm run dev       # http://localhost:6008
 npm run build     # Production output in .next/
 npm run start     # Production server at http://localhost:6008
 npm run typecheck
+npm run test:css-hmr
 ```
 
 The root shortcuts `dev:landing`, `build:landing`, `start:landing`, and `typecheck:landing` still work.
@@ -21,6 +22,18 @@ contains the landing page UI.
 The workspace uses Webpack and TypeScript paths to consume local Slice sources,
 so development does not require building the web library first. Its PostCSS
 configuration preserves Slice's nesting and custom media handling.
+
+In development, `next.config.ts` replaces mini-css-extract-plugin's CSS reload
+helper with `loaders/css-hot-reload.js`. The upstream helper also clones preload
+links and assumes the original link still has a parent, which can race with App
+Router stylesheet replacement. The local helper remembers loaded stylesheets and
+fetches their compiled CSS with fresh URLs and `cache: 'no-store'`, then applies it
+through development-owned style elements. Webpack already resolves font/image asset
+URLs. This prevents React from restoring stale links over an update. Previous styles
+stay active until their replacements load; failed or out-of-order responses cannot
+overwrite the last working version.
+Production keeps Next's standard CSS pipeline. Restart the dev server after editing
+the config or reload helper.
 
 The Docker `landing` target runs `next start` on container port 80. Known docs
 slugs are prerendered by `generateStaticParams()`; other slugs reach the docs page at

@@ -168,3 +168,10 @@ export function normalizedPercent(value: number | string): number {
 	if (value.endsWith('%')) return Number.parseFloat(value);
 	return Number.parseFloat(value) / 100;
 }
+
+/**
+ * Concatenate class names
+ */
+export function classNames(...args: string[]): string {
+	return args.join(' ');
+}

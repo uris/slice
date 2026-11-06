@@ -11,7 +11,7 @@ export default function NotFound() {
 			<h1>This is not the page I'm looking for ...</h1>
 			<Button
 				label={'Move along ...'}
-				size={'large'}
+				buttonSize="l"
 				variant={'text'}
 				textSize={'l'}
 				underline

@@ -39,6 +39,11 @@ The web package has a separate [scripts directory](../../slice/scripts/README.md
   Run `node scripts/check-ios-icons.mjs --pixels` to additionally use Chromium to
   check monochrome pixels, intentional blank artwork, and toggle masks. These checks do not test glass contrast or runtime bundle loading.
 
+The `shared-colors.mjs` helper delegates to the web `load-theme-colors.mjs` loader
+for plain theme data, palette, and opacity recipes for both iOS color generation and verification, without importing
+web runtime modules. When the web color values change, regenerate iOS colors
+with `node scripts/generate-ios-colors.mjs` and commit the resource changes.
+
 ## Workflow
 
 When the shared web icon catalog changes, run `npm run generate` before native

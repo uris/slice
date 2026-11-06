@@ -35,6 +35,7 @@
 	line-height: 140%;
 	letter-spacing: 1.25%;
 	color: var(--core-text-primary);
+	margin-top: 8px;
 }
 
 .p {
@@ -44,7 +45,7 @@
 	font-size: 16px;
 	line-height: 162.5%;
 	letter-spacing: 0.63%;
-	color: var(--core-text-tertiary);
+	color: var(--core-text-secondary);
 }
 
 .paragraph + .paragraph {
@@ -64,7 +65,7 @@
 	box-sizing: border-box;
 	padding: 0 6px;
 	border-radius: 4px;
-	background-color: var(--core-surface-primary);
+	background-color: var(--core-grey-1000);
 }
 
 .prop {
@@ -88,7 +89,7 @@
 	font-size: 15px;
 	line-height: 140%;
 	letter-spacing: 0.94%;
-	color: var(--core-text-tertiary);
+	color: var(--core-text-secondary);
 	opacity: 0.5;
 }
 

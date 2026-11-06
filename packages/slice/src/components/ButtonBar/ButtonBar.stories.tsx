@@ -405,9 +405,9 @@ export const DefaultActionBehavior: StoryObj<typeof ButtonBar> = {
 };
 
 const matchingButtonSizes = [
-	{ bar: 's', button: 'small' },
-	{ bar: 'm', button: 'medium' },
-	{ bar: 'l', button: 'large' },
+	{ bar: 's', button: 's' },
+	{ bar: 'm', button: 'm' },
+	{ bar: 'l', button: 'l' },
 ] as const;
 export const MatchesButtonHeights: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
@@ -415,7 +415,7 @@ export const MatchesButtonHeights: StoryObj<typeof ButtonBar> = {
 		<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 			{matchingButtonSizes.map((size) => (
 				<div key={size.bar} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-					<Button label={size.button} size={size.button} />
+					<Button label={size.button} buttonSize={size.button} />
 					<ButtonBar buttons={listView} buttonSize={size.bar} aria-label={size.button} />
 				</div>
 			))}

@@ -3,7 +3,7 @@
 import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { setStyle } from '../../utils/functions/misc';
+import { setStyle } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import typeCss from '../../utils/styling/type.module.css';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -15,15 +15,18 @@ import { resolveOptions } from './resolveOptions';
 const useClientLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 const withoutAria = (attributes: object) =>
 	Object.fromEntries(Object.entries(attributes).filter(([key]) => !key.startsWith('aria-') && key !== 'role'));
+
 function resolveValueKey(value: unknown, valueKey?: string) {
 	if (!valueKey || value === null || typeof value !== 'object') return undefined;
 	return (value as Record<string, unknown>)[valueKey];
 }
+
 function matchesValue(left: unknown, right: unknown, valueKey?: string) {
 	if (Object.is(left, right)) return true;
 	const key = resolveValueKey(left, valueKey);
 	return key !== undefined && Object.is(key, resolveValueKey(right, valueKey));
 }
+
 function formValue<T>(option: DropDownOption<T>, index: number, valueKey?: string) {
 	if (option.formValue !== undefined) return option.formValue;
 	const value = option.value;
@@ -34,11 +37,13 @@ function formValue<T>(option: DropDownOption<T>, index: number, valueKey?: strin
 		return String(key);
 	return String(index);
 }
+
 function optionLabel<T>(option: DropDownOption<T>) {
 	if (option.label !== undefined) return option.label;
 	if (typeof option.value === 'object') return 'Select an option';
 	return String(option.value);
 }
+
 function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 	const props = resolveColorProps(rawProps);
 	const {
@@ -89,6 +94,7 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 		error = false,
 		gap = 8,
 		onChange,
+		onChangeOption,
 		className,
 		style,
 		...spanAttributes
@@ -333,6 +339,7 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 						if (!next || next.disabled || nextIndex === index) return;
 						if (!controlled) setLocalSelection({ value: next.value });
 						onChange?.(next.value, next, nextIndex);
+						onChangeOption?.(next);
 					}}
 				>
 					{index < 0 && <option value="" hidden disabled />}
@@ -365,5 +372,6 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 		</span>
 	);
 }
+
 DropDownComponent.displayName = 'DropDown';
 export const DropDown = React.memo(DropDownComponent) as <T = string>(props: DropDownProps<T>) => React.JSX.Element;

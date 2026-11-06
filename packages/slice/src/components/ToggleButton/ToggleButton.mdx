@@ -82,12 +82,12 @@ padding values are pixels; negative values become zero.
 | `borderColor` | `ColorValue` | `core-outline-primary` | Border color. |
 | `borderRadius` | `number \| string` | `4` | Corner radius. Numbers are pixels; zero gives square corners. |
 | `borderWidth` | `number` | `0` | Border width in pixels. Negative or nonfinite values become zero. |
-| `buttonSize` | `'s' \| 'm' \| 'l' \| 'xl' \| number` | `m` | Minimum frame height and width: s=24, m=36, l=44, xl=56px. A positive finite number sets a custom minimum. Content and padding can make the button larger; invalid sizes fall back to 36px. |
-| `children` | `React.ReactNode` | `undefined` | Content used when label is absent. Keep it noninteractive; the whole control is one button. |
+| `buttonSize` | `'auto' \| 's' \| 'm' \| 'l' \| 'xl' \| number` | `m` | Minimum frame height and width: s=24, m=36, l=44, xl=56px. A positive finite number sets a custom minimum. Explicit auto removes the minimum frame size and fits content plus padding; children do not opt into auto automatically. Content and padding can make the button larger; invalid sizes fall back to 36px. |
+| `children` | `React.ReactNode` | `undefined` | Content used when label is absent, laid out in a vertically centered flex row using gap. Keep it noninteractive; the whole control is one button. |
 | `defaultSelected` | `boolean` | `false` | Initial local selection. Later changes are ignored; use selected for external control. |
 | `deselect` | `boolean` | `true` | Allows clearing an active selection. False keeps it selected without another onChange; onClick still runs. |
 | `disabled` | `boolean` | `false` | Disables the whole control, dims icon and text, and dismisses an open tooltip. |
-| `gap` | `number` | `4` | Pixel gap between icon and text. Negative or nonfinite values resolve to zero or the 4px default respectively. |
+| `gap` | `number` | `4` | Pixel gap between icon and content, and between items in the children flex row. Set to 0 for no gap. Negative or nonfinite values resolve to zero or the shared 4px default respectively. |
 | `hover` | `boolean` | `true` | Enables background, icon, and text hover colors. |
 | `icon` | `string` | `undefined` | Optional icon before the content. |
 | `iconColor` | `ColorValue` | `core-text-primary` | Resting icon color. |
@@ -97,8 +97,8 @@ padding values are pixels; negative values become zero.
 | `iconSelected` | `string` | `undefined` | Alternate icon when selected. Requires icon; otherwise the original icon remains. |
 | `iconSize` | `number` | `20` | Icon size in pixels. Negative or nonfinite values fall back to 20px; zero hides its geometry. |
 | `label` | `string` | `undefined` | Visible text. Takes priority over children. |
-| `labelOutside` | `boolean` | `false` | Applies background, border, and radius only to the icon. Label clicks still toggle the same control. Falls back to the whole button without an icon. Outer padding defaults to 4px horizontally and zero vertically. |
-| `padding` | `number \| string` | `undefined` | Uniform padding. Defaults to zero vertical padding and spacing-s + spacing-xs horizontally (12px by default), with spacing-xs subtracted on an icon edge; icon-only content adjusts both edges. An explicit value disables this optical adjustment. Numbers are pixels. |
+| `labelOutside` | `boolean` | `false` | Applies background, border, and radius only to the icon. Label clicks still toggle the same control. Falls back to the whole button without an icon. For labels, outer padding defaults to 4px horizontally and zero vertically; children use 6px top and bottom padding. |
+| `padding` | `number \| string` | `undefined` | Uniform padding. Children default to 6px top and bottom padding, keeping the same horizontal and optical icon padding as labels. Wrap children to add further spacing. Labels and icon-only content default to zero vertical padding and spacing-s + spacing-xs horizontally (12px by default), with spacing-xs subtracted on an icon edge; icon-only content adjusts both edges. An explicit value disables this optical adjustment. Numbers are pixels. |
 | `paddingBottom` | `number \| string` | `undefined` | Bottom padding; overrides padding. |
 | `paddingLeft` | `number \| string` | `undefined` | Left padding; overrides padding and the default icon adjustment. |
 | `paddingRight` | `number \| string` | `undefined` | Right padding; overrides padding and the default icon-only adjustment. |

@@ -1,13 +1,33 @@
 export const usageCode = `
 import { AudioBubble } from '@apple-pie/slice';
+import { useMicrophone } from '@apple-pie/slice/hooks';
+import { useReducedMotion } from 'motion/react';
 
-<AudioBubble audioStream={audioStream} playing={isListening} />
+export default function MicrophoneBubble() {
+    const { micStream, isActive, isRequesting } = useMicrophone(false);
+    const prefersReducedMotion = useReducedMotion();
+
+    return (
+        <AudioBubble
+            audioStream={isRequesting ? null : micStream.current}
+            playing={isActive && !prefersReducedMotion}
+        />
+    );
+}
+`;
+
+export const pausedCode = `
+import { AudioBubble } from '@apple-pie/slice';
+
+export default function PausedBubble() {
+    return <AudioBubble playing={false} />;
+}
 `;
 
 export const responseCode = `
 <AudioBubble
-    audioStream={audioStream}
-    playing={isListening}
+    audioStream={isRequesting ? null : micStream.current}
+    playing={isActive && !prefersReducedMotion}
     size={48}
     minScale={1}
     maxScale={2}
@@ -18,8 +38,8 @@ export const responseCode = `
 
 export const glowCode = `
 <AudioBubble
-    audioStream={audioStream}
-    playing={isListening}
+    audioStream={isRequesting ? null : micStream.current}
+    playing={isActive && !prefersReducedMotion}
     backgroundColor="core-link-primary"
     glowColor="core-link-primary"
     glowSize={32}
@@ -28,32 +48,25 @@ export const glowCode = `
 `;
 
 export const statusCode = `
-<>
-    <AudioBubble
-        audioStream={audioStream}
-        playing={isListening && !prefersReducedMotion}
-        aria-hidden="true"
-    />
-    <span role="status">{isListening ? 'Listening' : 'Not listening'}</span>
-</>
-`;
-
-export const microphoneCode = `
+import { AudioBubble } from '@apple-pie/slice';
 import { useMicrophone } from '@apple-pie/slice/hooks';
 
-function MicrophoneBubble() {
+export default function MicrophoneBubble() {
     const { micStream, isActive, isRequesting, error } = useMicrophone(false);
-
+    
+    const getStatus = () => {
+        if (error) return error.message;
+        if (isRequesting) return 'Waiting for microphone access…';
+        return isActive ? 'Listening' : 'Not listening';
+    };
+    
     return (
         <>
             <AudioBubble
                 audioStream={isRequesting ? null : micStream.current}
-                playing={isActive}
-                aria-hidden="true"
+                playing={isActive && !prefersReducedMotion}
             />
-            <span role="status">
-                {error ? error.message : isRequesting ? 'Waiting for microphone access…' : 'Say something!'}
-            </span>
+            <Label>{getStatus()}</Label>
         </>
     );
 }

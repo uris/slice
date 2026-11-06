@@ -1,9 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
 import { FlexDiv, Tip, Toast, type ToolTip, useToolTip } from 'src';
 import { coreColors } from '../../../src/theme/colors/colors';
+import { corePaletteAnchors } from '../../../src/theme/colors/palette';
 import { ColorTile } from '../ColorTile/ColorTile';
 
-export function BrandColors() {
+export function CoreColors() {
 	const [tip, setTip] = useState<ToolTip | null>(null);
 	const [message, setMessage] = useState<string | null>(null);
 	const tipRef = useRef<HTMLDivElement>(null);
@@ -19,8 +20,8 @@ export function BrandColors() {
 		const grouped = new Map<string, Array<{ key: string; value: string }>>();
 
 		for (const [key, value] of Object.entries(colors)) {
-			const match = /^brand-[a-z]+-/i.exec(key); // e.g. brand-grey-300
-			const bucket = match ? match[0].slice(0, -1) : 'Special'; // brand-grey or misc
+			const match = /^(?:core|brand)-[a-z]+-\d+$/i.exec(key);
+			const bucket = match ? key.replace(/-\d+$/, '') : 'Special';
 
 			if (!grouped.has(bucket)) grouped.set(bucket, []);
 			grouped.get(bucket)?.push({ key, value });
@@ -33,6 +34,15 @@ export function BrandColors() {
 	}
 
 	const groupedColors = groupColors(coreColors);
+	function getAnchorLabel(token: string) {
+		const match = /^core-([a-z]+)-(\d+)$/.exec(token);
+		if (!match) return undefined;
+		const anchor = corePaletteAnchors[match[1] as keyof typeof corePaletteAnchors];
+		if (!anchor) return undefined;
+		if (Number(match[2]) === anchor.light) return 'Light accent';
+		if (Number(match[2]) === anchor.dark) return 'Dark accent';
+		return undefined;
+	}
 
 	const handleCopy = useCallback((token: string, hex: string) => {
 		setMessage('Copied to clipboard');
@@ -54,6 +64,7 @@ export function BrandColors() {
 									<ColorTile
 										token={color.key}
 										hex={color.value}
+										core={getAnchorLabel(color.key)}
 										key={color.key}
 										onCopy={handleCopy}
 										onTooltip={handleToolTip}

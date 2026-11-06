@@ -6,7 +6,7 @@ import { SidebarHeader } from '@/components/SidebarHeader/SidebarHeader';
 import { SquareTabs, type Tab } from '@/components/SqaureTabs/SqaureTabs';
 import { getSidebarDocSections } from '@/docs/registry/sidebar';
 import { usePackageType, useSlug } from '@/docs/stores/store';
-import { Package, sidePanelConstraints, surfaceDarker } from '@/src/consts/consts';
+import { Package, sidePanelConstraints } from '@/src/consts/consts';
 import { FlexDiv, Preset } from '@apple-pie/slice';
 import { useCallback, useEffect } from 'react';
 
@@ -36,7 +36,7 @@ export function Sidebar() {
 	return (
 		<FlexDiv
 			preset={Preset.FillStart}
-			background={surfaceDarker}
+			background={'core-surface-primary'}
 			style={{
 				minWidth: sidePanelConstraints.min,
 			}}

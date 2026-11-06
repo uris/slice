@@ -12,6 +12,7 @@ export const AudioBubble = React.memo((rawProps: AudioBubbleProps) => {
 	const { current } = useTheme();
 	const color = current.colors['core-text-primary'];
 	const {
+		'aria-hidden': ariaHidden = true,
 		audioStream,
 		playing = false,
 		size = 64,
@@ -92,7 +93,7 @@ export const AudioBubble = React.memo((rawProps: AudioBubbleProps) => {
 	}, [minScale, playing]);
 
 	return (
-		<div id={divId} className={`${css.wrapper}${divClass}`} style={divStyle} {...rest}>
+		<div id={divId} className={`${css.wrapper}${divClass}`} style={divStyle} {...rest} aria-hidden={ariaHidden}>
 			<div
 				className={css.bubble}
 				style={{

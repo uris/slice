@@ -116,7 +116,8 @@
 		"prepack": "npm run build",
 		"prebuild": "rm -rf dist",
 		"build": "NODE_ENV=production rollup -c --bundleConfigAsCjs && tsc -p tsconfig.build.json && node ./scripts/finalize-styles.mjs && ./scripts/copy-css.sh",
-		"build:min": "MINIFY=true NODE_ENV=production rollup -c --bundleConfigAsCjs && tsc -p tsconfig.build.json && node ./scripts/finalize-styles.mjs && ./scripts/copy-css.sh"
+		"build:min": "MINIFY=true NODE_ENV=production rollup -c --bundleConfigAsCjs && tsc -p tsconfig.build.json && node ./scripts/finalize-styles.mjs && ./scripts/copy-css.sh",
+		"generate:palette": "node scripts/generate-core-palette.mjs && node scripts/generate-theme-css.mjs && biome format --write src/theme/colors/palette.ts src/theme/colors/palette.css src/theme/colors/colors.css"
 	},
 	"keywords": [],
 	"author": "Uris Dacosta",

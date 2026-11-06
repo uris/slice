@@ -1,4 +1,4 @@
-export { copyToClipboard, hexToRgb, setStyle } from './functions/misc';
+export { copyToClipboard, hexToRgb, setStyle, classNames } from './functions/misc';
 export { debounce } from './functions/debounce';
 export { rafThrottle } from './functions/rafThrottle';
 export * from './functions/colors';

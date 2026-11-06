@@ -12,6 +12,10 @@
 	}
 }
 
+.button.button {
+	padding: var(--ui-button-padding);
+}
+
 .label {
 	user-select: none;
 	-webkit-user-select: none;
@@ -77,4 +81,15 @@
 .button:hover .label,
 .button:focus-visible .label {
 	text-decoration: var(--ui-button-decoration);
+}
+
+.label.children {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--ui-button-gap);
+	overflow: visible;
+	-webkit-line-clamp: unset;
+	-webkit-box-orient: initial;
+	word-break: normal;
 }

@@ -31,7 +31,7 @@ export const DefaultsAndOverrides: StoryObj = {
 			<DropDown className="dropdown" />
 			<RadioButton className="radio" label="Radio" borderWidth={1} padding="8px 16px" />
 			<RadioButton className="hidden-radio" label="No icon" borderWidth={1} padding="8px 16px" iconSize={0} />
-			<Button className="text-button" label="Action" variant="text" size="small" />
+			<Button className="text-button" label="Action" variant="text" buttonSize="s" />
 			<Chip className="chip" label="Chip" icon="basic.search" paddingLeft={0} paddingRight={0} />
 			<Switch className="switch" aria-label="Switch" />
 			<div style={{ '--spacing-xxs': '4px' } as CSSProperties}>

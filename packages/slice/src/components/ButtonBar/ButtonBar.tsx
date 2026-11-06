@@ -7,16 +7,11 @@ import { setStyle } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import type { SliceIcon } from '../Icon';
 import { Icon } from '../Icon';
-import { type ToolTip, ToolTipType } from '../sharedTypes';
+import { type ToolTip, ToolTipType, buttonStyleDefaults } from '../sharedTypes';
 import css from './ButtonBar.module.css';
 import type { ButtonBarProps } from './_types';
 
-const sizes = {
-	s: 'calc(max(1lh, var(--bb-icon-size)) + 2 * var(--spacing-xs) + 2px)',
-	m: '36px',
-	l: '48px',
-	xl: '56px',
-};
+const sizes = buttonStyleDefaults.sizes;
 
 export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<ButtonBarProps>) {
 	const props = resolveColorProps(rawProps);
@@ -54,7 +49,7 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 			return `${buttonSize}px`;
 		}
 		const height = sizes[buttonSize as keyof typeof sizes] ?? sizes.m;
-		return `max(0px, calc(${height} - 2 * var(--spacing-xs) - 2 * var(--bb-border-width)))`;
+		return `max(0px, calc(${height}px - 2 * var(--spacing-xs) - 2 * var(--bb-border-width)))`;
 	};
 	const cssVars = {
 		'--bb-border-width': `${borderWidth}px`,

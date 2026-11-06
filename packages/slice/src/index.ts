@@ -1,7 +1,15 @@
 import './theme.css';
 
-export type { ToolTip, ToolTipInfo } from './components/sharedTypes';
-export { ToolTipType } from './components/sharedTypes';
+export type {
+	ComponentSize,
+	FixedSize,
+	ButtonSize,
+	PaddingProps,
+	ButtonStyleProps,
+	ToolTip,
+	ToolTipInfo,
+} from './components/sharedTypes';
+export { ToolTipType, buttonStyleDefaults } from './components/sharedTypes';
 
 export {
 	light,

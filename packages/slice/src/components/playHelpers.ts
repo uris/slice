@@ -2235,11 +2235,10 @@ export async function runButtonTextVariantChildrenPlay({ canvasElement }: { canv
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 
-	// children take priority over the `label` prop, and the text variant
-	// forces zero top/bottom padding
+	// Children take priority over label and retain the shared vertical padding.
 	await expect(canvas.getByText('Children Label')).toBeInTheDocument();
 	const button = canvas.getByRole('button');
-	await expect(button).toHaveStyle({ paddingTop: '0px', paddingBottom: '0px' });
+	await expect(button).toHaveStyle({ paddingTop: '6px', paddingBottom: '6px' });
 }
 
 export async function runButtonRoundIconOnlyPlay({ canvasElement }: { canvasElement: HTMLElement }) {

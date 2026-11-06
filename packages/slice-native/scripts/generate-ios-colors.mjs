@@ -1,11 +1,9 @@
-import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import ts from 'typescript';
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { loadSharedColors } from './shared-colors.mjs';
 
 const root = new URL('../', import.meta.url);
 // This module contains only token data; transpile it without importing web runtime code.
-const source = readFileSync(new URL('../slice/src/theme/colors/colors.ts', root), 'utf8');
-const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
-const { light, dark } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
+const { light, dark } = await loadSharedColors();
 const excluded = new Set(['surface-shadow-soft', 'surface-shadow-strong']);
 const names = Object.keys(light)
 	.filter((name) => !excluded.has(name))

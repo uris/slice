@@ -1,0 +1,22 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {FlexDiv} from "../src/components/FlexDiv";
+import {CoreColors} from "./_components/CoreColors/CoreColors";
+
+<Meta title="Colors/Core Colors" />
+
+<FlexDiv width={"fill"} height={"fill"} align={"center"}>
+    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+            # Core Colors
+            The core palette contains 13 chromatic families and a shared gray ramp. Each chromatic ramp runs from light (50) to dark (950), with the light-mode accent fixed at 500 and the exact dark-mode accent included at its nearest shade stop.
+             
+            The gray ramp includes all 22 supplied base colors, with exact white at 0 and black at 1000. Theme tokens use the gray ramp and preserve opacity in fill, label, and glass recipes.
+
+            Note: Slice's core colors are extended with "special" colors specific to digital product design and needs.
+            
+            <CoreColors />
+
+            Note: While tokens are available via CSS in Slice for every core color, you should avoid referencing these directly and opt for referencing them via theme tokens.
+        </Unstyled>   
+    </FlexDiv>
+</FlexDiv>

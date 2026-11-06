@@ -177,7 +177,7 @@ export function TypeDef(props: Readonly<TextProps>) {
 	const { children } = props;
 	const cssVars = {
 		color: 'var(--core-text-primary)',
-		backgroundColor: 'var(--core-surface-primary)',
+		backgroundColor: 'var(--core-fill-primary)',
 	} as React.CSSProperties;
 	return (
 		<span {...visibility} className={styles.prop} style={cssVars}>
@@ -190,8 +190,8 @@ export function DefaultVal(props: Readonly<TextProps>) {
 	const visibility = useTextVisibility<HTMLSpanElement>(props);
 	const { children } = props;
 	const cssVars = {
-		color: 'var(--core-text-disabled)',
-		backgroundColor: 'var(--core-surface-primary)',
+		color: 'var(--core-text-secondary)',
+		backgroundColor: 'var(--core-fill-primary)',
 	} as React.CSSProperties;
 	return (
 		<span {...visibility} className={styles.prop} style={cssVars}>

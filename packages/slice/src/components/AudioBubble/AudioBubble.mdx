@@ -18,6 +18,10 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         ## Interface
         `AudioBubbleProps`
 
+        ## Accessibility
+
+        AudioBubble is decorative by default (`aria-hidden={true}`). Provide text status separately. Consumers can override this with `aria-hidden={false}` and their own role and accessible name.
+
         ## Props
         <table style={{width: '100%'}}>
           <colgroup>
@@ -36,16 +40,16 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
           </thead>
           <tbody>
             <tr><td><code>audioStream</code></td><td><code>{`MediaStream | MediaStreamTrack | null`}</code></td><td><code>undefined</code></td><td>The live audio source to watch. Pass a stream or a single track.</td></tr>
-            <tr><td><code>playing</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Turns the pulsing behavior on or off.</td></tr>
+            <tr><td><code>playing</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Turns the pulsing behavior on or off.</td></tr>
             <tr><td><code>size</code></td><td><code>number</code></td><td><code>64</code></td><td>The base size of the bubble in pixels.</td></tr>
             <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>var(--core-text-primary)</code></td><td>The fill color of the bubble.</td></tr>
             <tr><td><code>glow</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Whether to show the soft outer glow.</td></tr>
             <tr><td><code>glowColor</code></td><td><code>string</code></td><td><code>core text primary with 10% opacity</code></td><td>The color used for the glow shadow.</td></tr>
             <tr><td><code>glowSize</code></td><td><code>number</code></td><td><code>48</code></td><td>How large the glow should feel around the bubble.</td></tr>
             <tr><td><code>minScale</code></td><td><code>number</code></td><td><code>1</code></td><td>The resting scale when the audio is quiet.</td></tr>
-            <tr><td><code>maxScale</code></td><td><code>number</code></td><td><code>2</code></td><td>The largest size the bubble should reach.</td></tr>
+            <tr><td><code>maxScale</code></td><td><code>number</code></td><td><code>3</code></td><td>The largest size the bubble should reach.</td></tr>
             <tr><td><code>intensity</code></td><td><code>number</code></td><td><code>2.2</code></td><td>A simple sensitivity knob. Higher values make the bubble react more strongly.</td></tr>
-            <tr><td><code>peakIntensity</code></td><td><code>number</code></td><td><code>0.2</code></td><td>The audio level you want to treat as "full" speaking volume. Lower values make max scale easier to hit.</td></tr>
+            <tr><td><code>peakIntensity</code></td><td><code>number</code></td><td><code>0.5</code></td><td>The audio level you want to treat as "full" speaking volume. Lower values make max scale easier to hit.</td></tr>
             <tr><td><code>risePerSeconds</code></td><td><code>number</code></td><td><code>4</code></td><td>How quickly the bubble grows when audio gets louder.</td></tr>
             <tr><td><code>ReleasePerSeconds</code></td><td><code>number</code></td><td><code>1.5</code></td><td>How quickly the bubble settles back down after the audio drops.</td></tr>
             <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through, including `className`, `style`, `id`, and `data-*` attributes.</td></tr>

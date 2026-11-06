@@ -429,7 +429,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 								<Button
 									label={actionLabel.trim() || 'Action'}
 									variant="text"
-									size="small"
+									buttonSize="s"
 									state={!canEdit || text === '' ? 'disabled' : 'normal'}
 									textColor={theme.current.colors['core-button-primary']}
 									onClick={() => {

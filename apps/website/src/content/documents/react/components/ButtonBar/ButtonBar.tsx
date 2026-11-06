@@ -142,9 +142,9 @@ export function ButtonBarDoc() {
 				<DefaultVal>{'m'}</DefaultVal>
 			</Definition>
 			<P>
-				Overall height presets: small matches the default outlined small Button (31px with the default theme), medium is
-				36px, large is 48px, and extra large is 56px. Inner circles compensate for default wrapper padding and borders.
-				A positive finite number sets the inner circle diameter instead. Invalid runtime values use medium.
+				Shared overall height presets: s=24px, m=36px, l=44px, and xl=56px. Inner circles compensate for default wrapper
+				padding and borders. A positive finite number sets the inner circle diameter instead. Invalid runtime values use
+				m.
 			</P>
 			<Definition id={'defaultSelectedIndex'}>
 				<Prop>defaultSelectedIndex</Prop>

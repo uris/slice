@@ -92,7 +92,7 @@ function LocalDBStoreDemo() {
 								<Button
 									iconLeft={'basic.trash'}
 									round
-									size={'medium'}
+									buttonSize="m"
 									destructive={true}
 									onClick={() => void handleRemove(message)}
 								/>

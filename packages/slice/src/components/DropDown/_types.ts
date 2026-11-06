@@ -73,6 +73,7 @@ type DropDownBaseProps<T = string> = {
 	inline?: boolean;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	onChange?: (value: T, option: DropDownOption<T>, index: number) => void;
+	onChangeOption?: (option: DropDownOption<T>) => void;
 };
 export type DropDownProps<T = string> = Omit<
 	React.HTMLAttributes<HTMLSpanElement>,

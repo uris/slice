@@ -1,7 +1,15 @@
 export const usageCode = `
 import { Avatar } from '@apple-pie/slice';
 
-<Avatar name="John Wick" image="/images/jw-profile.png" size={40} />
+function UserAvatar() {
+    return (
+        <Avatar 
+            name="John Wick"
+            image="/images/jw-profile.png"
+            size={40}
+        />
+    );
+}
 `;
 
 export const initialsCode = `

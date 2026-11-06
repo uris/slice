@@ -89,7 +89,7 @@ export function OnThisPage(props: Readonly<OnThisPageProps>) {
 			const { id, title, code } = item;
 			const selected = isSelected(id);
 			const className = classNames(styles.button, code ? styles.code : styles.section);
-			const baseColor = code ? 'var(--core-text-disabled)' : 'var(--core-text-primary)';
+			const baseColor = code ? 'var(--core-text-secondary)' : 'var(--core-text-primary)';
 			const color = selected ? surfaceYellow : baseColor;
 			return (
 				<input
@@ -119,7 +119,7 @@ export function OnThisPage(props: Readonly<OnThisPageProps>) {
 				const hasItems = Boolean(_items?.length);
 				const selected = isSelected(id);
 				const className = classNames(styles.button, code ? styles.code : styles.section);
-				const baseColor = code ? 'var(--core-text-disabled)' : 'var(--core-text-primary)';
+				const baseColor = code ? 'var(--core-text-secondary)' : 'var(--core-text-primary)';
 				const color = selected ? surfaceYellow : baseColor;
 				return (
 					<div className={styles.groupWrapper} key={`group_${id}`}>

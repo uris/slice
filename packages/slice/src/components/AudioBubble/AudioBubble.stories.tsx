@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { AudioBubble, type AudioBubbleProps } from 'src/components/AudioBubble';
 import { FlexDiv } from 'src/components/FlexDiv';
+import { expect, within } from 'storybook/test';
 import { useMicrophone } from '../../hooks';
 import { Button } from '../Button';
 import { Label } from '../Label';
@@ -28,6 +29,22 @@ const meta: Meta<typeof AudioBubble> = {
 };
 
 export default meta;
+
+export const DecorativeByDefault: StoryObj<typeof AudioBubble> = {
+	tags: ['tests'],
+	render: () => <AudioBubble data-testid="decorative-bubble" />,
+	play: async ({ canvasElement }) => {
+		expect(within(canvasElement).getByTestId('decorative-bubble')).toHaveAttribute('aria-hidden', 'true');
+	},
+};
+
+export const AccessibleOverride: StoryObj<typeof AudioBubble> = {
+	tags: ['tests'],
+	render: () => <AudioBubble aria-hidden={false} role="img" aria-label="Voice activity" />,
+	play: async ({ canvasElement }) => {
+		expect(within(canvasElement).getByRole('img', { name: 'Voice activity' })).toHaveAttribute('aria-hidden', 'false');
+	},
+};
 
 export const Demo: StoryObj<typeof AudioBubble> = {
 	render: (args) => {

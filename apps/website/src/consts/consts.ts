@@ -7,7 +7,12 @@ export enum Package {
 }
 
 // side panel definition
-export const sidePanelConstraints = { min: 230, max: 400, initial: 230 };
+export const sidePanelConstraints = { min: 250, max: 400, initial: 250 };
+
+// content width (on page approx. 230)
+export const contentMaxWidth = 740;
+export const contentMinWidth = 420;
+export const showOnThisPageMinWidth = 820;
 
 // define an absolute min size for the screen
 export const minScreenSize = 360;

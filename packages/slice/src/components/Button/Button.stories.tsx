@@ -15,6 +15,7 @@ import {
 	runButtonTextVariantChildrenPlay,
 } from 'src/components/playHelpers';
 import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import { Avatar } from '../Avatar';
 import type { ButtonHandle } from './_types';
 
 const meta: Meta<typeof Button> = {
@@ -30,7 +31,7 @@ const meta: Meta<typeof Button> = {
 		},
 	},
 	args: {
-		size: 'large',
+		buttonSize: 'l',
 		variant: 'solid',
 		label: 'Button Label',
 		textSize: 'm',
@@ -65,6 +66,83 @@ const meta: Meta<typeof Button> = {
 
 export default meta;
 
+export const AutoChildren: StoryObj<typeof Button> = {
+	args: {
+		buttonSize: 'auto',
+		variant: 'solid',
+		iconLeft: undefined,
+		iconRight: undefined,
+		children: (
+			<>
+				<Avatar name="John Wick" />
+				<span>Profile Info</span>
+			</>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button', { name: /Profile Info/ }).getBoundingClientRect();
+		const avatar = canvas.getByLabelText('User Avatar - John Wick').getBoundingClientRect();
+		const text = canvas.getByText('Profile Info').getBoundingClientRect();
+		expect(avatar.top - button.top).toBeCloseTo(6, 1);
+		expect(button.bottom - avatar.bottom).toBeCloseTo(6, 1);
+		expect(text.left - avatar.right).toBeCloseTo(4, 1);
+		expect(text.top + text.height / 2).toBeCloseTo(avatar.top + avatar.height / 2, 1);
+	},
+};
+
+export const ChildrenPaddingAndGap: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: {
+		buttonSize: 'auto',
+		variant: 'solid',
+		iconLeft: undefined,
+		iconRight: undefined,
+		padding: '2px 10px',
+		paddingTop: 8,
+		paddingBottom: 4,
+		paddingLeft: 20,
+		gap: 0,
+		children: (
+			<>
+				<span style={{ display: 'block' }}>First</span>
+				<span style={{ display: 'block' }}>Second</span>
+			</>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button');
+		expect(getComputedStyle(button).padding).toBe('8px 10px 4px 20px');
+		const first = canvas.getByText('First').getBoundingClientRect();
+		const second = canvas.getByText('Second').getBoundingClientRect();
+		expect(second.left - first.right).toBeCloseTo(0, 1);
+	},
+};
+
+export const SharedSizes: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv gap={12}>
+			{(['s', 'm', 'l', 'xl', 52] as const).map((buttonSize) => (
+				<Button key={buttonSize} label={String(buttonSize)} buttonSize={buttonSize} />
+			))}
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, height] of [
+			['s', 24],
+			['m', 36],
+			['l', 44],
+			['xl', 56],
+			['52', 52],
+		] as const) {
+			expect(canvas.getByRole('button', { name }).getBoundingClientRect().height).toBeCloseTo(height, 1);
+		}
+	},
+};
+
 export const Default: StoryObj<typeof Button> = {
 	render: (args) => {
 		return (
@@ -80,7 +158,7 @@ export const Default: StoryObj<typeof Button> = {
 
 export const Small: StoryObj<typeof Button> = {
 	args: {
-		size: 'small',
+		buttonSize: 's',
 		label: 'Small Button',
 		iconRight: undefined,
 	},
@@ -350,12 +428,19 @@ export const ZeroCountHasNoStrayText: StoryObj<typeof Button> = {
 
 export const SmallRoundGeometry: StoryObj<typeof Button> = {
 	tags: ['tests'],
-	args: { round: true, size: 'small', iconLeft: 'basic.home', iconRight: undefined },
+	args: { round: true, buttonSize: 's', iconLeft: 'basic.home', iconRight: undefined },
 	render: (args) => <Button {...args} label={undefined} aria-label="Home" />,
 	play: async ({ canvasElement }) => {
 		const button = within(canvasElement).getByRole('button', { name: 'Home' });
 		await expect(button.getBoundingClientRect().width).toBe(button.getBoundingClientRect().height);
 	},
+};
+
+export const AutoRoundGeometry: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { ...SmallRoundGeometry.args, buttonSize: 'auto' },
+	render: SmallRoundGeometry.render,
+	play: SmallRoundGeometry.play,
 };
 
 export const ActualFillWidth: StoryObj<typeof Button> = {

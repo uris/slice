@@ -6,5 +6,14 @@ it('uses normalized styling, motion, state and native button callbacks',()=>{
  expectTypeOf<ToggleButtonProps['onClick']>().toEqualTypeOf<React.MouseEventHandler<HTMLButtonElement>|undefined>();
  expectTypeOf<ToggleButtonProps['onChange']>().toEqualTypeOf<((selected:boolean)=>void)|undefined>();
  expectTypeOf<ToggleButtonProps['defaultSelected']>().toEqualTypeOf<boolean|undefined>();
- expectTypeOf<ToggleButtonProps['buttonSize']>().toEqualTypeOf<'s'|'m'|'l'|'xl'|number|undefined>();
+ expectTypeOf<ToggleButtonProps['buttonSize']>().toEqualTypeOf<'auto'|'s'|'m'|'l'|'xl'|number|undefined>();
+});
+
+// Fixed-frame controls opt out of the shared auto size.
+import type { IconButtonProps } from '../IconButton';
+import type { ButtonBarProps } from '../ButtonBar';
+it('limits auto sizing to controls that support it', () => {
+ expectTypeOf<Extract<ToggleButtonProps['buttonSize'], 'auto'>>().toEqualTypeOf<'auto'>();
+ expectTypeOf<Extract<IconButtonProps['buttonSize'], 'auto'>>().toEqualTypeOf<never>();
+ expectTypeOf<Extract<ButtonBarProps['buttonSize'], 'auto'>>().toEqualTypeOf<never>();
 });

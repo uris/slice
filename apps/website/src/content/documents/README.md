@@ -127,6 +127,18 @@ and document each prop only once.
 
 ## Preview and tips
 
+For the paired preview-and-code presentation used by ToggleButton and Button,
+place each focused usage example in `ComponentCanvas` and pass its snippet as the
+item's `code` (and optional `codeFilename`). The canvas owns the collapsible code
+display; do not repeat the same snippet in a separate `CodeBlock`. A page may start
+its previews under Usage rather than duplicating a lead preview above Usage.
+For paged examples, give each item a distinct caption and code matching that
+specific preview. Keep hooks and interactive wiring in the colocated preview file.
+Every item in the first preview array must have a complete, independently copyable
+example, including imports and an exported component. Later snippets can focus on
+the relevant props without repeating the initial setup; retain any wiring needed
+to explain stateful behavior.
+
 - Pass `ComponentCanvas` an array through `components`, even for one preview:
   `components={[{ label: 'Example', component: <ExamplePreview /> }]}`. Each entry
   is one pager page, and its label becomes the caption when selected. Keep
@@ -183,6 +195,9 @@ still belong in their respective sections; a tip can supplement that content.
 Omit the box when the example is already clear without instructions.
 
 ## Code snippets
+
+Keep copyable examples framework-neutral: omit `'use client'` directives. The actual
+Next.js preview modules still declare their client boundary where required.
 
 Store snippet strings in a colocated `code.ts` and render them with `CodeBlock`.
 Use the first basic example to introduce the public package import. Later snippets

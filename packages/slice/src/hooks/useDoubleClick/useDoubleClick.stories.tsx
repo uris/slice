@@ -29,7 +29,7 @@ function UseDoubleClickDemo(props: Readonly<UseDoubleClickDemoProps>) {
 			<Button
 				label={'Click Or Double Click Me'}
 				variant={'solid'}
-				size={'large'}
+				buttonSize="l"
 				onClick={click}
 				onDoubleClick={doubleClick}
 			/>
