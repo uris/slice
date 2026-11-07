@@ -57,10 +57,22 @@ export const Password: Story = {
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByLabelText('Password', { selector: 'input' });
+		expect(canvas.getByRole('button', { name: 'Show password' }).querySelector('svg')).toHaveAttribute(
+			'aria-label',
+			'security.eye icon',
+		);
 		await userEvent.click(canvas.getByRole('button', { name: 'Show password' }));
 		expect(input).toHaveAttribute('type', 'text');
+		expect(canvas.getByRole('button', { name: 'Hide password' }).querySelector('svg')).toHaveAttribute(
+			'aria-label',
+			'security.eye-slash icon',
+		);
 		await userEvent.click(canvas.getByRole('button', { name: 'Hide password' }));
 		expect(input).toHaveAttribute('type', 'password');
+		expect(canvas.getByRole('button', { name: 'Show password' }).querySelector('svg')).toHaveAttribute(
+			'aria-label',
+			'security.eye icon',
+		);
 	},
 };
 export const Action: Story = {
@@ -985,5 +997,39 @@ export const InlineLabelSeparator: Story = {
 		expect(label.nextElementSibling).toHaveTextContent('|');
 		expect(label.nextElementSibling).toHaveAttribute('aria-hidden', 'true');
 		expect(canvas.getByRole('textbox')).toHaveAccessibleName('Email');
+	},
+};
+
+export const UnderlineDefaults: Story = {
+	tags: ['tests'],
+	args: { borderStyle: 'underline', variant: 'stacked' },
+	play: async ({ canvasElement }) => {
+		const input = within(canvasElement).getByRole('textbox');
+		const wrapper = input.closest('[data-variant]') as HTMLElement;
+		expect(getComputedStyle(wrapper).borderRadius).toBe('0px');
+		expect(getComputedStyle(wrapper).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+		expect(getComputedStyle(wrapper).boxShadow).toMatch(/0px 1px 0px 0px/);
+		await userEvent.click(input);
+		expect(getComputedStyle(wrapper).borderRadius).toBe('0px');
+		expect(getComputedStyle(wrapper).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+	},
+};
+
+export const UnderlineExplicitAppearance: Story = {
+	tags: ['tests'],
+	args: {
+		borderStyle: 'underline',
+		borderRadius: 6,
+		backgroundColorBlurred: '#123456',
+		backgroundColorFocused: '#345678',
+	},
+	play: async ({ canvasElement }) => {
+		const input = within(canvasElement).getByRole('textbox');
+		const wrapper = input.closest('[data-variant]') as HTMLElement;
+		expect(getComputedStyle(wrapper).borderRadius).toBe('6px');
+		expect(getComputedStyle(wrapper).backgroundColor).toBe('rgb(18, 52, 86)');
+		await userEvent.click(input);
+		await waitFor(() => expect(getComputedStyle(wrapper).backgroundColor).toBe('rgb(52, 86, 120)'));
+		expect(getComputedStyle(wrapper).borderRadius).toBe('6px');
 	},
 };

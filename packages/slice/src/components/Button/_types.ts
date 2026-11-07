@@ -20,6 +20,10 @@ type ButtonBaseProps = ButtonStyleProps & {
 	tooltip?: string;
 	iconSize?: number;
 	borderRadius?: number | string;
+	/** Overrides the variant border width in every state. Numbers use pixels. */
+	borderWidth?: number | string;
+	/** Overrides the variant border color in every state. */
+	borderColor?: ColorValue;
 	iconColor?: ColorValue;
 	backgroundColor?: ColorValue;
 	backgroundColorDisabled?: ColorValue;

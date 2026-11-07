@@ -5,8 +5,8 @@ import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { SliderPreview } from './SliderPreview';
-import { commitCode, controlledCode, hoverCode, stepCode, usageCode } from './code';
+import { SliderDisabledExample, SliderHoverExample, SliderStepExample, SliderUsageExample } from './UsagePreviews';
+import { commitCode, controlledCode, disabledCode, hoverCode, stepCode, usageCode } from './code';
 
 export function SliderDoc() {
 	return (
@@ -17,27 +17,25 @@ export function SliderDoc() {
 				Fine-tune a value with a compact track and draggable head. Slider fits volume, zoom, and other continuous
 				settings.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-slider--default"
-				components={[
-					{ label: 'Default slider', component: <SliderPreview /> },
-					{
-						label: 'Custom sizing',
-						component: <SliderPreview width={100} height={12} trackHeadSize={12} trackHeadBorderWidth={0} />,
-					},
-					{ label: 'Head on hover', component: <SliderPreview trackHeadOnHover /> },
-					{ label: 'Disabled slider', component: <SliderPreview disabled /> },
-				]}
-			/>
-			<TipBox inline noBorder marginBottom={false} title="Tip:">
-				Drag to change the value, or focus the slider and use the arrow keys. Dragging stays continuous; step controls
-				keyboard increments only.
-			</TipBox>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Give the slider an accessible label. It manages its own value unless you provide <Code>value</Code>.
 			</P>
-			<CodeBlock filename="SliderExample.tsx" language="tsx" code={usageCode.trim()} />
+			<TipBox inline noBorder>
+				Drag to change the value, or focus the slider and use the arrow keys. Dragging stays continuous; step controls
+				keyboard increments only.
+			</TipBox>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-slider--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <SliderUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'SliderExample.tsx',
+					},
+				]}
+			/>
 			<H3>Control the value</H3>
 			<P>
 				Use <Code>value</Code> and <Code>onChange</Code> to keep the slider in sync with your UI. For an uncontrolled
@@ -49,18 +47,49 @@ export function SliderDoc() {
 				<Code>step</Code> controls keyboard increments only. Dragging remains continuous, and keyboard increments start
 				from the current value without snapping it to a grid.
 			</P>
-			<CodeBlock filename="SliderKeyboard.tsx" language="tsx" code={stepCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-slider--default"
+				components={[
+					{
+						label: 'Set keyboard increments',
+						component: <SliderStepExample />,
+						code: stepCode.trim(),
+						codeFilename: 'SliderKeyboard.tsx',
+					},
+				]}
+			/>
 			<H3>Reveal the head on hover</H3>
 			<P>
 				Use <Code>trackHeadOnHover</Code> to keep a nonzero head transparent until hover, keyboard focus, or dragging.
 			</P>
-			<CodeBlock filename="SliderHover.tsx" language="tsx" code={hoverCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-slider--default"
+				components={[
+					{
+						label: 'Reveal the head on hover',
+						component: <SliderHoverExample />,
+						code: hoverCode.trim(),
+						codeFilename: 'SliderHover.tsx',
+					},
+				]}
+			/>
 			<H3>Handle a completed change</H3>
 			<P>
 				Use <Code>onChange</Code> for live feedback and <Code>onChangeEnd</Code> for work that should run after an
 				interaction finishes.
 			</P>
 			<CodeBlock filename="SliderCommit.tsx" language="tsx" code={commitCode.trim()} />
+			<H3>Disable the control</H3>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-slider--default"
+				components={[
+					{
+						label: 'Disabled slider',
+						component: <SliderDisabledExample />,
+						code: disabledCode.trim(),
+					},
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				With <Code>value</Code>, your app controls the display. Without it, the slider manages local state and reads{' '}

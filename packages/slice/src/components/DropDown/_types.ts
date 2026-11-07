@@ -46,6 +46,7 @@ type DropDownBaseProps<T = string> = {
 	value?: T | null;
 	defaultValue?: T | null;
 	valueKey?: string;
+	/** Treat the first option as a prompt. Defaults to true only when its value is an empty string. */
 	placeholder?: boolean;
 	borderRadius?: number | string;
 	borderStyle?: 'underline' | 'box' | 'none';

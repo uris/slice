@@ -461,7 +461,7 @@ export const TextVariantColorOverrides: StoryObj<typeof Button> = {
 	render: Default.render,
 	play: async ({ canvasElement }) => {
 		const button = within(canvasElement).getByRole('button');
-		await expect(button.style.background).toBe('rgb(37, 99, 235)');
+		await expect(button.style.backgroundColor).toBe('rgb(37, 99, 235)');
 		await expect(button.style.color).toBe('rgb(255, 255, 255)');
 	},
 };
@@ -564,5 +564,74 @@ export const MotionEventSignatures: StoryObj<typeof Button> = {
 	render: Default.render,
 	play: async ({ args }) => {
 		await waitFor(() => expect((args.onAnimationStart as ReturnType<typeof fn>).mock.calls[0]?.[0]).toBe('visible'));
+	},
+};
+
+export const BorderOverrides: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv gap={12}>
+			{(['solid', 'outline', 'text'] as const).flatMap((variant) =>
+				(['s', 'auto', 52] as const).map((buttonSize) => (
+					<Button
+						key={`${variant}-${buttonSize}`}
+						label={`${variant}-${buttonSize}`}
+						variant={variant}
+						buttonSize={buttonSize}
+						borderWidth={2}
+						borderColor="#123456"
+					/>
+				)),
+			)}
+			<Button label="Disabled border" variant="solid" disabled borderWidth="3px" borderColor="#123456" />
+			<Button label="Destructive border" destructive fill borderWidth={2} borderColor="core-text-primary" />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const variant of ['solid', 'outline', 'text']) {
+			for (const size of ['s', 'auto', 52]) {
+				const button = canvas.getByRole('button', { name: `${variant}-${size}` });
+				await expect(getComputedStyle(button).borderTopWidth).toBe('2px');
+				await expect(getComputedStyle(button).backgroundClip).toBe('padding-box');
+				await expect(getComputedStyle(button).borderTopColor).toBe('rgb(18, 52, 86)');
+				await userEvent.hover(button);
+				await expect(getComputedStyle(button).borderTopColor).toBe('rgb(18, 52, 86)');
+				await expect(button).not.toHaveAttribute('borderWidth');
+				await expect(button).not.toHaveAttribute('borderColor');
+			}
+		}
+		const disabled = canvas.getByRole('button', { name: 'Disabled border' });
+		await expect(getComputedStyle(disabled).borderTopWidth).toBe('3px');
+		await expect(getComputedStyle(disabled).borderTopColor).toBe('rgb(18, 52, 86)');
+		const destructive = canvas.getByRole('button', { name: 'Destructive border' });
+		await expect(destructive.style.borderColor).toBe('var(--core-text-primary)');
+	},
+};
+
+export const ZeroAndRoundBorders: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv gap={12}>
+			<Button label="Borderless outline" borderWidth={0} borderColor="transparent" />
+			<Button label="Color only" borderColor="#123456" />
+			<Button label="Width only" variant="solid" borderWidth={2} />
+			<Button buttonSize="auto" round iconLeft="basic.home" aria-label="Round bordered" borderWidth={3} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(getComputedStyle(canvas.getByRole('button', { name: 'Borderless outline' })).borderTopWidth).toBe(
+			'0px',
+		);
+		const colorOnly = canvas.getByRole('button', { name: 'Color only' });
+		await expect(getComputedStyle(colorOnly).borderTopWidth).toBe('1px');
+		await expect(getComputedStyle(colorOnly).borderTopColor).toBe('rgb(18, 52, 86)');
+		const widthOnly = canvas.getByRole('button', { name: 'Width only' });
+		await expect(getComputedStyle(widthOnly).borderTopWidth).toBe('2px');
+		await expect(getComputedStyle(widthOnly).borderTopColor).toBe('rgba(0, 0, 0, 0)');
+		const round = canvas.getByRole('button', { name: 'Round bordered' }).getBoundingClientRect();
+		await expect(round.width).toBe(round.height);
+		await expect(round.width).toBe(38);
 	},
 };

@@ -13,18 +13,6 @@ export function TipDoc() {
 			<Path />
 			<H1 id="title">Tip component</H1>
 			<P clipWidth>{'Add a short hint beside an action without pulling people away from their work.'}</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tip--demo"
-				components={[
-					{ label: 'A short hint', component: <TipPreview /> },
-					{ label: 'Hover or focus', component: <TipPreview interactive /> },
-				]}
-			/>
-			<TipBox inline noBorder title="Tip:">
-				{
-					'In the interactive example, hover or focus Project details to show the hint. Preview coordinates are local to the canvas.'
-				}
-			</TipBox>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Provide the hint through '}
@@ -33,7 +21,17 @@ export function TipDoc() {
 				<Code>{'coords'}</Code>
 				{'. The current visibility logic requires both coordinates to be greater than zero.'}
 			</P>
-			<CodeBlock filename="TipExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tip--demo"
+				components={[
+					{ label: 'Basic usage', component: <TipPreview />, code: usageCode.trim(), codeFilename: 'TipExample.tsx' },
+				]}
+			/>
+			<TipBox inline noBorder title="Tip:">
+				{
+					'In the interactive example, hover or focus Project details to show the hint. Preview coordinates are local to the canvas.'
+				}
+			</TipBox>
 			<H3>Position beside a control</H3>
 			<P>
 				{'Use '}
@@ -42,7 +40,17 @@ export function TipDoc() {
 					' to calculate viewport coordinates from tooltip metadata and a measured tooltip ref. The triggering control supplies the metadata.'
 				}
 			</P>
-			<CodeBlock filename="positionedCode.tsx" language="tsx" code={positionedCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tip--demo"
+				components={[
+					{
+						label: 'Position beside a control',
+						component: <TipPreview interactive />,
+						code: positionedCode.trim(),
+						codeFilename: 'positionedCode.tsx',
+					},
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				{'Changing '}

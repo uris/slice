@@ -35,19 +35,19 @@ export function ActiveTabPreview() {
 				<Code>isActiveTab</Code>
 			</dt>
 			<dd style={{ margin: 0 }}>
-				<Switch checked={showActive} transition={transition} disabled aria-label="isActiveTab" />
+				<Switch checked={showActive} transition={transition} disabled name="isActiveTab" />
 			</dd>
 			<dt>
 				<Code>isTabFocused</Code>
 			</dt>
 			<dd style={{ margin: 0 }}>
-				<Switch checked={showFocused} transition={transition} disabled aria-label="isTabFocused" />
+				<Switch checked={showFocused} transition={transition} disabled name="isTabFocused" />
 			</dd>
 			<dt>
 				<Code>visibilityState</Code>
 			</dt>
 			<dd style={{ margin: 0 }}>
-				<Switch checked={showVisible} transition={transition} disabled aria-label="Document visible" />
+				<Switch checked={showVisible} transition={transition} disabled name="Document visible" />
 			</dd>
 		</dl>
 	);

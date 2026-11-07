@@ -13,13 +13,6 @@ export function DialogBoxDoc() {
 			<H1 id="title">DialogBox component</H1>
 			<P clipWidth>{'Bring a decision, its context, and the next action into one compact panel.'}</P>
 			{/* Published Storybook still uses Modal; update the URL after the DialogBox story is deployed. */}
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modal--default"
-				components={[
-					{ label: 'Confirm an action', component: <DialogBoxPreview /> },
-					{ label: 'Scrolling content', component: <DialogBoxPreview scroll /> },
-				]}
-			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Render the panel when your app needs it, then close it from the action callbacks. '}
@@ -35,7 +28,17 @@ export function DialogBoxDoc() {
 				<Code openURL="/docs/react/modal-controller/">ModalController</Code>
 				{'.'}
 			</P>
-			<CodeBlock filename="DialogBoxExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modal--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <DialogBoxPreview />,
+						code: usageCode.trim(),
+						codeFilename: 'DialogBoxExample.tsx',
+					},
+				]}
+			/>
 			<H3>Use props instead</H3>
 			<P>
 				For a concise alternative, provide <Code>title</Code> and <Code>actions</Code> and use ordinary children for the
@@ -55,7 +58,17 @@ export function DialogBoxDoc() {
 				<Code>{'maxHeight'}</Code>
 				{' to limit the panel. Its content area scrolls while the title and actions remain in place.'}
 			</P>
-			<CodeBlock filename="scrollingCode.tsx" language="tsx" code={scrollingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modal--default"
+				components={[
+					{
+						label: 'Make room for longer content',
+						component: <DialogBoxPreview scroll />,
+						code: scrollingCode.trim(),
+						codeFilename: 'scrollingCode.tsx',
+					},
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				{'The actions array calls '}
@@ -76,7 +89,8 @@ export function DialogBoxDoc() {
 			</P>
 			<P>
 				The content area responds to content and container size changes. <Code>autoBorderBottom</Code> adds a footer
-				divider while the body scrolls.
+				divider while the body scrolls. The header and footer use <Code>core-fill-primary</Code> while scrolling and
+				return to <Code>backgroundColor</Code> when the content fits, unless their colors are explicitly set.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
@@ -154,12 +168,12 @@ export function DialogBoxDoc() {
 			<Definition id="actionsBackgroundColor">
 				<Prop>actionsBackgroundColor</Prop>
 				<TypeDef>ColorValue</TypeDef>
-				<DefaultVal>backgroundColor mixed with 6% black</DefaultVal>
+				<DefaultVal>scroll-dependent</DefaultVal>
 			</Definition>
 			<P>
-				Footer background for composed controls and the actions array. Accepts Slice tokens or CSS colors. By default,
-				it follows <Code>backgroundColor</Code> with a subtle darker tint. Set <Code>transparent</Code> for no footer
-				fill.
+				Footer background for composed controls and the actions array. Defaults to <Code>core-fill-primary</Code> when
+				the body scrolls, otherwise <Code>backgroundColor</Code>. Explicit colors, including <Code>transparent</Code>,
+				apply in both states.
 			</P>
 			<Definition id="actionsBorderColor">
 				<Prop>actionsBorderColor</Prop>
@@ -253,7 +267,10 @@ export function DialogBoxDoc() {
 				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'300'}</DefaultVal>
 			</Definition>
-			<P>{'Minimum panel width. Lower it for narrower layouts.'}</P>
+			<P>
+				An explicit minimum width is honored even when it exceeds the parent or viewport. When omitted, the 300px
+				default is capped to the available parent width.
+			</P>
 			<Definition id="padding">
 				<Prop>padding</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
@@ -261,7 +278,8 @@ export function DialogBoxDoc() {
 			</Definition>
 			<P>
 				Padding shared by the header, body, and footer. Numbers become pixels; CSS shorthand and expressions are
-				preserved.
+				preserved. When omitted, header bottom padding is 4px while the body scrolls and zero otherwise. Explicit
+				padding, including zero, takes precedence.
 			</P>
 			<Definition id="scrollHandleColor">
 				<Prop>scrollHandleColor</Prop>
@@ -284,6 +302,15 @@ export function DialogBoxDoc() {
 				{'Title-area text. The title area also appears when '}
 				<Code>{'close'}</Code>
 				{' is enabled.'}
+			</P>
+			<Definition id="titleBackgroundColor">
+				<Prop>titleBackgroundColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>scroll-dependent</DefaultVal>
+			</Definition>
+			<P>
+				Header background. Defaults to <Code>core-fill-primary</Code> when the body scrolls, otherwise{' '}
+				<Code>backgroundColor</Code>. An explicit color applies in both states.
 			</P>
 			<Definition id="titleBorderColor">
 				<Prop>titleBorderColor</Prop>
@@ -464,6 +491,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'scrollHandleColor', title: 'scrollHandleColor', code: true },
 			{ id: 'scrollHandleColorHover', title: 'scrollHandleColorHover', code: true },
 			{ id: 'prop-title', title: 'title', code: true },
+			{ id: 'titleBackgroundColor', title: 'titleBackgroundColor', code: true },
 			{ id: 'titleBorderColor', title: 'titleBorderColor', code: true },
 			{ id: 'titleBorderWidth', title: 'titleBorderWidth', code: true },
 			{ id: 'titleIcon', title: 'titleIcon', code: true },

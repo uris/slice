@@ -71,7 +71,7 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 		valueKey,
 		options: optionItems,
 		children,
-		placeholder = true,
+		placeholder: placeholderProp,
 		borderRadius = corners['corner-m'],
 		backgroundColor,
 		iconColor = 'var(--core-text-primary)',
@@ -103,6 +103,7 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 		() => resolveOptions<T>(optionItems, children),
 		[optionItems, children],
 	);
+	const placeholder = placeholderProp ?? options[0]?.value === '';
 	const generatedId = useId();
 	const id = inputId || generatedId;
 	const hasLabel = Boolean(label?.trim());
@@ -129,7 +130,7 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 		selectedValue == null ? -1 : options.findIndex((option) => matchesValue(option.value, selectedValue, valueKey));
 	const option = options[index];
 	const appearing = variant === 'stacked' && behavior === 'appear' && !reduced && hasLabel;
-	const emptySelection = index < 0 || selectedValue === '' || (placeholder && index === 0);
+	const emptySelection = index < 0 || (placeholder && (selectedValue === '' || index === 0));
 	const collapsedLabel = appearing && emptySelection;
 	const nativeValue = option ? formValue(option, index, valueKey) : '';
 	const latestNativeValue = useRef(nativeValue);
@@ -222,7 +223,7 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 	};
 	const getTextColor = () => {
 		if (disabled) return textColorDisabled;
-		if (collapsedLabel || (placeholder && index <= 0)) return textColorPlaceholder;
+		if (placeholder && (collapsedLabel || index <= 0)) return textColorPlaceholder;
 		return textColor;
 	};
 	const getBorderColor = () => {

@@ -35,7 +35,7 @@
 	line-height: 140%;
 	letter-spacing: 1.25%;
 	color: var(--core-text-primary);
-	margin-top: 8px;
+	margin-top: 16px;
 }
 
 .p {
@@ -65,13 +65,13 @@
 	box-sizing: border-box;
 	padding: 0 6px;
 	border-radius: 4px;
-	background-color: var(--core-grey-1000);
+	background-color: var(--core-surface-secondary);
 }
 
 .prop {
 	font-family: var(--font-mono), monospace;
-	font-weight: 460;
-	font-size: 12px;
+	font-weight: 550;
+	font-size: 13px;
 	font-variant-ligatures: none;
 	line-height: 162.5%;
 	letter-spacing: 0.94%;

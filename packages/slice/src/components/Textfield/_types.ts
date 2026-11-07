@@ -62,12 +62,15 @@ type TextFieldBaseProps = {
 	width?: number | string;
 	height?: number | string;
 	padding?: string | number;
+	/** Defaults to 0 for underline borders, otherwise 8px. */
 	borderRadius?: number | string;
 	textAlign?: 'left' | 'center';
 	borderColorFocused?: ColorValue;
 	borderColorBlurred?: ColorValue;
 	borderColorError?: ColorValue;
+	/** Defaults to transparent for underline borders, otherwise core-surface-secondary. */
 	backgroundColorFocused?: ColorValue;
+	/** Defaults to transparent for underline borders, otherwise core-surface-secondary. */
 	backgroundColorBlurred?: ColorValue;
 	textColorFocused?: ColorValue;
 	textColorBlurred?: ColorValue;

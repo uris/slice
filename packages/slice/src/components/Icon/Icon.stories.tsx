@@ -41,3 +41,28 @@ export const Default: StoryObj<typeof Icon> = {
 		await runIconPlay({ canvasElement, args });
 	},
 };
+
+export const FilledMoreIcons: StoryObj<typeof Icon> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv gap={16}>
+			<Icon name={SliceIcons.basic.moreHorizFill} size={20} strokeColor="#123456" pointer={false} />
+			<Icon name={SliceIcons.basic.moreVertFill} size={20} strokeColor="#123456" pointer={false} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, width, height] of [
+			['basic.more-horiz-fill', 15, 2.5],
+			['basic.more-vert-fill', 2.5, 15],
+		] as const) {
+			const icon = canvas.getByRole('img', { name: `${name} icon` });
+			const path = icon.querySelector('path') as SVGPathElement;
+			await expect(path).toHaveAttribute('fill', '#123456');
+			await expect(path).not.toHaveAttribute('stroke');
+			const bounds = path.getBBox();
+			await expect(bounds.width).toBe(width);
+			await expect(bounds.height).toBe(height);
+		}
+	},
+};

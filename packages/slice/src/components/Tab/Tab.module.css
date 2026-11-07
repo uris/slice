@@ -14,7 +14,7 @@
 	outline: none;
 	appearance: none;
 	background: transparent;
-	color: var(--core-text-primary);
+	color: var(--tab-text-color, var(--core-text-primary));
 	font: inherit;
 	white-space: nowrap;
 	overflow: hidden;
@@ -23,13 +23,14 @@
 		var(--motion-water);
 }
 .option.selected {
-	color: var(--core-text-special);
+	color: var(--tab-text-color-selected, var(--core-text-special));
 }
 .option:disabled {
 	color: var(--core-text-disabled);
 	cursor: default;
 }
 .icon {
+	color: var(--tab-icon-color, currentColor);
 	display: inline-flex;
 	flex: 0 0 var(--tab-bar-icon-size);
 	width: var(--tab-bar-icon-size);
@@ -39,4 +40,11 @@
 	.option {
 		transition: none;
 	}
+}
+
+.option.selected .icon {
+	color: var(--tab-icon-color-selected, currentColor);
+}
+.option:disabled .icon {
+	color: var(--core-text-disabled);
 }

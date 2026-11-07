@@ -1,15 +1,16 @@
-import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
+import {} from './CheckBoxPreview';
 import {
-	MixedCheckBoxPreview,
-	MultilineCheckBoxPreview,
-	RequiredCheckBoxPreview,
-	SingleLineCheckBoxPreview,
-} from './CheckBoxPreview';
+	CheckBoxCustomExample,
+	CheckBoxDisabledExample,
+	CheckBoxMixedExample,
+	CheckBoxMultilineExample,
+	CheckBoxUsageExample,
+} from './UsagePreviews';
 import { customCode, disabledCode, mixedCode, multilineCode, usageCode } from './code';
 
 export function CheckBoxDoc() {
@@ -21,31 +22,52 @@ export function CheckBoxDoc() {
 				Let people choose an option or show a partially selected group. CheckBox pairs a state icon with text you can
 				tailor to your interface.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-checkbox--default"
-				components={[
-					{ label: 'Single-line checkbox', component: <SingleLineCheckBoxPreview /> },
-					{ label: 'Mixed selection', component: <MixedCheckBoxPreview /> },
-					{ label: 'Required selection', component: <RequiredCheckBoxPreview /> },
-					{ label: 'Multiline checkbox', component: <MultilineCheckBoxPreview /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Set <Code>label</Code> for the text beside the icon and handle <Code>onChange</Code> to update your application.
 			</P>
-			<CodeBlock filename="CheckBoxExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-checkbox--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <CheckBoxUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'CheckBoxExample.tsx',
+					},
+				]}
+			/>
 			<H3>Show a mixed selection</H3>
 			<P>
 				Use <Code>checked="mixed"</Code> for a partially selected group. setAllSelected is your application handler.
 			</P>
-			<CodeBlock filename="MixedCheckBox.tsx" language="tsx" code={mixedCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-checkbox--default"
+				components={[
+					{
+						label: 'Show a mixed selection',
+						component: <CheckBoxMixedExample />,
+						code: mixedCode.trim(),
+						codeFilename: 'MixedCheckBox.tsx',
+					},
+				]}
+			/>
 			<H3>Adjust icons and text</H3>
 			<P>
 				Choose an icon for each state. <Code>iconSize</Code> and <Code>textSize</Code> size them independently;{' '}
 				<Code>gap</Code> sets the space between them.
 			</P>
-			<CodeBlock filename="CustomCheckBox.tsx" language="tsx" code={customCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-checkbox--default"
+				components={[
+					{
+						label: 'Adjust icons and text',
+						component: <CheckBoxCustomExample />,
+						code: customCode.trim(),
+						codeFilename: 'CustomCheckBox.tsx',
+					},
+				]}
+			/>
 			<H3>Align a multiline label</H3>
 			<P>
 				Constrain the width to wrap a long label. Use <Code>align="top"</Code> to keep the icon beside the first line,
@@ -53,9 +75,29 @@ export function CheckBoxDoc() {
 				are preserved. Use <Code>textTopOffset</Code> for a small manual adjustment: positive moves text down, negative
 				moves it up.
 			</P>
-			<CodeBlock filename="TermsCheckBox.tsx" language="tsx" code={multilineCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-checkbox--default"
+				components={[
+					{
+						label: 'Align a multiline label',
+						component: <CheckBoxMultilineExample />,
+						code: multilineCode.trim(),
+						codeFilename: 'TermsCheckBox.tsx',
+					},
+				]}
+			/>
 			<H3>Disable an option</H3>
-			<CodeBlock filename="DisabledCheckBox.tsx" language="tsx" code={disabledCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-checkbox--default"
+				components={[
+					{
+						label: 'Disable an option',
+						component: <CheckBoxDisabledExample />,
+						code: disabledCode.trim(),
+						codeFilename: 'DisabledCheckBox.tsx',
+					},
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				The checkbox keeps local state and synchronizes when <Code>checked</Code> changes. Activating a mixed checkbox

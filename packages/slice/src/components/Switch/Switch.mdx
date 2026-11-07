@@ -51,10 +51,11 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
                 <tr><td><code>knobColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-primary)'</code></td><td>Knob color.</td></tr>
                 <tr><td><code>knobRadius</code></td><td><code>number | string</code></td><td><code>var(--corner-round)</code></td><td>Knob corner radius, independent of the track; use 0 for square corners.</td></tr>
                 <tr><td><code>knobWidth</code></td><td><code>number</code></td><td><code>26</code></td><td>Knob width in pixels, clamped to available track space. Defaults to a pill shape; invalid or nonpositive values use 26px.</td></tr>
+                <tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Native button name and accessible label. Blank or omitted values use Switch as the accessible label.</td></tr>
                 <tr><td><code>padding</code></td><td><code>number</code></td><td><code>2 (theme spacing-xxs)</code></td><td>Inner track padding; omitted values follow the theme and explicit numbers are pixels.</td></tr>
                 <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>undefined</code></td><td>Transition settings merged with Slice’s Water transition and applied to knob movement and color changes on both knob and track.</td></tr>
                 <tr><td><code>width</code></td><td><code>number</code></td><td><code>48</code></td><td>Track width in pixels.</td></tr>
-                <tr><td><code>...buttonAttributes</code></td><td><code>{`ButtonHTMLAttributes<HTMLButtonElement>`}</code></td><td><code>-</code></td><td>Standard button props passed through to the root element.</td></tr>
+                <tr><td><code>...buttonAttributes</code></td><td><code>{`ButtonHTMLAttributes<HTMLButtonElement>`}</code></td><td><code>-</code></td><td>Native button props passed through to the root element. Role and ARIA attributes are managed internally; use name for the accessible label.</td></tr>
             </tbody>
         </table>
 
@@ -66,7 +67,7 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
         - Invalid dimensions fall back to 48 × 22px; width is at least height and padding is clamped to retain a knob of at least 1px.
 
         ## Accessibility
-        Use `aria-label` or `aria-labelledby` to name the setting. The native button has `role="switch"`, reports `aria-checked`, supports Enter/Space, and provides an inset keyboard focus indicator.
+        Use `name` to name the setting. Its trimmed value supplies `aria-label`; omitted or blank values use `Switch`. The native button has `role="switch"`, reports `aria-checked`, supports Enter/Space, and provides an inset keyboard focus indicator.
 
         Reduced-motion preferences disable knob animations and track transitions, including custom delays. Live changes preserve focus.
 
@@ -110,7 +111,7 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
         export function TypedSwitchExample() {
             return (
                 <Switch<FeatureValue>
-                    aria-label="Auto Save"
+                    name="Auto Save"
                     value={{ id: 1 }}
                     defaultChecked={false}
                     onChange={(value, checked) => {

@@ -276,5 +276,13 @@ export const STATIC_ICON_REGISTRY = new Map<string, IconDefinition>([
 			),
 		},
 	],
+	[
+        'basic.more-horiz-fill',
+        { line: ({ strokeColor }) => <path d="M2.5 10a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0 -2.5 0ZM8.75 10a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0 -2.5 0ZM15 10a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0 -2.5 0Z" fill={strokeColor} /> },
+    ],
+	[
+        'basic.more-vert-fill',
+        { line: ({ strokeColor }) => <path d="M8.75 3.75a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0 -2.5 0ZM8.75 10a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0 -2.5 0ZM8.75 16.25a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0 -2.5 0Z" fill={strokeColor} /> },
+    ],
 /* IMPORTED_ICON_ENTRIES */
 ]);

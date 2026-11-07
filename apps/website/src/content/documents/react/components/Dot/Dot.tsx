@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { DotPreview } from './DotPreview';
+import { DotExample1Example, DotUsageExample } from './UsagePreviews';
 import { example1Code, motionCode, usageCode } from './code';
 
 export function DotDoc() {
@@ -16,22 +16,39 @@ export function DotDoc() {
 				Add a small signal for new activity or status. Dot can sit beside content or attach to the corner of a
 				positioned container.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-dot--default"
-				components={[{ label: 'Dot', component: <DotPreview /> }]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Set <Code>show</Code> to render the dot. Use inline positioning when it should occupy space beside other
 				content.
 			</P>
-			<CodeBlock filename="DotExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-dot--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <DotUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'DotExample.tsx',
+					},
+				]}
+			/>
 			<H3>Attach to a corner</H3>
 			<P>
-				Use a positioned parent for corner placement. <Code>rightOffset</Code> and <Code>topOffset</Code> are pixel
-				distances from that parent.
+				Use a positioned parent for corner placement. <Code>offSet</Code> sets both top and right offsets in pixels.
+				Positive values move the dot outward by applying negative CSS offsets. <Code>topOffset</Code> and
+				<Code>rightOffset</Code> override their respective sides, including zero.
 			</P>
-			<CodeBlock filename="DotExample1.tsx" language="tsx" code={example1Code.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-dot--default"
+				components={[
+					{
+						label: 'Attach to a corner',
+						component: <DotExample1Example />,
+						code: example1Code.trim(),
+						codeFilename: 'DotExample1.tsx',
+					},
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				<Code>show</Code>=false removes the dot after its exit animation. Corner positioning is absolute and needs a
@@ -74,6 +91,15 @@ export function DotDoc() {
 			<P>
 				Explicit dot <Code>color</Code>. Takes priority over <Code>state</Code>.
 			</P>
+			<Definition id={'offSet'}>
+				<Prop>offSet</Prop>
+				<TypeDef>number</TypeDef>
+				<DefaultVal>2</DefaultVal>
+			</Definition>
+			<P>
+				Shared top and right offset in pixels for corner mode. Positive values move outward; negative values move
+				inward. Individual offsets take precedence. Ignored in inline mode.
+			</P>
 			<Definition id={'position'}>
 				<Prop>position</Prop>
 				<TypeDef>{"'inline' | 'corner'"}</TypeDef>
@@ -83,9 +109,12 @@ export function DotDoc() {
 			<Definition id={'rightOffset'}>
 				<Prop>rightOffset</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'2'}</DefaultVal>
+				<DefaultVal>offSet</DefaultVal>
 			</Definition>
-			<P>Distance from the right edge in corner mode, in pixels. Ignored in inline mode.</P>
+			<P>
+				Overrides <Code>offSet</Code> for the right edge in corner mode. Positive values apply a negative CSS offset;
+				zero stays on the edge. Ignored in inline mode.
+			</P>
 			<Definition id={'show'}>
 				<Prop>show</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -110,9 +139,12 @@ export function DotDoc() {
 			<Definition id={'topOffset'}>
 				<Prop>topOffset</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'2'}</DefaultVal>
+				<DefaultVal>offSet</DefaultVal>
 			</Definition>
-			<P>Distance from the top edge in corner mode, in pixels. Ignored in inline mode.</P>
+			<P>
+				Overrides <Code>offSet</Code> for the top edge in corner mode. Positive values apply a negative CSS offset; zero
+				stays on the edge. Ignored in inline mode.
+			</P>
 			<Definition id={'divAttributes'}>
 				<Prop>...divAttributes</Prop>
 				<TypeDef>{'React.HTMLAttributes<HTMLDivElement>'}</TypeDef>
@@ -172,6 +204,7 @@ export const trackedItems: TrackedItem[] = [
 		items: [
 			{ id: 'border', title: 'border', code: true },
 			{ id: 'color', title: 'color', code: true },
+			{ id: 'offSet', title: 'offSet', code: true },
 			{ id: 'position', title: 'position', code: true },
 			{ id: 'rightOffset', title: 'rightOffset', code: true },
 			{ id: 'show', title: 'show', code: true },

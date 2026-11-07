@@ -35,11 +35,11 @@ const meta: Meta<typeof Chip> = {
 		borderColorDisabled: { control: 'text' },
 		borderWidth: { control: { type: 'number', min: 0 } },
 		borderRadius: { control: 'text' },
-		padding: { control: { type: 'number', min: 0 } },
-		paddingTop: { control: { type: 'number', min: 0 } },
-		paddingRight: { control: { type: 'number', min: 0 } },
-		paddingBottom: { control: { type: 'number', min: 0 } },
-		paddingLeft: { control: { type: 'number', min: 0 } },
+		padding: { control: 'text' },
+		paddingTop: { control: 'text' },
+		paddingRight: { control: 'text' },
+		paddingBottom: { control: 'text' },
+		paddingLeft: { control: 'text' },
 		gap: { control: { type: 'number', min: 0 } },
 		disabled: { control: 'boolean' },
 		tooltip: { control: 'text' },
@@ -194,6 +194,51 @@ export const UniformPadding: StoryObj<typeof Chip> = {
 		await expect(within(canvasElement).getByRole('button', { name: 'Chip Label' })).toHaveStyle({ padding: '6px' });
 	},
 };
+export const StringPadding: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	args: {
+		padding: 'var(--spacing-xs) calc(var(--spacing-s) + var(--spacing-xs)) var(--spacing-s) 1rem',
+		paddingTop: 0,
+		paddingLeft: 'calc(var(--spacing-xs) + var(--spacing-xxs))',
+	},
+	render: Default.render,
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).getByRole('button', { name: 'Chip Label' })).toHaveStyle({
+			paddingTop: '0px',
+			paddingRight: '12px',
+			paddingBottom: '8px',
+			paddingLeft: '6px',
+		});
+	},
+};
+
+export const RemovableStringPadding: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	args: {
+		padding: '2px 10px 6px 14px',
+		paddingTop: 'var(--spacing-xs)',
+		paddingRight: 0,
+		paddingLeft: 'var(--spacing-s)',
+		onRemove: fn(),
+	},
+	render: Default.render,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('button', { name: 'Chip Label' })).toHaveStyle({
+			paddingTop: '4px',
+			paddingRight: '4px',
+			paddingBottom: '6px',
+			paddingLeft: '8px',
+		});
+		await expect(canvas.getByRole('button', { name: 'Remove Chip Label' })).toHaveStyle({
+			paddingTop: '4px',
+			paddingRight: '0px',
+			paddingBottom: '6px',
+			paddingLeft: '0px',
+		});
+	},
+};
+
 export const FocusAndNativeHandlers: StoryObj<typeof Chip> = {
 	tags: ['tests'],
 	args: { onFocus: fn(), onBlur: fn(), onMouseEnter: fn() },

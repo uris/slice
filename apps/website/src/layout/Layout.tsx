@@ -3,9 +3,10 @@
 import { sidePanelConstraints } from '@/src/consts/consts';
 import { Content } from '@/src/layout/Content';
 import { Sidebar } from '@/src/layout/Sidebar';
-import { DraggablePanel, FlexDiv, Preset, Tip, useToolTip, useWindow } from '@apple-pie/slice';
+import { DraggablePanel, FlexDiv, ModalController, Preset, Tip, useToolTip, useWindow } from '@apple-pie/slice';
 import { useTip } from '@apple-pie/slice/stores';
 import { useRef } from 'react';
+import styles from './Layout.module.css';
 
 export function Layout() {
 	const viewRef = useRef<HTMLDivElement | null>(null);
@@ -29,13 +30,14 @@ export function Layout() {
 					isClosed={false}
 					dragHandle={false}
 					sizeConstraints={sidePanelConstraints}
-					borderRight={false}
+					className={styles.sidebar}
 				>
 					<Sidebar />
 				</DraggablePanel>
 			</FlexDiv>
 			<Content />
 			<Tip tip={tip} coords={coords} ref={tipRef} />
+			<ModalController dragConstraintsRef={viewRef} draggable={true} />
 		</FlexDiv>
 	);
 }

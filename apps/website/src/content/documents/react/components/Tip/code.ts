@@ -1,10 +1,13 @@
-export const usageCode = `
-import { Tip } from '@apple-pie/slice';
+export const usageCode = `import { Tip } from '@apple-pie/slice';
 
+export function TipExample() {
+ return (
 <Tip
   tip={{ payload: { label: 'Your changes are saved automatically.' } }}
   coords={{ x: 24, y: 48 }}
 />
+ );
+}
 `;
 export const positionedCode = `
 import { useRef, useState } from 'react';

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Dot } from 'src/components/Dot/Dot';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { runDotPlay, runDotVariantsPlay } from 'src/components/playHelpers';
+import { expect, within } from 'storybook/test';
 
 const meta: Meta<typeof Dot> = {
 	title: 'Components/Dot',
@@ -16,8 +17,7 @@ const meta: Meta<typeof Dot> = {
 	},
 	args: {
 		size: 8,
-		topOffset: 2,
-		rightOffset: 2,
+		offSet: 2,
 		border: 3,
 		position: 'inline',
 		motionValues: undefined,
@@ -81,5 +81,35 @@ export const ToggleVisibility: StoryObj<typeof Dot> = {
 				<Dot {...args} show={show} />
 			</FlexDiv>
 		);
+	},
+};
+
+export const CornerOffsets: StoryObj<typeof Dot> = {
+	tags: ['tests'],
+	render: () => (
+		<div style={{ position: 'relative', width: 100, height: 100 }}>
+			<Dot show aria-label="Default offsets" />
+			<Dot show offSet={6} aria-label="Shared offset" />
+			<Dot show offSet={6} topOffset={0} rightOffset={3} aria-label="Individual offsets" />
+			<Dot show offSet={-4} aria-label="Inward offset" />
+			<Dot show position="inline" offSet={10} aria-label="Inline offset" />
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [label, top, right] of [
+			['Default offsets', '-2px', '-2px'],
+			['Shared offset', '-6px', '-6px'],
+			['Individual offsets', '0px', '-3px'],
+			['Inward offset', '4px', '4px'],
+		]) {
+			const dot = canvas.getByRole('status', { name: label });
+			await expect(getComputedStyle(dot).top).toBe(top);
+			await expect(getComputedStyle(dot).right).toBe(right);
+			await expect(dot).not.toHaveAttribute('offSet');
+		}
+		const inline = canvas.getByRole('status', { name: 'Inline offset' });
+		await expect(inline.style.getPropertyValue('--dot-top')).toBe('unset');
+		await expect(inline.style.getPropertyValue('--dot-right')).toBe('unset');
 	},
 };

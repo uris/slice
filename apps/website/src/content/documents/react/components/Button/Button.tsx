@@ -233,12 +233,30 @@ export function ButtonDoc() {
 				<DefaultVal>{'variant disabled background'}</DefaultVal>
 			</Definition>
 			<P>Background color when disabled. Independent of backgroundColor.</P>
+			<Definition id={'borderColor'}>
+				<Prop>borderColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Overrides the border color for every variant, size, and state, including hover and disabled. When omitted, the
+				variant’s color applies.
+			</P>
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'corner-round'}</DefaultVal>
 			</Definition>
 			<P>Corner radius. Numbers use pixels; strings accept CSS lengths.</P>
+			<Definition id={'borderWidth'}>
+				<Prop>borderWidth</Prop>
+				<TypeDef>{'number | string'}</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Overrides the border width for every variant and size. Numbers use pixels; strings accept CSS lengths. Explicit
+				zero removes the border. When omitted, the variant’s width applies.
+			</P>
 			<Definition id={'buttonSize'}>
 				<Prop>buttonSize</Prop>
 				<TypeDef>{"'auto' | 's' | 'm' | 'l' | 'xl' | number"}</TypeDef>
@@ -603,7 +621,9 @@ export const buttonTrackedItems: TrackedItem[] = [
 		items: [
 			{ id: 'backgroundColor', title: 'backgroundColor', code: true },
 			{ id: 'backgroundColorDisabled', title: 'backgroundColorDisabled', code: true },
+			{ id: 'borderColor', title: 'borderColor', code: true },
 			{ id: 'borderRadius', title: 'borderRadius', code: true },
+			{ id: 'borderWidth', title: 'borderWidth', code: true },
 			{ id: 'buttonSize', title: 'buttonSize', code: true },
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'count', title: 'count', code: true },

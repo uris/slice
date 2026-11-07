@@ -4,7 +4,9 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { TabPreview } from './TabPreview';
+import { TabColorExample } from './UsagePreviews';
+import { TabCustomExample, TabExtrasExample, TabUsageExample } from './UsagePreviews';
+import { colorsCode } from './code';
 import { customCode, extrasCode, panelsCode, usageCode } from './code';
 export function TabDoc() {
 	return (
@@ -15,32 +17,62 @@ export function TabDoc() {
 				Give each view a clear place in your navigation. Tab pairs a label with an optional icon and count, while TabBar
 				manages the selection.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tab--default"
-				components={[
-					{ label: 'Text tab', component: <TabPreview /> },
-					{ label: 'Icon and count', component: <TabPreview variant="extras" /> },
-					{ label: 'Custom content', component: <TabPreview variant="custom" /> },
-					{ label: 'Disabled choice', component: <TabPreview variant="disabled" /> },
-				]}
-			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				Place Tab inside <Code openURL="/docs/react/tab-bar/">TabBar</Code> and give each choice a unique value. The
 				group handles selection, keyboard navigation, and the underline.
 			</P>
-			<CodeBlock filename="TabExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tab--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <TabUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'TabExample.tsx',
+					},
+				]}
+			/>
 			<H3>Add an icon and count</H3>
-			<CodeBlock filename="TabDetails.tsx" language="tsx" code={extrasCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tab--default"
+				components={[
+					{
+						label: 'Add an icon and count',
+						component: <TabExtrasExample />,
+						code: extrasCode.trim(),
+						codeFilename: 'TabDetails.tsx',
+					},
+				]}
+			/>
 			<H3>Use custom content</H3>
 			<P>Use children when the label needs richer content. A supplied label takes priority.</P>
-			<CodeBlock filename="TabContent.tsx" language="tsx" code={customCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tab--default"
+				components={[
+					{
+						label: 'Use custom content',
+						component: <TabCustomExample />,
+						code: customCode.trim(),
+						codeFilename: 'TabContent.tsx',
+					},
+				]}
+			/>
 			<H3>Connect a panel</H3>
 			<P>
 				Set id on the tab and panelId to the content it controls. Use the group’s selected value to show the matching
 				panel.
 			</P>
 			<CodeBlock filename="TabPanels.tsx" language="tsx" code={panelsCode.trim()} />
+			<H3>Override selected colors</H3>
+			<P>
+				Individual tabs inherit group colors. Selected text, icon, and underline overrides take precedence over the
+				accent.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tab--default"
+				components={[{ label: 'Override selected colors', component: <TabColorExample />, code: colorsCode.trim() }]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				Tab must be rendered within TabBar. It inherits selection, spacing, typography, and icon sizing from the group.
@@ -66,6 +98,19 @@ export function TabDoc() {
 			<P>Reduced-motion preferences disable color transitions and the group’s underline movement.</P>
 			<H2 id="props">Props</H2>
 			<P>value is required. All other Tab props are optional. Configure shared sizing and appearance on TabBar.</P>
+			<P>
+				Color props accept Slice theme tokens or CSS colors and inherit from <Code>TabBar</Code> when omitted. Explicit
+				selected colors, including inherited ones, take precedence over <Code>accentColor</Code>.
+			</P>
+			<Definition id={'accentColor'}>
+				<Prop>accentColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Fallback color for selected text, icons, and the moving underline. Explicit selected-color props take
+				precedence.
+			</P>
 			<Definition id={'children'}>
 				<Prop>children</Prop>
 				<TypeDef>{'React.ReactNode'}</TypeDef>
@@ -90,6 +135,21 @@ export function TabDoc() {
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>{'Optional decorative icon before the label.'}</P>
+			<Definition id={'iconColor'}>
+				<Prop>iconColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>Icon color for unselected tabs. Defaults to the tab’s text color.</P>
+			<Definition id={'iconColorSelected'}>
+				<Prop>iconColorSelected</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Selected icon color. Takes precedence over <Code>accentColor</Code>; without either, icons follow the selected
+				text color.
+			</P>
 			<Definition id={'id'}>
 				<Prop>id</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -108,12 +168,47 @@ export function TabDoc() {
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>{'ID of the corresponding panel, used as the button’s aria-controls. Your application renders the panel.'}</P>
+			<Definition id={'textColor'}>
+				<Prop>textColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Text color for unselected tabs. Defaults to <Code>core-text-primary</Code>.
+			</P>
+			<Definition id={'textColorSelected'}>
+				<Prop>textColorSelected</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Selected text color. Takes precedence over <Code>accentColor</Code>; without either, uses{' '}
+				<Code>core-text-special</Code>.
+			</P>
 			<Definition id={'toolTip'}>
 				<Prop>toolTip</Prop>
 				<TypeDef>{'string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>{'Tooltip text sent to the group’s onToolTip callback. Your application displays the tooltip.'}</P>
+			<Definition id={'underlineColor'}>
+				<Prop>underlineColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Baseline color beneath the tabs. Overrides TabBar’s <Code>borderColor</Code>. A Tab override applies while that
+				tab is selected.
+			</P>
+			<Definition id={'underlineSelectedColor'}>
+				<Prop>underlineSelectedColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Moving selected-underline color. Takes precedence over <Code>accentColor</Code>; without either, uses{' '}
+				<Code>core-text-special</Code>.
+			</P>
 			<Definition id={'value'}>
 				<Prop>value</Prop>
 				<TypeDef>{'T'}</TypeDef>
@@ -169,14 +264,21 @@ export const trackedItems: TrackedItem[] = [
 		id: 'props',
 		title: 'Props',
 		items: [
+			{ id: 'accentColor', title: 'accentColor', code: true },
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'count', title: 'count', code: true },
 			{ id: 'disabled', title: 'disabled', code: true },
 			{ id: 'icon', title: 'icon', code: true },
+			{ id: 'iconColor', title: 'iconColor', code: true },
+			{ id: 'iconColorSelected', title: 'iconColorSelected', code: true },
 			{ id: 'id', title: 'id', code: true },
 			{ id: 'label', title: 'label', code: true },
 			{ id: 'panelId', title: 'panelId', code: true },
+			{ id: 'textColor', title: 'textColor', code: true },
+			{ id: 'textColorSelected', title: 'textColorSelected', code: true },
 			{ id: 'toolTip', title: 'toolTip', code: true },
+			{ id: 'underlineColor', title: 'underlineColor', code: true },
+			{ id: 'underlineSelectedColor', title: 'underlineSelectedColor', code: true },
 			{ id: 'value', title: 'value', code: true },
 			{ id: 'buttonAttributes', title: '...buttonAttributes', code: true },
 		],

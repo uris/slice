@@ -3,8 +3,15 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { Badge, FlexDiv, Preset } from '@apple-pie/slice';
-import { accessibilityCode, colorsCode, labelCode, usageCode, zeroCode } from './code';
+import { FlexDiv, Preset } from '@apple-pie/slice';
+import {
+	BadgeColorsExample,
+	BadgeLabelExample,
+	BadgeOverflowExample,
+	BadgeUsageExample,
+	BadgeZeroExample,
+} from './UsagePreviews';
+import { accessibilityCode, colorsCode, labelCode, overflowCode, usageCode, zeroCode } from './code';
 
 export function BadgeDoc() {
 	return (
@@ -14,34 +21,82 @@ export function BadgeDoc() {
 			<P clipWidth>
 				Keep small updates visible. Badge adds a compact count or label to notifications, tabs, and navigation.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-badge--default"
-				components={[
-					{ label: 'Badge', component: <Badge count={12} /> },
-					{ label: 'Large count', component: <Badge count={240} aria-label="240 items" /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Set <Code>count</Code> to a number or short label.
 			</P>
-			<CodeBlock filename="BadgeExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-badge--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <BadgeUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'BadgeExample.tsx',
+					},
+				]}
+			/>
+			<H3>Show an overflowing count</H3>
+			<P>
+				Numeric counts above <Code>99</Code> display as <Code>99+</Code>. Keep the full count in the accessible label.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-badge--default"
+				components={[
+					{
+						label: 'Count above 99',
+						component: <BadgeOverflowExample />,
+						code: overflowCode.trim(),
+						codeFilename: 'BadgeOverflow.tsx',
+					},
+				]}
+			/>
 			<H3>Keep zero visible</H3>
 			<P>
 				Set <Code>hideZero</Code> to false when an empty count is still useful.
 			</P>
-			<CodeBlock filename="BadgeZero.tsx" language="tsx" code={zeroCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-badge--default"
+				components={[
+					{
+						label: 'Keep zero visible',
+						component: <BadgeZeroExample />,
+						code: zeroCode.trim(),
+						codeFilename: 'BadgeZero.tsx',
+					},
+				]}
+			/>
 			<H3>Show a label</H3>
 			<P>
 				Use a short string for a status or category, with <Code>variant="light"</Code> for the alternate color preset.
 			</P>
-			<CodeBlock filename="BadgeLabel.tsx" language="tsx" code={labelCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-badge--default"
+				components={[
+					{
+						label: 'Show a label',
+						component: <BadgeLabelExample />,
+						code: labelCode.trim(),
+						codeFilename: 'BadgeLabel.tsx',
+					},
+				]}
+			/>
 			<H3>Choose your colors</H3>
 			<P>
 				Override <Code>backgroundColor</Code> and <Code>textColor</Code> independently. Any omitted color still comes
 				from the selected <Code>variant</Code>.
 			</P>
-			<CodeBlock filename="BadgeColors.tsx" language="tsx" code={colorsCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-badge--default"
+				components={[
+					{
+						label: 'Choose your colors',
+						component: <BadgeColorsExample />,
+						code: colorsCode.trim(),
+						codeFilename: 'BadgeColors.tsx',
+					},
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				Numbers above 99 display as <Code>99+</Code>. Strings are not capped or parsed as numbers, so

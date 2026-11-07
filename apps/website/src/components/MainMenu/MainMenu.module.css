@@ -18,6 +18,18 @@
 	width: 100%;
 }
 
+.left {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	box-sizing: border-box;
+	gap: 24px;
+	padding: 16px 32px;
+	flex: 1;
+	margin: 0;
+}
+
 .menu {
 	display: flex;
 	flex-direction: row;
@@ -28,6 +40,8 @@
 	padding: 16px 32px;
 	width: 100%;
 	margin: 0;
+	background: var(--core-grey-1000);
+	border-radius: 8px;
 }
 
 .button {

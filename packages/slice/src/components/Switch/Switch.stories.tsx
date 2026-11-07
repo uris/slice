@@ -22,10 +22,10 @@ const meta = {
 		borderRadius: { control: 'text' },
 		transition: { control: 'object' },
 		value: { control: 'object' },
-		'aria-label': { control: 'text' },
+		name: { control: 'text' },
 	},
 	args: {
-		'aria-label': 'Notifications',
+		name: 'Notifications',
 		defaultChecked: false,
 		disabled: false,
 		height: 22,
@@ -85,10 +85,10 @@ export const InteractionSemantics: Story = {
 		const [initial, setInitial] = useState(true);
 		return (
 			<div style={{ display: 'grid', gap: 12 }}>
-				<Switch aria-label="Local" value={{ id: 42 }} onChange={changed} onClick={clicked} />
-				<Switch aria-label="Locked" checked={false} onChange={locked} />
+				<Switch name="Local" value={{ id: 42 }} onChange={changed} onClick={clicked} />
+				<Switch name="Locked" checked={false} onChange={locked} />
 				<Switch
-					aria-label="Controlled"
+					name="Controlled"
 					checked={checked}
 					onChange={(_, next) => {
 						controlledChange(next);
@@ -98,14 +98,14 @@ export const InteractionSemantics: Story = {
 				<button type="button" onClick={() => setChecked(false)}>
 					Reset controlled
 				</button>
-				<Switch aria-label="Canceled" onClick={(event) => event.preventDefault()} onChange={canceled} />
-				<Switch aria-label="Disabled" disabled defaultChecked onChange={disabledChange} onClick={disabledClick} />
-				<Switch aria-label="Initial" defaultChecked={initial} />
+				<Switch name="Canceled" onClick={(event) => event.preventDefault()} onChange={canceled} />
+				<Switch name="Disabled" disabled defaultChecked onChange={disabledChange} onClick={disabledClick} />
+				<Switch name="Initial" defaultChecked={initial} />
 				<button type="button" onClick={() => setInitial(false)}>
 					Change initial prop
 				</button>
 				<span id="switch-visible-label">Visible setting</span>
-				<Switch aria-labelledby="switch-visible-label" />
+				<Switch name="Visible setting" />
 			</div>
 		);
 	},
@@ -145,7 +145,7 @@ export const InteractionSemantics: Story = {
 		await expect(c.getByRole('switch', { name: 'Initial' })).toHaveFocus();
 		await userEvent.click(c.getByRole('button', { name: 'Change initial prop' }));
 		await expect(c.getByRole('switch', { name: 'Initial' })).toHaveAttribute('aria-checked', 'true');
-		await expect(c.getByRole('switch', { name: 'Visible setting' })).not.toHaveAttribute('aria-label');
+		await expect(c.getByRole('switch', { name: 'Visible setting' })).toHaveAttribute('aria-label', 'Visible setting');
 		local.focus();
 		await userEvent.tab();
 		await expect(c.getByRole('switch', { name: 'Locked' })).toHaveFocus();
@@ -155,10 +155,10 @@ export const Geometry: Story = {
 	tags: ['tests'],
 	render: () => (
 		<div style={{ display: 'flex', width: 1, gap: 8 }}>
-			<Switch aria-label="Default geometry" />
-			<Switch aria-label="Clamped geometry" height={12} width={3} padding={100} />
-			<Switch aria-label="Negative padding" padding={-10} />
-			<Switch aria-label="Invalid geometry" width={Number.NaN} height={Number.POSITIVE_INFINITY} padding={Number.NaN} />
+			<Switch name="Default geometry" />
+			<Switch name="Clamped geometry" height={12} width={3} padding={100} />
+			<Switch name="Negative padding" padding={-10} />
+			<Switch name="Invalid geometry" width={Number.NaN} height={Number.POSITIVE_INFINITY} padding={Number.NaN} />
 		</div>
 	),
 	play: async ({ canvasElement }) => {
@@ -195,10 +195,10 @@ export const KnobShapes: Story = {
 	tags: ['tests'],
 	render: () => (
 		<div style={{ display: 'grid', gap: 16 }}>
-			<Switch aria-label="Pill knob" width={64} knobWidth={30} />
-			<Switch aria-label="Custom corners" width={60} height={26} knobWidth={24} knobRadius={4} borderRadius={6} />
-			<Switch aria-label="Clamped knob" knobWidth={1000} knobRadius={0} borderRadius={0} />
-			<Switch aria-label="Invalid knob" knobWidth={Number.NaN} />
+			<Switch name="Pill knob" width={64} knobWidth={30} />
+			<Switch name="Custom corners" width={60} height={26} knobWidth={24} knobRadius={4} borderRadius={6} />
+			<Switch name="Clamped knob" knobWidth={1000} knobRadius={0} borderRadius={0} />
+			<Switch name="Invalid knob" knobWidth={Number.NaN} />
 		</div>
 	),
 	play: async ({ canvasElement }) => {
@@ -245,5 +245,41 @@ export const SharedTransition: Story = {
 			expect(getComputedStyle(track).backgroundColor).toBe('rgb(0, 255, 0)');
 			expect(root.getBoundingClientRect().right - knob.getBoundingClientRect().right).toBeCloseTo(2, 1);
 		});
+	},
+};
+
+export const AccessibleNames: StoryObj<typeof Switch> = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<Switch name="  Email updates  " />
+			<Switch />
+			<Switch name="   " />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('switch', { name: 'Email updates' })).toHaveAttribute('name', '  Email updates  ');
+		await expect(canvas.getAllByRole('switch', { name: 'Switch' })).toHaveLength(2);
+	},
+};
+
+export const ManagedAria: StoryObj<typeof Switch> = {
+	tags: ['tests'],
+	render: () => {
+		const raw = {
+			role: 'button',
+			'aria-label': 'Override',
+			'aria-labelledby': 'external',
+			'aria-hidden': true,
+			'aria-checked': false,
+		};
+		return <Switch {...raw} name="Email updates" defaultChecked />;
+	},
+	play: async ({ canvasElement }) => {
+		const control = within(canvasElement).getByRole('switch', { name: 'Email updates' });
+		await expect(control).toHaveAttribute('aria-checked', 'true');
+		await expect(control).not.toHaveAttribute('aria-labelledby');
+		await expect(control).not.toHaveAttribute('aria-hidden');
 	},
 };

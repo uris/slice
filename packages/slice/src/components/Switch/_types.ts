@@ -3,6 +3,8 @@ import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type SwitchBaseProps<T = string> = {
+	/** Native button name and accessible label. Blank or omitted names fall back to Switch. */
+	name?: string;
 	checked?: boolean;
 	defaultChecked?: boolean;
 	borderRadius?: number | string;
@@ -24,6 +26,6 @@ type SwitchBaseProps<T = string> = {
 /** Native button events are supported; Motion gestures and callbacks are not part of this API. */
 export type SwitchProps<T = string> = Omit<
 	React.ButtonHTMLAttributes<HTMLButtonElement>,
-	keyof SwitchBaseProps<T> | 'children' | 'dangerouslySetInnerHTML'
+	keyof SwitchBaseProps<T> | keyof React.AriaAttributes | 'role' | 'children' | 'dangerouslySetInnerHTML'
 > &
 	SwitchBaseProps<T>;

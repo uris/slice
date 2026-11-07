@@ -22,7 +22,9 @@ Legacy AI artwork is retained under `ai`, legacy brands are combined with import
 brands under `brands`, and specialized control artwork is retained under `system`:
 check-circle (progress and radio), circle (radio), checkbox, checkbox-checked,
 checkbox-partial, view (password visibility toggle), and blank (empty icon slots).
-Retained brand artwork takes precedence where an imported name matches. Bare legacy
+Compact filled More artwork is retained under `basic` as `more-horiz-fill` and
+`more-vert-fill`, with 2.5px dots in the 20px viewBox.
+Retained artwork takes precedence where an imported name matches. Bare legacy
 names are removed; use qualified names such as `ai.wand` or `system.check-circle`.
 
 The importer converts this export set's 24px artwork to 20px paths, removes

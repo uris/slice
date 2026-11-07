@@ -1,22 +1,22 @@
 export const usageCode = `
-import { useState } from 'react';
 import { ContentEditable } from '@apple-pie/slice';
+import { useState } from 'react';
 
-function EditableContent() {
-  const [title, setTitle] = useState('Quarterly planning');
-  const [editing, setEditing] = useState(false);
+export function ContentEditableUsageExample() {
+	const [title, setTitle] = useState('Quarterly planning');
+	const [editing, setEditing] = useState(false);
 
-  return (
-    <ContentEditable
-      name="Project title"
-      value={title}
-      isEditable={editing}
-      onClick={click}
-      onEditStart={() => setEditing(true)} // keyboard activation
-      onCommit={setTitle}
-      onEditEnd={() => setEditing(false)}
-    />
-  );
+	return (
+		<ContentEditable
+			name="Project title"
+			value={title}
+			isEditable={editing}
+			onClick={() => setEditing(true)}
+			onEditStart={() => setEditing(true)} // keyboard activation
+			onCommit={setTitle}
+			onEditEnd={() => setEditing(false)}
+		/>
+	);
 }
 `;
 export const activationCode = `
@@ -28,7 +28,7 @@ export const activationCode = `
       onCommit={setTitle}
       onEditEnd={() => setEditing(false)}
     />
-    <Button onClick={() => setEditing(true)}>Edit</button>
+    <Button onClick={() => setEditing(true)}>Edit</Button>
 </>
 `;
 export const persistenceCode = `
@@ -49,4 +49,28 @@ async function saveTitle(next: string, previous: string) {
     onCommit={saveTitle}
     onEditEnd={() => setEditing(false)}
 />
+`;
+
+export const clampCode = `
+import { ContentEditable } from '@apple-pie/slice';
+import { useState } from 'react';
+
+export function ContentEditableClampExample() {
+    const [title, setTitle] = useState('Quarterly planning: priorities, milestones, and decisions for the entire team');
+    const [editing, setEditing] = useState(false);
+
+    return (
+        <ContentEditable
+            name="Clamped project title"
+            value={title}
+            width={320}
+            clamp={1}
+            isEditable={editing}
+            onClick={() => setEditing(true)}
+            onEditStart={() => setEditing(true)}
+            onCommit={setTitle}
+            onEditEnd={() => setEditing(false)}
+        />
+    );
+}
 `;

@@ -5,18 +5,18 @@ import { Package } from '@/src/consts/consts';
 const designSystemSection: ListSection = [
 	{ type: SidebarListItemType.SectionTitle, title: 'Design System' },
 	{ title: 'Colors', slug: 'colors' },
-	{ title: 'Spacing', slug: 'spacing' },
-	{ title: 'Elevations', slug: 'elevations' },
 	{ title: 'Corners', slug: 'corners' },
-	{ title: 'Typography', slug: 'typography' },
-	{ title: 'Motion', slug: 'motion' },
+	{ title: 'Elevations', slug: 'elevations' },
 	{ title: 'Icons', slug: 'icons' },
+	{ title: 'Motion', slug: 'motion' },
+	{ title: 'Spacing', slug: 'spacing' },
+	{ title: 'Typography', slug: 'typography' },
 ];
 
 const gettingStartedSection: ListSection = [
 	{ type: SidebarListItemType.SectionTitle, title: 'Getting Started', display: false },
-	{ title: 'Overview', slug: 'get-started' },
 	{ title: 'Installation', slug: 'installation' },
+	{ title: 'Overview', slug: 'get-started' },
 	{ title: 'Resources', slug: 'resources' },
 ];
 
@@ -33,6 +33,7 @@ const reactComponentSection: ListSection = [
 	{ title: 'Chip', slug: 'chip', code: true },
 	{ title: 'ContentEditable', slug: 'content-editable', code: true },
 	{ title: 'DataTable', slug: 'data-table', code: true },
+	{ title: 'DialogBox', slug: 'dialog-box', code: true },
 	{ title: 'DoneCheck', slug: 'done-check', code: true },
 	{ title: 'Dot', slug: 'dot', code: true },
 	{ title: 'DraggablePanel', slug: 'draggable-panel', code: true },
@@ -46,7 +47,6 @@ const reactComponentSection: ListSection = [
 	{ title: 'IconButton', slug: 'icon-button', code: true },
 	{ title: 'Label', slug: 'label', code: true },
 	{ title: 'Level', slug: 'level', code: true },
-	{ title: 'DialogBox', slug: 'dialog-box', code: true },
 	{ title: 'ModalController', slug: 'modal-controller', code: true },
 	{ title: 'Overlay', slug: 'overlay', code: true },
 	{ title: 'Pager', slug: 'pager', code: true },

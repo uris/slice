@@ -44,7 +44,9 @@ ColorValue accepts Slice color tokens and CSS colors. Native button attributes a
 | `animate` | `string` | `undefined` | Named Motion variant to animate toward. Define the values in variants. |
 | `backgroundColor` | `ColorValue` | `variant background` | Background color in normal and hover states. Overrides the preset for every variant; fill takes priority while enabled. |
 | `backgroundColorDisabled` | `ColorValue` | `variant disabled background` | Background color when disabled. Independent of backgroundColor. |
+| `borderColor` | `ColorValue` | `undefined` | Overrides the variant border color for every size and state, including hover and disabled. Omitted values keep variant defaults. |
 | `borderRadius` | `number \| string` | `corner-round` | Corner radius. Numbers use pixels; strings accept CSS lengths. |
+| `borderWidth` | `number \| string` | `undefined` | Overrides the variant border width for every size and state. Numbers use pixels; CSS lengths are preserved. Zero removes the border. Omitted values keep variant defaults. |
 | `buttonSize` | `'auto' \| 's' \| 'm' \| 'l' \| 'xl' \| number` | `m` | Shared frame heights: 24, 36, 44, 56px. Auto fits content plus padding; a positive number sets a pixel height. |
 | `children` | `React.ReactNode` | `undefined` | Custom label content. Takes priority over label; use non-interactive content inside the button. |
 | `count` | `number` | `undefined` | Optional count badge. Zero and invalid numbers are hidden; numbers above 99 show 99+. Hidden while busy. |

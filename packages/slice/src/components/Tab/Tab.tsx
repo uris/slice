@@ -1,5 +1,6 @@
 'use client';
 import React, { useContext, useId, useMemo, useRef } from 'react';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Badge } from '../Badge';
 import { Icon } from '../Icon';
 import { TabContext, useClientLayoutEffect, withoutAria } from '../TabBar/shared';
@@ -7,31 +8,74 @@ import { ToolTipType } from '../sharedTypes';
 import css from './Tab.module.css';
 import type { TabProps } from './_types';
 
-function TabComponent<T = string>({
-	value,
-	label,
-	children,
-	icon,
-	toolTip,
-	count,
-	disabled = false,
-	panelId,
-	id,
-	onClick,
-	onKeyDown,
-	onMouseEnter,
-	onMouseLeave,
-	className,
-	...attributes
-}: TabProps<T>) {
+function TabComponent<T = string>(rawProps: TabProps<T>) {
+	const {
+		value,
+		label,
+		children,
+		icon,
+		toolTip,
+		count,
+		disabled = false,
+		panelId,
+		id,
+		onClick,
+		onKeyDown,
+		onMouseEnter,
+		onMouseLeave,
+		className,
+		style,
+		accentColor,
+		textColor,
+		textColorSelected,
+		underlineColor,
+		underlineSelectedColor,
+		iconColor,
+		iconColorSelected,
+		...attributes
+	} = resolveColorProps(rawProps);
 	const group = useContext(TabContext);
 	if (!group) throw new Error('Tab must be used inside TabBar.');
 	if (value == null) throw new Error('Tab requires a unique, non-null value.');
 	const generatedId = useId();
 	const ref = useRef<HTMLButtonElement>(null);
 	const option = useMemo(
-		() => ({ value, label, children, icon, toolTip, count, disabled, panelId, id }),
-		[value, label, children, icon, toolTip, count, disabled, panelId, id],
+		() => ({
+			value,
+			label,
+			children,
+			icon,
+			toolTip,
+			count,
+			disabled,
+			panelId,
+			id,
+			accentColor,
+			textColor,
+			textColorSelected,
+			underlineColor,
+			underlineSelectedColor,
+			iconColor,
+			iconColorSelected,
+		}),
+		[
+			value,
+			label,
+			children,
+			icon,
+			toolTip,
+			count,
+			disabled,
+			panelId,
+			id,
+			accentColor,
+			textColor,
+			textColorSelected,
+			underlineColor,
+			underlineSelectedColor,
+			iconColor,
+			iconColorSelected,
+		],
 	);
 	useClientLayoutEffect(
 		() => (ref.current ? group.register(ref.current, option) : undefined),
@@ -39,11 +83,20 @@ function TabComponent<T = string>({
 	);
 	const selected = group.value != null && Object.is(group.value, value);
 	const unavailable = group.disabled || disabled;
+	const accent = accentColor ?? group.colors.accentColor;
+	const colors = {
+		'--tab-text-color': textColor ?? group.colors.textColor ?? 'var(--core-text-primary)',
+		'--tab-text-color-selected':
+			textColorSelected ?? group.colors.textColorSelected ?? accent ?? 'var(--core-text-special)',
+		'--tab-icon-color': iconColor ?? group.colors.iconColor ?? 'currentColor',
+		'--tab-icon-color-selected': iconColorSelected ?? group.colors.iconColorSelected ?? accent ?? 'currentColor',
+	} as React.CSSProperties;
 	return (
 		<button
 			{...withoutAria(attributes)}
 			id={id ?? generatedId}
 			ref={ref}
+			style={{ ...style, ...colors }}
 			type="button"
 			role="tab"
 			aria-controls={panelId}

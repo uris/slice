@@ -157,16 +157,13 @@ export function CodeBlock({
 			{teased && (
 				<div className={styles.show} style={buttonStyles}>
 					<Button
-						iconRight={hidden ? 'arrows.chevron-down' : 'arrows.chevron-up'}
-						iconSize={16}
-						iconColor={'core-icon-secondary'}
 						label={hidden ? 'Show code' : 'Hide code'}
 						buttonSize="s"
 						textSize={'s'}
-						variant={'outline'}
-						backgroundColor={'core-surface-secondary'}
+						variant={'solid'}
+						backgroundColor={'core-surface-primary'}
 						textColor={'core-text-primary'}
-						padding={'16px 12px'}
+						padding={16}
 						onClick={() => setHidden(!hidden)}
 					/>
 				</div>
@@ -179,7 +176,7 @@ export function CodeBlock({
 					tooltip={'Copy code'}
 					backgroundColorHover={isCopied ? 'feedback-positive' : 'core-surface-primary'}
 					backgroundColor={isCopied ? 'feedback-positive' : 'core-surface-primary'}
-					borderColor={isCopied ? 'feedback-positive' : 'core-outline-primary'}
+					borderColor={isCopied ? 'feedback-positive' : 'core-fill-primary'}
 					borderWidth={0}
 					disabled={isRequesting}
 					onClick={() => {

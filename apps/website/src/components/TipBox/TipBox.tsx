@@ -8,11 +8,11 @@ interface TipBoxProps {
 	children?: React.ReactNode;
 	noBorder?: boolean;
 	inline?: boolean;
-	marginBottom?: boolean;
+	noMargin?: boolean;
 }
 
 export function TipBox(props: Readonly<TipBoxProps>) {
-	const { title, children, noBorder, inline = false, marginBottom = true } = props;
+	const { title, children, noBorder, inline = false, noMargin = true } = props;
 	const { current } = useTheme();
 	const green = current.colors['feedback-positive'];
 
@@ -23,7 +23,7 @@ export function TipBox(props: Readonly<TipBoxProps>) {
 		borderColor: addOpacity(green, 0.25),
 		display: inline ? 'inline-flex' : 'flex',
 		flexDirection: inline ? 'row' : 'column',
-		marginBottom: marginBottom ? 24 : 0,
+		marginBottom: noMargin ? 0 : 24,
 	} as React.CSSProperties;
 
 	return (

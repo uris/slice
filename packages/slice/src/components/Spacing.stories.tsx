@@ -33,9 +33,9 @@ export const DefaultsAndOverrides: StoryObj = {
 			<RadioButton className="hidden-radio" label="No icon" borderWidth={1} padding="8px 16px" iconSize={0} />
 			<Button className="text-button" label="Action" variant="text" buttonSize="s" />
 			<Chip className="chip" label="Chip" icon="basic.search" paddingLeft={0} paddingRight={0} />
-			<Switch className="switch" aria-label="Switch" />
+			<Switch className="switch" name="Switch" />
 			<div style={{ '--spacing-xxs': '4px' } as CSSProperties}>
-				<Switch className="themed-switch" aria-label="Themed switch" />
+				<Switch className="themed-switch" name="Themed switch" />
 			</div>
 			<FileList className="files" files={[{ file: 'ready.txt' }, { file: 'uploading.txt', uploading: true }]} />
 			<FileList className="zero-files" files={[{ file: 'zero.txt' }]} padding={0} />

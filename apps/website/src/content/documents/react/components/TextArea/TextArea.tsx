@@ -4,7 +4,12 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { TextAreaPreview } from './TextAreaPreview';
+import {
+	TextAreaGuidanceExample,
+	TextAreaSizingExample,
+	TextAreaSubmitExample,
+	TextAreaUsageExample,
+} from './UsagePreviews';
 import { controlledCode, guidanceCode, sizingCode, submitCode, usageCode } from './code';
 export function TextAreaDoc() {
 	return (
@@ -12,19 +17,6 @@ export function TextAreaDoc() {
 			<Path />
 			<H1 id="title">TextArea component</H1>
 			<P clipWidth>{'Make room for notes, comments, and longer messages, with content that can grow as you write.'}</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textarea--default"
-				components={[
-					{ label: 'Auto-grow (2 rows)', component: <TextAreaPreview /> },
-					{ label: 'Resizable', component: <TextAreaPreview variant="resizable" /> },
-					{ label: 'Send a message', component: <TextAreaPreview variant="message" /> },
-					{ label: 'Fixed height', component: <TextAreaPreview variant="fixed" /> },
-					{ label: 'Error state', component: <TextAreaPreview variant="error" /> },
-					{ label: 'Read-only', component: <TextAreaPreview variant="readonly" /> },
-					{ label: 'Disabled', component: <TextAreaPreview variant="disabled" /> },
-					{ label: 'With label', component: <TextAreaPreview variant="labeled" /> },
-				]}
-			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				For short, single-line answers, use <Code openURL="/docs/react/textfield/">TextField</Code>.
@@ -38,7 +30,17 @@ export function TextAreaDoc() {
 				<Code>{'onChange'}</Code>
 				{'.'}
 			</P>
-			<CodeBlock filename="TextAreaExample1.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textarea--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <TextAreaUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'TextAreaExample1.tsx',
+					},
+				]}
+			/>
 			<H3>Control the value</H3>
 			<P>
 				{'Use '}
@@ -60,7 +62,17 @@ export function TextAreaDoc() {
 				<Code>{'autoGrow'}</Code>
 				{' to allow native resizing.'}
 			</P>
-			<CodeBlock filename="TextAreaExample3.tsx" language="tsx" code={sizingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textarea--default"
+				components={[
+					{
+						label: 'Choose a height',
+						component: <TextAreaSizingExample />,
+						code: sizingCode.trim(),
+						codeFilename: 'TextAreaExample3.tsx',
+					},
+				]}
+			/>
 			<H3>Send a message</H3>
 			<P>
 				{'Use '}
@@ -69,7 +81,17 @@ export function TextAreaDoc() {
 				<Code>{'returnSubmits'}</Code>
 				{' for Enter submission.'}
 			</P>
-			<CodeBlock filename="TextAreaExample4.tsx" language="tsx" code={submitCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textarea--default"
+				components={[
+					{
+						label: 'Send a message',
+						component: <TextAreaSubmitExample />,
+						code: submitCode.trim(),
+						codeFilename: 'TextAreaExample4.tsx',
+					},
+				]}
+			/>
 			<H3>Add field guidance</H3>
 			<P>
 				{'Provide a '}
@@ -78,7 +100,17 @@ export function TextAreaDoc() {
 				<Code>{'errorMessage'}</Code>
 				{' for validation feedback.'}
 			</P>
-			<CodeBlock filename="TextAreaExample5.tsx" language="tsx" code={guidanceCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textarea--default"
+				components={[
+					{
+						label: 'Add field guidance',
+						component: <TextAreaGuidanceExample />,
+						code: guidanceCode.trim(),
+						codeFilename: 'TextAreaExample5.tsx',
+					},
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				{'With '}

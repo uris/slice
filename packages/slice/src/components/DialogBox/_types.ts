@@ -21,6 +21,7 @@ export type DialogBoxAction<T = string> = {
 type DialogBoxBaseProps<T = string> = {
 	children?: React.ReactNode;
 	minHeight?: number | string;
+	/** Explicit values are hard minimums, even when wider than the parent or viewport. */
 	minWidth?: number | string;
 	maxWidth?: number | string;
 	maxHeight?: number | string;
@@ -31,6 +32,8 @@ type DialogBoxBaseProps<T = string> = {
 	padding?: number | string;
 	title?: string;
 	dialogName?: string;
+	/** Header fill. Defaults to core-fill-primary while scrolling, otherwise backgroundColor. */
+	titleBackgroundColor?: ColorValue;
 	titleTextColor?: ColorValue;
 	titleBorderColor?: ColorValue;
 	titleBorderWidth?: number;
@@ -40,6 +43,7 @@ type DialogBoxBaseProps<T = string> = {
 	contentTextSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	close?: boolean;
 	actions?: DialogBoxAction<T>[];
+	/** Footer fill. Defaults to core-fill-primary while scrolling, otherwise backgroundColor. */
 	actionsBackgroundColor?: ColorValue;
 	actionsBorderColor?: ColorValue;
 	actionsBorderWidth?: number;

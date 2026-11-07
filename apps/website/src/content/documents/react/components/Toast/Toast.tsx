@@ -1,4 +1,3 @@
-import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
@@ -6,27 +5,13 @@ import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset, ToastType } from '@apple-pie/slice';
 import { ToastPreview } from './ToastPreview';
-import { parentCode, persistentCode, usageCode } from './code';
+import { errorCode, parentCode, persistentCode, successCode, usageCode, warningCode } from './code';
 export function ToastDoc() {
 	return (
 		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">Toast component</H1>
 			<P clipWidth>{'Confirm a result or share a brief update while people stay with their current task.'}</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-toast--demo"
-				components={[
-					{ label: 'Information', component: <ToastPreview /> },
-					{ label: 'Success', component: <ToastPreview type={ToastType.Success} /> },
-					{ label: 'Timed notification', component: <ToastPreview timed /> },
-					{ label: 'Working', component: <ToastPreview progress /> },
-				]}
-			/>
-			<TipBox inline noBorder title="Tip:">
-				{
-					'Use Show toast to replay a notification. In the timed example, hover or focus the notification to pause dismissal.'
-				}
-			</TipBox>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Pass a '}
@@ -35,7 +20,22 @@ export function ToastDoc() {
 				<Code>{'key'}</Code>
 				{' gives each notification its own lifecycle, including when the same message is shown again.'}
 			</P>
-			<CodeBlock filename="ToastExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-toast--demo"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <ToastPreview type={ToastType.Success} timed />,
+						code: usageCode.trim(),
+						codeFilename: 'ToastExample.tsx',
+					},
+				]}
+			/>
+			<TipBox inline noBorder title="Tip:">
+				{
+					'Use Show toast to replay a notification. In the timed example, hover or focus the notification to pause dismissal.'
+				}
+			</TipBox>
 			<H3>Keep a notification visible</H3>
 			<P>
 				{'Use '}
@@ -44,14 +44,46 @@ export function ToastDoc() {
 				<Code>{'progress'}</Code>
 				{' controls the working indicator.'}
 			</P>
-			<CodeBlock filename="persistentCode.tsx" language="tsx" code={persistentCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-toast--demo"
+				components={[
+					{
+						label: 'Keep a notification visible',
+						component: <ToastPreview progress />,
+						code: persistentCode.trim(),
+						codeFilename: 'persistentCode.tsx',
+					},
+				]}
+			/>
 			<H3>Position inside a container</H3>
 			<P>
 				{'Use '}
 				<Code>{'container="parent"'}</Code>
 				{' inside a positioned element. Otherwise the notification is fixed to the viewport.'}
 			</P>
-			<CodeBlock filename="parentCode.tsx" language="tsx" code={parentCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-toast--demo"
+				components={[
+					{
+						label: 'Position inside a container',
+						component: <ToastPreview timed position="top" />,
+						code: parentCode.trim(),
+						codeFilename: 'parentCode.tsx',
+					},
+				]}
+			/>
+			<H3>Choose a notification type</H3>
+			<P>
+				Use <Code>type</Code> to distinguish a result, warning, or error.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-toast--demo"
+				components={[
+					{ label: 'Success', component: <ToastPreview type={ToastType.Success} />, code: successCode.trim() },
+					{ label: 'Warning', component: <ToastPreview type={ToastType.Warning} />, code: warningCode.trim() },
+					{ label: 'Error', component: <ToastPreview type={ToastType.Error} />, code: errorCode.trim() },
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				{'A message is scheduled after '}

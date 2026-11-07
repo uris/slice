@@ -6,7 +6,8 @@ export function ToastPreview({
 	type = ToastType.Info,
 	timed = false,
 	progress = false,
-}: { type?: ToastType; timed?: boolean; progress?: boolean }) {
+	position = 'bottom',
+}: { type?: ToastType; timed?: boolean; progress?: boolean; position?: 'top' | 'bottom' }) {
 	const [key, setKey] = useState(0);
 	const [visible, setVisible] = useState(true);
 	const message = progress ? 'Uploading files…' : 'Your changes have been saved.';
@@ -25,6 +26,7 @@ export function ToastPreview({
 				message={visible ? message : null}
 				type={type}
 				container="parent"
+				position={position}
 				duration={timed ? 4000 : 'Infinite'}
 				progress={progress}
 				didHide={() => setVisible(false)}

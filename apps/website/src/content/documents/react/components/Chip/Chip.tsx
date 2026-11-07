@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { DefaultChipPreview, RemovableChipPreview, SelectableChipPreview } from './ChipPreview';
+import { ChipRemoveExample, ChipSelectionExample, ChipStylingExample, ChipUsageExample } from './UsagePreviews';
 import { actionCode, removeCode, selectionCode, stylingCode, tooltipCode, usageCode } from './code';
 
 export function ChipDoc() {
@@ -15,19 +15,21 @@ export function ChipDoc() {
 			<P clipWidth>
 				Give tags and compact actions a clear shape. Chip combines text, an optional icon, and colors that fit your UI.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
-				components={[
-					{ label: 'Default chip', component: <DefaultChipPreview /> },
-					{ label: 'Removable chip', component: <RemovableChipPreview /> },
-					{ label: 'Selectable chip', component: <SelectableChipPreview /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Set <Code>label</Code> for text, or omit it and pass children for custom content.
 			</P>
-			<CodeBlock filename="ChipExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <ChipUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'ChipExample.tsx',
+					},
+				]}
+			/>
 			<H3>Add an action</H3>
 			<P>
 				Provide <Code>onClick</Code> to make the chip a native button and handle the action in your app.
@@ -38,19 +40,49 @@ export function ChipDoc() {
 				Pass <Code>selected</Code> and update it in <Code>onClick</Code>. A changing label resizes smoothly with Water
 				motion.
 			</P>
-			<CodeBlock filename="SelectableChip.tsx" language="tsx" code={selectionCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
+				components={[
+					{
+						label: 'Select a chip',
+						component: <ChipSelectionExample />,
+						code: selectionCode.trim(),
+						codeFilename: 'SelectableChip.tsx',
+					},
+				]}
+			/>
 			<H3>Allow removal</H3>
 			<P>
 				Provide <Code>onRemove</Code> to show a separate remove button. Your handler removes the chip from your app’s
 				state.
 			</P>
-			<CodeBlock filename="RemovableChip.tsx" language="tsx" code={removeCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
+				components={[
+					{
+						label: 'Allow removal',
+						component: <ChipRemoveExample />,
+						code: removeCode.trim(),
+						codeFilename: 'RemovableChip.tsx',
+					},
+				]}
+			/>
 			<H3>Adjust appearance and spacing</H3>
 			<P>
-				Use <Code>textSize</Code> for typography and <Code>padding</Code> for uniform spacing. Individual padding sides
-				override that value.
+				Use <Code>textSize</Code> for typography and <Code>padding</Code> for spacing, including CSS shorthands such as
+				<Code>"4px 8px"</Code>. Individual padding sides override that value.
 			</P>
-			<CodeBlock filename="StyledChip.tsx" language="tsx" code={stylingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
+				components={[
+					{
+						label: 'Adjust appearance and spacing',
+						component: <ChipStylingExample />,
+						code: stylingCode.trim(),
+						codeFilename: 'StyledChip.tsx',
+					},
+				]}
+			/>
 			<H3>Connect a tooltip</H3>
 			<P>
 				Provide text and connect <Code>onToolTip</Code> to your tooltip UI.
@@ -209,37 +241,38 @@ export function ChipDoc() {
 			<P>Primary text. Replaces children whenever supplied, including an empty string.</P>
 			<Definition id={'padding'}>
 				<Prop>padding</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
-				Uniform padding in pixels. Individual side props take priority. When omitted, spacing follows textSize with
-				optical adjustment at icon edges, including the remove icon.
+				Padding shorthand. Numbers use pixels; strings accept CSS lengths, theme tokens, and one to four values.
+				Individual side props take priority. When omitted, spacing follows textSize with optical adjustment at icon
+				edges, including the remove icon.
 			</P>
 			<Definition id={'paddingBottom'}>
 				<Prop>paddingBottom</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Bottom padding in pixels. Overrides padding for this side.</P>
+			<P>Bottom padding as a pixel number or CSS length. Overrides padding for this side.</P>
 			<Definition id={'paddingLeft'}>
 				<Prop>paddingLeft</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Left padding in pixels. Overrides padding for this side.</P>
+			<P>Left padding as a pixel number or CSS length. Overrides padding for this side.</P>
 			<Definition id={'paddingRight'}>
 				<Prop>paddingRight</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Right padding in pixels. Overrides padding for this side.</P>
+			<P>Right padding as a pixel number or CSS length. Overrides padding for this side.</P>
 			<Definition id={'paddingTop'}>
 				<Prop>paddingTop</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Top padding in pixels. Overrides padding for this side.</P>
+			<P>Top padding as a pixel number or CSS length. Overrides padding for this side.</P>
 			<Definition id={'removeLabel'}>
 				<Prop>removeLabel</Prop>
 				<TypeDef>{'string'}</TypeDef>

@@ -2,9 +2,10 @@ import type { Transition } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { TabOption } from '../Tab';
+import type { TabColorProps } from '../Tab/_types';
 import type { ToolTip } from '../sharedTypes';
 
-type TabBarBaseProps<T> = {
+type TabBarBaseProps<T> = TabColorProps & {
 	tabBarName?: string;
 	children?: React.ReactNode;
 	options?: TabOption<T>[];

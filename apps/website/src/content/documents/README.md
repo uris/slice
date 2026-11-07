@@ -4,10 +4,13 @@ This guide records the editorial and implementation conventions for the website'
 component docs. Extend it as we agree on new patterns. Apply it to new documents
 and edits to existing ones; preserve deliberate user changes.
 
-Use [Avatar](react/components/Avatar/Avatar.tsx) as the structural reference and
-[AudioBubble](react/components/AudioBubble/AudioBubble.tsx) as a reference for concise
-copy, a live preview, and a separate preview tip. These are examples, not sources
-of truth for another component's API.
+Use [Avatar](react/components/Avatar/Avatar.tsx),
+[Button](react/components/Button/Button.tsx), and
+[ToggleButton](react/components/ToggleButton/ToggleButton.tsx) as references for
+structure and focused preview-and-code examples.
+[AudioBubble](react/components/AudioBubble/AudioBubble.tsx) also demonstrates a live
+preview and a separate preview tip. These are examples, not sources of truth for
+another component's API.
 
 ## Intent and audience
 
@@ -127,6 +130,12 @@ and document each prop only once.
 
 ## Preview and tips
 
+Choose previews for the value of seeing or trying the result. Key visual variants,
+layout changes, validation states, and meaningful interactions belong in a canvas
+beside their Usage explanation. Minor adjustments, typed metadata, persistence,
+and equivalent APIs can use a code snippet alone. Avoid a separate lead gallery
+when Usage already demonstrates the component.
+
 For the paired preview-and-code presentation used by ToggleButton and Button,
 place each focused usage example in `ComponentCanvas` and pass its snippet as the
 item's `code` (and optional `codeFilename`). The canvas owns the collapsible code
@@ -195,6 +204,14 @@ still belong in their respective sections; a tip can supplement that content.
 Omit the box when the example is already clear without instructions.
 
 ## Code snippets
+
+Use Slice components in previews and copyable examples wherever an equivalent
+exists: for example, `Button` for actions and submission, `TextField` for inputs,
+and `FlexDiv` for layout. Keep native semantic containers such as `form`, `ul`,
+and `li` where appropriate. For form spacing, use a column `FlexDiv` with an
+explicit `gap` inside the form; do not rely on `gap` on a non-flex form.
+Use native controls only when the example specifically teaches native behavior
+that a Slice component cannot represent.
 
 Keep copyable examples framework-neutral: omit `'use client'` directives. The actual
 Next.js preview modules still declare their client boundary where required.

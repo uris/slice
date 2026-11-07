@@ -5,7 +5,7 @@ import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { PagerPreview } from './PagerPreview';
+import { PagerOpacityExample, PagerScalingExample, PagerUsageExample, PagerWindowExample } from './UsagePreviews';
 import { controlledCode, opacityCode, scalingCode, transitionCode, usageCode, windowCode } from './code';
 
 export function PagerDoc() {
@@ -17,27 +17,25 @@ export function PagerDoc() {
 				Give each page a place. Pager uses compact dots to show the current page, with distance scaling and a sliding
 				window for longer collections.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-pager--default"
-				components={[
-					{ label: 'Default pager', component: <PagerPreview /> },
-					{ label: 'No scaling', component: <PagerPreview scaleFactor={1} /> },
-					{
-						label: 'Progressive pages (20 pages)',
-						component: <PagerPreview pages={20} maxVisiblePages={5} opacityScales />,
-					},
-				]}
-			/>
-			<TipBox inline noBorder marginBottom={false} title="Tip:">
-				The arrows are demo controls, separate from Pager. Use them to see how scaling and sliding respond to selection
-				changes, whether triggered by interacting directly with individual pager items or an external trigger.
-			</TipBox>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Pass <Code>pages</Code> for the total number of pages. Pager manages its selection unless you provide{' '}
 				<Code>selectedIndex</Code>.
 			</P>
-			<CodeBlock filename="PagerExample.tsx" language="tsx" code={usageCode.trim()} />
+			<TipBox inline noBorder>
+				Select a dot to change the page and see how nearby dots respond.
+			</TipBox>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-pager--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <PagerUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'PagerExample.tsx',
+					},
+				]}
+			/>
 			<H3>Control the selected page</H3>
 			<P>
 				Use <Code>selectedIndex</Code> and <Code>onChange</Code> to keep the dots in sync with your content. Indices
@@ -49,13 +47,33 @@ export function PagerDoc() {
 				<Code>scale</Code> sets the selected dot's scale. Each step away multiplies it by <Code>scaleFactor</Code>,
 				stopping at <Code>minScale</Code>. For equal-sized dots, set <Code>scaleFactor</Code> to 1.
 			</P>
-			<CodeBlock filename="ScaledPager.tsx" language="tsx" code={scalingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-pager--default"
+				components={[
+					{
+						label: 'Scale dots by distance',
+						component: <PagerScalingExample />,
+						code: scalingCode.trim(),
+						codeFilename: 'ScaledPager.tsx',
+					},
+				]}
+			/>
 			<H3>Fade dots by distance</H3>
 			<P>
 				Enable <Code>opacityScales</Code> to fade dots by the same distance factor as their size. The selected dot
 				remains fully opaque.
 			</P>
-			<CodeBlock filename="FadingPager.tsx" language="tsx" code={opacityCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-pager--default"
+				components={[
+					{
+						label: 'Fade dots by distance',
+						component: <PagerOpacityExample />,
+						code: opacityCode.trim(),
+						codeFilename: 'FadingPager.tsx',
+					},
+				]}
+			/>
 			<H3>Reveal more pages</H3>
 			<P>
 				Set <Code>maxVisiblePages</Code> to keep a long pager compact. With five visible dots,{' '}
@@ -64,7 +82,17 @@ export function PagerDoc() {
 				Each triggered shift brings in enough pages to center the selection, or only the remaining pages near either
 				end. Sliding is enabled for five or more total pages.
 			</P>
-			<CodeBlock filename="SlidingPager.tsx" language="tsx" code={windowCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-pager--default"
+				components={[
+					{
+						label: 'Reveal more pages',
+						component: <PagerWindowExample />,
+						code: windowCode.trim(),
+						codeFilename: 'SlidingPager.tsx',
+					},
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				The window slides within a fixed mask. Dot scaling changes the visible circles without moving their button

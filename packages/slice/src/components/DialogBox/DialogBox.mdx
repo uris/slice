@@ -112,7 +112,7 @@ When any section is present, direct content must use these sections. Unsupported
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | `actions` | `DialogBoxAction<T>[]` | `undefined` | Action buttons shown in the footer. Actions default to the right; `position` can move them left. `primary` selects the solid button treatment. `promise` chooses the resolve, reject, or action-only path. Disabled and working actions do not run callbacks. |
-| `actionsBackgroundColor` | `ColorValue` | `backgroundColor mixed with 6% black` | Footer background for composed controls and the actions array. Accepts Slice tokens or CSS colors; defaults to a subtly darker panel background. Use `transparent` for no footer fill. |
+| `actionsBackgroundColor` | `ColorValue` | scroll-dependent | Footer background. Defaults to `core-fill-primary` when the body scrolls, otherwise `backgroundColor`. Explicit colors, including `transparent`, apply in both states. |
 | `actionsBorderColor` | `ColorValue` | `core-outline-primary` | Divider color above the footer. |
 | `actionsBorderWidth` | `number` | `0` | Footer divider width in pixels. Automatic scrolling treatment can add a 1px divider when this is zero. |
 | `autoBorderBottom` | `boolean` | `true` | Adds a footer divider when scrolling is detected and the explicit divider width is zero. |
@@ -127,11 +127,12 @@ When any section is present, direct content must use these sections. Unsupported
 | `maxHeight` | `number &#124; string` | `400` | Maximum panel height in pixels or CSS units. |
 | `maxWidth` | `number &#124; string` | `400` | Maximum panel width. |
 | `minHeight` | `number &#124; string` | `200` | Minimum panel height. |
-| `minWidth` | `number &#124; string` | `300` | Minimum panel width. Lower it for narrower layouts. |
-| `padding` | `number &#124; string` | `16px 24px` | Padding shared by the header, body, and footer. Numbers become pixels; CSS shorthand and expressions are preserved. |
+| `minWidth` | `number &#124; string` | `300` | An explicit minimum width is honored even when it exceeds the parent or viewport. When omitted, the 300px default is capped to the available parent width. |
+| `padding` | `number &#124; string` | `16px 24px` | Padding shared by the header, body, and footer. Numbers become pixels; CSS shorthand and expressions are preserved. Without an explicit value, the header has 4px bottom padding while scrolling and zero otherwise. |
 | `scrollHandleColor` | `ColorValue` | `core-text-disabled` | Content scrollbar thumb color. |
 | `scrollHandleColorHover` | `ColorValue` | `core-text-disabled` | Scrollbar thumb color on hover. |
 | `title` | `string` | `undefined` | Title-area text. The title area also appears when `close` is enabled. |
+| `titleBackgroundColor` | `ColorValue` | scroll-dependent | Header background. Defaults to `core-fill-primary` when the body scrolls, otherwise `backgroundColor`. An explicit color applies in both states. |
 | `titleBorderColor` | `ColorValue` | `core-outline-primary` | Divider color beneath the title area. |
 | `titleBorderWidth` | `number` | `0` | Title divider width in pixels. |
 | `titleIcon` | `string` | `undefined` | Icon before the title. |

@@ -5,8 +5,25 @@ import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { TextFieldPreview } from './TextFieldPreview';
-import { actionCode, controlledCode, labelsCode, passwordCode, usageCode } from './code';
+import {
+	TextFieldActionExample,
+	TextFieldErrorExample,
+	TextFieldIconUsageExample,
+	TextFieldLabelsExample,
+	TextFieldPasswordExample,
+	TextFieldUnderlineExample,
+	TextFieldUsageExample,
+} from './UsagePreviews';
+import {
+	actionCode,
+	controlledCode,
+	errorCode,
+	labelsCode,
+	passwordCode,
+	underlineCode,
+	usageCode,
+	usageCodeIcon,
+} from './code';
 
 export function TextFieldDoc() {
 	return (
@@ -16,23 +33,6 @@ export function TextFieldDoc() {
 			<P clipWidth>
 				{'Capture a short answer, search query, or password with a field that keeps useful actions close to the text.'}
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
-				components={[
-					{ label: 'Simple', component: <TextFieldPreview variant={'simple'} /> },
-					{ label: 'Simple w/label', component: <TextFieldPreview variant={'labeled'} /> },
-					{ label: 'Simple w/icon', component: <TextFieldPreview variant={'icon'} /> },
-					{ label: 'Stacked', component: <TextFieldPreview variant="stacked" /> },
-					{ label: 'Stacked appearing label', component: <TextFieldPreview variant="appear" /> },
-					{ label: 'Stacked underline only', component: <TextFieldPreview variant="underline" /> },
-					{ label: 'Outlined', component: <TextFieldPreview variant="outlined" /> },
-					{ label: 'Password', component: <TextFieldPreview variant="password" /> },
-					{ label: 'Error state', component: <TextFieldPreview variant="error" /> },
-				]}
-			/>
-			<TipBox title={'Tip:'} inline noBorder>
-				Enter text into the input field to preview it's behavior
-			</TipBox>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Give the input a meaningful '}
@@ -41,13 +41,61 @@ export function TextFieldDoc() {
 				<Code>{'onChange'}</Code>
 				{' to receive edits.'}
 			</P>
-			<CodeBlock filename="TextFieldExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <TextFieldUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'TextFieldExample.tsx',
+					},
+					{
+						label: 'With Icon',
+						component: <TextFieldIconUsageExample />,
+						code: usageCodeIcon.trim(),
+						codeFilename: 'TextFieldExample.tsx',
+					},
+				]}
+			/>
+			<TipBox title={'Tip:'} inline noBorder>
+				Enter text to try the field and its clear action.
+			</TipBox>
 			<H3>Position the label</H3>
 			<P>
 				Use <Code>variant</Code> for <Code>simple</Code>, <Code>stacked</Code>, or <Code>outlined</Code> placement.{' '}
 				<Code>behavior="appear"</Code> animates stacked labels when text is entered.
 			</P>
-			<CodeBlock filename="TextFieldLabels.tsx" language="tsx" code={labelsCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
+				components={[
+					{
+						label: 'Position the label',
+						component: <TextFieldLabelsExample />,
+						code: labelsCode.trim(),
+						codeFilename: 'TextFieldLabels.tsx',
+					},
+				]}
+			/>
+			<H3>Underline border style</H3>
+			<P>
+				{'Use '}
+				<Code>{'borderStyle'}</Code>
+				{
+					' to choose a complete border or an underline. Underline borders default to zero corner radius and a transparent background; explicit radius and background colors take precedence.'
+				}
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
+				components={[
+					{
+						label: 'Underline border style',
+						component: <TextFieldUnderlineExample />,
+						code: underlineCode.trim(),
+						codeFilename: 'TextFieldLabels.tsx',
+					},
+				]}
+			/>
 			<H3>Password input</H3>
 			<P>
 				{'Use '}
@@ -56,7 +104,17 @@ export function TextFieldDoc() {
 				<Code>{'showPasswordToggle'}</Code>
 				{' controls its visibility action.'}
 			</P>
-			<CodeBlock filename="TextFieldExample2.tsx" language="tsx" code={passwordCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
+				components={[
+					{
+						label: 'Password input',
+						component: <TextFieldPasswordExample />,
+						code: passwordCode.trim(),
+						codeFilename: 'TextFieldExample2.tsx',
+					},
+				]}
+			/>
 			<H3>Control the value</H3>
 			<P>
 				{'Keep text in application state with '}
@@ -74,7 +132,22 @@ export function TextFieldDoc() {
 				<Code>{'onAction'}</Code>
 				{'.'}
 			</P>
-			<CodeBlock filename="TextFieldExample2.tsx" language="tsx" code={actionCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
+				components={[
+					{
+						label: 'Add an action',
+						component: <TextFieldActionExample />,
+						code: actionCode.trim(),
+						codeFilename: 'TextFieldExample2.tsx',
+					},
+				]}
+			/>
+			<H3>Show validation feedback</H3>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
+				components={[{ label: 'Invalid field', component: <TextFieldErrorExample />, code: errorCode.trim() }]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				With <Code>behavior="appear"</Code>, typing moves the label above the value; clearing returns it to the
@@ -154,22 +227,20 @@ export function TextFieldDoc() {
 			<Definition id={'backgroundColorBlurred'}>
 				<Prop>backgroundColorBlurred</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-surface-secondary'}</DefaultVal>
+				<DefaultVal>style-dependent</DefaultVal>
 			</Definition>
 			<P>
-				{'Background when the input is not focused. '}
-				<Code>{'inline'}</Code>
-				{' removes it.'}
+				Background when not focused. Underline borders default to <Code>transparent</Code>; other styles use{' '}
+				<Code>core-surface-secondary</Code>. An explicit color overrides the default. <Code>inline</Code> removes it.
 			</P>
 			<Definition id={'backgroundColorFocused'}>
 				<Prop>backgroundColorFocused</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-surface-secondary'}</DefaultVal>
+				<DefaultVal>style-dependent</DefaultVal>
 			</Definition>
 			<P>
-				{'Background while the input is focused. '}
-				<Code>{'inline'}</Code>
-				{' removes it.'}
+				Background when focused. Underline borders default to <Code>transparent</Code>; other styles use{' '}
+				<Code>core-surface-secondary</Code>. An explicit color overrides the default. <Code>inline</Code> removes it.
 			</P>
 			<Definition id={'prop-behavior'}>
 				<Prop>behavior</Prop>
@@ -220,9 +291,13 @@ export function TextFieldDoc() {
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'8'}</DefaultVal>
+				<DefaultVal>style-dependent</DefaultVal>
 			</Definition>
-			<P>{'Corner radius. Numbers are pixels; strings accept CSS radii.'}</P>
+			<P>
+				{
+					'Corner radius. Defaults to 0 for underline borders, otherwise 8px. Explicit values take precedence. Numbers are pixels; strings accept CSS radii.'
+				}
+			</P>
 			<Definition id={'borderStyle'}>
 				<Prop>borderStyle</Prop>
 				<TypeDef>{"'box' | 'underline' | 'none'"}</TypeDef>

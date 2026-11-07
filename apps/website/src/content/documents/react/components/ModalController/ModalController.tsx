@@ -3,7 +3,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
-import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
+import { Code, DefaultVal, Definition, H1, H2, H3, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
 import { ModalControllerPreview } from './ModalControllerPreview';
 import { motionCode, responseCode, usageCode } from './code';
@@ -13,15 +13,6 @@ export function ModalControllerDoc() {
 			<Path />
 			<H1 id="title">ModalController component</H1>
 			<P clipWidth>{'Open a dialog from application code and collect its result through one shared host.'}</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modalcontroller--default"
-				components={[{ label: 'Open a dialog', component: <ModalControllerPreview /> }]}
-			/>
-			<TipBox inline noBorder title="Tip:">
-				{
-					'Open the dialog and use its action or close controls. This preview keeps it inside the canvas; app dialogs normally use the viewport.'
-				}
-			</TipBox>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Mount one controller for the app’s modal store. Pass a component to '}
@@ -35,7 +26,22 @@ export function ModalControllerDoc() {
 				<Code openURL="/docs/react/dialog-box/">DialogBox</Code>
 				{'.'}
 			</P>
-			<CodeBlock filename="ModalControllerExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modalcontroller--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <ModalControllerPreview />,
+						code: usageCode.trim(),
+						codeFilename: 'ModalControllerExample.tsx',
+					},
+				]}
+			/>
+			<TipBox inline noBorder title="Tip:">
+				{
+					'Open the dialog and use its action or close controls. This preview keeps it inside the canvas; app dialogs normally use the viewport.'
+				}
+			</TipBox>
 			<H3>Wait for a response</H3>
 			<P>
 				{'Use '}

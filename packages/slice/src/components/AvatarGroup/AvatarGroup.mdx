@@ -50,18 +50,19 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>backgroundColor</code></td><td><code>ColorValue</code></td><td><code>undefined</code></td><td>Default avatar fill, including the overflow avatar. Explicit record or child colors override it. When undefined, Avatar uses its normal theme fallback. Does not color the container.</td></tr>
             <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Optional inner border color override passed to each child avatar.</td></tr>
             <tr><td><code>borderColorHover</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Optional hover border color override passed to each child avatar.</td></tr>
-            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>3</code></td><td>Inner border width applied to each child avatar.</td></tr>
+            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>undefined</code></td><td>Inner border width in pixels. When omitted, avatars retain their own border width or Avatar’s default of 0. Explicit child values override the group.</td></tr>
             <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td><code>undefined</code></td><td>Avatar children replacing the array. Child props override group defaults.</td></tr>
             <tr><td><code>gap</code></td><td><code>number</code></td><td><code>0</code></td><td>Additional spacing between avatar wrappers.</td></tr>
+            <tr><td><code>groupName</code></td><td><code>string</code></td><td><code>people</code></td><td>Accessible group label. Surrounding whitespace is trimmed; omitted or blank names use people. The root automatically supplies role="group" and aria-label.</td></tr>
             <tr><td><code>lazyLoad</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Native browser lazy loading for every photo. Initials stay visible while loading or on failure.</td></tr>
             <tr><td><code>limit</code></td><td><code>number</code></td><td><code>undefined</code></td><td>Maximum visible people, plus an overflow avatar when more remain.</td></tr>
             <tr><td><code>margin</code></td><td><code>number</code></td><td><code>0</code></td><td>Outer margin value for the group layout token.</td></tr>
             <tr><td><code>overlap</code></td><td><code>number</code></td><td><code>8</code></td><td>Horizontal overlap amount between adjacent avatars. Positive values create tighter stacking.</td></tr>
             <tr><td><code>outerBorderColor</code></td><td><code>string</code></td><td><code>var(--core-surface-primary)</code></td><td>Outer ring color passed to each child avatar.</td></tr>
             <tr><td><code>outerBorderWidth</code></td><td><code>number</code></td><td><code>3</code></td><td>Outer ring width applied to each child avatar.</td></tr>
-            <tr><td><code>size</code></td><td><code>number</code></td><td><code>32</code></td><td>Avatar width/height in pixels for each item in the group.</td></tr>
+            <tr><td><code>size</code></td><td><code>number</code></td><td><code>40</code></td><td>Avatar width/height in pixels for each item in the group.</td></tr>
             <tr><td><code>textSize</code></td><td><code>xs | s | m | l | xl</code></td><td><code>m</code></td><td>Theme typography size for every avatar's initials.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>HTMLAttributes</code><br/><code>HTMLDivElement</code></td><td><code>-</code></td><td>Native <code>div</code> props pass through to the group root (for example <code>id</code>, <code>data-testid</code>, <code>className</code>, <code>style</code>, <code>aria-*</code>).</td></tr>
+            <tr><td><code>...divAttributes</code></td><td><code>HTMLAttributes</code><br/><code>HTMLDivElement</code></td><td><code>-</code></td><td>Native <code>div</code> props pass through to the group root (for example <code>id</code>, <code>data-testid</code>, <code>className</code>, <code>style</code>). Role and ARIA attributes are managed internally; use <code>groupName</code> to name the group. Native attributes apply to the wrapper only, not individual avatars.</td></tr>
           </tbody>
         </table>
 

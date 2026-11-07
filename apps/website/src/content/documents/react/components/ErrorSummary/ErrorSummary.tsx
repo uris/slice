@@ -5,8 +5,9 @@ import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { ErrorSummaryPreview } from './ErrorSummaryPreview';
+import { ErrorSummaryFieldsExample, ErrorSummaryLiveExample, ErrorSummaryUsageExample } from './UsagePreviews';
 import { announcementCode, entryCode, fieldsCode, focusCode, liveCode, motionCode, usageCode } from './code';
+
 export function ErrorSummaryDoc() {
 	return (
 		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
@@ -15,19 +16,6 @@ export function ErrorSummaryDoc() {
 			<P clipWidth>
 				Bring validation messages together so people can see what needs attention and get back to the right field.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-errorsummary--default"
-				components={[
-					{ label: 'One error', component: <ErrorSummaryPreview /> },
-					{ label: 'Live validation', component: <ErrorSummaryPreview variant="validation" /> },
-					{ label: 'Multiple errors', component: <ErrorSummaryPreview variant="multiple" /> },
-					{ label: 'Navigate to fields', component: <ErrorSummaryPreview variant="fields" /> },
-				]}
-			/>
-			<TipBox inline noBorder title="Tip:">
-				In the field example, activate an error title to move to its field. Enter a value to clear that error. In live
-				validation, any text creates an error; clearing the field hides it.
-			</TipBox>
 			<H2 id="usage">Usage</H2>
 			<P>
 				Place the summary above the fields, typically at the top of a large form. It collects errors across fields; each
@@ -38,7 +26,17 @@ export function ErrorSummaryDoc() {
 				<Code>{'entries'}</Code>
 				{'. Each entry has a title and optional supporting messages.'}
 			</P>
-			<CodeBlock filename="ErrorSummaryExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-errorsummary--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <ErrorSummaryUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'ErrorSummaryExample.tsx',
+					},
+				]}
+			/>
 			<H3>Connect errors to fields</H3>
 			<P>
 				{'Set '}
@@ -53,10 +51,31 @@ export function ErrorSummaryDoc() {
 				<Code>{'DropDown'}</Code>
 				{'. Activating the title focuses that control and scrolls its parent into view.'}
 			</P>
-			<CodeBlock filename="ContactForm.tsx" language="tsx" code={fieldsCode.trim()} />
+			<P>
+				Pass your application’s <Code>validateEmail</Code> function to this form. It returns an{' '}
+				<Code>ErrorMessage</Code> with <Code>fieldName: 'email'</Code>, or <Code>undefined</Code> when valid.
+			</P>
+			<TipBox inline noBorder>
+				Submit an empty or invalid email address to show an error, then select its title to focus the field. Enter a
+				valid address to clear it.
+			</TipBox>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-errorsummary--default"
+				components={[
+					{
+						label: 'Connect errors to fields',
+						component: <ErrorSummaryFieldsExample />,
+						code: fieldsCode.trim(),
+						codeFilename: 'ContactForm.tsx',
+					},
+				]}
+			/>
 			<H3>Show errors as you type</H3>
 			<P>This example treats every entered value as invalid. Your app supplies its own validation rules.</P>
-			<CodeBlock filename="LiveValidation.tsx" language="tsx" code={liveCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-errorsummary--default"
+				components={[{ label: 'Live validation', component: <ErrorSummaryLiveExample />, code: liveCode.trim() }]}
+			/>
 			<H3>Choose announcement urgency</H3>
 			<P>
 				{'Use '}
@@ -275,6 +294,7 @@ export function ErrorSummaryDoc() {
 		</FlexDiv>
 	);
 }
+
 export const trackedItems: TrackedItem[] = [
 	{ id: 'title', title: 'ErrorSummary component' },
 	{ id: 'usage', title: 'Usage' },

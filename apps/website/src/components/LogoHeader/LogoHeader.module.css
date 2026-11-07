@@ -1,15 +1,19 @@
 .wrapper {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: flex-start;
 	justify-content: center;
 	box-sizing: border-box;
-	padding: 0 32px;
+	padding: 0;
 	gap: 0;
-	width: 100%;
-	min-height: 125px;
-	height: 125px;
-	max-height: 125px;
+	flex: 0;
+
+	&::after {
+		content: "|";
+		display: inline-flex;
+		padding-left: 24px;
+		color: var(--core-fill-secondary);
+	}
 }
 
 .identity {

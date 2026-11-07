@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { RadioButtonPreview } from './RadioButtonPreview';
+import { RadioButtonSelectionExample, RadioButtonUsageExample } from './UsagePreviews';
 import { exampleCode, typedCode, usageCode } from './code';
 export function RadioButtonDoc() {
 	return (
@@ -15,25 +15,36 @@ export function RadioButtonDoc() {
 				Make one choice from a set with a clear selection icon and a label. Customize its colors, spacing, and text for
 				compact options or longer descriptions.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-radiobutton--default"
-				components={[
-					{ label: 'Default', component: <RadioButtonPreview /> },
-					{ label: 'Framed choices', component: <RadioButtonPreview variant="framed" /> },
-					{ label: 'Multiline', component: <RadioButtonPreview variant="multiline" /> },
-					{ label: 'Disabled', component: <RadioButtonPreview variant="disabled" /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Give related options the same <Code>name</Code> so choosing one clears the others.
 			</P>
-			<CodeBlock filename="RadioButtonExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-radiobutton--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <RadioButtonUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'RadioButtonExample.tsx',
+					},
+				]}
+			/>
 			<H3>Control selection</H3>
 			<P>
 				Use <Code>checked</Code> and <Code>onChange</Code> to keep the group’s value in application state.
 			</P>
-			<CodeBlock filename="RadioButtonSelection.tsx" language="tsx" code={exampleCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-radiobutton--default"
+				components={[
+					{
+						label: 'Control selection',
+						component: <RadioButtonSelectionExample />,
+						code: exampleCode.trim(),
+						codeFilename: 'RadioButtonSelection.tsx',
+					},
+				]}
+			/>
 			<H3>Pass typed metadata</H3>
 			<P>
 				<Code>value</Code> can carry an object to <Code>onChange</Code>. Set <Code>formValue</Code> when the form should

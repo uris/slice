@@ -16,7 +16,7 @@ describe('component color tokens', () => {
 
 	it('resolves button label, background, and nested icon colors', () => {
 		const html = renderToStaticMarkup(<Button variant="solid" label="Test" backgroundColor="core-surface-special" textColor="core-text-accent" iconLeft="basic.home" iconColor="core-icon-error" />);
-		expect(html).toContain('background:var(--core-surface-special)');
+		expect(html).toContain('background-color:var(--core-surface-special)');
 		expect(html).toContain('color:var(--core-text-accent)');
 		expect(html).toContain('var(--core-icon-error)');
 	});

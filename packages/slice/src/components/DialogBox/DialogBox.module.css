@@ -1,6 +1,6 @@
 .wrapper {
 	position: relative;
-	min-width: min(var(--modal-min-width), 100%);
+	min-width: var(--modal-min-width);
 	width: max-content;
 	box-sizing: border-box;
 	align-self: center;
@@ -15,8 +15,8 @@
 }
 
 .title {
-	padding: var(--modal-padding);
-	padding-bottom: 0;
+	background-color: var(--modal-title-background-color, var(--modal-background-color));
+	padding: var(--modal-title-padding);
 	width: 100%;
 	gap: var(--spacing-m);
 	border-bottom: var(--modal-title-border-width) solid var(--modal-title-border-color);
@@ -58,13 +58,13 @@
 }
 
 .content {
-	color: var(--core-text-tertiary);
+	color: var(--core-text-secondary);
 	padding: var(--modal-padding);
 	width: 100%;
 }
 
 .actions {
-	background-color: var(--modal-actions-background-color, color-mix(in srgb, var(--modal-background-color) 90%, black));
+	background-color: var(--modal-actions-background-color, var(--modal-background-color));
 	padding: var(--modal-padding);
 	padding-top: var(--modal-padding-adjust);
 	width: 100%;
@@ -182,5 +182,10 @@
 
 /* Keep the scrollbar inset after the shared margin reset above. */
 .contentWrapper {
-	margin-right: 2px;
+	margin-right: var(--spacing-xs);
+}
+
+/* Separate scrolling content from the header after the shared margin reset. */
+.content {
+	margin-top: var(--modal-content-margin-top, 0px);
 }

@@ -56,6 +56,72 @@ export const Default: StoryObj<typeof AvatarGroup> = {
 	},
 };
 
+export const DefaultSizeFromRecords: StoryObj<typeof AvatarGroup> = {
+	tags: ['tests'],
+	render: () => <AvatarGroup avatars={[{ first: 'Jane' }, { first: 'Morgan' }, { first: 'Alex' }]} limit={2} />,
+	play: async ({ canvasElement }) => {
+		const avatars = within(canvasElement).getAllByRole('img');
+		await expect(avatars).toHaveLength(3);
+		for (const avatar of avatars) {
+			await expect(avatar.getBoundingClientRect().width).toBe(40);
+			await expect(avatar.getBoundingClientRect().height).toBe(40);
+		}
+	},
+};
+
+export const DefaultSizeFromChildren: StoryObj<typeof AvatarGroup> = {
+	tags: ['tests'],
+	render: () => (
+		<AvatarGroup size={undefined}>
+			<Avatar name="Jane" />
+			<Avatar name="Morgan" size={undefined} />
+			<Avatar name="Alex" size={56} />
+		</AvatarGroup>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const name of ['Jane', 'Morgan', 'Alex']) {
+			const avatar = canvas.getByRole('img', { name: `User Avatar - ${name}` });
+			const expectedSize = name === 'Alex' ? 56 : 40;
+			await expect(avatar.getBoundingClientRect().width).toBe(expectedSize);
+			await expect(avatar.getBoundingClientRect().height).toBe(expectedSize);
+		}
+	},
+};
+
+export const AccessibleGroupName: StoryObj<typeof AvatarGroup> = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<AvatarGroup avatars={[{ first: 'Jane' }]} />
+			<AvatarGroup groupName="  Project collaborators  ">
+				<Avatar name="Morgan" />
+			</AvatarGroup>
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('group', { name: 'people' })).toBeVisible();
+		const custom = canvas.getByRole('group', { name: 'Project collaborators' });
+		await expect(within(custom).getByRole('img', { name: 'User Avatar - Morgan' })).toBeVisible();
+		await expect(custom).not.toHaveAttribute('groupName');
+	},
+};
+
+export const ManagedGroupSemantics: StoryObj<typeof AvatarGroup> = {
+	tags: ['tests'],
+	render: () => {
+		const raw = { role: 'presentation', 'aria-label': 'Override', 'aria-labelledby': 'external', 'aria-hidden': true };
+		return <AvatarGroup {...raw} groupName="   " avatars={[{ first: 'Jane' }]} data-testid="managed-group" />;
+	},
+	play: async ({ canvasElement }) => {
+		const group = within(canvasElement).getByRole('group', { name: 'people' });
+		await expect(group).toHaveAttribute('data-testid', 'managed-group');
+		await expect(group).not.toHaveAttribute('aria-labelledby');
+		await expect(group).not.toHaveAttribute('aria-hidden');
+	},
+};
+
 export const WithoutToolTipHandler: StoryObj<typeof AvatarGroup> = {
 	tags: ['tests'],
 	args: {
@@ -132,12 +198,22 @@ export const NormalizedBordersAndColors: StoryObj<typeof AvatarGroup> = {
 
 export const DefaultBorderWidths: StoryObj<typeof AvatarGroup> = {
 	tags: ['tests'],
-	args: { borderWidth: undefined, avatars: [{ first: 'Jane' }] },
-	render: Default.render,
+	render: () => (
+		<AvatarGroup>
+			<Avatar name="Default border" />
+			<Avatar name="Custom border" borderWidth={1} />
+		</AvatarGroup>
+	),
 	play: async ({ canvasElement }) => {
-		const avatar = within(canvasElement).getByRole('img');
-		await expect(getComputedStyle(avatar).borderTopWidth).toBe('3px');
-		await expect(getComputedStyle(avatar.firstElementChild as HTMLElement).borderTopWidth).toBe('3px');
+		const canvas = within(canvasElement);
+		for (const [name, borderWidth] of [
+			['Default border', '0px'],
+			['Custom border', '1px'],
+		]) {
+			const avatar = canvas.getByRole('img', { name: `User Avatar - ${name}` });
+			await expect(getComputedStyle(avatar).borderTopWidth).toBe('3px');
+			await expect(getComputedStyle(avatar.firstElementChild as HTMLElement).borderTopWidth).toBe(borderWidth);
+		}
 	},
 };
 

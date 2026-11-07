@@ -4,7 +4,12 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { RoundSwitchPreview, SwitchPreview } from './SwitchPreview';
+import {
+	SwitchDisabledExample,
+	SwitchShapeExample,
+	SwitchUncontrolledExample,
+	SwitchUsageExample,
+} from './UsagePreviews';
 import { example1Code, example2Code, motionCode, shapeCode, uncontrolledCode, usageCode } from './code';
 
 export function SwitchDoc() {
@@ -16,19 +21,22 @@ export function SwitchDoc() {
 				Make a setting easy to turn on or off. Switch pairs a compact track with a moving knob and a typed change
 				payload.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-switch--default"
-				components={[
-					{ label: 'Default', component: <SwitchPreview /> },
-					{ label: 'Round handle', component: <RoundSwitchPreview /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Use <Code>checked</Code> and <Code>onChange</Code> to control a setting, or pass <Code>defaultChecked</Code>
-				when the switch should manage its own state. Give it an accessible name with <Code>aria-label</Code>.
+				when the switch should manage its own state. Give it an accessible label with <Code>name</Code>.
 			</P>
-			<CodeBlock filename="SwitchExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-switch--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <SwitchUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'SwitchExample.tsx',
+					},
+				]}
+			/>
 			<H3>Pass a typed value</H3>
 			<P>
 				<Code>value</Code> carries optional metadata into <Code>onChange</Code>. The second argument is the new on/off
@@ -36,15 +44,46 @@ export function SwitchDoc() {
 			</P>
 			<CodeBlock filename="SwitchExample1.tsx" language="tsx" code={example1Code.trim()} />
 			<H3>Start on</H3>
-			<CodeBlock filename="SwitchUncontrolled.tsx" language="tsx" code={uncontrolledCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-switch--default"
+				components={[
+					{
+						label: 'Start on',
+						component: <SwitchUncontrolledExample />,
+						code: uncontrolledCode.trim(),
+						codeFilename: 'SwitchUncontrolled.tsx',
+					},
+				]}
+			/>
 			<H3>Disable a setting</H3>
-			<CodeBlock filename="SwitchExample2.tsx" language="tsx" code={example2Code.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-switch--default"
+				components={[
+					{
+						label: 'Disable a setting',
+						component: <SwitchDisabledExample />,
+						code: example2Code.trim(),
+						codeFilename: 'SwitchExample2.tsx',
+					},
+				]}
+			/>
 			<H3>Customize the knob and track</H3>
 			<P>
-				Set <Code>knobWidth</Code> for a pill shape, then adjust <Code>knobRadius</Code> and <Code>borderRadius</Code>{' '}
-				for custom corners.
+				Match <Code>knobWidth</Code> to the knob’s height and use <Code>knobRadius="50%"</Code> for a circular head.
+				This example uses a 30px head and a 60px-wide track. A 34px <Code>height</Code> leaves 2px padding above and
+				below.
 			</P>
-			<CodeBlock filename="SwitchShape.tsx" language="tsx" code={shapeCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-switch--default"
+				components={[
+					{
+						label: 'Customize the knob and track',
+						component: <SwitchShapeExample />,
+						code: shapeCode.trim(),
+						codeFilename: 'SwitchShape.tsx',
+					},
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				With <Code>checked</Code>, your application controls the switch. Without it, the switch manages its own state;
@@ -57,8 +96,8 @@ export function SwitchDoc() {
 			<H2 id={'accessibility'}>Accessibility</H2>
 			<P>
 				The button uses <Code>role="switch"</Code> and exposes its state through <Code>aria-checked</Code>. Use{' '}
-				<Code>aria-label</Code> or connect visible text with <Code>aria-labelledby</Code>. The fallback name is
-				“Switch”.
+				<Code>name</Code> to describe the setting; its trimmed value supplies <Code>aria-label</Code>. Omitted or blank
+				names fall back to <Code>Switch</Code>.
 			</P>
 			<P>
 				Enter and Space toggle the setting. Keyboard focus has a visible inset indicator. <Code>disabled</Code>
@@ -142,6 +181,15 @@ export function SwitchDoc() {
 				Knob width in pixels. Defaults to a pill shape. Width is clamped to the available track space. Invalid or
 				nonpositive values use the default.
 			</P>
+			<Definition id={'name'}>
+				<Prop>name</Prop>
+				<TypeDef>string</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Button name and accessible label. Whitespace is trimmed for <Code>aria-label</Code>; omitted or blank names use{' '}
+				<Code>Switch</Code>.
+			</P>
 			<Definition id={'padding'}>
 				<Prop>padding</Prop>
 				<TypeDef>{'number'}</TypeDef>
@@ -175,9 +223,9 @@ export function SwitchDoc() {
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
-				Other attributes apply to the root. className is appended; style is merged. Component layout and color styles
-				take priority over overlapping style fields. Children are not supported; the internal knob is retained. The
-				default button type is button.
+				Other native button attributes apply to the root. Role and ARIA attributes are managed internally. className is
+				appended; style is merged. Component layout and color styles take priority over overlapping style fields.
+				Children are not supported; the internal knob is retained. The default button type is button.
 			</P>
 			<H2 id={'motion'}>Motion</H2>
 			<P>
@@ -235,6 +283,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'knobColor', title: 'knobColor', code: true },
 			{ id: 'knobRadius', title: 'knobRadius', code: true },
 			{ id: 'knobWidth', title: 'knobWidth', code: true },
+			{ id: 'name', title: 'name', code: true },
 			{ id: 'padding', title: 'padding', code: true },
 			{ id: 'value', title: 'value', code: true },
 			{ id: 'width', title: 'width', code: true },

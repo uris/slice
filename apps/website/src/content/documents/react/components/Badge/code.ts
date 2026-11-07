@@ -1,15 +1,25 @@
 export const usageCode = `
 import { Badge } from '@apple-pie/slice';
 
-<Badge count={12} />
+export function BadgeUsageExample() {
+	return <Badge count={12} />;
+}
 `;
 
 export const zeroCode = `
-<Badge count={0} hideZero={false} />
+import { Badge } from '@apple-pie/slice';
+
+export function BadgeZeroExample() {
+	return <Badge count={0} hideZero={false} />;
+}
 `;
 
 export const labelCode = `
-<Badge count="New" variant="light" />
+import { Badge } from '@apple-pie/slice';
+
+export function BadgeLabelExample() {
+	return <Badge count="New" variant="light" />;
+}
 `;
 
 export const accessibilityCode = `
@@ -21,5 +31,13 @@ export const accessibilityCode = `
 `;
 
 export const colorsCode = `
-<Badge count={12} backgroundColor="array-sky-label" textColor="#111111" />
+import { Badge } from '@apple-pie/slice';
+
+export function BadgeColorsExample() {
+	return <Badge count={12} backgroundColor="array-sky-label" textColor="#111111" />;
+}
+`;
+
+export const overflowCode = `
+<Badge count={240} aria-label="240 unread messages" />
 `;

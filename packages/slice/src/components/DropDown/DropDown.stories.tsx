@@ -108,11 +108,12 @@ export const DisabledOption: Story = {
 };
 export const InitialFaceMatchesSelection: Story = {
 	tags: ['tests'],
-	args: { options: options.slice(1), placeholder: false },
+	args: { options: options.slice(1), textColor: '#123456', textColorPlaceholder: '#abcdef' },
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		expect(canvas.getByRole('combobox')).toHaveValue('active');
 		expect(canvas.getByText('In progress', { selector: 'span' })).toBeVisible();
+		expect(getComputedStyle(canvas.getByText('In progress', { selector: 'span' })).color).toBe('rgb(18, 52, 86)');
 	},
 };
 export const UnmatchedValue: Story = {
@@ -1012,5 +1013,67 @@ export const RejectOptionSelectedAndMarkup: Story = {
 				</DropDown>,
 			),
 		).toThrow('DropDown <option> values must be strings or numbers');
+	},
+};
+
+export const PlaceholderTextColors: Story = {
+	tags: ['tests'],
+	args: { textColor: '#123456', textColorPlaceholder: '#abcdef' },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		expect(getComputedStyle(canvas.getByText('Choose a status', { selector: 'span' })).color).toBe(
+			'rgb(171, 205, 239)',
+		);
+		await userEvent.selectOptions(canvas.getByRole('combobox'), 'active');
+		expect(getComputedStyle(canvas.getByText('In progress', { selector: 'span' })).color).toBe('rgb(18, 52, 86)');
+	},
+};
+
+export const ExplicitPlaceholderTextColor: Story = {
+	tags: ['tests'],
+	args: {
+		placeholder: true,
+		options: [{ label: 'Choose a status', value: 'prompt' }, ...options.slice(1)],
+		textColorPlaceholder: '#abcdef',
+	},
+	play: async ({ canvasElement }) => {
+		expect(getComputedStyle(within(canvasElement).getByText('Choose a status', { selector: 'span' })).color).toBe(
+			'rgb(171, 205, 239)',
+		);
+	},
+};
+
+export const EmptyValueWithoutPlaceholder: Story = {
+	tags: ['tests'],
+	args: {
+		placeholder: false,
+		label: 'Status',
+		variant: 'stacked',
+		behavior: 'appear',
+		options: [{ label: 'All statuses', value: '' }, ...options.slice(1)],
+		textColor: '#123456',
+		textColorPlaceholder: '#abcdef',
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const value = canvas.getByText('All statuses', { selector: 'span' });
+		expect(value).toBeVisible();
+		expect(getComputedStyle(value).color).toBe('rgb(18, 52, 86)');
+		expect(canvas.getByRole('combobox')).toHaveValue('');
+	},
+};
+
+export const FirstChildOptionTextColor: Story = {
+	tags: ['tests'],
+	render: () => (
+		<DropDown inputName="Project status" textColor="#123456">
+			<option value="active">In progress</option>
+			<option value="complete">Complete</option>
+		</DropDown>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		expect(canvas.getByRole('combobox')).toHaveValue('active');
+		expect(getComputedStyle(canvas.getByText('In progress', { selector: 'span' })).color).toBe('rgb(18, 52, 86)');
 	},
 };

@@ -151,7 +151,7 @@ Reduced-motion preferences disable border, background, and label transitions. Wi
 | `paddingLeft` | `number  /  string` | `16px in box/underline modes; otherwise 0` | Left padding. Explicit values override that side of `padding`. |
 | `paddingRight` | `number  /  string` | `12px in simple/stacked box/underline modes; 16px outlined; otherwise 0` | Right padding. Simple and stacked fields compensate for the chevron’s internal space. Explicit values override that side of `padding`. |
 | `paddingTop` | `number  /  string` | `8px in box/underline modes; outlined adds half the label font size; otherwise 0` | Top padding. Explicit values override that side of `padding`. |
-| `placeholder` | `boolean` | `true` | Keeps the existing prompt convention: index zero uses `textColorPlaceholder`. Include a first option such as `-- Choose a status` to make that prompt selectable. This flag does not insert a visible option. |
+| `placeholder` | `boolean` | inferred from first option | Defaults to true only when the first option has an empty-string value. Set true to mark a nonempty first option as a prompt, or false to treat every option as a real selection. Prompts use `textColorPlaceholder`; real selections use `textColor`. Does not insert an option. |
 | `stackedGap` | `number` | `2` | Space in pixels between a stacked label and value. The space remains reserved with `behavior="appear"`, keeping field height stable. |
 | `stackedLabelTextSize` | `keyof Type` | `body-xs-regular` | Slice typography preset for stacked and outlined labels. |
 | `textColor` | `ColorValue` | `core-text-primary` | Selected text color. Error state does not recolor the value. |

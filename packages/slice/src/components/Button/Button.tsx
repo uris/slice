@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
+import { setStyle as resolveStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
@@ -45,6 +46,8 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		width = 'min-content',
 		underline = false,
 		borderRadius = undefined,
+		borderWidth = undefined,
+		borderColor = undefined,
 		iconColor = undefined,
 		backgroundColor = undefined,
 		backgroundColorDisabled = undefined,
@@ -263,6 +266,8 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		};
 	}, [solid, outline, text]);
 
+	const resolvedBorderWidth = resolveStyle(borderWidth, colorStyles[variant].border);
+	const resolvedBorderColor = borderColor ?? colorStyles[variant].borderColor[btnState];
 	const autoSize = buttonSize === 'auto';
 	const getHeight = () => {
 		if (autoSize) return 'auto';
@@ -286,7 +291,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		return base;
 	};
 	const roundWidth = autoSize
-		? `calc(${iconSize + verticalPadding + bottomPadding}px + 2 * ${colorStyles[variant].border})`
+		? `calc(${iconSize + verticalPadding + bottomPadding}px + 2 * ${resolvedBorderWidth})`
 		: height;
 
 	const handleMouseEnter = useCallback(
@@ -349,7 +354,8 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	const resolvedPaddingLeft = paddingLeft ?? getSidePadding('left');
 	const buttonStyle = {
 		color: colorStyles[variant].color[btnState],
-		background: fill && !isDisabled ? 'var(--core-surface-primary)' : colorStyles[variant].background[btnState],
+		backgroundColor: fill && !isDisabled ? 'var(--core-surface-primary)' : colorStyles[variant].background[btnState],
+		backgroundClip: 'padding-box' as const,
 		...(resolvedPaddingRight === undefined ? {} : { paddingRight: resolvedPaddingRight }),
 		...(resolvedPaddingLeft === undefined ? {} : { paddingLeft: resolvedPaddingLeft }),
 		...(paddingTop === undefined ? {} : { paddingTop }),
@@ -363,9 +369,9 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		maxWidth: round && width === 'min-content' ? 'unset' : setWidth,
 		minWidth: 0,
 		gap: resolvedGap,
-		borderWidth: colorStyles[variant].border,
+		borderWidth: resolvedBorderWidth,
 		borderStyle: 'solid' as const,
-		borderColor: colorStyles[variant].borderColor[btnState],
+		borderColor: resolvedBorderColor,
 		cursor: isDisabled || playing ? ('default' as const) : ('pointer' as const),
 		transition: 'all var(--motion-water-duration) var(--motion-water) 0s',
 	};

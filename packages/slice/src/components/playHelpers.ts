@@ -2266,7 +2266,7 @@ export async function runButtonFillAndCustomWidthPlay({ canvasElement }: { canva
 	// `fill` forces the surface-primary background regardless of variant,
 	// and width='fill' switches the button to `flex: 1`
 	const fillButton = canvasElement.querySelector('[class*="fill-button"]') as HTMLElement | null;
-	await expect(fillButton?.style.background).toBe('var(--core-surface-primary)');
+	await expect(fillButton?.style.backgroundColor).toBe('var(--core-surface-primary)');
 	await expect(fillButton?.style.flex).not.toBe('unset');
 
 	// a fixed numeric width goes through setWidth's `setStyle` branch and

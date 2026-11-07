@@ -1,33 +1,50 @@
 export const usageCode = `
 import { ErrorSummary } from '@apple-pie/slice';
 
-<ErrorSummary entries={[
-  { id: 'email', title: 'Email address required', message: 'Add an email address to continue.' },
-  { id: 'project', title: 'Choose a project' },
-]} />
+export function ErrorSummaryUsageExample() {
+	return (
+		<ErrorSummary
+			entries={[
+				{ id: 'email', title: 'Email address required', message: 'Add an email address to continue.' },
+				{ id: 'project', title: 'Choose a project' },
+			]}
+		/>
+	);
+}
 `;
 export const fieldsCode = `
+import { Button, type ErrorMessage, ErrorSummary, FlexDiv, Preset, TextField } from '@apple-pie/slice';
 import { useState } from 'react';
-import { ErrorSummary, type ErrorMessage, TextField } from '@apple-pie/slice';
 
-function ContactForm() {
-  const [email, setEmail] = useState('');
-  const [errors, setErrors] = useState<ErrorMessage[]>([]);
+export function ContactForm({ validateEmail }: { validateEmail: (value: string) => ErrorMessage | undefined }) {
+	const [email, setEmail] = useState('');
+	const [submitted, setSubmitted] = useState(false);
+	const error = submitted ? validateEmail(email) : undefined;
+	const errors = error ? [error] : [];
 
-  return <form onSubmit={(event) => {
-    event.preventDefault();
-    setErrors(email.trim() ? [] : [{
-      id: 'email-required',
-      title: 'Email address required',
-      message: 'Add an email address to continue.',
-      fieldName: 'email',
-    }]);
-  }}>
-    <ErrorSummary entries={errors} />
-    <TextField name="email" inputName="Email address" value={email}
-      onChange={(next) => setEmail(next ?? '')} />
-    <button type="submit">Continue</button>
-  </form>;
+	return (
+		<form
+			noValidate
+			onSubmit={(event) => {
+				event.preventDefault();
+				setSubmitted(true);
+			}}
+		>
+			<FlexDiv preset={Preset.Column}>
+				<ErrorSummary entries={errors} />
+				<TextField
+					name="email"
+					inputAttributes={{ autoComplete: 'email', inputMode: 'email' }}
+					label="Email address"
+					placeholder="jane@example.com"
+					value={email}
+					error={errors.length > 0}
+					onChange={(next) => setEmail(next ?? '')}
+				/>
+				<Button type="submit" label="Continue" />
+			</FlexDiv>
+		</form>
+	);
 }
 `;
 export const announcementCode = `
@@ -38,15 +55,14 @@ export const announcementCode = `
 />
 `;
 export const focusCode = `
+import { Button } from '@apple-pie/slice';
 import { useRef } from 'react';
 
 const summaryRef = useRef<HTMLDivElement>(null);
 
 <>
   <ErrorSummary ref={summaryRef} entries={errors} />
-  <button type="button" onClick={() => summaryRef.current?.focus()}>
-    Review errors
-  </button>
+  <Button label="Review errors" onClick={() => summaryRef.current?.focus()} />
 </>
 `;
 export const entryCode = `
@@ -59,21 +75,38 @@ type ErrorMessage = {
 `;
 
 export const liveCode = `
-function LiveValidation() {
-  const [value, setValue] = useState('');
-  const errors: ErrorMessage[] = value.length > 0 ? [{
-    id: 'example-value',
-    title: 'Value not accepted',
-    message: 'Choose a different value.',
-    fieldName: 'example-value',
-  }] : [];
+import { type ErrorMessage, ErrorSummary, FlexDiv, Preset, TextField } from '@apple-pie/slice';
+import { useState } from 'react';
 
-  return <form onSubmit={(event) => event.preventDefault()}>
-    <ErrorSummary entries={errors} />
-    <TextField name="example-value" inputName="Example value"
-      placeholder="Enter a value" value={value}
-      onChange={(next) => setValue(next ?? '')} error={errors.length > 0} />
-  </form>;
+export function ErrorSummaryLiveExample() {
+	const [value, setValue] = useState('');
+	const errors: ErrorMessage[] =
+		value.length > 0
+			? [
+					{
+						id: 'example-value',
+						title: 'Value not accepted',
+						message: 'Choose a different value.',
+						fieldName: 'example-value',
+					},
+				]
+			: [];
+
+	return (
+		<form style={{ width: '100%', maxWidth: 440 }} onSubmit={(event) => event.preventDefault()}>
+			<FlexDiv preset={Preset.Column} gap={16} width="100%">
+				<ErrorSummary entries={errors} />
+				<TextField
+					name="example-value"
+					inputName="Example value"
+					placeholder="Enter a value"
+					value={value}
+					onChange={(next) => setValue(next ?? '')}
+					error={errors.length > 0}
+				/>
+			</FlexDiv>
+		</form>
+	);
 }
 `;
 

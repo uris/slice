@@ -13,10 +13,6 @@ export function OverlayDoc() {
 			<Path />
 			<H1 id="title">Overlay component</H1>
 			<P clipWidth>Catch background clicks while a menu or dialog is open, with a clear or dimmed backdrop.</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-overlay--default"
-				components={[{ label: 'Overlay', component: <OverlayPreview opacity={0.75} /> }]}
-			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Control '}
@@ -29,7 +25,17 @@ export function OverlayDoc() {
 				<Code>{'opacity'}</Code>
 				{' for a dimmed backdrop, or leave it at zero for a clear pointer-catching layer.'}
 			</P>
-			<CodeBlock filename="OverlayExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-overlay--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <OverlayPreview opacity={0.75} />,
+						code: usageCode.trim(),
+						codeFilename: 'OverlayExample.tsx',
+					},
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				{

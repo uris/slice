@@ -18,12 +18,11 @@ export function AudioBubbleDoc() {
 					Bring live audio into view. AudioBubble is a responsive circle for voice interfaces and speaking indicators,
 					with a soft glow that fits your theme.
 				</P>
-				<TipBox inline marginBottom={false}>
+				<TipBox inline>
 					To make examples live, allow microphone access to this page and watch the animation playout as microphone
 					sound levels change.
 				</TipBox>
 				<H2 id="usage">Usage</H2>
-				<H3>Use the microphone</H3>
 				<P>
 					These examples use the microphone to create an audio stream. You can pass any audio stream or track to the
 					components' <Code>audioStream</Code>; <Code>playing</Code> controls visualization (not the sound source).

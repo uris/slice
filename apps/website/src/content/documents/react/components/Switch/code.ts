@@ -1,16 +1,23 @@
 export const usageCode = `
 import { Switch } from '@apple-pie/slice';
+import { useState } from 'react';
 
-<Switch
-    aria-label="Notifications"
-    checked={notificationsEnabled}
-    onChange={(_, on) => setNotificationsEnabled(on)}
-/>
+export function SwitchUsageExample() {
+	const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+	return (
+		<Switch
+			name="Notifications"
+			checked={notificationsEnabled}
+			onChange={(_, on) => setNotificationsEnabled(on)}
+		/>
+	);
+}
 `;
 
 export const example1Code = `
 <Switch<{ id: number }>
-    aria-label="Email updates"
+    name="Email updates"
     value={{ id: 42 }}
     checked={emailEnabled}
     onChange={(setting, on) => updateSetting(setting?.id, on)}
@@ -18,12 +25,16 @@ export const example1Code = `
 `;
 
 export const example2Code = `
-<Switch aria-label="Required setting" checked disabled />
+import { Switch } from '@apple-pie/slice';
+
+export function SwitchDisabledExample() {
+	return <Switch name="Required setting" checked disabled />;
+}
 `;
 
 export const motionCode = `
 <Switch
-    aria-label="Notifications"
+    name="Notifications"
     checked={notificationsEnabled}
     onChange={(_, on) => setNotificationsEnabled(on)}
     transition={{ duration: 0.35 }}
@@ -31,13 +42,17 @@ export const motionCode = `
 `;
 
 export const uncontrolledCode = `
-<Switch aria-label="Email updates" defaultChecked />
+import { Switch } from '@apple-pie/slice';
+
+export function SwitchUncontrolledExample() {
+	return <Switch name="Email updates" defaultChecked />;
+}
 `;
 
 export const shapeCode = `
-<Switch
-    aria-label="Email updates"
-    width={64}
-    knobWidth={30}
-/>
+import { Switch } from '@apple-pie/slice';
+
+export function SwitchShapeExample() {
+	return <Switch name="Email updates" width={60} height={34} padding={2} knobWidth={30} knobRadius="50%" borderRadius={17} />;
+}
 `;

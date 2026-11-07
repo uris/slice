@@ -92,15 +92,18 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 	const iconOnly = Boolean(icon) && !hasContent;
 	const hasLeadingIcon = Boolean(icon) && (iconPosition === 'left' || iconOnly);
 	const hasTrailingIcon = Boolean(onRemove) || (Boolean(icon) && (iconPosition === 'right' || iconOnly));
-	const side = (specific: number | undefined, fallback: string) => {
-		const value = specific ?? padding;
-		return value === undefined ? fallback : `${value}px`;
+	const paddingSides = {
+		paddingTop: paddingTop === undefined ? undefined : setStyle(paddingTop),
+		paddingRight: paddingRight === undefined ? undefined : setStyle(paddingRight),
+		paddingBottom: paddingBottom === undefined ? undefined : setStyle(paddingBottom),
+		paddingLeft: paddingLeft === undefined ? undefined : setStyle(paddingLeft),
 	};
 	const cssVars = {
-		'--ui-chip-padding-top': side(paddingTop, vertical),
-		'--ui-chip-padding-right': side(paddingRight, hasTrailingIcon ? iconSide : horizontal),
-		'--ui-chip-padding-bottom': side(paddingBottom, vertical),
-		'--ui-chip-padding-left': side(paddingLeft, hasLeadingIcon ? iconSide : horizontal),
+		'--ui-chip-padding': padding === undefined ? undefined : setStyle(padding),
+		'--ui-chip-padding-top': vertical,
+		'--ui-chip-padding-right': hasTrailingIcon ? iconSide : horizontal,
+		'--ui-chip-padding-bottom': vertical,
+		'--ui-chip-padding-left': hasLeadingIcon ? iconSide : horizontal,
 		'--ui-chip-gap': `${gap}px`,
 		'--ui-chip-icon-size': `${iconSize}px`,
 		'--ui-chip-border-radius': setStyle(borderRadius),
@@ -139,7 +142,11 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 			{iconPosition === 'right' && iconContent}
 		</motion.span>
 	);
-	const actionShared = { className: css.action, 'aria-disabled': disabled ? true : nativeAttributes['aria-disabled'] };
+	const actionShared = {
+		className: css.action,
+		'aria-disabled': disabled ? true : nativeAttributes['aria-disabled'],
+		style: { ...paddingSides, paddingRight: onRemove ? undefined : paddingSides.paddingRight },
+	};
 
 	function handlers<E extends HTMLElement>(attributes: React.DOMAttributes<E>) {
 		const showTooltip = (event?: React.MouseEvent<E>) => {
@@ -241,6 +248,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 							{onRemove && (
 								<button
 									className={css.remove}
+									style={{ ...paddingSides, paddingLeft: 0 }}
 									type="button"
 									aria-label={removalName}
 									disabled={disabled}

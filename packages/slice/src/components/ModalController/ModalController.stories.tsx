@@ -244,3 +244,49 @@ export const UnfocusedPointerOpener: StoryObj<typeof ModalController> = {
 		await expect(opener).toHaveFocus();
 	},
 };
+
+function MinimumWidthDemo({ width }: { width: number }) {
+	return (
+		<div style={{ width, height: 360, transform: 'translateZ(0)' }}>
+			<Button
+				label="Open width test"
+				onClick={() =>
+					modalActionsImperative.show({
+						id: 'modal-width-test',
+						component: DialogBox,
+						props: { title: 'Width test', minWidth: 300, maxWidth: 400, children: 'Short content' },
+					})
+				}
+			/>
+			<ModalController transition={{ duration: 0 }} />
+		</div>
+	);
+}
+
+export const DialogMinimumWidth: StoryObj<typeof ModalController> = {
+	tags: ['tests'],
+	render: () => <MinimumWidthDemo width={600} />,
+	play: async ({ canvasElement }) => {
+		modalActionsImperative.clear();
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Open width test' }));
+		const dialog = await canvas.findByRole('dialog', { name: 'Width test' });
+		await expect(dialog.getBoundingClientRect().width).toBe(300);
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+	},
+};
+
+export const DialogMinimumWidthOverridesHost: StoryObj<typeof ModalController> = {
+	tags: ['tests'],
+	render: () => <MinimumWidthDemo width={240} />,
+	play: async ({ canvasElement }) => {
+		modalActionsImperative.clear();
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Open width test' }));
+		const dialog = await canvas.findByRole('dialog', { name: 'Width test' });
+		await expect(dialog.getBoundingClientRect().width).toBe(300);
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+	},
+};
