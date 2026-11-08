@@ -31,14 +31,14 @@ describe('color recipes', () => {
    'core-surface-primary': '#ffffff', 'core-surface-secondary': '#f5f4f2',
    'core-text-primary': '#000000', 'core-text-secondary': 'rgba(67, 66, 66, 0.6)',
    'core-text-tertiary': 'rgba(67, 66, 66, 0.3)', 'core-text-quaternary': 'rgba(67, 66, 66, 0.18)',
-   'core-fill-primary': 'rgba(128, 128, 128, 0.12)', 'core-fill-secondary': 'rgba(60, 60, 67, 0.6)',
+   'core-fill-primary': 'rgba(128, 128, 128, 0.12)', 'core-fill-secondary': 'rgba(60, 60, 67, 0.3)',
    'core-fill-tertiary': 'rgba(120, 120, 120, 0.2)', 'core-surface-liquid-glass': 'rgba(255, 255, 255, 0.8)',
   });
   expect(dark).toMatchObject({
    'core-surface-primary': '#101010', 'core-surface-secondary': '#1f1e1e',
    'core-text-primary': '#ffffff', 'core-text-secondary': 'rgba(245, 243, 240, 0.6)',
    'core-text-tertiary': 'rgba(245, 243, 240, 0.3)', 'core-text-quaternary': 'rgba(235, 235, 245, 0.18)',
-   'core-fill-secondary': 'rgba(235, 235, 245, 0.6)', 'core-surface-liquid-glass': 'rgba(31, 30, 30, 0.8)',
+   'core-fill-secondary': 'rgba(235, 235, 245, 0.3)', 'core-surface-liquid-glass': 'rgba(31, 30, 30, 0.8)',
   });
   for (const mode of ['light', 'dark'] as const) {
    expect(Object.keys(neutralThemeColors(mode))).toEqual(Object.keys(neutralThemeCss(mode)));

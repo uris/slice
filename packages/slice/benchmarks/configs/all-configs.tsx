@@ -24,6 +24,8 @@ import {
 	Level,
 	DialogBox,
 	ModalController,
+	PopMenuController,
+	PopMenuGroup,
 	Overlay,
 	Pager,
 	ProgressIndicator,
@@ -414,6 +416,22 @@ export const dialogBoxConfig: ComponentBenchmarkConfig = {
 					10,
 				),
 		},
+	],
+};
+
+export const popMenuGroupConfig: ComponentBenchmarkConfig = {
+	componentName: 'PopMenuGroup',
+	tests: [
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<PopMenuGroup title="Actions" items={[{ label: 'Edit' }]} />, 50) },
+		{ name: 'Memory', type: 'memory', fn: () => measureMemoryDelta(<PopMenuGroup title="Actions" items={[{ label: 'Edit' }]} />, 10) },
+	],
+};
+
+export const popMenuControllerConfig: ComponentBenchmarkConfig = {
+	componentName: 'PopMenuController',
+	tests: [
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<PopMenuController />, 50) },
+		{ name: 'Memory', type: 'memory', fn: () => measureMemoryDelta(<PopMenuController />, 10) },
 	],
 };
 
@@ -1896,6 +1914,8 @@ export const allBenchmarkConfigs = [
 	levelConfig,
 	dialogBoxConfig,
 	modalControllerConfig,
+	popMenuControllerConfig,
+	popMenuGroupConfig,
 	promptInputConfig,
 	overlayConfig,
 	pagerConfig,

@@ -1,3 +1,12 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 8px;
+}
+
 .wrapper {
 	display: flex;
 	box-sizing: border-box;
@@ -54,4 +63,20 @@
 
 .clickable {
 	cursor: pointer;
+}
+
+.counter {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 2px 8px;
+	font-family: var(--font-family), sans-serif;
+	font-weight: var(--font-weight-medium);
+	font-size: 13px;
+	line-height: var(--line-height-m);
+	letter-spacing: 0.0125em;
+	color: var(--text-color);
+	background-color: var(--core-fill-primary);
+	border-radius: 4px;
 }

@@ -46,3 +46,6 @@ export { buttonBenchmarkConfig } from './Button.bench';
 export { buttonBarBenchmarkConfig } from './ButtonBar.bench';
 export { chipBenchmarkConfig } from './Chip.bench';
 export { labelBenchmarkConfig } from './Label.bench';
+
+export { popMenuControllerBenchmarkConfig } from './PopMenuController.bench';
+export { popMenuGroupBenchmarkConfig } from './PopMenuGroup.bench';

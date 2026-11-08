@@ -40,6 +40,7 @@ export interface ComponentCanvasProps {
 	showControls?: boolean;
 	showCode?: boolean;
 	offsetTop?: boolean;
+	offsetBottom?: boolean;
 }
 
 type SlideSettings = { direction: number; reduceMotion: boolean; transition: Transition };
@@ -95,7 +96,7 @@ function CanvasSlide({ children, settings }: Readonly<{ children: React.ReactNod
 }
 
 export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.ReactElement {
-	const { zoom, components, showControls = false, showCode = true, offsetTop = false } = props;
+	const { zoom, components, showControls = false, showCode = true, offsetTop = false, offsetBottom = true } = props;
 	const { initial, min, max } = zoom ?? { initial: 1, min: 0, max: 2 };
 	const [scale, setScale] = useState(initial);
 	const [{ index: selected, direction }, setPage] = useState({ index: 0, direction: 1 });
@@ -157,7 +158,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 	const page = (components?.length ?? 0) > 1;
 
 	return (
-		<div className={styles.container}>
+		<div className={styles.container} style={{ marginBottom: offsetBottom ? 24 : 0 }}>
 			{showControls && (
 				<div className={styles.header}>
 					<div className={styles.scale}>

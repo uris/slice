@@ -36,7 +36,7 @@
 	--core-icon-secondary: color-mix(in srgb, var(--core-grey-795) 60%, transparent);
 	--core-icon-disabled: color-mix(in srgb, var(--core-grey-795) 18%, transparent);
 	--core-fill-primary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
-	--core-fill-secondary: color-mix(in srgb, var(--core-grey-820) 60%, transparent);
+	--core-fill-secondary: color-mix(in srgb, var(--core-grey-820) 30%, transparent);
 	--core-fill-tertiary: color-mix(in srgb, var(--core-grey-595) 20%, transparent);
 	--core-button-disabled: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
 	--core-badge-secondary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
@@ -118,7 +118,7 @@
 	--core-icon-secondary: color-mix(in srgb, var(--core-grey-51) 60%, transparent);
 	--core-icon-disabled: color-mix(in srgb, var(--core-grey-85) 18%, transparent);
 	--core-fill-primary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
-	--core-fill-secondary: color-mix(in srgb, var(--core-grey-85) 60%, transparent);
+	--core-fill-secondary: color-mix(in srgb, var(--core-grey-85) 30%, transparent);
 	--core-fill-tertiary: color-mix(in srgb, var(--core-grey-595) 20%, transparent);
 	--core-button-disabled: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
 	--core-badge-secondary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);

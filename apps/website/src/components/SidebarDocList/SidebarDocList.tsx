@@ -5,9 +5,8 @@ import type { Package } from '@/src/consts/consts';
 import { useCallback } from 'react';
 import styles from './SidebarDocList.module.css';
 
-export type DocListItem = Omit<SidebarListItemProps, 'selected' | 'packageType' | 'onClick'>;
-
-export type ListSection = DocListItem[];
+export type SideBarDoc = Omit<SidebarListItemProps, 'selected' | 'packageType' | 'onClick'>;
+export type ListSection = SideBarDoc[];
 
 export interface SideBarListProps {
 	items: ListSection[];
@@ -50,15 +49,19 @@ export function SideBarListSection(props: Readonly<SideBarListSectionProps>) {
 	return (
 		<div className={styles.section}>
 			{items.map((item, index) => {
-				const { slug, ...rest } = item;
+				const { slug, childDocs, ...rest } = item;
+				const selectedChild = childDocs?.find((doc) => doc.slug === selectedSlug);
 				const selected = slug === selectedSlug && packageType === selectedPackageType;
+				console.log({ childDocs, slug, selectedChild });
 				return (
 					<SidebarListItem
 						key={`${packageType ?? 'section'}.${slug ?? item.title ?? 'doc'}.${index}`}
 						slug={slug}
 						packageType={packageType}
 						onClick={handleClickDoc}
-						selected={selected}
+						selected={selected || !!selectedChild}
+						selectedChild={selectedChild}
+						childDocs={childDocs}
 						{...rest}
 					/>
 				);

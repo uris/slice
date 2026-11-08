@@ -13,7 +13,6 @@ export const reactDocSlugs = [
 	'modal-controller',
 	'tip',
 	'toast',
-
 	'icon-button',
 	'toggle-button',
 	'radio-button',
@@ -30,9 +29,12 @@ export const reactDocSlugs = [
 	'chip',
 	'dot',
 	'pager',
+	'pop-menu',
+	'pop-menu-group',
+	'pop-menu-item',
+	'pop-menu-controller',
 	'slider',
 	'switch',
-
 	'use-active-tab',
 	'use-last-updated',
 	'placeholder',
@@ -153,6 +155,25 @@ export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
 		title: 'Slider | Slice UIKit',
 		description:
 			'Choose numeric values with continuous dragging and keyboard increments using the Slice Slider component for React.',
+	},
+	'pop-menu': {
+		title: 'PopMenu | Slice UIKit',
+		description:
+			'Build contextual actions with grouped items, toggles, and nested menus using Slice PopMenu for React.',
+	},
+	'pop-menu-group': {
+		title: 'PopMenuGroup | Slice UIKit',
+		description: 'Organize menu actions into titled and untitled groups with Slice PopMenuGroup for React.',
+	},
+	'pop-menu-item': {
+		title: 'PopMenuItem | Slice UIKit',
+		description:
+			'Compose actions, controlled toggles, custom rows, and submenu openers with Slice PopMenuItem for React.',
+	},
+	'pop-menu-controller': {
+		title: 'PopMenuController | Slice UIKit',
+		description:
+			'Open a single store-driven contextual menu from props or composed controls with Slice PopMenuController for React.',
 	},
 	pager: {
 		title: 'Pager | Slice UIKit',

@@ -1,5 +1,17 @@
 {
 	"extends": "./tsconfig.json",
 	"include": ["src/**/*"],
-	"exclude": ["**/*.stories.ts", "**/*.stories.tsx", "documentation/**", "**/*.figma.ts"]
+	"exclude": [
+		"**/*.stories.ts",
+		"**/*.stories.tsx",
+		"documentation/**",
+		"**/*.figma.ts",
+		"**/*.test.ts",
+		"**/*.test.tsx",
+		"**/*.spec.ts",
+		"**/*.spec.tsx"
+	],
+	"compilerOptions": {
+		"rootDir": "src"
+	}
 }

@@ -88,14 +88,17 @@ Use the existing shared components and this order:
 Follow the [component composition convention](../../../../../packages/slice/docs/component-composition.md)
 when choosing notation and documentation ownership:
 
-- Parent-only sections use dot notation, such as `DialogBox.Title`,
-  `DialogBox.Content`, and `DialogBox.Actions`. Document their supported children,
-  props, and events on the parent page; do not give them standalone slugs or imply
-  they work outside that parent.
-- Independently useful controls remain named exports and have their own pages.
-  For example, a `RadioButton` can stand alone or participate in a
-  `RadioButtonList`. `Tab` and `TabBar` also retain separate API pages. Link related
-  pages and include a required parent in examples when applicable.
+- Components with child controls that expose their own props, events, methods, or
+  refs have focused documentation pages for each control. Give the parent and its
+  children separate slugs, and group them in the sidebar with `childDocs`.
+- Keep the parent page focused on composition, shared behavior, and its own API.
+  Link to each child page rather than repeating its full reference. Child pages
+  demonstrate their own usage inside the required parent when applicable.
+- Preserve the actual public API: named controls such as `PopMenuGroup` and
+  `PopMenuItem` remain named exports; structural sections that use dot notation
+  keep that notation. A separate doc page does not imply standalone behavior.
+- Independently useful controls also retain their own pages. Link related pages
+  and explain which behavior comes from the containing component.
 
 Verify current public exports before writing usage snippets; a convention does not
 mean every component has already adopted it. For components
@@ -202,6 +205,11 @@ rather than creating a new callout style. Do not repeat the tip in Usage or turn
 it into a second API reference. Essential behavior and accessibility guidance
 still belong in their respective sections; a tip can supplement that content.
 Omit the box when the example is already clear without instructions.
+
+For menus and their controllers, default usage snippets render normally without
+portals. Keep portals needed by the documentation canvas in preview wiring only.
+Explain a portal as a conditional option under Behavior, with a small example for
+transformed or clipping ancestors and a target that preserves theme variables.
 
 ## Code snippets
 
@@ -323,6 +331,11 @@ Documentation work must not invent a normalized prop or compatibility alias that
 is absent from the implementation. If the existing API has an unusual name, document
 it accurately and flag a potential API cleanup separately. Make breaking API changes
 only as part of an authorized component change, updating its consumers and docs together.
+
+Use the component's existing `name`, `label`, `title`, and ID-based fallbacks for
+accessible naming wherever supported. Avoid redundant `aria-label` props in
+examples. Explain the actual naming sources and fallback order in Accessibility;
+keep explicit ARIA overrides for cases the normal naming props cannot express.
 
 ## Accessibility
 

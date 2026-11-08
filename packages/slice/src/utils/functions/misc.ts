@@ -1,3 +1,4 @@
+import type { Variants } from 'motion/react';
 import type React from 'react';
 
 /**
@@ -174,4 +175,19 @@ export function normalizedPercent(value: number | string): number {
  */
 export function classNames(...args: string[]): string {
 	return args.join(' ');
+}
+
+/**
+ * Merge presence motion value variants
+ */
+export function mergedPresenceMotionValues(defaults?: Variants | null, updated?: Variants | null) {
+	const resolvedDefaults = defaults ?? {};
+	const resolvedUpdated = updated ?? {};
+	if (!updated) return resolvedDefaults;
+	const merged: Variants = { ...resolvedDefaults, ...resolvedUpdated };
+	for (const state of ['initial', 'animate', 'exit'] as const) {
+		const override = updated?.[state];
+		if (override && typeof override !== 'function') merged[state] = { ...resolvedDefaults[state], ...override };
+	}
+	return merged;
 }

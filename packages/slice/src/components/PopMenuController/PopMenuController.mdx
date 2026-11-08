@@ -1,0 +1,38 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './PopMenuController.stories';
+
+<Meta of={Stories} />
+
+# PopMenuController
+
+Mount one controller inside your theme provider. The store holds one menu or `null`;
+pushing another menu replaces the current menu.
+
+```tsx
+import { PopMenu, PopMenuController } from '@apple-pie/slice';
+import { popMenuActions } from '@apple-pie/slice/stores/popMenu';
+
+<PopMenuController />
+
+// Construct a menu from props. Capture currentTarget inside the event handler.
+<button onClick={(event) => popMenuActions.push({
+    caller: event.currentTarget,
+    options: [{ label: 'Edit' }, { label: 'Archive' }],
+})}>Open</button>
+
+// Or push a composed menu.
+popMenuActions.push(<PopMenu caller={buttonElement} options={options} />);
+
+popMenuActions.push(null);
+popMenuActions.clear();
+```
+
+`usePopMenu()` selects the active value; `usePopMenuActions()` selects its actions.
+`getPopMenu()` and `popMenuActions` provide imperative access, matching the tooltip store.
+
+The controller connects `onDismiss` and `dismissAll` to the store while preserving
+callbacks supplied with the menu. A custom composed component must accept and forward
+those props to its `PopMenu`. Submenus forward `dismissAll` as usual.
+
+Each push mounts a fresh instance. A dismissal from an older menu cannot clear its
+replacement. `push(null)` and `clear()` remove the active menu immediately.

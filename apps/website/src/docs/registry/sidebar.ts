@@ -50,6 +50,17 @@ const reactComponentSection: ListSection = [
 	{ title: 'ModalController', slug: 'modal-controller', code: true },
 	{ title: 'Overlay', slug: 'overlay', code: true },
 	{ title: 'Pager', slug: 'pager', code: true },
+	{
+		title: 'PopMenu',
+		slug: 'pop-menu',
+		code: true,
+		childDocs: [
+			{ title: 'PopMenu', slug: 'pop-menu', code: true },
+			{ title: 'PopMenuGroup', slug: 'pop-menu-group', code: true },
+			{ title: 'PopMenuItem', slug: 'pop-menu-item', code: true },
+		],
+	},
+	{ title: 'PopMenuController', slug: 'pop-menu-controller', code: true },
 	{ title: 'ProgressIndicator', slug: 'progress-indicator', code: true },
 	{ title: 'PromptInput', slug: 'prompt-input', code: true },
 	{ title: 'RadioButton', slug: 'radio-button', code: true },

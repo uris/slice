@@ -42,7 +42,9 @@ export const neutralThemeRecipes = {
 type NeutralToken = keyof typeof neutralThemeRecipes;
 function neutralRecipe(token: NeutralToken, mode: Appearance): ColorRecipe {
 	if (token === 'core-surface-primary' && mode === 'dark') return { token: 'core-grey-975', opacity: 1 };
-	return coreGreyRecipes[neutralThemeRecipes[token]][mode];
+	const recipe = coreGreyRecipes[neutralThemeRecipes[token]][mode];
+	if (token === 'core-fill-secondary') return { ...recipe, opacity: 0.3 };
+	return recipe;
 }
 
 export function neutralThemeColors(mode: Appearance): Record<NeutralToken, string> {

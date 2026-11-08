@@ -245,3 +245,13 @@ export {
 	type UseInfiniteScrollOptions,
 	type UseInfiniteScrollReturn,
 } from './hooks/useInfiniteScroll/useInfiniteScroll';
+
+export { PopMenu, PopMenuItem, PopMenuGroup } from './components/PopMenu';
+export type {
+	PopMenuProps,
+	PopMenuItemProps,
+	PopMenuItemGroupProps,
+	PopMenuItemClickInfo,
+	PopMenuSubMenuProps,
+} from './components/PopMenu';
+export { PopMenuController } from './components/PopMenuController';

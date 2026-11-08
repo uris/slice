@@ -1,0 +1,54 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './PopMenu.stories';
+
+<Meta of={Stories} />
+
+# PopMenu
+
+A menu can contain individual options and visual groups. A group adds an optional
+title above its items and a top separator between groups. It does not own a separate submenu or
+dismissal lifecycle.
+
+```tsx
+<PopMenu caller={caller} dismissAll={closeMenus} options={[
+    { title: 'Actions', items: [{ label: 'Edit' }, { label: 'Duplicate' }] },
+    { title: 'Preferences', items: [{ label: 'Archived', toggle: true, toggled }] },
+]} />
+```
+
+Use the named `PopMenuGroup` control for composition:
+
+```tsx
+import { PopMenu, PopMenuGroup, PopMenuItem } from '@apple-pie/slice';
+
+<PopMenu caller={caller} dismissAll={closeMenus} onClickItem={handleItem}>
+    <PopMenuGroup title="Actions">
+        <PopMenuItem label="Edit" />
+        <PopMenuItem label="Duplicate" />
+    </PopMenuGroup>
+    <PopMenuGroup title="Preferences" items={preferences} />
+</PopMenu>
+```
+
+The parent connects direct `PopMenuItem` and `PopMenuGroup` children, including
+fragments and conditional children. Authored order is preserved. Other custom
+children render unchanged; controls hidden inside a custom component must forward
+handlers explicitly. Group `children` take precedence over its `items` shorthand.
+
+Item and group callbacks run before the parent `onClickItem` callback and automatic
+dismissal. All groups share the menu's one active submenu branch. Actions dismiss
+all menus by default; toggles and submenu openers stay open unless `autoDismiss`
+is explicitly overridden.
+
+Group `textColor`, `textColorHover`, and `textSize` style the title. Defaults are
+secondary text and size `s`. `borderColor` defaults to the primary fill, and
+`borderWidth` defaults to `1`; pass `0` to hide it. The first group has no top
+border or top margin, and its title has no top padding. The final child group has
+no bottom margin.
+
+`padding` styles the title; its default is 8px at the top, 10px at the sides,
+and zero at the bottom, expressed with theme spacing tokens. `gap` defaults to
+2px and controls the group's vertical margins and top padding when untitled.
+Explicit `padding` and `gap` support numbers and CSS strings; the positional
+first/last-group rules still apply.
+Group HTML attributes, `className`, and `style` are forwarded to its wrapper.

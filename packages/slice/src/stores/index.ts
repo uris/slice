@@ -24,3 +24,4 @@ export {
 } from './browserChannel';
 export type { BrowserChannelConfig, BrowserChannelsStore } from './browserChannel';
 export * from './activeTab';
+export * from './popMenu';

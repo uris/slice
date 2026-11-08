@@ -1,6 +1,6 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
-import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { ColorValue } from '../../theme';
 
 export type ErrorMessage = {
 	id?: string;
