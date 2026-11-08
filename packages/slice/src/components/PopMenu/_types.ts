@@ -1,5 +1,6 @@
 import type { HTMLMotionProps, Transition, Variants } from 'motion/react';
 import type React from 'react';
+import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts/useKeyboardShortcuts';
 import type { ColorValue } from '../../theme';
 import type { SliceIcon } from '../Icon';
 import type { FixedSize } from '../sharedTypes';
@@ -12,7 +13,7 @@ export type PopSizeConstraints = {
 	maxHeight: number;
 	maxWidth: number;
 };
-export type PopOffset = 'top' | 'bottom' | 'right';
+export type PopOffset = 'top' | 'bottom' | 'right' | 'left';
 export type PopCaller = HTMLElement;
 
 export type PopMenuSubMenuProps = {
@@ -30,6 +31,8 @@ export type PopMenuItemClickInfo = Pick<
 };
 
 export interface PopMenuBase {
+	/** Defaults to auto; submenus inherit their parent's resolved host. */
+	portalContainer?: 'auto' | HTMLElement | false;
 	/** Nesting level used to stack submenus above their parent. */
 	level?: number;
 	name?: string;
@@ -54,6 +57,7 @@ export interface PopMenuBase {
 }
 
 export interface PopMenuItemBase {
+	disabled?: boolean;
 	/** Defaults to true for actions, false for toggles and submenu openers. */
 	autoDismiss?: boolean;
 	dismissAll?: () => void;
@@ -68,17 +72,20 @@ export interface PopMenuItemBase {
 	iconSize?: number;
 	iconColor?: ColorValue;
 	iconColorHover?: ColorValue;
+	iconColorDisabled?: ColorValue;
 	iconGap?: number;
 	backgroundColor?: ColorValue;
 	backgroundColorHover?: ColorValue;
 	label?: string;
 	textColor?: ColorValue;
 	textColorHover?: ColorValue;
+	textColorDisabled?: ColorValue;
 	textSize?: FixedSize;
 	subMenu?: (props: PopMenuSubMenuProps) => React.ReactNode;
 	padding?: number | string;
 	gap?: number | string;
-	shortcut?: string;
+	/** Display a custom string or automatically format a shared shortcut definition. Does not register a binding. */
+	shortcut?: string | KeyboardShortcut;
 	toggle?: boolean;
 	toggled?: boolean;
 	onClick?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo) => void;

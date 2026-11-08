@@ -64,15 +64,16 @@ export default function PopMenuControllerDoc() {
 				menu subtree.
 			</P>
 			<P>
-				Render the controller normally in most layouts. If an ancestor transforms or clips its menus, see the optional{' '}
-				<Code openURL="/docs/react/pop-menu/#behavior">portal example</Code>.
+				Render the controller normally; each menu manages its own portal. Configure <Code>portalContainer</Code> in the
+				pushed props or forward it through a composed control to select a custom host or inline rendering. Submenus
+				inherit that placement. See <Code openURL="/docs/react/pop-menu/#behavior">portal behavior</Code>.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
 				The controller adds no wrapper, focus behavior, or keyboard handling. Naming, menu semantics, and the current
-				keyboard and reduced-motion limitations are described on <Code openURL="/docs/react/pop-menu/">PopMenu</Code>.
-				Set <Code>name</Code> in the pushed props or composed control. The menu derives its accessible label from that
-				name, with its usual ID and default fallbacks.
+				keyboard behavior and reduced-motion responsibilities are described on{' '}
+				<Code openURL="/docs/react/pop-menu/">PopMenu</Code>. Set <Code>name</Code> in the pushed props or composed
+				control. The menu derives its accessible label from that name, with its usual ID and default fallbacks.
 			</P>
 			<H2 id="props">Props</H2>
 			<P>None. Configure the pushed menu instead. The controller does not accept or forward native attributes.</P>

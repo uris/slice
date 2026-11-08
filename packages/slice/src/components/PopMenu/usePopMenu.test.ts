@@ -40,7 +40,7 @@ describe('usePopMenu', () => {
 
     it('keeps a right menu within the viewport at the right edge', () => {
         const { result } = setup({ offset: 'right', x: 750 });
-        expect(result.current.coords).toEqual({ x: 600, y: 100 });
+        expect(result.current.coords).toEqual({ x: 542, y: 100 });
     });
 
     it('clamps a right menu when its caller is partly above the viewport', () => {
@@ -108,10 +108,10 @@ describe('usePopMenu', () => {
         expect(result.current.resolved).toBe(true);
     });
 
-    it('dismisses when clicking non-item menu space', () => {
+    it('keeps non-item menu space open', () => {
         const { result, menu } = setup();
         act(() => menu.dispatchEvent(new MouseEvent('click', { bubbles: true })));
-        expect(result.current.resolved).toBe(false);
+        expect(result.current.resolved).toBe(true);
     });
 
     it('dismisses on window resize', () => {
@@ -122,4 +122,43 @@ describe('usePopMenu', () => {
         act(() => result.current.resetMenu());
         expect(result.current.constraints).toBeUndefined();
     });
+});
+
+it('flips a right submenu to the left before clamping', () => {
+ const { result } = setup({ offset: 'right', x: 700, width: 200 });
+ expect(result.current.coords?.x).toBe(492);
+});
+
+it('does not dismiss on clicks inside the menu', () => {
+ const { result, menu } = setup();
+ act(() => menu.click());
+ expect(result.current.resolved).toBe(true);
+});
+
+it('allows clicks and scrolling inside a portaled descendant', () => {
+ const { result, menu } = setup();
+ menu.id = 'parent-menu';
+ const child = document.createElement('div');
+ child.dataset.popMenuParent = menu.id;
+ document.body.append(child);
+ act(() => { child.click(); child.dispatchEvent(new Event('scroll')); });
+ expect(result.current.resolved).toBe(true);
+});
+
+it('waits for a portal container before measuring the mounted menu', () => {
+ const caller = document.createElement('button');
+ const menu = document.createElement('div');
+ const container = document.createElement('div');
+ document.body.append(caller, container);
+ vi.spyOn(caller, 'getBoundingClientRect').mockReturnValue(new DOMRect(100, 100, 50, 40));
+ vi.spyOn(menu, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 0, 200, 100));
+ const menuRef = { current: menu };
+ const { result, rerender } = renderHook(({ enabled }) => usePopMenu({ caller, menuRef, container, enabled }), { initialProps: { enabled: false } });
+ expect(result.current.resolved).toBe(false);
+ rerender({ enabled: true });
+ expect(result.current.resolved).toBe(false);
+ container.append(menu);
+ rerender({ enabled: false });
+ rerender({ enabled: true });
+ expect(result.current.resolved).toBe(true);
 });

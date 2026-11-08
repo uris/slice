@@ -135,6 +135,8 @@ update those settings to match; editing workflow YAML does not update them autom
 
 ## Contribution Rules
 
+- Treat [cross-API composability](../../CONTRIBUTING.md#composable-apis) as a core design requirement: related hook/store outputs, component inputs, and callbacks should connect directly with compatible types. Include a typed composition example or interaction fixture when changing such a contract.
+
 - Component style props must follow the naming standard in [contributor-docs/style-prop-naming.md](./docs/style-prop-naming.md) (e.g. `backgroundColor`/`backgroundColorHover`, not `bgColor`/`bgColorHover`). New components must use only the standard names; existing components get renamed to match only as part of an intentional breaking change.
 - Component padding and insets must follow the spacing standard in [contributor-docs/spacing.md](./docs/spacing.md): use the `--spacing-*` tokens, express icon-side reductions with token-based `calc()`, and apply explicit padding overrides exactly (including zero).
 - For parent-only sections versus independently usable controls, follow the [component composition convention](./docs/component-composition.md). Use `Parent.Section` for sections that only make sense within their parent.

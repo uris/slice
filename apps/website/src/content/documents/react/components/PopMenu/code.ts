@@ -44,7 +44,7 @@ export default function ProjectActions() {
                         if (item.id === 'autoSave') setAutoSave(item.toggled ?? false);
                     }}>
                     <PopMenuGroup title="Project">
-                        <PopMenuItem label="Edit" icon="editor.edit" shortcut="⌘E" />
+                        <PopMenuItem label="Edit" icon="editor.edit" shortcut={{ name: 'Edit', key: 'e', metaPressed: true }} />
                         <PopMenuItem label="Colors" icon="basic.swatchbook" subMenu={(props) => <ColorsMenu {...props} />} />
                     </PopMenuGroup>
                     <PopMenuGroup title="Preferences">
@@ -71,13 +71,13 @@ export const optionsCode = `
 `;
 
 export const portalCode = `
-import { createPortal } from 'react-dom';
+// menuHost is an application-owned HTMLElement in the desired overlay layer.
+<PopMenu caller={caller} portalContainer={menuHost}
+    options={options} dismissAll={close} onDismiss={close} />;
 
-// menuHost is outside the transformed container, within your theme scope.
-{caller && createPortal(
-    <PopMenu caller={caller} options={options} dismissAll={close} onDismiss={close} />,
-    menuHost,
-)}
+// Opt out of portaling for this menu and its submenus.
+<PopMenu caller={caller} portalContainer={false}
+    options={options} dismissAll={close} onDismiss={close} />;
 `;
 
 export const motionCode = `

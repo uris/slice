@@ -28,18 +28,24 @@ export default function AppActions() {
 `;
 
 export const composedCode = `
-import { PopMenu, type PopMenuProps } from '@apple-pie/slice';
+import { Button, PopMenu, type PopMenuProps } from '@apple-pie/slice';
+import { popMenuActions } from '@apple-pie/slice/stores/popMenu';
 
 function ProjectMenu(props: PopMenuProps) {
     return <PopMenu {...props} name="Project actions"
         options={[{ label: 'Edit' }, { label: 'Duplicate' }]} />;
 }
 
-// Capture the button inside its click handler.
-popMenuActions.push(<ProjectMenu caller={event.currentTarget} />);
+export function ProjectMenuButton() {
+    return <Button label="Project actions" onClick={(event) => {
+        if (event) popMenuActions.push(<ProjectMenu caller={event.currentTarget} />);
+    }} />;
+}
 `;
 
 export const clearCode = `
+import { popMenuActions } from '@apple-pie/slice/stores/popMenu';
+
 popMenuActions.clear();
 // Equivalent:
 popMenuActions.push(null);

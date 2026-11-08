@@ -1,7 +1,8 @@
-import { type CSSProperties, useId } from 'react';
+import { type CSSProperties, useContext, useId, useMemo } from 'react';
 import { classNames, setStyle } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import styles from './PopMenu.module.css';
+import { type PopMenuActions, PopMenuContext, noopDismiss } from './PopMenuContext';
 import { PopMenuItem } from './PopMenuItem';
 import type { PopMenuItemGroupProps } from './_types';
 
@@ -33,6 +34,7 @@ export function PopMenuGroup(rawProps: Readonly<PopMenuItemGroupProps>) {
 	const hasTitle = Boolean(title?.trim());
 	const titleId = `${groupId}-title`;
 	const groupName = ariaLabel?.trim() || name?.trim() || title?.trim() || id?.trim() || 'Menu group';
+	// Explicit accessible names take precedence; otherwise associate the visible group title.
 	const getLabelledBy = () => {
 		if (ariaLabelledBy) return ariaLabelledBy;
 		if (ariaLabel?.trim() || name?.trim()) return undefined;
@@ -50,39 +52,46 @@ export function PopMenuGroup(rawProps: Readonly<PopMenuItemGroupProps>) {
 		...style,
 	} as CSSProperties;
 
+	// Add this group to the callback chain without cloning children or replacing root dismissal.
+	const parent = useContext(PopMenuContext);
+	const groupActions = useMemo<PopMenuActions>(
+		() => ({
+			dismissAll: parent?.dismissAll ?? dismissAll ?? noopDismiss,
+			onClickItem: (event, info) => {
+				onClickItem?.(event, info);
+				parent?.onClickItem?.(event, info);
+			},
+			onHoverItem: (event, info) => {
+				onHoverItem?.(event, info);
+				parent?.onHoverItem?.(event, info);
+			},
+		}),
+		[parent, dismissAll, onClickItem, onHoverItem],
+	);
+
 	const renderItems = () =>
-		items?.map((item) => (
-			<PopMenuItem
-				key={item.id ?? item.label}
-				{...item}
-				dismissAll={dismissAll}
-				onClick={(event, info) => {
-					item.onClick?.(event, info);
-					onClickItem?.(event, info);
-				}}
-				onHover={(event, info) => {
-					item.onHover?.(event, info);
-					onHoverItem?.(event, info);
-				}}
-			/>
+		items?.map((item, index) => (
+			<PopMenuItem key={item.id?.trim() ? `id:${item.id.trim()}` : `index:${index}`} {...item} />
 		));
 
 	return (
-		<div
-			{...rest}
-			role="group"
-			id={groupId}
-			aria-label={groupName}
-			aria-labelledby={getLabelledBy()}
-			className={classNames(styles.popMenuGroupWrapper, className)}
-			style={groupStyle}
-		>
-			{hasTitle && (
-				<div id={titleId} className={classNames(styles.groupTitle, `body-${textSize}-regular`)}>
-					{title}
-				</div>
-			)}
-			{children ?? renderItems()}
-		</div>
+		<PopMenuContext.Provider value={groupActions}>
+			<div
+				{...rest}
+				role="group"
+				id={groupId}
+				aria-label={groupName}
+				aria-labelledby={getLabelledBy()}
+				className={classNames(styles.popMenuGroupWrapper, className)}
+				style={groupStyle}
+			>
+				{hasTitle && (
+					<div id={titleId} className={classNames(styles.groupTitle, `body-${textSize}-regular`)}>
+						{title}
+					</div>
+				)}
+				{children ?? renderItems()}
+			</div>
+		</PopMenuContext.Provider>
 	);
 }

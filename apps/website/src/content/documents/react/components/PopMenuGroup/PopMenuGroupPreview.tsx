@@ -2,7 +2,6 @@
 
 import { Button, FlexDiv, PopMenu, PopMenuGroup, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
-import { createPortal } from 'react-dom';
 
 export function PopMenuGroupPreview() {
 	const [caller, setCaller] = useState<HTMLButtonElement>();
@@ -27,7 +26,7 @@ export function PopMenuGroupPreview() {
 					if (event) setCaller(event.currentTarget);
 				}}
 			/>
-			{caller && createPortal(menu, caller.closest('[data-slice-theme-scope]') ?? document.body)}
+			{menu}
 		</FlexDiv>
 	);
 }

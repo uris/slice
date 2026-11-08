@@ -5,6 +5,7 @@ any workspace-specific `AGENTS.md` and the relevant resources linked below.
 
 Read [CONTRIBUTING.md](./CONTRIBUTING.md) first — it's the source of truth for setup, the
 component lifecycle, testing strategy, and the lint/coverage/build gates CI enforces.
+For API design, follow its [composable API guideline](./CONTRIBUTING.md#composable-apis).
 For readable branching, follow its [code readability guideline](./CONTRIBUTING.md#code-readability):
 extract nested ternaries into named helpers with explicit `if`/`return` branches. For
 build/publish pipeline detail, read [packages/slice/docs/build-architecture.md](./packages/slice/docs/build-architecture.md);

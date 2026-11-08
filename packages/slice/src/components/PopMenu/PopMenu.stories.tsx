@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts/useKeyboardShortcuts';
+import { resolveShortcut } from '../../utils/functions/resolveShortcut';
 import { FlexDiv } from '../FlexDiv';
 import { PopMenu } from './PopMenu';
 import { PopMenuGroup } from './PopMenuGroup';
 import { PopMenuItem } from './PopMenuItem';
-import type { PopMenuProps, PopMenuSubMenuProps } from './_types';
+import type { PopMenuItemGroupProps, PopMenuItemProps, PopMenuProps, PopMenuSubMenuProps } from './_types';
 
 function ColorsMenu({ caller, level, dismissAll }: PopMenuSubMenuProps) {
 	return (
@@ -40,7 +43,7 @@ const meta = {
 		gap: 8,
 		minWidth: 200,
 		options: [
-			{ label: 'Edit', icon: 'editor.edit', shortcut: '\u2318+E' },
+			{ label: 'Edit', icon: 'editor.edit', shortcut: { name: 'Edit', key: 'e', metaPressed: true } },
 			{
 				label: 'Colors ...',
 				subMenu: colorsSubMenu,
@@ -80,7 +83,7 @@ export const ItemEvents: Story = {
 	play: async ({ canvasElement, args }) => {
 		const canvas = within(canvasElement);
 		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
-		const item = await canvas.findByRole('button', { name: 'Edit' });
+		const item = await canvas.findByRole('menuitem', { name: 'Edit' });
 		await waitFor(() => expect(item.closest('[role="menu"]')).not.toHaveAttribute('inert'));
 		await userEvent.hover(item);
 		await expect(args.onHoverItem).toHaveBeenCalledWith(expect.anything(), { id: 'edit', label: 'Edit' });
@@ -92,7 +95,7 @@ export const ItemEvents: Story = {
 			autoDismiss: false,
 			dismissAll: expect.any(Function),
 		});
-		await userEvent.click(canvas.getByRole('button', { name: 'Enable' }));
+		await userEvent.click(canvas.getByRole('menuitemcheckbox', { name: 'Enable' }));
 		await expect(args.onClickItem).toHaveBeenLastCalledWith(expect.anything(), {
 			id: 'enable',
 			label: 'Enable',
@@ -100,7 +103,7 @@ export const ItemEvents: Story = {
 			toggle: true,
 			toggled: true,
 		});
-		await userEvent.click(canvas.getByRole('button', { name: /^Disable/ }));
+		await userEvent.click(canvas.getByRole('menuitemcheckbox', { name: /^Disable/ }));
 		await expect(args.onClickItem).toHaveBeenLastCalledWith(expect.anything(), {
 			id: 'disable',
 			label: 'Disable',
@@ -108,7 +111,7 @@ export const ItemEvents: Story = {
 			toggle: true,
 			toggled: false,
 		});
-		await userEvent.click(canvas.getByRole('button', { name: /^Colors/ }));
+		await userEvent.click(canvas.getByRole('menuitem', { name: /^Colors/ }));
 		await expect(args.onClickItem).toHaveBeenLastCalledWith(expect.anything(), {
 			id: 'colors',
 			label: 'Colors',
@@ -127,11 +130,11 @@ export const Submenu: Story = {
 		const canvas = within(canvasElement);
 		const page = within(canvasElement.ownerDocument.body);
 		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
-		const caller = await canvas.findByRole('button', { name: /^Colors/ });
+		const caller = await canvas.findByRole('menuitem', { name: /^Colors/ });
 		const parent = caller.closest('[role="menu"]');
 		await waitFor(() => expect(parent).not.toHaveAttribute('inert'));
 		await userEvent.click(caller);
-		const red = await page.findByRole('button', { name: 'Red' });
+		const red = await page.findByRole('menuitem', { name: 'Red' });
 		const submenu = red.closest('[role="menu"]') as HTMLElement;
 		await waitFor(() => expect(submenu).not.toHaveAttribute('inert'));
 		await expect(submenu).toBeVisible();
@@ -140,8 +143,8 @@ export const Submenu: Story = {
 		await expect((parent as HTMLElement).style.zIndex).toBe('12');
 		await expect(submenu.style.zIndex).toBe('13');
 		await userEvent.click(red);
-		await waitFor(() => expect(page.queryByRole('button', { name: 'Red' })).not.toBeInTheDocument());
-		await waitFor(() => expect(canvas.queryByRole('button', { name: /^Colors/ })).not.toBeInTheDocument());
+		await waitFor(() => expect(page.queryByRole('menuitem', { name: 'Red' })).not.toBeInTheDocument());
+		await waitFor(() => expect(canvas.queryByRole('menuitem', { name: /^Colors/ })).not.toBeInTheDocument());
 	},
 };
 
@@ -203,9 +206,9 @@ export const DismissAll: Story = {
 	play: async ({ canvasElement }) => {
 		const page = within(canvasElement.ownerDocument.body);
 		await userEvent.click(page.getByRole('button', { name: 'Open actions' }));
-		await userEvent.click(await page.findByRole('button', { name: /^More actions/ }));
-		await userEvent.click(await page.findByRole('button', { name: /^Danger zone/ }));
-		await userEvent.click(await page.findByRole('button', { name: 'Delete' }));
+		await userEvent.click(await page.findByRole('menuitem', { name: /^More actions/ }));
+		await userEvent.click(await page.findByRole('menuitem', { name: /^Danger zone/ }));
+		await userEvent.click(await page.findByRole('menuitem', { name: 'Delete' }));
 		await expect(page.getByRole('dialog', { name: 'Confirm deletion' })).toBeVisible();
 		await expect(page.queryAllByRole('menu')).toHaveLength(0);
 		await userEvent.click(page.getByRole('button', { name: 'Cancel' }));
@@ -237,26 +240,26 @@ export const ReplaceSubmenuBranch: Story = {
 	play: async ({ canvasElement }) => {
 		const page = within(canvasElement.ownerDocument.body);
 		await userEvent.click(page.getByRole('button', { name: 'Button 1' }));
-		const colors = await page.findByRole('button', { name: /^Colors/ });
+		const colors = await page.findByRole('menuitem', { name: /^Colors/ });
 		const parent = colors.closest('[role="menu"]');
 		await userEvent.click(colors);
-		await userEvent.click(await page.findByRole('button', { name: /^Shades/ }));
-		await waitFor(() => expect(page.getByRole('button', { name: 'Dark red' })).toBeVisible());
+		await userEvent.click(await page.findByRole('menuitem', { name: /^Shades/ }));
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Dark red' })).toBeVisible());
 
 		// Clicking the same opener replaces its old branch, including descendants.
 		await userEvent.click(colors);
-		await expect(page.queryByRole('button', { name: 'Dark red' })).not.toBeInTheDocument();
-		await waitFor(() => expect(page.getByRole('button', { name: 'Red' })).toBeVisible());
-		await userEvent.click(await page.findByRole('button', { name: /^Shades/ }));
-		await waitFor(() => expect(page.getByRole('button', { name: 'Dark red' })).toBeVisible());
+		await expect(page.queryByRole('menuitem', { name: 'Dark red' })).not.toBeInTheDocument();
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Red' })).toBeVisible());
+		await userEvent.click(await page.findByRole('menuitem', { name: /^Shades/ }));
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Dark red' })).toBeVisible());
 
 		// A sibling action removes the entire child branch and retains the parent.
-		await userEvent.click(page.getByRole('button', { name: 'Edit' }));
-		await expect(page.queryByRole('button', { name: 'Red' })).not.toBeInTheDocument();
-		await expect(page.queryByRole('button', { name: 'Dark red' })).not.toBeInTheDocument();
+		await userEvent.click(page.getByRole('menuitem', { name: 'Edit' }));
+		await expect(page.queryByRole('menuitem', { name: 'Red' })).not.toBeInTheDocument();
+		await expect(page.queryByRole('menuitem', { name: 'Dark red' })).not.toBeInTheDocument();
 		await expect(parent).not.toHaveAttribute('inert');
 		await userEvent.click(colors);
-		await waitFor(() => expect(page.getByRole('button', { name: 'Red' })).toBeVisible());
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Red' })).toBeVisible());
 	},
 };
 
@@ -278,14 +281,14 @@ export const AutoDismiss: Story = {
 		const canvas = within(canvasElement);
 		const open = canvas.getByRole('button', { name: 'Button 1' });
 		await userEvent.click(open);
-		await userEvent.click(await canvas.findByRole('button', { name: 'Keep open' }));
+		await userEvent.click(await canvas.findByRole('menuitem', { name: 'Keep open' }));
 		await expect(canvas.getByRole('menu')).not.toHaveAttribute('inert');
-		await userEvent.click(canvas.getByRole('button', { name: 'Toggle' }));
+		await userEvent.click(canvas.getByRole('menuitemcheckbox', { name: 'Toggle' }));
 		await expect(canvas.getByRole('menu')).not.toHaveAttribute('inert');
-		await userEvent.click(canvas.getByRole('button', { name: 'Toggle and close' }));
+		await userEvent.click(canvas.getByRole('menuitemcheckbox', { name: 'Toggle and close' }));
 		await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
 		await userEvent.click(open);
-		await userEvent.click(await canvas.findByRole('button', { name: 'Action' }));
+		await userEvent.click(await canvas.findByRole('menuitem', { name: 'Action' }));
 		await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
 		await expect(args.onClickItem).toHaveBeenCalledTimes(4);
 	},
@@ -319,9 +322,9 @@ export const Grouped: Story = {
 		await expect(getComputedStyle(actions).marginBottom).toBe('0px');
 		await expect(getComputedStyle(canvas.getByText('Actions')).paddingTop).toBe('8px');
 		await expect(getComputedStyle(canvas.getByText('Actions')).paddingLeft).toBe('10px');
-		await userEvent.click(within(appearance).getByRole('button', { name: /^Colors/ }));
-		await waitFor(() => expect(page.getByRole('button', { name: 'Red' })).toBeVisible());
-		const toggle = within(actions).getByRole('button', { name: 'Archived' });
+		await userEvent.click(within(appearance).getByRole('menuitem', { name: /^Colors/ }));
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Red' })).toBeVisible());
+		const toggle = within(actions).getByRole('menuitemcheckbox', { name: 'Archived' });
 		await userEvent.hover(toggle);
 		await expect(args.onHoverItem).toHaveBeenCalledWith(expect.anything(), { id: 'archived', label: 'Archived' });
 		await userEvent.click(toggle);
@@ -333,9 +336,9 @@ export const Grouped: Story = {
 				toggled: true,
 			}),
 		);
-		await expect(page.queryByRole('button', { name: 'Red' })).not.toBeInTheDocument();
+		await expect(page.queryByRole('menuitem', { name: 'Red' })).not.toBeInTheDocument();
 		await expect(canvas.getByRole('menu')).not.toHaveAttribute('inert');
-		await userEvent.click(within(actions).getByRole('button', { name: 'Edit' }));
+		await userEvent.click(within(actions).getByRole('menuitem', { name: 'Edit' }));
 		await expect(args.onClickItem).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({ id: 'edit' }));
 		await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
 	},
@@ -370,15 +373,15 @@ export const ComposedGroups: Story = {
 		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
 		const appearance = await canvas.findByRole('group', { name: 'Appearance' });
 		await expect(getComputedStyle(appearance).borderTopWidth).toBe('0px');
-		await userEvent.click(within(appearance).getByRole('button', { name: /^Colors/ }));
-		await waitFor(() => expect(page.getByRole('button', { name: 'Red' })).toBeVisible());
-		await userEvent.click(canvas.getByRole('button', { name: 'Keep open' }));
+		await userEvent.click(within(appearance).getByRole('menuitem', { name: /^Colors/ }));
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Red' })).toBeVisible());
+		await userEvent.click(canvas.getByRole('menuitem', { name: 'Keep open' }));
 		await expect(composedGroupClick).toHaveBeenCalledTimes(1);
 		await expect(composedItemClick).toHaveBeenCalledTimes(1);
 		await expect(args.onClickItem).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({ id: 'keep' }));
-		await expect(page.queryByRole('button', { name: 'Red' })).not.toBeInTheDocument();
+		await expect(page.queryByRole('menuitem', { name: 'Red' })).not.toBeInTheDocument();
 		await expect(canvas.getByRole('menu')).not.toHaveAttribute('inert');
-		await userEvent.click(canvas.getByRole('button', { name: 'Close' }));
+		await userEvent.click(canvas.getByRole('menuitem', { name: 'Close' }));
 		await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
 	},
 };
@@ -420,7 +423,7 @@ export const GroupSpacing: Story = {
 		await expect(getComputedStyle(custom).borderTopWidth).toBe('2px');
 		await expect(getComputedStyle(custom).borderTopColor).toBe('rgb(18, 52, 86)');
 
-		const untitled = canvas.getByRole('button', { name: 'Untitled action' }).closest('[role="group"]') as HTMLElement;
+		const untitled = canvas.getByRole('menuitem', { name: 'Untitled action' }).closest('[role="group"]') as HTMLElement;
 		await expect(getComputedStyle(untitled).paddingTop).toBe('2px');
 		await expect(untitled).not.toHaveAttribute('aria-labelledby');
 		const last = canvas.getByRole('group', { name: 'Zero spacing' });
@@ -457,7 +460,8 @@ export const CustomContentHover: Story = {
 	play: async ({ canvasElement, args }) => {
 		const canvas = within(canvasElement);
 		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
-		const button = await canvas.findByRole('button', { name: 'Custom option' });
+		const button = await canvas.findByRole('menuitem', { name: 'Custom option' });
+		button.blur();
 		const content = within(button).getByText('Custom option');
 		const row = button.firstElementChild as HTMLElement;
 		await expect(getComputedStyle(row).backgroundColor).toBe('rgb(255, 255, 255)');
@@ -480,6 +484,7 @@ export const CustomContentHover: Story = {
 			expect.anything(),
 			expect.objectContaining({ id: 'custom', label: 'Custom option' }),
 		);
+		button.blur();
 		await userEvent.unhover(content);
 		await expect(getComputedStyle(row).backgroundColor).toBe('rgb(255, 255, 255)');
 		await expect(getComputedStyle(content).color).toBe('rgb(17, 34, 51)');
@@ -520,12 +525,12 @@ export const AccessibleNames: Story = {
 		const menu = await canvas.findByRole('menu', { name: 'Project actions' });
 		await expect(menu).toHaveAttribute('id', 'project-actions');
 		await expect(menu).not.toHaveAttribute('aria-labelledby');
-		await expect(canvas.getByRole('button', { name: 'Edit' })).toHaveAttribute('id', 'edit-action');
-		await expect(canvas.getByRole('button', { name: 'Edit' }).querySelector('[aria-hidden="true"]')).not.toBeNull();
-		await expect(canvas.getByRole('button', { name: 'Save changes' })).toHaveTextContent('Save');
-		await expect(canvas.getByRole('button', { name: 'id-only' })).toHaveTextContent('Custom text');
-		await expect(canvas.getByRole('button', { name: 'Natural custom name' })).toBeInTheDocument();
-		await expect(canvas.getByRole('button', { name: 'Menu item' })).toBeInTheDocument();
+		await expect(canvas.getByRole('menuitem', { name: 'Edit' })).toHaveAttribute('id', 'edit-action');
+		await expect(canvas.getByRole('menuitem', { name: 'Edit' }).querySelector('[aria-hidden="true"]')).not.toBeNull();
+		await expect(canvas.getByRole('menuitem', { name: 'Save changes' })).toHaveTextContent('Save');
+		await expect(canvas.getByRole('menuitem', { name: 'id-only' })).toHaveTextContent('Custom text');
+		await expect(canvas.getByRole('menuitem', { name: 'Natural custom name' })).toBeInTheDocument();
+		await expect(canvas.getByRole('menuitem', { name: 'Menu item' })).toBeInTheDocument();
 		const group = canvas.getByRole('group', { name: 'Actions' });
 		const titleId = group.getAttribute('aria-labelledby');
 		await expect(canvasElement.ownerDocument.getElementById(titleId ?? '')).toHaveTextContent('Actions');
@@ -558,5 +563,427 @@ export const MenuDefaultName: Story = {
 		await canvas.findByRole('menu', { name: 'Pop Menu' });
 		await userEvent.click(canvasElement);
 		await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+	},
+};
+
+export const KeyboardNavigation: Story = {
+	tags: ['tests'],
+	args: {
+		options: [
+			{ label: 'First', autoDismiss: false },
+			{ label: 'Colors', subMenu: colorsSubMenu },
+			{ label: 'Checked', toggle: true, toggled: true },
+		],
+	},
+	play: async ({ canvasElement }) => {
+		const page = within(canvasElement.ownerDocument.body);
+		const trigger = page.getByRole('button', { name: 'Button 1' });
+		await userEvent.click(trigger);
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'First' })).toHaveFocus());
+		await userEvent.keyboard('{ArrowDown}{ArrowRight}');
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Red' })).toHaveFocus());
+		await expect(page.getByRole('menuitem', { name: 'Colors' })).toHaveAttribute('aria-expanded', 'true');
+		const submenu = page.getByRole('menuitem', { name: 'Red' }).closest('[role="menu"]') as HTMLElement;
+		submenu.dispatchEvent(new Event('scroll'));
+		await userEvent.click(submenu);
+		await expect(page.getAllByRole('menu')).toHaveLength(2);
+		page.getByRole('menuitem', { name: 'Red' }).focus();
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Colors' })).toHaveFocus());
+		await waitFor(() =>
+			expect(page.getByRole('menuitem', { name: 'Colors' })).toHaveAttribute('aria-expanded', 'false'),
+		);
+		await userEvent.keyboard('{End}');
+		await expect(page.getByRole('menuitemcheckbox', { name: 'Checked' })).toHaveFocus();
+		await expect(page.getByRole('menuitemcheckbox', { name: 'Checked' })).toHaveAttribute('aria-checked', 'true');
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(trigger).toHaveFocus());
+	},
+};
+
+export const ItemAttributes: Story = {
+	tags: ['tests'],
+	args: {
+		options: undefined,
+		children: (
+			<PopMenuGroup title="Actions">
+				<PopMenuItem label="Unavailable" disabled onClick={fn()} />
+				<PopMenuItem
+					label="Custom"
+					aria-label="Custom action"
+					className="custom-action"
+					style={{ opacity: 0.9 }}
+					autoDismiss={false}
+				/>
+			</PopMenuGroup>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const disabled = await canvas.findByRole('menuitem', { name: 'Unavailable' });
+		await expect(disabled).toBeDisabled();
+		const custom = canvas.getByRole('menuitem', { name: 'Custom action' });
+		await expect(custom).toHaveClass('custom-action');
+		await expect(custom).toHaveStyle({ opacity: '0.9' });
+		await userEvent.click(canvas.getByText('Actions'));
+		await expect(canvas.getByRole('menu')).toBeVisible();
+	},
+};
+
+export const TabLeavesMenu: Story = {
+	tags: ['tests'],
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
+		await userEvent.tab();
+		await expect(canvas.getByRole('button', { name: 'Button 2' })).toHaveFocus();
+		await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+	},
+};
+
+export const DisabledColors: Story = {
+	tags: ['tests'],
+	args: {
+		options: undefined,
+		children: (
+			<PopMenuGroup
+				title="Actions"
+				items={[
+					{
+						label: 'Disabled action',
+						disabled: true,
+						icon: 'editor.edit',
+						shortcut: '⌘E',
+						textColorDisabled: '#123456',
+						iconColorDisabled: '#654321',
+						textColorHover: '#ff0000',
+						iconColorHover: '#ff0000',
+						backgroundColor: '#ffffff',
+						backgroundColorHover: '#ff0000',
+					},
+				]}
+			/>
+		),
+		onClickItem: fn(),
+		onHoverItem: fn(),
+	},
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const item = await canvas.findByRole('menuitem', { name: 'Disabled action' });
+		await expect(item).toBeDisabled();
+		const row = item.firstElementChild as HTMLElement;
+		await userEvent.hover(item);
+		const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+		if (MODE === 'test') {
+			const { userEvent: pointer } = await import('vitest/browser');
+			await pointer.hover(item);
+		}
+		await expect(getComputedStyle(row).color).toBe('rgb(18, 52, 86)');
+		await expect(getComputedStyle(row).backgroundColor).toBe('rgb(255, 255, 255)');
+		await expect(getComputedStyle(canvas.getByText('⌘E')).color).toBe('rgb(18, 52, 86)');
+		await expect(getComputedStyle(item.querySelector('svg [stroke]') as SVGElement).stroke).toBe('rgb(101, 67, 33)');
+		await userEvent.click(item);
+		await expect(args.onClickItem).not.toHaveBeenCalled();
+		await expect(args.onHoverItem).not.toHaveBeenCalled();
+	},
+};
+
+export const IconCssStates: Story = {
+	tags: ['tests'],
+	args: {
+		options: [
+			{ label: 'Edit', icon: 'editor.edit', iconColor: '#123456', iconColorHover: '#654321', autoDismiss: false },
+		],
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const item = await canvas.findByRole('menuitem', { name: 'Edit' });
+		const icon = item.querySelector('svg [stroke]') as SVGElement;
+		item.blur();
+		const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+		if (MODE === 'test') {
+			const { userEvent: pointer } = await import('vitest/browser');
+			await pointer.hover(item);
+			await expect(getComputedStyle(icon).stroke).toBe('rgb(101, 67, 33)');
+			await pointer.unhover(item);
+			await expect(getComputedStyle(icon).stroke).toBe('rgb(18, 52, 86)');
+		}
+		canvas.getByRole('button', { name: 'Button 1' }).focus();
+		await userEvent.keyboard('{ArrowDown}');
+		item.focus();
+		await expect(item.matches(':focus-visible')).toBe(true);
+		await expect(getComputedStyle(icon).stroke).toBe('rgb(101, 67, 33)');
+	},
+};
+
+function StableKeysPreview() {
+	const [reversed, setReversed] = useState(false);
+	const items = [
+		{ id: 'stable-group-a', label: 'Grouped duplicate', autoDismiss: false },
+		{ id: 'stable-group-b', label: 'Grouped duplicate', autoDismiss: false },
+	];
+	const options = [
+		{ id: 'stable-a', label: reversed ? 'Renamed' : 'Duplicate', autoDismiss: false },
+		{ id: 'stable-b', label: 'Duplicate', autoDismiss: false },
+		{ id: 'stable-group', title: reversed ? 'Renamed group' : 'Group', items: reversed ? [...items].reverse() : items },
+	];
+	return <Preview options={reversed ? [...options].reverse() : options} onClickItem={() => setReversed(true)} />;
+}
+
+export const StableEntryIdentity: Story = {
+	tags: ['tests'],
+	render: () => <StableKeysPreview />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const roots = await canvas.findAllByRole('menuitem', { name: 'Duplicate' });
+		const group = canvas.getByRole('group', { name: 'Group' });
+		const grouped = within(group).getAllByRole('menuitem', { name: 'Grouped duplicate' });
+		await userEvent.click(roots[0]);
+		await expect(canvas.getByRole('menuitem', { name: 'Renamed' })).toBe(roots[0]);
+		await expect(canvas.getByRole('menuitem', { name: 'Duplicate' })).toBe(roots[1]);
+		await expect(canvas.getByRole('group', { name: 'Renamed group' })).toBe(group);
+		const reordered = within(group).getAllByRole('menuitem', { name: 'Grouped duplicate' });
+		await expect(reordered).toEqual([grouped[1], grouped[0]]);
+		await expect(roots[0]).toHaveFocus();
+	},
+};
+
+export const DuplicateLabelsWithoutIds: Story = {
+	tags: ['tests'],
+	args: {
+		options: [
+			{ label: 'Duplicate' },
+			{ label: 'Duplicate' },
+			{ items: [{ label: 'Grouped duplicate' }, { label: 'Grouped duplicate' }] },
+			{ items: [{ label: 'Other group' }] },
+		],
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		await expect(await canvas.findAllByRole('menuitem', { name: 'Duplicate' })).toHaveLength(2);
+		await expect(canvas.getAllByRole('group', { name: 'Menu group' })).toHaveLength(2);
+		await expect(canvas.getAllByRole('menuitem', { name: 'Grouped duplicate' })).toHaveLength(2);
+	},
+};
+
+function PortalPreview({ mode }: { mode: 'auto' | 'custom' | 'inline' | 'dialog' }) {
+	const [caller, setCaller] = useState<HTMLElement>();
+	const [target, setTarget] = useState<HTMLDivElement | null>(null);
+	const [dialog, setDialog] = useState<HTMLDialogElement | null>(null);
+	useEffect(() => {
+		if (mode !== 'dialog' || !dialog) return;
+		dialog.showModal();
+		return () => dialog.close();
+	}, [mode, dialog]);
+	const getPortalContainer = () => {
+		if (mode === 'inline') return false;
+		if (mode === 'custom') return target ?? undefined;
+		return 'auto' as const;
+	};
+	const content = (
+		<div data-slice-theme-scope style={{ color: 'rgb(12, 34, 56)' }}>
+			<div ref={setTarget} aria-label="Custom portal host" />
+			<button type="button" onClick={(event) => setCaller(event.currentTarget)}>
+				Open portal menu
+			</button>
+			{caller && (
+				<PopMenu
+					caller={caller}
+					portalContainer={getPortalContainer()}
+					onDismiss={() => setCaller(undefined)}
+					options={[{ label: 'Colors', subMenu: colorsSubMenu }]}
+				/>
+			)}
+		</div>
+	);
+	if (mode === 'dialog')
+		return (
+			<dialog ref={setDialog} aria-label="Portal dialog">
+				{content}
+			</dialog>
+		);
+	return content;
+}
+
+async function checkPortalBranch(canvasElement: HTMLElement, mode: 'auto' | 'custom' | 'inline' | 'dialog') {
+	const canvas = within(canvasElement);
+	const page = within(canvasElement.ownerDocument.body);
+	await userEvent.click(canvas.getByRole('button', { name: 'Open portal menu' }));
+	const opener = await page.findByRole('menuitem', { name: 'Colors' });
+	const menu = opener.closest('[role="menu"]') as HTMLElement;
+	const host = menu.parentElement;
+	if (mode === 'inline') await expect(host).not.toHaveAttribute('data-slice-pop-menu-host');
+	else if (mode === 'custom') await expect(host).toHaveAttribute('aria-label', 'Custom portal host');
+	else await expect(host).toHaveAttribute('data-slice-pop-menu-host');
+	if (mode === 'dialog') await expect(menu.closest('dialog')).toBe(canvas.getByRole('dialog'));
+	await expect(getComputedStyle(menu).color).toBe('rgb(12, 34, 56)');
+	await userEvent.click(opener);
+	const red = await page.findByRole('menuitem', { name: 'Red' });
+	await expect(red.closest('[role="menu"]')?.parentElement).toBe(host);
+	await userEvent.keyboard('{Escape}');
+	await waitFor(() => expect(opener).toHaveFocus());
+	await userEvent.keyboard('{Escape}');
+	await waitFor(() => expect(page.queryByRole('menuitem', { name: 'Colors' })).not.toBeInTheDocument());
+	if (mode === 'auto' || mode === 'dialog') await expect(host).not.toBeInTheDocument();
+	else await expect(host).toBeInTheDocument();
+}
+
+export const AutomaticPortal: Story = {
+	tags: ['tests'],
+	render: () => <PortalPreview mode="auto" />,
+	play: async ({ canvasElement }) => checkPortalBranch(canvasElement, 'auto'),
+};
+export const CustomPortal: Story = {
+	tags: ['tests'],
+	render: () => <PortalPreview mode="custom" />,
+	play: async ({ canvasElement }) => checkPortalBranch(canvasElement, 'custom'),
+};
+export const InlinePortal: Story = {
+	tags: ['tests'],
+	render: () => <PortalPreview mode="inline" />,
+	play: async ({ canvasElement }) => checkPortalBranch(canvasElement, 'inline'),
+};
+export const DialogPortal: Story = {
+	tags: ['tests'],
+	render: () => <PortalPreview mode="dialog" />,
+	play: async ({ canvasElement }) => checkPortalBranch(canvasElement, 'dialog'),
+};
+
+function ShadowPortalPreview() {
+	const [root, setRoot] = useState<ShadowRoot>();
+	return (
+		<>
+			<div
+				ref={(element) => {
+					if (!element || element.shadowRoot) return;
+					const shadow = element.attachShadow({ mode: 'open' });
+					// Shadow consumers provide their own stylesheet scope.
+					for (const stylesheet of Array.from(document.querySelectorAll('style, link[rel="stylesheet"]')))
+						shadow.appendChild(stylesheet.cloneNode(true));
+					setRoot(shadow);
+				}}
+			/>
+			{root && createPortal(<PortalPreview mode="auto" />, root)}
+		</>
+	);
+}
+
+export const ShadowPortal: Story = {
+	tags: ['tests'],
+	render: () => <ShadowPortalPreview />,
+	play: async ({ canvasElement }) => {
+		const host = Array.from(canvasElement.querySelectorAll('div')).find((element) => element.shadowRoot);
+		if (!host?.shadowRoot) throw new Error('Missing shadow fixture');
+		const shadow = host.shadowRoot;
+		const scope = within(shadow as unknown as HTMLElement);
+		await userEvent.click(scope.getByRole('button', { name: 'Open portal menu' }));
+		const opener = await scope.findByRole('menuitem', { name: 'Colors' });
+		const menu = opener.closest('[role="menu"]') as HTMLElement;
+		await expect(menu.getRootNode()).toBe(shadow);
+		await userEvent.click(opener);
+		const red = await scope.findByRole('menuitem', { name: 'Red' });
+		await expect(red.closest('[role="menu"]')?.parentElement).toBe(menu.parentElement);
+		(red.closest('[role="menu"]') as HTMLElement).click();
+		await expect(scope.getAllByRole('menu')).toHaveLength(2);
+		await userEvent.click(red);
+		await waitFor(() => expect(scope.queryAllByRole('menu')).toHaveLength(0));
+	},
+};
+
+function WrappedItem(props: PopMenuItemProps) {
+	return (
+		<div style={{ width: '100%' }}>
+			<PopMenuItem {...props} />
+		</div>
+	);
+}
+function WrappedGroup(props: PopMenuItemGroupProps) {
+	return <PopMenuGroup {...props} />;
+}
+const wrappedClickOrder: string[] = [];
+const wrappedHoverOrder: string[] = [];
+
+export const WrappedCallbacks: Story = {
+	tags: ['tests'],
+	args: {
+		options: undefined,
+		children: (
+			<WrappedGroup
+				title="Wrapped actions"
+				onClickItem={() => wrappedClickOrder.push('group')}
+				onHoverItem={() => wrappedHoverOrder.push('group')}
+			>
+				<WrappedItem
+					label="Wrapped action"
+					autoDismiss={false}
+					onClick={() => wrappedClickOrder.push('item')}
+					onHover={() => wrappedHoverOrder.push('item')}
+				/>
+			</WrappedGroup>
+		),
+		onClickItem: () => wrappedClickOrder.push('menu'),
+		onHoverItem: () => wrappedHoverOrder.push('menu'),
+	},
+	play: async ({ canvasElement }) => {
+		wrappedClickOrder.length = 0;
+		wrappedHoverOrder.length = 0;
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const item = await canvas.findByRole('menuitem', { name: 'Wrapped action' });
+		await userEvent.hover(item);
+		await expect(wrappedHoverOrder).toEqual(['item', 'group', 'menu']);
+		await userEvent.click(item);
+		await expect(wrappedClickOrder).toEqual(['item', 'group', 'menu']);
+		await expect(canvas.getByRole('menu')).toBeVisible();
+	},
+};
+
+export const WrappedSubmenu: Story = {
+	tags: ['tests'],
+	args: {
+		options: undefined,
+		children: (
+			<WrappedGroup title="Wrapped actions">
+				<WrappedItem label="Wrapped colors" subMenu={colorsSubMenu} />
+			</WrappedGroup>
+		),
+		onClickItem: fn(),
+	},
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const page = within(canvasElement.ownerDocument.body);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const opener = await canvas.findByRole('menuitem', { name: 'Wrapped colors' });
+		await waitFor(() => expect(opener).toHaveFocus());
+		await userEvent.keyboard('{ArrowRight}');
+		const red = await page.findByRole('menuitem', { name: 'Red' });
+		await expect(opener).toHaveAttribute('aria-expanded', 'true');
+		await userEvent.click(red);
+		await waitFor(() => expect(page.queryAllByRole('menu')).toHaveLength(0));
+		await expect(args.onClickItem).toHaveBeenCalledTimes(1);
+	},
+};
+
+function ResolvedShortcutPreview() {
+	const shortcut: KeyboardShortcut = { key: 'k', name: 'Quick open', metaPressed: true, shiftPressed: true };
+	return <Preview options={[{ label: shortcut.name, shortcut }]} />;
+}
+
+export const ResolvedShortcut: Story = {
+	tags: ['tests'],
+	render: () => <ResolvedShortcutPreview />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const item = await canvas.findByRole('menuitem', { name: 'Quick open' });
+		await expect(item).toHaveTextContent(
+			resolveShortcut({ key: 'k', name: 'Quick open', metaPressed: true, shiftPressed: true }),
+		);
 	},
 };

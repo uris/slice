@@ -1,3 +1,4 @@
+import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
@@ -7,12 +8,13 @@ import { FlexDiv, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import {
 	CustomContentPreview,
+	DisabledPreview,
 	IconsPreview,
 	LabelsPreview,
 	SubmenusPreview,
 	TogglesPreview,
 } from './PopMenuItemPreview';
-import { customCode, iconsCode, submenuCode, toggleCode, usageCode } from './code';
+import { customCode, disabledCode, iconsCode, shortcutCode, submenuCode, toggleCode, usageCode } from './code';
 
 const props = [
 	{
@@ -33,7 +35,7 @@ const props = [
 		name: 'backgroundColorHover',
 		type: 'ColorValue',
 		defaultValue: 'var(--core-fill-secondary)',
-		description: <>{'Content background on pointer hover.'}</>,
+		description: <>{'Content background during pointer hover and keyboard-visible focus.'}</>,
 	},
 	{
 		name: 'children',
@@ -44,6 +46,16 @@ const props = [
 				{
 					'Custom children replace the built-in label, icons, shortcut, and submenu indicator. The row wrapper retains its background, hover highlight, padding, and text colors. Do not place interactive controls inside the button.'
 				}
+			</>
+		),
+	},
+	{
+		name: 'disabled',
+		type: 'boolean',
+		defaultValue: 'false',
+		description: (
+			<>
+				Prevents activation, skips the item during keyboard navigation, and suppresses hover colors and hover callbacks.
 			</>
 		),
 	},
@@ -73,10 +85,16 @@ const props = [
 		description: <>{'Leading icon stroke color.'}</>,
 	},
 	{
+		name: 'iconColorDisabled',
+		type: 'ColorValue',
+		defaultValue: 'var(--core-text-tertiary)',
+		description: <>Stroke color for the leading icon, checkmark, and submenu indicator while disabled.</>,
+	},
+	{
 		name: 'iconColorHover',
 		type: 'ColorValue',
 		defaultValue: 'var(--core-text-primary)',
-		description: <>{'Leading icon stroke color during hover.'}</>,
+		description: <>{'Leading icon stroke color during pointer hover and keyboard-visible focus.'}</>,
 	},
 	{
 		name: 'iconGap',
@@ -97,7 +115,8 @@ const props = [
 		description: (
 			<>
 				A supplied identifier is used for the native button ID, event metadata, and the final naming fallback. Without
-				one, only the DOM ID is generated.
+				one, only the DOM ID is generated. In item descriptors, a supplied ID also provides the React key; use stable,
+				document-unique IDs for dynamic lists.
 			</>
 		),
 	},
@@ -138,9 +157,15 @@ const props = [
 	},
 	{
 		name: 'shortcut',
-		type: 'string',
+		type: 'string | KeyboardShortcut',
 		defaultValue: 'undefined',
-		description: <>{'Trailing shortcut hint. Display only; it does not register a keyboard shortcut.'}</>,
+		description: (
+			<>
+				Pass a <Code>KeyboardShortcut</Code> for automatic platform formatting or a string for a custom display hint.
+				The same definition can be registered with <Code>useKeyboardShortcuts</Code>; activation remains
+				application-owned.
+			</>
+		),
 	},
 	{
 		name: 'subMenu',
@@ -169,10 +194,16 @@ const props = [
 		description: <>{'Item text color.'}</>,
 	},
 	{
+		name: 'textColorDisabled',
+		type: 'ColorValue',
+		defaultValue: 'var(--core-text-tertiary)',
+		description: <>Disabled label and shortcut color. Custom text that inherits the row color receives it too.</>,
+	},
+	{
 		name: 'textColorHover',
 		type: 'ColorValue',
 		defaultValue: 'var(--core-text-primary)',
-		description: <>{'Item text color during hover.'}</>,
+		description: <>{'Item text color during pointer hover and keyboard-visible focus.'}</>,
 	},
 	{
 		name: 'textSize',
@@ -231,18 +262,11 @@ const props = [
 	{
 		name: '...buttonAttributes',
 		type: 'HTML button attributes',
-		defaultValue: 'not forwarded',
+		defaultValue: '\u2014',
 		description: (
 			<>
-				{
-					'The public type accepts native button attributes, but the current renderer does not forward arbitrary attributes, '
-				}
-				<Code>{'disabled'}</Code>
-				{', '}
-				<Code>{'style'}</Code>
-				{', or '}
-				<Code>{'className'}</Code>
-				{'.'}
+				Native attributes and events apply to the button. <Code>className</Code> is appended and <Code>style</Code> can
+				override CSS variables. Internal roles and toggle/submenu semantics remain managed by the component.
 			</>
 		),
 	},
@@ -341,6 +365,38 @@ export default function PopMenuItemDoc() {
 					},
 				]}
 			/>
+			<H3>Disable an action</H3>
+			<P>
+				Use <Code>disabled</Code> to prevent activation and hover behavior. Set <Code>textColorDisabled</Code> and
+				<Code>iconColorDisabled</Code> to customize its appearance; the normal background is retained.
+			</P>
+			<ComponentCanvas
+				components={[
+					{
+						label: 'Disabled action',
+						component: <DisabledPreview />,
+						code: disabledCode.trim(),
+						codeFilename: 'DisabledAction.tsx',
+					},
+				]}
+			/>
+			<H3>Display platform shortcuts</H3>
+			<P>
+				Pass a <Code>KeyboardShortcut</Code> directly to <Code>shortcut</Code>. The item formats it for the current
+				platform, so the same definition works with <Code>useKeyboardShortcuts</Code> without an adapter. Strings render
+				unchanged for custom hints. Mount shortcut activation outside the menu if it should work while the menu is
+				closed; the item does not register a binding.
+			</P>
+			<CodeBlock filename="ShortcutItem.tsx" language="tsx" code={shortcutCode.trim()} />
+			<P>
+				<Code>metaPressed</Code> means Command on Apple and Control elsewhere; the current model has no separate Apple
+				Control modifier. For example, Meta+Shift+K displays <Code>⇧⌘K</Code> or <Code>Ctrl+Shift+K</Code>. Enter,
+				Escape, and Tab display as <Code>Enter</Code>, <Code>Esc</Code>, and <Code>Tab</Code> on both platforms; Apple
+				keeps symbols for Backspace, Delete, and arrows. For formatting outside a menu or explicit platform control, use{' '}
+				<Code>resolveShortcut(shortcut, isAppleDevice?)</Code> from the package root or{' '}
+				<Code>@apple-pie/slice/utils</Code>. You can pass <Code>useWindow().isAppleDevice</Code>, or supply a
+				deterministic flag and pass the resulting string to the item.
+			</P>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				Inside a connected menu, actions invoke their callback and then dismiss all menus. Toggle and submenu items stay
@@ -369,8 +425,11 @@ export default function PopMenuItemDoc() {
 				button.
 			</P>
 			<P>
-				Native keyboard activation works, but menu-item roles, arrow-key navigation, Escape handling, focus transfer,
-				and toggle state announcements are not currently managed. See the parent{' '}
+				Buttons expose <Code>role="menuitem"</Code>, or <Code>role="menuitemcheckbox"</Code> and{' '}
+				<Code>aria-checked</Code>
+				for toggles. Submenu openers expose <Code>aria-haspopup</Code> and <Code>aria-expanded</Code>. The containing
+				menu manages keyboard navigation, focus transfer, and Escape dismissal. Focus highlighting and outlines use{' '}
+				<Code>:focus-visible</Code>. See the parent{' '}
 				<Code openURL="/docs/react/pop-menu/#accessibility">accessibility guidance</Code> for menu animation and
 				integration responsibilities.
 			</P>
@@ -404,8 +463,16 @@ export default function PopMenuItemDoc() {
 				</TypeDef>
 			</Definition>
 			<P>
-				Runs on pointer entry, not leave, before connected group and parent hover callbacks. Arbitrary native button
-				events are not forwarded by the current renderer.
+				Runs on pointer entry, not leave, before connected group and parent hover callbacks. Disabled items do not emit
+				it.
+			</P>
+			<Definition id="buttonEvents">
+				<Method>...buttonEvents</Method>
+				<TypeDef>HTML button events</TypeDef>
+			</Definition>
+			<P>
+				Native events are forwarded to the button. Mouse enter/leave handlers are merged with internal hover behavior
+				and suppressed while disabled. Item clicks stop propagation.
 			</P>
 		</FlexDiv>
 	);
@@ -427,6 +494,7 @@ export const trackedItems: TrackedItem[] = [
 		items: [
 			{ id: 'onClick', title: 'onClick', code: true },
 			{ id: 'onHover', title: 'onHover', code: true },
+			{ id: 'buttonEvents', title: '...buttonEvents', code: true },
 		],
 	},
 ];

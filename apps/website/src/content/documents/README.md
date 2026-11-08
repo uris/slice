@@ -100,6 +100,10 @@ when choosing notation and documentation ownership:
 - Independently useful controls also retain their own pages. Link related pages
   and explain which behavior comes from the containing component.
 
+When related Slice APIs compose directly, show that connection: reuse shared data
+shapes and pass compatible callbacks directly instead of adding adapter functions
+or casts. Follow the [composable API guideline](../../../../../CONTRIBUTING.md#composable-apis).
+
 Verify current public exports before writing usage snippets; a convention does not
 mean every component has already adopted it. For components
 with both composition and an options/props alternative, show composition first and
@@ -206,10 +210,12 @@ it into a second API reference. Essential behavior and accessibility guidance
 still belong in their respective sections; a tip can supplement that content.
 Omit the box when the example is already clear without instructions.
 
-For menus and their controllers, default usage snippets render normally without
-portals. Keep portals needed by the documentation canvas in preview wiring only.
-Explain a portal as a conditional option under Behavior, with a small example for
-transformed or clipping ancestors and a target that preserves theme variables.
+For menus and their controllers, render the component normally in snippets and
+previews; PopMenu manages its portal internally by default. Explain portalContainer
+under Behavior: auto preserves the nearest theme/dialog or shadow-root scope,
+false renders in place, and an explicit HTMLElement lets the application choose
+its overlay layer. Do not imply that auto escapes every stacking or clipping
+context. Submenus inherit the resolved host unless explicitly overridden.
 
 ## Code snippets
 

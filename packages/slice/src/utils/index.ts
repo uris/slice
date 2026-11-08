@@ -1,3 +1,4 @@
+export { resolveShortcut } from './functions/resolveShortcut';
 export { copyToClipboard, hexToRgb, setStyle, classNames } from './functions/misc';
 export { debounce } from './functions/debounce';
 export { rafThrottle } from './functions/rafThrottle';

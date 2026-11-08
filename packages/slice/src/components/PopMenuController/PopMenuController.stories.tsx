@@ -48,7 +48,8 @@ export const Default: Story = {
 		const canvas = within(canvasElement);
 		await expect(canvas.queryByRole('menu')).not.toBeInTheDocument();
 		await userEvent.click(canvas.getByRole('button', { name: 'Props menu' }));
-		const edit = await canvas.findByRole('button', { name: 'Edit' });
+		const edit = await canvas.findByRole('menuitem', { name: 'Edit' });
+		await waitFor(() => expect(getComputedStyle(edit).pointerEvents).toBe('auto'));
 		await userEvent.click(edit);
 		await waitFor(() => expect(getPopMenu()).toBeNull());
 	},
@@ -60,7 +61,7 @@ export const Composed: Story = {
 		popMenuActions.clear();
 		const canvas = within(canvasElement);
 		await userEvent.click(canvas.getByRole('button', { name: 'Composed menu' }));
-		await userEvent.click(await canvas.findByRole('button', { name: 'Composed action' }));
+		await userEvent.click(await canvas.findByRole('menuitem', { name: 'Composed action' }));
 		await waitFor(() => expect(getPopMenu()).toBeNull());
 	},
 };
@@ -78,7 +79,7 @@ export const OutsideDismiss: Story = {
 				onDismiss={onDismiss}
 			/>,
 		);
-		await canvas.findByRole('button', { name: 'Edit' });
+		await canvas.findByRole('menuitem', { name: 'Edit' });
 		await userEvent.click(canvasElement);
 		await waitFor(() => expect(getPopMenu()).toBeNull());
 		await expect(onDismiss).toHaveBeenCalledTimes(1);
@@ -98,9 +99,9 @@ export const ReplacementSurvivesOldDismiss: Story = {
 				popMenuActions.push({ caller, options: [{ label: 'Replacement' }] });
 			},
 		});
-		await userEvent.click(await canvas.findByRole('button', { name: 'Replace' }));
-		await waitFor(() => expect(canvas.getByRole('button', { name: 'Replacement' })).toBeVisible());
-		await expect(canvas.queryByRole('button', { name: 'Replace' })).not.toBeInTheDocument();
+		await userEvent.click(await canvas.findByRole('menuitem', { name: 'Replace' }));
+		await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Replacement' })).toBeVisible());
+		await expect(canvas.queryByRole('menuitem', { name: 'Replace' })).not.toBeInTheDocument();
 		popMenuActions.clear();
 	},
 };
@@ -111,11 +112,11 @@ export const ClearAndPushNull: Story = {
 		popMenuActions.clear();
 		const canvas = within(canvasElement);
 		await userEvent.click(canvas.getByRole('button', { name: 'Props menu' }));
-		await canvas.findByRole('button', { name: 'Edit' });
+		await canvas.findByRole('menuitem', { name: 'Edit' });
 		popMenuActions.push(null);
 		await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
 		await userEvent.click(canvas.getByRole('button', { name: 'Composed menu' }));
-		await canvas.findByRole('button', { name: 'Composed action' });
+		await canvas.findByRole('menuitem', { name: 'Composed action' });
 		popMenuActions.clear();
 		await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
 	},
@@ -133,10 +134,10 @@ export const SubmenuDismissAll: Story = {
 			dismissAll,
 			options: [{ label: 'Colors', subMenu: (props) => <PopMenu {...props} options={[{ label: 'Red' }]} /> }],
 		});
-		await userEvent.click(await canvas.findByRole('button', { name: /^Colors/ }));
-		await userEvent.click(await page.findByRole('button', { name: 'Red' }));
+		await userEvent.click(await canvas.findByRole('menuitem', { name: /^Colors/ }));
+		await userEvent.click(await page.findByRole('menuitem', { name: 'Red' }));
 		await waitFor(() => expect(getPopMenu()).toBeNull());
 		await expect(dismissAll).toHaveBeenCalledTimes(1);
-		await waitFor(() => expect(page.queryByRole('button', { name: 'Red' })).not.toBeInTheDocument());
+		await waitFor(() => expect(page.queryByRole('menuitem', { name: 'Red' })).not.toBeInTheDocument());
 	},
 };

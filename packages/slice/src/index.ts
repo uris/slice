@@ -255,3 +255,5 @@ export type {
 	PopMenuSubMenuProps,
 } from './components/PopMenu';
 export { PopMenuController } from './components/PopMenuController';
+
+export { resolveShortcut } from './utils/functions/resolveShortcut';

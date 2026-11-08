@@ -59,13 +59,11 @@ const menuProps = [
 			<>
 				{'Composed content takes precedence over '}
 				<Code>{'options'}</Code>
-				{'. Direct '}
+				{'. '}
 				<Code>{'PopMenuItem'}</Code>
 				{', '}
 				<Code>{'PopMenuGroup'}</Code>
-				{
-					', fragments, and conditional children are connected to the parent handlers. Other custom children render unchanged.'
-				}
+				{', including those inside custom wrappers and fragments, connect through context without forwarding handlers.'}
 			</>
 		),
 	},
@@ -88,7 +86,7 @@ const menuProps = [
 		description: (
 			<>
 				{'Gap in pixels. For '}
-				<Code>{'right'}</Code>
+				<Code>{'right'}</Code> or <Code>left</Code>
 				{', it shifts horizontally only. Negative values overlap the caller; submenu defaults overlap by 24px.'}
 			</>
 		),
@@ -123,19 +121,18 @@ const menuProps = [
 		defaultValue: 'id, then Pop Menu',
 		description: (
 			<>
-				Accessible menu name and generated-key prefix. Blank names use a supplied <Code>id</Code>, then{' '}
-				<Code>Pop Menu</Code>.
+				Accessible menu name. Blank names use a supplied <Code>id</Code>, then <Code>Pop Menu</Code>.
 			</>
 		),
 	},
 	{
 		name: 'offset',
-		type: "'top' | 'bottom' | 'right'",
+		type: "'top' | 'bottom' | 'right' | 'left'",
 		defaultValue: 'bottom; right for level > 0',
 		description: (
 			<>
 				{
-					'Placement relative to the caller. Top/bottom switch sides when the other side fits the full menu. Right aligns to the caller top and starts at its right edge plus '
+					'Placement relative to the caller. Top/bottom switch sides when the other side fits the full menu. Side placements align to the caller top and can flip horizontally before viewport clamping. Right starts at its right edge plus '
 				}
 				<Code>{'gap'}</Code>
 				{'.'}
@@ -161,6 +158,19 @@ const menuProps = [
 		type: 'number | string',
 		defaultValue: '4px 2px',
 		description: <>{'Menu wrapper padding. Numbers use pixels; CSS shorthand values pass through.'}</>,
+	},
+
+	{
+		name: 'portalContainer',
+		type: "'auto' | HTMLElement | false",
+		defaultValue: 'auto; inherited by submenus',
+		description: (
+			<>
+				Automatic hosts are shared within the nearest theme/dialog scope, shadow root, or document body and removed
+				after their last owner unmounts. Pass an element to choose an application-owned host, or <Code>false</Code> to
+				render in place. Submenus inherit the resolved host or inline mode unless explicitly overridden.
+			</>
+		),
 	},
 
 	{
@@ -227,19 +237,29 @@ export default function PopMenuDoc() {
 			</P>
 			<P>
 				Menus calculate their position when the caller or placement props change. Top and bottom placement can flip to
-				fit; right placement is clamped inside the viewport. Oversized menus scroll. Dynamic menu content is not
-				remeasured automatically.
+				fit; side placements can flip horizontally before clamping to the viewport. Oversized menus scroll. Dynamic menu
+				content is not remeasured automatically.
 			</P>
 			<P>
-				Clicks on items do not bubble to the global dismissal listener. Other clicks, window resizing, and scrolling
-				outside the menu start dismissal. The menu keeps its position through its exit animation before calling{' '}
-				<Code>onDismiss</Code>. Explicit root removal and store clearing unmount immediately.
+				Clicks on items stop propagation. Menu padding, group titles, and portaled descendant menus count as inside the
+				menu branch. Outside clicks, window resizing, and scrolling outside the branch start dismissal. The menu keeps
+				its position through its exit animation before calling <Code>onDismiss</Code>. Explicit root removal and store
+				clearing unmount immediately.
 			</P>
-			<H3>When a portal is useful</H3>
 			<P>
-				Render the menu normally in most layouts. If a transformed ancestor changes its fixed-position reference or a
-				container clips it, use <Code>createPortal</Code> to render outside that container. Choose an untransformed{' '}
-				<Code>menuHost</Code> within your theme scope so the menu keeps its theme variables.
+				Items and groups connect through context, including inside custom wrappers. Callback order is item, containing
+				groups from inner to outer, then menu. Each submenu establishes its own callback scope. Supply unique, stable
+				<Code>id</Code> values for dynamic options, groups, and grouped items; entries without IDs use their position as
+				a fallback for static lists. Duplicate labels and untitled groups are supported.
+			</P>
+			<H3>Choose a portal host</H3>
+			<P>
+				<Code>portalContainer="auto"</Code> creates a shared host in the nearest theme or dialog scope, falling back to
+				the caller's shadow root or document body. Submenus inherit it, even through custom wrappers. Provide Slice
+				styles inside a shadow root. Automatic placement can still inherit ancestor clipping and stacking contexts; pass
+				an <Code>HTMLElement</Code> outside those constraints when you need a specific overlay layer. The application
+				owns that host's theme, stacking, and lifetime. Use <Code>{'portalContainer={false}'}</Code> to render the
+				entire menu branch in place.
 			</P>
 			<CodeBlock filename="Portal.tsx" language="tsx" code={portalCode.trim()} />
 			<H2 id="accessibility">Accessibility</H2>
@@ -249,9 +269,11 @@ export default function PopMenuDoc() {
 				ARIA overrides remain available but are not needed for ordinary examples.
 			</P>
 			<P>
-				The current component does not implement menu-item roles, arrow-key navigation, Escape dismissal, or opening and
-				restoring focus. Native buttons retain their normal keyboard activation. Custom button children must not contain
-				nested interactive controls.
+				Opening focuses the first enabled item. Up/Down move between items, Home/End move to the first/last item, and
+				Right opens a submenu. Escape closes the current menu and restores focus to its opener; Left does the same
+				inside a submenu. Tab and Shift+Tab close the menu chain and move beyond its root trigger. Enter and Space
+				activate items. Focus outlines use <Code>:focus-visible</Code> for keyboard interaction. Disabled items are
+				skipped. Custom button children must not contain nested interactive controls.
 			</P>
 			<P>
 				The current animation does not automatically honor reduced-motion preferences. Supply an immediate{' '}
@@ -329,7 +351,9 @@ export default function PopMenuDoc() {
 			</Definition>
 			<P>
 				Native wrapper events pass through except internally managed scroll and animation handlers. Item clicks stop
-				propagation. Arbitrary native item button events are not forwarded by the current item renderer.
+				propagation. Native item events are documented on{' '}
+				<Code openURL="/docs/react/pop-menu-item/#events">PopMenuItem</Code>. A consumer <Code>onKeyDown</Code> can call{' '}
+				<Code>preventDefault()</Code> to cancel built-in navigation.
 			</P>
 		</FlexDiv>
 	);

@@ -2,7 +2,6 @@
 
 import { Button, FlexDiv, PopMenu, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
-import { createPortal } from 'react-dom';
 
 export function LabelsPreview() {
 	const [caller, setCaller] = useState<HTMLButtonElement>();
@@ -22,7 +21,7 @@ export function LabelsPreview() {
 					if (event) setCaller(event.currentTarget);
 				}}
 			/>
-			{caller && createPortal(menu, caller.closest('[data-slice-theme-scope]') ?? document.body)}
+			{menu}
 		</FlexDiv>
 	);
 }
@@ -45,7 +44,7 @@ export function IconsPreview() {
 					if (event) setCaller(event.currentTarget);
 				}}
 			/>
-			{caller && createPortal(menu, caller.closest('[data-slice-theme-scope]') ?? document.body)}
+			{menu}
 		</FlexDiv>
 	);
 }
@@ -75,7 +74,7 @@ export function TogglesPreview() {
 					if (event) setCaller(event.currentTarget);
 				}}
 			/>
-			{caller && createPortal(menu, caller.closest('[data-slice-theme-scope]') ?? document.body)}
+			{menu}
 		</FlexDiv>
 	);
 }
@@ -123,7 +122,7 @@ export function SubmenusPreview() {
 					if (event) setCaller(event.currentTarget);
 				}}
 			/>
-			{caller && createPortal(menu, caller.closest('[data-slice-theme-scope]') ?? document.body)}
+			{menu}
 		</FlexDiv>
 	);
 }
@@ -167,7 +166,34 @@ export function CustomContentPreview() {
 					if (event) setCaller(event.currentTarget);
 				}}
 			/>
-			{caller && createPortal(menu, caller.closest('[data-slice-theme-scope]') ?? document.body)}
+			{menu}
+		</FlexDiv>
+	);
+}
+
+export function DisabledPreview() {
+	const [caller, setCaller] = useState<HTMLButtonElement>();
+	const close = () => setCaller(undefined);
+	return (
+		<FlexDiv justify="center" align="center" height={180}>
+			<Button
+				label="Disabled action"
+				onClick={(event) => {
+					if (event) setCaller(event.currentTarget);
+				}}
+			/>
+			{caller && (
+				<PopMenu caller={caller} name="Archive actions" minWidth={200} dismissAll={close} onDismiss={close}>
+					<PopMenuItem label="Edit" icon="editor.edit" />
+					<PopMenuItem
+						label="Archive"
+						icon="basic.archive"
+						disabled
+						textColorDisabled="var(--core-text-tertiary)"
+						iconColorDisabled="var(--core-text-tertiary)"
+					/>
+				</PopMenu>
+			)}
 		</FlexDiv>
 	);
 }

@@ -1,13 +1,10 @@
 'use client';
 
-import { OnThisPage } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { H1, P } from '@/components/Type/Type';
 import { type DocumentLoader, type DocumentModule, getDocumentLoader } from '@/docs/registry/documents';
-import { usePackageType, useScrollboxSize, useSlug } from '@/docs/stores/store';
-import { showOnThisPageMinWidth } from '@/src/consts/consts';
+import { useDocsActions, usePackageType, useScrollboxSize, useSlug } from '@/docs/stores/store';
 import { FlexDiv, Preset } from '@apple-pie/slice';
-import { AnimatePresence } from 'motion/react';
 import { useEffect, useState } from 'react';
 
 function DocumentNotFound() {
@@ -20,9 +17,10 @@ function DocumentNotFound() {
 	);
 }
 
-function LoadedDocument({ loader, showOnThisPage }: Readonly<{ loader: DocumentLoader; showOnThisPage: boolean }>) {
+function LoadedDocument({ loader }: Readonly<{ loader: DocumentLoader }>) {
 	const [document, setDocument] = useState<DocumentModule>();
 	const [failed, setFailed] = useState(false);
+	const { setTrackedItems } = useDocsActions();
 
 	useEffect(() => {
 		let active = true;
@@ -41,6 +39,12 @@ function LoadedDocument({ loader, showOnThisPage }: Readonly<{ loader: DocumentL
 		};
 	}, [loader]);
 
+	useEffect(() => {
+		setTrackedItems(document?.trackedItems ?? null);
+		return () => setTrackedItems(null);
+	}, [document, setTrackedItems]);
+
+	// show unable to load page if unable to load module
 	if (failed) {
 		return (
 			<FlexDiv preset={Preset.Column} maxWidth={680}>
@@ -51,25 +55,21 @@ function LoadedDocument({ loader, showOnThisPage }: Readonly<{ loader: DocumentL
 		);
 	}
 
+	// while no document is loaded and there's no error, show loading
 	if (!document) return <div role="status">Loading document…</div>;
 
-	const { default: Document, trackedItems = [] } = document;
-	return (
-		<>
-			<Document />
-			<AnimatePresence initial={true}>
-				{showOnThisPage && <OnThisPage key="on-this-page" items={trackedItems} />}
-			</AnimatePresence>
-		</>
-	);
+	// extract loaded module exports
+	const { default: Document } = document;
+
+	// return the loaded document
+	return <Document />;
 }
 
 export function ContentLayout() {
-	const { height, width } = useScrollboxSize() ?? {};
+	const { height } = useScrollboxSize() ?? {};
 	const packageType = usePackageType();
 	const slug = useSlug();
 	const loader = getDocumentLoader(packageType, slug);
-	const showOnThisPage = (width ?? 0) > showOnThisPageMinWidth;
 	const paddingBottom = height ? height / 2 : 48;
 
 	return (
@@ -80,11 +80,13 @@ export function ContentLayout() {
 			gap={64}
 			padding={`8px 48px ${paddingBottom}px 48px`}
 		>
-			{loader ? (
-				<LoadedDocument key={`${packageType}/${slug}`} loader={loader} showOnThisPage={showOnThisPage} />
-			) : (
-				<DocumentNotFound />
-			)}
+			{loader ? <LoadedDocument key={`${packageType}/${slug}`} loader={loader} /> : <DocumentNotFound />}
 		</FlexDiv>
 	);
 }
+
+/*
+<AnimatePresence initial={true}>
+	{showOnThisPage && <OnThisPage key="on-this-page" items={trackedItems}/>}
+</AnimatePresence>
+ */

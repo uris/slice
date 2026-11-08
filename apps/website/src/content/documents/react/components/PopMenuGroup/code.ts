@@ -29,7 +29,7 @@ export default function GroupedActions() {
 `;
 
 export const optionsCode = `
-<PopMenuGroup title="Project" items={[{ label: 'Edit' }, { label: 'Duplicate' }]} />
+<PopMenuGroup title="Project" items={[{ label: 'Edit' }, { label: 'Duplicate' }]} />;
 
 // Or describe the groups directly on the menu:
 <PopMenu caller={caller} name="Project actions" dismissAll={close} onDismiss={close}
@@ -37,7 +37,7 @@ export const optionsCode = `
         { title: 'Project', items: [{ label: 'Edit' }, { label: 'Duplicate' }] },
         { items: [{ label: 'Share ...' }, { label: 'Archive ...' }] },
     ]}
-/>
+/>;
 `;
 
 export const styleCode = `

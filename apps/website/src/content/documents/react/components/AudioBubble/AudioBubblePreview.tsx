@@ -52,7 +52,7 @@ export function AudioBubblePreview({
 					: {})}
 			/>
 
-			{variant === 'live' && (
+			{variant === 'live' && !error && (
 				<DropDown<MicOption>
 					valueKey={'id'}
 					value={{ id: selectedId }}
@@ -63,7 +63,7 @@ export function AudioBubblePreview({
 					style={{ maxWidth: 'min-content', alignSelf: 'center' }}
 				/>
 			)}
-			{variant === 'status' && <Label padding={8} label={getStatus()} />}
+			{variant === 'status' || (variant === 'live' && error && <Label padding={8} label={getStatus()} />)}
 		</FlexDiv>
 	);
 }

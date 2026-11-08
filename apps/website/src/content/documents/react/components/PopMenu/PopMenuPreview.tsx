@@ -2,7 +2,6 @@
 
 import { Button, FlexDiv, PopMenu, PopMenuGroup, PopMenuItem, type PopMenuSubMenuProps } from '@apple-pie/slice';
 import { useState } from 'react';
-import { createPortal } from 'react-dom';
 
 const colorOptions = [
 	{ id: 'red', label: 'Red', color: 'var(--core-red-500)' },
@@ -48,32 +47,30 @@ export function PopMenuPreview() {
 					if (event) setCaller(event.currentTarget);
 				}}
 			/>
-			{caller &&
-				createPortal(
-					<PopMenu
-						caller={caller}
-						minWidth={200}
-						name="Project actions"
-						dismissAll={close}
-						onDismiss={close}
-						onClickItem={(_event, item) => {
-							if (item.id === 'autoSave') setAutoSave(item.toggled ?? false);
-						}}
-					>
-						<PopMenuGroup title="Project">
-							<PopMenuItem label="Edit" icon="editor.edit" shortcut="⌘E" />
-							<PopMenuItem label="Colors" icon="basic.swatchbook" subMenu={(props) => <ColorsMenu {...props} />} />
-						</PopMenuGroup>
-						<PopMenuGroup title="Preferences">
-							<PopMenuItem id="autoSave" label="Auto Save" toggle toggled={autoSave} />
-						</PopMenuGroup>
-						<PopMenuGroup>
-							<PopMenuItem label="Share ..." />
-							<PopMenuItem label="Archive ..." />
-						</PopMenuGroup>
-					</PopMenu>,
-					caller.closest('[data-slice-theme-scope]') ?? document.body,
-				)}
+			{caller && (
+				<PopMenu
+					caller={caller}
+					minWidth={200}
+					name="Project actions"
+					dismissAll={close}
+					onDismiss={close}
+					onClickItem={(_event, item) => {
+						if (item.id === 'autoSave') setAutoSave(item.toggled ?? false);
+					}}
+				>
+					<PopMenuGroup title="Project">
+						<PopMenuItem label="Edit" icon="editor.edit" shortcut={{ name: 'Edit', key: 'e', metaPressed: true }} />
+						<PopMenuItem label="Colors" icon="basic.swatchbook" subMenu={(props) => <ColorsMenu {...props} />} />
+					</PopMenuGroup>
+					<PopMenuGroup title="Preferences">
+						<PopMenuItem id="autoSave" label="Auto Save" toggle toggled={autoSave} />
+					</PopMenuGroup>
+					<PopMenuGroup>
+						<PopMenuItem label="Share ..." />
+						<PopMenuItem label="Archive ..." />
+					</PopMenuGroup>
+				</PopMenu>
+			)}
 		</FlexDiv>
 	);
 }

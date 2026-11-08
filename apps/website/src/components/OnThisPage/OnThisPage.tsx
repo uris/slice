@@ -1,4 +1,10 @@
-import { useNewestVisibleItem, useScrollAmount, useScrollBox, useScrollDirection } from '@/docs/stores/store';
+import {
+	useNewestVisibleItem,
+	useScrollAmount,
+	useScrollBox,
+	useScrollDirection,
+	useTrackedItems,
+} from '@/docs/stores/store';
 import { surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
 import { motion } from 'motion/react';
@@ -12,12 +18,8 @@ export type TrackedItem = {
 	items?: Omit<TrackedItem[], 'items'>;
 };
 
-interface OnThisPageProps {
-	items?: TrackedItem[];
-}
-
-export function OnThisPage(props: Readonly<OnThisPageProps>) {
-	const { items = [] } = props;
+export function OnThisPage() {
+	const items = useTrackedItems();
 	const selectedId = useNewestVisibleItem();
 	const scrollBox = useScrollBox();
 	const scrollAmount = useScrollAmount();
@@ -108,12 +110,11 @@ export function OnThisPage(props: Readonly<OnThisPageProps>) {
 	return (
 		<motion.div
 			className={classNames(styles.wrapper, 'slice-scrollbars')}
-			initial={{ opacity: 0, x: 35 }}
-			animate={{ opacity: 1, x: 0 }}
-			exit={{ opacity: 0, x: 35 }}
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
 			transition={{ ease: 'easeInOut', duration: 0.25 }}
 		>
-			<span className={styles.title}>On this page</span>
 			{items.map((item) => {
 				const { items: _items, title, code, id } = item;
 				const hasItems = Boolean(_items?.length);
@@ -131,7 +132,7 @@ export function OnThisPage(props: Readonly<OnThisPageProps>) {
 							value={title}
 							onClick={() => handleScrollToItem(id)}
 						/>
-						{hasItems && renderSubItems(_items)}
+						{hasItems && <div className={styles.groupItems}>{renderSubItems(_items)}</div>}
 					</div>
 				);
 			})}

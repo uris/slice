@@ -26,6 +26,9 @@
 /* pop menu item styles */
 
 .popMenuItem {
+	--item-icon-color-current: var(--item-icon-color);
+	--item-toggle-color-current: var(--core-text-primary);
+	--item-submenu-color-current: var(--core-text-secondary);
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
@@ -97,7 +100,7 @@
 }
 
 .shortcut {
-	color: var(--core-text-secondary);
+	color: var(--shortcut-color);
 	padding-right: 3px;
 	white-space: nowrap;
 }
@@ -136,4 +139,24 @@
 /* last and first title */
 .popMenu > :nth-child(1 of .popMenuGroupWrapper) > .groupTitle {
 	padding-top: 0;
+}
+
+.popMenuItem:focus-visible {
+	outline: 2px solid var(--core-text-primary);
+	outline-offset: -2px;
+}
+.popMenuItem:focus-visible > .popMenuItemWrapper {
+	background-color: var(--background-color-hover);
+	color: var(--text-color-hover);
+}
+
+.popMenuItem:not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible) {
+	--item-icon-color-current: var(--item-icon-color-hover);
+}
+
+.popMenuItem:disabled,
+.popMenuItem[aria-disabled="true"] {
+	--item-icon-color-current: var(--item-icon-color-disabled);
+	--item-toggle-color-current: var(--item-icon-color-disabled);
+	--item-submenu-color-current: var(--item-icon-color-disabled);
 }

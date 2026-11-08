@@ -40,9 +40,8 @@ const props = [
 		defaultValue: 'provided by parent',
 		description: (
 			<>
-				{'Root dismissal callback forwarded to items created from '}
-				<Code>{'items'}</Code>
-				{'.'}
+				Fallback root dismissal callback for descendants when no containing menu provides one. Items receive the
+				resolved closure in click metadata.
 			</>
 		),
 	},
@@ -63,14 +62,23 @@ const props = [
 		type: 'string',
 		defaultValue: 'generated unique ID',
 		description: (
-			<>Wrapper ID. Title IDs derive from it; a supplied ID is also a naming fallback for an untitled, unnamed group.</>
+			<>
+				Wrapper ID. Title IDs derive from it; a supplied ID is also a naming fallback for an untitled, unnamed group and
+				the key for a group descriptor. Use stable, document-unique IDs when groups can move or change.
+			</>
 		),
 	},
 	{
 		name: 'items',
 		type: 'PopMenuItemBase[]',
 		defaultValue: 'undefined',
-		description: <>{'Item descriptors rendered with their callbacks and parent menu behavior.'}</>,
+		description: (
+			<>
+				{
+					'Item descriptors rendered with their callbacks and parent menu behavior. Supply stable item IDs for dynamic lists; missing IDs use positions for static lists. Duplicate labels are supported.'
+				}
+			</>
+		),
 	},
 	{
 		name: 'name',
@@ -172,9 +180,9 @@ export default function PopMenuGroupDoc() {
 				padding from <Code>gap</Code>.
 			</P>
 			<P>
-				Inside <Code>PopMenu</Code>, direct items, groups, and fragments are connected automatically and keep authored
-				order. Other custom wrapper components must forward handlers explicitly. Standalone groups require explicit
-				callbacks and do not create a popup.
+				Inside <Code>PopMenu</Code>, items and groups connect automatically through context, including inside custom
+				wrappers and fragments. Authored order is preserved. Standalone groups require explicit callbacks and do not
+				create a popup. Callbacks run from the item through its containing groups, then the menu.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>

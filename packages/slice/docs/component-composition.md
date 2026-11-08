@@ -4,6 +4,14 @@ Choose exports according to whether a child has a useful identity outside its
 parent. Apply this convention to new APIs and intentional component refactors;
 do not rename unrelated existing components just to match it.
 
+## Composition across APIs
+
+Composition includes compatible data and callbacks across hooks, stores,
+components, and utilities, as well as JSX structure. Follow the repository's
+[composable API guideline](../../../CONTRIBUTING.md#composable-apis) before adding
+new shapes or callback signatures. Demonstrate related APIs connected directly,
+without adapter callbacks or type assertions, and keep that usage typechecked.
+
 ## Parent-only sections
 
 Expose structural sections through their parent using dot notation:

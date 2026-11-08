@@ -20,6 +20,7 @@ export interface SideBarListSectionProps {
 export function SidebarDocList(props: Readonly<SideBarListProps>) {
 	const { items } = props;
 	const packageType = usePackageType();
+
 	return (
 		<div className={styles.wrapper}>
 			{items.map((section, index) => {
@@ -52,7 +53,6 @@ export function SideBarListSection(props: Readonly<SideBarListSectionProps>) {
 				const { slug, childDocs, ...rest } = item;
 				const selectedChild = childDocs?.find((doc) => doc.slug === selectedSlug);
 				const selected = slug === selectedSlug && packageType === selectedPackageType;
-				console.log({ childDocs, slug, selectedChild });
 				return (
 					<SidebarListItem
 						key={`${packageType ?? 'section'}.${slug ?? item.title ?? 'doc'}.${index}`}

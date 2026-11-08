@@ -1,28 +1,37 @@
 .wrapper {
-	position: sticky;
-	top: 112px;
-	max-height: calc(100dvh - 136px);
 	overflow-y: auto;
+	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: flex-start;
 	box-sizing: border-box;
 	gap: 16px;
-	padding: 0 32px 16px 56px;
-	margin: 56px 0 0 0;
-	min-width: max-content;
-	width: max-content;
-	border-left: 1px solid var(--core-outline-secondary);
+	padding: 0 8px;
+	width: 100%;
 }
 
 .groupWrapper {
+	width: 100%;
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
 	box-sizing: border-box;
 	padding: 0;
+	gap: 4px;
+}
+
+.groupItems {
+	width: 100%;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	box-sizing: border-box;
+	padding: 8px 0 0 0;
 	gap: 4px;
 }
 
@@ -42,7 +51,7 @@
 .title {
 	font-family: var(--font-family), sans-serif;
 	font-weight: 500;
-	font-size: 18px;
+	font-size: 15px;
 	line-height: 140%;
 	letter-spacing: 1.25%;
 	color: var(--core-text-primary);
@@ -55,9 +64,21 @@
 	font-size: 15px;
 	line-height: var(--line-height-m);
 	letter-spacing: 0.0125em;
+	width: 100%;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: left;
 }
 
 .code {
+	width: 100%;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: left;
 	font-family: var(--font-mono), monospace;
 	font-weight: 460;
 	font-size: 12px;
@@ -65,5 +86,5 @@
 	line-height: 162.5%;
 	letter-spacing: 0.94%;
 	color: var(--core-text-secondary);
-	padding-left: 8px;
+	padding: 0 24px 0 16px;
 }

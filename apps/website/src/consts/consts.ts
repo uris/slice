@@ -8,6 +8,7 @@ export enum Package {
 
 // side panel definition
 export const sidePanelConstraints = { min: 250, max: 400, initial: 250 };
+export const detailsPanelConstraints = { min: 250, max: 400, initial: 250 };
 
 // content width (on page approx. 230)
 export const contentMaxWidth = 740;

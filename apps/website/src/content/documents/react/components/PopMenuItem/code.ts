@@ -163,3 +163,22 @@ export default function ColorItems() {
     );
 }
 `;
+
+export const disabledCode = `
+<PopMenuItem label="Archive" icon="basic.archive" disabled
+    textColorDisabled="var(--core-text-tertiary)"
+    iconColorDisabled="var(--core-text-tertiary)" />
+`;
+
+export const shortcutCode = `
+import { PopMenuItem, type KeyboardShortcut } from '@apple-pie/slice';
+
+const quickOpen: KeyboardShortcut = {
+    name: 'Quick open', key: 'k', metaPressed: true, shiftPressed: true,
+};
+
+// Render this item inside PopMenu, directly or through a group.
+export function QuickOpenItem() {
+    return <PopMenuItem label={quickOpen.name} shortcut={quickOpen} />;
+}
+`;
