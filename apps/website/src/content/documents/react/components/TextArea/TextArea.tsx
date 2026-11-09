@@ -162,6 +162,15 @@ export function TextAreaDoc() {
 			</P>
 			<H2 id="props">Props</H2>
 			<P>All component props are optional. Color props accept Slice theme tokens or CSS colors.</P>
+			<Definition id="allowEmptySubmit">
+				<Prop>allowEmptySubmit</Prop>
+				<TypeDef>boolean</TypeDef>
+				<DefaultVal>false</DefaultVal>
+			</Definition>
+			<P>
+				Allows submission of empty text when a composed control has associated content, such as file attachments.
+				Editing and onSubmit requirements still apply.
+			</P>
 			<Definition id={'autoGrow'}>
 				<Prop>autoGrow</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -344,6 +353,15 @@ export function TextAreaDoc() {
 				{' prop.'}
 			</P>
 
+			<Definition id="inputRef">
+				<Prop>inputRef</Prop>
+				<TypeDef>React.Ref&lt;HTMLTextAreaElement&gt;</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Native editor ref for imperative focus and composition with related controls. Internal measurement continues to
+				use the same element.
+			</P>
 			<Definition id={'label'}>
 				<Prop>label</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -691,6 +709,7 @@ export const trackedItems: TrackedItem[] = [
 		id: 'props',
 		title: 'Props',
 		items: [
+			{ id: 'allowEmptySubmit', title: 'allowEmptySubmit', code: true },
 			{ id: 'autoGrow', title: 'autoGrow', code: true },
 			{ id: 'backgroundColor', title: 'backgroundColor', code: true },
 			{ id: 'borderColor', title: 'borderColor', code: true },
@@ -707,6 +726,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'inputAttributes', title: 'inputAttributes', code: true },
 			{ id: 'inputId', title: 'inputId', code: true },
 			{ id: 'inputName', title: 'inputName', code: true },
+			{ id: 'inputRef', title: 'inputRef', code: true },
 			{ id: 'label', title: 'label', code: true },
 			{ id: 'labelColor', title: 'labelColor', code: true },
 			{ id: 'labelSize', title: 'labelSize', code: true },

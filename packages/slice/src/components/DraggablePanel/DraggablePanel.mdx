@@ -1,149 +1,79 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as DraggablePanelStories from './DraggablePanel.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={DraggablePanelStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # DraggablePanel
-        Renders a resizable side panel for split-view layouts. The panel supports mouse/touch resizing, min/max constraints, optional open/closed control, and resize callbacks so parent layouts can react to width changes.
+# DraggablePanel
 
-        ## Base element
-        `HTMLDivElement`
+Build a split workspace with a resizable sidebar. Mouse, touch, pen, and keyboard resizing share the same constraints and callbacks.
 
-        ## Interface
-        `DraggablePanelProps`
-
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td><code>-</code></td><td>Content rendered inside the panel.</td></tr>
-            <tr><td><code>sizeConstraints</code></td><td><code>{`{ initial: number; min: number; max: number }`}</code></td><td><code>{`{ initial: 250, min: 250, max: 500 }`}</code></td><td>Width constraints. Values between <code>0</code> and <code>1</code> are treated as relative ratios of the container/window width; all other values are pixels.</td></tr>
-            <tr><td><code>isClosed</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Controlled open/closed state. When <code>true</code>, panel width is <code>0</code> and the resize handle is hidden.</td></tr>
-            <tr><td><code>drags</code></td><td><code>{`'left' | 'right' | false`}</code></td><td><code>'right'</code></td><td>Controls resize direction. Use <code>'right'</code> for left-side panels that grow to the right, <code>'left'</code> for right-side panels that grow to the left, or <code>false</code> to disable dragging.</td></tr>
-            <tr><td><code>containerRef</code></td><td><code>{`React.RefObject<HTMLDivElement | null>`}</code></td><td><code>-</code></td><td>Optional container used to resolve ratio-based constraints (for example <code>0.5</code> = 50% of container width).</td></tr>
-            <tr><td><code>resizeHandle</code></td><td><code>{`{ width?: number; color?: string; offsetX?: boolean }`}</code></td><td><code>{`{ width: 10, color: 'transparent', offsetX: true }`}</code></td><td>Resize rail styling and hit area width.</td></tr>
-            <tr><td><code>dragHandle</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Shows or hides the visual grip dots.</td></tr>
-            <tr><td><code>dragHandleStyle</code></td><td><code>{`{ width?: number; height?: number; radius?: number; stroke?: number; strokeColor?: string; color?: string }`}</code></td><td><code>{`{ width: 9, height: 24, color: 'var(--core-surface-primary-tint)', strokeColor: 'var(--core-outline-secondary)' }`}</code></td><td>Style overrides for the grip dots.</td></tr>
-            <tr><td><code>borderRight</code></td><td><code>string</code></td><td><code>'1px solid var(--core-outline-secondary)'</code></td><td>Right border applied when panel is open and draggable.</td></tr>
-            <tr><td><code>borderLeft</code></td><td><code>string | null</code></td><td><code>'1px solid var(--core-outline-secondary)'</code></td><td>Left border applied when panel is open and draggable.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'transparent'</code></td><td>Panel background color.</td></tr>
-            <tr><td><code>disableOnContext</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Prevents browser context menu on the panel.</td></tr>
-            <tr><td><code>isTouchDevice</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Expands touch hit area and removes hover delay for handle highlight.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native <code>div</code> props pass through (for example <code>id</code>, <code>data-testid</code>, <code>className</code>, <code>style</code>, <code>aria-*</code>).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onResizeStart</code></td><td><code>{`(info: { div: RefObject<HTMLDivElement | null>; divWidth: number; divHeight: number; deltaWidth: number }) => void`}</code></td><td>Fires once when dragging begins.</td></tr>
-            <tr><td><code>onResize</code></td><td><code>{`(info: { div: RefObject<HTMLDivElement | null>; divWidth: number; divHeight: number; deltaWidth: number }) => void`}</code></td><td>Fires continuously while dragging and once at drag end with final values.</td></tr>
-            <tr><td><code>onResizeEnd</code></td><td><code>{`(info: { div: RefObject<HTMLDivElement | null>; divWidth: number; divHeight: number; deltaWidth: number }) => void`}</code></td><td>Fires once after drag listeners are released.</td></tr>
-          </tbody>
-        </table>
-
-        ## Resize direction
-        - Use `drags="right"` when the panel sits on the left and should grow toward the right.
-        - Use `drags="left"` when the panel sits on the right and should grow toward the left.
-        - The matching side border is shown automatically while the panel is open.
-
-        ## Code Examples
-        **Layout requirement:** `DraggablePanel` should be used inside a horizontal (`row`) container with a sibling content area set to `flex: 1` (and usually `minWidth: 0`) so the content region grows/shrinks as the panel resizes.
-        </Unstyled>
-
-        <RenderSource>
-```
-import { DraggablePanel, FlexDiv } from '@apple-pie/slice';
-
-export function DraggablePanelExample() {
-    return (
-        <FlexDiv width="fill" height={240} direction="row">
-            <DraggablePanel
-                // > 1 => pixels
-                sizeConstraints={{ initial: 320, min: 240, max: 560 }}
-                drags="right"
-                backgroundColor="var(--core-surface-secondary)"
-                id="draggablepanel-example"
-                data-testid="draggablepanel-example"
-                className="custom-wrapper"
-            >
-                <div style={{ padding: 16 }}>Resizable panel content</div>
-            </DraggablePanel>
-            <div style={{ flex: 1, minWidth: 0, padding: 16 }}>
-                Main content area
-            </div>
-        </FlexDiv>
-    );
-}
-```
-        </RenderSource>
-
-        <RenderSource>
-```
+```tsx
+import { Button, DraggablePanel } from '@apple-pie/slice';
 import { useRef, useState } from 'react';
-import { DraggablePanel, FlexDiv } from '@apple-pie/slice';
 
-export function DraggablePanelControlled() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [isClosed, setIsClosed] = useState(false);
-    const [width, setWidth] = useState<number | null>(null);
-
-    // 1) Parent layout must be a horizontal row container.
-    return (
-        <FlexDiv ref={containerRef} width="viewport" height={360} direction="row">
-            {/* 2) Draggable panel is one child in the row. */}
-            <DraggablePanel
-                containerRef={containerRef}
-                isClosed={isClosed}
-                drags="right"
-                // 0..1 => percentage of container width, > 1 => pixels
-                sizeConstraints={{ initial: 0.28, min: 220, max: 560 }}
-                onResize={(info) => setWidth(info.divWidth)}
-            >
-                <div style={{ padding: 16 }}>
-                    Panel width: {width ? Math.round(width) : '-'}px
-                </div>
-            </DraggablePanel>
-            {/* 3) Sibling content must use flex: 1 so it absorbs remaining width. */}
-            <div style={{ flex: 1, minWidth: 0, padding: 16 }}>
-                <button onClick={() => setIsClosed((prev) => !prev)}>
-                    {isClosed ? 'Open' : 'Close'} panel
-                </button>
-            </div>
-        </FlexDiv>
-    );
+export function Workspace() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [closed, setClosed] = useState(false);
+  return <div ref={containerRef} style={{display: 'flex', height: 320}}>
+    <DraggablePanel containerRef={containerRef} isClosed={closed}
+      sizeConstraints={{initial: 240, min: 160, max: 0.6}}
+      resizeHandleLabel="Resize project sidebar">
+      Project navigation
+    </DraggablePanel>
+    <main style={{flex: 1, minWidth: 0, padding: 24}}>
+      <Button label={closed ? 'Open sidebar' : 'Close sidebar'} onClick={() => setClosed(!closed)} />
+      Workspace content
+    </main>
+  </div>;
 }
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+## Behavior and accessibility
+
+The panel starts closed by default. Fixed widths render on the server; relative initial widths settle once the container is measured. Reopening restores the previous resized width within the current constraints. Closed content remains mounted, inert, and hidden from assistive technology.
+
+Use `drags="right"` for a sidebar on the left and `drags="left"` for a sidebar on the right. `drags={false}` fills available width without a resize rail; `isClosed` still collapses the panel. Give the layout a height and a flexible sibling with `minWidth: 0`.
+
+The rail is a named vertical separator exposing current width and bounds. Left/Right arrows move the edge by 10px; Shift increases the step to 50px. Home/End choose the minimum/maximum. Escape ends an active pointer resize. Focus outlines appear for keyboard focus; reduced motion disables width/highlight transitions.
+
+Pointer movement changes width without a React render on every move. Cancellation, blur, and unmount release pointer capture and listeners and restore the document's prior selection styles. Use `onResizeEnd` for expensive work that only needs the final size.
+
+### Keep content stable while closing
+
+For a pixel minimum, set the inner content wrapper's `minWidth` to the same value as `sizeConstraints.min`. This prevents squeezing and rewrapping during the closing animation. Keep that minimum on the inner wrapper so the panel itself can still collapse to zero and clip its content. Percentage minimums need a resolved pixel width for this pattern.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `backgroundColor` | `ColorValue` | `transparent` | Panel background. |
+| `borderLeft` | `CSSProperties['borderLeft'] \| null` | `1px solid var(--core-outline-secondary)` | Border on the left resize edge while open. Null removes it. |
+| `borderRight` | `CSSProperties['borderRight'] \| null` | `1px solid var(--core-outline-secondary)` | Border on the right resize edge while open. Null removes it. |
+| `children` | `ReactNode` | — | Panel content. |
+| `containerRef` | `RefObject<HTMLDivElement \| null>` | — | Container width for relative constraints; otherwise uses viewport width. |
+| `disableOnContext` | `boolean` | `false` | Prevents the context menu after calling `onContextMenu`. |
+| `dragHandle` | `boolean` | `true` | Shows the visual grip; the resize rail remains available when hidden. |
+| `dragHandleStyle` | `DragHandleProps` | `{height: 24, width: 9}` | Grip `width`, `height`, `radius`, `stroke`, `strokeColor`, and `color`. |
+| `drags` | `'left' \| 'right' \| false` | `'right'` | Resize edge, or false to fill available width without resizing. |
+| `isClosed` | `boolean` | `true` | Controlled collapsed state. |
+| `isTouchDevice` | `boolean` | `false` | Expands the rail to 44px and removes highlight delay; touch also works without this option. |
+| `resizeHandle` | `ResizeHandle` | `{width: 10, color: 'transparent', offsetX: true}` | Rail width/color. `offsetX` is retained for compatibility and has no effect; the rail stays centered on the edge. |
+| `resizeHandleLabel` | `string` | `Resize panel` | Accessible rail name. Use distinct labels for multiple panels. |
+| `sizeConstraints` | `Constraint` | `{initial: 250, min: 250, max: 500}` | Values 0–1 are container ratios; larger values are pixels with a 50px floor. Invalid values use defaults; bounds and initial width are normalized. |
+| `transitionDurationOnInit` | `number \| string` | — | Initial relative-size transition only. Numbers are milliseconds; strings are CSS durations. Later transitions use Water timing. |
+| `...divAttributes` | `HTMLAttributes<HTMLDivElement>` | — | Native wrapper attributes, classes, styles, and events. The panel owns width/layout. |
+
+## Events
+
+`onResizeStart`, `onResize`, and `onResizeEnd` receive the exported `DraggablePanelResizeInfo`:
+
+```ts
+type DraggablePanelResizeInfo = {
+  div: React.RefObject<HTMLDivElement | null>;
+  divWidth: number;
+  divHeight: number;
+  deltaWidth: number;
+};
+```
+
+`onResize` runs at start, for accepted changes, and at end. `onResizeStart` and `onResizeEnd` bracket each gesture or keyboard resize. For compatibility, `deltaWidth` remains pointer movement from the gesture start, so left-edge growth is negative; start/end notifications use zero. Cancellation while mounted ends the gesture; unmount only cleans up.

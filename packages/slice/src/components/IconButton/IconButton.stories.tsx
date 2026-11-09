@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { spring } from 'motion/react';
 import { useState } from 'react';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
 import { FlexDiv } from '../FlexDiv';
 import { SliceIcons } from '../Icon/_types';
+import { ToggleButton } from '../ToggleButton';
 import { installReducedMotionPreference } from '../playHelpers';
 import { IconButton } from './IconButton';
 import type { IconButtonProps } from './_types';
@@ -331,4 +333,90 @@ export const TrimmedActionName: Story = {
 		await expect(button).toHaveAttribute('aria-label', 'Open profile');
 		await expect(button).not.toHaveAttribute('aria-labelledby');
 	},
+};
+
+export const TranslucentHover: Story = {
+	args: {
+		backgroundColor: 'core-fill-primary',
+		backgroundColorHover: 'core-surface-secondary',
+		transition: { duration: 0.6, ease: 'linear' },
+	},
+};
+
+export const TranslucentTransitions: Story = {
+	tags: ['tests'],
+	render: () => (
+		<div style={{ background: '#181818', padding: 32, display: 'flex', gap: 16 }}>
+			<IconButton
+				actionName="Translucent icon"
+				backgroundColor="color-mix(in srgb, white 8%, transparent)"
+				backgroundColorHover="#303030"
+				transition={{ duration: 0.18, ease: 'linear' }}
+			/>
+			<ToggleButton
+				actionName="Translucent toggle"
+				icon="media.mic"
+				backgroundColor="color-mix(in srgb, white 8%, transparent)"
+				backgroundColorHover="#303030"
+				transition={{ duration: 0.18, ease: 'linear' }}
+			/>
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const name of ['Translucent icon', 'Translucent toggle']) {
+			const button = canvas.getByRole('button', { name });
+			const background = button.querySelector<HTMLElement>('[class*="background"]');
+			if (!background) throw Error('Missing background');
+			const sampleFrames = () =>
+				new Promise<number[]>((resolve) => {
+					const context = document.createElement('canvas').getContext('2d');
+					if (!context) throw Error('Missing color sampler');
+					const deadline = performance.now() + 240;
+					const frames: number[] = [];
+					const sample = () => {
+						context.clearRect(0, 0, 1, 1);
+						context.fillStyle = getComputedStyle(background).backgroundColor;
+						context.fillRect(0, 0, 1, 1);
+						const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
+						const alpha = a / 255;
+						frames.push(Math.max(r, g, b) * alpha + 24 * (1 - alpha));
+						if (performance.now() < deadline) requestAnimationFrame(sample);
+						else resolve(frames);
+					};
+					requestAnimationFrame(sample);
+				});
+			const entering = sampleFrames();
+			await userEvent.hover(button);
+			const enterFrames = await entering;
+			await expect(enterFrames.length).toBeGreaterThan(2);
+			await expect(Math.max(...enterFrames)).toBeLessThanOrEqual(50);
+			await expect(getComputedStyle(background).backgroundColor).toBe('rgb(48, 48, 48)');
+			const leaving = sampleFrames();
+			await userEvent.unhover(button);
+			await expect(Math.max(...(await leaving))).toBeLessThanOrEqual(50);
+		}
+	},
+};
+
+export const SpringBackground: Story = {
+	tags: ['tests'],
+	args: {
+		backgroundColor: '#ffffff',
+		backgroundColorHover: '#123456',
+		transition: { backgroundColor: { type: 'spring', stiffness: 400, damping: 30 } },
+	},
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button');
+		await userEvent.hover(button);
+		await waitFor(() =>
+			expect(getComputedStyle(button.querySelector('[class*="background"]') as HTMLElement).backgroundColor).toBe(
+				'rgb(18, 52, 86)',
+			),
+		);
+	},
+};
+export const CustomGeneratorBackground: Story = {
+	...SpringBackground,
+	args: { ...SpringBackground.args, transition: { type: (options) => spring(options), duration: 0.1, bounce: 0 } },
 };

@@ -8,6 +8,7 @@ import { fileProgress } from '../FileList/fileListValues';
 import { IconButton } from '../IconButton';
 import { ProgressIndicator } from '../Progress';
 import styles from './Attachment.module.css';
+import { AttachmentImagePreview } from './AttachmentImagePreview';
 import type { AttachmentProps } from './_types';
 import { useContentThumbnail } from './useContentThumbnail';
 
@@ -26,12 +27,12 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 		borderWidth = 1,
 		borderStyle = 'solid',
 		borderRadius = 16,
-		iconSize = 32,
+		iconSize = 48,
 		iconGap = 4,
 		padding = '0 var(--spacing-xs)',
 		thumbTextSize = 10,
 		thumbPadding = 'var(--spacing-m)',
-		canRemove = true,
+		canRemove,
 		removeLabel,
 		attachmentName,
 		openLabel,
@@ -44,10 +45,12 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 		...nativeAttributes
 	} = resolveColorProps(props);
 	const descriptionId = useId();
+	const errorId = useId();
 	const fileItem = typeof content === 'object' ? content : undefined;
-	const uploading = Boolean(fileItem?.uploading);
+	const error = fileItem?.error?.trim() || undefined;
+	const uploading = Boolean(fileItem?.uploading) && !error;
 	const progress = fileItem ? fileProgress(fileItem) : undefined;
-	const { thumbnail, contentFormat, fileSize, fileExtension, fileName } = useContentThumbnail(content);
+	const { thumbnail, isLoading, contentFormat, fileSize, fileExtension, fileName } = useContentThumbnail(content);
 	const getLabel = () => {
 		if (content === undefined) return '';
 		if (typeof content === 'string') return 'Clipboard content';
@@ -56,14 +59,22 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 	};
 	const label = getLabel();
 	const accessibleName = attachmentName?.trim() || label || 'Attachment';
-	const removeName = removeLabel?.trim() || `Remove ${accessibleName}`;
-	const openName = openLabel?.trim() || `Open ${accessibleName}`;
+	const getActionName = () => {
+		if (attachmentName?.trim()) return attachmentName.trim();
+		if (!fileItem) return accessibleName;
+		if (typeof fileItem.file === 'string') return fileItem.file || accessibleName;
+		return fileItem.file.name || accessibleName;
+	};
+	const actionName = getActionName();
+	const removeName = removeLabel?.trim() || `Remove ${actionName}`;
+	const openName = openLabel?.trim() || `Open ${actionName}`;
+	const removable = (canRemove ?? true) && Boolean(onRemove);
 	const uploadLabel = progress === undefined ? 'Uploading' : `Uploading ${progress}%`;
 	const description = [
 		uploading ? uploadLabel : undefined,
 		contentFormat ?? fileExtension,
 		fileSize?.replace(/ k$/, ' kilobytes').replace(/ mb$/, ' megabytes'),
-		thumbnail?.type === 'text' ? thumbnail.text : undefined,
+		!error && thumbnail?.type === 'text' ? thumbnail.text : undefined,
 	]
 		.filter(Boolean)
 		.join('. ');
@@ -92,22 +103,46 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 			{...nativeAttributes}
 			role="group"
 			aria-label={accessibleName}
-			aria-describedby={description ? descriptionId : undefined}
+			aria-describedby={
+				[description ? descriptionId : undefined, error ? errorId : undefined].filter(Boolean).join(' ') || undefined
+			}
 			aria-disabled={disabled || undefined}
 			className={[styles.wrapper, className].filter(Boolean).join(' ')}
 			style={cssVars}
 		>
 			<div className={styles.canvas}>
-				<div className={styles.preview} aria-hidden="true">
-					{thumbnail?.type === 'image' && <img className={styles.imageThumbnail} src={thumbnail.src} alt="" />}
-					{thumbnail?.type === 'text' && <span className={styles.textThumbnail}>{thumbnail.text}</span>}
-					{!thumbnail && content !== undefined && (
-						<div className={styles.fileThumbnail}>
-							<FileIcon type={contentFormat} size={iconSize} decorative />
-						</div>
-					)}
-				</div>
-				{onOpen && (
+				{error ? (
+					// biome-ignore lint/a11y/noNoninteractiveTabindex: Long errors scroll within the fixed preview and must be keyboard reachable.
+					<div id={errorId} className={`${styles.errorPreview} ${styles[textSize]}`} role="alert" tabIndex={0}>
+						<span className={styles.errorMessage}>
+							<span className={styles.srOnly}>{actionName}: </span>
+							{error}
+						</span>
+					</div>
+				) : (
+					<div className={styles.preview} aria-hidden="true">
+						{thumbnail?.type === 'image' && (
+							<AttachmentImagePreview
+								key={thumbnail.src}
+								src={thumbnail.src}
+								iconSize={iconSize}
+								color={textColorLight}
+							/>
+						)}
+						{isLoading && (
+							<div className={styles.previewLoader}>
+								<ProgressIndicator decorative inline show size={20} color={textColorLight} />
+							</div>
+						)}
+						{thumbnail?.type === 'text' && <span className={styles.textThumbnail}>{thumbnail.text}</span>}
+						{!thumbnail && !isLoading && content !== undefined && (
+							<div className={styles.fileThumbnail}>
+								<FileIcon type={contentFormat} size={iconSize} decorative />
+							</div>
+						)}
+					</div>
+				)}
+				{onOpen && !error && (
 					<button
 						type="button"
 						className={styles.openButton}
@@ -170,7 +205,7 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 					)
 				)}
 			</div>
-			{canRemove && (
+			{removable && (
 				<div className={styles.button}>
 					<IconButton
 						icon={'basic.cross'}

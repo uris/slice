@@ -14,7 +14,7 @@ export type ContentFormat = FileIconTypes;
 export type Content = FileItem | string;
 
 export type AttachmentBaseProps = {
-	/** FileItem.uploading and FileItem.progress drive the upload status row. */
+	/** FileItem.uploading and FileItem.progress drive upload status; FileItem.error replaces the preview. */
 	content?: Content;
 	textColor?: ColorValue;
 	textColorLight?: ColorValue;
@@ -31,10 +31,11 @@ export type AttachmentBaseProps = {
 	height?: number | string;
 	thumbTextSize?: number;
 	thumbPadding?: number | string;
+	/** Removal is shown only when a handler is supplied; false hides it. */
 	canRemove?: boolean;
 	/** Accessible name of the attachment group; defaults to the displayed filename. */
 	attachmentName?: string;
-	/** Override the contextual "Remove <filename>" action name. */
+	/** Override the contextual action name, which includes the original filename extension. */
 	removeLabel?: string;
 	/** Optional preview action; supports mouse and native keyboard activation. */
 	onOpen?: React.MouseEventHandler<HTMLButtonElement>;

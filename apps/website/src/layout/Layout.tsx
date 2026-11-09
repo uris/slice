@@ -29,6 +29,7 @@ export function Layout() {
 			<FlexDiv preset={Preset.Draggable}>
 				<DraggablePanel
 					drags={'right'}
+					resizeHandleLabel="Resize navigation sidebar"
 					isClosed={false}
 					dragHandle={false}
 					sizeConstraints={sidePanelConstraints}
@@ -42,6 +43,7 @@ export function Layout() {
 			<FlexDiv preset={Preset.Draggable}>
 				<DraggablePanel
 					drags={'left'}
+					resizeHandleLabel="Resize page outline sidebar"
 					isClosed={false}
 					dragHandle={false}
 					sizeConstraints={detailsPanelConstraints}

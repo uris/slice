@@ -150,6 +150,12 @@ export function TabDoc() {
 				Selected icon color. Takes precedence over <Code>accentColor</Code>; without either, icons follow the selected
 				text color.
 			</P>
+			<Definition id="iconSize">
+				<Prop>iconSize</Prop>
+				<TypeDef>number</TypeDef>
+				<DefaultVal>TabBar iconSize (20px by default)</DefaultVal>
+			</Definition>
+			<P>Overrides the inherited icon size for this tab, in pixels. Also supported on TabBar options.</P>
 			<Definition id={'id'}>
 				<Prop>id</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -271,6 +277,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'icon', title: 'icon', code: true },
 			{ id: 'iconColor', title: 'iconColor', code: true },
 			{ id: 'iconColorSelected', title: 'iconColorSelected', code: true },
+			{ id: 'iconSize', title: 'iconSize', code: true },
 			{ id: 'id', title: 'id', code: true },
 			{ id: 'label', title: 'label', code: true },
 			{ id: 'panelId', title: 'panelId', code: true },

@@ -32,9 +32,9 @@
 .icon {
 	color: var(--tab-icon-color, currentColor);
 	display: inline-flex;
-	flex: 0 0 var(--tab-bar-icon-size);
-	width: var(--tab-bar-icon-size);
-	height: var(--tab-bar-icon-size);
+	flex: 0 0 var(--tab-icon-size, var(--tab-bar-icon-size));
+	width: var(--tab-icon-size, var(--tab-bar-icon-size));
+	height: var(--tab-icon-size, var(--tab-bar-icon-size));
 }
 @media (prefers-reduced-motion: reduce) {
 	.option {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
@@ -18,6 +18,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 	const props = resolveColorProps(rawProps);
 	const {
 		value,
+		inputRef,
 		defaultValue = '',
 		name,
 		inputName,
@@ -58,6 +59,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 		disabled = false,
 		readOnly = false,
 		submitClears = true,
+		allowEmptySubmit = false,
 		maxLength,
 		onChange,
 		onFocus,
@@ -80,6 +82,20 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 	const message = (error ? errorMessage : tip)?.trim();
 	const messageId = `${id}-message`;
 	const ref = useRef<HTMLTextAreaElement>(null);
+	const setInputRef = useCallback(
+		(element: HTMLTextAreaElement | null) => {
+			ref.current = element;
+			if (typeof inputRef === 'function') {
+				const cleanup = inputRef(element);
+				if (typeof cleanup === 'function')
+					return () => {
+						ref.current = null;
+						cleanup();
+					};
+			} else if (inputRef) inputRef.current = element;
+		},
+		[inputRef],
+	);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const initialValue = useRef(defaultValue);
 	const [localText, setLocalText] = useState(defaultValue);
@@ -87,7 +103,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 	const controlled = value !== undefined;
 	const text = controlled ? value : localText;
 	const canEdit = !disabled && !readOnly;
-	const canSubmit = canEdit && Boolean(text.trim()) && Boolean(onSubmit);
+	const canSubmit = canEdit && (Boolean(text.trim()) || allowEmptySubmit) && Boolean(onSubmit);
 	const growing = autoGrow && height === 'auto';
 	const nativeResizable = resizable && !growing && height === 'auto';
 	const rowCount = Number.isFinite(rows) ? Math.max(1, Math.floor(rows)) : 6;
@@ -248,7 +264,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 			>
 				<textarea
 					{...withoutAria(inputAttributes)}
-					ref={ref}
+					ref={setInputRef}
 					id={id}
 					name={name}
 					className={`${css.textarea} ${css[textSize]}`}

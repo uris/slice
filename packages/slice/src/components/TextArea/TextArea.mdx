@@ -94,6 +94,7 @@ Reduced-motion preferences disable color and focus transitions. Auto-grow follow
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `allowEmptySubmit` | `boolean` | `false` | Allows a composed control to submit associated content even with empty editor text. |
 | `autoGrow` | `boolean` | `true` | Grows and shrinks with content when `height` is `auto`. `rows` sets the starting height; `maxHeight` caps growth. Native resizing is disabled while growing. |
 | `backgroundColor` | `ColorValue` | `core-surface-secondary` | Field background. |
 | `borderColor` | `ColorValue` | `core-outline-primary` | Outline color while not focused or in an error state. |
@@ -110,6 +111,7 @@ Reduced-motion preferences disable color and focus transitions. Auto-grow follow
 | `inputAttributes` | `TextAreaProps['inputAttributes']` | `{}` | Native settings such as `autoComplete`, `spellCheck`, `required`, `minLength`, `wrap`, and `form`. Autocomplete follows the browser or form default; use `autoComplete: 'off'` to request no suggestions. Managed values, identifiers, styling, callbacks, and raw ARIA are excluded. |
 | `inputId` | `string` | `generated` | Native textarea ID. The visible label targets it automatically. |
 | `inputName` | `string` | `label, name, then Text input` | Accessible-name override. Native form naming uses the separate `name` prop. |
+| `inputRef` | `React.Ref<HTMLTextAreaElement>` | `undefined` | Native editor ref for imperative focus and selection; internal measurement uses the same element. |
 | `label` | `string` | `undefined` | Visible label above the field, associated with the textarea. Its horizontal inset matches the value and supporting text. Empty text is hidden. |
 | `labelColor` | `ColorValue` | `core-text-primary` | Visible label color, replaced by `textColorDisabled` while disabled. |
 | `labelSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Typography size of the visible label. |

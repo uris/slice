@@ -13,6 +13,10 @@ Text files show an escaped excerpt of their first 250 characters; other files us
 <Canvas of={Stories.PdfThumbnail} />
 <Canvas of={Stories.TextThumbnail} />
 
+Images load lazily, stay hidden behind a loader until decoded, and fall back to the image
+icon on load or decoding failure. Text reads also show the loader until the excerpt is ready.
+The hook's `isLoading` field covers preview generation; image decoding is tracked per URL.
+
 ## Actions and accessibility
 
 Each attachment is a named group, with file type, size, and any text excerpt exposed
@@ -21,13 +25,13 @@ the filename and metadata identify the attachment. Long filenames remain availab
 to assistive technology and through the label's title.
 
 `attachmentName` overrides the group's accessible name. The remove action defaults
-to `Remove <filename>`; `removeLabel` overrides it. Blank names use their defaults.
+to `Remove <filename>` including its extension; `removeLabel` overrides it. Blank names use their defaults.
 The remove button appears on hover or keyboard focus and stays visible on touch devices.
 
 `onRemove` receives the button click event for mouse and keyboard activation. Removal
 is controlled: update the application's list or state to remove the attachment.
 When removing an item from a list, the parent should move focus to the next attachment
-or the upload control. `canRemove={false}` hides the button. `disabled` disables the open and remove actions.
+or the upload control. `canRemove={false}` hides the button. A remove handler is required for the button to appear. `disabled` disables the open and remove actions.
 
 `onOpen` adds a keyboard-accessible button over the preview, named `Open <filename>`
 by default. `openLabel` overrides that action name. `onToolTip` connects the remove button to the shared Slice tooltip handler.
@@ -60,6 +64,15 @@ The row exposes a named progressbar, including its current percentage when known
 <Canvas of={Stories.Uploading} />
 <Canvas of={Stories.UploadingIndeterminate} />
 
+## Upload errors
+
+`FileItem.error` replaces the preview with an accessible error message while preserving
+card dimensions and filename metadata. It takes precedence over `uploading`; long messages
+scroll within the preview, which is keyboard-focusable. The preview's open action is hidden
+while the error is shown. Clear `error` when retrying to restore the normal preview.
+
+<Canvas of={Stories.UploadError} />
+
 ## Styling
 
 `textSize` uses the theme's `xs`, `s`, `m`, `l`, and `xl` body styles. `size` sets
@@ -72,7 +85,7 @@ the primary surface background. `textColor` and `textColorLight` style the filen
 and metadata; `thumbColor` styles preview text. `borderColor`, `borderWidth`,
 `borderStyle`, and `borderRadius` style the outer card, with an inset canvas radius.
 
-`iconSize` sets the fallback icon size. `iconGap` controls metadata spacing.
+`iconSize` sets the fallback icon size (48px by default). `iconGap` controls metadata spacing.
 `padding` controls each information row, defaulting to zero vertically and spacing-xs
 horizontally. `thumbPadding` and `thumbTextSize` control the text and fallback preview.
 Numeric dimensions use pixels; CSS strings and padding shorthands pass through exactly,

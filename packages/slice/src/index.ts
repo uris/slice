@@ -101,7 +101,7 @@ export { Dot } from './components/Dot';
 export type { DotProps } from './components/Dot';
 
 export { DraggablePanel } from './components/DraggablePanel';
-export type { DraggablePanelProps } from './components/DraggablePanel';
+export type { DraggablePanelProps, DraggablePanelResizeInfo } from './components/DraggablePanel';
 
 export { DropDown } from './components/DropDown';
 export type { DropDownOption, DropDownProps } from './components/DropDown';
@@ -131,7 +131,7 @@ export { Pager } from './components/Pager';
 export type { PagerProps } from './components/Pager';
 
 export { PromptInput } from './components/PromptInput';
-export type { PromptProps } from './components/PromptInput';
+export type { PromptProps, PromptActions, PromptTextAreaProps } from './components/PromptInput';
 
 export { DoneCheck, ProgressIndicator } from './components/Progress';
 export type {
@@ -201,7 +201,7 @@ export { Level } from './components/Level';
 export type { LevelProps } from './components/Level';
 
 export { UploadArea } from './components/UploadArea';
-export type { UploadAreaProps } from './components/UploadArea/_types';
+export type { UploadAreaProps, UploadFileRejection } from './components/UploadArea/_types';
 export {
 	imageTypes,
 	videoTypes,

@@ -188,7 +188,7 @@ export function TabBarDoc() {
 				<TypeDef>{'number'}</TypeDef>
 				<DefaultVal>{'20'}</DefaultVal>
 			</Definition>
-			<P>{'Size of tab icons in pixels.'}</P>
+			<P>{'Default size of tab icons in pixels. A Tab or TabOption iconSize overrides it.'}</P>
 			<Definition id={'justify'}>
 				<Prop>justify</Prop>
 				<TypeDef>{"'start' | 'center' | 'end'"}</TypeDef>

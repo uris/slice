@@ -52,6 +52,7 @@ Color props accept Slice theme tokens or CSS colors and inherit from `TabBar` wh
 | `icon` | `string  /  null` | `undefined` | Optional decorative icon before the label. |
 | `iconColor` | `ColorValue` | `undefined` | Icon color for unselected tabs. Defaults to the tab’s text color. |
 | `iconColorSelected` | `ColorValue` | `undefined` | Selected icon color. Takes precedence over `accentColor`; without either, icons follow the selected text color. |
+| `iconSize` | `number` | inherited from TabBar (20px by default) | Per-tab icon size in pixels; also available on TabBar options. |
 | `id` | `string` | `generated` | ID of the tab button. Supply a stable ID when a panel references it through aria-labelledby. |
 | `label` | `string` | `undefined` | Tab text. Takes priority over children; the fallback is Tab. |
 | `panelId` | `string` | `undefined` | ID of the corresponding panel, used as the button’s aria-controls. Your application renders the panel. |

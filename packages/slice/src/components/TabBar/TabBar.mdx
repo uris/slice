@@ -60,7 +60,7 @@ Use tabBarName to name the tablist. The component supplies its ARIA label, with 
 | `iconColorSelected` | `ColorValue` | `undefined` | Selected icon color. Takes precedence over `accentColor`; without either, icons follow the selected text color. |
 | `iconFill` | `boolean` | `false` | Uses the filled treatment for tab icons and the close icon. |
 | `iconGap` | `number` | `8` | Gap in pixels between the icon, label, and count. |
-| `iconSize` | `number` | `20` | Size of tab icons in pixels. |
+| `iconSize` | `number` | `20` | Default size of tab icons in pixels. Tab/TabOption iconSize overrides it. |
 | `justify` | `'start'  /  'center'  /  'end'` | `start` | Aligns compact or fixed-width tabs within the bar. Filled tabs occupy the available width. |
 | `options` | `TabOption<T>[]` | `[]` | Creates tabs from data. Each entry supplies Tab content and state, including a unique non-null value. Use composed Tab children for native button attributes and handlers. |
 | `padding` | `number  /  string` | `var(--spacing-s)` | Padding inside each tab and the close area. Numbers are pixels; strings accept CSS padding syntax. Explicit zero is preserved. |

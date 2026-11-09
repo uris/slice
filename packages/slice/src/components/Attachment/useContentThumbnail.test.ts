@@ -6,6 +6,7 @@ import { useContentThumbnail } from './useContentThumbnail';
 afterEach(() => {
 	cleanup();
 	vi.unstubAllGlobals();
+    vi.restoreAllMocks();
 });
 
 it('truncates literal text and clears it when content is removed', () => {
@@ -16,7 +17,7 @@ it('truncates literal text and clears it when content is removed', () => {
 	rerender({ content: '' });
 	expect(result.current.thumbnail).toEqual({ type: 'text', text: '' });
 	rerender({});
-	expect(result.current).toEqual({ contentType: undefined, contentFormat: undefined, thumbnail: undefined, fileName: undefined, fileExtension: undefined, fileSize: undefined });
+	expect(result.current).toEqual({ contentType: undefined, contentFormat: undefined, thumbnail: undefined, isLoading: false, fileName: undefined, fileExtension: undefined, fileSize: undefined });
 });
 
 it('owns image URLs and releases them on replacement and unmount', () => {
@@ -90,7 +91,9 @@ it('reads a bounded text-file prefix, truncates it, and keeps the file metadata'
     const file = new File(['A'.repeat(5000)], 'Meeting-notes.txt', {type: 'text/plain'});
     const slice = vi.spyOn(file, 'slice');
     const {result} = renderHook(() => useContentThumbnail({file}));
+    expect(result.current.isLoading).toBe(true);
     await waitFor(() => expect(result.current.thumbnail).toEqual({type: 'text', text: 'A'.repeat(250)}));
+    expect(result.current.isLoading).toBe(false);
     expect(slice).toHaveBeenCalledWith(0, 4096);
     expect(result.current.fileName).toBe('Meeting-notes');
     expect(result.current.fileExtension).toBe('txt');
@@ -107,4 +110,22 @@ it('replaces pending text reads and clears previews for other files', async () =
     expect(result.current.thumbnail).toBeUndefined();
     rerender({content: {file: new File(['Pending'], 'pending.txt')}});
     unmount();
+});
+
+it('clears loading and falls back after a text read error', () => {
+    vi.spyOn(FileReader.prototype, 'readAsText').mockImplementation(function(this: FileReader) {
+        this.dispatchEvent(new ProgressEvent('error'));
+    });
+    const file = new File(['Unreadable'], 'notes.txt');
+    const {result} = renderHook(() => useContentThumbnail({file}));
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.thumbnail).toBeUndefined();
+});
+
+it('falls back if an image URL cannot be generated', () => {
+    vi.stubGlobal('URL', {createObjectURL: vi.fn(() => {throw new Error('Unavailable');})});
+    const file = new File([], 'photo.png');
+    const {result} = renderHook(() => useContentThumbnail({file}));
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.thumbnail).toBeUndefined();
 });

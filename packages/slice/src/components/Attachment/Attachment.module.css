@@ -212,3 +212,37 @@
 	margin-left: auto;
 	font-variant-numeric: tabular-nums;
 }
+
+.previewLoader {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: var(--core-surface-primary);
+}
+
+.errorPreview {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	overflow-wrap: anywhere;
+	padding: var(--thumb-padding);
+	background: var(--core-surface-primary);
+	color: var(--feedback-warning);
+	text-align: center;
+}
+
+.errorMessage {
+	margin: auto;
+	min-width: 0;
+	flex-shrink: 0;
+}
+
+.errorPreview:focus-visible {
+	outline: 2px solid var(--core-text-special);
+	outline-offset: -3px;
+}

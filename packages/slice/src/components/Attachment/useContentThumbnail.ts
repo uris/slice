@@ -8,45 +8,60 @@ export type ContentThumbnail = { type: 'image'; src: string } | { type: 'text'; 
 /** Image URLs belong to this hook and are revoked on replacement or unmount. */
 export function useContentThumbnail(content: Content | undefined) {
 	const file = typeof content === 'object' ? content.file : undefined;
-	const [text, setText] = useState<{ file: File; value: string }>();
-	const [image, setImage] = useState<{ file: File; src: string }>();
+	const [preview, setPreview] = useState<{
+		file: File;
+		thumbnail?: ContentThumbnail;
+		status: 'loading' | 'ready' | 'error';
+	}>();
 	const contentType = getContentType(content);
 	const contentFormat = getContentFormat(content);
+	const previewable =
+		file instanceof File && (contentFormat === FileIconTypes.image || isTextFile(file, contentFormat));
 
 	useEffect(() => {
-		if (!(file instanceof File) || contentFormat !== FileIconTypes.image) return;
-		const src = URL.createObjectURL(file);
-		setImage({ file, src });
-		return () => URL.revokeObjectURL(src);
-	}, [file, contentFormat]);
-
-	useEffect(() => {
-		if (!(file instanceof File) || !isTextFile(file, contentFormat)) return;
+		if (!(file instanceof File) || !previewable) {
+			setPreview(undefined);
+			return;
+		}
+		if (contentFormat === FileIconTypes.image) {
+			let src: string;
+			try {
+				src = URL.createObjectURL(file);
+			} catch {
+				setPreview({ file, status: 'error' });
+				return;
+			}
+			setPreview({ file, thumbnail: { type: 'image', src }, status: 'ready' });
+			return () => URL.revokeObjectURL(src);
+		}
 		const reader = new FileReader();
+		setPreview({ file, status: 'loading' });
 		reader.onload = () => {
-			if (typeof reader.result === 'string') setText({ file, value: reader.result.slice(0, 250) });
+			if (typeof reader.result === 'string') {
+				setPreview({ file, thumbnail: { type: 'text', text: reader.result.slice(0, 250) }, status: 'ready' });
+			} else setPreview({ file, status: 'error' });
 		};
+		reader.onerror = () => setPreview({ file, status: 'error' });
 		// A bounded UTF-8 prefix is enough for the thumbnail; avoid reading whole uploads.
 		reader.readAsText(file.slice(0, 4096));
 		return () => {
 			reader.onload = null;
+			reader.onerror = null;
 			if (reader.readyState === FileReader.LOADING) reader.abort();
 		};
-	}, [file, contentFormat]);
+	}, [file, contentFormat, previewable]);
 
+	const current = preview?.file === file ? preview : undefined;
 	const getThumbnail = (): ContentThumbnail | undefined => {
 		if (typeof content === 'string') return { type: 'text', text: content.slice(0, 250) };
-		if (text && text.file === file) return { type: 'text', text: text.value };
-		if (contentFormat === FileIconTypes.image && image && image.file === file) {
-			return { type: 'image', src: image.src };
-		}
-		return undefined;
+		return current?.thumbnail;
 	};
 
 	return {
 		contentType,
 		contentFormat,
 		thumbnail: getThumbnail(),
+		isLoading: previewable && (!current || current.status === 'loading'),
 		fileName: typeof content === 'string' ? 'clipboard' : getFileName(file),
 		fileExtension: getFileExtension(file),
 		fileSize: file instanceof File ? formatFileSize(file.size) : undefined,

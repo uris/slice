@@ -214,7 +214,7 @@ export const Attachments: StoryObj<typeof FileList> = {
 					},
 					{ id: 'pdf', file: new File([new Uint8Array(5632)], 'report.pdf', { type: 'application/pdf' }) },
 					{ id: 'upload', file: 'notes.md', uploading: true, progress: 45 },
-					{ id: 'error', file: 'archive.zip', error: 'Upload failed' },
+					{ id: 'error', file: 'archive.zip', uploading: true, progress: 10, error: 'Upload failed' },
 				] satisfies FileItem[],
 			};
 		},
@@ -231,7 +231,15 @@ export const Attachments: StoryObj<typeof FileList> = {
 		await expect(canvas.getByRole('group', { name: 'report' })).toHaveAccessibleDescription('pdf. 5.5 kilobytes');
 		await expect(canvas.getByRole('progressbar', { name: 'Uploading notes' })).toHaveAttribute('aria-valuenow', '45');
 		await expect(canvas.queryByRole('button', { name: 'Remove file notes.md' })).toBeNull();
-		await expect(canvas.getByRole('alert')).toHaveTextContent('archive.zip: Upload failed');
+		const alert = canvas.getByRole('alert');
+		await expect(alert).toHaveTextContent('archive.zip: Upload failed');
+		const card = canvas.getByRole('group', { name: 'archive' });
+		await expect(card.contains(alert)).toBe(true);
+		await expect(within(card).queryByRole('progressbar')).toBeNull();
+		await expect(within(card).getByRole('button', { name: 'Remove file archive.zip' })).toBeInTheDocument();
+		await expect(alert.closest('[role="listitem"]')?.getBoundingClientRect().height).toBe(
+			card.getBoundingClientRect().height,
+		);
 		await waitFor(() =>
 			expect(canvas.getByRole('group', { name: 'sunflower' }).querySelector('img')?.naturalWidth).toBeGreaterThan(0),
 		);

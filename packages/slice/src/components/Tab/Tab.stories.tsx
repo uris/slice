@@ -108,3 +108,34 @@ export const PanelRelationship: Story = {
 		expect(canvas.getByRole('tabpanel', { name: 'Details' })).toBeInTheDocument();
 	},
 };
+
+export const IconSizeOverride: Story = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<TabBar
+				iconSize={28}
+				options={[
+					{ value: 'inherit', label: 'Inherited', icon: 'basic.home' },
+					{ value: 'override', label: 'Override', icon: 'basic.home', iconSize: 36 },
+				]}
+			/>
+			<TabBar iconSize={24}>
+				<Tab value="child" label="Child" icon="basic.home" iconSize={32} />
+			</TabBar>
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, size] of [
+			['Inherited', 28],
+			['Override', 36],
+			['Child', 32],
+		] as const) {
+			const svg = canvas.getByRole('tab', { name }).querySelector('svg');
+			await expect(svg).toBeVisible();
+			await expect(svg?.getBoundingClientRect().width).toBe(size);
+			await expect(svg?.getBoundingClientRect().height).toBe(size);
+		}
+	},
+};

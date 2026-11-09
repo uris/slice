@@ -215,17 +215,12 @@ const FileListBase = React.forwardRef<HTMLDivElement, FileListProps>((rawProps, 
 								iconSize={iconSize}
 								padding={padding}
 								backgroundColor={backgroundColor}
-								canRemove={canRemove && !item.uploading}
+								canRemove={canRemove && (!item.uploading || Boolean(item.error?.trim()))}
 								removeLabel={`Remove file ${name}`}
 								onRemove={(event) => remove(event.currentTarget)}
 								onToolTip={onToolTip}
 								style={{ maxWidth: '100%', minWidth: 'var(--file-min-width)' }}
 							/>
-							{item.error && (
-								<div className={`${css.status} ${css.error}`} role="alert">
-									{name}: {item.error}
-								</div>
-							)}
 						</div>
 					);
 				}

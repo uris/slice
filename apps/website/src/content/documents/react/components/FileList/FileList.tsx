@@ -48,7 +48,7 @@ const listProps = [
 	{
 		name: 'iconSize',
 		type: 'number',
-		defaultValue: '24 in list; 32 in attachments',
+		defaultValue: '24 in list; 48 in attachments',
 		description: 'Width and height of each file icon in pixels.',
 	},
 	{ name: 'listName', type: 'string', defaultValue: 'Files', description: 'Accessible name for the attachment list.' },
@@ -151,8 +151,8 @@ export function FileListDoc() {
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				Removal calls <Code>onChange</Code> with a filtered array; the component does not keep its own files or upload
-				them. Uploading files hide the remove control and show a spinner. Errors are visible alerts; compact rows also
-				show a warning border.
+				them. Uploading files hide the remove control and show a spinner; failed cards remain removable even if their
+				upload flag has not yet been cleared. Errors are visible alerts; compact rows also show a warning border.
 			</P>
 			<P>
 				<Code>progress</Code> is a percentage from 0 to 100, rounded and clamped. For example, 1 means 1% and 40 means

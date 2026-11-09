@@ -1,164 +1,127 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as PromptInputStories from './PromptInput.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={PromptInputStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # PromptInput
-        Renders a flexible, auto-resizing prompt textarea for chat and AI message boxes, with working/stop states, configurable border styles, optional attach/send controls, and customizable toolbar content.
-        Choose border style of gradient to apply an "ai" gradient affordance to the border.
-        Attachment chips are controlled via `attachments` + `onAttachmentsChange` (parent owns attachment state).
+# PromptInput
 
-        ## Base element
-        `HTMLDivElement`
+An AI-ready text box for adding messaging to your app. Combine prompts, file attachments, model selection, and send/stop controls in one customizable composer.
 
-        ## Interface
-        `PromptProps`
+Connect your message and attachment state, then use `onSubmit` to send them to your model. Add controls to the actions bar to fit your AI experience.
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td><code>-</code></td><td>Optional custom toolbar content rendered beside the attach button.</td></tr>
-            <tr><td><code>attachments</code></td><td><code>FileItem[]</code></td><td><code>[]</code></td><td>Attachment list rendered above the textarea. Controlled by parent state.</td></tr>
-            <tr><td><code>value</code></td><td><code>string</code></td><td><code>''</code></td><td>Current textarea value.</td></tr>
-            <tr><td><code>maxHeight</code></td><td><code>{`string | number`}</code></td><td><code>-</code></td><td>Maximum height constraint for the input surface.</td></tr>
-            <tr><td><code>working</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Controls the working state and send/stop behavior.</td></tr>
-            <tr><td><code>borderStyle</code></td><td><code>{`'solid' | 'gradient' | 'none'`}</code></td><td><code>'gradient'</code></td><td>Border rendering style.</td></tr>
-            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>1</code></td><td>Border width in pixels.</td></tr>
-            <tr><td><code>borderColor</code></td><td><code>{`string | number`}</code></td><td><code>-</code></td><td>Border color when idle.</td></tr>
-            <tr><td><code>borderColorOn</code></td><td><code>{`string | number`}</code></td><td><code>-</code></td><td>Border color when focused/active.</td></tr>
-            <tr><td><code>borderAnimate</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enables/disables animated gradient border while working.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>8</code></td><td>Outer border radius in pixels.</td></tr>
-            <tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>'Ask me anything ...'</code></td><td>Placeholder text when idle.</td></tr>
-            <tr><td><code>placeholderWorking</code></td><td><code>string</code></td><td><code>'Working ...'</code></td><td>Placeholder text while working.</td></tr>
-            <tr><td><code>focused</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Programmatically control focus state.</td></tr>
-            <tr><td><code>submitClears</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Clears input value after submit when enabled.</td></tr>
-            <tr><td><code>submitEnablesStop</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Switches send button to stop mode after submit.</td></tr>
-            <tr><td><code>enterSubmits</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Submits on Enter key press.</td></tr>
-            <tr><td><code>sendButton</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show/hide the send/stop button.</td></tr>
-            <tr><td><code>attachButton</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show/hide the attach button.</td></tr>
-            <tr><td><code>stopEnabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>External control for stop mode state.</td></tr>
-            <tr><td><code>maxLength</code></td><td><code>number</code></td><td><code>-</code></td><td>Maximum character count for textarea input.</td></tr>
-            <tr><td><code>toolbarGap</code></td><td><code>number</code></td><td><code>8</code></td><td>Gap spacing for toolbar controls.</td></tr>
-            <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Textarea text size preset.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '25%'}} />
-            <col style={{width: '50%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onChange</code></td><td><code>{`(value: string | undefined, attachments?: FileItem[]) => void`}</code></td><td>Fires whenever textarea content changes.</td></tr>
-            <tr><td><code>onSubmit</code></td><td><code>{`(value: string | undefined, attachments?: FileItem[]) => void`}</code></td><td>Fires when user submits the prompt (Enter or send button).</td></tr>
-            <tr><td><code>onBlur</code></td><td><code>{`(value: string | undefined, attachments?: FileItem[]) => void`}</code></td><td>Fires when input loses focus. When <code>submitClears</code> is enabled and a submit succeeds, the blur callback receives the cleared value.</td></tr>
-            <tr><td><code>onFocus</code></td><td><code>{`(value: string | undefined, attachments?: FileItem[]) => void`}</code></td><td>Fires when input receives focus.</td></tr>
-            <tr><td><code>onStop</code></td><td><code>{`() => void`}</code></td><td>Fires when stop action is triggered during working state.</td></tr>
-            <tr><td><code>onAttachmentsChange</code></td><td><code>{`(attachments: FileItem[]) => void`}</code></td><td>Fires when files are removed from the attachment list.</td></tr>
-          </tbody>
-        </table>
-
-        ## Notes
-        - `onSubmit` fires before `submitClears` resets the local textarea value.
-        - When `submitClears` is `true`, the component also emits `onChange('', attachments)` so controlled parents can clear their external value immediately.
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource language={"tsx"}>
-```
+```tsx
+import { PromptInput, type FileItem } from '@apple-pie/slice';
 import { useState } from 'react';
-import { PromptInput } from '@apple-pie/slice';
 
-export function PromptInputExample() {
-    const [attachments, setAttachments] = useState([
-        { file: 'policy.pdf' },
-        { file: 'notes.txt' },
-    ]);
-
-    return (
-        <PromptInput
-            attachments={attachments}
-            value="Summarize this policy update"
-            placeholder="Ask the assistant anything ..."
-            borderStyle="gradient"
-            textSize="m"
-            onAttachmentsChange={(items) => setAttachments(items)}
-            onSubmit={(value) => console.log(value)}
-            id="promptinput-example"
-            data-testid="promptinput-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 720 }}
-        />
-    );
+export function MessageComposer() {
+  const [value, setValue] = useState('');
+  const [attachments, setAttachments] = useState<FileItem[]>([]);
+  return <PromptInput fileListProps={{variant: 'attachments', attachmentSize: 's'}} value={value} onChange={setValue}
+    attachments={attachments} onAttachmentsChange={setAttachments}
+    onSubmit={(message, files) => console.log(message, files)} />;
 }
 ```
-        </RenderSource>
 
-        <Unstyled>
-        ## Custom Toolbar Tools
-        JSX you write inside the prompt tags will render as `children` appearing as custom tools into the bottom toolbar area next to the attach button (you can toggle attach on/off). This is useful for context controls like model selection, tone, or output format.
-        </Unstyled>
+## Drag and drop
 
-        <RenderSource language={"tsx"}>
+Drop files anywhere in the composer to add attachments. Drops share the picker's `acceptedTypes`, `multiple`, `onReject`, and attachment state callbacks. `disabled`, `readOnly`, `attachmentsDisabled`, and controlled attachments without a change handler block file addition. The composer highlights while files hover over it; text dragging keeps native editor behavior.
+
+Call `preventDefault()` in `onDrop` to handle a drop yourself. The application owns uploading the attached files; the attach button remains the keyboard-accessible alternative.
+
+## Custom actions and paste
+
+Children can be normal controls or a render function receiving PromptActions. Clicking an empty part of the composer focuses the editor. Interactive controls retain their own focus, and selecting text does not move focus. Commands use the latest committed state, including when retained across an asynchronous clipboard read.
+
+```tsx
+<PromptInput pasteAttachmentThreshold={200}
+  fileListProps={{variant: 'attachments', attachmentSize: 's'}}
+  onSubmit={(message, files) => console.log(message, files)} />
 ```
-import { useState } from 'react';
-import { PromptInput } from '@apple-pie/slice';
 
-export function PromptInputWithModelSelector() {
-    const [model, setModel] = useState('gpt-4.1');
+Paste plain text directly into the editor. Content strictly longer than the limit becomes Pasted-text.txt through the shared validator; equal/shorter content inserts inline. A rejected conversion reports an error and leaves the editor unchanged. With attachment mutation disabled, content stays inline and follows maxLength. Commands preserve the editor selection/caret.
 
-    return (
-        <PromptInput
-            placeholder="Ask a question..."
-            onSubmit={(value) => console.log({ value, model })}
-            toolbarGap={10}
-        >
-            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: 12 }}>Model</span>
-                <select
-                    value={model}
-                    onChange={(e) => setModel(e.target.value)}
-                    style={{ height: 28 }}
-                >
-                    <option value="gpt-4.1">GPT-4.1</option>
-                    <option value="gpt-4o-mini">GPT-4o mini</option>
-                    <option value="gpt-4.1-mini">GPT-4.1 mini</option>
-                </select>
-            </label>
-        </PromptInput>
-    );
-}
+```ts
+type PromptActions = {
+  value: string;
+  attachments: FileItem[];
+  canSubmit: boolean;
+  canAttach: boolean;
+  disabled: boolean; // editing actions are unavailable
+  focus(): void;
+  submit(): void;
+  stop(): void;
+  openFilePicker(): void;
+  addFiles(files: File[]): boolean;
+  pasteText(text: string): void;
+};
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `acceptedTypes` | `string[]` | `allTypes` | Allowed file extensions or MIME tokens, using the same normalization and validation as UploadArea. Converted text pastes must also match these rules. |
+| `attachActionName` | `string` | `Attach files` | Accessible name and tooltip for the attach action. |
+| `attachButton` | `boolean` | `true` | Shows the native file-picker action. |
+| `attachments` | `FileItem[]` | `undefined` | Controlled attachments. Pass onAttachmentsChange to update them; otherwise attachment mutations are disabled. |
+| `attachmentsDisabled` | `boolean` | `false` | Disables file addition and removal. Text editing and inline paste remain available. |
+| `borderAnimate` | `boolean` | `true` | Allows the gradient border to rotate while working; reduced motion overrides it. |
+| `borderColor` | `ColorValue` | `theme border or gradient` | Idle composer border. Supports Slice tokens or CSS colors. |
+| `borderColorFocused` | `ColorValue` | `current border` | Border while any composer control has focus; also highlights a working solid border. |
+| `borderRadius` | `number \| string` | `8` | Outer corner radius. Numbers use pixels; the inner radius accounts for borderWidth. |
+| `borderStyle` | `'solid' \| 'gradient' \| 'none'` | `gradient` | Composer border treatment. |
+| `borderWidth` | `number` | `1` | Border width in pixels. Negative values clamp to zero; nonfinite values use 1. |
+| `children` | `ReactNode \| ((actions: PromptActions) => ReactNode)` | `undefined` | Custom action-bar controls. Ordinary children retain their native interaction. A render function receives editor state and commands; see the shape below. |
+| `defaultAttachments` | `FileItem[]` | `[]` | Initial attachments when attachments is omitted. |
+| `defaultValue` | `string` | `''` | Initial editor text when value is omitted. |
+| `disabled` | `boolean` | `false` | Disables editing, file mutations, submit, and stop. |
+| `enterSubmits` | `boolean` | `true` | Submits unmodified Enter when eligible. Shift/modifier Enter and IME composition retain TextArea behavior; held Enter does not repeat-submit. |
+| `fileListProps` | `UploadAreaProps["fileListProps"]` | `undefined` | FileList presentation options, including attachment cards and card size. PromptInput owns files, removal, and tooltip callbacks. |
+| `focused` | `boolean` | `undefined` | Optional TextArea focus request. Omit to let normal browser interaction own focus. |
+| `inputName` | `string` | `Message` | Accessible editor name; TextArea provides a unique input ID. |
+| `maxHeight` | `number \| string` | `400` | Maximum editor height. TextArea auto-growth scrolls within this limit, keeping the action bar available. Numbers use pixels; CSS strings are supported. |
+| `maxLength` | `number` | `undefined` | Native text length limit, also applied to custom paste insertion. textAreaProps.maxLength can override it. |
+| `maxWidth` | `number \| string` | `undefined` | Maximum composer width; numbers use pixels. |
+| `minWidth` | `number \| string` | `0` | Minimum composer width; numbers use pixels. |
+| `multiple` | `boolean` | `true` | Appends accepted files. False replaces attachments with the first accepted file and rejects excess matches. |
+| `pasteAttachmentThreshold` | `number` | `undefined` | Opt-in plain-text paste limit, measured with JavaScript string.length. Text longer than the limit becomes Pasted-text.txt; equal or shorter content stays inline. Negative or nonfinite limits disable conversion. |
+| `placeholder` | `string` | `Ask me anything ...` | Idle editor placeholder. |
+| `placeholderWorking` | `string` | `Working ...` | Placeholder while working. |
+| `readOnly` | `boolean` | `false` | Prevents text and attachment changes and submission. An explicitly enabled stop action remains available. |
+| `sendActionName` | `string` | `Send message` | Accessible name and tooltip for send. |
+| `sendButton` | `boolean` | `true` | Shows the send/stop action. |
+| `stopActionName` | `string` | `Stop generating` | Accessible name and tooltip for stop. |
+| `stopEnabled` | `boolean` | `false` | Routes the action button to onStop. Enter in the editor does not stop generation. |
+| `submitClears` | `boolean` | `true` | Clears text after submission. Attachments remain owned by the application or local attachment state. |
+| `submitWorking` | `boolean` | `false` | While working, blocks submission and displays Button progress. The editor stays editable unless disabled/readOnly. |
+| `textAreaProps` | `PromptTextAreaProps` | `undefined` | TextArea presentation, naming, guidance, native inputAttributes, and sizing options. Owned value, refs, state, callbacks, and submit controls cannot be replaced. |
+| `textSize` | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'` | `m` | Editor text size; may be overridden in textAreaProps. |
+| `toolbarGap` | `number` | `8` | Space between custom and attach actions in pixels. |
+| `value` | `string` | `undefined` | Controlled editor text. Pass onChange to update it; omission enables local text state. |
+| `width` | `number \| string` | `100%` | Composer width; numbers use pixels. |
+| `working` | `boolean` | `false` | Working border/placeholder state. Pair with submitWorking to block sends or stopEnabled to expose stop. |
+| `divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Native wrapper attributes, className, style, and events. A forwarded ref targets the outer div. Editor key/paste and value/focus callbacks use the dedicated events below. |
+
+## Events
+
+- `onAttachmentsChange: (attachments: FileItem[]) => void`: Complete next attachment array after file selection, drop, paste conversion, or removal. Pass a file-array state setter directly.
+- `onBlur: (value: string, attachments: FileItem[]) => void`: Runs for a native editor blur, once per focus transition.
+- `onChange: (value: string, attachments: FileItem[]) => void`: Runs for text edits and attachment changes. A string state setter can be assigned directly; the second argument supplies current attachments.
+- `onFocus: (value: string, attachments: FileItem[]) => void`: Runs for a native editor focus, once per transition.
+- `onKeyDown: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void`: Runs before editor key handling. preventDefault cancels the corresponding internal behavior.
+- `onPaste: (event: React.ClipboardEvent<HTMLTextAreaElement>) => void`: Runs before threshold conversion. preventDefault lets the application handle the paste itself.
+- `onReject: (files: UploadFileRejection[]) => void`: Rejected file/reason pairs, using UploadArea’s type and multiple reasons. Visible rejection feedback is automatic.
+- `onStop: () => void`: Explicit stop action. The application updates working/stopEnabled; editor focus is restored.
+- `onSubmit: (value: string, attachments: FileItem[]) => void`: Ready prompt submission from the native action, Enter, or an action command. Requires trimmed text or ready attachments; uploading/error attachments block it. The application owns async work.
+- `onToolTip: (tip: ToolTip | null) => void`: Shared Button/IconButton and FileList tooltips, directly composable with an app-wide Tip handler.
+- `nativeEvents: React.HTMLAttributes<HTMLDivElement>`: Other native DOM events apply to the outer wrapper.
+
+## Behavior and accessibility
+
+Text and attachments can be controlled independently or initialized with defaults. Direct string/file-array setters work without adapters. Controlled attachments require onAttachmentsChange for mutation. Submission requires trimmed text or ready attachments, and is blocked by uploading/error attachments, disabled/readOnly, stop mode, or working with submitWorking. Async work belongs to the application.
+
+Submission clears text by default and keeps editor focus; the application decides when to clear attachments. Enter submits, while Shift/modifier Enter and IME composition retain TextArea behavior. Stop is an explicitly named native action. Native focus/blur callbacks run for editor focus transitions. Child presentation props cannot replace owned values, refs, callbacks, or submission state.
+
+The shared picker accepts normalized extensions or explicit MIME rules, preserves IDs while appending, and reports typed rejections. FileList handles accessible progress, errors, and removal. Artwork remains decorative; composer motion respects live reduced-motion preferences. A forwarded ref and inherited native attributes apply to the outer div. maxHeight constrains the editor through TextArea, leaving the actions bar available; numeric values use pixels and CSS strings are supported.
+
+Use borderColorFocused in place of the removed borderColorOn. The obsolete submitEnablesStop entry has been removed; applications set stopEnabled explicitly.

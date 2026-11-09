@@ -17,6 +17,8 @@ export type TabOption<T = string> = TabColorProps & {
 	label?: string;
 	children?: React.ReactNode;
 	icon?: SliceIcon | null;
+	/** Overrides the inherited TabBar icon size in pixels. */
+	iconSize?: number;
 	toolTip?: string;
 	count?: number;
 	disabled?: boolean;

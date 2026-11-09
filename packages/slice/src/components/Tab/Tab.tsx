@@ -14,6 +14,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 		label,
 		children,
 		icon,
+		iconSize,
 		toolTip,
 		count,
 		disabled = false,
@@ -45,6 +46,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 			label,
 			children,
 			icon,
+			iconSize,
 			toolTip,
 			count,
 			disabled,
@@ -63,6 +65,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 			label,
 			children,
 			icon,
+			iconSize,
 			toolTip,
 			count,
 			disabled,
@@ -85,6 +88,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 	const unavailable = group.disabled || disabled;
 	const accent = accentColor ?? group.colors.accentColor;
 	const colors = {
+		'--tab-icon-size': iconSize === undefined ? undefined : `${iconSize}px`,
 		'--tab-text-color': textColor ?? group.colors.textColor ?? 'var(--core-text-primary)',
 		'--tab-text-color-selected':
 			textColorSelected ?? group.colors.textColorSelected ?? accent ?? 'var(--core-text-special)',

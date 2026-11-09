@@ -1,121 +1,80 @@
-.wrapperBg {
-	position: relative;
+.wrapper {
 	--border-angle: 0turn;
-	--conic-gradient-dark: conic-gradient(
+	--prompt-gradient: conic-gradient(
 		from var(--border-angle),
-		var(--core-text-special) 0deg,
-		var(--core-text-special) 45deg,
-		var(--core-text-special) 90deg,
-		var(--array-magenta-label) 135deg,
-		var(--array-magenta-label) 180deg,
-		var(--array-magenta-label) 225deg,
-		var(--array-land) 270deg,
-		var(--array-land) 315deg,
-		var(--array-land) 360deg
+		var(--core-text-special),
+		var(--array-magenta-label),
+		var(--array-land-label),
+		var(--core-text-special)
 	);
-	--conic-gradient-light: conic-gradient(
-		from var(--border-angle),
-		var(--core-text-special) 0deg,
-		var(--core-text-special) 45deg,
-		var(--core-text-special) 90deg,
-		var(--array-magenta-label) 135deg,
-		var(--array-magenta-label) 180deg,
-		var(--array-magenta-label) 225deg,
-		var(--array-land-label) 270deg,
-		var(--array-land-label) 315deg,
-		var(--array-land-label) 360deg
-	);
-	composes: columnStart from "../../utils/styling/flexBox.module.css";
-	z-index: 0;
-	height: auto;
-	max-height: var(--prompt-max-height);
+	box-sizing: border-box;
 	width: var(--prompt-width);
-	max-width: var(--prompt-max-width);
 	min-width: var(--prompt-min-width);
+	max-width: var(--prompt-max-width);
+	padding: var(--prompt-border-width);
 	border-radius: var(--prompt-border-radius);
-	overflow: hidden;
-	padding: var(--prompt-border-width) !important;
 	background: var(--prompt-border-color);
 	animation: bgRotate 3s linear infinite;
 	animation-play-state: var(--prompt-state);
-	transition: background var(--motion-water-duration) var(--motion-water) 0s;
+	transition: background var(--motion-water-duration) var(--motion-water);
 }
-
+.wrapper:focus-within {
+	background: var(--prompt-focused-border);
+}
+.surface {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	border-radius: var(--prompt-inner-border-radius);
+	background: var(--core-surface-secondary);
+}
+/* Keep the opaque surface over the gradient; translucent fills reveal it through the whole composer. */
+.wrapper[data-file-dragging] {
+	background: var(--core-outline-special);
+}
+.wrapper[data-file-dragging] .surface {
+	box-shadow: inset 0 0 0 2px var(--core-outline-special);
+}
+.attachments {
+	padding: var(--spacing-m) var(--spacing-m) 0;
+	box-sizing: border-box;
+	width: 100%;
+}
+.buttonBar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--spacing-s);
+	padding: var(--spacing-s) var(--spacing-m) var(--spacing-m);
+}
+.actions {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: var(--prompt-toolbar-gap);
+	flex: 1;
+	min-width: 0;
+}
+.rejection {
+	composes: body-s-regular from "../../utils/styling/type.module.css";
+	padding: 0 var(--spacing-m) var(--spacing-s);
+}
+.rejection:empty {
+	display: none;
+}
 @property --border-angle {
 	syntax: "<angle>";
 	inherits: false;
 	initial-value: 0turn;
 }
-
 @keyframes bgRotate {
 	100% {
 		--border-angle: 1turn;
 	}
 }
-
-.textareaWrapper {
-	composes: columnStart from "../../utils/styling/flexBox.module.css";
-	align-items: flex-start;
-	width: 100%;
-	height: min-content;
-	max-height: 400px;
-	overflow: hidden;
-	overflow-y: auto;
-	border-radius: var(--prompt-inner-border-radius);
-	background: var(--core-surface-secondary);
-}
-
-.attachments {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	padding: var(--spacing-m) var(--spacing-m) 0 var(--spacing-m) !important;
-	width: 100%;
-}
-
-.buttonBar {
-	composes: rowBetween from "../../utils/styling/flexBox.module.css";
-	padding: var(--spacing-s) var(--spacing-m) var(--spacing-m) var(--spacing-m) !important;
-	width: 100%;
-	cursor: text;
-}
-
-.toolBar {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	flex: 1;
-	gap: 8px;
-}
-
-.textarea {
-	padding: var(--spacing-m) !important;
-	box-sizing: border-box;
-	field-sizing: content;
-	width: 100%;
-	resize: none;
-	border: 0;
-	outline: none;
-	color: var(--core-text-primary);
-	background: transparent;
-	border-radius: var(--prompt-border-radius);
-	&::placeholder {
-		color: var(--core-text-disabled);
+@media (prefers-reduced-motion: reduce) {
+	.wrapper {
+		animation: none;
+		transition: none;
 	}
-}
-
-.xs {
-	composes: body-xs-regular from "../../utils/styling/type.module.css";
-}
-
-.s {
-	composes: body-s-regular from "../../utils/styling/type.module.css";
-}
-
-.m {
-	composes: body-m-regular from "../../utils/styling/type.module.css";
-}
-
-.l {
-	composes: body-l-regular from "../../utils/styling/type.module.css";
-}
-
-.xl {
-	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }

@@ -1,11 +1,20 @@
 'use client';
 
-import { type TargetAndTransition, type Transition, motion, useAnimationControls } from 'motion/react';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { animate as animateBackground } from 'motion/mini';
+import {
+	type TargetAndTransition,
+	type Transition,
+	createGeneratorEasing,
+	getValueTransition,
+	inertia,
+	motion,
+	spring,
+	useAnimationControls,
+} from 'motion/react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import type { ColorValue } from '../../theme';
-import { resolveTransparent } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -70,6 +79,51 @@ function AnimatedSurface({
 	);
 }
 
+/** Let the browser blend translucent CSS colors, including live theme color-mix() values. */
+function AnimatedBackground({
+	color,
+	transition,
+	reduceMotion,
+}: {
+	color: string;
+	transition: Transition;
+	reduceMotion: boolean;
+}) {
+	const ref = useRef<HTMLSpanElement>(null);
+	const mounted = useRef(false);
+	useLayoutEffect(() => {
+		const element = ref.current;
+		if (!element) return;
+		const { type, ...timing } = getValueTransition(transition, 'backgroundColor');
+		if (!mounted.current || reduceMotion || type === false || typeof element.animate !== 'function') {
+			element.style.backgroundColor = color;
+			mounted.current = true;
+			return;
+		}
+		const getNativeType = () => {
+			if (type === 'spring') return spring;
+			if (type === 'inertia' || type === 'decay') return inertia;
+			if (typeof type === 'function') return type;
+			return undefined;
+		};
+		const generator = getNativeType();
+		const getNativeTiming = () => {
+			if (!generator || generator.applyToOptions) return { ...timing, type: generator };
+			// Custom/inertia generators need a numeric easing curve for native color interpolation.
+			const generated = createGeneratorEasing(
+				{ ...timing, duration: timing.duration === undefined ? undefined : timing.duration * 1000 },
+				100,
+				generator,
+			);
+			return { ...timing, ease: generated.ease, duration: generated.duration };
+		};
+		const animation = animateBackground(element, { backgroundColor: color }, getNativeTiming());
+		// stop() commits the current color so rapid hover reversals continue from the visible frame.
+		return () => animation.stop();
+	}, [color, transition, reduceMotion]);
+	return <span ref={ref} aria-hidden="true" className={css.background} />;
+}
+
 export const ActionButton = React.memo(function ActionButton(rawProps: ActionButtonProps) {
 	const props = resolveColorProps(rawProps);
 	const {
@@ -128,7 +182,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 	const tipCallback = useRef(onToolTip);
 	const hasTipCallback = Boolean(onToolTip);
 	const reduceMotion = usePrefersReducedMotion();
-	const { current: theme, isDark } = useTheme();
+	const { current: theme } = useTheme();
 	const themeMotion = theme.motion;
 	const motionTransition = useMemo(() => getWaterTransition(themeMotion, transition), [themeMotion, transition]);
 	const activeHover = hover && hovered && !disabled;
@@ -161,19 +215,6 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 	}, [motionValues, on, color]);
 	const contentColor = on ? textColorSelected : activeHover ? textColorHover : textColor;
 	const textTarget = useMemo(() => ({ color: contentColor }), [contentColor]);
-	const backgroundTarget = useMemo(
-		() => ({
-			backgroundColor: resolveTransparent(
-				background,
-				on || activeHover
-					? [backgroundColor, on ? backgroundColorHover : backgroundColorSelected]
-					: [backgroundColorHover, backgroundColorSelected],
-				theme.colors,
-				isDark,
-			),
-		}),
-		[background, on, activeHover, backgroundColor, backgroundColorHover, backgroundColorSelected, theme.colors, isDark],
-	);
 	const cssVars = {
 		'--ib-button-size': `${size}px`,
 		'--ib-icon-size': `${resolvedIconSize}px`,
@@ -260,22 +301,12 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 			}}
 		>
 			{!iconFrame && (
-				<AnimatedSurface
-					className={css.background}
-					target={backgroundTarget}
-					transition={motionTransition}
-					reduceMotion={reduceMotion}
-				/>
+				<AnimatedBackground color={background} transition={motionTransition} reduceMotion={reduceMotion} />
 			)}
 			{icon && (
 				<span className={`${css.slot}${iconFrame ? ` ${css.frame}` : ''}`} aria-hidden="true">
 					{iconFrame && (
-						<AnimatedSurface
-							className={css.background}
-							target={backgroundTarget}
-							transition={motionTransition}
-							reduceMotion={reduceMotion}
-						/>
+						<AnimatedBackground color={background} transition={motionTransition} reduceMotion={reduceMotion} />
 					)}
 					<span className={css.content}>
 						<AnimatedSurface

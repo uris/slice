@@ -12,8 +12,18 @@ import {
 	RemovableAttachmentPreview,
 	TextAttachmentPreview,
 	UploadAttachmentPreview,
+	UploadErrorPreview,
 } from './AttachmentPreview';
-import { actionsCode, imageCode, indeterminateCode, pdfCode, removalCode, textCode, uploadCode } from './code';
+import {
+	actionsCode,
+	errorCode,
+	imageCode,
+	indeterminateCode,
+	pdfCode,
+	removalCode,
+	textCode,
+	uploadCode,
+} from './code';
 
 const attachmentProps = [
 	{
@@ -56,8 +66,8 @@ const attachmentProps = [
 	{
 		name: 'canRemove',
 		type: 'boolean',
-		defaultValue: 'true',
-		description: 'Shows the remove button. Removal is controlled through the callback described under Events.',
+		defaultValue: 'onRemove provided',
+		description: 'Shows the remove button only when a removal handler is supplied. False hides it.',
 	},
 	{
 		name: 'content',
@@ -91,13 +101,13 @@ const attachmentProps = [
 	{
 		name: 'iconSize',
 		type: 'number',
-		defaultValue: '32',
+		defaultValue: '48',
 		description: 'Size of the fallback file-type icon in pixels.',
 	},
 	{
 		name: 'openLabel',
 		type: 'string',
-		defaultValue: 'Open <attachment name>',
+		defaultValue: 'Open <original filename>',
 		description: 'Accessible name for the optional preview action. Blank values use the contextual default.',
 	},
 	{
@@ -109,7 +119,7 @@ const attachmentProps = [
 	{
 		name: 'removeLabel',
 		type: 'string',
-		defaultValue: 'Remove <attachment name>',
+		defaultValue: 'Remove <original filename>',
 		description: 'Accessible name for the remove action. Blank values use the contextual default.',
 	},
 	{
@@ -201,6 +211,7 @@ export function AttachmentDoc() {
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-attachment--uploading"
 				components={[
 					{ label: 'Known progress', component: <UploadAttachmentPreview />, code: uploadCode.trim() },
+					{ label: 'Upload failed', component: <UploadErrorPreview />, code: errorCode.trim() },
 					{
 						label: 'Unknown progress',
 						component: <UploadAttachmentPreview indeterminate />,
@@ -213,6 +224,9 @@ export function AttachmentDoc() {
 				Handle <Code>onRemove</Code> in your application state. Use <Code>onOpen</Code> when the preview should open a
 				file; <Code>openFile</Code> and <Code>removeFile</Code> below represent application functions.
 			</P>
+			<TipBox inline noBorder>
+				Hover or focus the card to reveal its remove button. Dismiss it, then reload the page to reset this example.
+			</TipBox>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-attachment--controlled-removal"
 				components={[
@@ -224,9 +238,6 @@ export function AttachmentDoc() {
 					},
 				]}
 			/>
-			<TipBox inline noBorder title="Tip:">
-				Hover or focus the card to reveal its remove button. Dismiss it, then reload the page to reset this example.
-			</TipBox>
 			<CodeBlock code={actionsCode.trim()} />
 			<H2 id="behavior">Behavior</H2>
 			<P>
@@ -245,13 +256,21 @@ export function AttachmentDoc() {
 			</P>
 			<P>
 				The component does not upload, open, download, or remove files itself. A standalone card leaves removal
-				available during upload unless you hide it with <Code>canRemove</Code>. File errors are not rendered by the
-				standalone card; present them in your application or use <Code openURL="/docs/react/file-list/">FileList</Code>.
+				available during upload when a removal handler is supplied, unless you hide it with <Code>canRemove</Code>.
+				<Code>FileItem.error</Code> replaces the preview with an accessible error message, taking precedence over upload
+				progress. Long messages scroll inside the fixed preview area, keeping the filename and card dimensions stable.
+				The preview's open action is hidden while an error is shown.
 			</P>
 			<P>
 				For multiple files, <Code>FileList</Code> with <Code>variant="attachments"</Code> adds wrapping, upload errors,
-				controlled removal, and focus management. The same <Code>FileItem[]</Code> data connects directly to both APIs.
-				Color props accept Slice theme tokens or CSS colors.
+				controlled removal, and focus management. Errors stay inside each card’s preview area. The same{' '}
+				<Code>FileItem[]</Code> data connects directly to both APIs. Color props accept Slice theme tokens or CSS
+				colors.
+			</P>
+			<P>
+				Images load lazily and stay behind a preview loader until decoded. Text previews show the loader while their
+				excerpt is read. Failed previews fall back to the file-type icon. Preview loading is separate from upload
+				progress.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
@@ -261,8 +280,8 @@ export function AttachmentDoc() {
 			</P>
 			<P>
 				Open and remove actions are native buttons with Enter/Space activation and visible keyboard focus. Their default
-				names include the attachment name; customize them with <Code>openLabel</Code> and <Code>removeLabel</Code>.
-				Without <Code>onOpen</Code>, the preview is passive.
+				names include the original filename and extension; customize them with <Code>openLabel</Code> and{' '}
+				<Code>removeLabel</Code>. Without <Code>onOpen</Code>, the preview is passive.
 			</P>
 			<P>
 				Uploading exposes a named progress bar and its numeric value when known. The spinner respects reduced motion. On

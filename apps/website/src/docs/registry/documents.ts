@@ -13,6 +13,7 @@ export type DocumentLoader = () => Promise<DocumentModule>;
 // Use explicit imports so Next can split documents into chunks and unknown slugs cannot resolve arbitrary files.
 const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 	[Package.React]: new Map<string, DocumentLoader>([
+		['draggable-panel', () => import('@/documents/react/components/DraggablePanel/DraggablePanel')],
 		['textfield', () => import('@/documents/react/components/TextField/TextField')],
 		['text-area', () => import('@/documents/react/components/TextArea/TextArea')],
 		['drop-down', () => import('@/documents/react/components/DropDown/DropDown')],
@@ -26,6 +27,8 @@ const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 		['toast', () => import('@/documents/react/components/Toast/Toast')],
 		['progress-indicator', () => import('@/documents/react/components/ProgressIndicator/ProgressIndicator')],
 		['attachment', () => import('@/documents/react/components/Attachment/Attachment')],
+		['prompt-input', () => import('@/documents/react/components/PromptInput/PromptInput')],
+		['upload-area', () => import('@/documents/react/components/UploadArea/UploadArea')],
 		['file-list', () => import('@/documents/react/components/FileList/FileList')],
 		['file-icon', () => import('@/documents/react/components/FileIcon/FileIcon')],
 

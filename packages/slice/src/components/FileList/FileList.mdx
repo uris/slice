@@ -38,7 +38,7 @@ focus to the next removal button after removal (or the list when empty).
 
 Cards display image previews or text excerpts when `file` is a browser `File`, and file-type
 icons otherwise. Uploading cards replace metadata with a spinner and percentage; removal
-is hidden while uploading, matching compact rows. Upload errors remain visible alerts.
+is hidden while uploading, matching compact rows. Upload errors appear as alerts inside the preview, keeping card dimensions stable. Failed cards remain removable even if their upload flag is still true.
 
 `attachmentSize` uses Attachment's named card sizes. `direction`, `gap`, `textSize`,
 `iconSize`, `padding`, `backgroundColor`, and width constraints also apply to cards.
@@ -58,7 +58,7 @@ A column stacks cards at their natural size rather than stretching them across t
 | direction | row or column | row | Wrapping row or stacked column; compact column rows fill the list width. |
 | files | FileItem[] | [] | Controlled attachments; see below. |
 | gap | number | 10 | Space between items in pixels. |
-| iconSize | number | 24 in list, 32 in attachments | File icon size in pixels. |
+| iconSize | number | 24 in list, 48 in attachments | File icon size in pixels. |
 | listName | string | Files | Accessible name for the list. |
 | maxWidth | number or string | undefined | Maximum item width; compact column mode uses 100%. |
 | minWidth | number or string | undefined | Minimum item width; compact columns default to 100%. Zero is respected. |
@@ -68,7 +68,7 @@ A column stacks cards at their natural size rather than stretching them across t
 
 A `FileItem` has `id?: string`, `file: File | string`, `uploading?: boolean`, `progress?: number`, and `error?: string`. Supply a unique ID when recreating attachment objects; retained item objects or File objects have stable fallback identity. Duplicate filenames are supported.
 
-Progress uses **0–100 percent only**: 1 means 1%. Values are rounded and clamped. Missing or nonfinite progress is indeterminate while uploading and defaults to 100% otherwise. Uploading hides removal; errors show an alert containing the filename, with a warning border on compact rows. File icons use the shared extension resolver.
+Progress uses **0–100 percent only**: 1 means 1%. Values are rounded and clamped. Missing or nonfinite progress is indeterminate while uploading and defaults to 100% otherwise. Uploading hides removal; failed cards restore removal and replace the preview with an alert. Compact rows show an alert beside the filename with a warning border. File icons use the shared extension resolver.
 
 ## Events
 

@@ -594,6 +594,7 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 					<UploadArea
 						title="Upload Files"
 						message="Drop files here"
+						acceptedTypes={['pdf', 'image/*']}
 						showProgress={false}
 					/>,
 					50,
@@ -607,13 +608,17 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 					<UploadArea
 						title="Upload Files"
 						message="Drop files here"
+						acceptedTypes={['pdf', 'image/*']}
 						showProgress={false}
 					/>,
 					(container) => {
 						container.rerender(
 							<UploadArea
 								title="Upload Images"
+								fileListProps={{ variant: 'attachments', attachmentSize: 's' }}
 								message="Click to upload"
+								busy
+								files={[{ id: 'report', file: 'report.pdf', uploading: true, progress: 45 }]}
 								multiple={false}
 								showProgress={false}
 							/>,
@@ -627,13 +632,12 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<UploadArea title="Upload Files" message="Drop files here" />,
+					<UploadArea title="Upload Files" message="Drop files here" acceptedTypes={['pdf', 'image/*']} />,
 					10,
 				),
 		},
 	],
 };
-
 export const videoConfig: ComponentBenchmarkConfig = {
 	componentName: 'Video',
 	tests: [
@@ -758,6 +762,19 @@ export const fileIconConfig: ComponentBenchmarkConfig = {
 export const attachmentConfig: ComponentBenchmarkConfig = {
 	componentName: 'Attachment',
 	tests: [
+		{
+			name: 'Upload Error',
+			type: 'mount',
+			fn: () => measureMountTime(<Attachment content={{file: 'report.pdf', error: 'Upload failed. Please try again.'}} />, 50),
+		},
+		{
+			name: 'Text Preview Setup',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<Attachment content={{file: new File(['Preview text for an uploaded document.'], 'notes.txt', {type: 'text/plain'})}} />,
+				50,
+			),
+		},
 		{
 			name: 'Mount Time',
 			type: 'mount',
@@ -1157,7 +1174,7 @@ export const draggablePanelConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<DraggablePanel dragsRight={true} isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
+					<DraggablePanel drags="right" isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
 						<div>Panel Content</div>
 					</DraggablePanel>,
 					50,
@@ -1168,12 +1185,12 @@ export const draggablePanelConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<DraggablePanel dragsRight={true} isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
+					<DraggablePanel drags="right" isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
 						<div>Content</div>
 					</DraggablePanel>,
 					(container) => {
 						container.rerender(
-							<DraggablePanel dragsRight={true} isClosed={true} sizeConstraints={{min:100, max:0.9, initial:250}}>
+							<DraggablePanel drags="right" isClosed={true} sizeConstraints={{min:100, max:0.9, initial:250}}>
 								<div>Content</div>
 							</DraggablePanel>,
 						);
@@ -1181,12 +1198,24 @@ export const draggablePanelConfig: ComponentBenchmarkConfig = {
 					50,
 				),
 		},
+        {
+            name: 'Event Response',
+            type: 'event',
+            fn: () => measureEventResponseTime(
+                <DraggablePanel isClosed={false} sizeConstraints={{initial:250,min:100,max:500}} />,
+                (container) => {
+                    const rail = container.container.querySelector('[role="separator"]');
+                    if (rail) fireEvent.keyDown(rail, {key:'ArrowRight'});
+                },
+                50,
+            ),
+        },
 		{
 			name: 'Memory',
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<DraggablePanel dragsRight={true} isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
+					<DraggablePanel drags="right" isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
 						<div>Panel Content</div>
 					</DraggablePanel>,
 					10,
@@ -1470,17 +1499,25 @@ export const promptInputConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<PromptInput value="Test prompt" />, 50),
+			fn: () =>
+				measureMountTime(<PromptInput value="Test prompt" onSubmit={() => {}} pasteAttachmentThreshold={1000} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<PromptInput value="Initial prompt" />,
+					<PromptInput value="Initial prompt" onSubmit={() => {}} />,
 					(container) => {
 						container.rerender(
-							<PromptInput value="Updated prompt" working={true} />,
+							<PromptInput
+								value="Updated prompt"
+								working
+								stopEnabled
+								pasteAttachmentThreshold={1000}
+								attachments={[{ id: 'report', file: 'report.pdf' }]}
+								fileListProps={{ variant: 'attachments', attachmentSize: 's' }}
+							/>,
 						);
 					},
 					50,
@@ -1489,15 +1526,10 @@ export const promptInputConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () =>
-				measureMemoryDelta(
-					<PromptInput value="Memory benchmark prompt" />,
-					10,
-				),
+			fn: () => measureMemoryDelta(<PromptInput value="Memory benchmark prompt" />, 10),
 		},
 	],
 };
-
 export const overlayConfig: ComponentBenchmarkConfig = {
 	componentName: 'Overlay',
 	tests: [

@@ -1,8 +1,7 @@
-# Component review batch 05 — in progress
+# Component review batch 05 — done
 
 Selected scope: **ProgressIndicator, FileIcon, FileList, UploadArea, and PromptInput**.
-ProgressIndicator and FileIcon are complete. FileList is documented for review;
-UploadArea and PromptInput are pending.
+All five components are complete, including their website documentation and validation.
 Together they cover file presentation, upload feedback, and composing messages
 with attachments.
 
@@ -108,7 +107,7 @@ Completed the approved refinement:
 Implementation and validation were reviewed and approved; this component review is closed.
 
 
-## FileList — implemented
+## FileList — done
 
 Route: `/docs/react/file-list/`.
 
@@ -137,5 +136,107 @@ Completed the approved refinement:
   coverage, and benchmarks to use stable IDs and percentage progress.
 
 Full unit/browser coverage gates, typechecks, package/website builds, benchmarks,
-snippet checks, and Chromium/WebKit interaction checks pass. The implementation is
-ready for final review.
+snippet checks, and Chromium/WebKit interaction checks pass. Implementation was
+reviewed and approved; this component review is closed.
+
+
+## UploadArea — done
+
+Route: `/docs/react/upload-area/`.
+
+Completed the approved refinement:
+
+- Picker and drop share a tested selection validator. Accepted extensions normalize
+  case/dot prefixes; explicit MIME tokens and supported media wildcards remain
+  supported. Empty configuration accepts all; invalid-only configuration rejects
+  all. Extension matching uses File.name independently of MIME type.
+- Multiple mode appends accepted files; single mode replaces with the first match
+  and rejects excess matching files. Empty/fileless selections emit nothing.
+  onReject reports File/reason pairs (type or multiple), with automatic visible
+  alert feedback. Existing files survive fully rejected selections.
+- onFilesChange now reports the complete next FileItem[] after selection and
+  removal, accepting the same state setter as FileList and PromptInput attachments.
+  New items receive stable IDs and appended items retain object identity. onUpload
+  reports only new accepted File objects after onFilesChange, for upload work.
+- A native picker button remains available with existing files. Explicit disabled
+  and busy block all selection/removal paths without disabling the list ancestor.
+  actionName/title supply the accessible name; focus outlines are keyboard-only.
+  Busy status is announced independently of the busy trigger. Icons/spinners are
+  decorative, and the existing spinner keeps reduced-motion behavior.
+- Wrapper native attributes/ref, className, style, and events work. Drag callbacks
+  compose and may cancel their event's internal work; onClickCapture can cancel
+  picker activation. Drag depth/highlight resets on availability changes, drag
+  end/drop, Escape, and window blur; nested enter/leave remains supported.
+- Forwarded FileList tooltips and restored focus to the picker when the last file
+  is removed. Removed !important, obsolete spacing overrides, unused FileTypes,
+  redundant color/style memoization, and legacy border/radius aliases in favor of
+  borderWidth/borderRadius.
+- Added fileListProps for directly composing FileList presentation, including
+  centered attachment cards, while UploadArea retains ownership of files and callbacks.
+  Cards inherit the base Attachment icon size (48px); compact rows remain 24px.
+- Updated website/MDX, examples, unit and focused interaction coverage, and
+  benchmarks. Drag tests use native DragEvents so file payloads are retained rather
+  than being discarded by Testing Library's DataTransfer cloning.
+
+Validation passed: 1,864 unit/browser tests, coverage gates, typechecks, package
+and website builds, snippet checks, refreshed benchmarks, and Chromium/WebKit
+interaction checks. Implementation and validation were reviewed and approved;
+this component review is closed.
+
+
+## PromptInput — done
+
+Route: `/docs/react/prompt-input/`.
+
+Completed the approved composition-first refinement:
+
+- Replaced the raw textarea, duplicate sizing/type CSS, fixed ID, effect-mirrored
+  value, and direct DOM value writes with TextArea. PromptInput owns conventional
+  controlled/default text and attachments; callbacks use string and FileItem[] so
+  their state setters connect directly.
+- Added small typed TextArea inputRef and allowEmptySubmit integrations. Native
+  editor refs preserve internal measurement; ready attachment-only prompts reuse
+  TextArea's submit handling without duplicating IME/modifier logic.
+- Send/stop/attach use Button/IconButton onClick, meaningful names, shared tooltips,
+  and consistent disabled policy. Enter/Space actions work; Shift/modifier Enter,
+  IME, and held Enter are handled correctly. Submit/stop restore editor focus and
+  focus/blur callbacks reflect actual editor transitions.
+- The actions bar accepts ordinary controls or children(actions). PromptActions
+  supplies state plus focus, submit, stop, openFilePicker, addFiles, and pasteText.
+  Custom controls retain native pointer/focus/keyboard behavior. Retained commands
+  use the latest committed state and ignore delayed completion after unmount.
+- Added opt-in pasteAttachmentThreshold. Plain text strictly longer than the limit
+  becomes Pasted-text.txt; equal/shorter content stays inline. Native paste and
+  custom pasteText share this policy. Inline insertion preserves selection/caret
+  and maxLength without splitting surrogate pairs. Disabled attachment mutation
+  falls back to inline insertion; rejected conversions show shared file feedback.
+- Added composer-wide file drops with nested drag highlighting and cancellation
+  cleanup. File drops share picker validation and attachment restrictions, preserve
+  native text dragging, and support caller cancellation through onDrop.
+- Extracted useFileSelection for UploadArea and PromptInput, preserving normalized
+  acceptance, append/replace, stable IDs, typed rejection payloads, and callback order.
+  Attachments share FileList presentation options, including attachment cards and
+  inherited default icons. Uploading/error attachments block submission; ready
+  attachment-only prompts can submit. Controlled arrays without a change handler
+  cannot be mutated.
+- Forwarded intended wrapper attributes/ref and editor key/paste cancellation,
+  exposed owned presentation types, delegated maxHeight/CSS sizes to TextArea,
+  removed toolbar-wide mouse-down interception and !important, and fixed border
+  radius/width handling. borderColorFocused replaces borderColorOn; numeric color
+  types and the obsolete submitEnablesStop documentation entry were removed.
+- Composer decoration respects live reduced motion through the shared observer
+  and CSS. Website examples cover direct state-setter composition, native paste
+  conversion above 200 characters, sunflower attachment previews, a composed model
+  menu and microphone action, and working/stop feedback. MDX, primitive
+  docs, focused component/unit tests, shared selection coverage, and benchmarks
+  have been updated together.
+
+Validation passed: 1,890 tests and coverage gates, workspace typechecks, package
+and website builds, standalone snippet checks, refreshed/rendered benchmarks, and
+Chromium/WebKit checks for native actions, IME/modifiers, threshold boundaries,
+text attachments, delayed clipboard state, focus, and live reduced motion. The
+website paste example and composition API anchors were also verified. File-drop
+highlighting, validation, cancellation, attachment restrictions, and native text
+drag handling have focused browser stories; Chromium/WebKit drop checks passed.
+
+Reviewed and accepted. PromptInput and review batch 05 are complete.

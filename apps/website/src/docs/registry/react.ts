@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 
 // all doc slugs (pages)
 export const reactDocSlugs = [
+	'draggable-panel',
 	'textfield',
 	'text-area',
 	'drop-down',
@@ -17,6 +18,8 @@ export const reactDocSlugs = [
 	'file-icon',
 	'attachment',
 	'file-list',
+	'upload-area',
+	'prompt-input',
 	'icon-button',
 	'toggle-button',
 	'radio-button',
@@ -53,10 +56,23 @@ export type ReactDocSlug = (typeof reactDocSlugs)[number];
 
 // meta for all slugs including shared
 export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
+	'draggable-panel': {
+		title: 'DraggablePanel | Slice UIKit',
+		description: 'Build accessible split workspaces with resizable sidebars using DraggablePanel for React.',
+	},
 	attachment: {
 		title: 'Attachment | Slice UIKit',
 		description:
 			'Preview images, clipboard text, files, and upload progress with the Slice Attachment component for React.',
+	},
+	'prompt-input': {
+		title: 'PromptInput | Slice UIKit',
+		description:
+			'Build AI messaging experiences with PromptInput for React: prompts, attachments, model selection, and send/stop controls.',
+	},
+	'upload-area': {
+		title: 'UploadArea | Slice UIKit',
+		description: 'Choose files, receive drops, and display upload feedback with UploadArea for React.',
 	},
 	'file-list': {
 		title: 'FileList | Slice UIKit',

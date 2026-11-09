@@ -150,12 +150,19 @@ export const FlexDiv = React.memo(
 			scrollBox,
 		]);
 
+		const getFinalStyle = () => {
+			if (wrapperStyle.overflow === undefined) return { ...style, ...wrapperStyle };
+			// Default axes must not undo explicit overflow; caller-provided axes still override the shorthand.
+			const { overflowX: _overflowX, overflowY: _overflowY, ...layoutStyle } = style;
+			return { ...layoutStyle, ...wrapperStyle };
+		};
+
 		return (
 			<motion.div
 				id={divId}
 				ref={ref}
 				className={`${css.flexDiv} ${className ?? ''}`}
-				style={{ ...style, ...wrapperStyle }}
+				style={getFinalStyle()}
 				transition={transition}
 				variants={variants}
 				initial={enter}

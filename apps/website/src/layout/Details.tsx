@@ -2,7 +2,7 @@
 
 import { OnThisPage } from '@/components/OnThisPage/OnThisPage';
 import { useTrackedItems } from '@/docs/stores/store';
-import { detailsPanelConstraints, surfaceYellow } from '@/src/consts/consts';
+import { detailsPanelConstraints } from '@/src/consts/consts';
 import { FlexDiv, Preset, Tab, TabBar } from '@apple-pie/slice';
 import { AnimatePresence } from 'motion/react';
 import styles from './Layout.module.css';
@@ -17,8 +17,15 @@ export function Details() {
 			style={{ minWidth: detailsPanelConstraints.min }}
 		>
 			<div className={styles.details}>
-				<TabBar tabWidth="fill" accentColor={surfaceYellow}>
-					<Tab value={'on-this-page'}>On this page</Tab>
+				<TabBar
+					tabWidth="fill"
+					underlineSelectedColor={'core-fill-primary'}
+					underlineColor={'core-fill-primary'}
+					textColorSelected={'core-text-primary'}
+				>
+					<Tab icon={'editor.wrap-text'} iconSize={16} value={'on-this-page'}>
+						On this page
+					</Tab>
 				</TabBar>
 				<AnimatePresence>{showTrackedItems && <OnThisPage key={'on-this-page'} />}</AnimatePresence>
 			</div>

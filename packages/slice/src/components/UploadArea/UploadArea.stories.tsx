@@ -1,152 +1,271 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
-import {
-	runUploadAreaBusyGuardsPlay,
-	runUploadAreaDragWithoutFilesPlay,
-	runUploadAreaKeyboardAndFileInputPlay,
-	runUploadAreaNestedDragDepthPlay,
-	runUploadAreaPlay,
-} from 'src/components/playHelpers';
-import { fn } from 'storybook/test';
-import { corners } from '../../theme/corners/corners';
+import { createRef, useState } from 'react';
+import { expect, fireEvent, fn, spyOn, userEvent, within } from 'storybook/test';
+import { Button } from '../Button';
+import type { FileItem } from '../FileList';
 import { UploadArea } from './UploadArea';
-import { allTypes } from './_types';
+import type { UploadAreaProps } from './_types';
 
-const uploadFiles = [
-	{ file: 'document.doc' },
-	{ file: 'spreadsheet.xls', uploading: true, progress: 0 },
-	{ file: 'markdown.md', uploading: true, progress: 82 },
-	{ file: 'pdf.pdf', error: 'Upload failed' },
-];
-
-const meta: Meta<typeof UploadArea> = {
+const meta = {
 	title: 'Components/UploadArea',
 	component: UploadArea,
-	args: {
-		icon: 'arrows.export',
-		iconColor: 'var(--core-text-primary)',
-		iconColorHover: 'var(--core-text-special)',
-		width: '100%',
-		height: 'auto',
-		title: 'Upload Files',
-		message: 'Drag and drop files here or click to upload',
-		busyMessage: 'Uploading in progress',
-		iconSize: 24,
-		textSize: 'm',
-		border: 1,
-		borderStyle: 'dashed',
-		borderColor: 'var(--core-outline-primary)',
-		borderColorHover: 'var(--core-outline-special)',
-		backgroundColor: 'var(--core-surface-secondary)',
-		backgroundColorHover: 'var(--core-surface-special)',
-		radius: corners['corner-m'],
-		padding: 'var(--spacing-xl)',
-		acceptedTypes: allTypes,
-		multiple: true,
-		busy: false,
-		canRemove: false,
-		files: [],
-		showProgress: false,
-		onUpload: fn(),
-	},
-};
-
+	args: { onUpload: fn(), onFilesChange: fn(), onReject: fn() },
+} satisfies Meta<typeof UploadArea>;
 export default meta;
+type Story = StoryObj<typeof meta>;
+export const Default: Story = {};
+export const Busy: Story = { args: { busy: true, files: [{ file: 'report.pdf', uploading: true, progress: 45 }] } };
+function ControlledArea(props: UploadAreaProps) {
+	const [files, setFiles] = useState<FileItem[]>(props.files ?? []);
+	return <UploadArea {...props} files={files} onFilesChange={setFiles} />;
+}
+export const Controlled: Story = { render: (args) => <ControlledArea {...args} /> };
+function fileInput(container: HTMLElement) {
+	const input = container.querySelector<HTMLInputElement>('input[type=file]');
+	if (!input) throw new Error('Missing file input');
+	return input;
+}
+async function drag(target: HTMLElement, type: string, files: File[]) {
+	const dataTransfer = new DataTransfer();
+	for (const file of files) dataTransfer.items.add(file);
+	// A native event preserves DataTransfer getters that Testing Library's factory would clone away.
+	await fireEvent(target, new DragEvent(type, { dataTransfer, bubbles: true, cancelable: true }));
+}
+async function drop(target: HTMLElement, files: File[]) {
+	await drag(target, 'drop', files);
+}
 
-export const Default: StoryObj<typeof UploadArea> = {
-	render: (args) => {
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
-				<UploadArea {...args} />
-			</FlexDiv>
-		);
-	},
-	play: async ({ canvasElement, args }) => {
-		await runUploadAreaPlay({ canvasElement, args });
-	},
-};
-
-export const Busy: StoryObj<typeof UploadArea> = {
-	render: (args) => {
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
-				<UploadArea {...args} files={uploadFiles} busy={true} />
-			</FlexDiv>
-		);
-	},
-};
-
-// *** TESTS ONLY *** //
-export const KeyboardAndFileInputActivation: StoryObj<typeof UploadArea> = {
+export const SharedSelectionValidation: Story = {
 	tags: ['tests'],
-	render: (args) => {
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
-				<UploadArea {...args} />
-			</FlexDiv>
-		);
-	},
+	args: { acceptedTypes: ['pdf'], multiple: false },
 	play: async ({ canvasElement, args }) => {
-		await runUploadAreaKeyboardAndFileInputPlay({ canvasElement, args });
+		const canvas = within(canvasElement);
+		const input = fileInput(canvasElement);
+		await expect(input).toHaveAttribute('accept', '.pdf');
+		const pdf = new File([''], 'REPORT.PDF', { type: 'image/png' });
+		const excess = new File([''], 'extra.pdf');
+		const rejected = new File([''], 'notes.txt');
+		await drop(canvas.getByRole('button', { name: 'Upload Files' }), [rejected, pdf, excess]);
+
+		await expect(args.onUpload).toHaveBeenLastCalledWith([pdf]);
+		await expect(args.onFilesChange).toHaveBeenLastCalledWith([expect.objectContaining({ file: pdf })]);
+		await expect(args.onReject).toHaveBeenLastCalledWith([
+			{ file: rejected, reason: 'type' },
+			{ file: excess, reason: 'multiple' },
+		]);
+		await expect(canvas.getByRole('alert')).toHaveTextContent('extra.pdf');
+		await fireEvent.change(input, { target: { files: [rejected] } });
+		await expect(args.onReject).toHaveBeenLastCalledWith([{ file: rejected, reason: 'type' }]);
+		await expect(args.onUpload).toHaveBeenCalledTimes(1);
+		await fireEvent.change(input, { target: { files: [pdf] } });
+		await expect(args.onUpload).toHaveBeenCalledTimes(2);
+		await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
 	},
 };
-
-export const BusyGuards: StoryObj<typeof UploadArea> = {
+export const ControlledAppendAndRemoval: Story = {
 	tags: ['tests'],
-	args: { busy: true, showProgress: true },
-	render: (args) => {
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
-				<UploadArea {...args} />
-			</FlexDiv>
-		);
-	},
-	play: async ({ canvasElement, args }) => {
-		await runUploadAreaBusyGuardsPlay({ canvasElement, args });
-	},
-};
-
-export const DragWithoutFiles: StoryObj<typeof UploadArea> = {
-	tags: ['tests'],
-	render: (args) => {
-		// `acceptedTypes` is a destructured default parameter in UploadArea.tsx
-		// (`acceptedTypes = allTypes`), so passing `undefined` - whether via
-		// Storybook's own args merge (which also doesn't let an explicit
-		// undefined override a defined meta default) or directly here - is
-		// indistinguishable from omitting the prop entirely; the component's
-		// own default reinstates `allTypes` either way. `null` is the only
-		// falsy value that actually bypasses a default parameter.
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
-				<UploadArea {...args} acceptedTypes={null as unknown as string[]} />
-			</FlexDiv>
-		);
-	},
-	play: async ({ canvasElement, args }) => {
-		await runUploadAreaDragWithoutFilesPlay({ canvasElement, args });
-	},
-};
-
-export const NestedDragDepth: StoryObj<typeof UploadArea> = {
-	tags: ['tests'],
-	render: (args) => {
-		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
-				<UploadArea {...args} />
-			</FlexDiv>
-		);
-	},
+	args: { files: [{ id: 'existing', file: 'existing.pdf' }] },
+	render: (args) => <ControlledArea {...args} />,
 	play: async ({ canvasElement }) => {
-		await runUploadAreaNestedDragDepthPlay({ canvasElement });
+		const canvas = within(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Upload Files' });
+		const existing = canvas.getByRole('listitem');
+		await expect(trigger).toBeEnabled();
+		await expect(canvas.getByRole('button', { name: 'Remove file existing.pdf' })).toBeEnabled();
+		await drop(trigger, [new File([''], 'new.pdf')]);
+		await expect(canvas.getAllByRole('listitem')).toHaveLength(2);
+		await expect(canvas.getAllByRole('listitem')[0]).toBe(existing);
+		await userEvent.click(canvas.getByRole('button', { name: 'Remove file existing.pdf' }));
+		await userEvent.click(canvas.getByRole('button', { name: 'Remove file new.pdf' }));
+		await expect(canvas.queryByRole('listitem')).not.toBeInTheDocument();
+		await expect(trigger).toHaveFocus();
+	},
+};
+export const SingleReplacement: Story = {
+	tags: ['tests'],
+	args: { multiple: false, files: [{ id: 'old', file: 'old.pdf' }] },
+	render: (args) => <ControlledArea {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await drop(canvas.getByRole('button', { name: 'Upload Files' }), [new File([''], 'new.pdf')]);
+		await expect(canvas.getAllByRole('listitem')).toHaveLength(1);
+		await expect(canvas.queryByText('old.pdf')).not.toBeInTheDocument();
+		await expect(canvas.getByText('new.pdf')).toBeVisible();
+	},
+};
+export const NativeKeyboardTrigger: Story = {
+	tags: ['tests'],
+	args: { actionName: 'Choose documents' },
+	play: async ({ canvasElement, args }) => {
+		const trigger = within(canvasElement).getByRole('button', { name: 'Choose documents' });
+		const click = spyOn(HTMLInputElement.prototype, 'click').mockImplementation(() => {});
+		try {
+			await userEvent.tab();
+			await expect(trigger).toHaveFocus();
+			await userEvent.keyboard('{Enter}');
+			await userEvent.keyboard(' ');
+			await userEvent.click(trigger);
+			await expect(click).toHaveBeenCalledTimes(3);
+			await expect(trigger.tagName).toBe('BUTTON');
+			await expect(args.onUpload).not.toHaveBeenCalled();
+		} finally {
+			click.mockRestore();
+		}
+	},
+};
+export const BusyGuards: Story = {
+	tags: ['tests'],
+	args: { busy: true, files: [{ file: 'existing.pdf' }] },
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Upload Files' });
+		await expect(trigger).toBeDisabled();
+		await expect(trigger).toHaveAttribute('aria-busy', 'true');
+		await expect(canvas.getByRole('status')).toHaveTextContent('Uploading in progress');
+		await expect(canvas.queryByRole('button', { name: /Remove file/ })).not.toBeInTheDocument();
+		await drop(trigger, [new File([''], 'ignored.pdf')]);
+		await fireEvent.change(fileInput(canvasElement), {
+			target: { files: [new File([''], 'ignored.pdf')] },
+		});
+		await expect(args.onUpload).not.toHaveBeenCalled();
+		await expect(args.onFilesChange).not.toHaveBeenCalled();
+	},
+};
+export const DisabledGuards: Story = {
+	...BusyGuards,
+	args: { disabled: true },
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Upload Files' });
+		await expect(trigger).toBeDisabled();
+		await expect(canvas.getByRole('status')).toBeEmptyDOMElement();
+		await drop(trigger, [new File([''], 'ignored.pdf')]);
+		await expect(args.onUpload).not.toHaveBeenCalled();
+	},
+};
+const rootRef = createRef<HTMLDivElement>();
+export const NativeAttributesAndCancellation: Story = {
+	tags: ['tests'],
+	args: {
+		ref: rootRef,
+		id: 'upload-root',
+		className: 'custom-upload',
+		padding: 0,
+		style: { maxWidth: 420 },
+		onDrop: fn((event) => event.preventDefault()),
+		onClickCapture: fn((event) => event.preventDefault()),
+		onKeyDown: fn(),
+	},
+	play: async ({ canvasElement, args }) => {
+		const trigger = within(canvasElement).getByRole('button', { name: 'Upload Files' });
+		await expect(rootRef.current).toHaveAttribute('id', 'upload-root');
+		await expect(rootRef.current).toHaveClass('custom-upload');
+		await expect(rootRef.current).toHaveStyle({ padding: '0px', maxWidth: '420px' });
+		await drop(trigger, [new File([''], 'cancelled.pdf')]);
+		await expect(args.onDrop).toHaveBeenCalled();
+		await expect(args.onUpload).not.toHaveBeenCalled();
+		const click = spyOn(HTMLInputElement.prototype, 'click').mockImplementation(() => {});
+		try {
+			await userEvent.click(trigger);
+			await expect(click).not.toHaveBeenCalled();
+		} finally {
+			click.mockRestore();
+		}
+		await fireEvent.keyDown(trigger, { key: 'a' });
+		await expect(args.onKeyDown).toHaveBeenCalled();
+	},
+};
+export const EmptyDrop: Story = {
+	tags: ['tests'],
+	args: { acceptedTypes: [] },
+	play: async ({ canvasElement, args }) => {
+		const trigger = within(canvasElement).getByRole('button', { name: 'Upload Files' });
+		await fireEvent.dragEnter(trigger);
+		await fireEvent.drop(trigger);
+		await expect(canvasElement.querySelector('input')).not.toHaveAttribute('accept');
+		await expect(args.onUpload).not.toHaveBeenCalled();
+		await expect(args.onReject).not.toHaveBeenCalled();
+	},
+};
+function AvailabilityFixture() {
+	const [busy, setBusy] = useState(false);
+	return (
+		<>
+			<Button label="Toggle busy" onClick={() => setBusy(!busy)} />
+			<UploadArea busy={busy} data-testid="area" />
+		</>
+	);
+}
+export const DragLifecycle: Story = {
+	tags: ['tests'],
+	render: () => <AvailabilityFixture />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const area = canvas.getByTestId('area');
+		const draggedFiles = [new File([''], 'a.pdf')];
+		const background = () => area.style.getPropertyValue('--ua-bg-color');
+		const idle = background();
+		await drag(area, 'dragenter', draggedFiles);
+		await drag(area, 'dragenter', draggedFiles);
+		await drag(area, 'dragleave', draggedFiles);
+		await expect(background()).not.toBe(idle);
+		await userEvent.click(canvas.getByRole('button', { name: 'Toggle busy' }));
+		await expect(background()).toBe(idle);
+		await userEvent.click(canvas.getByRole('button', { name: 'Toggle busy' }));
+		await drag(area, 'dragenter', draggedFiles);
+		await fireEvent.keyDown(window, { key: 'Escape' });
+		await expect(background()).toBe(idle);
+		await drag(area, 'dragenter', draggedFiles);
+		await fireEvent.dragEnd(window);
+		await expect(background()).toBe(idle);
+		await drag(area, 'dragenter', draggedFiles);
+		await fireEvent.blur(window);
+		await expect(background()).toBe(idle);
+	},
+};
+export const TooltipForwarding: Story = {
+	tags: ['tests'],
+	args: { files: [{ file: 'report.pdf' }], onToolTip: fn() },
+	play: async ({ canvasElement, args }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Remove file report.pdf' });
+		await fireEvent.focusIn(button);
+		await expect(args.onToolTip).toHaveBeenCalledWith(
+			expect.objectContaining({ payload: { label: 'Remove file report.pdf' } }),
+		);
+		await fireEvent.focusOut(button);
+		await expect(args.onToolTip).toHaveBeenLastCalledWith(null);
 	},
 };
 
-export const AttachmentRemoval: StoryObj<typeof UploadArea> = {
-	tags: ['tests'],
-	args: { files: [{ id: 'report', file: 'report.pdf' }], canRemove: true, onFilesChange: fn() },
-	play: async ({ canvasElement, args }) => {
-		const { within, userEvent, expect } = await import('storybook/test');
-		await userEvent.click(within(canvasElement).getByRole('button', { name: 'Remove file report.pdf' }));
-		await expect(args.onFilesChange).toHaveBeenCalledWith([]);
+export const SingleFile: Story = {
+	args: { multiple: false, acceptedTypes: ['pdf'] },
+	render: (args) => <ControlledArea {...args} />,
+};
+
+export const AttachmentCards: Story = {
+	args: {
+		fileListProps: {
+			variant: 'attachments',
+			attachmentSize: 's',
+			style: { justifyContent: 'center' },
+		},
+		files: [
+			{ id: 'brief', file: 'Project-brief.txt' },
+			{ id: 'report', file: 'Quarterly-report.pdf' },
+		],
+	},
+	render: (args) => <ControlledArea {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getAllByRole('listitem')).toHaveLength(2);
+		await expect(canvas.getByRole('list')).toHaveStyle({ flexDirection: 'row', justifyContent: 'center' });
+		const remove = canvas.getByRole('button', { name: 'Remove file Project-brief.txt' });
+		await expect(remove).toBeEnabled();
+		await userEvent.tab();
+		await userEvent.tab();
+		await expect(remove).toHaveFocus();
+		await userEvent.keyboard('{Enter}');
+		await expect(canvas.getAllByRole('listitem')).toHaveLength(1);
+		await expect(canvas.getByRole('button', { name: 'Upload Files' })).toBeEnabled();
 	},
 };

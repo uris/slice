@@ -25,6 +25,8 @@ type NativeInputAttributes = Omit<
 	| 'onSubmit'
 >;
 type TextAreaBaseProps = {
+	/** Native editor ref for composed controls and imperative focus. */
+	inputRef?: React.Ref<HTMLTextAreaElement>;
 	value?: string;
 	defaultValue?: string;
 	name?: string;
@@ -65,6 +67,8 @@ type TextAreaBaseProps = {
 	textColorError?: ColorValue;
 	disabled?: boolean;
 	readOnly?: boolean;
+	/** Composed editors may submit associated content even when the text is empty. */
+	allowEmptySubmit?: boolean;
 	submitClears?: boolean;
 	maxLength?: number;
 	onChange?: (value: string) => void;

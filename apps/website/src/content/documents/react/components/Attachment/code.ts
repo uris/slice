@@ -48,3 +48,10 @@ export const actionsCode = `
   onRemove={() => removeFile(fileItem)}
 />
 `;
+
+export const errorCode = `
+<Attachment
+  content={{ file, error: 'Upload failed. Check your connection and try again.' }}
+  canRemove={false}
+/>
+`;

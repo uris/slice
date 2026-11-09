@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from 'src/components/Button/Button';
 import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
 import { runFlexDivPlay } from 'src/components/playHelpers';
+import { expect, within } from 'storybook/test';
+import { DraggablePanel } from '../DraggablePanel';
 import { Preset } from './_types';
 
 const loremIpsum =
@@ -78,5 +80,42 @@ export const Default: StoryObj<typeof FlexDiv> = {
 	},
 	play: async ({ canvasElement, args }) => {
 		await runFlexDivPlay({ canvasElement, args });
+	},
+};
+
+export const ExplicitOverflowClipsPanel: StoryObj<typeof FlexDiv> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv
+			data-testid="clip-container"
+			width={300}
+			height={160}
+			direction="row"
+			borderRadius={24}
+			style={{ overflow: 'hidden' }}
+		>
+			<DraggablePanel isClosed={false} backgroundColor="#ff0000" sizeConstraints={{ initial: 400, min: 400, max: 500 }}>
+				<span>Clipped panel</span>
+			</DraggablePanel>
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const container = within(canvasElement).getByTestId('clip-container');
+		await expect(getComputedStyle(container).overflowX).toBe('hidden');
+		await expect(getComputedStyle(container).overflowY).toBe('hidden');
+		await expect(getComputedStyle(container).borderRadius).toBe('24px');
+	},
+};
+export const ExplicitOverflowAxes: StoryObj<typeof FlexDiv> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv data-testid="clip-container" width={200} height={100} style={{ overflow: 'hidden', overflowY: 'auto' }}>
+			Content
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const container = within(canvasElement).getByTestId('clip-container');
+		await expect(getComputedStyle(container).overflowX).toBe('hidden');
+		await expect(getComputedStyle(container).overflowY).toBe('auto');
 	},
 };

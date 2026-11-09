@@ -2,7 +2,6 @@ import type { SideBarDoc } from '@/components/SidebarDocList/SidebarDocList';
 import type { DocsContext, DocsSlug } from '@/docs/registry/shared';
 import { type Package, surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
-import { Icon, type SliceIcon } from '@apple-pie/slice';
 import type React from 'react';
 import { useCallback, useMemo } from 'react';
 import styles from './SidebarListItem.module.css';
@@ -60,15 +59,6 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 		[packageType, onClick],
 	);
 
-	const iconColor = useMemo((): string => {
-		const parentSelected = !selectedChild && selected;
-		return parentSelected ? surfaceYellow : 'core-text-secondary';
-	}, [selected, selectedChild]);
-
-	const iconName = useMemo((): SliceIcon => {
-		return selectedChild ? 'arrows.chevron-down' : 'arrows.chevron-right';
-	}, [selectedChild]);
-
 	if (!display) return null;
 
 	return (
@@ -76,7 +66,6 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 			<div className={styles.wrapper} id={`sidebar.${slug}`}>
 				<input type={'button'} className={className} style={cssVars} onClick={handleClick} value={title} />
 				{childDocs && childDocs.length > 0 && <span className={styles.counter}>{childDocs.length}</span>}
-				{childDocs && childDocs.length > 0 && <Icon name={iconName} size={16} strokeColor={iconColor} stroke={2} />}
 			</div>
 			{selected &&
 				childDocs?.map((doc) => {
@@ -102,3 +91,16 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 		</div>
 	);
 }
+
+/*
+{childDocs && childDocs.length > 0 && <Icon name={iconName} size={16} strokeColor={iconColor} stroke={2} />}
+
+const iconColor = useMemo((): string => {
+	const parentSelected = !selectedChild && selected;
+	return parentSelected ? surfaceYellow : 'core-text-secondary';
+}, [selected, selectedChild]);
+
+const iconName = useMemo((): SliceIcon => {
+	return selectedChild ? 'arrows.chevron-down' : 'arrows.chevron-right';
+}, [selectedChild]);
+ */

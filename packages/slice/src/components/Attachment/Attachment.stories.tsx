@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Attachment } from './Attachment';
 import css from './Attachment.module.css';
@@ -35,6 +35,7 @@ export const ImageThumbnail: Story = {
 			const image = group.querySelector('img');
 			expect(image?.getAttribute('src')).toMatch(/^blob:/);
 			expect(image?.naturalWidth).toBeGreaterThan(0);
+			expect(image).toHaveStyle({ opacity: '1' });
 		});
 		await expect(within(group).queryByRole('img')).toBeNull();
 	},
@@ -51,6 +52,7 @@ export const PdfThumbnail: Story = {
 	play: async ({ canvasElement }) => {
 		const group = within(canvasElement).getByRole('group', { name: 'Annual-Convention-Summary-Report' });
 		await expect(group.querySelector(`.${css.fileThumbnail} svg`)).toBeVisible();
+		await expect(group.querySelector(`.${css.fileThumbnail} svg`)).toHaveAttribute('width', '48');
 		await expect(within(group).queryByRole('img')).toBeNull();
 		await expect(within(group).getByText('5.5 k')).toBeVisible();
 		await expect(group).toHaveAccessibleDescription('pdf. 5.5 kilobytes');
@@ -152,7 +154,7 @@ export const RemoveClick: Story = {
 	play: async ({ canvasElement, args }) => {
 		const canvas = within(canvasElement);
 		const group = canvas.getByRole('group', { name: 'report' });
-		const button = canvas.getByRole('button', { name: 'Remove report' });
+		const button = canvas.getByRole('button', { name: 'Remove report.pdf' });
 		button.focus();
 		await expect(button.parentElement).toHaveStyle({ opacity: '1', pointerEvents: 'auto' });
 		await userEvent.click(button);
@@ -169,8 +171,8 @@ export const KeyboardActions: Story = {
 	args: { content: { file: 'report.pdf' }, onOpen: fn(), onRemove: fn(), onClick: fn() },
 	play: async ({ canvasElement, args }) => {
 		const group = within(canvasElement).getByRole('group');
-		const open = within(group).getByRole('button', { name: 'Open report' });
-		const remove = within(group).getByRole('button', { name: 'Remove report' });
+		const open = within(group).getByRole('button', { name: 'Open report.pdf' });
+		const remove = within(group).getByRole('button', { name: 'Remove report.pdf' });
 		open.focus();
 		await userEvent.keyboard('{Enter}');
 		await expect(args.onOpen).toHaveBeenCalledOnce();
@@ -203,6 +205,7 @@ export const ActionNames: Story = {
 		attachmentName: 'Pasted note',
 		removeLabel: 'Discard note',
 		openLabel: 'Read note',
+		onRemove: fn(),
 		onOpen: fn(),
 	},
 	play: async ({ canvasElement }) => {
@@ -222,7 +225,7 @@ export const ControlledRemoval: Story = {
 		);
 	},
 	play: async ({ canvasElement }) => {
-		const button = within(canvasElement).getByRole('button', { name: 'Remove report' });
+		const button = within(canvasElement).getByRole('button', { name: 'Remove report.pdf' });
 		button.focus();
 		await userEvent.click(button);
 		await expect(within(canvasElement).queryByRole('group')).toBeNull();
@@ -232,7 +235,7 @@ export const ControlledRemoval: Story = {
 
 export const EmptyAttachment: Story = {
 	tags: ['tests'],
-	args: { attachmentName: ' ', removeLabel: ' ', openLabel: ' ', onOpen: fn() },
+	args: { attachmentName: ' ', removeLabel: ' ', openLabel: ' ', onOpen: fn(), onRemove: fn() },
 	play: async ({ canvasElement }) => {
 		const group = within(canvasElement).getByRole('group', { name: 'Attachment' });
 		await expect(group).not.toHaveAttribute('aria-describedby');
@@ -320,5 +323,188 @@ export const TextFileThumbnail: Story = {
 			expect(group.querySelector(`.${css.textThumbnail}`)).toHaveTextContent('Planning notes for the next release.'),
 		);
 		await expect(group.querySelector(`.${css.fileThumbnail}`)).toBeNull();
+	},
+};
+
+export const InvalidImage: Story = {
+	loaders: ImageThumbnail.loaders,
+	render: (args, { loaded }) => {
+		const [file, setFile] = useState(() => new File(['Not an image'], 'broken.png', { type: 'image/png' }));
+		return (
+			<>
+				<Attachment {...args} content={{ file }} />
+				<button type="button" onClick={() => setFile(loaded.image)}>
+					Load valid image
+				</button>
+			</>
+		);
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const broken = canvas.getByRole('group', { name: 'broken' });
+		await waitFor(() => expect(broken.querySelector(`.${css.fileThumbnail} svg`)).toBeVisible());
+		await expect(broken.querySelector('img')).toBeNull();
+		await expect(broken.querySelector(`.${css.previewLoader}`)).toBeNull();
+		await userEvent.click(canvas.getByRole('button', { name: 'Load valid image' }));
+		const valid = canvas.getByRole('group', { name: 'flowers-sunflower' });
+		await waitFor(() => expect(valid.querySelector('img')).toHaveStyle({ opacity: '1' }));
+		await expect(valid.querySelector(`.${css.fileThumbnail}`)).toBeNull();
+	},
+};
+
+export const NoRemoveHandler: Story = {
+	args: { content: { file: 'report.pdf' }, canRemove: true },
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).queryByRole('button')).toBeNull();
+	},
+};
+
+export const DistinctActionNames: Story = {
+	render: () => (
+		<>
+			<Attachment content={{ file: 'report.pdf' }} onOpen={fn()} onRemove={fn()} />
+			<Attachment content={{ file: 'report.docx' }} onOpen={fn()} onRemove={fn()} />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const extension of ['pdf', 'docx']) {
+			await expect(canvas.getByRole('button', { name: `Open report.${extension}` })).toBeInTheDocument();
+			await expect(canvas.getByRole('button', { name: `Remove report.${extension}` })).toBeInTheDocument();
+		}
+		await expect(canvas.getAllByText('report')).toHaveLength(2);
+	},
+};
+
+export const ImagePreviewLoading: Story = {
+	tags: ['tests'],
+	loaders: ImageThumbnail.loaders,
+	render: (args, { loaded }) => {
+		const release = useRef<(() => void) | undefined>(undefined);
+		return (
+			<div
+				onLoadCapture={(event) => {
+					if (event.target instanceof HTMLImageElement) {
+						// Hold decoding to exercise the visible loading state deterministically.
+						event.target.decode = () =>
+							new Promise<void>((resolve) => {
+								release.current = resolve;
+							});
+					}
+				}}
+			>
+				<Attachment {...args} content={{ file: loaded.image }} />
+				<button type="button" onClick={() => release.current?.()}>
+					Finish preview
+				</button>
+			</div>
+		);
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const group = canvas.getByRole('group', { name: 'flowers-sunflower' });
+		await waitFor(() => expect(group.querySelector('img')?.naturalWidth).toBeGreaterThan(0));
+		const image = group.querySelector('img');
+		await expect(image).toHaveAttribute('loading', 'lazy');
+		await expect(image).toHaveAttribute('decoding', 'async');
+		await expect(image).toHaveStyle({ opacity: '0' });
+		await expect(group.querySelector(`.${css.previewLoader}`)).toBeVisible();
+		await userEvent.click(canvas.getByRole('button', { name: 'Finish preview' }));
+		await waitFor(() => expect(image).toHaveStyle({ opacity: '1' }));
+		await expect(group.querySelector(`.${css.previewLoader}`)).toBeNull();
+	},
+};
+
+export const ImageDecodingFailure: Story = {
+	tags: ['tests'],
+	loaders: ImageThumbnail.loaders,
+	render: (args, { loaded }) => (
+		<div
+			onLoadCapture={(event) => {
+				if (event.target instanceof HTMLImageElement)
+					event.target.decode = () => Promise.reject(new Error('Decode failed'));
+			}}
+		>
+			<Attachment {...args} content={{ file: loaded.image }} />
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const group = within(canvasElement).getByRole('group', { name: 'flowers-sunflower' });
+		await waitFor(() => expect(group.querySelector(`.${css.fileThumbnail} svg`)).toBeVisible());
+		await expect(group.querySelector('img')).toBeNull();
+		await expect(group.querySelector(`.${css.previewLoader}`)).toBeNull();
+	},
+};
+
+export const UploadError: Story = {
+	args: {
+		content: { file: 'report.pdf', uploading: true, progress: 45, error: 'Upload failed. Please try again.' },
+		onRemove: fn(),
+		onOpen: fn(),
+	},
+	render: (args) => (
+		<>
+			<Attachment {...args} />
+			<Attachment content={{ file: 'healthy.pdf' }} />
+		</>
+	),
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const group = canvas.getByRole('group', { name: 'report' });
+		const alert = within(group).getByRole('alert');
+		await expect(alert).toHaveTextContent('report.pdf: Upload failed. Please try again.');
+		await expect(alert.closest(`.${css.canvas}`)).not.toBeNull();
+		await expect(alert.closest('[aria-hidden="true"]')).toBeNull();
+		await expect(group).toHaveAccessibleDescription(/Upload failed. Please try again./);
+		await expect(within(group).queryByRole('progressbar')).toBeNull();
+		await expect(within(group).queryByRole('button', { name: 'Open report.pdf' })).toBeNull();
+		await expect(group.getBoundingClientRect().height).toBe(
+			canvas.getByRole('group', { name: 'healthy' }).getBoundingClientRect().height,
+		);
+		const remove = within(group).getByRole('button', { name: 'Remove report.pdf' });
+		remove.focus();
+		await userEvent.click(remove);
+		await expect(args.onRemove).toHaveBeenCalledOnce();
+	},
+};
+
+export const LongUploadError: Story = {
+	args: { content: { file: 'report.pdf', error: 'The upload could not be completed. '.repeat(30) } },
+	play: async ({ canvasElement }) => {
+		const alert = within(canvasElement).getByRole('alert');
+		await expect(alert.scrollHeight).toBeGreaterThan(alert.clientHeight);
+		await expect(alert).toHaveStyle({ overflow: 'auto' });
+		alert.focus();
+		await expect(alert).toHaveFocus();
+	},
+};
+
+export const UploadErrorRecovery: Story = {
+	tags: ['tests'],
+	render: () => {
+		const [error, setError] = useState<string | undefined>();
+		return (
+			<>
+				<Attachment content={{ file: 'report.pdf', uploading: true, progress: 45, error }} />
+				<button type="button" onClick={() => setError('Upload failed. Please try again.')}>
+					Fail upload
+				</button>
+				<button type="button" onClick={() => setError(undefined)}>
+					Retry upload
+				</button>
+			</>
+		);
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const group = canvas.getByRole('group', { name: 'report' });
+		await expect(within(group).getByRole('progressbar')).toHaveAttribute('aria-valuenow', '45');
+		await userEvent.click(canvas.getByRole('button', { name: 'Fail upload' }));
+		await expect(within(group).getByRole('alert')).toBeVisible();
+		await expect(within(group).queryByRole('progressbar')).toBeNull();
+		await userEvent.click(canvas.getByRole('button', { name: 'Retry upload' }));
+		await expect(within(group).queryByRole('alert')).toBeNull();
+		await expect(within(group).getByRole('progressbar')).toHaveAttribute('aria-valuenow', '45');
+		await expect(group.querySelector(`.${css.fileThumbnail}`)).toBeVisible();
 	},
 };

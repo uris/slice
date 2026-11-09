@@ -60,3 +60,12 @@ export function RemovableAttachmentPreview() {
 		/>
 	) : null;
 }
+
+export function UploadErrorPreview() {
+	return (
+		<Attachment
+			content={{ file: 'Quarterly-report.pdf', error: 'Upload failed. Check your connection and try again.' }}
+			canRemove={false}
+		/>
+	);
+}
