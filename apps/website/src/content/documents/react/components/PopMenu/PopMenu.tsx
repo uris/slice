@@ -7,7 +7,7 @@ import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } fr
 import { FlexDiv, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { PopMenuPreview } from './PopMenuPreview';
-import { motionCode, optionsCode, portalCode, usageCode } from './code';
+import { actionsCode, motionCode, optionsCode, portalCode, usageCode } from './code';
 const menuProps = [
 	{
 		name: 'backgroundColor',
@@ -141,7 +141,7 @@ const menuProps = [
 	},
 	{
 		name: 'options',
-		type: 'PropMenuEntry[]',
+		type: 'PropMenuEntry<T>[]',
 		defaultValue: 'undefined',
 		description: (
 			<>
@@ -222,6 +222,21 @@ export default function PopMenuDoc() {
 				takes precedence when both are supplied.
 			</P>
 			<CodeBlock filename="Options.tsx" language="tsx" code={optionsCode.trim()} />
+			<H3>Attach item actions and data</H3>
+			<P>
+				Each item accepts <Code>onClick(event, item)</Code> and optional <Code>data</Code>. The callback details carry{' '}
+				<Code>data?: T</Code> unchanged through the item, its groups, and the menu. Use item callbacks for actions and{' '}
+				<Code>onClickItem</Code> for shared handling. This works in root <Code>options</Code>, grouped{' '}
+				<Code>items</Code>, and composed children.
+			</P>
+			<P>
+				<Code>T</Code> is inferred from the options array. A shared <Code>PropMenuEntry&lt;T&gt;[]</Code> type gives
+				descriptors and their callbacks the same payload shape. With composed children, specify{' '}
+				<Code>PopMenu&lt;T&gt;</Code> and <Code>PopMenuGroup&lt;T&gt;</Code> when their shared handlers need typed data;
+				keep the payload shape consistent throughout that menu. Nested menus have their own callback and payload scope.
+			</P>
+			<CodeBlock filename="DocumentMenu.tsx" language="tsx" code={actionsCode.trim()} />
+
 			<P>
 				For toggle, custom-content, and submenu usage, see <Code openURL="/docs/react/pop-menu-item/">PopMenuItem</Code>
 				. For titled and untitled sections, see <Code openURL="/docs/react/pop-menu-group/">PopMenuGroup</Code>.
@@ -276,9 +291,9 @@ export default function PopMenuDoc() {
 				skipped. Custom button children must not contain nested interactive controls.
 			</P>
 			<P>
-				The current animation does not automatically honor reduced-motion preferences. Supply an immediate{' '}
-				<Code>transition</Code> when your application detects that preference. The closed or exiting wrapper is{' '}
-				<Code>inert</Code>.
+				The menu observes <Code>prefers-reduced-motion</Code>, including live changes. With reduced motion enabled,
+				menus and submenus appear and dismiss immediately, bypassing custom motion values and transition delays. The
+				closed or exiting wrapper is <Code>inert</Code>.
 			</P>
 			<H2 id="props">Props</H2>
 			{menuProps.map((entry) => (
@@ -313,19 +328,19 @@ export default function PopMenuDoc() {
 				<DefaultVal>Water</DefaultVal>
 			</Definition>
 			<P>
-				Timing and easing settings merge with the theme’s Water transition. Reduced-motion preferences are not detected
-				automatically; supply an immediate transition when your application detects that preference.
+				Timing and easing settings merge with the theme’s Water transition. Reduced-motion preferences override custom
+				motion values and timing, including delays, so opening and dismissal remain immediate.
 			</P>
 			<H2 id="events">Events</H2>
 			<Definition id="onClickItem">
 				<Method>onClickItem</Method>
-				<TypeDef>{'(event: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo) => void'}</TypeDef>
+				<TypeDef>{'(event: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => void'}</TypeDef>
 			</Definition>
 			<P>
 				Runs after an item click and before automatic dismissal. Metadata includes <Code>id</Code>, <Code>label</Code>,
-				and <Code>dismissAll</Code>; toggle items add <Code>toggle</Code> and the next <Code>toggled</Code> value.
-				Submenu openers add their <Code>subMenu</Code> renderer. An explicit <Code>autoDismiss</Code> override is also
-				included. Async handlers are not awaited.
+				and <Code>dismissAll</Code>, plus optional <Code>data</Code> of shape <Code>T</Code>; toggle items add{' '}
+				<Code>toggle</Code> and the next <Code>toggled</Code> value. Submenu openers add their <Code>subMenu</Code>{' '}
+				renderer. An explicit <Code>autoDismiss</Code> override is also included. Async handlers are not awaited.
 			</P>
 			<Definition id="onDismiss">
 				<Method>onDismiss</Method>

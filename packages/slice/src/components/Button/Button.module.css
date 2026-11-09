@@ -28,6 +28,11 @@
 	-webkit-box-orient: vertical;
 }
 
+/* Optically lift text labels with the font size; composed content keeps its own alignment. */
+.label:not(.children) {
+	transform: translateY(-0.067em);
+}
+
 .count {
 	position: absolute;
 	composes: row from "../../utils/styling/flexBox.module.css";

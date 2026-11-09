@@ -41,7 +41,8 @@
 	width: 100%;
 	margin: 0;
 	background: var(--core-grey-1000);
-	border-radius: 8px;
+	border-radius: 0;
+	border: 1px solid var(--core-surface-secondary);
 }
 
 .button {

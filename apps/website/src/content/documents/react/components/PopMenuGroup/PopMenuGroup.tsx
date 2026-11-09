@@ -70,7 +70,7 @@ const props = [
 	},
 	{
 		name: 'items',
-		type: 'PopMenuItemBase[]',
+		type: 'PopMenuItemBase<T>[]',
 		defaultValue: 'undefined',
 		description: (
 			<>
@@ -209,9 +209,15 @@ export default function PopMenuGroupDoc() {
 			))}
 
 			<H2 id="events">Events</H2>
+			<P>
+				Item <Code>onClick</Code> callbacks run before the group, then the menu, followed by automatic dismissal. All
+				receive the same details, including optional <Code>data?: T</Code>. Infer <Code>T</Code> from <Code>items</Code>
+				, or specify <Code>PopMenuGroup&lt;T&gt;</Code> for composed children with a shared payload shape. Disabled
+				items do not emit callbacks.
+			</P>
 			<Definition id="onClickItem">
 				<Method>onClickItem</Method>
-				<TypeDef>{'(event: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo) => void'}</TypeDef>
+				<TypeDef>{'(event: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => void'}</TypeDef>
 			</Definition>
 			<P>
 				Receives connected item clicks after the item's own callback and before the parent menu callback and automatic

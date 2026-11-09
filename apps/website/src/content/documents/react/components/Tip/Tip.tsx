@@ -3,254 +3,223 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
-import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
+import { Code, DefaultVal, Definition, H1, H2, H3, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexDiv, Preset } from '@apple-pie/slice';
+import { Fragment } from 'react';
 import { TipPreview } from './TipPreview';
-import { positionedCode, tipCode, usageCode } from './code';
+import { applicationCode, customCode, motionCode, usageCode } from './code';
+
+const tipProps = [
+	{
+		name: 'backgroundColor',
+		type: 'ColorValue',
+		defaultValue: 'core-surface-secondary',
+		description: 'Tooltip background.',
+	},
+	{ name: 'border', type: 'boolean', defaultValue: 'true', description: 'Shows a 1px border.' },
+	{ name: 'borderColor', type: 'ColorValue', defaultValue: 'core-outline-primary', description: 'Border color.' },
+	{
+		name: 'borderRadius',
+		type: 'number | string',
+		defaultValue: 'corner-xs (4px)',
+		description: 'Corner radius. Numbers use pixels; CSS lengths pass through.',
+	},
+	{
+		name: 'coords',
+		type: '{ x: number; y: number }',
+		defaultValue: 'undefined',
+		description: 'Viewport position returned by useToolTip. Undefined hides the tip and cancels timers.',
+	},
+	{
+		name: 'hideDelay',
+		type: 'number',
+		defaultValue: '2500',
+		description: 'Visible lifetime in milliseconds, overridden by tip.payload.duration.',
+	},
+	{
+		name: 'padding',
+		type: 'number | string',
+		defaultValue: '4px 8px',
+		description: 'Inner spacing. Explicit zero is respected.',
+	},
+	{
+		name: 'showDelay',
+		type: 'number',
+		defaultValue: '500',
+		description: 'Delay before showing a new request, in milliseconds. Separate from the reveal animation duration.',
+	},
+	{
+		name: 'textColor',
+		type: 'ColorValue',
+		defaultValue: 'core-text-primary',
+		description: 'Text color. Accepts Slice tokens or CSS colors.',
+	},
+	{ name: 'textSize', type: "'xs' | 's' | 'm' | 'l' | 'xl'", defaultValue: 's', description: 'Body typography size.' },
+	{
+		name: 'tip',
+		type: 'ToolTip | null',
+		defaultValue: 'undefined',
+		description: 'Request received through onToolTip. Pass null to clear.',
+	},
+	{
+		name: 'divAttributes',
+		type: 'React.HTMLAttributes<HTMLDivElement>',
+		defaultValue: 'undefined',
+		description:
+			'Native div attributes target the permanently mounted wrapper. Classes are appended and styles merged. Content, ARIA semantics, animation, native color, drag, and animation-start handlers are component-managed or excluded.',
+	},
+];
+
 export function TipDoc() {
 	return (
 		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">Tip component</H1>
-			<P clipWidth>{'Add a short hint beside an action without pulling people away from their work.'}</P>
+			<P clipWidth>Add a short hint beside an action without pulling people away from their work.</P>
 			<H2 id="usage">Usage</H2>
 			<P>
-				{'Provide the hint through '}
-				<Code>{'tip.payload.label'}</Code>
-				{' and position it with '}
-				<Code>{'coords'}</Code>
-				{'. The current visibility logic requires both coordinates to be greater than zero.'}
+				Slice components handle tooltip activation and cleanup for you.{' '}
+				<Code openURL="/docs/react/button/">Button</Code>, <Code openURL="/docs/react/icon-button/">IconButton</Code>,{' '}
+				<Code openURL="/docs/react/toggle-button/">ToggleButton</Code>, and{' '}
+				<Code openURL="/docs/react/chip/">Chip</Code> handle hover and focus and supply the hint label and
+				source-element ref through <Code>onToolTip</Code>.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tip--demo"
-				components={[
-					{ label: 'Basic usage', component: <TipPreview />, code: usageCode.trim(), codeFilename: 'TipExample.tsx' },
-				]}
-			/>
-			<TipBox inline noBorder title="Tip:">
-				{
-					'In the interactive example, hover or focus Project details to show the hint. Preview coordinates are local to the canvas.'
-				}
-			</TipBox>
-			<H3>Position beside a control</H3>
 			<P>
-				{'Use '}
-				<Code>{'useToolTip'}</Code>
-				{
-					' to calculate viewport coordinates from tooltip metadata and a measured tooltip ref. The triggering control supplies the metadata.'
-				}
+				Add a <Code>tooltip</Code> label and connect <Code>onToolTip</Code> to <Code>tipActions.push</Code>. The shared{' '}
+				<Code>Tip</Code> handles positioning, timing, and dismissal.
 			</P>
+			<TipBox inline noBorder>
+				Hover or focus Project details. Press Escape or click to dismiss.
+			</TipBox>
 			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tip--demo"
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tip--keyboard-and-association"
 				components={[
 					{
-						label: 'Position beside a control',
-						component: <TipPreview interactive />,
-						code: positionedCode.trim(),
-						codeFilename: 'positionedCode.tsx',
+						label: 'Button tooltip',
+						component: <TipPreview />,
+						code: usageCode.trim(),
+						codeFilename: 'ProjectButton.tsx',
+					},
+				]}
+			/>
+			<H3>Set up the shared Tip</H3>
+			<P>
+				Mount <Code>ApplicationTip</Code> once in your app shell. It reads the shared tip data and uses{' '}
+				<Code>useToolTip</Code> to position the hint beside its source element.
+			</P>
+			<CodeBlock language="tsx" filename="ApplicationTip.tsx" code={applicationCode.trim()} />
+			<H2 id="custom-components">Tooltips for your own components</H2>
+			<P>
+				Expose the same <Code>onToolTip</Code> callback. Send a <Code>ToolTip</Code> containing the label and a ref to
+				your element; send <Code>null</Code> when the interaction ends or the control is clicked.
+			</P>
+			<P>
+				Support both hover and focus. Clear on leave or blur only when neither remains. Connect your component to{' '}
+				<Code>tipActions.push</Code> to use the shared <Code>Tip</Code>.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tip--keyboard-and-association"
+				components={[
+					{
+						label: 'Profile button tooltip',
+						component: <TipPreview custom />,
+						code: customCode.trim(),
+						codeFilename: 'ProfileTrigger.tsx',
 					},
 				]}
 			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
-				{'Changing '}
-				<Code>{'coords'}</Code>
-				{
-					' restarts the show-delay and hide-delay sequence. The tooltip hides after its timer expires, even if the trigger is still hovered.'
-				}
+				The wrapper stays mounted while hidden so <Code>useToolTip</Code> can measure it. A nonempty{' '}
+				<Code>tip.payload.label</Code> and finite <Code>coords</Code> schedule display. Position follows the source
+				element, flips above when needed, and stays within the viewport.
 			</P>
 			<P>
-				{
-					'The wrapper stays mounted while hidden. Coordinates drive visibility; a label without positive coordinates does not show the tooltip.'
-				}
+				Tips appear after <Code>showDelay</Code> (500ms), fade in over 150ms, and hide instantly. <Code>hideDelay</Code>{' '}
+				sets the visible lifetime (2500ms); <Code>tip.payload.duration</Code> overrides it. Moving the source element
+				does not restart timers.
 			</P>
 			<P>
-				{
-					'Fade timing is fixed internally. Hiding changes visibility immediately, and subsequent reveals do not consistently restart the fade.'
-				}
+				Clearing the tip, expiry, Escape, or a click cancels pending work and hides the hint. A new request can show it
+				again.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
-				{
-					'The current component does not add tooltip semantics, an association with its trigger, or Escape dismissal. Provide an equivalent accessible description through application-owned controls and markup.'
-				}
+				<Code>Tip</Code> uses <Code>role="tooltip"</Code> and associates the visible hint with its source through{' '}
+				<Code>aria-describedby</Code>, preserving existing descriptions. Escape dismisses without moving focus.
 			</P>
 			<P>
-				{
-					'Hover alone is insufficient for keyboard users. The interactive preview supplies focus/blur activation in its own wiring; this is not built into Tip. Reduced-motion preferences are not currently observed.'
-				}
+				Custom triggers must support keyboard focus as well as hover. Tips contain descriptive text; use a menu or
+				dialog for interactive content. Reduced-motion preferences disable animation while retaining the show delay and
+				lifetime.
 			</P>
 			<H2 id="props">Props</H2>
-			<P>{'All component props are optional. Color props accept Slice tokens or CSS colors.'}</P>
-			<Definition id="backgroundColor">
-				<Prop>backgroundColor</Prop>
-				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-surface-secondary'}</DefaultVal>
-			</Definition>
-			<P>{'Tooltip background.'}</P>
-			<Definition id="border">
-				<Prop>border</Prop>
-				<TypeDef>{'boolean'}</TypeDef>
-				<DefaultVal>{'true'}</DefaultVal>
-			</Definition>
-			<P>{'Shows a 1px border.'}</P>
-			<Definition id="borderColor">
-				<Prop>borderColor</Prop>
-				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-outline-primary'}</DefaultVal>
-			</Definition>
-			<P>{'Tooltip border color.'}</P>
-			<Definition id="borderRadius">
-				<Prop>borderRadius</Prop>
-				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'radius, then corner-xs (4px)'}</DefaultVal>
+			<P>All component props are optional.</P>
+			{tipProps.map(({ name, type, defaultValue, description }) => (
+				<Fragment key={name}>
+					<Definition id={name}>
+						<Prop>{name === 'divAttributes' ? '...divAttributes' : name}</Prop>
+						<TypeDef>{type}</TypeDef>
+						<DefaultVal>{defaultValue}</DefaultVal>
+					</Definition>
+					<P>{description}</P>
+				</Fragment>
+			))}
+			<H2 id="motion">Motion</H2>
+			<Definition id="motionValues">
+				<Prop>motionValues</Prop>
+				<TypeDef>Variants</TypeDef>
+				<DefaultVal>opacity 0 → 1</DefaultVal>
 			</Definition>
 			<P>
-				{'Corner radius. Takes precedence over the existing '}
-				<Code>{'radius'}</Code>
-				{' fallback.'}
+				Overrides the <Code>initial</Code> and <Code>animate</Code> states. Each reveal resets its initial state. Exit
+				variants are not used because removal is immediate.
 			</P>
-			<Definition id="color">
-				<Prop>color</Prop>
-				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'undefined'}</DefaultVal>
+			<Definition id="transition">
+				<Prop>transition</Prop>
+				<TypeDef>Transition</TypeDef>
+				<DefaultVal>150ms; Water easing</DefaultVal>
 			</Definition>
 			<P>
-				{'Existing fallback for '}
-				<Code>{'textColor'}</Code>
-				{'. The current stylesheet does not apply the resulting text-color variable.'}
+				Customizes reveal timing and easing. Hiding always stops animation and changes visibility immediately. Reduced
+				motion overrides custom movement and animation delays.
 			</P>
-			<Definition id="coords">
-				<Prop>coords</Prop>
-				<TypeDef>{'{ x: number; y: number }'}</TypeDef>
-				<DefaultVal>{'undefined'}</DefaultVal>
-			</Definition>
-			<P>
-				{
-					'Viewport coordinates in pixels. Both values must currently be positive to show the tooltip; zero or negative coordinates hide it.'
-				}
-			</P>
-			<Definition id="hideDelay">
-				<Prop>hideDelay</Prop>
-				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'2500'}</DefaultVal>
-			</Definition>
-			<P>{'Milliseconds the tooltip remains visible after the show delay.'}</P>
-			<Definition id="padding">
-				<Prop>padding</Prop>
-				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'4px 8px'}</DefaultVal>
-			</Definition>
-			<P>{'Tooltip padding, in pixels or CSS units. Explicit zero is supported.'}</P>
-			<Definition id="radius">
-				<Prop>radius</Prop>
-				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'corner-xs (4px)'}</DefaultVal>
-			</Definition>
-			<P>
-				{'Existing corner-radius fallback when '}
-				<Code>{'borderRadius'}</Code>
-				{' is omitted.'}
-			</P>
-			<Definition id="showDelay">
-				<Prop>showDelay</Prop>
-				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'500'}</DefaultVal>
-			</Definition>
-			<P>{'Milliseconds to wait after valid coordinates arrive.'}</P>
-			<Definition id="textColor">
-				<Prop>textColor</Prop>
-				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-primary'}</DefaultVal>
-			</Definition>
-			<P>
-				{
-					'Sets the tooltip text-color variable, but the current stylesheet does not read that variable. This needs a component fix.'
-				}
-			</P>
-			<Definition id="textSize">
-				<Prop>textSize</Prop>
-				<TypeDef>{"'xs' | 's' | 'm' | 'l' | 'xl'"}</TypeDef>
-				<DefaultVal>{'s'}</DefaultVal>
-			</Definition>
-			<P>{'Typography size.'}</P>
-			<Definition id="tip">
-				<Prop>tip</Prop>
-				<TypeDef>{'ToolTip | null'}</TypeDef>
-				<DefaultVal>{'undefined'}</DefaultVal>
-			</Definition>
-			<P>
-				{'Tooltip metadata. Only '}
-				<Code>{'payload.label'}</Code>
-				{' is rendered by Tip; positioning metadata is consumed by the external helper, and '}
-				<Code>{'payload.duration'}</Code>
-				{' does not replace '}
-				<Code>{'hideDelay'}</Code>
-				{'.'}
-			</P>
-			<CodeBlock filename="ToolTip.ts" language="typescript" code={tipCode.trim()} />
-			<Definition id="divAttributes">
-				<Prop>...divAttributes</Prop>
-				<TypeDef>{"HTMLMotionProps<'div'>"}</TypeDef>
-				<DefaultVal>undefined</DefaultVal>
-			</Definition>
-			<P>
-				{'Attributes apply to the persistent Motion wrapper. '}
-				<Code>{'className'}</Code>
-				{' is appended; component styles control coordinates and visibility. Children are supplied by '}
-				<Code>{'tip.payload.label'}</Code>
-				{'. Incidental Motion gestures are not a documented Tip feature.'}
-			</P>
+			<CodeBlock language="tsx" code={motionCode.trim()} />
 			<H2 id="events">Events</H2>
-			<P>No component-specific callbacks.</P>
-			<Definition id="nativeEvents">
-				<Method>...divEvents</Method>
-				<TypeDef>{"HTMLMotionProps<'div'>"}</TypeDef>
-			</Definition>
 			<P>
-				{
-					'Native wrapper handlers are forwarded. No component-specific callbacks or intentional drag gestures are implemented.'
-				}
+				Native wrapper handlers are forwarded. Document-level click and Escape handling remains active while a valid
+				request exists.
 			</P>
 			<H2 id="ref">Ref</H2>
 			<Definition id="componentRef">
 				<Prop>ref</Prop>
-				<TypeDef>{'React.Ref<HTMLDivElement>'}</TypeDef>
+				<TypeDef>React.Ref&lt;HTMLDivElement&gt;</TypeDef>
 			</Definition>
 			<P>
-				{
-					'The forwarded ref points to the persistent tooltip div, including while hidden. The positioning helper uses it for measurement.'
-				}
+				Points to the mounted wrapper, including while hidden. Pass the same ref to <Code>useToolTip</Code>. Missing or
+				removed anchors produce undefined coordinates.
 			</P>
 		</FlexDiv>
 	);
 }
+
 export const trackedItems: TrackedItem[] = [
 	{ id: 'title', title: 'Tip component' },
 	{ id: 'usage', title: 'Usage' },
+	{ id: 'custom-components', title: 'Tooltips for your own components' },
 	{ id: 'behavior', title: 'Behavior' },
 	{ id: 'accessibility', title: 'Accessibility' },
 	{
 		id: 'props',
 		title: 'Props',
-		items: [
-			{ id: 'backgroundColor', title: 'backgroundColor', code: true },
-			{ id: 'border', title: 'border', code: true },
-			{ id: 'borderColor', title: 'borderColor', code: true },
-			{ id: 'borderRadius', title: 'borderRadius', code: true },
-			{ id: 'color', title: 'color', code: true },
-			{ id: 'coords', title: 'coords', code: true },
-			{ id: 'hideDelay', title: 'hideDelay', code: true },
-			{ id: 'padding', title: 'padding', code: true },
-			{ id: 'radius', title: 'radius', code: true },
-			{ id: 'showDelay', title: 'showDelay', code: true },
-			{ id: 'textColor', title: 'textColor', code: true },
-			{ id: 'textSize', title: 'textSize', code: true },
-			{ id: 'tip', title: 'tip', code: true },
-			{ id: 'divAttributes', title: '...divAttributes', code: true },
-		],
+		items: tipProps.map(({ name }) => ({
+			id: name,
+			title: name === 'divAttributes' ? '...divAttributes' : name,
+			code: true,
+		})),
 	},
-	{ id: 'events', title: 'Events', items: [{ id: 'nativeEvents', title: '...divEvents', code: true }] },
+	{ id: 'motion', title: 'Motion', items: ['motionValues', 'transition'].map((id) => ({ id, title: id, code: true })) },
+	{ id: 'events', title: 'Events' },
 	{ id: 'ref', title: 'Ref', items: [{ id: 'componentRef', title: 'ref', code: true }] },
 ];
 export default TipDoc;

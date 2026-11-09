@@ -1,17 +1,19 @@
 'use client';
-import { Button, DialogBox, ModalController, useDialogBox } from '@apple-pie/slice';
+import { Button, DialogBox, useDialogBox } from '@apple-pie/slice';
 import { type ModalComponentProps, getModal, modalActions } from '@apple-pie/slice/stores/modal';
 import { useEffect, useId } from 'react';
 import styles from '../_shared/LayerPreview.module.css';
+
 function PreviewActions() {
 	const { close, resolve } = useDialogBox();
 	return (
 		<>
 			<Button label="Cancel" variant="outline" onClick={close} />
-			<Button label="Archive" onClick={() => resolve('archive')} />
+			<Button variant={'solid'} label="Archive" onClick={() => resolve('archive')} />
 		</>
 	);
 }
+
 function PreviewDialog(props: ModalComponentProps) {
 	return (
 		<DialogBox {...props} minWidth={0} minHeight={180} maxWidth={360}>
@@ -25,6 +27,7 @@ function PreviewDialog(props: ModalComponentProps) {
 		</DialogBox>
 	);
 }
+
 export function ModalControllerPreview() {
 	const id = useId();
 	useEffect(
@@ -36,7 +39,6 @@ export function ModalControllerPreview() {
 	return (
 		<div className={styles.dialogStage}>
 			<Button label="Open dialog" onClick={() => modalActions.show({ id, component: PreviewDialog })} />
-			<ModalController />
 		</div>
 	);
 }

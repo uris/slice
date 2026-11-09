@@ -9,7 +9,7 @@ import {FlexDiv} from '../../components/FlexDiv';
         <Unstyled>
         # useToolTip
         Computes tooltip coordinates from an anchor ref and the rendered tooltip rectangle.
-        The resolved position stays within the viewport with a 10px inset, and flips above the anchor when there is not enough space below.
+        The resolved position stays within the viewport with a 10px inset, and flips above the anchor when there is not enough space below. While a request exists, it tracks anchor/content geometry, layout movement, scrolling, and resizing. Equal positions retain coordinate identity; cleanup cancels tracking and listeners. The tooltip wrapper must stay mounted for measurement.
 
         ## Signature
         `useToolTip(toolTip, tipElement)`
@@ -53,7 +53,7 @@ import {FlexDiv} from '../../components/FlexDiv';
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>coords</code></td><td><code>{`{ x: number; y: number }`}</code></td><td><code>{`{ x: 0, y: 0 }`}</code></td><td>Viewport coordinates where the tooltip should be placed. Returns <code>{`{ x: 0, y: 0 }`}</code> when the tooltip is inactive or cannot be measured.</td></tr>
+            <tr><td><code>coords</code></td><td><code>{`{ x: number; y: number } | undefined`}</code></td><td><code>undefined</code></td><td>Viewport coordinates where the tooltip should be placed. Returns <code>undefined</code> when the tooltip is inactive or cannot be measured.</td></tr>
           </tbody>
         </table>
 
@@ -83,7 +83,7 @@ import {FlexDiv} from '../../components/FlexDiv';
                         tooltip="Click Me"
                         onToolTip={(nextTip) => setTip(nextTip)}
                     />
-                    <Tip ref={tipRef} tip={tip} coords={coords} size="m" />
+                    <Tip ref={tipRef} tip={tip} coords={coords} textSize="m" />
                 </>
             );
         }

@@ -1,4 +1,5 @@
-import type { HTMLMotionProps } from 'motion/react';
+import type { Transition, Variants } from 'motion/react';
+import type React from 'react';
 
 export enum ToastType {
 	Success = 'success',
@@ -6,27 +7,48 @@ export enum ToastType {
 	Warning = 'warning',
 	Info = 'info',
 }
-
-type ToastBaseProps = {
-	notifId?: string;
+export type ToastHideReason = 'timeout' | 'dismiss' | 'cleared' | 'replaced';
+export interface ToastInfo {
+	notificationId?: string;
+	message: string;
+}
+export interface ToastHideInfo extends ToastInfo {
+	reason: ToastHideReason;
+}
+export interface ToastBaseProps<T = unknown> {
+	data?: T;
+	onClick?: (event: React.MouseEvent<HTMLDivElement>, data: T | undefined) => void;
+	notificationId?: string;
 	message?: string | null;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	border?: boolean;
 	padding?: number | string;
-	radius?: number | string;
+	borderRadius?: number | string;
 	position?: 'top' | 'bottom';
 	container?: 'window' | 'parent';
 	offset?: number;
 	showDelay?: number;
-	duration?: number | 'Infinite';
+	duration?: number | 'infinite';
 	close?: boolean;
-	type?: ToastType;
+	closeLabel?: string;
+	type?: ToastType | `${ToastType}`;
 	progress?: boolean;
-	onShow?: () => void;
-	didHide?: () => void;
-};
-
-// reserved for internal working - not overridable
-type ReservedToastEvents = 'onMouseEnter' | 'onMouseLeave' | 'onFocus' | 'onBlur';
-
-export type ToastProps = Omit<HTMLMotionProps<'div'>, keyof ToastBaseProps | ReservedToastEvents> & ToastBaseProps;
+	urgency?: 'polite' | 'assertive';
+	motionValues?: Variants;
+	transition?: Transition;
+	onShow?: (notification: ToastInfo) => void;
+	onHide?: (notification: ToastHideInfo) => void;
+}
+export type ToastProps<T = unknown> = ToastBaseProps<T> &
+	Omit<
+		React.HTMLAttributes<HTMLDivElement>,
+		| keyof ToastBaseProps<T>
+		| keyof React.AriaAttributes
+		| 'role'
+		| 'children'
+		| 'dangerouslySetInnerHTML'
+		| 'onDrag'
+		| 'onDragStart'
+		| 'onDragEnd'
+		| 'onAnimationStart'
+	>;

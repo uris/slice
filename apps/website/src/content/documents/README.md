@@ -88,17 +88,26 @@ Use the existing shared components and this order:
 Follow the [component composition convention](../../../../../packages/slice/docs/component-composition.md)
 when choosing notation and documentation ownership:
 
-- Components with child controls that expose their own props, events, methods, or
-  refs have focused documentation pages for each control. Give the parent and its
-  children separate slugs, and group them in the sidebar with `childDocs`.
+- Use a sidebar `childDocs` group only when a control depends on its parent for
+  meaningful use, rather than merely composing well with it. When those dependent
+  controls have their own props, events, methods, or refs, give them focused pages
+  with separate slugs. The group is named for the parent; its first child is the
+  parent's own page, followed by the dependent controls. For example, `TabBar`
+  contains `TabBar` and `Tab`; `PopMenu` contains `PopMenu`, `PopMenuGroup`, and
+  `PopMenuItem`.
 - Keep the parent page focused on composition, shared behavior, and its own API.
   Link to each child page rather than repeating its full reference. Child pages
   demonstrate their own usage inside the required parent when applicable.
 - Preserve the actual public API: named controls such as `PopMenuGroup` and
   `PopMenuItem` remain named exports; structural sections that use dot notation
   keep that notation. A separate doc page does not imply standalone behavior.
-- Independently useful controls also retain their own pages. Link related pages
-  and explain which behavior comes from the containing component.
+- Independently useful controls retain separate top-level sidebar entries and
+  pages, even when another control can host them. `RadioButton` works independently
+  and composes with `RadioButtonList`; it is not a dependent child doc of that list.
+  Link related pages and explain which behavior the containing control adds.
+- Sidebar grouping describes the supported usage relationship. It does not require
+  a runtime parent check or change exports, types, or component behavior. Structural
+  sections documented on their parent's page do not need separate child-doc pages.
 
 When related Slice APIs compose directly, show that connection: reuse shared data
 shapes and pass compatible callbacks directly instead of adding adapter functions
@@ -218,6 +227,14 @@ its overlay layer. Do not imply that auto escapes every stacking or clipping
 context. Submenus inherit the resolved host unless explicitly overridden.
 
 ## Code snippets
+
+Lead with the normal integration between related Slice APIs. Keep each example
+focused on one task; put measurement, mounting, and timer details in Behavior.
+For Tip, start with a control's `tooltip` and `onToolTip` connected to the shared
+Tip, followed by one app-wide setup example. Explain custom triggers separately;
+do not lead with disconnected, hardcoded coordinates. Tip previews should use
+the website layout’s existing Tip instance through `tipActions.push`, rather than
+mounting additional instances or managing their own coordinates.
 
 Use Slice components in previews and copyable examples wherever an equivalent
 exists: for example, `Button` for actions and submission, `TextField` for inputs,

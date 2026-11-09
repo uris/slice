@@ -1,7 +1,7 @@
 .sidebar {
 	border: 0;
 	border-right-width: 1px;
-	border-color: var(--core-outline-primary);
+	border-color: var(--core-surface-secondary);
 	border-style: solid;
 }
 

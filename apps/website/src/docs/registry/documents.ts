@@ -24,6 +24,10 @@ const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 		['modal-controller', () => import('@/documents/react/components/ModalController/ModalController')],
 		['tip', () => import('@/documents/react/components/Tip/Tip')],
 		['toast', () => import('@/documents/react/components/Toast/Toast')],
+		['progress-indicator', () => import('@/documents/react/components/ProgressIndicator/ProgressIndicator')],
+		['attachment', () => import('@/documents/react/components/Attachment/Attachment')],
+		['file-list', () => import('@/documents/react/components/FileList/FileList')],
+		['file-icon', () => import('@/documents/react/components/FileIcon/FileIcon')],
 
 		['icon-button', () => import('@/documents/react/components/IconButton/IconButton')],
 		['toggle-button', () => import('@/documents/react/components/ToggleButton/ToggleButton')],

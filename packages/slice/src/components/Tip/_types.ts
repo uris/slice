@@ -1,24 +1,34 @@
-import type { HTMLMotionProps } from 'motion/react';
+import type { Transition, Variants } from 'motion/react';
+import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { ToolTip } from '../sharedTypes';
 
-export const tipBasePos = { left: 0, top: 0 };
-export type PosCoords = { left: number; top: number };
-
-type ToolTipBaseProps = {
+export interface ToolTipBaseProps {
 	tip?: ToolTip | null;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	backgroundColor?: ColorValue;
 	textColor?: ColorValue;
-	color?: ColorValue;
 	border?: boolean;
 	borderColor?: ColorValue;
 	padding?: number | string;
 	borderRadius?: number | string;
-	radius?: number | string;
 	coords?: { x: number; y: number };
 	showDelay?: number;
 	hideDelay?: number;
-};
-
-export type ToolTipProps = Omit<HTMLMotionProps<'div'>, keyof ToolTipBaseProps> & ToolTipBaseProps;
+	motionValues?: Variants;
+	transition?: Transition;
+}
+export type ToolTipProps = ToolTipBaseProps &
+	Omit<
+		React.HTMLAttributes<HTMLDivElement>,
+		| keyof ToolTipBaseProps
+		| keyof React.AriaAttributes
+		| 'color'
+		| 'role'
+		| 'children'
+		| 'dangerouslySetInnerHTML'
+		| 'onDrag'
+		| 'onDragStart'
+		| 'onDragEnd'
+		| 'onAnimationStart'
+	>;

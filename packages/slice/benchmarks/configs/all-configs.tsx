@@ -1,3 +1,4 @@
+import { Attachment } from '../../src/components/Attachment';
 /**
  * Centralized benchmark configurations
  * Import configs directly without executing bench() calls
@@ -50,6 +51,7 @@ import {
 	DataTable,
 	createColumnHelper,
 } from '../../src';
+import { modalActions } from '../../src/stores/modal';
 import { FileList } from '../../src/components/FileList';
 import { PromptInput } from '../../src/components/PromptInput/PromptInput';
 import { fireEvent } from '@testing-library/react';
@@ -422,8 +424,41 @@ export const dialogBoxConfig: ComponentBenchmarkConfig = {
 export const popMenuGroupConfig: ComponentBenchmarkConfig = {
 	componentName: 'PopMenuGroup',
 	tests: [
-		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<PopMenuGroup title="Actions" items={[{ label: 'Edit' }]} />, 50) },
-		{ name: 'Memory', type: 'memory', fn: () => measureMemoryDelta(<PopMenuGroup title="Actions" items={[{ label: 'Edit' }]} />, 10) },
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(<PopMenuGroup title="Actions" items={[{ label: 'Edit' }]} />, 50),
+		},
+		{
+			name: 'Typed item action',
+			type: 'event',
+			fn: () =>
+				measureEventResponseTime(
+					<PopMenuGroup
+						title="Documents"
+						items={[
+							{
+								id: 'open',
+								label: 'Open document',
+								data: { documentId: 'doc-42' },
+								onClick: (_event, item) => {
+									void item.data?.documentId;
+								},
+							},
+						]}
+						onClickItem={(_event, item) => {
+							void item.data?.documentId;
+						}}
+					/>,
+					(container) => fireEvent.click(container.getByRole('menuitem', { name: 'Open document' })),
+					50,
+				),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(<PopMenuGroup title="Actions" items={[{ label: 'Edit' }]} />, 10),
+		},
 	],
 };
 
@@ -434,6 +469,30 @@ export const popMenuControllerConfig: ComponentBenchmarkConfig = {
 		{ name: 'Memory', type: 'memory', fn: () => measureMemoryDelta(<PopMenuController />, 10) },
 	],
 };
+
+function ModalReplacementBenchmark() {
+	React.useEffect(() => {
+		modalActions.show({
+			component: DialogBox,
+			id: 'benchmark',
+			props: {
+				title: 'First dialog',
+				children: (
+					<button
+						type="button"
+						onClick={() =>
+							modalActions.show({ component: DialogBox, id: 'benchmark', props: { title: 'Next dialog' } })
+						}
+					>
+						Replace benchmark dialog
+					</button>
+				),
+			},
+		});
+		return () => modalActions.clear();
+	}, []);
+	return <ModalController draggable={false} transition={{ duration: 0 }} />;
+}
 
 export const modalControllerConfig: ComponentBenchmarkConfig = {
 	componentName: 'ModalController',
@@ -450,10 +509,18 @@ export const modalControllerConfig: ComponentBenchmarkConfig = {
 				measureRerenderTime(
 					<ModalController draggable={false} overlayOpacity={0.5} />,
 					(container) => {
-						container.rerender(
-							<ModalController draggable={true} overlayOpacity={0.8} />,
-						);
+						container.rerender(<ModalController draggable={true} overlayOpacity={0.8} />);
 					},
+					50,
+				),
+		},
+		{
+			name: 'Replace active dialog',
+			type: 'event',
+			fn: () =>
+				measureEventResponseTime(
+					<ModalReplacementBenchmark />,
+					(container) => fireEvent.click(container.getByRole('button', { name: 'Replace benchmark dialog' })),
 					50,
 				),
 		},
@@ -666,16 +733,16 @@ export const fileIconConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<FileIcon name="pdf" size={24} />, 50),
+			fn: () => measureMountTime(<FileIcon filename="report.PDF" size={24} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<FileIcon name="pdf" size={24} />,
+					<FileIcon filename="report.PDF" size={24} />,
 					(container) => {
-						container.rerender(<FileIcon name="sheet" size={24} />);
+						container.rerender(<FileIcon filename="report.XLSX" size={24} />);
 					},
 					50,
 				),
@@ -683,7 +750,34 @@ export const fileIconConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<FileIcon name="image" size={24} />, 10),
+			fn: () => measureMemoryDelta(<FileIcon filename="photo.webp" size={24} />, 10),
+		},
+	],
+};
+
+export const attachmentConfig: ComponentBenchmarkConfig = {
+	componentName: 'Attachment',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(<Attachment content="Clipboard preview" />, 50),
+		},
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () => measureRerenderTime(
+				<Attachment content={{file: 'report.pdf', uploading: true, progress: 25}} />,
+				(container) => {
+					container.rerender(<Attachment content={{file: 'report.pdf', uploading: true, progress: 75}} />);
+				},
+				50,
+			),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(<Attachment content="Clipboard preview" />, 10),
 		},
 	],
 };
@@ -692,11 +786,19 @@ export const fileListConfig: ComponentBenchmarkConfig = {
 	componentName: 'FileList',
 	tests: [
 		{
+			name: 'Attachment Cards',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<FileList variant="attachments" files={[{id: 'report', file: 'report.pdf'}, {id: 'upload', file: 'notes.md', uploading: true, progress: 45}]} />,
+				50,
+			),
+		},
+		{
 			name: 'Mount Time',
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<FileList files={[{ file: 'document.pdf' }, { file: 'notes.txt' }]} />,
+					<FileList files={[{ id: 'document', file: 'document.pdf' }, { id: 'notes', file: 'notes.txt' }]} />,
 					50,
 				),
 		},
@@ -705,13 +807,13 @@ export const fileListConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<FileList files={[{ file: 'document.pdf' }, { file: 'notes.txt' }]} />,
+					<FileList files={[{ id: 'document', file: 'document.pdf' }, { id: 'notes', file: 'notes.txt' }]} />,
 					(container) => {
 						container.rerender(
 							<FileList
 								files={[
-									{ file: 'document.pdf', uploading: true, progress: 0.5 },
-									{ file: 'notes.txt', error: 'Upload failed' },
+									{ id: 'document', file: 'document.pdf', uploading: true, progress: 50 },
+									{ id: 'notes', file: 'notes.txt', error: 'Upload failed' },
 								]}
 							/>,
 						);
@@ -724,7 +826,7 @@ export const fileListConfig: ComponentBenchmarkConfig = {
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<FileList files={[{ file: 'document.pdf' }, { file: 'notes.txt' }]} />,
+					<FileList files={[{ id: 'document', file: 'document.pdf' }, { id: 'notes', file: 'notes.txt' }]} />,
 					10,
 				),
 		},
@@ -1476,21 +1578,39 @@ export const pagerConfig: ComponentBenchmarkConfig = {
 };
 
 export const progressConfig: ComponentBenchmarkConfig = {
-	componentName: 'Progress',
+	componentName: 'ProgressIndicator',
 	tests: [
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<ProgressIndicator size={20} />, 50),
+			fn: () => measureMountTime(<ProgressIndicator show inline decorative size={20} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<ProgressIndicator size={20} />,
+					<ProgressIndicator
+						show
+						inline
+						decorative
+						displayLabel
+						label="Loading files"
+						labelPosition="left"
+						size={20}
+					/>,
 					(container) => {
-						container.rerender(<ProgressIndicator size={64} />);
+						container.rerender(
+							<ProgressIndicator
+								show
+								inline
+								decorative
+								displayLabel
+								label="Loading files"
+								labelPosition="right"
+								size={64}
+							/>,
+						);
 					},
 					50,
 				),
@@ -1498,7 +1618,7 @@ export const progressConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<ProgressIndicator size={20} />, 10),
+			fn: () => measureMemoryDelta(<ProgressIndicator show inline decorative size={20} />, 10),
 		},
 	],
 };
@@ -1793,7 +1913,7 @@ export const tipConfig: ComponentBenchmarkConfig = {
 				),
 		},
 		{
-			name: 'Re-render',
+			name: 'Replace pending request',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
@@ -1813,6 +1933,16 @@ export const tipConfig: ComponentBenchmarkConfig = {
 							/>,
 						);
 					},
+					50,
+				),
+		},
+		{
+			name: 'Cancel pending tip on click',
+			type: 'event',
+			fn: () =>
+				measureEventResponseTime(
+					<Tip tip={{ payload: { label: 'Pending tip' } }} coords={{ x: 0, y: 0 }} showDelay={60000} />,
+					() => fireEvent.click(document.body),
 					50,
 				),
 		},
@@ -1851,12 +1981,15 @@ export const toastConfig: ComponentBenchmarkConfig = {
 				),
 		},
 		{
-			name: 'Re-render',
+			name: 'Repeat notification identity',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
 					<Toast
-						message="Saving..."
+						message="Saved"
+						notificationId="first"
+						data={{ documentId: 'first' }}
+						onClick={() => {}}
 						type="info"
 						showDelay={60000}
 						duration={5000}
@@ -1864,7 +1997,10 @@ export const toastConfig: ComponentBenchmarkConfig = {
 					(container) => {
 						container.rerender(
 							<Toast
-								message="Save failed"
+								message="Saved"
+								notificationId="second"
+								data={{ documentId: 'second' }}
+								onClick={() => {}}
 								type="error"
 								showDelay={60000}
 								duration={5000}
@@ -1907,6 +2043,7 @@ export const allBenchmarkConfigs = [
 	errorSummaryConfig,
 	fileIconConfig,
 	fileListConfig,
+	attachmentConfig,
 	flexDivConfig,
 	grouperConfig,
 	iconConfig,

@@ -1,140 +1,199 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
-import type React from 'react';
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import { useTheme } from '../../../hooks';
+import {
+	AnimatePresence,
+	type Transition,
+	type Variants,
+	motion,
+	useAnimationControls,
+	usePresence,
+} from 'motion/react';
+import React, { useEffect, useId, useMemo } from 'react';
+import { useTheme } from '../../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../../hooks/useTrackRenders/useTrackRenders';
+import { classNames, mergedPresenceMotionValues } from '../../../utils/functions/misc';
 import { resolveColorProps } from '../../../utils/functions/resolveColorProps';
+import { getWaterTransition } from '../../../utils/styling/getWaterTransition';
+import { usePrefersReducedMotion } from '../../../utils/styling/usePrefersReducedMotion';
 import css from './ProgressIndicator.module.css';
 import type { ProgressIndicatorProps } from './_types';
+import { useSpinnerPlayback } from './useSpinnerPlayback';
 
-export function ProgressIndicator(rawProps: Readonly<ProgressIndicatorProps>) {
-	const props = resolveColorProps(rawProps);
-	const theme = useTheme();
-	const {
-		size = 20,
-		inset = true,
-		secondsPerSpin = 1,
-		show = false,
-		color = theme.current.colors['core-text-primary'],
-		stroke = 1.5,
-		inline = false,
-		duration = undefined,
-		didStart = () => null,
-		didStop = () => null,
-		...divAttributes
-	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
-	const [playing, setPlaying] = useState<boolean>(show);
-	const gradientId = useId().replace(/:/g, '');
-	const timer = useRef<any>(null);
-
-	// start and stop the spinner from the controlled show and duration props
+const staticState = {
+	opacity: 1,
+	x: 0,
+	y: 0,
+	z: 0,
+	scale: 1,
+	scaleX: 1,
+	scaleY: 1,
+	rotate: 0,
+	rotateX: 0,
+	rotateY: 0,
+	skewX: 0,
+	skewY: 0,
+};
+type SurfaceProps = Omit<
+	ProgressIndicatorProps,
+	'onStart' | 'onStop' | 'show' | 'duration' | 'decorative' | 'motionValues' | 'transition'
+> & {
+	playing: boolean;
+	gradientId: string;
+	variants: Variants;
+	timing: Transition;
+	forwardedRef: React.ForwardedRef<HTMLDivElement>;
+};
+function IndicatorSurface({
+	playing,
+	gradientId,
+	variants,
+	timing,
+	forwardedRef,
+	size = 20,
+	stroke = 1.5,
+	secondsPerSpin = 1,
+	color = 'var(--core-text-primary)',
+	inset = true,
+	inline = false,
+	label = 'Loading',
+	displayLabel = false,
+	labelPosition = 'right',
+	textSize = 'm',
+	textColor = 'var(--core-text-primary)',
+	className,
+	style,
+	...attributes
+}: SurfaceProps) {
+	const [present, safeToRemove] = usePresence();
+	const reduced = usePrefersReducedMotion();
+	const controls = useAnimationControls();
 	useEffect(() => {
-		if (show) {
-			setPlaying(true);
-			didStart();
-			if (duration) {
-				timer.current = setTimeout(() => {
-					setPlaying(false);
-					didStop();
-				}, duration * 1000);
-			}
-		} else {
-			setPlaying(false);
-			didStop();
+		controls.stop();
+		if (reduced) {
+			controls.set(staticState);
+			if (!present) safeToRemove?.();
+			return;
 		}
+		let active = true;
+		const state = present ? 'animate' : 'exit';
+		const target = variants[state];
+		const definition = typeof target === 'function' ? state : { ...target, transition: target?.transition ?? timing };
+		if (present) controls.set('initial');
+		void controls.start(definition).then(() => {
+			if (active && !present) safeToRemove?.();
+		});
 		return () => {
-			if (timer?.current) clearTimeout(timer.current);
+			active = false;
+			controls.stop();
 		};
-	}, [show, didStart, didStop, duration]);
-
-	// compose CSS custom properties for spinner positioning and sizing
-	const cssVars = useMemo(() => {
-		return {
-			'--pi-position': inline ? 'relative' : 'absolute',
-			'--pi-inset': inline ? 'unset' : '0',
-			'--pi-icon-size': `${size ?? 0}px`,
-			'--pi-display': inline ? 'inline-flex' : 'flex',
-		} as React.CSSProperties;
-	}, [inline, size]);
-
-	// derive the spinner SVG from the active visual configuration
-	const openCircle = useMemo(() => {
-		return OpenCircle(size, secondsPerSpin, color, stroke, playing, inset, gradientId);
-	}, [size, secondsPerSpin, color, stroke, playing, inset, gradientId]);
-
+	}, [present, reduced, controls, variants, timing, safeToRemove]);
+	const resolveSize = () => {
+		if (typeof size === 'string') return size.trim() || 20;
+		if (Number.isFinite(size) && size > 0) return size;
+		return 20;
+	};
+	const resolvedSize = resolveSize();
+	const resolvedStroke = Number.isFinite(stroke) && stroke >= 0 ? Math.min(stroke, 10) : 1.5;
+	const spinTime = Number.isFinite(secondsPerSpin) && secondsPerSpin > 0 ? secondsPerSpin : 1;
+	const radius = Math.min(inset ? 8 : 10, 10 - resolvedStroke / 2);
+	const x = 10 + radius * Math.cos(-0.4);
+	const y = 10 + radius * Math.sin(-0.4);
+	const path = `M ${x} ${y} A ${radius} ${radius} 0 1 1 10 ${10 - radius}`;
+	const variables = {
+		'--pi-position': inline ? 'relative' : 'absolute',
+		'--pi-inset': inline ? 'auto' : '0',
+		'--pi-display': inline ? 'inline-flex' : 'flex',
+		'--pi-spin-duration': `${spinTime}s`,
+		'--pi-text-color': textColor,
+	} as React.CSSProperties;
+	return (
+		<motion.div
+			{...attributes}
+			ref={forwardedRef}
+			className={classNames(css.container, className ?? '')}
+			aria-hidden="true"
+			data-label-position={displayLabel ? labelPosition : undefined}
+			inert={!present}
+			style={{ ...style, ...variables }}
+			initial={reduced ? false : 'initial'}
+			animate={controls}
+			variants={reduced ? undefined : variants}
+			transition={reduced ? { duration: 0, delay: 0 } : timing}
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width={resolvedSize}
+				height={resolvedSize}
+				viewBox="0 0 20 20"
+				aria-hidden="true"
+				focusable="false"
+				className={playing && present && !reduced ? css.spinning : undefined}
+				style={{ width: resolvedSize, height: resolvedSize }}
+			>
+				<defs>
+					<linearGradient id={gradientId} x1="0" y1="0" x2="20" y2="0" gradientUnits="userSpaceOnUse">
+						<stop offset="0%" stopColor={color} stopOpacity={1} />
+						<stop offset="50%" stopColor={color} stopOpacity={1} />
+						<stop offset="100%" stopColor={color} stopOpacity={0} />
+					</linearGradient>
+				</defs>
+				<path d={path} fill="transparent" strokeWidth={resolvedStroke} stroke={`url(#${gradientId})`} />
+			</svg>
+			{displayLabel && <span className={classNames(css.label, css[textSize])}>{label}</span>}
+		</motion.div>
+	);
+}
+const ProgressIndicatorBase = React.forwardRef<HTMLDivElement, ProgressIndicatorProps>((rawProps, ref) => {
+	const props = resolveColorProps(rawProps);
+	const {
+		show = false,
+		duration,
+		onStart,
+		onStop,
+		label = 'Loading',
+		decorative = false,
+		motionValues,
+		transition,
+		...attributes
+	} = props;
+	const resolvedLabel = label.trim() || 'Loading';
+	const playing = useSpinnerPlayback({ show, duration, onStart, onStop });
+	const id = useId().replace(/:/g, '');
+	const theme = useTheme().current;
+	const variants = useMemo(
+		() =>
+			mergedPresenceMotionValues(
+				{ initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } },
+				motionValues,
+			),
+		[motionValues],
+	);
+	const timing = useMemo(() => getWaterTransition(theme.motion, transition), [theme.motion, transition]);
 	/* START.DEBUG */
 	useTrackRenders(props, 'Progress Indicator');
 	/* END.DEBUG */
-
 	return (
-		<AnimatePresence initial={true}>
-			{show && (
-				<motion.div
-					id={divId}
-					className={`${css.container}${divClass}`}
-					style={{ ...divStyle, ...cssVars }}
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					exit={{ opacity: 0 }}
-					{...(rest as any)}
-				>
-					{openCircle}
-				</motion.div>
+		<>
+			{!decorative && (
+				<span role="status" aria-live="polite" aria-atomic="true" className={css.announcement}>
+					{show ? resolvedLabel : ''}
+				</span>
 			)}
-		</AnimatePresence>
+			<AnimatePresence>
+				{show && (
+					<IndicatorSurface
+						{...attributes}
+						forwardedRef={ref}
+						label={resolvedLabel}
+						playing={playing}
+						gradientId={id}
+						variants={variants}
+						timing={timing}
+					/>
+				)}
+			</AnimatePresence>
+		</>
 	);
-}
-
-export const OpenCircle = (
-	size: number | string,
-	secondsPerSpin: number,
-	color: string,
-	stroke = 1.5,
-	playing = false,
-	inset = true,
-	gradientId = 'strokeFill',
-) => {
-	// keep the stroke fully inside the 20x20 viewBox while visually touching the edge
-	const edgeRadius = 10 - stroke / 2;
-	const edgeStartX = 10 + edgeRadius * Math.cos(-0.4);
-	const edgeStartY = 10 + edgeRadius * Math.sin(-0.4);
-	const path = inset
-		? 'M 17.371 6.886 C 17.776 7.843 18 8.895 18 10 C 18 14.418 14.418 18 10 18 C 5.582 18 2 14.418 2 10 C 2 5.582 5.582 2 10 2'
-		: `M ${edgeStartX.toFixed(3)} ${edgeStartY.toFixed(3)} A ${edgeRadius.toFixed(3)} ${edgeRadius.toFixed(3)} 0 1 1 10 ${(
-				10 - edgeRadius
-			).toFixed(3)}`;
-
-	// render the animated open-circle spinner path
-	return (
-		<motion.svg
-			xmlns="http://www.w3.org/2000/svg"
-			width={size}
-			height={size}
-			viewBox="0 0 20 20"
-			role="img"
-			aria-label="Loading spinner"
-			transition={{
-				ease: 'linear',
-				repeatType: 'loop',
-				repeat: playing ? Number.POSITIVE_INFINITY : 0,
-				duration: secondsPerSpin,
-			}}
-			animate={playing ? { rotate: 360 } : { rotate: 0 }}
-		>
-			<title>Loading</title>
-			<defs>
-				<linearGradient id={gradientId} x1="0" y1="0" x2="20" y2="0" gradientUnits="userSpaceOnUse">
-					<stop offset="0%" stopColor={color} stopOpacity={1} />
-					<stop offset="50%" stopColor={color} stopOpacity={1} />
-					<stop offset="100%" stopColor={color} stopOpacity={0} />
-				</linearGradient>
-			</defs>
-			<motion.path d={path} fill="transparent" strokeWidth={stroke} stroke={`url(#${gradientId})`} />
-		</motion.svg>
-	);
-};
+});
+ProgressIndicatorBase.displayName = 'ProgressIndicator';
+export const ProgressIndicator = React.memo(ProgressIndicatorBase);

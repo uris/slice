@@ -96,3 +96,22 @@ export const motionCode = `
     <PopMenuItem label="Edit" />
 </PopMenu>
 `;
+
+export const actionsCode = `
+import { PopMenu, type PropMenuEntry } from '@apple-pie/slice';
+
+type DocumentAction = { documentId: string };
+const options: PropMenuEntry<DocumentAction>[] = [
+  {
+    id: 'open', label: 'Open document', data: { documentId: 'doc-42' },
+    onClick: (_event, item) => {
+      if (item.data) window.location.assign('/documents/' + item.data.documentId);
+    },
+  },
+];
+
+export function DocumentMenu({ caller, close }: { caller: HTMLElement; close: () => void }) {
+  return <PopMenu caller={caller} options={options} onDismiss={close}
+    onClickItem={(_event, item) => console.log('Selected', item.id, item.data)} />;
+}
+`;

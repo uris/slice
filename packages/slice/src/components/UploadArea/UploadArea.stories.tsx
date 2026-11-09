@@ -15,7 +15,7 @@ import { allTypes } from './_types';
 const uploadFiles = [
 	{ file: 'document.doc' },
 	{ file: 'spreadsheet.xls', uploading: true, progress: 0 },
-	{ file: 'markdown.md', uploading: true, progress: 0.82 },
+	{ file: 'markdown.md', uploading: true, progress: 82 },
 	{ file: 'pdf.pdf', error: 'Upload failed' },
 ];
 
@@ -138,5 +138,15 @@ export const NestedDragDepth: StoryObj<typeof UploadArea> = {
 	},
 	play: async ({ canvasElement }) => {
 		await runUploadAreaNestedDragDepthPlay({ canvasElement });
+	},
+};
+
+export const AttachmentRemoval: StoryObj<typeof UploadArea> = {
+	tags: ['tests'],
+	args: { files: [{ id: 'report', file: 'report.pdf' }], canRemove: true, onFilesChange: fn() },
+	play: async ({ canvasElement, args }) => {
+		const { within, userEvent, expect } = await import('storybook/test');
+		await userEvent.click(within(canvasElement).getByRole('button', { name: 'Remove file report.pdf' }));
+		await expect(args.onFilesChange).toHaveBeenCalledWith([]);
 	},
 };

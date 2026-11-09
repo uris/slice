@@ -63,6 +63,9 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         </table>
 
         ## Events
+
+`onFilesChange?: (files: FileItem[]) => void` receives the remaining controlled files after removal. Connect it directly to your file-array state setter. Removal is available only when canRemove is true, the area is not busy, and this callback is provided.
+
         <table style={{width: '100%'}}>
           <colgroup>
             <col style={{width: '1%'}} />
@@ -98,7 +101,7 @@ export function UploadAreaExample() {
             busy={false}
             showProgress
             files={[
-                { file: 'proposal.pdf', uploading: true, progress: 0.45 },
+                { file: 'proposal.pdf', uploading: true, progress: 45 },
                 { file: 'brief.clipboard' },
             ]}
             canRemove

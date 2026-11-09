@@ -13,6 +13,10 @@ export const reactDocSlugs = [
 	'modal-controller',
 	'tip',
 	'toast',
+	'progress-indicator',
+	'file-icon',
+	'attachment',
+	'file-list',
 	'icon-button',
 	'toggle-button',
 	'radio-button',
@@ -49,6 +53,23 @@ export type ReactDocSlug = (typeof reactDocSlugs)[number];
 
 // meta for all slugs including shared
 export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
+	attachment: {
+		title: 'Attachment | Slice UIKit',
+		description:
+			'Preview images, clipboard text, files, and upload progress with the Slice Attachment component for React.',
+	},
+	'file-list': {
+		title: 'FileList | Slice UIKit',
+		description: 'Display compact file rows or attachment cards with upload feedback and controlled removal in React.',
+	},
+	'file-icon': {
+		title: 'FileIcon | Slice UIKit',
+		description: 'Display themed document and media artwork with the Slice FileIcon component for React.',
+	},
+	'progress-indicator': {
+		title: 'ProgressIndicator | Slice UIKit',
+		description: 'Show indeterminate loading feedback with the Slice ProgressIndicator component for React.',
+	},
 	overlay: {
 		title: 'Overlay | Slice UIKit',
 		description: 'Dim the background for focused tasks with the Slice Overlay component for React.',

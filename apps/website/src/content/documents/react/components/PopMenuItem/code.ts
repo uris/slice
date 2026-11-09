@@ -182,3 +182,22 @@ export function QuickOpenItem() {
     return <PopMenuItem label={quickOpen.name} shortcut={quickOpen} />;
 }
 `;
+
+export const actionCode = `
+import { PopMenu, PopMenuGroup, PopMenuItem } from '@apple-pie/slice';
+
+type DocumentAction = { documentId: string };
+
+export function DocumentMenu({ caller, close }: { caller: HTMLElement; close: () => void }) {
+return <PopMenu<DocumentAction> caller={caller} onDismiss={close}
+  onClickItem={(_event, item) => console.log('Menu', item.data?.documentId)}>
+  <PopMenuGroup<DocumentAction> title="Documents"
+    onClickItem={(_event, item) => console.log('Group', item.data?.documentId)}>
+    <PopMenuItem data={{ documentId: 'doc-42' }} label="Open document"
+      onClick={(_event, item) => {
+        if (item.data) window.location.assign('/documents/' + item.data.documentId);
+      }} />
+  </PopMenuGroup>
+</PopMenu>;
+}
+`;

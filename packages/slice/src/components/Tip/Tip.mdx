@@ -1,97 +1,95 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as TipStories from './Tip.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={TipStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Tip
-        Renders a positioned tooltip surface and animates visibility based on resolved coordinates.
+# Tip
 
-        ## Singleton usage pattern
-        Add a single `Tip` instance for the app (or app shell), not one per component. Use shared state management to set `tip` and `coords` from any element emitting tooltip events, so one global `Tip` handles show/hide across the full UI.
+Slice components handle tooltip activation and cleanup for you. Button,
+IconButton, ToggleButton, and Chip handle hover and focus and supply the hint
+label and source-element ref through `onToolTip`. The shared Tip handles
+positioning, timing, and dismissal.
 
-        When paired with `useToolTip`, the tooltip is centered to its anchor, clamped within the viewport horizontally, and moved above the anchor if there is not enough room below.
-            
-        ## Base element
-        `HTMLDivElement`
+Add a `tooltip` label and pass `onToolTip` directly to the shared tip store:
 
-        ## Interface
-        `ToolTipProps`
+```tsx
+import { Button } from '@apple-pie/slice';
+import { tipActions } from '@apple-pie/slice/stores/tip';
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>var(--core-surface-secondary)</code></td><td>Tooltip background color token/value.</td></tr>
-            <tr><td><code>border</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Whether a border is shown around the tooltip.</td></tr>
-            <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>var(--core-outline-primary)</code></td><td>Tooltip border color token/value.</td></tr>
-            <tr><td><code>textColor</code></td><td><code>string</code></td><td><code>var(--core-text-primary)</code></td><td>Text color token/value.</td></tr>
-            <tr><td><code>coords</code></td><td><code>{`{ x: number; y: number }`}</code></td><td><code>{`{ x: 0, y: 0 }`}</code></td><td>Coordinates used to place the tooltip.</td></tr>
-            <tr><td><code>hideDelay</code></td><td><code>number</code></td><td><code>2500</code></td><td>Delay in ms before the tooltip auto-hides.</td></tr>
-            <tr><td><code>padding</code></td><td><code>number | string</code></td><td><code>var(--spacing-xs) var(--spacing-s)</code></td><td>Tooltip padding.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>4</code></td><td>Tooltip border radius in px.</td></tr>
-            <tr><td><code>showDelay</code></td><td><code>number</code></td><td><code>500</code></td><td>Delay in ms before the tooltip appears.</td></tr>
-            <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'s'</code></td><td>Typography size variant.</td></tr>
-            <tr><td><code>tip</code></td><td><code>ToolTip | null</code></td><td><code>undefined</code></td><td>Tooltip payload containing label and anchor metadata.</td></tr>
-            <tr><td><code>...motionDivAttributes</code></td><td><code>{`HTMLMotionProps<'div'>`}</code></td><td><code>-</code></td><td>Native and motion props passed through to the root <code>motion.div</code>.</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        `Tip` has no events
-            
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
+<Button label="Project details" tooltip="Your changes are saved automatically."
+  onToolTip={tipActions.push} />;
 ```
-import { useRef, useState } from 'react';
-import { IconButton, Tip, useToolTip } from '@apple-pie/slice';
-import type { ToolTip } from '@apple-pie/slice';
 
-function TipExample() {
-    const [tip, setTip] = useState<ToolTip | null>(null);
-    const tipRef = useRef<HTMLDivElement>(null);
-    const coords = useToolTip(tip, tipRef);
+Mount this once in your app shell:
 
-    return (
-        <>
-            <IconButton actionName="Click Me"
-                icon="basic.home"
-                tooltip="Click Me"
-                onToolTip={(nextTip) => setTip(nextTip)}
-            />
-            <Tip
-                id="tip-example"
-                data-testid="tip-example"
-                className="custom-wrapper"
-                style={{ zIndex: 20 }}
-                ref={tipRef}
-                tip={tip}
-                coords={coords}
-                size="m"
-            />
-        </>
-    );
+```tsx
+import { useRef } from 'react';
+import { Tip, useToolTip } from '@apple-pie/slice';
+import { useTip } from '@apple-pie/slice/stores/tip';
+
+function ApplicationTip() {
+  const tip = useTip();
+  const ref = useRef<HTMLDivElement>(null);
+  const coords = useToolTip(tip, ref);
+  return <Tip ref={ref} tip={tip} coords={coords} />;
 }
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+## Custom components
+
+Expose `onToolTip?: (tip: ToolTip | null) => void`. On hover or focus, send
+`{ ref, payload: { label: 'Your hint' } }` using a ref to your source element.
+Send `null` on click, or when both hover and focus have ended. Consumers can pass
+`tipActions.push` directly, using the same shared Tip and positioning hook.
+
+## Behavior
+
+The wrapper stays mounted while hidden so it can be measured. A nonempty label and finite coordinates (including zero) schedule a request after
+`showDelay` (500ms). The default reveal is 150ms with Water easing. Hiding is
+instant. A new request replaces timers; changing coordinates does not restart them.
+`hideDelay` defaults to 2500ms from reveal; `tip.payload.duration` overrides it.
+Expiry applies even while a trigger remains active. Clearing data or coordinates,
+clicks, and Escape cancel pending/visible tips. Unmount clears timers/listeners.
+
+`useToolTip` measures the mounted wrapper, centers below the anchor, flips above
+when needed, and clamps both axes to the viewport. It tracks geometry while a
+request exists, including scrolling, resizing, and layout/transform movement.
+Missing/removed anchors return undefined coordinates. Equal geometry keeps the
+same coordinate object and does not trigger rendering.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| backgroundColor | ColorValue | core-surface-secondary |
+| border | boolean | true |
+| borderColor | ColorValue | core-outline-primary |
+| borderRadius | number or string | corner-xs (4px) |
+| coords | finite x/y numbers | undefined |
+| hideDelay | number, milliseconds | 2500 |
+| padding | number or string | 4px 8px |
+| showDelay | number, milliseconds | 500 |
+| textColor | ColorValue | core-text-primary |
+| textSize | xs, s, m, l, xl | s |
+| tip | ToolTip or null | undefined |
+
+Use `textColor` and `borderRadius`; legacy `color` and `radius` are removed.
+Native div attributes/events are forwarded, classes appended, and styles merged.
+Content, ARIA semantics, and animation are managed internally. Native color,
+drag, and animation-start handlers are excluded. The ref targets the mounted div.
+
+## Motion
+
+`motionValues?: Variants` overrides initial/animate states. Each reveal resets the
+initial state. `transition?: Transition` customizes reveal only; removal never
+waits for animation. Reduced motion is observed live and cancels custom movement,
+fading, and animation delays while retaining the show delay and lifetime.
+
+## Accessibility
+
+The wrapper has `role="tooltip"` and is hidden while inactive. Visible tips add
+their ID to the trigger's `aria-describedby` through `tip.ref`, preserving existing
+descriptions and removing only their own association when hidden. Escape dismisses
+without moving focus. Controls must activate on hover and focus, and clear requests
+on leave/blur/click. Tips are descriptive text, without pointer input or focusable
+content. Use a dialog or menu for interactive content.

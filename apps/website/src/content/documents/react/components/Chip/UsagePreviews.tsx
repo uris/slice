@@ -3,7 +3,7 @@ import { Chip } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export function ChipUsageExample() {
-	return <Chip label="Colors" icon="basic.swatchbook" textSize={'m'} />;
+	return <Chip label="Colors" icon="basic.swatchbook" />;
 }
 
 export function ChipStylingExample() {
@@ -41,6 +41,8 @@ export function ChipRemoveExample() {
 				<Chip
 					key={tag.id}
 					label={tag.label}
+					borderWidth={0}
+					backgroundColor={'core-fill-primary'}
 					onRemove={() => setTags((items) => items.filter((item) => item.id !== tag.id))}
 				/>
 			))}

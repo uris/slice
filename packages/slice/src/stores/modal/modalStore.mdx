@@ -59,7 +59,7 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
         </table>
 
         ## Actions
-        Use `show()` for fire-and-forget display and `modalResponse()` when the caller should await the result. Explicit button choices should resolve. Dismissal, closing, or clearing should reject.
+        Use `show()` for fire-and-forget display and `modalResponse()` when the caller should await the result. Explicit button choices should resolve. Dismissal, closing, clearing, and replacement reject a pending response, so always handle rejection. Retained settlement callbacks are bound to their exact stored instance and cannot clear a replacement.
 
         <table style={{width: '100%'}}>
           <colgroup>

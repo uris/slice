@@ -13,6 +13,25 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
 
         Mount one `ModalController` near the app root when using the modal store. The controller owns overlay rendering, enter and exit animation, and optional dragging.
 
+        ## Replacement and dismissal
+
+The store holds one modal without stacking. Every new stored instance gets fresh
+presentation/drag state, including when IDs are reused or omitted. Exiting panels
+are inert and stop trapping focus or handling Escape. A replacement receives its
+own initial focus; dismissal restores the opener and background/scroll state.
+
+Callbacks are bound to their exact instance. Retained callbacks from replaced or
+closed dialogs cannot affect a newer modal. Store settlement precedes descriptor
+callbacks, so a throwing consumer callback cannot strand a pending modal.
+
+Always catch `modalResponse()` rejection: close, backdrop, Escape, clear, and
+replacement reject a pending response. `show()` is fire-and-forget.
+
+Reduced motion overrides custom animation delays and movement, including live
+changes during entry/exit. Use `motionValues={{ initial, animate, exit }}` and
+`transition` for custom motion, matching PopMenu. Partial states merge with defaults. Manual dragging stays enabled
+when `draggable` is true; close/action controls do not initiate it.
+
         ## Base element
         `HTMLDivElement`
 
@@ -36,15 +55,12 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>animate</code></td><td><code>string</code></td><td><code>'animate'</code></td><td>Variant key used for the active animation state.</td></tr>
             <tr><td><code>dragConstraintsRef</code></td><td><code>{`RefObject<HTMLElement | null>`}</code></td><td><code>-</code></td><td>Optional ref used to constrain dragging when the active modal exposes a drag handle.</td></tr>
             <tr><td><code>draggable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enables dragging on the controller wrapper.</td></tr>
-            <tr><td><code>exit</code></td><td><code>string</code></td><td><code>'exit'</code></td><td>Variant key used during unmount.</td></tr>
-            <tr><td><code>initial</code></td><td><code>string</code></td><td><code>'initial'</code></td><td>Variant key used before the modal enters.</td></tr>
             <tr><td><code>overlayColor</code></td><td><code>string</code></td><td><code>'rgb(0,0,0)'</code></td><td>Background color for the overlay behind the active modal.</td></tr>
             <tr><td><code>overlayOpacity</code></td><td><code>number</code></td><td><code>0.7</code></td><td>Opacity applied to the overlay.</td></tr>
             <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>{`Water`}</code></td><td>Timing merged with Slice’s Water transition for both the wrapper and backdrop. Reduced motion bypasses animation.</td></tr>
-            <tr><td><code>variants</code></td><td><code>Variants</code></td><td><code>{`{ initial, animate, exit }`}</code></td><td>Motion variants applied to the controller wrapper.</td></tr>
+            <tr><td><code>motionValues</code></td><td><code>Variants</code></td><td><code>{`{ initial, animate, exit }`}</code></td><td>Partial initial/animate/exit values merged with the controller defaults.</td></tr>
           </tbody>
         </table>
 
@@ -112,4 +128,4 @@ export function ConstrainedControllerExample() {
 
 ## Modal hosting
 
-Use `DialogBox` for the named dialog panel. `ModalController` supplies modal state, initial focus, focus containment and restoration, Escape dismissal, background inertness, and page scroll locking. It restores background state after exit. The controller settles the store before descriptor callbacks run.
+Use `DialogBox` for the named dialog panel. `ModalController` supplies modal state, initial focus, focus containment and restoration, Escape dismissal, background inertness, and page scroll locking. It restores background state when the active panel is dismissed. The controller settles the store before descriptor callbacks run.

@@ -1,100 +1,83 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
 import * as FileListStories from './FileList.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={FileListStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # FileList
-        Renders a list of files as removable chips with file-type icons. It supports upload-aware states per item, including in-progress uploads (`uploading` + `progress`) and error messaging (`error`).
+# FileList
 
-        `FileList` is a controlled component: clicking remove emits `onChange(updatedFiles)` but does not mutate internal list state. The parent must pass the updated `files` prop for the UI to change.
+Controlled attachments with file icons, upload progress, errors, and removal.
 
-        ## Base element
-        `HTMLDivElement`
-
-        ## Interface
-        `FileListProps`
-
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>files</code></td><td><code>FileItem[]</code></td><td><code>-</code></td><td>Rendered file data. Each `FileItem` supports `file`, `uploading`, `progress`, and `error`.</td></tr>
-            <tr><td><code>direction</code></td><td><code>{`'row' | 'column'`}</code></td><td><code>'row'</code></td><td>Controls list direction and wrapping behavior.</td></tr>
-            <tr><td><code>gap</code></td><td><code>number</code></td><td><code>10</code></td><td>Sizing/layout setting for `gap`.</td></tr>
-            <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'s'</code></td><td>Typography size preset used by each list item.</td></tr>
-            <tr><td><code>maxWidth</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Maximum width applied to each list item.</td></tr>
-            <tr><td><code>minWidth</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Minimum width applied to each list item.</td></tr>
-            <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Exact inner spacing override, including zero. Defaults use compact theme spacing with per-row icon compensation.</td></tr>
-            <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>24</code></td><td>Sizing/layout setting for the file icon.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>-</code></td><td>Background color applied to each rendered file item.</td></tr>
-            <tr><td><code>canRemove</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Shows or hides the remove action for each file item.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onChange</code></td><td><code>{`(files: FileItem[]) => void`}</code></td></tr>
-            <tr><td><code>onToolTip</code></td><td><code>{`(tip: ToolTip | null) => void`}</code></td></tr>
-          </tbody>
-        </table>
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
 ```
-import { FileList } from '@apple-pie/slice';
+import { FileList, type FileItem } from '@apple-pie/slice';
+import { useState } from 'react';
 
-export function FileListExample() {
-    return (
-        <FileList
-            files={[
-                { file: 'document.doc' },
-                { file: 'spreadsheet.xls', uploading: true, progress: 0.45 },
-                { file: 'pdf.pdf', error: 'Upload failed' },
-            ]}
-            size="s"
-            direction="row"
-            gap={8}
-            onChange={(items) => console.log(items)}
-            id="filelist-example"
-            data-testid="filelist-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8 }}
-        />
-    );
+export function Attachments() {
+  const [files, setFiles] = useState<FileItem[]>([
+    {id: 'report', file: 'report.pdf'},
+    {id: 'notes', file: 'notes.md'},
+  ]);
+  return <FileList files={files} onChange={setFiles} />;
 }
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+## Attachment cards
+
+Use `variant="attachments"` to render the same files as thumbnail cards. The default
+`variant="list"` keeps compact file rows. Both variants accept the same `FileItem[]`
+and controlled `onChange` callback, preserve stable item identity, and move keyboard
+focus to the next removal button after removal (or the list when empty).
+
+```
+<FileList
+    variant="attachments"
+    attachmentSize="s"
+    files={files}
+    onChange={setFiles}
+/>
+```
+
+Cards display image previews or text excerpts when `file` is a browser `File`, and file-type
+icons otherwise. Uploading cards replace metadata with a spinner and percentage; removal
+is hidden while uploading, matching compact rows. Upload errors remain visible alerts.
+
+`attachmentSize` uses Attachment's named card sizes. `direction`, `gap`, `textSize`,
+`iconSize`, `padding`, `backgroundColor`, and width constraints also apply to cards.
+A column stacks cards at their natural size rather than stretching them across the list.
+
+<Canvas of={FileListStories.Attachments} />
+<Canvas of={FileListStories.AttachmentsColumn} />
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| variant | list or attachments | list | Choose compact rows or thumbnail cards. |
+| attachmentSize | xs, s, m, l, or xl | s | Attachment card width and preview height. |
+| backgroundColor | ColorValue | core-surface-secondary | Compact progress fill or attachment card background. |
+| canRemove | boolean | true | Show removal buttons for items that are not uploading. |
+| direction | row or column | row | Wrapping row or stacked column; compact column rows fill the list width. |
+| files | FileItem[] | [] | Controlled attachments; see below. |
+| gap | number | 10 | Space between items in pixels. |
+| iconSize | number | 24 in list, 32 in attachments | File icon size in pixels. |
+| listName | string | Files | Accessible name for the list. |
+| maxWidth | number or string | undefined | Maximum item width; compact column mode uses 100%. |
+| minWidth | number or string | undefined | Minimum item width; compact columns default to 100%. Zero is respected. |
+| padding | number or string | 6px in list, 0 4px in attachments | Compact row padding or card information-row padding; overrides are exact. |
+| textSize | xs, s, m, l, or xl | s | Filename text size. |
+| ...divAttributes | HTMLAttributes | — | Native attributes, styles, class names, and events apply to the wrapper. Children are not rendered. |
+
+A `FileItem` has `id?: string`, `file: File | string`, `uploading?: boolean`, `progress?: number`, and `error?: string`. Supply a unique ID when recreating attachment objects; retained item objects or File objects have stable fallback identity. Duplicate filenames are supported.
+
+Progress uses **0–100 percent only**: 1 means 1%. Values are rounded and clamped. Missing or nonfinite progress is indeterminate while uploading and defaults to 100% otherwise. Uploading hides removal; errors show an alert containing the filename, with a warning border on compact rows. File icons use the shared extension resolver.
+
+## Events
+
+- `onChange?: (files: FileItem[]) => void`: remaining attachments after removal. Pass a state setter directly; FileList does not mutate its own files.
+- `onToolTip?: (tip: ToolTip | null) => void`: filename-specific remove tooltip on hover/focus. Clears when neither applies, on removal, or on trigger unmount.
+- Native DOM events apply to the wrapper. A forwarded ref targets its HTMLDivElement.
+
+## Accessibility
+
+The wrapper and items have list semantics. Progress bars have task-specific names and numeric values when known; spinners and file icons are decorative. Errors are announced without duplicating spinner announcements. Native removal buttons support Enter and Space and show keyboard-only focus outlines. Removal focuses the next action, previous action, or empty list. Reduced motion disables progress transitions and spinner motion.
+
+`FileItem[]` composes with UploadArea.files and PromptInput.attachments. UploadArea.onFilesChange and PromptInput.onAttachmentsChange accept the same array setter as FileList.onChange.

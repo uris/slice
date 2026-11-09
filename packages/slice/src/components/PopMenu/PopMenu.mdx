@@ -30,6 +30,31 @@ import { PopMenu, PopMenuGroup, PopMenuItem } from '@apple-pie/slice';
 </PopMenu>
 ```
 
+## Item actions and typed payloads
+
+Items accept `data?: T` and `onClick(event, item)`. The same API works in root
+`options`, grouped `items`, and composed `PopMenuItem` children. Click details use
+`PopMenuItemClickInfo<T>` and include the original payload as `item.data` (undefined
+when omitted). Item callbacks run before groups, then the menu, then dismissal;
+disabled items do not emit callbacks. Keyboard activation uses the same flow.
+Async callbacks are not awaited. Use `autoDismiss={false}` when an action should
+keep the menu open, and call `item.dismissAll()` when ready.
+
+```tsx
+const options: PropMenuEntry<{ documentId: string }>[] = [{
+  id: 'open', label: 'Open document', data: { documentId: 'doc-42' },
+  onClick: (_event, item) => {
+    if (item.data) window.location.assign('/documents/' + item.data.documentId);
+  },
+}];
+<PopMenu options={options} onClickItem={(_event, item) => console.log(item.data)} />
+```
+
+`T` is inferred from descriptors or supplied explicitly on the component and prop
+types. For composed children, use the same `T` on parent `PopMenu<T>` and
+`PopMenuGroup<T>` shared handlers and their items. React does not infer a parent's
+payload type from JSX children. Nested menus establish their own payload scope.
+
 Items and groups connect to their containing menu through React context,
 including inside custom wrappers, fragments, and conditional children. Custom
 wrappers do not need to forward menu handlers. Authored order is preserved, and
@@ -122,3 +147,8 @@ menus or explicit platform control, use `resolveShortcut(shortcut, isAppleDevice
 exported from the package root and `@apple-pie/slice/utils`. Pass the resulting string
 to an item when you need a custom or deterministic platform display. Enter, Escape,
 and Tab display as text on both platforms.
+
+PopMenu observes `prefers-reduced-motion`, including live preference changes. When
+enabled, menus and submenus appear and dismiss immediately without translating,
+scaling, rotating, or fading. Custom `motionValues` and `transition` delays are
+bypassed, while focus management and dismissal callbacks remain active.

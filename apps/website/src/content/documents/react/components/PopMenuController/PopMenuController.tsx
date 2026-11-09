@@ -71,7 +71,7 @@ export default function PopMenuControllerDoc() {
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
 				The controller adds no wrapper, focus behavior, or keyboard handling. Naming, menu semantics, and the current
-				keyboard behavior and reduced-motion responsibilities are described on{' '}
+				keyboard behavior and reduced-motion behavior are described on{' '}
 				<Code openURL="/docs/react/pop-menu/">PopMenu</Code>. Set <Code>name</Code> in the pushed props or composed
 				control. The menu derives its accessible label from that name, with its usual ID and default fallbacks.
 			</P>

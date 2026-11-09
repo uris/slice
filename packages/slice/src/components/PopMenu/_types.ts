@@ -23,40 +23,44 @@ export type PopMenuSubMenuProps = {
 };
 
 /** Click details. For toggle items, toggled is the requested next state. */
-export type PopMenuItemClickInfo = Pick<
-	PopMenuItemBase,
-	'id' | 'label' | 'toggle' | 'toggled' | 'subMenu' | 'autoDismiss'
+export type PopMenuItemClickInfo<T = unknown> = Pick<
+	PopMenuItemBase<T>,
+	'id' | 'label' | 'data' | 'toggle' | 'toggled' | 'subMenu' | 'autoDismiss'
 > & {
 	dismissAll: () => void;
 };
 
-export interface PopMenuBase {
+export interface PopMenuBase<T = unknown> {
 	/** Defaults to auto; submenus inherit their parent's resolved host. */
 	portalContainer?: 'auto' | HTMLElement | false;
 	/** Nesting level used to stack submenus above their parent. */
 	level?: number;
 	name?: string;
 	id?: string;
-	options?: PropMenuEntry[];
+	options?: PropMenuEntry<T>[];
 	children?: React.ReactNode;
 	padding?: number | string;
 	backgroundColor?: ColorValue;
 	borderRadius?: number | string;
 	borderWidth?: number;
 	borderColor?: ColorValue;
+	/** Enter/exit overrides; bypassed when the user prefers reduced motion. */
 	motionValues?: Variants;
+	/** Merged with Water; timing and delays are bypassed for reduced motion. */
 	transition?: Transition;
 	caller?: PopCaller;
 	offset?: PopOffset;
 	gap?: number;
 	minWidth?: number;
-	onClickItem?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo) => void;
-	onHoverItem?: (e: React.MouseEvent<HTMLButtonElement>, item: Pick<PopMenuItemBase, 'id' | 'label'>) => void;
+	onClickItem?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => void;
+	onHoverItem?: (e: React.MouseEvent<HTMLButtonElement>, item: Pick<PopMenuItemBase<T>, 'id' | 'label'>) => void;
 	onDismiss?: () => void;
 	dismissAll?: () => void;
 }
 
-export interface PopMenuItemBase {
+export interface PopMenuItemBase<T = unknown> {
+	/** Application payload included in click details at item, group, and menu levels. */
+	data?: T;
 	disabled?: boolean;
 	/** Defaults to true for actions, false for toggles and submenu openers. */
 	autoDismiss?: boolean;
@@ -88,11 +92,11 @@ export interface PopMenuItemBase {
 	shortcut?: string | KeyboardShortcut;
 	toggle?: boolean;
 	toggled?: boolean;
-	onClick?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo) => void;
-	onHover?: (e: React.MouseEvent<HTMLButtonElement>, item: Pick<PopMenuItemBase, 'id' | 'label'>) => void;
+	onClick?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => void;
+	onHover?: (e: React.MouseEvent<HTMLButtonElement>, item: Pick<PopMenuItemBase<T>, 'id' | 'label'>) => void;
 }
 
-export interface PopMenuItemGroupBase {
+export interface PopMenuItemGroupBase<T = unknown> {
 	name?: string;
 	id?: string;
 	title?: string;
@@ -100,23 +104,24 @@ export interface PopMenuItemGroupBase {
 	textColorHover?: ColorValue;
 	textSize?: FixedSize;
 	padding?: number | string;
-	items?: PopMenuItemBase[];
+	items?: PopMenuItemBase<T>[];
 	children?: React.ReactNode;
 	borderWidth?: number | string;
 	borderColor?: ColorValue;
-	onClickItem?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo) => void;
-	onHoverItem?: (e: React.MouseEvent<HTMLButtonElement>, item: Pick<PopMenuItemBase, 'id' | 'label'>) => void;
+	onClickItem?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => void;
+	onHoverItem?: (e: React.MouseEvent<HTMLButtonElement>, item: Pick<PopMenuItemBase<T>, 'id' | 'label'>) => void;
 	dismissAll?: () => void;
 	gap?: number | string;
 }
 
-export type PropMenuEntry =
-	| Omit<PopMenuItemBase, 'children' | 'onClick' | 'onHover'>
-	| Omit<PopMenuItemGroupBase, 'children'>;
+export type PropMenuEntry<T = unknown> =
+	| Omit<PopMenuItemBase<T>, 'children'>
+	| Omit<PopMenuItemGroupBase<T>, 'children'>;
 
-export type PopMenuProps = PopMenuBase &
-	Omit<React.HTMLProps<HTMLDivElement>, keyof PopMenuBase> &
-	Omit<HTMLMotionProps<'div'>, keyof PopMenuBase>;
-export type PopMenuItemProps = PopMenuItemBase & Omit<React.HTMLProps<HTMLButtonElement>, keyof PopMenuItemBase>;
-export type PopMenuItemGroupProps = PopMenuItemGroupBase &
-	Omit<React.HTMLProps<HTMLDivElement>, keyof PopMenuItemGroupBase>;
+export type PopMenuProps<T = unknown> = PopMenuBase<T> &
+	Omit<React.HTMLProps<HTMLDivElement>, keyof PopMenuBase<T>> &
+	Omit<HTMLMotionProps<'div'>, keyof PopMenuBase<T>>;
+export type PopMenuItemProps<T = unknown> = PopMenuItemBase<T> &
+	Omit<React.HTMLProps<HTMLButtonElement>, keyof PopMenuItemBase<T>>;
+export type PopMenuItemGroupProps<T = unknown> = PopMenuItemGroupBase<T> &
+	Omit<React.HTMLProps<HTMLDivElement>, keyof PopMenuItemGroupBase<T>>;

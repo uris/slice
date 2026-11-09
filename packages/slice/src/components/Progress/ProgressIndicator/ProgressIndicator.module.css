@@ -1,24 +1,67 @@
 .container {
-	composes: column from "../../../utils/styling/flexBox.module.css";
-	display: var(--pi-display) !important;
+	display: var(--pi-display);
+	gap: var(--spacing-s);
+	align-items: center;
+	justify-content: center;
 	position: var(--pi-position);
-	top: var(--pi-inset);
-	bottom: var(--pi-inset);
-	left: var(--pi-inset);
-	right: var(--pi-inset);
-	color: var(--core-text-disabled);
+	inset: var(--pi-inset);
 	z-index: var(--elevation-status);
 }
+.spinning {
+	animation: spin var(--pi-spin-duration) linear infinite;
+}
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+.announcement {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
 
-.iconWrapper {
-	composes: row from "../../../utils/styling/flexBox.module.css";
-	min-width: var(--pi-icon-size);
-	max-width: var(--pi-icon-size);
-	max-height: var(--pi-icon-size);
-	min-height: var(--pi-icon-size);
-	height: var(--pi-icon-size);
-	width: var(--pi-icon-size);
-	padding: 0;
-	background: none;
-	border-radius: 100%;
+@media (prefers-reduced-motion: reduce) {
+	.spinning {
+		animation: none;
+	}
+}
+
+.container[data-label-position="left"] {
+	flex-direction: row-reverse;
+}
+.container[data-label-position="right"] {
+	flex-direction: row;
+}
+.container[data-label-position="top"] {
+	flex-direction: column-reverse;
+}
+.container[data-label-position="bottom"] {
+	flex-direction: column;
+}
+.container > svg {
+	flex-shrink: 0;
+}
+.label {
+	min-width: 0;
+	color: var(--pi-text-color);
+	overflow-wrap: anywhere;
+}
+.xs {
+	composes: body-xs-regular from "../../../utils/styling/type.module.css";
+}
+.s {
+	composes: body-s-regular from "../../../utils/styling/type.module.css";
+}
+.m {
+	composes: body-m-regular from "../../../utils/styling/type.module.css";
+}
+.l {
+	composes: body-l-regular from "../../../utils/styling/type.module.css";
+}
+.xl {
+	composes: body-xl-regular from "../../../utils/styling/type.module.css";
 }

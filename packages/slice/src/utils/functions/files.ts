@@ -1,3 +1,5 @@
+import type { FileIconType } from '../../components/FileIcon/_types';
+
 /**
  * Split a file name into its display name and extension.
  */
@@ -6,52 +8,68 @@ export function nameAndExtension(fileName: string) {
 	return { name: fileName, ext };
 }
 
-/**
- * Map a file extension to the corresponding file icon name.
- */
-export function fileIconName(extension: string) {
-	switch (extension) {
-		case 'png':
-		case 'jpeg':
-		case 'jpg':
-		case 'gif':
-		case 'heic':
-			return 'image';
-		case 'docx':
-		case 'doc':
-		case 'txt':
-			return 'text';
-		case 'md':
-			return 'md';
-		case 'html':
-		case 'js':
-		case 'ts':
-		case 'tsx':
-		case 'json':
-		case 'py':
-			return 'code';
-		case 'xls':
-		case 'xlsx':
-		case 'csv':
-			return 'sheet';
-		case 'ppt':
-		case 'pptx':
-			return 'preso';
-		case 'pdf':
-			return 'pdf';
-		case 'mp3':
-		case 'aif':
-		case 'wav':
-			return 'audio';
-		case 'mp4':
-		case 'mov':
-			return 'video';
-		case 'clipboard':
-			return 'clipboard';
-		default:
-			return 'other';
-	}
+/** Resolve filename/extension or File.name only; MIME type is deliberately ignored. */
+export function resolveFileIconType(file?: string | Pick<File, 'name'>): FileIconType {
+	let name = typeof file === 'string' ? file : file?.name;
+	if (!name?.trim()) return 'other';
+	name = name.trim();
+	// URL/path suffixes are transport metadata; literal File names are left intact.
+	if (typeof file === 'string' && (/^[a-z][a-z0-9+.-]*:\/\//i.test(name) || name.includes('/')))
+		name = name.split(/[?#]/)[0];
+	const basename = name.split(/[\\/]/).pop() ?? '';
+	const extension = (basename.split('.').pop() ?? '').toLowerCase();
+	return extensions.get(extension) ?? 'other';
 }
+
+const extensions = new Map<string, FileIconType>(
+	Object.entries({
+		pdf: ['pdf'],
+		text: ['txt', 'text', 'rtf', 'doc', 'docx', 'odt', 'pages', 'log', 'clipboard'],
+		sheet: ['xls', 'xlsx', 'xlsm', 'xlsb', 'csv', 'tsv', 'ods', 'numbers'],
+		preso: ['ppt', 'pptx', 'pps', 'ppsx', 'odp', 'key'],
+		md: ['md', 'markdown', 'mdown', 'mdx'],
+		code: [
+			'html',
+			'htm',
+			'css',
+			'scss',
+			'sass',
+			'less',
+			'js',
+			'jsx',
+			'mjs',
+			'cjs',
+			'ts',
+			'tsx',
+			'json',
+			'xml',
+			'yaml',
+			'yml',
+			'py',
+			'java',
+			'c',
+			'h',
+			'cpp',
+			'hpp',
+			'cs',
+			'go',
+			'rs',
+			'rb',
+			'php',
+			'swift',
+			'kt',
+			'sh',
+			'sql',
+			'toml',
+			'ini',
+		],
+		image: ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'avif', 'heic', 'heif', 'bmp', 'tif', 'tiff', 'ico'],
+		audio: ['mp3', 'wav', 'wave', 'aif', 'aiff', 'ogg', 'oga', 'opus', 'aac', 'm4a', 'flac', 'wma'],
+		video: ['mp4', 'm4v', 'mov', 'webm', 'avi', 'wmv', 'flv', 'mkv', 'mpeg', 'mpg', 'ogv', '3gp'],
+	} satisfies Record<Exclude<FileIconType, 'other'>, string[]>).flatMap(([type, values]) =>
+		values.map((extension): [string, FileIconType] => [extension, type as FileIconType]),
+	),
+);
 
 /**
  * Create a clipboard-text file with a guaranteed `.clipboard` extension.

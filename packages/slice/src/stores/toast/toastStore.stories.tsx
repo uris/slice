@@ -19,7 +19,7 @@ const meta: Meta<typeof Toast> = {
 	args: {
 		message: undefined,
 		border: undefined,
-		radius: undefined,
+		borderRadius: undefined,
 		padding: undefined,
 		offset: undefined,
 		position: 'bottom',
@@ -58,11 +58,12 @@ export const Demo: StoryObj<typeof Toast> = {
 				/>
 				<Toast
 					{...args}
+					{...toast}
 					message={toast?.message ?? null}
 					type={toast?.type ?? args.type}
 					close={toast?.close ?? args.close}
 					duration={toast?.duration ?? args.duration}
-					didHide={toastActions.clear}
+					onHide={toastActions.clear}
 					container={'window'}
 				/>
 			</FlexDiv>

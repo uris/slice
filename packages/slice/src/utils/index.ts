@@ -35,3 +35,5 @@ export type {
 	WebRTCConnectionOptions,
 	WSConnectionOptions,
 } from './objects';
+
+export { resolveFileIconType } from './functions/files';

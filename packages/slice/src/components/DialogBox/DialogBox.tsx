@@ -36,9 +36,9 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		actionsBackgroundColor,
 		titleIcon,
 		titleIconFill = true,
-		titleBorderColor = 'var(--core-outline-primary)',
-		titleBorderWidth = 0,
-		actionsBorderColor = 'var(--core-outline-secondary)',
+		titleBorderColor = 'var(--core-fill-primary)',
+		titleBorderWidth,
+		actionsBorderColor = 'var(--core-fill-primary)',
 		actionsBorderWidth = 0,
 		autoBorderBottom = true,
 		onAction,
@@ -78,7 +78,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 	const contentSize = useObserveResize(contentRef);
 	const viewportSize = useObserveResize(contentWrapperRef);
 	const scrolls = contentSize.height > viewportSize.height;
-	const sectionBackground = scrolls ? 'var(--core-fill-primary)' : backgroundColor;
+	const resolvedTitleBorderWidth = titleBorderWidth ?? (scrolls ? 1 : 0);
 	const titlePaddingBottom = scrolls ? 'var(--spacing-xs)' : '0px';
 
 	const setActionBorderWidth = useMemo(() => {
@@ -112,9 +112,9 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 			'--modal-content-margin-top': scrolls ? 'var(--spacing-xxs)' : '0px',
 			'--modal-background-color': backgroundColor,
 			'--modal-title-border-color': titleBorderColor,
-			'--modal-title-border-width': setStyle(titleBorderWidth),
-			'--modal-title-background-color': titleBackgroundColor ?? sectionBackground,
-			'--modal-actions-background-color': actionsBackgroundColor ?? sectionBackground,
+			'--modal-title-border-width': setStyle(resolvedTitleBorderWidth),
+			'--modal-title-background-color': titleBackgroundColor ?? backgroundColor,
+			'--modal-actions-background-color': actionsBackgroundColor ?? backgroundColor,
 			'--modal-actions-border-color': actionsBorderColor,
 			'--modal-scroll-handle': setStyle(scrollHandleColor),
 			'--modal-scroll-handle-hover': setStyle(scrollHandleColorHover),
@@ -133,12 +133,11 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		setPaddingAdjustment,
 		scrolls,
 		titlePaddingBottom,
-		titleBorderWidth,
+		resolvedTitleBorderWidth,
 		titleBorderColor,
 		actionsBorderColor,
 		actionsBackgroundColor,
 		titleBackgroundColor,
-		sectionBackground,
 		backgroundColor,
 		scrollHandleColor,
 		scrollHandleColorHover,

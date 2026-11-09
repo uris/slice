@@ -1,90 +1,80 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../../FlexDiv';
-import * as ProgressIndicatorStories from './ProgressIndicator.stories';
-import {RenderSource} from '../../../../documentation/_components/RenderSource/RenderSource';
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './ProgressIndicator.stories';
 
-<Meta of={ProgressIndicatorStories} />
+<Meta of={Stories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # ProgressIndicator
-        Renders an animated progress spinner for loading and in-progress states.
+# ProgressIndicator
 
-        ## Base element
-        `HTMLDivElement`
+An indeterminate loading indicator. Connect `show` to application loading state;
+use `inline` beside content, or leave it false to center over a positioned parent.
 
-        ## Interface
-        `ProgressIndicatorProps`
-
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>color</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `color`.</td></tr>
-            <tr><td><code>didStart</code></td><td><code>{`() => void`}</code></td><td><code>-</code></td><td>Controls `didStart`.</td></tr>
-            <tr><td><code>didStop</code></td><td><code>{`() => void`}</code></td><td><code>-</code></td><td>Controls `didStop`.</td></tr>
-            <tr><td><code>duration</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `duration`.</td></tr>
-            <tr><td><code>inline</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `inline`.</td></tr>
-            <tr><td><code>secondsPerSpin</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `secondsPerSpin`.</td></tr>
-            <tr><td><code>show</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `show`.</td></tr>
-            <tr><td><code>size</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `size`.</td></tr>
-            <tr><td><code>stroke</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `stroke`.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>-</code></td><td><code>-</code></td></tr>
-          </tbody>
-        </table>
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource language={"tsx"}>
+```tsx
+<ProgressIndicator show={loading} inline label="Loading files" />
 ```
-import { ProgressIndicator } from '@apple-pie/slice';
 
-export function ProgressIndicatorExample() {
-    return (
-        <ProgressIndicator
-            show={true}
-            size={20}
-            secondsPerSpin={1.2}
-            id="progressindicator-example"
-            data-testid="progressindicator-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
+## Visible label
+
+The default stays spinner-only. Set `displayLabel` to render the label in a span.
+`labelPosition` accepts left, right, top, or bottom and defaults to right. Label
+text defaults to body size m and core-text-primary, independently of spinner color.
+The existing status region announces once; visible text adds no duplicate status.
+
+```tsx
+<ProgressIndicator show inline displayLabel label="Loading files"
+  labelPosition="right" textSize="m" textColor="core-text-primary" />
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+## Playback
+
+`show` starts a logical playback cycle and controls presence. `duration` is an
+optional playback limit in seconds; expiry stops rotation but leaves the indicator
+visible. Zero stops immediately. Negative/non-finite values have no limit; large
+values use the browser timer maximum. Toggle show off/on to replay after expiry.
+Callback identity changes never reset the timer. Live duration changes restart the
+active deadline but do not restart an expired cycle. Unmount cancels pending work.
+
+## Props
+
+| Prop | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| color | ColorValue | core-text-primary | Stroke color. |
+| decorative | boolean | false | Suppress announcements when the parent provides status. |
+| displayLabel | boolean | false | Opt into a visible text span. |
+| duration | number | undefined | Playback limit in seconds, independent of visibility. |
+| inline | boolean | false | Normal flow versus filling a positioned parent. |
+| inset | boolean | true | Inset arc versus expanded arc, retaining its stroke within the viewBox. |
+| label | string | Loading | Task-specific status text. Empty uses the default. |
+| labelPosition | left, right, top, bottom | right | Visible label position; requires displayLabel. |
+| secondsPerSpin | number | 1 | Positive finite seconds per revolution; invalid values use 1. |
+| show | boolean | false | Show/hide the indicator. |
+| size | number or string | 20 | Pixels or CSS lengths; invalid numbers and empty strings use 20. |
+| stroke | number | 1.5 | Width clamped to 0–10; invalid values use 1.5. |
+| textColor | ColorValue | core-text-primary | Visible text color. |
+| textSize | xs, s, m, l, xl | m | Visible text size. |
+
+Native div attributes/events target the visual wrapper. Classes are appended and
+styles merged. Content, focusability, ARIA, native drag and animation-start handlers
+are managed or excluded. A forwarded ref points to the wrapper until exit completes.
+
+## Motion
+
+`motionValues?: Variants` merges initial/animate/exit wrapper states.
+`transition?: Transition` customizes the Water presence transition. Rotation uses
+secondsPerSpin independently. Live reduced-motion preferences leave a static arc
+and bypass presence motion and delays, including during exit. Logical playback
+callbacks and timing remain active under reduced motion.
+
+## Accessibility
+
+A persistent polite status region announces `label` while shown. The SVG is always
+decorative. When a parent already provides loading status, set `decorative` to
+avoid duplicate announcements. Use aria-busy on the region being updated. This
+component does not expose a percentage or determinate progressbar value.
+
+## Events
+
+`onStart()` runs once per shown playback cycle. `onStop()` runs once when that
+active cycle expires or is hidden. Initially hidden mounts, callback changes,
+unmount, and hiding an already expired cycle do not emit another stop.
+These callbacks describe logical playback, not presence animation completion.
+Use onStart/onStop instead of the removed didStart/didStop names.

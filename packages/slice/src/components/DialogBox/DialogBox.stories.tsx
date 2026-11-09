@@ -434,16 +434,26 @@ export const ScrollingSectionBackgrounds: StoryObj<typeof DialogBox> = {
 		const footer = canvas.getByRole('button', { name: 'Done' }).parentElement?.parentElement as HTMLElement;
 		const fill = getComputedStyle(canvas.getByTestId('scroll-color')).backgroundColor;
 		await expect(getComputedStyle(header).paddingBottom).toBe('0px');
+		await waitFor(() => expect(getComputedStyle(header).borderBottomWidth).toBe('0px'));
+		await waitFor(() => expect(getComputedStyle(footer).borderTopWidth).toBe('0px'));
 		for (const section of [header, footer])
 			await waitFor(() => expect(getComputedStyle(section).backgroundColor).toBe('rgb(128, 128, 128)'));
 		await userEvent.click(canvas.getByRole('button', { name: 'Toggle overflow' }));
 		for (const section of [header, footer])
-			await waitFor(() => expect(getComputedStyle(section).backgroundColor).toBe(fill));
+			await waitFor(() => expect(getComputedStyle(section).backgroundColor).toBe('rgb(128, 128, 128)'));
 		await expect(getComputedStyle(header).paddingBottom).toBe('4px');
+		await expect(getComputedStyle(header).borderBottomWidth).toBe('1px');
+		await expect(getComputedStyle(footer).borderTopWidth).toBe('1px');
+		await expect(getComputedStyle(header).borderBottomStyle).toBe('solid');
+		await expect(getComputedStyle(footer).borderTopStyle).toBe('solid');
+		await expect(getComputedStyle(header).borderBottomColor).toBe(fill);
+		await expect(getComputedStyle(footer).borderTopColor).toBe(fill);
 		await userEvent.click(canvas.getByRole('button', { name: 'Toggle overflow' }));
 		for (const section of [header, footer])
 			await waitFor(() => expect(getComputedStyle(section).backgroundColor).toBe('rgb(128, 128, 128)'));
 		await expect(getComputedStyle(header).paddingBottom).toBe('0px');
+		await waitFor(() => expect(getComputedStyle(header).borderBottomWidth).toBe('0px'));
+		await waitFor(() => expect(getComputedStyle(footer).borderTopWidth).toBe('0px'));
 	},
 };
 
@@ -454,10 +464,9 @@ export const ExplicitZeroHeaderPadding: StoryObj<typeof DialogBox> = {
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const header = canvas.getByRole('heading', { name: 'Project details' }).parentElement?.parentElement as HTMLElement;
-		const fill = getComputedStyle(canvas.getByTestId('scroll-color')).backgroundColor;
 		await expect(getComputedStyle(header).paddingBottom).toBe('0px');
 		await userEvent.click(canvas.getByRole('button', { name: 'Toggle overflow' }));
-		await waitFor(() => expect(getComputedStyle(header).backgroundColor).toBe(fill));
+		await waitFor(() => expect(getComputedStyle(header).borderBottomWidth).toBe('1px'));
 		await expect(getComputedStyle(header).paddingBottom).toBe('0px');
 	},
 };
@@ -518,5 +527,36 @@ export const ExplicitMinimumWidth: StoryObj<typeof DialogBox> = {
 		await expect(
 			within(canvasElement).getByRole('dialog', { name: 'Explicit minimum' }).getBoundingClientRect().width,
 		).toBe(300);
+	},
+};
+
+export const ExplicitSectionDividers: StoryObj<typeof DialogBox> = {
+	tags: ['tests'],
+	args: { titleBorderWidth: 2, titleBorderColor: '#123456', actionsBorderWidth: 3, actionsBorderColor: '#654321' },
+	render: ScrollingSectionBackgrounds.render,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Toggle overflow' }));
+		const header = canvas.getByRole('heading', { name: 'Project details' }).parentElement?.parentElement as HTMLElement;
+		const footer = canvas.getByRole('button', { name: 'Done' }).parentElement?.parentElement as HTMLElement;
+		await expect(getComputedStyle(header).borderBottomWidth).toBe('2px');
+		await expect(getComputedStyle(header).borderBottomColor).toBe('rgb(18, 52, 86)');
+		await expect(getComputedStyle(footer).borderTopWidth).toBe('3px');
+		await expect(getComputedStyle(footer).borderTopColor).toBe('rgb(101, 67, 33)');
+	},
+};
+
+export const DisabledAutomaticDividers: StoryObj<typeof DialogBox> = {
+	tags: ['tests'],
+	args: { titleBorderWidth: 0, autoBorderBottom: false },
+	render: ScrollingSectionBackgrounds.render,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Toggle overflow' }));
+		const header = canvas.getByRole('heading', { name: 'Project details' }).parentElement?.parentElement as HTMLElement;
+		const footer = canvas.getByRole('button', { name: 'Done' }).parentElement?.parentElement as HTMLElement;
+		await waitFor(() => expect(getComputedStyle(header).paddingBottom).toBe('4px'));
+		await expect(getComputedStyle(header).borderBottomWidth).toBe('0px');
+		await expect(getComputedStyle(footer).borderTopWidth).toBe('0px');
 	},
 };

@@ -14,8 +14,6 @@ import { ToolTipType, buttonStyleDefaults } from '../sharedTypes';
 import css from './Button.module.css';
 import type { ButtonHandle, ButtonProps } from './_types';
 
-const noop = () => {};
-
 const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonRef: React.Ref<ButtonHandle>) => {
 	const props = resolveColorProps(rawProps);
 	const {
@@ -444,26 +442,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 			)}
 			{playing && iconLeft && (
 				<div className={css.icon} aria-hidden="true">
-					<ProgressIndicator
-						show={playing}
-						didStart={noop}
-						didStop={noop}
-						size={iconSize}
-						color={progressColor}
-						inline
-					/>
+					<ProgressIndicator decorative show={playing} size={iconSize} color={progressColor} inline />
 				</div>
 			)}
 			{playing && !iconLeft && !iconRight && (
 				<div className={css.centerProgress} aria-hidden="true">
-					<ProgressIndicator
-						show={playing}
-						didStart={noop}
-						didStop={noop}
-						size={iconSize}
-						color={progressColor}
-						inline={false}
-					/>
+					<ProgressIndicator decorative show={playing} size={iconSize} color={progressColor} inline={false} />
 				</div>
 			)}
 			{hasContent && (
@@ -475,14 +459,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 			)}
 			{playing && iconRight && (
 				<div className={css.icon} aria-hidden="true">
-					<ProgressIndicator
-						show={playing}
-						didStart={noop}
-						didStop={noop}
-						size={iconSize}
-						color={progressColor}
-						inline
-					/>
+					<ProgressIndicator decorative show={playing} size={iconSize} color={progressColor} inline />
 				</div>
 			)}
 			{!playing && iconRight && (

@@ -536,7 +536,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 			>
 				<track kind="captions" src={captionsSrc} />
 			</video>
-			{!canPlay && showProgressIndicator && <ProgressIndicator show />}
+			{!canPlay && showProgressIndicator && <ProgressIndicator show label="Loading video" />}
 		</div>
 	);
 });

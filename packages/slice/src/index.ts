@@ -176,7 +176,7 @@ export { Tip } from './components/Tip';
 export type { ToolTipProps } from './components/Tip';
 
 export { Toast, ToastType } from './components/Toast';
-export type { ToastProps } from './components/Toast';
+export type { ToastProps, ToastInfo, ToastHideInfo, ToastHideReason } from './components/Toast';
 
 export { Button } from './components/Button';
 export type { ButtonProps, ButtonHandle } from './components/Button';
@@ -184,8 +184,8 @@ export type { ButtonProps, ButtonHandle } from './components/Button';
 export { Chip } from './components/Chip';
 export type { ChipProps } from './components/Chip';
 
-export { FileIcon, FileIconNames } from './components/FileIcon';
-export type { FileIconProps } from './components/FileIcon/_types';
+export { FileIcon, FileIconTypes } from './components/FileIcon';
+export type { FileIconProps, FileIconType } from './components/FileIcon/_types';
 
 export { Icon, SliceIcons } from './components/Icon';
 export type { IconProps, SliceIcon } from './components/Icon/_types';
@@ -249,6 +249,9 @@ export {
 export { PopMenu, PopMenuItem, PopMenuGroup } from './components/PopMenu';
 export type {
 	PopMenuProps,
+	PropMenuEntry,
+	PopMenuItemBase,
+	PopMenuItemGroupBase,
 	PopMenuItemProps,
 	PopMenuItemGroupProps,
 	PopMenuItemClickInfo,
@@ -257,3 +260,11 @@ export type {
 export { PopMenuController } from './components/PopMenuController';
 
 export { resolveShortcut } from './utils/functions/resolveShortcut';
+
+export { resolveFileIconType } from './utils/functions/files';
+
+export { FileList } from './components/FileList';
+export type { FileItem, FileListProps } from './components/FileList';
+
+export { Attachment, ContentType } from './components/Attachment';
+export type { AttachmentProps, Content, ContentFormat } from './components/Attachment';

@@ -88,9 +88,10 @@ export function DialogBoxDoc() {
 				<Code>promise="none"</Code> when it should call only <Code>onAction</Code>.
 			</P>
 			<P>
-				The content area responds to content and container size changes. <Code>autoBorderBottom</Code> adds a footer
-				divider while the body scrolls. The header and footer use <Code>core-fill-primary</Code> while scrolling and
-				return to <Code>backgroundColor</Code> when the content fits, unless their colors are explicitly set.
+				The content area responds to content and container size changes. Overflow adds a 1px solid{' '}
+				<Code>core-fill-primary</Code> bottom border to the header and top border to the footer by default.{' '}
+				<Code>autoBorderBottom</Code> controls the automatic footer divider. The header and footer keep{' '}
+				<Code>backgroundColor</Code> while scrolling, matching the content unless their colors are explicitly set.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
@@ -168,17 +169,16 @@ export function DialogBoxDoc() {
 			<Definition id="actionsBackgroundColor">
 				<Prop>actionsBackgroundColor</Prop>
 				<TypeDef>ColorValue</TypeDef>
-				<DefaultVal>scroll-dependent</DefaultVal>
+				<DefaultVal>backgroundColor</DefaultVal>
 			</Definition>
 			<P>
-				Footer background for composed controls and the actions array. Defaults to <Code>core-fill-primary</Code> when
-				the body scrolls, otherwise <Code>backgroundColor</Code>. Explicit colors, including <Code>transparent</Code>,
-				apply in both states.
+				Footer background. Defaults to <Code>backgroundColor</Code>, including while scrolling. Explicit colors apply in
+				both states.
 			</P>
 			<Definition id="actionsBorderColor">
 				<Prop>actionsBorderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-outline-primary'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>{'Divider color above the footer.'}</P>
 			<Definition id="actionsBorderWidth">
@@ -306,24 +306,29 @@ export function DialogBoxDoc() {
 			<Definition id="titleBackgroundColor">
 				<Prop>titleBackgroundColor</Prop>
 				<TypeDef>ColorValue</TypeDef>
-				<DefaultVal>scroll-dependent</DefaultVal>
+				<DefaultVal>backgroundColor</DefaultVal>
 			</Definition>
 			<P>
-				Header background. Defaults to <Code>core-fill-primary</Code> when the body scrolls, otherwise{' '}
-				<Code>backgroundColor</Code>. An explicit color applies in both states.
+				Header background. Defaults to <Code>backgroundColor</Code>, including while scrolling. Explicit colors apply in
+				both states.
 			</P>
 			<Definition id="titleBorderColor">
 				<Prop>titleBorderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-outline-primary'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>{'Divider color beneath the title area.'}</P>
 			<Definition id="titleBorderWidth">
 				<Prop>titleBorderWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'0'}</DefaultVal>
+				<DefaultVal>{'1 while scrolling; otherwise 0'}</DefaultVal>
 			</Definition>
-			<P>{'Title divider width in pixels.'}</P>
+			<P>
+				<>
+					Bottom divider width in pixels. Defaults to 1 when the body overflows, otherwise 0. Set{' '}
+					<Code>{'titleBorderWidth={0}'}</Code> to disable the automatic header divider.
+				</>
+			</P>
 			<Definition id="titleIcon">
 				<Prop>titleIcon</Prop>
 				<TypeDef>{'SliceIcon'}</TypeDef>

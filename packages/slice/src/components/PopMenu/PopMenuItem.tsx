@@ -3,12 +3,13 @@ import { type CSSProperties, useCallback, useContext, useId, useMemo } from 'rea
 import { classNames, resolveShortcut, setStyle } from '../../utils';
 import { Icon } from '../Icon';
 import styles from './PopMenu.module.css';
-import { PopMenuActiveSubMenuContext, PopMenuContext, noopDismiss } from './PopMenuContext';
+import { PopMenuActiveSubMenuContext, noopDismiss, usePopMenuActions } from './PopMenuContext';
 import type { PopMenuItemClickInfo, PopMenuItemProps } from './_types';
 
-export function PopMenuItem(props: PopMenuItemProps) {
+export function PopMenuItem<T = unknown>(props: PopMenuItemProps<T>) {
 	const {
 		children,
+		data,
 		dismissAll: dismissAllProp,
 		onClick,
 		autoDismiss,
@@ -46,7 +47,7 @@ export function PopMenuItem(props: PopMenuItemProps) {
 		...rest
 	} = props;
 	// Prefer the containing menu/group dismissal chain; standalone items can supply their own.
-	const menu = useContext(PopMenuContext);
+	const menu = usePopMenuActions<T>();
 	const activeSubMenuId = useContext(PopMenuActiveSubMenuContext);
 	const dismissAll = menu?.dismissAll ?? dismissAllProp ?? noopDismiss;
 	const isDisabled = Boolean(disabled || props['aria-disabled'] === true || props['aria-disabled'] === 'true');
@@ -63,7 +64,8 @@ export function PopMenuItem(props: PopMenuItemProps) {
 		(event: React.MouseEvent<HTMLButtonElement>) => {
 			event.stopPropagation();
 			if (isDisabled) return;
-			const item: PopMenuItemClickInfo = { id, label, dismissAll };
+			const item: PopMenuItemClickInfo<T> = { id, label, dismissAll };
+			if (data !== undefined) item.data = data;
 			if (autoDismiss !== undefined) item.autoDismiss = autoDismiss;
 			if (toggle) {
 				item.toggle = true;
@@ -75,7 +77,7 @@ export function PopMenuItem(props: PopMenuItemProps) {
 			onClick?.(event, item);
 			menu?.onClickItem?.(event, item);
 		},
-		[onClick, id, label, toggle, toggled, subMenu, dismissAll, autoDismiss, isDisabled, menu],
+		[onClick, data, id, label, toggle, toggled, subMenu, dismissAll, autoDismiss, isDisabled, menu],
 	);
 
 	// CSS selects icon hover/focus colors without React state; disabled text also covers shortcut hints.

@@ -49,3 +49,5 @@ export { labelBenchmarkConfig } from './Label.bench';
 
 export { popMenuControllerBenchmarkConfig } from './PopMenuController.bench';
 export { popMenuGroupBenchmarkConfig } from './PopMenuGroup.bench';
+
+export { attachmentBenchmarkConfig } from './Attachment.bench';

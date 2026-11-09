@@ -1,0 +1,91 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Attachment.stories';
+
+<Meta of={Stories} />
+
+# Attachment
+
+Preview an image, clipboard text, or a file-type icon with an extension-free filename.
+Clipboard content is labeled `Clipboard content`; text previews show the first 250 characters.
+Text files show an escaped excerpt of their first 250 characters; other files use the icon fallback. Image object URLs are released on replacement or unmount.
+
+<Canvas of={Stories.ImageThumbnail} />
+<Canvas of={Stories.PdfThumbnail} />
+<Canvas of={Stories.TextThumbnail} />
+
+## Actions and accessibility
+
+Each attachment is a named group, with file type, size, and any text excerpt exposed
+as its accessible description. Thumbnail images and icons are decorative because
+the filename and metadata identify the attachment. Long filenames remain available
+to assistive technology and through the label's title.
+
+`attachmentName` overrides the group's accessible name. The remove action defaults
+to `Remove <filename>`; `removeLabel` overrides it. Blank names use their defaults.
+The remove button appears on hover or keyboard focus and stays visible on touch devices.
+
+`onRemove` receives the button click event for mouse and keyboard activation. Removal
+is controlled: update the application's list or state to remove the attachment.
+When removing an item from a list, the parent should move focus to the next attachment
+or the upload control. `canRemove={false}` hides the button. `disabled` disables the open and remove actions.
+
+`onOpen` adds a keyboard-accessible button over the preview, named `Open <filename>`
+by default. `openLabel` overrides that action name. `onToolTip` connects the remove button to the shared Slice tooltip handler.
+Both action clicks stop propagation,
+so they do not trigger a wrapper click handler. Native events, `className`, and `style`
+are forwarded to the wrapper. `style` overrides the component's inline styles.
+
+<Canvas of={Stories.ControlledRemoval} />
+<Canvas of={Stories.KeyboardActions} />
+
+```
+<Attachment
+    content={fileItem}
+    onOpen={() => openFile(fileItem)}
+    onRemove={() => removeFile(fileItem)}
+/>
+```
+
+## Upload progress
+
+Pass upload state on the existing `FileItem`: `content={{ file, uploading: true, progress: 45 }}`.
+While uploading, the metadata row shows a spinner and `Uploading` on the left, with
+`45%` on the right. The percentage is outside the animated indicator, so updates
+preserve the spinner instance. Set `uploading` to false to restore file type and size.
+
+Progress uses percentages from 0 to 100, rounded and clamped like FileList. Missing,
+NaN, or infinite progress shows an indeterminate spinner without a percentage.
+The row exposes a named progressbar, including its current percentage when known.
+
+<Canvas of={Stories.Uploading} />
+<Canvas of={Stories.UploadingIndeterminate} />
+
+## Styling
+
+`textSize` uses the theme's `xs`, `s`, `m`, `l`, and `xl` body styles. `size` sets
+the card width and preview height to 80, 140, 160, 200, or 240px; the default is `s`.
+`width` overrides the card width, and `height` overrides the preview height. The filename
+and metadata sit below the preview, so total card height includes those rows.
+
+`backgroundColor` sets the card and canvas background. Text and icon previews share
+the primary surface background. `textColor` and `textColorLight` style the filename
+and metadata; `thumbColor` styles preview text. `borderColor`, `borderWidth`,
+`borderStyle`, and `borderRadius` style the outer card, with an inset canvas radius.
+
+`iconSize` sets the fallback icon size. `iconGap` controls metadata spacing.
+`padding` controls each information row, defaulting to zero vertically and spacing-xs
+horizontally. `thumbPadding` and `thumbTextSize` control the text and fallback preview.
+Numeric dimensions use pixels; CSS strings and padding shorthands pass through exactly,
+including zero. Color props accept Slice theme color values.
+
+<Canvas of={Stories.CustomStyles} />
+
+## Thumbnail metadata
+
+The internal `useContentThumbnail` result includes `fileName` (without the final
+extension, or `clipboard` for strings), `fileExtension` (lowercase without a dot),
+and `fileSize` (for example `5 k` or `5.5 mb`). Sizes use 1024 bytes per k, switch to
+mb at 1,048,576 bytes, and round to at most one decimal place. Filename-only entries
+have no size; clipboard strings have neither a file extension nor a file size.
+
+<ArgTypes of={Stories} />

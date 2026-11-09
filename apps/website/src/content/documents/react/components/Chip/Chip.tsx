@@ -90,8 +90,9 @@ export function ChipDoc() {
 			<CodeBlock filename="ChipTooltip.tsx" language="tsx" code={tooltipCode.trim()} />
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
-				Without onClick, the chip’s content is static. With onClick, it becomes a native button. Selection and removal
-				are controlled by your app.
+				Without <Code>onClick</Code>, the chip’s content is static. Removable chips share clickable chips’ default hover
+				and focus colors, while removal stays on the separate remove button. With onClick, it becomes a native button.
+				Selection and removal are controlled by your app.
 			</P>
 			<P>
 				Default padding is reduced on icon edges to account for space inside SVGs, including the remove icon. Explicit
@@ -117,17 +118,17 @@ export function ChipDoc() {
 			<Definition id={'backgroundColor'}>
 				<Prop>backgroundColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'transparent'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>Chip background.</P>
 			<Definition id={'backgroundColorHover'}>
 				<Prop>backgroundColorHover</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'click-dependent'}</DefaultVal>
+				<DefaultVal>{'interaction-dependent'}</DefaultVal>
 			</Definition>
 			<P>
-				Hover and keyboard-focus background. Static chips keep backgroundColor; clickable chips use
-				core-surface-secondary. Disabled chips keep backgroundColor.
+				Hover and keyboard-focus background. Static chips keep backgroundColor; clickable or removable chips use
+				core-fill-primary. Disabled chips keep backgroundColor.
 			</P>
 			<Definition id={'backgroundColorSelected'}>
 				<Prop>backgroundColorSelected</Prop>
@@ -138,39 +139,40 @@ export function ChipDoc() {
 			<Definition id={'borderColor'}>
 				<Prop>borderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-primary'}</DefaultVal>
+				<DefaultVal>{'core-outline-primary'}</DefaultVal>
 			</Definition>
 			<P>Normal border color.</P>
 			<Definition id={'borderColorDisabled'}>
 				<Prop>borderColorDisabled</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-disabled'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>Border color while disabled, including hover.</P>
 			<Definition id={'borderColorHover'}>
 				<Prop>borderColorHover</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'click-dependent'}</DefaultVal>
+				<DefaultVal>{'interaction-dependent'}</DefaultVal>
 			</Definition>
 			<P>
-				Hover and keyboard-focus border color. Static chips keep borderColor; clickable chips use core-text-special.
+				Hover and keyboard-focus border color. Static chips keep borderColor; clickable or removable chips use
+				core-text-special.
 			</P>
 			<Definition id={'borderColorSelected'}>
 				<Prop>borderColorSelected</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-special'}</DefaultVal>
+				<DefaultVal>{'transparent'}</DefaultVal>
 			</Definition>
 			<P>Selected border color. Disabled chips use borderColorDisabled.</P>
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'corner-m'}</DefaultVal>
+				<DefaultVal>{'corner-l'}</DefaultVal>
 			</Definition>
 			<P>Corner radius. Numbers are pixels; strings accept CSS values.</P>
 			<Definition id={'borderWidth'}>
 				<Prop>borderWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'1'}</DefaultVal>
+				<DefaultVal>{'0'}</DefaultVal>
 			</Definition>
 			<P>Border width in pixels.</P>
 			<Definition id={'children'}>
@@ -209,11 +211,11 @@ export function ChipDoc() {
 			<Definition id={'iconColorHover'}>
 				<Prop>iconColorHover</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'click-dependent'}</DefaultVal>
+				<DefaultVal>{'interaction-dependent'}</DefaultVal>
 			</Definition>
 			<P>
-				Hover and keyboard-focus icon color. Static chips keep iconColor; clickable chips use core-text-special.
-				Disabled chips use core-text-disabled.
+				Hover and keyboard-focus icon color. Static chips keep iconColor; clickable or removable chips use
+				core-text-special. Disabled chips use core-text-disabled.
 			</P>
 			<Definition id={'iconColorSelected'}>
 				<Prop>iconColorSelected</Prop>
@@ -230,7 +232,7 @@ export function ChipDoc() {
 			<Definition id={'iconSize'}>
 				<Prop>iconSize</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'20'}</DefaultVal>
+				<DefaultVal>{'16'}</DefaultVal>
 			</Definition>
 			<P>Icon width and height in pixels.</P>
 			<Definition id={'label'}>
@@ -300,11 +302,11 @@ export function ChipDoc() {
 			<Definition id={'textColorHover'}>
 				<Prop>textColorHover</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'click-dependent'}</DefaultVal>
+				<DefaultVal>{'interaction-dependent'}</DefaultVal>
 			</Definition>
 			<P>
-				Hover and keyboard-focus text color. Static chips keep textColor; clickable chips use core-text-special.
-				Disabled chips use core-text-disabled.
+				Hover and keyboard-focus text color. Static chips keep textColor; clickable or removable chips use
+				core-text-special. Disabled chips use core-text-disabled.
 			</P>
 			<Definition id={'textColorSelected'}>
 				<Prop>textColorSelected</Prop>

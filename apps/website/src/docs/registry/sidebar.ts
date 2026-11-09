@@ -22,6 +22,7 @@ const gettingStartedSection: ListSection = [
 
 const reactComponentSection: ListSection = [
 	{ type: SidebarListItemType.SectionTitle, title: 'Components' },
+	{ title: 'Attachment', slug: 'attachment', code: true },
 	{ title: 'AudioBubble', slug: 'audio-bubble', code: true },
 	{ title: 'Avatar', slug: 'avatar', code: true },
 	{ title: 'AvatarGroup', slug: 'avatar-group', code: true },
@@ -68,8 +69,15 @@ const reactComponentSection: ListSection = [
 	{ title: 'Slider', slug: 'slider', code: true },
 	{ title: 'Spacer', slug: 'spacer', code: true },
 	{ title: 'Switch', slug: 'switch', code: true },
-	{ title: 'Tab', slug: 'tab', code: true },
-	{ title: 'TabBar', slug: 'tab-bar', code: true },
+	{
+		title: 'TabBar',
+		slug: 'tab-bar',
+		code: true,
+		childDocs: [
+			{ title: 'TabBar', slug: 'tab-bar', code: true },
+			{ title: 'Tab', slug: 'tab', code: true },
+		],
+	},
 	{ title: 'TextArea', slug: 'text-area', code: true },
 	{ title: 'TextField', slug: 'textfield', code: true },
 	{ title: 'Tip', slug: 'tip', code: true },

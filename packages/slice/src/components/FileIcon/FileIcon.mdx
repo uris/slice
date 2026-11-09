@@ -1,86 +1,40 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as FileIconStories from './FileIcon.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={FileIconStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # FileIcon
-        Renders a file-type icon for document formats such as PDF, text, spreadsheets, media, and code.
+# FileIcon
 
-        ## Base element
-        `SVGSVGElement`
+Themed file artwork. Pass `filename` as a string or File; its extension (or `File.name`) selects the category, case-insensitively. MIME type is ignored. An explicit `type` overrides inference. Missing or unknown types use `other`.
 
-        ## Interface
-        `FileIconProps`
+```tsx
+import { Button, FileIcon } from '@apple-pie/slice';
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>name</code></td><td><code>string</code></td><td><code>'pdf'</code></td><td>Icon name key from the file icon registry (for example values from <code>FileIconNames</code>).</td></tr>
-            <tr><td><code>size</code></td><td><code>number</code></td><td><code>24</code></td><td>Sizing/layout setting for `size`.</td></tr>
-            <tr><td><code>pointer</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Boolean flag controlling pointer cursor and keyboard focusability.</td></tr>
-            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Boolean flag controlling disabled visual and interaction state.</td></tr>
-            <tr><td><code>...svgAttributes</code></td><td><code>{`SVGAttributes<SVGSVGElement>`}</code></td><td><code>-</code></td><td>Native `svg` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onClick</code></td><td><code>{`(e: React.MouseEvent<SVGElement, MouseEvent> | React.KeyboardEvent<SVGSVGElement>) => void`}</code></td></tr>
-          </tbody>
-        </table>
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource language={"tsx"}>
-```
-import { FileIcon } from '@apple-pie/slice';
-
-export function FileIconExample() {
-    return (
-        <FileIcon
-            name="pdf"
-            size={24}
-            pointer
-            onClick={() => console.log('clicked')}
-            id="fileicon-example"
-            data-testid="fileicon-example"
-            className="custom-wrapper"
-            style={{ display: 'block', marginTop: 8 }}
-        />
-    );
+export function FileAction() {
+  return <Button variant="outline" onClick={() => console.log('open')}>
+    <FileIcon filename="report.PDF" size={32} decorative />
+    <span>Open report.pdf</span>
+  </Button>;
 }
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| decorative | boolean | false | Hides a passive icon from accessibility APIs. |
+| disabled | boolean | false | Dims the icon, blocks activation, and removes interactive icons from the tab order. |
+| filename | string or File | undefined | Infers artwork from the filename extension; never MIME type. |
+| label | string | category description | Accessible image or action name; takes precedence over aria-label. |
+| pointer | boolean | onClick provided | Cursor preference only; does not disable keyboard activation. |
+| size | number | 24 | Width and height in pixels; invalid sizes fall back to 24. |
+| type | FileIconType | inferred or other | Explicit category override. |
+| ...svgAttributes | SVGAttributes | — | Native attributes, styles, class names, and events. Interaction semantics are managed internally. |
+
+`FileIconTypes` lists pdf, text, sheet, preso, md, code, image, audio, video, and other. `resolveFileIconType(filename)` exports the same resolution for use independently; its result can be passed directly to `type`.
+
+## Interaction and accessibility
+
+Passive icons have an image role. Use `decorative` beside equivalent text. Supplying `onClick` makes the SVG a keyboard-accessible action even when `pointer={false}`; provide a task-specific label. Actions always remain accessible, including when `decorative` is supplied. Keyboard focus uses `:focus-visible`.
+
+Enter activates on keydown and Space on release; blur cancels pending Space activation. `onClick` receives a `React.MouseEvent<SVGSVGElement>` for both pointer and keyboard activation (keyboard clicks have `detail: 0`). Native key handlers run first and may call `preventDefault()` to cancel internal activation. A forwarded ref targets the SVGSVGElement.

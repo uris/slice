@@ -304,7 +304,7 @@ const playLoadingIndicator: NonNullable<StoryObj<typeof Video>['play']> = async 
 	const canvas = within(canvasElement);
 	const video = canvasElement.querySelector('video');
 	if (!video) throw new Error('Expected a video element');
-	const spinner = () => canvas.queryByRole('img', { name: 'Loading spinner' });
+	const spinner = () => canvas.queryByText('Loading video');
 	if (args.showProgressIndicator !== false) {
 		await expect(spinner()).toBeInTheDocument();
 	} else {
@@ -346,11 +346,11 @@ export const CanPlayWithoutCallback: StoryObj<typeof Video> = {
 	render: (args) => <VideoDemo {...args} />,
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		await expect(canvas.getByRole('img', { name: 'Loading spinner' })).toBeInTheDocument();
+		await expect(canvas.getByText('Loading video')).toBeInTheDocument();
 		const video = canvasElement.querySelector('video');
 		if (!video) throw new Error('Expected a video element');
 		fireEvent.canPlay(video);
-		await waitFor(() => expect(canvas.queryByRole('img', { name: 'Loading spinner' })).not.toBeInTheDocument());
+		await waitFor(() => expect(canvas.queryByText('Loading video')).not.toBeInTheDocument());
 	},
 };
 

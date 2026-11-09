@@ -43,6 +43,25 @@ participate in a group. For example, `RadioButton` can be used alone or within
 `RadioButtonList`; it should not become only `RadioButtonList.RadioButton`.
 These controls retain their own API documentation pages, linked to related parents.
 
+## Documentation grouping for dependent controls
+
+Use a parent-named sidebar group with `childDocs` when its related controls depend
+on the parent for meaningful use. Include the parent's own page first, followed by
+the dependent controls' pages: `TabBar` groups `TabBar` and `Tab`; `PopMenu` groups
+`PopMenu`, `PopMenuGroup`, and `PopMenuItem`. Give a dependent control its own page
+when it has a distinct public API to document; structural sections can remain on
+the parent's page.
+
+Compatibility alone does not establish a parent/child documentation relationship.
+`RadioButton` remains a standalone sidebar entry because it is useful independently,
+even though `RadioButtonList` can host it directly. Link their pages instead of
+nesting the radio control under the list.
+
+This is a documentation convention, not a requirement to reject standalone rendering
+or rename public exports. Preserve the existing API and explain which behavior the
+parent provides. See the [website documentation guide](../../../apps/website/src/content/documents/README.md#page-structure)
+for page layout, sidebar registration, and tracking rules.
+
 ## Composition contracts
 
 For parents with a fixed set of structural slots, define and test the contract:

@@ -14,7 +14,16 @@ import {
 	SubmenusPreview,
 	TogglesPreview,
 } from './PopMenuItemPreview';
-import { customCode, disabledCode, iconsCode, shortcutCode, submenuCode, toggleCode, usageCode } from './code';
+import {
+	actionCode,
+	customCode,
+	disabledCode,
+	iconsCode,
+	shortcutCode,
+	submenuCode,
+	toggleCode,
+	usageCode,
+} from './code';
 
 const props = [
 	{
@@ -46,6 +55,17 @@ const props = [
 				{
 					'Custom children replace the built-in label, icons, shortcut, and submenu indicator. The row wrapper retains its background, hover highlight, padding, and text colors. Do not place interactive controls inside the button.'
 				}
+			</>
+		),
+	},
+	{
+		name: 'data',
+		type: 'T',
+		defaultValue: 'undefined',
+		description: (
+			<>
+				Application payload included as <Code>item.data</Code> in item, group, and menu click callbacks. Inferred from
+				the value or specified with <Code>PopMenuItem&lt;T&gt;</Code>.
 			</>
 		),
 	},
@@ -447,14 +467,21 @@ export default function PopMenuItemDoc() {
 			))}
 
 			<H2 id="events">Events</H2>
+			<P>
+				Use <Code>onClick</Code> for an item action. The same callback works on descriptors passed through{' '}
+				<Code>PopMenu.options</Code> or <Code>PopMenuGroup.items</Code>. Specify the same <Code>T</Code> on composed
+				parent menus/groups when using shared typed handlers.
+			</P>
+			<CodeBlock filename="DocumentMenu.tsx" language="tsx" code={actionCode.trim()} />
 			<Definition id="onClick">
 				<Method>onClick</Method>
-				<TypeDef>{'(event: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo) => void'}</TypeDef>
+				<TypeDef>{'(event: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => void'}</TypeDef>
 			</Definition>
 			<P>
 				Runs before connected group and parent callbacks. The payload contains <Code>id</Code>, <Code>label</Code>, and{' '}
-				<Code>dismissAll</Code>. Toggles add <Code>toggle</Code> and the next <Code>toggled</Code> value; submenu
-				openers add <Code>subMenu</Code>. An explicit <Code>autoDismiss</Code> override is also included.
+				<Code>dismissAll</Code>. Optional <Code>data</Code> of shape <Code>T</Code> is included unchanged; it is
+				undefined when omitted. Toggles add <Code>toggle</Code> and the next <Code>toggled</Code> value; submenu openers
+				add <Code>subMenu</Code>. An explicit <Code>autoDismiss</Code> override is also included.
 			</P>
 			<Definition id="onHover">
 				<Method>onHover</Method>

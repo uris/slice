@@ -1,80 +1,134 @@
 'use client';
 
-import React, { useCallback, useMemo } from 'react';
-import { useTheme } from '../../hooks';
+import React, { useRef } from 'react';
+import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import { accessibleKeyDown } from '../../utils/functions/misc';
-import type { FileIconProps } from './_types';
+import { resolveFileIconType } from '../../utils/functions/files';
+import { classNames } from '../../utils/functions/misc';
+import css from './FileIcon.module.css';
+import type { FileIconProps, FileIconType } from './_types';
 import { STATIC_FILE_ICONS } from './fileIconRegistry';
 
-export const FileIcon = React.memo((props: FileIconProps) => {
+const labels: Record<FileIconType, string> = {
+	pdf: 'PDF file',
+	text: 'Text document',
+	sheet: 'Spreadsheet',
+	preso: 'Presentation',
+	md: 'Markdown file',
+	code: 'Code file',
+	image: 'Image file',
+	audio: 'Audio file',
+	video: 'Video file',
+	other: 'File',
+};
+const FileIconBase = React.forwardRef<SVGSVGElement, FileIconProps>((props, ref) => {
 	const { isDark } = useTheme();
-
-	const { name = 'pdf', size = 24, pointer = false, disabled = false, onClick, ...svgAttributes } = props;
-	const { id: svgId, className, style, ...rest } = svgAttributes;
-	const svgStyle = style ?? ({} as React.CSSProperties);
-
-	// resolve pointer behavior for the file icon wrapper
-	const cursor = useMemo(() => {
+	const {
+		type,
+		filename,
+		size = 24,
+		pointer,
+		disabled = false,
+		label,
+		decorative = false,
+		onClick,
+		onKeyDown,
+		onKeyUp,
+		onBlur,
+		'aria-label': ariaLabel,
+		className,
+		style,
+		...attributes
+	} = props;
+	const inferred = type ?? resolveFileIconType(filename);
+	const category = STATIC_FILE_ICONS.has(inferred) ? inferred : 'other';
+	const definition = STATIC_FILE_ICONS.get(category);
+	const interactive = Boolean(onClick);
+	const hidden = decorative && !interactive;
+	const spacePressed = useRef(false);
+	const resolvedSize = Number.isFinite(size) && size > 0 ? size : 24;
+	const accessibleName = label?.trim() || ariaLabel?.trim() || labels[category];
+	const cursor = () => {
 		if (disabled) return 'default';
-		return pointer ? 'pointer' : 'inherit';
-	}, [disabled, pointer]);
-
-	// compose inline interaction styles for the file icon wrapper
-	const iconStyle = useMemo(() => {
-		return {
-			cursor,
-			userSelect: 'none' as const,
-			WebkitUserSelect: 'none' as const,
-			WebkitTapHighlightColor: 'transparent',
-			outline: 'none',
-			border: 0,
-		} as React.CSSProperties;
-	}, [cursor]);
-
-	// forward click and keyboard activation while respecting the disabled state
-	const handleClick = useCallback(
-		(e: React.MouseEvent<SVGElement, MouseEvent> | React.KeyboardEvent<SVGSVGElement>) => {
-			if (!disabled) onClick?.(e);
-		},
-		[onClick, disabled],
-	);
-
-	// resolve the themed SVG paths for the requested file type
-	const definition = STATIC_FILE_ICONS.get(name);
-	const paths = definition?.paths(isDark ? 'dark' : 'light');
-
+		if (pointer === false) return 'inherit';
+		if (pointer || interactive) return 'pointer';
+		return 'inherit';
+	};
+	// Keyboard activation dispatches a real click-shaped event, preserving one callback contract.
+	const activate = (event: React.KeyboardEvent<SVGSVGElement>) => {
+		const view = event.currentTarget.ownerDocument.defaultView;
+		if (!view) return;
+		event.currentTarget.dispatchEvent(
+			new view.MouseEvent('click', {
+				bubbles: true,
+				cancelable: true,
+				view,
+				detail: 0,
+				ctrlKey: event.ctrlKey,
+				altKey: event.altKey,
+				metaKey: event.metaKey,
+				shiftKey: event.shiftKey,
+			}),
+		);
+	};
 	/* START.DEBUG */
-	useTrackRenders(props, 'Icon');
+	useTrackRenders(props, 'FileIcon');
 	/* END.DEBUG */
-
-	if (!paths) return null;
-
 	return (
 		<svg
-			id={svgId}
-			className={className}
+			{...attributes}
+			ref={ref}
 			xmlns="http://www.w3.org/2000/svg"
-			width={size}
-			height={size}
+			width={resolvedSize}
+			height={resolvedSize}
 			viewBox="0 0 20 20"
-			style={{ ...svgStyle, ...iconStyle }}
-			onClick={handleClick}
-			role={pointer ? 'button' : 'img'}
-			aria-label={`${name} icon`}
-			aria-disabled={pointer ? disabled : undefined}
-			tabIndex={pointer && !disabled ? 0 : -1}
-			onKeyDown={(e) => {
-				if (!pointer || disabled) return;
-				accessibleKeyDown(e, () => handleClick(e));
+			className={classNames(css.icon, className ?? '')}
+			style={{ ...style, cursor: cursor(), opacity: disabled ? 0.5 : style?.opacity }}
+			role={interactive ? 'button' : 'img'}
+			aria-label={hidden ? undefined : accessibleName}
+			aria-hidden={hidden || undefined}
+			aria-disabled={interactive ? disabled : undefined}
+			tabIndex={interactive && !disabled ? 0 : undefined}
+			focusable={interactive && !disabled ? 'true' : 'false'}
+			onClick={(event) => {
+				if (disabled) {
+					event.preventDefault();
+					event.stopPropagation();
+					return;
+				}
+				if (!event.defaultPrevented) onClick?.(event);
 			}}
-			opacity={disabled ? 0.5 : 1}
-			{...rest}
+			onKeyDown={(event) => {
+				if (disabled) return;
+				onKeyDown?.(event);
+				if (!interactive || event.defaultPrevented) return;
+				if (event.key === 'Enter') {
+					event.preventDefault();
+					if (!event.repeat) activate(event);
+				}
+				if (event.key === ' ') {
+					event.preventDefault();
+					spacePressed.current = true;
+				}
+			}}
+			onKeyUp={(event) => {
+				const pressed = spacePressed.current;
+				spacePressed.current = false;
+				if (disabled) return;
+				onKeyUp?.(event);
+				if (interactive && !event.defaultPrevented && event.key === ' ' && pressed) {
+					event.preventDefault();
+					activate(event);
+				}
+			}}
+			onBlur={(event) => {
+				spacePressed.current = false;
+				onBlur?.(event);
+			}}
 		>
-			<title />
-			{paths}
+			{definition?.paths(isDark ? 'dark' : 'light')}
 		</svg>
 	);
 });
-
-FileIcon.displayName = 'FileIcon';
+FileIconBase.displayName = 'FileIcon';
+export const FileIcon = React.memo(FileIconBase);

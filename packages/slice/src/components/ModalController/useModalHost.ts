@@ -1,4 +1,4 @@
-import { type RefObject, useEffect } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 
 const focusableSelector = 'button, a[href], input, select, textarea, [tabindex], [contenteditable="true"]';
 
@@ -7,8 +7,14 @@ export function useModalHost(
 	ref: RefObject<HTMLDivElement | null>,
 	dismiss: () => void,
 	opener: RefObject<HTMLElement | null>,
+	active = true,
 ) {
+	const dismissRef = useRef(dismiss);
 	useEffect(() => {
+		dismissRef.current = dismiss;
+	}, [dismiss]);
+	useEffect(() => {
+		if (!active) return;
 		const host = ref.current;
 		if (!host) return;
 		const document = host.ownerDocument;
@@ -46,7 +52,7 @@ export function useModalHost(
 			if (event.key === 'Escape' && !event.defaultPrevented) {
 				event.preventDefault();
 				event.stopPropagation();
-				dismiss();
+				dismissRef.current();
 				return;
 			}
 			if (event.key !== 'Tab' || event.defaultPrevented) return;
@@ -82,5 +88,5 @@ export function useModalHost(
 			if (previousFocus instanceof HTMLElement && previousFocus.isConnected && !previousFocus.closest('[inert]'))
 				previousFocus.focus({ preventScroll: true });
 		};
-	}, [ref, dismiss, opener]);
+	}, [ref, opener, active]);
 }

@@ -76,7 +76,7 @@ export function CoreColors() {
 				);
 			})}
 			<Tip ref={tipRef} coords={coords} tip={tip} />
-			<Toast message={message} didHide={() => setMessage(null)} close={false} />
+			<Toast message={message} onHide={() => setMessage(null)} close={false} />
 		</FlexDiv>
 	);
 }

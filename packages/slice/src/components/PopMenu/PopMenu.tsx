@@ -1,5 +1,5 @@
 import type { AnimationDefinition } from 'motion';
-import { type Variants, motion } from 'motion/react';
+import { type Variants, motion, useAnimationControls } from 'motion/react';
 import type React from 'react';
 import {
 	type CSSProperties,
@@ -17,6 +17,7 @@ import { useTheme } from '../../hooks';
 import { classNames, setStyle } from '../../utils';
 import { mergedPresenceMotionValues } from '../../utils/functions/misc';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import styles from './PopMenu.module.css';
 import { PopMenuActiveSubMenuContext, PopMenuContext } from './PopMenuContext';
 import { PopMenuGroup } from './PopMenuGroup';
@@ -30,13 +31,32 @@ const PortalContext = createContext<PopMenuPortalTarget | undefined>(undefined);
 const BranchDismissContext = createContext<(() => void) | undefined>(undefined);
 const RootCallerContext = createContext<HTMLElement | undefined>(undefined);
 
+const reducedMotionState = {
+	opacity: 1,
+	x: 0,
+	y: 0,
+	scale: 1,
+	scaleX: 1,
+	scaleY: 1,
+	rotate: 0,
+	rotateX: 0,
+	rotateY: 0,
+	skewX: 0,
+	skewY: 0,
+};
+const reducedMotionValues = {
+	initial: reducedMotionState,
+	animate: reducedMotionState,
+	exit: reducedMotionState,
+} satisfies Variants;
+
 const defaultMotionValues = {
 	initial: { y: 5, opacity: 0 },
 	animate: { y: 0, opacity: 1 },
 	exit: { y: 5, opacity: 0 },
 } satisfies Variants;
 
-export function PopMenu(props: Readonly<PopMenuProps>) {
+export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 	const {
 		level = 0,
 		children,
@@ -91,7 +111,13 @@ export function PopMenu(props: Readonly<PopMenuProps>) {
 		enabled: portalTarget !== undefined,
 	});
 	const { coords, resolved, constraints, visible, resetMenu } = layout;
-	const resolvedTransition = getWaterTransition(current.motion, transition);
+	const reduceMotion = usePrefersReducedMotion();
+	const dismissalNotified = useRef(false);
+	const animationControls = useAnimationControls();
+	const resolvedTransition = useMemo(() => {
+		if (reduceMotion) return { type: 'tween' as const, duration: 0, delay: 0 };
+		return getWaterTransition(current.motion, transition);
+	}, [reduceMotion, current.motion, transition]);
 
 	// Each menu owns one active submenu branch; descendants manage their own branches.
 	const [activeSubMenu, setActiveSubMenu] = useState<{
@@ -105,6 +131,7 @@ export function PopMenu(props: Readonly<PopMenuProps>) {
 	// Focus only after placement resolves, without scrolling an ancestor and dismissing the menu.
 	useEffect(() => {
 		if (!resolved) return;
+		dismissalNotified.current = false;
 		const firstItem = menuRef.current?.querySelector<HTMLElement>('[role^="menuitem"]:not(:disabled)');
 		(firstItem ?? menuRef.current)?.focus({ preventScroll: true });
 	}, [resolved]);
@@ -168,8 +195,9 @@ export function PopMenu(props: Readonly<PopMenuProps>) {
 
 	// Layer consumer animation overrides onto the default enter/exit variants.
 	const resolvedVariants = useMemo(() => {
+		if (reduceMotion) return reducedMotionValues;
 		return mergedPresenceMotionValues(defaultMotionValues, motionValues);
-	}, [motionValues]);
+	}, [motionValues, reduceMotion]);
 
 	// Placement and interaction state update independently of appearance tokens.
 	const posStyles = useMemo(() => {
@@ -206,7 +234,7 @@ export function PopMenu(props: Readonly<PopMenuProps>) {
 	}, [rootCaller, dismissAll, onDismiss]);
 
 	const handleItemClick = useCallback(
-		(event: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo) => {
+		(event: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => {
 			const caller = event.currentTarget;
 			const render = item.subMenu;
 			if (render) {
@@ -234,10 +262,10 @@ export function PopMenu(props: Readonly<PopMenuProps>) {
 		if (!options || options?.length === 0) return null;
 		return options.map((option, index) => {
 			if ('label' in option) {
-				const item = option as PopMenuItemProps;
+				const item = option as PopMenuItemProps<T>;
 				return <PopMenuItem key={item.id?.trim() ? `id:${item.id.trim()}` : `index:${index}`} {...item} />;
 			}
-			const item = option as PopMenuItemGroupProps;
+			const item = option as PopMenuItemGroupProps<T>;
 			return <PopMenuGroup key={item.id?.trim() ? `id:${item.id.trim()}` : `index:${index}`} {...item} />;
 		});
 	};
@@ -245,7 +273,8 @@ export function PopMenu(props: Readonly<PopMenuProps>) {
 	// Retain the menu during exit, then clear layout and notify both its owner and parent branch.
 	const handleAnimationComplete = useCallback(
 		(definition: AnimationDefinition) => {
-			if (definition !== 'exit' || resolved || !visible) return;
+			if (definition !== 'exit' || resolved || !visible || dismissalNotified.current) return;
+			dismissalNotified.current = true;
 			setActiveSubMenu(undefined);
 			resetMenu();
 			onDismiss?.();
@@ -253,6 +282,23 @@ export function PopMenu(props: Readonly<PopMenuProps>) {
 		},
 		[resolved, visible, onDismiss, resetMenu, dismissBranch],
 	);
+
+	// Stop in-flight/delayed animations before snapping to the static state on a live preference change.
+	useEffect(() => {
+		if (!visible) return;
+		if (reduceMotion) {
+			animationControls.stop();
+			animationControls.set(reducedMotionState);
+			return;
+		}
+		const animation = resolved ? 'animate' : 'exit';
+		if (resolvedVariants[animation]) void animationControls.start(animation);
+	}, [animationControls, reduceMotion, visible, resolved, resolvedVariants]);
+
+	// Identical reduced-motion states may have no exit animation to complete; close immediately instead.
+	useEffect(() => {
+		if (reduceMotion && !resolved && visible) handleAnimationComplete('exit');
+	}, [reduceMotion, resolved, visible, handleAnimationComplete]);
 
 	// Wait for automatic host creation; false is a resolved request to render in place.
 	if (portalTarget === undefined) return null;
@@ -268,8 +314,8 @@ export function PopMenu(props: Readonly<PopMenuProps>) {
 							onKeyDown={handleKeyDown}
 							ref={menuRef}
 							variants={resolvedVariants}
-							initial={'initial'}
-							animate={resolved ? 'animate' : 'exit'}
+							initial={reduceMotion ? false : 'initial'}
+							animate={animationControls}
 							exit={'exit'}
 							transition={resolvedTransition}
 							className={classNames(divClass, styles.popMenu)}

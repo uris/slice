@@ -120,14 +120,12 @@ const playLoadingIndicator: NonNullable<StoryObj<typeof VideoController>['play']
 		// The controller hides its contents until the first frame is available.
 		fireEvent.loadedData(video);
 		if (args.showProgressIndicator !== false) {
-			await waitFor(() => expect(canvas.getByRole('img', { name: 'Loading spinner' })).toBeVisible());
+			await waitFor(() => expect(canvas.getByRole('status')).toBeVisible());
 		} else {
-			await expect(canvas.queryByRole('img', { name: 'Loading spinner', hidden: true })).not.toBeInTheDocument();
+			await expect(canvas.queryByText('Loading video')).not.toBeInTheDocument();
 		}
 		fireEvent.canPlay(video);
-		await waitFor(() =>
-			expect(canvas.queryByRole('img', { name: 'Loading spinner', hidden: true })).not.toBeInTheDocument(),
-		);
+		await waitFor(() => expect(canvas.queryByText('Loading video')).not.toBeInTheDocument());
 	} finally {
 		videoActions.clear();
 		await waitFor(() => expect(canvasElement.querySelector('video')).not.toBeInTheDocument());

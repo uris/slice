@@ -47,6 +47,7 @@ type UploadAreaBaseProps = {
 	showProgress?: boolean;
 	files?: FileItem[];
 	canRemove?: boolean;
+	onFilesChange?: (files: FileItem[]) => void;
 	onUpload?: (files: File[]) => void;
 };
 

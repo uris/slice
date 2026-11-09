@@ -58,16 +58,8 @@ const meta: Meta<typeof Chip> = {
 		removeLabel: undefined,
 		onRemove: undefined,
 		textSize: 'm',
-		iconSize: 20,
 		iconPosition: 'left',
 		gap: 4,
-		borderWidth: 1,
-		borderRadius: 'var(--corner-m)',
-		textColor: 'var(--core-text-primary)',
-		iconColor: 'var(--core-text-primary)',
-		backgroundColor: 'transparent',
-		borderColor: 'var(--core-text-primary)',
-		borderColorDisabled: 'var(--core-text-disabled)',
 		icon: 'ai.wand',
 		disabled: false,
 		tooltip: 'Chip tooltip',
@@ -183,7 +175,7 @@ export const IndependentPadding: StoryObj<typeof Chip> = {
 			paddingBottom: '4px',
 			paddingLeft: '5px',
 		});
-		await expect(chip.querySelector('svg')?.parentElement).toHaveStyle({ width: '20px', height: '20px' });
+		await expect(chip.querySelector('svg')?.parentElement).toHaveStyle({ width: '16px', height: '16px' });
 	},
 };
 export const UniformPadding: StoryObj<typeof Chip> = {
@@ -522,5 +514,159 @@ export const ReducedMotionRemoval: StoryObj<typeof Chip> = {
 		if (!chip) throw new Error('Missing chip wrapper');
 		await userEvent.click(canvas.getByRole('button', { name: 'Remove Chip Label' }));
 		await waitFor(() => expect(chip).not.toBeInTheDocument(), { timeout: 500 });
+	},
+};
+
+export const DefaultPalette: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: () => <Chip label="Default palette" icon="basic.home" onClick={() => {}} />,
+	play: async ({ canvasElement }) => {
+		const action = within(canvasElement).getByRole('button', { name: 'Default palette' });
+		const chip = action.parentElement as HTMLElement;
+		for (const [property, value] of Object.entries({
+			'--ui-chip-bg-color': 'var(--core-fill-primary)',
+			'--ui-chip-bg-color-hover': 'var(--core-fill-primary)',
+			'--ui-chip-border-width': '0px',
+			'--ui-chip-border-color': 'var(--core-outline-primary)',
+			'--ui-chip-border-color-hover': 'var(--core-text-special)',
+			'--ui-chip-border-radius': '12px',
+			'--ui-chip-icon-size': '16px',
+		}))
+			await expect(chip.style.getPropertyValue(property)).toBe(value);
+	},
+};
+
+export const RemoveOnlyHoverPalette: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexDiv gap={16}>
+			<Chip label="Selectable" icon="basic.home" selected={false} onClick={() => {}} />
+			<Chip label="Removable" icon="basic.home" onRemove={() => {}} />
+		</FlexDiv>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const selectable = canvas.getByRole('button', { name: 'Selectable' });
+		const remove = canvas.getByRole('button', { name: 'Remove Removable' });
+		const first = selectable.parentElement as HTMLElement;
+		const second = remove.parentElement as HTMLElement;
+		for (const root of [first, second]) {
+			root.style.transition = 'none';
+			for (const icon of Array.from(root.querySelectorAll('svg')))
+				(icon.parentElement as HTMLElement).style.transition = 'none';
+		}
+
+		for (const name of [
+			'--ui-chip-text-color-hover',
+			'--ui-chip-icon-color-hover',
+			'--ui-chip-bg-color-hover',
+			'--ui-chip-border-color-hover',
+			'--ui-chip-cursor',
+		]) {
+			await expect(second.style.getPropertyValue(name)).toBe(first.style.getPropertyValue(name));
+		}
+		const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+		if (MODE === 'test') {
+			const { userEvent: pointer } = await import('vitest/browser');
+			await pointer.hover(selectable);
+			const colors = () => ({
+				color: getComputedStyle(first).color,
+				background: getComputedStyle(first).backgroundColor,
+				icon: getComputedStyle(first.querySelector('svg')?.parentElement as HTMLElement).color,
+			});
+			await waitFor(() => expect(getComputedStyle(first).color).not.toBe(getComputedStyle(second).color));
+			const expected = colors();
+			await pointer.hover(remove);
+			await waitFor(() => expect(getComputedStyle(second).color).toBe(expected.color));
+			await expect(getComputedStyle(second).backgroundColor).toBe(expected.background);
+			await waitFor(() =>
+				expect(getComputedStyle(second.querySelector('svg')?.parentElement as HTMLElement).color).toBe(expected.icon),
+			);
+			await pointer.unhover(remove);
+		}
+		selectable.focus();
+		const focusColor = getComputedStyle(first).color;
+		remove.focus();
+		await waitFor(() => expect(getComputedStyle(second).color).toBe(focusColor));
+		await expect(canvas.queryByRole('button', { name: 'Removable' })).toBeNull();
+	},
+};
+
+export const RemoveOnlyHoverOverrides: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: () => (
+		<Chip
+			label="Custom removable"
+			icon="basic.home"
+			onRemove={() => {}}
+			textColorHover="#123456"
+			iconColorHover="#654321"
+			backgroundColorHover="#abcdef"
+			borderColorHover="#112233"
+			borderWidth={1}
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const remove = within(canvasElement).getByRole('button', { name: 'Remove Custom removable' });
+		const chip = remove.parentElement as HTMLElement;
+		remove.focus();
+		await waitFor(() => expect(getComputedStyle(chip).color).toBe('rgb(18, 52, 86)'));
+		await expect(getComputedStyle(chip).backgroundColor).toBe('rgb(171, 205, 239)');
+		await expect(getComputedStyle(chip).borderColor).toBe('rgb(17, 34, 51)');
+		await waitFor(() =>
+			expect(getComputedStyle(remove.querySelector('svg')?.parentElement as HTMLElement).color).toBe(
+				'rgb(101, 67, 33)',
+			),
+		);
+	},
+};
+
+export const RemoveOnlyDisabledPalette: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: () => (
+		<Chip
+			label="Disabled removable"
+			icon="basic.home"
+			onRemove={() => {}}
+			disabled
+			selected
+			backgroundColor="#112233"
+			backgroundColorHover="#ffffff"
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const remove = within(canvasElement).getByRole('button', { name: 'Remove Disabled removable' });
+		const chip = remove.parentElement as HTMLElement;
+		await expect(remove).toBeDisabled();
+		await expect(chip.style.getPropertyValue('--ui-chip-text-color-hover')).toBe('var(--core-text-disabled)');
+		await expect(chip.style.getPropertyValue('--ui-chip-icon-color-hover')).toBe('var(--core-text-disabled)');
+		await expect(chip.style.getPropertyValue('--ui-chip-border-color-hover')).toBe('var(--core-fill-primary)');
+		await expect(chip.style.getPropertyValue('--ui-chip-cursor')).toBe('default');
+		await expect(chip.style.getPropertyValue('--ui-chip-bg-color-hover')).toBe('#112233');
+	},
+};
+
+export const DefaultSelectedPalette: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: () => <Chip label="Selected defaults" selected onClick={() => {}} />,
+	play: async ({ canvasElement }) => {
+		const chip = within(canvasElement).getByRole('button', { name: 'Selected defaults' }).parentElement as HTMLElement;
+		await expect(chip.style.getPropertyValue('--ui-chip-border-color')).toBe('transparent');
+		await expect(chip.style.getPropertyValue('--ui-chip-border-color-hover')).toBe('transparent');
+		await expect(chip.style.getPropertyValue('--ui-chip-bg-color')).toBe('var(--core-surface-secondary)');
+		await expect(chip.style.getPropertyValue('--ui-chip-text-color')).toBe('var(--core-text-special)');
+	},
+};
+
+export const StaticHoverPalette: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: () => <Chip label="Static defaults" />,
+	play: async ({ canvasElement }) => {
+		const chip = within(canvasElement).getByText('Static defaults').closest('div')?.parentElement as HTMLElement;
+		for (const name of ['text-color', 'icon-color', 'bg-color', 'border-color'])
+			await expect(chip.style.getPropertyValue(`--ui-chip-${name}-hover`)).toBe(
+				chip.style.getPropertyValue(`--ui-chip-${name}`),
+			);
+		await expect(chip.style.getPropertyValue('--ui-chip-cursor')).toBe('default');
 	},
 };

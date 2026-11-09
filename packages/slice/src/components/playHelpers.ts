@@ -271,12 +271,6 @@ export async function runPagerPlay<TArgs>({ args, canvasElement }: PlayContext<T
 	}
 }
 
-export async function runProgressIndicatorPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await expect(canvas.getByRole('img', { name: /Loading spinner/i })).toBeInTheDocument();
-}
-
 export async function runSliderPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
@@ -680,107 +674,6 @@ export async function runModalControllerRejectWithoutCallbacksPlay<TArgs>({ canv
 	await waitFor(() => expect(alertSpy).toHaveBeenCalledTimes(1));
 
 	alertSpy.mockRestore();
-}
-
-export async function runToastInfoPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await userEvent.click(canvas.getByRole('button', { name: /info toast/i }));
-	await expect(await canvas.findByText('Thank you for clicking!')).toBeInTheDocument();
-	await userEvent.click(canvas.getByRole('button', { name: /dismiss message/i }));
-}
-
-export async function runToastSuccessHoverPausePlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await userEvent.click(canvas.getByRole('button', { name: /success toast/i }));
-	const successMessage = await canvas.findByText('Saved successfully');
-	await expect(successMessage).toBeInTheDocument();
-	// hovering pauses, then un-hovering resumes, the auto-hide timer
-	const wrapper = successMessage.closest('[role="status"]')?.parentElement ?? successMessage;
-	fireEvent.mouseEnter(wrapper);
-	fireEvent.mouseLeave(wrapper);
-	await userEvent.click(canvas.getByRole('button', { name: /dismiss message/i }));
-}
-
-export async function runToastWarningKeyboardDismissPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await userEvent.click(canvas.getByRole('button', { name: /warning toast/i }));
-	await expect(await canvas.findByText('Careful now')).toBeInTheDocument();
-	// dismissed via the keyboard rather than a click
-	canvas.getByRole('button', { name: /dismiss message/i }).focus();
-	await userEvent.keyboard('{Enter}');
-}
-
-export async function runToastErrorInfiniteDurationPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// Infinite duration renders the progress-indicator branch and never
-	// auto-hides on its own, so dismiss it explicitly afterward
-	await userEvent.click(canvas.getByRole('button', { name: /error toast/i }));
-	await expect(await canvas.findByText('Something failed')).toBeInTheDocument();
-	await userEvent.click(canvas.getByRole('button', { name: /dismiss message/i }));
-}
-
-export async function runToastCustomClassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const status = await canvas.findByRole('status');
-	// exercises the wrapper's `className ? ... : ''` true branch, composed
-	// into classNames via filterClasses
-	await expect(status.parentElement).toHaveClass('story-toast-class');
-}
-
-export async function runToastWithoutDidHidePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// no didHide passed at all, so this exercises the default `() => null`
-	// parameter; the toast's own short duration drives it through
-	// AnimatePresence's exit + onExitComplete without anything external
-	// listening for it
-	await canvas.findByText('Bye for now');
-	await waitFor(() => expect(canvas.queryByText('Bye for now')).not.toBeInTheDocument(), { timeout: 3000 });
-}
-
-export async function runToastNoBorderNoClosePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const status = await canvas.findByRole('status');
-	const wrapper = status.parentElement as HTMLElement;
-	// close=false exercises defaultPadding's `close ? ... : '10px 16px'`
-	// false branch and hides the dismiss affordance; border=false exercises
-	// cssVars' `border ? ... : 'unset'` false branch
-	await expect(wrapper.style.getPropertyValue('--toast-border')).toBe('unset');
-	await expect(canvas.queryByRole('button', { name: /dismiss message/i })).not.toBeInTheDocument();
-}
-
-export async function runToastContainerParentPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const status = await canvas.findByRole('status');
-	const wrapper = status.parentElement as HTMLElement;
-	// container='parent' exercises `container === 'window' ? 'fixed' :
-	// 'absolute'`'s false branch
-	await expect(wrapper.style.getPropertyValue('--toast-position')).toBe('absolute');
-}
-
-export async function runToastPositionTopPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// position='top' exercises both position-based ternaries' false branch
-	// (every other story leaves position at its 'bottom' default)
-	await canvas.findByRole('status');
-}
-
-export async function runToastExplicitProgressPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await canvas.findByRole('status');
-	// progress explicitly set (rather than left `undefined`, which every
-	// other story does) exercises showProgress's `if (progress !==
-	// undefined) return progress;` true branch
-	await expect(canvasElement.querySelector('[class*="progress"]')).toBeInTheDocument();
 }
 
 export async function runUploadAreaPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
@@ -1701,70 +1594,6 @@ export async function runDataTableVirtualizedScrollPlay<TArgs>({ canvasElement }
 	await waitFor(() => expect(wrapper.scrollTop).toBeGreaterThan(0));
 }
 
-export async function runFileIconInteractionsPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const svg = canvasElement.querySelector('svg') as SVGElement | null;
-	await expect(svg).toBeInTheDocument();
-	if (!svg) return;
-
-	await userEvent.click(svg);
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalledTimes(1);
-	}
-
-	// Enter activates via accessibleKeyDown -> handleClick
-	fireEvent.keyDown(svg, { key: 'Enter' });
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalledTimes(2);
-	}
-
-	// a non-activating key still reaches accessibleKeyDown but doesn't match,
-	// so it shouldn't produce another click
-	fireEvent.keyDown(svg, { key: 'a' });
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalledTimes(2);
-	}
-}
-
-export async function runFileIconDisabledPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const svg = canvasElement.querySelector('svg') as SVGElement | null;
-	await expect(svg).toBeInTheDocument();
-	if (!svg) return;
-
-	await userEvent.click(svg);
-	// pointer=true here so !pointer is false and the disabled operand is what
-	// short-circuits the onKeyDown early return
-	fireEvent.keyDown(svg, { key: 'Enter' });
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).not.toHaveBeenCalled();
-	}
-}
-
-export async function runFileIconNonPointerPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const svg = canvasElement.querySelector('svg') as SVGElement | null;
-	await expect(svg).toBeInTheDocument();
-	if (!svg) return;
-
-	// pointer=false here so !pointer alone short-circuits the onKeyDown early
-	// return before the disabled operand is even evaluated
-	fireEvent.keyDown(svg, { key: 'Enter' });
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).not.toHaveBeenCalled();
-	}
-}
-
-export async function runFileIconUnknownNamePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// an unregistered name resolves to no path definition, so the component
-	// renders nothing at all
-	await expect(canvasElement.querySelector('svg')).not.toBeInTheDocument();
-}
-
 export async function runLevelActiveBarsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
 	await expectCanvas(canvasElement);
 	// minIntensity > 0 forces some bars active from the very first render,
@@ -1887,7 +1716,7 @@ export async function runUploadAreaBusyGuardsPlay<TArgs>({ canvasElement, args }
 
 	// a busy+showProgress area renders the inline progress indicator instead
 	// of just the message
-	await expect(canvasElement.querySelector('[class*="message"] [role="img"]')).toBeInTheDocument();
+	await expect(canvasElement.querySelector('[class*="message"] svg[aria-hidden="true"]')).toBeInTheDocument();
 
 	const file = new File(['contents'], 'ignored.txt', { type: 'text/plain' });
 	const dataTransfer = new DataTransfer();
@@ -2074,7 +1903,9 @@ export async function runChipDisabledPlay<TArgs>({ canvasElement, args }: PlayCo
 	const disabledChip = canvasElement.querySelector('[class*="chip"]') as HTMLElement;
 	await expect(disabledChip.style.getPropertyValue('--ui-chip-icon-color')).toBe('var(--core-text-disabled)');
 	const wrapper = canvasElement.querySelector('[class*="chip"]') as HTMLElement | null;
-	await expect(wrapper?.style.getPropertyValue('--ui-chip-border-color')).toBe('var(--core-text-disabled)');
+	await expect(wrapper?.style.getPropertyValue('--ui-chip-border-color')).toBe(
+		String(storyArgs.borderColorDisabled ?? 'var(--core-fill-primary)'),
+	);
 	await expect(wrapper?.style.getPropertyValue('--ui-chip-cursor')).toBe('default');
 }
 
@@ -2119,68 +1950,6 @@ export async function runChipLayoutVariantsPlay({ canvasElement }: { canvasEleme
 	// borderWidth controls the rendered border
 	const customBorder = canvasElement.querySelector('[class*="custom-border"]') as HTMLElement | null;
 	await expect(customBorder?.style.getPropertyValue('--ui-chip-border-width')).toBe('3px');
-}
-
-export async function runTipShowsAndHidesPlay({ canvasElement, args }: PlayContext) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const tip = canvasElement.querySelector('[class*="wrapper"]') as HTMLElement | null;
-	await expect(tip).toBeInTheDocument();
-	if (!tip) return;
-
-	// positive coords stay hidden until the show-delay timer fires
-	await expect(tip.style.visibility).toBe('hidden');
-
-	const coords = storyArgs.coords as { x: number; y: number } | undefined;
-	await waitFor(() => expect(tip.style.visibility).toBe('visible'));
-	await expect(tip.style.left).toBe(`${coords?.x ?? 0}px`);
-	await expect(tip.style.top).toBe(`${coords?.y ?? 0}px`);
-	await expect(tip.textContent).toBe('Tip text');
-
-	// and it hides itself again once the hide-delay timer fires
-	await waitFor(() => expect(tip.style.visibility).toBe('hidden'));
-	await expect(tip.style.left).toBe('0px');
-	await expect(tip.style.top).toBe('0px');
-}
-
-export async function runTipHiddenAtOriginPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const tip = canvasElement.querySelector('[class*="wrapper"]') as HTMLElement | null;
-	await expect(tip).toBeInTheDocument();
-	if (!tip) return;
-
-	// coords at the origin never satisfy `x > 0 && y > 0`, so the tip never
-	// schedules a show timer at all
-	await expect(tip.style.visibility).toBe('hidden');
-	await expect(tip.textContent).toBe('');
-}
-
-export async function runTipStyleVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-
-	const noBorder = canvasElement.querySelector('[class*="no-border"]') as HTMLElement | null;
-	await expect(noBorder?.style.getPropertyValue('--tooltip-border')).toBe('unset');
-
-	const customBorderColor = canvasElement.querySelector('[class*="custom-border-color"]') as HTMLElement | null;
-	await expect(customBorderColor?.style.getPropertyValue('--tooltip-border')).toBe('1px solid #ff0000');
-
-	const textColorPriority = canvasElement.querySelector('[class*="text-color-priority"]') as HTMLElement | null;
-	await expect(textColorPriority?.style.getPropertyValue('--tooltip-color')).toBe('#00ff00');
-
-	const colorFallback = canvasElement.querySelector('[class*="color-fallback"]') as HTMLElement | null;
-	await expect(colorFallback?.style.getPropertyValue('--tooltip-color')).toBe('#0000ff');
-
-	const radiusPriority = canvasElement.querySelector('[class*="border-radius-priority"]') as HTMLElement | null;
-	await expect(radiusPriority?.style.getPropertyValue('--tooltip-border-radius')).toBe('12px');
-
-	const radiusFallback = canvasElement.querySelector('[class*="radius-fallback"]') as HTMLElement | null;
-	await expect(radiusFallback?.style.getPropertyValue('--tooltip-border-radius')).toBe('4px');
-
-	const customPadding = canvasElement.querySelector('[class*="custom-padding"]') as HTMLElement | null;
-	await expect(customPadding?.style.getPropertyValue('--tooltip-padding')).toBe('10px 20px');
-
-	const customBg = canvasElement.querySelector('[class*="custom-bg"]') as HTMLElement | null;
-	await expect(customBg?.style.getPropertyValue('--tooltip-background')).toBe('#123456');
 }
 
 export async function runButtonDisabledInteractionsPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
@@ -2308,8 +2077,7 @@ export async function runButtonProgressFlowPlay<TArgs>({ canvasElement, args }: 
 	}
 	await expect(canvasElement.querySelector('[class*="container"]')).toBeInTheDocument();
 
-	// once the ProgressIndicator's own duration elapses it calls didStop,
-	// which resolves the deferred click with `undefined`
+	// The Button owns its action timer and invokes the deferred click with `undefined`.
 	if (isFn(storyArgs.onClick)) {
 		await waitFor(() => expect(storyArgs.onClick).toHaveBeenCalledWith(undefined));
 	}

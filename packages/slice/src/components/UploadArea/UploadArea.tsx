@@ -40,6 +40,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawPro
 		showProgress = true,
 		files = [],
 		onUpload,
+		onFilesChange,
 	} = props;
 	const [hovered, setHovered] = useState<boolean>(false);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -177,7 +178,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawPro
 				{title}
 			</div>
 			<div id={messageId} className={`${css.message} ${css[textSize]}`}>
-				{busy && showProgress && <ProgressIndicator show size={20} inline color={iconStrokeColor} />}
+				{busy && showProgress && <ProgressIndicator decorative show size={20} inline color={iconStrokeColor} />}
 				{busy ? busyMessage : message}
 			</div>
 			{files.length > 0 && (
@@ -196,7 +197,8 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawPro
 								'--file-row-adjustment': 'var(--spacing-xs)',
 							} as React.CSSProperties
 						}
-						canRemove={canRemove}
+						canRemove={canRemove && !busy && Boolean(onFilesChange)}
+						onChange={onFilesChange}
 					/>
 				</div>
 			)}

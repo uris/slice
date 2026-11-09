@@ -635,3 +635,28 @@ export const ZeroAndRoundBorders: StoryObj<typeof Button> = {
 		await expect(round.width).toBe(38);
 	},
 };
+
+export const BodyTextSizes: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Compare all body text sizes at the default 36px button height. Each row compares labels without descenders (Button Label) and with descenders (Typography), paired in solid and outline variants.',
+			},
+		},
+	},
+	render: () => (
+		<FlexDiv direction="column" gap={16} padding={24}>
+			{(['xs', 's', 'm', 'l', 'xl'] as const).map((textSize) => (
+				<FlexDiv key={textSize} align="center" gap={16}>
+					<span style={{ width: 24 }}>{textSize}</span>
+					<Button variant="solid" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
+					<Button variant="solid" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
+					<Button variant="outline" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
+					<Button variant="outline" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
+				</FlexDiv>
+			))}
+		</FlexDiv>
+	),
+};

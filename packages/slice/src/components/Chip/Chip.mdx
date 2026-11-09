@@ -15,7 +15,7 @@ precedence over children; numeric children such as 0 are supported.
 
 Providing onClick creates a native button with type=button by default. Without it,
 the content is static. selected is controlled by your app. onRemove adds a separate
-remove button; after its exit transition, your handler updates the list. The wrapper
+remove button; after its exit transition, your handler updates the list. Removable chips share clickable chips’ default hover and focus colors without making their content a selection button. The wrapper
 animates layout when selected is supplied, using Water easing over 150ms.
 Chip owns removal presence internally. Its remove button fades the chip to zero opacity and scales it to 0.9 over 150ms with Water easing, then calls `onRemove` once so the parent can update its list. No presence wrapper is needed. Reduced motion skips the transition.
 
@@ -56,7 +56,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>transparent</code>
+<code>core-fill-primary</code>
 </td>
 <td>Chip background.</td>
 </tr>
@@ -68,9 +68,9 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>click-dependent</code>
+<code>interaction-dependent</code>
 </td>
-<td>Hover and keyboard-focus background. Static chips keep backgroundColor; clickable chips use core-surface-secondary. Disabled chips keep backgroundColor.</td>
+<td>Hover and keyboard-focus background. Static chips keep backgroundColor; clickable or removable chips use core-fill-primary. Disabled chips keep backgroundColor.</td>
 </tr>
 <tr>
 <td>
@@ -92,7 +92,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>core-text-primary</code>
+<code>core-outline-primary</code>
 </td>
 <td>Normal border color.</td>
 </tr>
@@ -104,7 +104,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>core-text-disabled</code>
+<code>core-fill-primary</code>
 </td>
 <td>Border color while disabled, including hover.</td>
 </tr>
@@ -116,9 +116,9 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>click-dependent</code>
+<code>interaction-dependent</code>
 </td>
-<td>Hover and keyboard-focus border color. Static chips keep borderColor; clickable chips use core-text-special.</td>
+<td>Hover and keyboard-focus border color. Static chips keep borderColor; clickable or removable chips use core-text-special.</td>
 </tr>
 <tr>
 <td>
@@ -128,7 +128,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>core-text-special</code>
+<code>transparent</code>
 </td>
 <td>Selected border color. Disabled chips use borderColorDisabled.</td>
 </tr>
@@ -140,7 +140,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>number &#124; string</code>
 </td>
 <td>
-<code>corner-m</code>
+<code>corner-l</code>
 </td>
 <td>Corner radius. Numbers are pixels; strings accept CSS values.</td>
 </tr>
@@ -152,7 +152,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>number</code>
 </td>
 <td>
-<code>1</code>
+<code>0</code>
 </td>
 <td>Border width in pixels.</td>
 </tr>
@@ -224,9 +224,9 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>click-dependent</code>
+<code>interaction-dependent</code>
 </td>
-<td>Hover and keyboard-focus icon color. Static chips keep iconColor; clickable chips use core-text-special. Disabled chips use core-text-disabled.</td>
+<td>Hover and keyboard-focus icon color. Static chips keep iconColor; clickable or removable chips use core-text-special. Disabled chips use core-text-disabled.</td>
 </tr>
 <tr>
 <td>
@@ -260,7 +260,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>number</code>
 </td>
 <td>
-<code>20</code>
+<code>16</code>
 </td>
 <td>Icon width and height in pixels.</td>
 </tr>
@@ -392,9 +392,9 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>click-dependent</code>
+<code>interaction-dependent</code>
 </td>
-<td>Hover and keyboard-focus text color. Static chips keep textColor; clickable chips use core-text-special. Disabled chips use core-text-disabled.</td>
+<td>Hover and keyboard-focus text color. Static chips keep textColor; clickable or removable chips use core-text-special. Disabled chips use core-text-disabled.</td>
 </tr>
 <tr>
 <td>

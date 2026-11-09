@@ -1,12 +1,12 @@
-import { type CSSProperties, useContext, useId, useMemo } from 'react';
+import { type CSSProperties, useId, useMemo } from 'react';
 import { classNames, setStyle } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import styles from './PopMenu.module.css';
-import { type PopMenuActions, PopMenuContext, noopDismiss } from './PopMenuContext';
+import { type PopMenuActions, PopMenuContext, noopDismiss, usePopMenuActions } from './PopMenuContext';
 import { PopMenuItem } from './PopMenuItem';
 import type { PopMenuItemGroupProps } from './_types';
 
-export function PopMenuGroup(rawProps: Readonly<PopMenuItemGroupProps>) {
+export function PopMenuGroup<T = unknown>(rawProps: Readonly<PopMenuItemGroupProps<T>>) {
 	const {
 		children,
 		title,
@@ -53,8 +53,8 @@ export function PopMenuGroup(rawProps: Readonly<PopMenuItemGroupProps>) {
 	} as CSSProperties;
 
 	// Add this group to the callback chain without cloning children or replacing root dismissal.
-	const parent = useContext(PopMenuContext);
-	const groupActions = useMemo<PopMenuActions>(
+	const parent = usePopMenuActions<T>();
+	const groupActions = useMemo<PopMenuActions<T>>(
 		() => ({
 			dismissAll: parent?.dismissAll ?? dismissAll ?? noopDismiss,
 			onClickItem: (event, info) => {

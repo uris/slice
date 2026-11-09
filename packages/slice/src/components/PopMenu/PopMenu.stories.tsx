@@ -1,14 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Fragment, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
 import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts/useKeyboardShortcuts';
 import { resolveShortcut } from '../../utils/functions/resolveShortcut';
 import { FlexDiv } from '../FlexDiv';
 import { PopMenu } from './PopMenu';
 import { PopMenuGroup } from './PopMenuGroup';
 import { PopMenuItem } from './PopMenuItem';
-import type { PopMenuItemGroupProps, PopMenuItemProps, PopMenuProps, PopMenuSubMenuProps } from './_types';
+import type {
+	PopMenuItemGroupProps,
+	PopMenuItemProps,
+	PopMenuProps,
+	PopMenuSubMenuProps,
+	PropMenuEntry,
+} from './_types';
 
 function ColorsMenu({ caller, level, dismissAll }: PopMenuSubMenuProps) {
 	return (
@@ -726,7 +732,7 @@ function StableKeysPreview() {
 		{ id: 'stable-group-a', label: 'Grouped duplicate', autoDismiss: false },
 		{ id: 'stable-group-b', label: 'Grouped duplicate', autoDismiss: false },
 	];
-	const options = [
+	const options: PropMenuEntry<DocumentActionData>[] = [
 		{ id: 'stable-a', label: reversed ? 'Renamed' : 'Duplicate', autoDismiss: false },
 		{ id: 'stable-b', label: 'Duplicate', autoDismiss: false },
 		{ id: 'stable-group', title: reversed ? 'Renamed group' : 'Group', items: reversed ? [...items].reverse() : items },
@@ -984,6 +990,232 @@ export const ResolvedShortcut: Story = {
 		const item = await canvas.findByRole('menuitem', { name: 'Quick open' });
 		await expect(item).toHaveTextContent(
 			resolveShortcut({ key: 'k', name: 'Quick open', metaPressed: true, shiftPressed: true }),
+		);
+	},
+};
+
+function mockMotionPreference(initial: boolean) {
+	const original = window.matchMedia.bind(window);
+	let reduced = initial;
+	const listeners = new Set<EventListener>();
+	const query = {
+		get matches() {
+			return reduced;
+		},
+		media: '(prefers-reduced-motion: reduce)',
+		onchange: null,
+		addEventListener: (_type: string, listener: EventListener) => listeners.add(listener),
+		removeEventListener: (_type: string, listener: EventListener) => listeners.delete(listener),
+		addListener: () => {},
+		removeListener: () => {},
+		dispatchEvent: () => true,
+	} as MediaQueryList;
+	const mock = spyOn(window, 'matchMedia').mockImplementation((value) =>
+		value === query.media ? query : original(value),
+	);
+	return {
+		set: (value: boolean) => {
+			reduced = value;
+			for (const listener of listeners) listener(new Event('change'));
+		},
+		restore: () => mock.mockRestore(),
+	};
+}
+function ReducedMotionPreview(args: PopMenuProps) {
+	const [caller, setCaller] = useState<HTMLElement>();
+	return (
+		<>
+			<button type="button" onClick={(event) => setCaller(event.currentTarget)}>
+				Open reduced menu
+			</button>
+			{caller && (
+				<PopMenu
+					{...args}
+					caller={caller}
+					onDismiss={() => {
+						args.onDismiss?.();
+						setCaller(undefined);
+					}}
+				/>
+			)}
+		</>
+	);
+}
+export const ReducedMotion: Story = {
+	tags: ['tests'],
+	beforeEach: () => {
+		const preference = mockMotionPreference(true);
+		return preference.restore;
+	},
+	args: {
+		options: [{ label: 'Colors', subMenu: colorsSubMenu }],
+		transition: { duration: 10, delay: 10 },
+		motionValues: {
+			initial: { x: -100, opacity: 0 },
+			animate: { x: 100, opacity: 1, transition: { duration: 10, delay: 10 } },
+			exit: { x: -100, opacity: 0 },
+		},
+		onDismiss: fn(),
+	},
+	render: (args) => <ReducedMotionPreview {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const page = within(canvasElement.ownerDocument.body);
+		const trigger = page.getByRole('button', { name: 'Open reduced menu' });
+		await userEvent.click(trigger);
+		const colors = await page.findByRole('menuitem', { name: 'Colors' });
+		await waitFor(() => expect(colors).toHaveFocus(), { timeout: 500 });
+		const menu = colors.closest('[role="menu"]') as HTMLElement;
+		await expect(getComputedStyle(menu).opacity).toBe('1');
+		await expect(getComputedStyle(menu).transform).toBe('none');
+		await userEvent.keyboard('{ArrowRight}');
+		await waitFor(() => expect(page.getByRole('menuitem', { name: 'Red' })).toHaveFocus(), { timeout: 500 });
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(page.queryByRole('menuitem', { name: 'Red' })).not.toBeInTheDocument(), {
+			timeout: 500,
+		});
+		await expect(colors).toHaveFocus();
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(page.queryByRole('menu')).not.toBeInTheDocument(), { timeout: 500 });
+		await expect(args.onDismiss).toHaveBeenCalledTimes(1);
+		await expect(trigger).toHaveFocus();
+	},
+};
+let changeMotionPreference: ((value: boolean) => void) | undefined;
+export const LiveReducedMotion: Story = {
+	tags: ['tests'],
+	beforeEach: () => {
+		const preference = mockMotionPreference(false);
+		changeMotionPreference = preference.set;
+		return () => {
+			changeMotionPreference = undefined;
+			preference.restore();
+		};
+	},
+	args: { options: [{ label: 'Edit' }], transition: { duration: 10, delay: 10 }, onDismiss: fn() },
+	render: (args) => <ReducedMotionPreview {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const page = within(canvasElement.ownerDocument.body);
+		await userEvent.click(page.getByRole('button', { name: 'Open reduced menu' }));
+		const item = await page.findByRole('menuitem', { name: 'Edit' });
+		changeMotionPreference?.(true);
+		await waitFor(() => expect(getComputedStyle(item.closest('[role="menu"]') as HTMLElement).opacity).toBe('1'), {
+			timeout: 500,
+		});
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(page.queryByRole('menu')).not.toBeInTheDocument(), { timeout: 500 });
+		await expect(args.onDismiss).toHaveBeenCalledTimes(1);
+	},
+};
+
+interface DocumentActionData {
+	documentId: string;
+}
+function PayloadMenu({ composed = false }: { composed?: boolean }) {
+	const [caller, setCaller] = useState<HTMLButtonElement>();
+	const [events, setEvents] = useState<string[]>([]);
+	const report = (level: string, documentId?: string) =>
+		setEvents((previous) => [...previous, `${level}:${documentId ?? ''}`]);
+	const close = () => {
+		report('dismiss');
+		setCaller(undefined);
+	};
+	const options: PropMenuEntry<DocumentActionData>[] = [
+		{
+			id: 'direct',
+			label: 'Open document',
+			data: { documentId: 'doc-42' },
+			onClick: (event, item) => {
+				report(event.currentTarget.tagName, item.data?.documentId);
+			},
+		},
+		{
+			id: 'documents',
+			title: 'Documents',
+			onClickItem: (_event, item) => report('group', item.data?.documentId),
+			items: [
+				{
+					id: 'grouped',
+					label: 'Open grouped document',
+					data: { documentId: 'doc-99' },
+					onClick: (_event, item) => report('item', item.data?.documentId),
+				},
+			],
+		},
+	];
+	return (
+		<>
+			<button
+				type="button"
+				onClick={(event) => {
+					setEvents([]);
+					setCaller(event.currentTarget);
+				}}
+			>
+				Open typed menu
+			</button>
+			<output aria-label="Callback order">{events.join(',')}</output>
+			{caller && (
+				<PopMenu
+					caller={caller}
+					name="Document actions"
+					transition={{ duration: 0 }}
+					options={composed ? undefined : options}
+					onDismiss={close}
+					onClickItem={(_event, item) => report('menu', item.data?.documentId)}
+				>
+					{composed ? (
+						<PopMenuGroup<DocumentActionData>
+							title="Documents"
+							onClickItem={(_event, item) => report('group', item.data?.documentId)}
+						>
+							<PopMenuItem
+								label="Open composed document"
+								data={{ documentId: 'doc-77' }}
+								onClick={(event, item) => {
+									report(event.currentTarget.tagName, item.data?.documentId);
+								}}
+							/>
+						</PopMenuGroup>
+					) : undefined}
+				</PopMenu>
+			)}
+		</>
+	);
+}
+export const OptionCallbacksWithData: Story = {
+	tags: ['tests'],
+	render: () => <PayloadMenu />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Open typed menu' }));
+		const direct = await canvas.findByRole('menuitem', { name: 'Open document' });
+		await expect(direct).not.toHaveAttribute('data');
+		await userEvent.click(direct);
+		await waitFor(() =>
+			expect(canvas.getByLabelText('Callback order')).toHaveTextContent('BUTTON:doc-42,menu:doc-42,dismiss:'),
+		);
+		await userEvent.click(canvas.getByRole('button', { name: 'Open typed menu' }));
+		const grouped = await canvas.findByRole('menuitem', { name: 'Open grouped document' });
+		grouped.focus();
+		await userEvent.keyboard('{Enter}');
+		await waitFor(() =>
+			expect(canvas.getByLabelText('Callback order')).toHaveTextContent(
+				'item:doc-99,group:doc-99,menu:doc-99,dismiss:',
+			),
+		);
+	},
+};
+export const ComposedCallbacksWithData: Story = {
+	tags: ['tests'],
+	render: () => <PayloadMenu composed />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Open typed menu' }));
+		await userEvent.click(await canvas.findByRole('menuitem', { name: 'Open composed document' }));
+		await waitFor(() =>
+			expect(canvas.getByLabelText('Callback order')).toHaveTextContent(
+				'BUTTON:doc-77,group:doc-77,menu:doc-77,dismiss:',
+			),
 		);
 	},
 };
