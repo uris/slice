@@ -2,7 +2,7 @@ import type React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useMemo } from 'react';
-import { FlexDiv, Label, Slider } from 'src';
+import { Chip, FlexBox, Slider } from 'src';
 import { accessibleKeyDown, setStyle } from '../../../src/utils/functions/misc';
 import css from './MotionSimulation.module.css';
 interface MotionSimulationProps {
@@ -44,7 +44,7 @@ export function MotionSimulation(props: Readonly<MotionSimulationProps>) {
 	}, [objectSize, transition, padding, animate, time, width]);
 
 	return (
-		<FlexDiv width={'fill'} height={'fit'} align={'start'} justify={'start'}>
+		<FlexBox width={'fill'} height={'fit'} align={'start'} justify={'start'}>
 			<div
 				className={css.wrapper}
 				style={cssVars}
@@ -58,7 +58,7 @@ export function MotionSimulation(props: Readonly<MotionSimulationProps>) {
 				<span className={css.instructions}>{placeholder ?? 'click to run animation'}</span>
 			</div>
 			<div className={css.controls}>
-				<Label borderSize={0}>Drag to adjust duration:</Label>
+				<span>Drag to adjust duration:</span>
 				<Slider
 					aria-label="Animation speed"
 					min={0}
@@ -68,8 +68,8 @@ export function MotionSimulation(props: Readonly<MotionSimulationProps>) {
 					width={'100%'}
 					trackHeadSize={16}
 				/>
-				<Label>{time.toFixed(2)}s</Label>
+				<Chip>{time.toFixed(2)}s</Chip>
 			</div>
-		</FlexDiv>
+		</FlexBox>
 	);
 }

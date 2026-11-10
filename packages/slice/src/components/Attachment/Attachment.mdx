@@ -9,6 +9,18 @@ Preview an image, clipboard text, or a file-type icon with an extension-free fil
 Clipboard content is labeled `Clipboard content`; text previews show the first 250 characters.
 Text files show an escaped excerpt of their first 250 characters; other files use the icon fallback. Image object URLs are released on replacement or unmount.
 
+`content` accepts a raw browser `File`, a `FileItem`, or clipboard text. Raw files show
+previews and metadata without upload status. Use `FileItem` when you need progress or errors.
+
+```tsx
+import { Attachment } from '@apple-pie/slice';
+
+export function FilePreview({ file }: { file: File }) {
+  return <Attachment content={file} />;
+}
+```
+
+<Canvas of={Stories.RawFile} />
 <Canvas of={Stories.ImageThumbnail} />
 <Canvas of={Stories.PdfThumbnail} />
 <Canvas of={Stories.TextThumbnail} />
@@ -53,8 +65,8 @@ are forwarded to the wrapper. `style` overrides the component's inline styles.
 ## Upload progress
 
 Pass upload state on the existing `FileItem`: `content={{ file, uploading: true, progress: 45 }}`.
-While uploading, the metadata row shows a spinner and `Uploading` on the left, with
-`45%` on the right. The percentage is outside the animated indicator, so updates
+While uploading, the metadata row shows a spinner and `Uploading`. Sizes `m`, `l`, and `xl`
+cards also show the percentage on the right; `xs` and `s` omit it. The percentage is outside the animated indicator, so updates
 preserve the spinner instance. Set `uploading` to false to restore file type and size.
 
 Progress uses percentages from 0 to 100, rounded and clamped like FileList. Missing,
@@ -76,9 +88,13 @@ while the error is shown. Clear `error` when retrying to restore the normal prev
 ## Styling
 
 `textSize` uses the theme's `xs`, `s`, `m`, `l`, and `xl` body styles. `size` sets
-the card width and preview height to 80, 140, 160, 200, or 240px; the default is `s`.
+the card width and preview height to 100, 125, 140, 160, or 180px; the default is `m`.
 `width` overrides the card width, and `height` overrides the preview height. The filename
 and metadata sit below the preview, so total card height includes those rows.
+`xs` and `s` show only the file type in the metadata row; `m`, `l`, and `xl` also
+show the file size. The accessible description retains the size at every card size.
+
+<Canvas of={Stories.Sizes} />
 
 `backgroundColor` sets the card and canvas background. Text and icon previews share
 the primary surface background. `textColor` and `textColorLight` style the filename

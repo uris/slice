@@ -4,13 +4,13 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { ModalControllerPreview } from './ModalControllerPreview';
 import { motionCode, responseCode, usageCode } from './code';
 
 export function ModalControllerDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">ModalController component</H1>
 			<P clipWidth>{'Open a dialog from application code and collect its result through one shared host.'}</P>
@@ -122,7 +122,7 @@ export function ModalControllerDoc() {
 					'Native div attributes and events are not forwarded by this controller. Lifecycle callbacks belong to the displayed modal component and its descriptor.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

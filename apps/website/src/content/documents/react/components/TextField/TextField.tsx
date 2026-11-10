@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import {
 	TextFieldActionExample,
 	TextFieldErrorExample,
@@ -27,7 +27,7 @@ import {
 
 export function TextFieldDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">TextField component</H1>
 			<P clipWidth>
@@ -758,7 +758,7 @@ export function TextFieldDoc() {
 				Other native handlers apply to the outer wrapper. No Motion gesture or animation lifecycle callbacks are part of
 				the documented component API.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

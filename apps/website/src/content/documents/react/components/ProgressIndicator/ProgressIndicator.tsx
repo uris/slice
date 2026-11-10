@@ -3,7 +3,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { AppearancePreview, LabelPreview, LoadingPreview, OverlayPreview } from './ProgressIndicatorPreview';
 import { appearanceCode, labelCode, motionCode, overlayCode, timedCode, usageCode } from './code';
@@ -109,7 +109,7 @@ const indicatorProps = [
 
 export function ProgressIndicatorDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">ProgressIndicator component</H1>
 			<P clipWidth>Show that work is in progress when its completion percentage is unknown.</P>
@@ -269,7 +269,7 @@ export function ProgressIndicatorDoc() {
 				<TypeDef>React.Ref&lt;HTMLDivElement&gt;</TypeDef>
 			</Definition>
 			<P>Targets the visual wrapper while mounted. It becomes null after exit completes.</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

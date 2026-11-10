@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { memo, useContext, useRef, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import { RadioButton } from '../RadioButton';
 import { RadioGroupContext } from '../RadioButton/RadioGroupContext';
 import { RadioButtonList } from './RadioButtonList';
@@ -14,9 +14,9 @@ const meta = {
 	title: 'Components/RadioButtonList',
 	component: RadioButtonList,
 	render: (args) => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<RadioButtonList {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	args: {
 		options,
@@ -158,10 +158,10 @@ export const ControlledUpdates: Story = {
 export const IndependentGroups: Story = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv gap={32}>
+		<FlexBox gap={32}>
 			<RadioButtonList label="First plan" options={options} />
 			<RadioButtonList label="Second plan" options={options} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);

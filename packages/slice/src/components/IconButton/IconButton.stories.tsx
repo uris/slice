@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { spring } from 'motion/react';
 import { useState } from 'react';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import { SliceIcons } from '../Icon/_types';
 import { ToggleButton } from '../ToggleButton';
 import { installReducedMotionPreference } from '../playHelpers';
@@ -13,9 +13,9 @@ const meta = {
 	title: 'Components/IconButton',
 	component: IconButton,
 	render: (args) => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<IconButton {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	argTypes: {
 		icon: { control: 'select', options: Object.values(SliceIcons).flatMap(Object.values) },
@@ -97,9 +97,9 @@ function ControlledExample() {
 }
 export const ControlledSelection: Story = {
 	render: () => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<ControlledExample />
-		</FlexDiv>
+		</FlexBox>
 	),
 };
 export const Cancelled: Story = {
@@ -419,4 +419,31 @@ export const SpringBackground: Story = {
 export const CustomGeneratorBackground: Story = {
 	...SpringBackground,
 	args: { ...SpringBackground.args, transition: { type: (options) => spring(options), duration: 0.1, bounce: 0 } },
+};
+
+export const IconStrokeWidth: Story = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<IconButton actionName="Default stroke" icon="media.play" toggle />
+			<IconButton actionName="Stroke 0" icon="media.play" toggle iconStrokeWidth={0} />
+			<IconButton actionName="Stroke 2.5" icon="media.play" toggle iconStrokeWidth={2.5} />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, width] of [
+			['Default stroke', '1.25'],
+			['Stroke 0', '0'],
+			['Stroke 2.5', '2.5'],
+		]) {
+			const button = canvas.getByRole('button', { name });
+			const path = button.querySelector('svg path');
+			if (!path) throw new Error('Expected stroked icon');
+			await expect(path).toHaveAttribute('stroke-width', width);
+			await expect(button).not.toHaveAttribute('iconStrokeWidth');
+			await userEvent.click(button);
+			await expect(button.querySelector('svg path')).toHaveAttribute('stroke-width', width);
+		}
+	},
 };

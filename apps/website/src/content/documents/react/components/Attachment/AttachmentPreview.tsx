@@ -1,11 +1,11 @@
 'use client';
 
-import { Attachment, type FileItem } from '@apple-pie/slice';
+import { Attachment, type AttachmentProps, type FileItem } from '@apple-pie/slice';
 import { tipActions } from '@apple-pie/slice/stores/tip';
 import { useEffect, useState } from 'react';
 
-export function ImageAttachmentPreview() {
-	const [content, setContent] = useState<FileItem>({ file: 'flowers-sunflower.png' });
+function useImageAttachmentContent() {
+	const [content, setContent] = useState<File | FileItem>({ file: 'flowers-sunflower.png' });
 	useEffect(() => {
 		const controller = new AbortController();
 		void fetch('/images/flowers-sunflower.png', { signal: controller.signal })
@@ -14,15 +14,33 @@ export function ImageAttachmentPreview() {
 				return response.blob();
 			})
 			.then((blob) => {
-				if (!controller.signal.aborted)
-					setContent({ file: new File([blob], 'flowers-sunflower.png', { type: blob.type }) });
+				if (!controller.signal.aborted) setContent(new File([blob], 'flowers-sunflower.png', { type: blob.type }));
 			})
 			.catch(() => {
 				/* Keep the filename fallback if the image cannot be loaded. */
 			});
 		return () => controller.abort();
 	}, []);
+	return content;
+}
+
+export function ImageAttachmentPreview() {
+	const content = useImageAttachmentContent();
 	return <Attachment content={content} canRemove={false} />;
+}
+
+export function AttachmentSizePreview({
+	size,
+	uploading = false,
+}: Pick<AttachmentProps, 'size'> & { uploading?: boolean }) {
+	const content = useImageAttachmentContent();
+	const file = 'file' in content ? content.file : content;
+	const previewContent = uploading ? { file, uploading: true, progress: 45 } : content;
+	return (
+		<div style={{ minHeight: 250, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+			<Attachment content={previewContent} size={size} canRemove={false} />
+		</div>
+	);
 }
 
 export function TextAttachmentPreview() {
@@ -35,9 +53,9 @@ export function TextAttachmentPreview() {
 }
 
 export function PdfAttachmentPreview() {
-	const [content] = useState<FileItem>(() => ({
-		file: new File([new Uint8Array(5632)], 'Quarterly-report.pdf', { type: 'application/pdf' }),
-	}));
+	const [content] = useState(
+		() => new File([new Uint8Array(5632)], 'Quarterly-report.pdf', { type: 'application/pdf' }),
+	);
 	return <Attachment content={content} canRemove={false} />;
 }
 
@@ -45,6 +63,7 @@ export function UploadAttachmentPreview({ indeterminate = false }: Readonly<{ in
 	return (
 		<Attachment
 			content={{ file: 'Quarterly-report.pdf', uploading: true, progress: indeterminate ? undefined : 45 }}
+			size="l"
 			canRemove={false}
 		/>
 	);

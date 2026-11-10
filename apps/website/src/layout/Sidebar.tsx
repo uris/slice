@@ -5,7 +5,7 @@ import { SidebarDocuments } from '@/components/SidebarDocuments/SidebarDocuments
 import { getSidebarDocSections } from '@/docs/registry/sidebar';
 import { usePackageType, useSlug } from '@/docs/stores/store';
 import { Package, sidePanelConstraints, surfaceYellow } from '@/src/consts/consts';
-import { FlexDiv, Preset, Tab, TabBar } from '@apple-pie/slice';
+import { FlexBox, Preset, Tab, TabBar } from '@apple-pie/slice';
 import { useCallback, useEffect } from 'react';
 
 export function Sidebar() {
@@ -28,7 +28,7 @@ export function Sidebar() {
 	}, [slug]);
 
 	return (
-		<FlexDiv
+		<FlexBox
 			preset={Preset.FillStart}
 			background={'core-surface-primary'}
 			style={{
@@ -40,11 +40,11 @@ export function Sidebar() {
 					<Tab value={Package.React}>React</Tab>
 					<Tab value={Package.ReactNative}>React Native</Tab>
 				</TabBar>
-				<FlexDiv preset={Preset.FillScroll}>
+				<FlexBox preset={Preset.FillScroll}>
 					<SidebarDocList items={getSidebarDocSections(packageType)} />
-				</FlexDiv>
+				</FlexBox>
 			</SidebarDocuments>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

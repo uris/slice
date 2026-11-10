@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { Spacer } from '../../components/Spacer';
 import { TextField } from '../../components/Textfield';
 import { useIsConnected, useMessage, useSSE, useSSEStore } from './sseStore';
@@ -105,8 +105,8 @@ function SSEStoreDemo() {
 	}, [lastMessage]);
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'start'} padding={24}>
-			<FlexDiv
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'start'} padding={24}>
+			<FlexBox
 				width={640}
 				height={'auto'}
 				direction={'column'}
@@ -132,7 +132,7 @@ function SSEStoreDemo() {
 					placeholder={'Enter a custom event name'}
 					onChange={(value) => setCustomEventName(value)}
 				/>
-				<FlexDiv gap={12} direction={'row'} background={'transparent'}>
+				<FlexBox gap={12} direction={'row'} background={'transparent'}>
 					<Button
 						variant={'solid'}
 						label={isConnected ? 'Reconnect' : 'Connect'}
@@ -165,8 +165,8 @@ function SSEStoreDemo() {
 						onClick={() => setEventLog([])}
 						state={eventLog.length === 0 ? 'disabled' : 'normal'}
 					/>
-				</FlexDiv>
-				<FlexDiv direction={'column'} gap={8} padding={8}>
+				</FlexBox>
+				<FlexBox direction={'column'} gap={8} padding={8}>
 					<strong>Event log</strong>
 					{eventLog.length === 0 ? (
 						<div>waiting for an active connection...</div>
@@ -177,9 +177,9 @@ function SSEStoreDemo() {
 							</div>
 						))
 					)}
-				</FlexDiv>
-			</FlexDiv>
-		</FlexDiv>
+				</FlexBox>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

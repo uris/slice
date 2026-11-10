@@ -129,3 +129,27 @@ it('falls back if an image URL cannot be generated', () => {
     expect(result.current.isLoading).toBe(false);
     expect(result.current.thumbnail).toBeUndefined();
 });
+
+it('preserves a raw file preview when upload state is added', () => {
+ const createObjectURL = vi.fn().mockReturnValue('blob:raw');
+ const revokeObjectURL = vi.fn();
+ vi.stubGlobal('URL', { createObjectURL, revokeObjectURL });
+ const file = new File(['image'], 'raw.png', { type: 'image/png' });
+ const { result, rerender, unmount } = renderHook(({ content }: { content: Content }) => useContentThumbnail(content), {
+  initialProps: { content: file } as { content: Content },
+ });
+ expect(result.current.fileName).toBe('raw');
+ expect(result.current.thumbnail).toEqual({ type: 'image', src: 'blob:raw' });
+ rerender({ content: { file, uploading: true, progress: 20 } });
+ expect(createObjectURL).toHaveBeenCalledTimes(1);
+ expect(revokeObjectURL).not.toHaveBeenCalled();
+ unmount();
+ expect(revokeObjectURL).toHaveBeenCalledWith('blob:raw');
+});
+
+it('reads text previews from raw files', async () => {
+ const file = new File(['Raw text preview'], 'notes.txt', { type: 'text/plain' });
+ const { result } = renderHook(() => useContentThumbnail(file));
+ await waitFor(() => expect(result.current.thumbnail).toEqual({ type: 'text', text: 'Raw text preview' }));
+ expect(result.current.fileExtension).toBe('txt');
+});

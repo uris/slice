@@ -3,14 +3,14 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { TabBarColorExample } from './UsagePreviews';
 import { TabBarDisabledExample, TabBarExtrasExample, TabBarFillExample, TabBarUsageExample } from './UsagePreviews';
 import { colorsCode } from './code';
 import { controlledCode, disabledCode, extrasCode, fillCode, motionCode, optionsCode, usageCode } from './code';
 export function TabBarDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">TabBar component</H1>
 			<P clipWidth>
@@ -351,7 +351,7 @@ export function TabBarDoc() {
 					'Native group handlers apply to the tablist. Individual Tab children accept button handlers; there are no incidental drag or animation lifecycle callbacks.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Avatar } from '../Avatar';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import { SliceIcons } from '../Icon/_types';
 import { installReducedMotionPreference } from '../playHelpers';
 import type { ToolTip } from '../sharedTypes';
@@ -12,9 +12,9 @@ const meta = {
 	title: 'Components/ToggleButton',
 	component: ToggleButton,
 	render: (args) => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<ToggleButton {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	argTypes: {
 		icon: { control: 'select', options: Object.values(SliceIcons).flatMap(Object.values) },
@@ -311,7 +311,7 @@ export const ReducedMotion: Story = {
 function GroupedExample() {
 	const [theme, setTheme] = useState('system');
 	return (
-		<FlexDiv gap={12}>
+		<FlexBox gap={12}>
 			{(
 				[
 					{ label: 'System', icon: 'electronics.laptop', value: 'system' },
@@ -330,15 +330,15 @@ function GroupedExample() {
 					}}
 				/>
 			))}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const Grouped: Story = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<GroupedExample />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);
@@ -396,12 +396,12 @@ export const LabelOutsideWithoutIcon: Story = { ...TextOnly, args: { ...TextOnly
 export const ContentAndNaming: Story = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv gap={16}>
+		<FlexBox gap={16}>
 			<ToggleButton label="Follow">Other</ToggleButton>
 			<ToggleButton>{0}</ToggleButton>
 			<ToggleButton icon="weather.sun" />
 			<ToggleButton label="Follow" actionName="Follow Jane" />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);
@@ -489,5 +489,32 @@ export const LiveReducedMotion: Story = {
 		motionPreference.set(true);
 		await waitFor(() => expect(icon.style.transform).not.toContain('180deg'));
 		await expect(document.activeElement).toBe(button);
+	},
+};
+
+export const IconStrokeWidth: Story = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<ToggleButton actionName="Default stroke" icon="media.play" iconSelected="media.pause" />
+			<ToggleButton actionName="Stroke 0" icon="media.play" iconSelected="media.pause" iconStrokeWidth={0} />
+			<ToggleButton actionName="Stroke 2.5" icon="media.play" iconSelected="media.pause" iconStrokeWidth={2.5} />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, width] of [
+			['Default stroke', '1.25'],
+			['Stroke 0', '0'],
+			['Stroke 2.5', '2.5'],
+		]) {
+			const button = canvas.getByRole('button', { name });
+			const path = button.querySelector('svg path');
+			if (!path) throw new Error('Expected stroked icon');
+			await expect(path).toHaveAttribute('stroke-width', width);
+			await expect(button).not.toHaveAttribute('iconStrokeWidth');
+			await userEvent.click(button);
+			await expect(button.querySelector('svg path')).toHaveAttribute('stroke-width', width);
+		}
 	},
 };

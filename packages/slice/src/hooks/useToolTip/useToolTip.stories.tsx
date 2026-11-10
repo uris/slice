@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { IconButton } from '../../components/IconButton';
 import { Tip } from '../../components/Tip/Tip';
 import type { ToolTip } from '../../components/sharedTypes';
@@ -12,7 +12,7 @@ function UseToolTipDemo() {
 	const coords = useToolTip(tip, tipRef);
 
 	return (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<IconButton
 				actionName={'Click Me'}
 				icon={'basic.home'}
@@ -20,7 +20,7 @@ function UseToolTipDemo() {
 				onToolTip={(nextTip) => setTip(nextTip)}
 			/>
 			<Tip coords={coords} tip={tip} ref={tipRef} textSize={'m'} />
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

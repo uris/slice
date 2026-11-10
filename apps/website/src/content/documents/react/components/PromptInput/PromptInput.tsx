@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { ModelsPromptPreview, PastePromptPreview, PromptPreview, WorkingPreview } from './PromptInputPreview';
 import { actionsCode, modelsCode, usageCode, workingCode } from './code';
@@ -317,7 +317,7 @@ const actionsType =
 
 export function PromptInputDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">PromptInput component</H1>
 			<P>
@@ -461,7 +461,7 @@ export function PromptInputDoc() {
 					<P>{description}</P>
 				</Fragment>
 			))}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

@@ -17,11 +17,9 @@ export { dataTableBenchmarkConfig } from './DataTable.bench';
 export { errorSummaryBenchmarkConfig } from './ErrorSummary.bench';
 export { fileIconBenchmarkConfig } from './FileIcon.bench';
 export { fileListBenchmarkConfig } from './FileList.bench';
-export { flexDivBenchmarkConfig } from './FlexDiv.bench';
-export { grouperBenchmarkConfig } from './Grouper.bench';
 export { iconBenchmarkConfig } from './Icon.bench';
 export { iconButtonBenchmarkConfig } from './IconButton.bench';
-export { levelBenchmarkConfig } from './Level.bench';
+export { audioLevelBenchmarkConfig } from './AudioLevel.bench';
 export { dialogBoxBenchmarkConfig } from './DialogBox.bench';
 export { modalControllerBenchmarkConfig } from './ModalController.bench';
 export { overlayBenchmarkConfig } from './Overlay.bench';
@@ -45,9 +43,14 @@ export { videoBenchmarkConfig } from './Video.bench';
 export { buttonBenchmarkConfig } from './Button.bench';
 export { buttonBarBenchmarkConfig } from './ButtonBar.bench';
 export { chipBenchmarkConfig } from './Chip.bench';
-export { labelBenchmarkConfig } from './Label.bench';
 
 export { popMenuControllerBenchmarkConfig } from './PopMenuController.bench';
 export { popMenuGroupBenchmarkConfig } from './PopMenuGroup.bench';
 
 export { attachmentBenchmarkConfig } from './Attachment.bench';
+
+export { doneCheckBenchmarkConfig } from './DoneCheck.bench';
+
+export { videoControllerBenchmarkConfig } from './VideoController.bench';
+
+export { flexBoxBenchmarkConfig } from './FlexBox.bench';

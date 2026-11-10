@@ -1,6 +1,6 @@
 'use client';
 
-import { Avatar, Button, type ButtonHandle, type ButtonProps, FlexDiv } from '@apple-pie/slice';
+import { Avatar, Button, type ButtonHandle, type ButtonProps, FlexBox } from '@apple-pie/slice';
 import { useTipActions } from '@apple-pie/slice/stores';
 import { useEffect, useRef, useState } from 'react';
 
@@ -88,9 +88,9 @@ export function ButtonRefPreview() {
 	const buttonRef = useRef<ButtonHandle>(null);
 	const [count, setCount] = useState(0);
 	return (
-		<FlexDiv gap={12}>
+		<FlexBox gap={12}>
 			<Button ref={buttonRef} label={`Button action (${count})`} onClick={() => setCount((value) => value + 1)} />
 			<Button label="Trigger through a ref" onClick={() => buttonRef.current?.triggerClick()} />
-		</FlexDiv>
+		</FlexBox>
 	);
 }

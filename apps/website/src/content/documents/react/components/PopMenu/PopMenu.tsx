@@ -4,10 +4,11 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { PopMenuPreview } from './PopMenuPreview';
 import { actionsCode, motionCode, optionsCode, portalCode, usageCode } from './code';
+
 const menuProps = [
 	{
 		name: 'backgroundColor',
@@ -192,7 +193,7 @@ const menuProps = [
 ];
 export default function PopMenuDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">PopMenu component</H1>
 			<P clipWidth>Keep contextual actions beside their caller, with grouped items, toggles, and nested menus.</P>
@@ -202,6 +203,9 @@ export default function PopMenuDoc() {
 				<Code openURL="/docs/react/pop-menu-group/">PopMenuGroup</Code> inside a menu. Keep its caller in state and
 				clear it from <Code>dismissAll</Code> and <Code>onDismiss</Code>.
 			</P>
+			<TipBox inline noBorder>
+				Open the menu, try Colors, or toggle Auto Save. Actions close the menu; toggles keep it open.
+			</TipBox>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-popmenu--default"
 				components={[
@@ -213,9 +217,6 @@ export default function PopMenuDoc() {
 					},
 				]}
 			/>
-			<TipBox inline noBorder title="Tip:">
-				Open the menu, try Colors, or toggle Auto Save. Actions close the menu; toggles keep it open.
-			</TipBox>
 			<H3>Use an options array</H3>
 			<P>
 				Pass <Code>options</Code> instead of composed children. Entries can be items or groups. <Code>children</Code>{' '}
@@ -370,7 +371,7 @@ export default function PopMenuDoc() {
 				<Code openURL="/docs/react/pop-menu-item/#events">PopMenuItem</Code>. A consumer <Code>onKeyDown</Code> can call{' '}
 				<Code>preventDefault()</Code> to cancel built-in navigation.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

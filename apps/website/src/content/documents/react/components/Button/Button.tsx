@@ -3,7 +3,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { contentMaxWidth, contentMinWidth } from '@/src/consts/consts';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import {
 	ButtonActionPreview,
 	ButtonChildrenPreview,
@@ -35,7 +35,7 @@ import {
 
 export function ButtonDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
+		<FlexBox preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
 			<Path />
 			<H1 id={'title'}>Button component</H1>
 			<P clipWidth>Make the next step clear. Button brings labels, icons, and busy states to the actions in your UI.</P>
@@ -606,7 +606,7 @@ export function ButtonDoc() {
 				Runs the same activation path with no mouse event. Honors disabled and busy state, link behavior, and timed
 				progress. It does not focus the button or perform native submit/reset behavior.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

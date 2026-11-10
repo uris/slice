@@ -13,6 +13,11 @@ export type DocumentLoader = () => Promise<DocumentModule>;
 // Use explicit imports so Next can split documents into chunks and unknown slugs cannot resolve arbitrary files.
 const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 	[Package.React]: new Map<string, DocumentLoader>([
+		['video-controller', () => import('@/documents/react/components/VideoController/VideoController')],
+		['video', () => import('@/documents/react/components/Video/Video')],
+		['spacer', () => import('@/documents/react/components/Spacer/Spacer')],
+		['done-check', () => import('@/documents/react/components/DoneCheck/DoneCheck')],
+
 		['draggable-panel', () => import('@/documents/react/components/DraggablePanel/DraggablePanel')],
 		['textfield', () => import('@/documents/react/components/TextField/TextField')],
 		['text-area', () => import('@/documents/react/components/TextArea/TextArea')],
@@ -38,6 +43,10 @@ const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 		['radio-button-list', () => import('@/documents/react/components/RadioButtonList/RadioButtonList')],
 		['tab', () => import('@/documents/react/components/Tab/Tab')],
 		['tab-bar', () => import('@/documents/react/components/TabBar/TabBar')],
+		['icon', () => import('@/documents/react/components/Icon/Icon')],
+		['flex-box', () => import('@/documents/react/components/FlexBox/FlexBox')],
+		['flex-div', () => import('@/documents/react/components/FlexDiv/FlexDiv')],
+		['audio-level', () => import('@/documents/react/components/AudioLevel/AudioLevel')],
 		['audio-bubble', () => import('@/documents/react/components/AudioBubble/AudioBubble')],
 		['avatar', () => import('@/documents/react/components/Avatar/Avatar')],
 		['avatar-group', () => import('@/documents/react/components/AvatarGroup/AvatarGroup')],

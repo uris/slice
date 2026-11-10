@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, FlexDiv, PopMenu, PopMenuGroup, PopMenuItem } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuGroup, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export function PopMenuGroupPreview() {
@@ -19,7 +19,7 @@ export function PopMenuGroupPreview() {
 		</PopMenu>
 	);
 	return (
-		<FlexDiv justify="center" align="center" height={180}>
+		<FlexBox justify="center" align="center" height={180}>
 			<Button
 				label="Open grouped menu"
 				onClick={(event) => {
@@ -27,6 +27,6 @@ export function PopMenuGroupPreview() {
 				}}
 			/>
 			{menu}
-		</FlexDiv>
+		</FlexBox>
 	);
 }

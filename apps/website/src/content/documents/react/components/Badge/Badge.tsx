@@ -3,7 +3,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import {
 	BadgeColorsExample,
 	BadgeLabelExample,
@@ -15,7 +15,7 @@ import { accessibilityCode, colorsCode, labelCode, overflowCode, usageCode, zero
 
 export function BadgeDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>Badge component</H1>
 			<P clipWidth>
@@ -175,7 +175,7 @@ export function BadgeDoc() {
 				<TypeDef>{'React.DOMAttributes<HTMLDivElement>'}</TypeDef>
 			</Definition>
 			<P>Native React handlers pass through to the badge and receive the standard event.</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

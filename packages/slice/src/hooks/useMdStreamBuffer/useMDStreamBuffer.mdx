@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Hooks/useMdStreamBuffer" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useMDStreamBuffer
         React hook wrapper around `MdBuffer`. The `MdBuffer` utility transforms partial markdown streams into "healthy" markdown ready for rendering without re-render flickers and trailing markdown tokens.
@@ -118,5 +118,5 @@ import {FlexDiv} from '../../components/FlexDiv';
         <Unstyled>
         In the example above, incoming chunks are first queued by the hook and then released into `MdBuffer` every `40ms`, up to `12` characters at a time.
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

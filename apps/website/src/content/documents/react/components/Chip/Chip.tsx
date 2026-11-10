@@ -3,13 +3,13 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { ChipRemoveExample, ChipSelectionExample, ChipStylingExample, ChipUsageExample } from './UsagePreviews';
 import { actionCode, removeCode, selectionCode, stylingCode, tooltipCode, usageCode } from './code';
 
 export function ChipDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>Chip component</H1>
 			<P clipWidth>
@@ -64,6 +64,7 @@ export function ChipDoc() {
 						component: <ChipRemoveExample />,
 						code: removeCode.trim(),
 						codeFilename: 'RemovableChip.tsx',
+						hasRefresh: true,
 					},
 				]}
 			/>
@@ -89,6 +90,10 @@ export function ChipDoc() {
 			</P>
 			<CodeBlock filename="ChipTooltip.tsx" language="tsx" code={tooltipCode.trim()} />
 			<H2 id={'behavior'}>Behavior</H2>
+			<P>
+				The outer wrapper is an inline-flex <Code>span</Code>, so chips can sit within a line of text. Static content is
+				also a span; clickable and remove actions remain native buttons.
+			</P>
 			<P>
 				Without <Code>onClick</Code>, the chip’s content is static. Removable chips share clickable chips’ default hover
 				and focus colors, while removal stays on the separate remove button. With onClick, it becomes a native button.
@@ -328,19 +333,20 @@ export function ChipDoc() {
 			<P>Text sent to onToolTip on hover or focus. Your application renders the tooltip.</P>
 			<Definition id={'elementAttributes'}>
 				<Prop>...elementAttributes</Prop>
-				<TypeDef>{'React.HTMLAttributes<HTMLDivElement> | React.ButtonHTMLAttributes<HTMLButtonElement>'}</TypeDef>
+				<TypeDef>{'React.HTMLAttributes<HTMLSpanElement> | React.ButtonHTMLAttributes<HTMLButtonElement>'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
-				With onClick, native button attributes apply to the main action; otherwise div attributes apply to the static
+				With onClick, native button attributes apply to the main action; otherwise span attributes apply to the static
 				content. className and style apply to the outer layout wrapper. Button attributes such as type and form require
 				onClick.
 			</P>
 
 			<H2 id={'motion'}>Motion</H2>
 			<P>
-				Chip uses <Code openURL="https://motion.dev/">Motion</Code> layout animation on a <Code>motion.div</Code>{' '}
-				wrapper to resize smoothly when its label changes.
+				Chip uses <Code openURL="https://motion.dev/">Motion</Code> layout animation on a <Code>motion.span</Code>{' '}
+				wrapper with <Code>display: inline-flex</Code>, so it can appear inside text and resize smoothly when its label
+				changes.
 			</P>
 			<P>
 				Chip manages removal presence internally; no parent presence wrapper is needed. Pressing remove fades the chip
@@ -393,14 +399,14 @@ export function ChipDoc() {
 			</P>
 			<Definition id={'elementEvents'}>
 				<Method>...elementEvents</Method>
-				<TypeDef>{'React.DOMAttributes<HTMLDivElement> | React.DOMAttributes<HTMLButtonElement>'}</TypeDef>
+				<TypeDef>{'React.DOMAttributes<HTMLSpanElement> | React.DOMAttributes<HTMLButtonElement>'}</TypeDef>
 			</Definition>
 			<P>
 				Native events apply to the main button or static content, according to onClick. Mouse and focus handlers compose
 				with tooltip behavior; native keyboard handlers pass through. Preventing default on mouse enter or focus
 				suppresses its tooltip request.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

@@ -1,0 +1,137 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {FlexBox} from './';
+import * as FlexBoxStories from './FlexBox.stories';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+
+<Meta of={FlexBoxStories} />
+
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        # FlexBox
+        Renders a flexbox layout primitive for arranging content with shorthand props for alignment, spacing, and sizing.
+
+        ## Base element
+        `HTMLDivElement`
+
+        ## Interface
+        `FlexBoxProps`
+
+        ## Props
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={"left"}>Prop</th>
+              <th className={"left"}>Type</th>
+              <th className={"left"}>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>absolute</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Positions the wrapper absolutely and pins it to all four edges.</td></tr>
+            <tr><td><code>align</code></td><td><code>{`'start' | 'center' | 'end'`}</code></td><td><code>preset-dependent</code></td><td>Controls cross-axis alignment. Explicit values override the selected <code>preset</code>.</td></tr>
+            <tr><td><code>animate</code></td><td><code>Motion target</code></td><td><code>-</code></td><td>Controls `animate`.</td></tr>
+            <tr><td><code>background</code></td><td><code>string</code></td><td><code>'transparent'</code></td><td>Background color or CSS background value for the wrapper.</td></tr>
+            <tr><td><code>border</code></td><td><code>string</code></td><td><code>-</code></td><td>CSS border shorthand applied to the wrapper.</td></tr>
+            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>-</code></td><td>Border radius in pixels.</td></tr>
+            <tr><td><code>centerSelf</code></td><td><code>{`boolean`}</code></td><td><code>-</code></td><td>Centers the wrapper horizontally by applying <code>margin: 0 auto</code>.</td></tr>
+            <tr><td><code>children</code></td><td><code>Motion target</code></td><td><code>-</code></td><td>Controls `children`.</td></tr>
+            <tr><td><code>className</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `className`.</td></tr>
+            <tr><td><code>direction</code></td><td><code>{`'row' | 'column'`}</code></td><td><code>preset-dependent</code></td><td>Flex direction for children. Explicit values override the selected <code>preset</code>.</td></tr>
+            <tr><td><code>initial</code></td><td><code>Motion target</code></td><td><code>-</code></td><td>Controls `initial`.</td></tr>
+            <tr><td><code>exit</code></td><td><code>Motion target</code></td><td><code>-</code></td><td>Controls `exit`.</td></tr>
+            <tr><td><code>flex</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `flex`.</td></tr>
+            <tr><td><code>gap</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `gap`.</td></tr>
+            <tr><td><code>height</code></td><td><code>{`number | 'grow' | 'fill' | 'fit' | 'viewport' | 'auto' | string`}</code></td><td><code>preset-dependent</code></td><td>Wrapper height. Explicit values override the selected <code>preset</code>.</td></tr>
+            <tr><td><code>justify</code></td><td><code>{`'start' | 'top' | 'center' | 'end' | 'bottom' | 'between'`}</code></td><td><code>preset-dependent</code></td><td>Controls main-axis alignment. Explicit values override the selected <code>preset</code>.</td></tr>
+            <tr><td><code>margin</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Sizing/layout setting for `margin`.</td></tr>
+            <tr><td><code>maxWidth</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Sizing/layout setting for `maxWidth`.</td></tr>
+            <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Sizing/layout setting for `padding`.</td></tr>
+            <tr><td><code>preset</code></td><td><code>{`'fill-scroll' | 'fill-center' | 'fill-start' | 'window' | 'row' | 'row-between' | 'column' | 'default' | 'draggable'`}</code></td><td><code>'default'</code></td><td>Applies a predefined layout set for <code>direction</code>, <code>align</code>, <code>justify</code>, <code>width</code>, <code>height</code>, scroll behavior, and base overflow handling.</td></tr>
+            <tr><td><code>reverse</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `reverse`.</td></tr>
+            <tr><td><code>scrollBox</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Adds a small right-side padding adjustment for scrollable containers so content does not sit directly beneath the scrollbar.</td></tr>
+            <tr><td><code>scrollHandle</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `scrollHandle`.</td></tr>
+            <tr><td><code>scrollHandleHover</code></td><td><code>string</code></td><td><code>-</code></td><td>Text/value for `scrollHandleHover`.</td></tr>
+            <tr><td><code>scrollX</code></td><td><code>boolean</code></td><td><code>preset-dependent</code></td><td>Controls horizontal overflow behavior. Explicit values override the selected <code>preset</code>.</td></tr>
+            <tr><td><code>scrollY</code></td><td><code>boolean</code></td><td><code>preset-dependent</code></td><td>Controls vertical overflow behavior. Explicit values override the selected <code>preset</code>.</td></tr>
+            <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>-</code></td><td>Controls `transition`.</td></tr>
+            <tr><td><code>variants</code></td><td><code>Motion target</code></td><td><code>-</code></td><td>Controls `variants`.</td></tr>
+            <tr><td><code>width</code></td><td><code>{`number | 'grow' | 'fill' | 'fit' | 'viewport' | 'auto' | string`}</code></td><td><code>preset-dependent</code></td><td>Wrapper width. Explicit values override the selected <code>preset</code>.</td></tr>
+            <tr><td><code>wrap</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `wrap`.</td></tr>
+            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
+          </tbody>
+        </table>
+
+        Explicit zero spacing and width limits are respected. `scrollBox` adds a right inset only when padding is omitted.
+        Motion timing merges with Water; reduced motion disables animations and applies declarative targets immediately.
+
+        ## Events
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '99%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={"left"}>Event</th>
+              <th className={"left"}>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>-</code></td><td><code>-</code></td></tr>
+          </tbody>
+        </table>
+
+        ## Code Examples
+        </Unstyled>
+
+        <RenderSource>
+```
+import { FlexBox } from '@apple-pie/slice';
+
+export function FlexBoxExample() {
+    return (
+        <FlexBox
+            preset="fill-column"
+            gap={12}
+            padding={16}
+            background="var(--core-surface-secondary)"
+            id="flexdiv-example"
+            data-testid="flexdiv-example"
+            className="custom-wrapper"
+            style={{ marginTop: 8, maxWidth: 480 }}
+        >
+            <div>Panel content</div>
+        </FlexBox>
+    );
+}
+```
+        </RenderSource>
+
+        <RenderSource>
+```
+import { FlexBox } from '@apple-pie/slice';
+
+export function ScrollBoxExample() {
+    return (
+        <FlexBox
+            preset="fill-scroll"
+            scrollBox={true}
+            height={220}
+            padding={12}
+            background="var(--core-surface-secondary)"
+        >
+            <div>Scrollable content...</div>
+        </FlexBox>
+    );
+}
+```
+        </RenderSource>
+    </FlexBox>
+</FlexBox>

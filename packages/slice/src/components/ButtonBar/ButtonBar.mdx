@@ -1,11 +1,11 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import * as ButtonBarStories from './ButtonBar.stories';
 import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ButtonBarStories} />
 
-<FlexDiv width="fill" maxWidth={760} height="auto">
+<FlexBox width="fill" maxWidth={760} height="auto">
 <Unstyled>
 # ButtonBar
 
@@ -310,4 +310,4 @@ import { ButtonBar } from '@apple-pie/slice';
 <ButtonBar buttons={buttons} selectionRadius={12} buttonGap={-4} padding={8} />
 ```
 </RenderSource>
-</FlexDiv>
+</FlexBox>

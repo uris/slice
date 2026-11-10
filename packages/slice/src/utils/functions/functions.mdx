@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Utils/Utility Functions" />
 
-<FlexDiv width={'fill'} height={'fill'} align={'center'}>
-    <FlexDiv width={'fill'} maxWidth={760} height={'auto'}>
+<FlexBox width={'fill'} height={'fill'} align={'center'}>
+    <FlexBox width={'fill'} maxWidth={760} height={'auto'}>
         <Unstyled>
         # Utility Functions
         Small browser and styling helpers exported from `@apple-pie/slice/utils`.
@@ -35,17 +35,17 @@ import {FlexDiv} from '../../components/FlexDiv';
 
         <RenderSource language={"tsx"}>
         ```
-        import { Button, FlexDiv, type ColorValue } from '@apple-pie/slice';
+        import { Button, FlexBox, type ColorValue } from '@apple-pie/slice';
         import { resolveColor } from '@apple-pie/slice/utils';
 
         const color: ColorValue = 'core-text-primary';
         const cssColor = resolveColor(color); // 'var(--core-text-primary)'
         const customColor = resolveColor('#ff00aa'); // '#ff00aa'
 
-        <FlexDiv background="core-surface-primary">
+        <FlexBox background="core-surface-primary">
             <Button label="Continue" textColor={color} iconColor="core-icon-primary" />
             <span style={{ color: cssColor }}>Themed text</span>
-        </FlexDiv>
+        </FlexBox>
         ```
         </RenderSource>
 
@@ -115,5 +115,5 @@ import {FlexDiv} from '../../components/FlexDiv';
         ```
         </RenderSource>
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

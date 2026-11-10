@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { Pager } from 'src/components/Pager/Pager';
 import { runPagerPlay } from 'src/components/playHelpers';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
@@ -36,9 +36,9 @@ export default meta;
 export const Default: StoryObj<typeof Pager> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Pager {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -48,9 +48,9 @@ export const DefaultTest: StoryObj<typeof Pager> = {
 	tags: ['tests'],
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Pager {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {

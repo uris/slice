@@ -167,7 +167,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawPro
 				}}
 			>
 				<span className={css.icon}>
-					<Icon size={iconSize} name={icon} strokeColor={dragging ? iconColorHover : iconColor} aria-hidden="true" />
+					<Icon size={iconSize} name={icon} strokeColor={dragging ? iconColorHover : iconColor} decorative />
 				</span>
 				<span className={css.title}>{title}</span>
 				<span id={messageId} className={`${css.message} ${css[textSize]}`}>

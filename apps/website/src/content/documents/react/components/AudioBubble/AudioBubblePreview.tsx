@@ -1,8 +1,7 @@
 'use client';
 
-import { AudioBubble, DropDown, FlexDiv, Label, type MicOption } from '@apple-pie/slice';
+import { AudioBubble, Chip, DropDown, FlexBox, type MicOption } from '@apple-pie/slice';
 import { useMicrophone } from '@apple-pie/slice/hooks';
-import { useReducedMotion } from 'motion/react';
 import { type ReactNode, createContext, useContext } from 'react';
 
 const MicrophoneContext = createContext<ReturnType<typeof useMicrophone> | null>(null);
@@ -17,11 +16,10 @@ export function AudioBubblePreview({
 	variant = 'live',
 }: { variant?: 'live' | 'paused' | 'response' | 'glow' | 'status' }) {
 	const microphone = useContext(MicrophoneContext);
-	const reducedMotion = useReducedMotion();
 	if (!microphone) throw new Error('AudioBubble previews require their microphone provider.');
 	const { micStream, isActive, isRequesting, error, micOptions, setMicrophone, currentDeviceId } = microphone;
 	const selectedId = currentDeviceId ?? '';
-	const playing = variant !== 'paused' && isActive && !reducedMotion;
+	const playing = variant !== 'paused' && isActive;
 	console.log({ micOptions, currentDeviceId });
 	const getStatus = () => {
 		if (error) return error.message;
@@ -29,7 +27,7 @@ export function AudioBubblePreview({
 		return isActive ? 'Listening' : 'Not listening';
 	};
 	return (
-		<FlexDiv justify={'start'} align={'center'} direction={'column'} gap={16}>
+		<FlexBox justify={'start'} align={'center'} direction={'column'} gap={16}>
 			<AudioBubble
 				audioStream={isRequesting ? null : micStream.current}
 				playing={playing}
@@ -63,7 +61,7 @@ export function AudioBubblePreview({
 					style={{ maxWidth: 'min-content', alignSelf: 'center' }}
 				/>
 			)}
-			{variant === 'status' || (variant === 'live' && error && <Label padding={8} label={getStatus()} />)}
-		</FlexDiv>
+			{(variant === 'status' || (variant === 'live' && error)) && <Chip padding={8} label={getStatus()} />}
+		</FlexBox>
 	);
 }

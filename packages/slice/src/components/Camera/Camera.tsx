@@ -509,8 +509,7 @@ export const Camera = React.memo(
 							<Icon
 								name={'basic.cross'}
 								pointer={true}
-								role={'button'}
-								aria-label={'Clear snapshot'}
+								actionName={'Clear snapshot'}
 								onClick={() =>
 									setSnapshot((previousSnapshot) => {
 										if (previousSnapshot) URL.revokeObjectURL(previousSnapshot);

@@ -15,7 +15,7 @@ import {
 	usePresenceData,
 } from 'motion/react';
 import type React from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getWaterTransition } from '../../../../../packages/slice/src/utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../../../../packages/slice/src/utils/styling/usePrefersReducedMotion';
 import styles from './ComponentCanvas.module.css';
@@ -31,6 +31,7 @@ export type ComponentCanvasItem = {
 	code?: string;
 	codeFilename?: string;
 	component: React.ReactNode;
+	hasRefresh?: boolean;
 };
 
 export interface ComponentCanvasProps {
@@ -43,7 +44,7 @@ export interface ComponentCanvasProps {
 	offsetBottom?: boolean;
 }
 
-type SlideSettings = { direction: number; reduceMotion: boolean; transition: Transition };
+type SlideSettings = { direction: number; reduceMotion: boolean; transition: Transition; contentKey: string };
 
 const slideVariants: Variants = {
 	enter: ({ direction, reduceMotion }: SlideSettings) => ({
@@ -89,6 +90,7 @@ function CanvasSlide({ children, settings }: Readonly<{ children: React.ReactNod
 			transition={liveSettings.reduceMotion ? { duration: 0 } : liveSettings.transition}
 			inert={!isPresent || undefined}
 			aria-hidden={!isPresent || undefined}
+			key={settings.contentKey}
 		>
 			{children}
 		</motion.div>
@@ -103,7 +105,10 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 	const reduceMotion = usePrefersReducedMotion();
 	const themeMotion = useTheme().current.motion;
 	const transition = useMemo(() => getWaterTransition(themeMotion), [themeMotion]);
-	const slideSettings = { direction, reduceMotion, transition };
+	const [contentKey, setContentKey] = useState<string>(Date.now().toString());
+	const slideSettings = { direction, reduceMotion, transition, contentKey };
+	const controls = useAnimationControls();
+	const rotation = useRef(0);
 
 	/*
     const patternStyles = useMemo(() => {
@@ -208,6 +213,21 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 				<div className={styles.caption}>
 					<Caption style={{ padding: 0 }}>{resolvedComponent?.label}</Caption>
 				</div>
+				{resolvedComponent?.hasRefresh && (
+					<motion.div animate={controls} className={styles.refresh}>
+						<IconButton
+							iconColor={'core-text-tertiary'}
+							backgroundColor={'transparent'}
+							backgroundColorHover={'transparent'}
+							icon={'arrows.refresh-ccw'}
+							onClick={() => {
+								setContentKey(Date.now().toString());
+								rotation.current += 180;
+								void controls.start({ rotate: rotation.current }, { ease: 'linear', duration: 0.25 });
+							}}
+						/>
+					</motion.div>
+				)}
 				<div className={styles.content}>
 					<div className={styles.preview} style={{ transform: `scale(${scale})` }}>
 						<AnimatePresence initial={false} custom={slideSettings}>

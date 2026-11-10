@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { ConstraintsPreview, DraggablePanelPreview } from './DraggablePanelPreview';
 import { constraintsCode, constraintsExampleCode, usageCode } from './code';
@@ -103,7 +103,7 @@ function eventDescription(name: string) {
 const events = ['onResizeStart', 'onResize', 'onResizeEnd'];
 export default function DraggablePanelDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={760}>
+		<FlexBox preset={Preset.Column} maxWidth={760}>
 			<Path />
 			<H1 id="title">DraggablePanel component</H1>
 			<P>
@@ -229,7 +229,7 @@ export default function DraggablePanelDoc() {
 					<P>{eventDescription(name)}</P>
 				</Fragment>
 			))}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [

@@ -166,87 +166,16 @@ export async function runDraggablePanelPlay<TArgs>({ canvasElement, args }: Play
 	}
 }
 
-export async function runFlexDivPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
+export async function runFlexBoxPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	await expect(canvasElement.querySelector('div')).toBeInTheDocument();
-}
-
-export async function runGrouperPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const title = storyArgs.title;
-	if (typeof title === 'string') {
-		const group = canvas.getByText(title);
-		await userEvent.click(group);
-		await userEvent.keyboard('{Enter}');
-	}
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-}
-
-export async function runGrouperWithoutHandlersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// no onChange/onClick passed, so this exercises both default-arg no-ops
-	const button = canvas.getByRole('button');
-	await userEvent.click(button);
-}
-
-export async function runGrouperCustomClassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button');
-	// exercises the `className ? ... : ''` true branch
-	await expect(button).toHaveClass('story-grouper-class');
-}
-
-export async function runGrouperToggleDisabledPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const button = canvas.getByRole('button');
-	// toggle=false exercises handleToggle's `if (!toggle) return;` true branch
-	await userEvent.click(button);
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).not.toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).not.toHaveBeenCalled();
-	}
-}
-
-export async function runGrouperUnframedPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// unframed=true exercises cssVars' `unframed ? 'auto' : ...` true branch
-	await expect(button?.style.getPropertyValue('--grouper-height')).toBe('auto');
-}
-
-export async function runGrouperNoBorderPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// border left at its falsy default (0) exercises `border ? ... : '0'`'s
-	// false branch, which every other story leaves untaken since they all
-	// pass a truthy border
-	await expect(button?.style.getPropertyValue('--grouper-border')).toBe('0');
-}
-
-export async function runGrouperFilterBadgePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// showFilterBadge=true exercises the `showFilterBadge && <Icon .../>`
-	// true branch
-	await expect(canvasElement.querySelectorAll('svg').length).toBeGreaterThanOrEqual(2);
 }
 
 export async function runIconPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
-	const icon = canvas.getByRole('img');
+	const icon = canvas.getByRole('button');
 	await userEvent.click(icon);
 	if (isFn(storyArgs.onClick)) {
 		await expect(storyArgs.onClick).toHaveBeenCalled();
@@ -528,31 +457,9 @@ export async function runUIFileIconPlay<TArgs>({ args, canvasElement }: PlayCont
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
-	const icon = canvas.getByRole('img');
+	const icon = canvas.getByRole('button');
 	await userEvent.click(icon);
 	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalled();
-	}
-}
-
-export async function runLabelPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const labelText =
-		typeof storyArgs.children === 'string' || typeof storyArgs.children === 'number'
-			? String(storyArgs.children)
-			: typeof storyArgs.label === 'string'
-				? storyArgs.label
-				: null;
-
-	if (!labelText) return;
-
-	const label = canvas.getByText(labelText);
-	await expect(label).toBeInTheDocument();
-
-	if (isFn(storyArgs.onClick)) {
-		await userEvent.click(label);
 		await expect(storyArgs.onClick).toHaveBeenCalled();
 	}
 }
@@ -974,17 +881,8 @@ export async function runVideoControllerShowAndHidePlay<TArgs>({ canvasElement, 
 
 	await userEvent.click(canvas.getByRole('button', { name: /show video/i }));
 
-	// the local muted fixture actually decodes and plays in this real browser -
-	// wait for handleDidLoadFrame's `ready` flip (driven by the <video>'s real
-	// `loadeddata` event) rather than assuming it's immediate
-	const container = canvasElement.querySelector('[class*="container"]') as HTMLElement | null;
-	await expect(container).toBeInTheDocument();
-	await waitFor(() => expect(container?.style.getPropertyValue('--video-visibility')).toBe('visible'), {
-		timeout: 5000,
-	});
-	if (isFn(storyArgs.onLoadedFrameData)) {
-		await expect(storyArgs.onLoadedFrameData).toHaveBeenCalled();
-	}
+	await waitFor(() => expect(canvas.getByRole('dialog', { name: 'Video player' })).toBeVisible());
+	await waitFor(() => expect(canvasElement.querySelector('video')?.readyState).toBeGreaterThanOrEqual(2));
 
 	// clicking the dark overlay behind the video calls handleHide, which clears
 	// the store and fires onQuit
@@ -1004,21 +902,11 @@ export async function runVideoControllerQuitOutsidePlay({ canvasElement }: { can
 	await userEvent.click(canvas.getByRole('button', { name: /show video/i }));
 	await waitFor(() => expect(canvasElement.querySelector('video')).toBeInTheDocument());
 
-	// the whole container (video + the outside close button) sits behind
-	// `visibility: var(--video-visibility, hidden)` until handleDidLoadFrame
-	// flips `ready` - while hidden, the close button exists in the DOM but is
-	// correctly excluded from the accessibility tree, so getByRole can't see
-	// it yet. Wait for that flip before querying for it, same as the
-	// show/hide flow does.
-	const container = canvasElement.querySelector('[class*="container"]') as HTMLElement | null;
-	await expect(container).toBeInTheDocument();
-	await waitFor(() => expect(container?.style.getPropertyValue('--video-visibility')).toBe('visible'), {
-		timeout: 5000,
-	});
+	await waitFor(() => expect(canvas.getByRole('dialog', { name: 'Video player' })).toBeVisible());
 
 	// quit='outside' renders a dedicated close IconButton alongside the video
 	// instead of (or in addition to) the overlay-click/inline-quit-button paths
-	const closeButton = canvas.getByRole('button', { name: 'Close video' });
+	const closeButton = await canvas.findByRole('button', { name: 'Close video' });
 	await userEvent.click(closeButton);
 	await waitFor(() => expect(canvasElement.querySelector('video')).not.toBeInTheDocument());
 }
@@ -1266,6 +1154,8 @@ export async function runVideoHoverControlsPlay<TArgs>({ canvasElement }: PlayCo
 	}
 
 	await userEvent.unhover(wrapper);
+	await expect(getComputedStyle(wrapper).getPropertyValue('--video-controls-opacity').trim()).toBe('1');
+	if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 	await waitFor(() => expect(getComputedStyle(wrapper).getPropertyValue('--video-controls-opacity').trim()).toBe('0'));
 }
 
@@ -1403,17 +1293,7 @@ export async function runDataTableVirtualizedScrollPlay<TArgs>({ canvasElement }
 	await waitFor(() => expect(wrapper.scrollTop).toBeGreaterThan(0));
 }
 
-export async function runLevelActiveBarsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// minIntensity > 0 forces some bars active from the very first render,
-	// without needing real audio analysis to drive normalizedIntensity up
-	const bars = canvasElement.querySelectorAll('[class*="bar"]');
-	await expect(bars.length).toBeGreaterThan(0);
-	const activeBar = Array.from(bars).find((bar) => (bar as HTMLElement).style.opacity === '1');
-	await expect(activeBar).toBeTruthy();
-}
-
-export async function runLevelStreamLifecyclePlay({ canvasElement }: { canvasElement: HTMLElement }) {
+export async function runAudioLevelStreamLifecyclePlay({ canvasElement }: { canvasElement: HTMLElement }) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 
@@ -1453,33 +1333,10 @@ export async function runLevelStreamLifecyclePlay({ canvasElement }: { canvasEle
 	await waitFor(() => expect(canvasElement.querySelectorAll('[class*="bar"]').length).toBeGreaterThan(0));
 }
 
-export async function runLabelBackgroundVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-
-	// each of these renders exercises a different case of the semantic
-	// background/border-color switches (setBgColor/setBorderColor in Label.tsx)
-	for (const text of ['Green', 'Yellow', 'Grey', 'Light Grey', 'White', 'Blue']) {
-		await expect(canvas.getByText(text)).toBeInTheDocument();
-	}
-
-	// an explicitly empty backgroundColor exercises the `!resolvedBackgroundColor`
-	// early-return branch in both useMemos
-	const emptyBg = canvas.getByText('Empty');
-	await expect(emptyBg).toBeInTheDocument();
-	await expect(emptyBg.style.getPropertyValue('--label-bg-color')).toBe('transparent');
-
-	// an explicit padding prop exercises setPadding's truthy branch instead of
-	// the '2px 4px' default
-	const padded = canvas.getByText('Padded');
-	await expect(padded).toBeInTheDocument();
-	await expect(padded.style.getPropertyValue('--label-padding')).toBe('12px');
-}
-
 export async function runDoneCheckAnimatesAndFiresCallbacksPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
-	const icon = canvasElement.querySelector('[class*="icon"]') as HTMLElement | null;
+	const icon = canvasElement.querySelector('[role="status"]') as HTMLElement | null;
 	await expect(icon).toBeInTheDocument();
 	if (!icon) return;
 
@@ -1491,22 +1348,22 @@ export async function runDoneCheckAnimatesAndFiresCallbacksPlay<TArgs>({ canvasE
 	if (isFn(storyArgs.didEnd)) {
 		await waitFor(() => expect(storyArgs.didEnd).toHaveBeenCalled());
 	}
-	await waitFor(() => expect(icon.style.getPropertyValue('--icon-scale')).toBe('1'));
-	await expect(icon.style.getPropertyValue('--icon-transition')).not.toBe('unset');
+	await waitFor(() => expect(getComputedStyle(icon).getPropertyValue('--icon-scale')).toBe('1'));
+	await expect(getComputedStyle(icon).getPropertyValue('--icon-transition')).not.toBe('none');
 }
 
 export async function runDoneCheckNoPlayPlay({ canvasElement, args }: PlayContext) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
-	const icon = canvasElement.querySelector('[class*="icon"]') as HTMLElement | null;
+	const icon = canvasElement.querySelector('[role="status"]') as HTMLElement | null;
 	await expect(icon).toBeInTheDocument();
 	if (!icon) return;
 
 	// play:false skips the mount animation entirely - scale is 1 from the
-	// first render and the transition custom property is left 'unset', so
+	// first render and the transition custom property is set to 'none', so
 	// no transitionstart/transitionend should ever fire
-	await expect(icon.style.getPropertyValue('--icon-scale')).toBe('1');
-	await expect(icon.style.getPropertyValue('--icon-transition')).toBe('unset');
+	await expect(getComputedStyle(icon).getPropertyValue('--icon-scale')).toBe('1');
+	await expect(getComputedStyle(icon).getPropertyValue('--icon-transition')).toBe('none');
 
 	if (isFn(storyArgs.didStart)) {
 		await expect(storyArgs.didStart).not.toHaveBeenCalled();
@@ -1518,14 +1375,14 @@ export async function runDoneCheckNoPlayPlay({ canvasElement, args }: PlayContex
 
 export async function runDoneCheckWithoutCallbacksPlay({ canvasElement }: { canvasElement: HTMLElement }) {
 	await expectCanvas(canvasElement);
-	const icon = canvasElement.querySelector('[class*="icon"]') as HTMLElement | null;
+	const icon = canvasElement.querySelector('[role="status"]') as HTMLElement | null;
 	await expect(icon).toBeInTheDocument();
 	if (!icon) return;
 
 	// didStart/didEnd are both omitted here, exercising the `didStart?.()` /
 	// `didEnd?.()` optional-chaining branches with no callback attached - the
 	// animation should still run to completion without throwing
-	await waitFor(() => expect(icon.style.getPropertyValue('--icon-scale')).toBe('1'));
+	await waitFor(() => expect(getComputedStyle(icon).getPropertyValue('--icon-scale')).toBe('1'));
 }
 
 export async function runDotVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {

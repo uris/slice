@@ -2,7 +2,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import {
 	ButtonBarAppearanceExample,
 	ButtonBarControlledExample,
@@ -13,7 +13,7 @@ import { controlledCode, example2Code, overlapCode, usageCode } from './code';
 
 export function ButtonBarDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>ButtonBar component</H1>
 			<P clipWidth>Keep related icon actions together in a compact bar, with optional selection.</P>
@@ -281,7 +281,7 @@ export function ButtonBarDoc() {
 				Standard group-root events pass through. <Code>onClick</Code> and <Code>onChange</Code> above are component
 				callbacks with item payloads, not native div events.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

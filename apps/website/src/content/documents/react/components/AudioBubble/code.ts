@@ -1,16 +1,14 @@
 export const usageCode = `
 import { AudioBubble } from '@apple-pie/slice';
 import { useMicrophone } from '@apple-pie/slice/hooks';
-import { useReducedMotion } from 'motion/react';
 
 export default function MicrophoneBubble() {
     const { micStream, isActive, isRequesting } = useMicrophone(false);
-    const prefersReducedMotion = useReducedMotion();
 
     return (
         <AudioBubble
             audioStream={isRequesting ? null : micStream.current}
-            playing={isActive && !prefersReducedMotion}
+            playing={isActive}
         />
     );
 }
@@ -27,7 +25,7 @@ export default function PausedBubble() {
 export const responseCode = `
 <AudioBubble
     audioStream={isRequesting ? null : micStream.current}
-    playing={isActive && !prefersReducedMotion}
+    playing={isActive}
     size={48}
     minScale={1}
     maxScale={2}
@@ -39,7 +37,7 @@ export const responseCode = `
 export const glowCode = `
 <AudioBubble
     audioStream={isRequesting ? null : micStream.current}
-    playing={isActive && !prefersReducedMotion}
+    playing={isActive}
     backgroundColor="core-link-primary"
     glowColor="core-link-primary"
     glowSize={32}
@@ -48,7 +46,7 @@ export const glowCode = `
 `;
 
 export const statusCode = `
-import { AudioBubble } from '@apple-pie/slice';
+import { AudioBubble, Chip } from '@apple-pie/slice';
 import { useMicrophone } from '@apple-pie/slice/hooks';
 
 export default function MicrophoneBubble() {
@@ -64,9 +62,9 @@ export default function MicrophoneBubble() {
         <>
             <AudioBubble
                 audioStream={isRequesting ? null : micStream.current}
-                playing={isActive && !prefersReducedMotion}
+                playing={isActive}
             />
-            <Label>{getStatus()}</Label>
+            <Chip>{getStatus()}</Chip>
         </>
     );
 }

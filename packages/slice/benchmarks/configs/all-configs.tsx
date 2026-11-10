@@ -13,16 +13,16 @@ import {
 	Camera,
 	CheckBox,
 	ContentEditable,
+	DoneCheck,
 	Dot,
 	DraggablePanel,
 	DropDown,
 	ErrorSummary,
 	FileIcon,
-	FlexDiv,
-	Grouper,
+	FlexBox,
 	Icon,
 	IconButton,
-	Level,
+	AudioLevel,
 	DialogBox,
 	ModalController,
 	PopMenuController,
@@ -44,13 +44,14 @@ import {
 	ToggleButton,
 	UploadArea,
 	Video,
+	VideoController,
 	Button,
 	ButtonBar,
 	Chip,
-	Label,
 	DataTable,
 	createColumnHelper,
 } from '../../src';
+import { videoActions } from '../../src/stores/video';
 import { modalActions } from '../../src/stores/modal';
 import { FileList } from '../../src/components/FileList';
 import { PromptInput } from '../../src/components/PromptInput/PromptInput';
@@ -296,18 +297,18 @@ export const checkBoxConfig: ComponentBenchmarkConfig = {
 	],
 };
 
-export const flexDivConfig: ComponentBenchmarkConfig = {
-	componentName: 'FlexDiv',
+export const flexBoxConfig: ComponentBenchmarkConfig = {
+	componentName: 'FlexBox',
 	tests: [
 		{
 			name: 'Mount Time',
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<FlexDiv>
+					<FlexBox>
 						<div>Child 1</div>
 						<div>Child 2</div>
-					</FlexDiv>,
+					</FlexBox>,
 					50,
 				),
 		},
@@ -316,16 +317,16 @@ export const flexDivConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<FlexDiv direction="column">
+					<FlexBox direction="column">
 						<div>Child 1</div>
 						<div>Child 2</div>
-					</FlexDiv>,
+					</FlexBox>,
 					(container) => {
 						container.rerender(
-							<FlexDiv direction="row">
+							<FlexBox direction="row">
 								<div>Child 1</div>
 								<div>Child 2</div>
-							</FlexDiv>,
+							</FlexBox>,
 						);
 					},
 					50,
@@ -334,23 +335,23 @@ export const flexDivConfig: ComponentBenchmarkConfig = {
 	],
 };
 
-export const levelConfig: ComponentBenchmarkConfig = {
-	componentName: 'Level',
+export const audioLevelConfig: ComponentBenchmarkConfig = {
+	componentName: 'AudioLevel',
 	tests: [
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<Level width={120} height={6} playing={false} />, 50),
+			fn: () => measureMountTime(<AudioLevel width={120} height={6} playing={false} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<Level width={120} height={6} playing={false} />,
+					<AudioLevel width={120} height={6} playing={false} />,
 					(container) => {
 						container.rerender(
-							<Level width={140} height={8} playing={false} maxIntensity={8} />,
+							<AudioLevel width={140} height={8} playing={false} barCount={8} />,
 						);
 					},
 					50,
@@ -359,7 +360,7 @@ export const levelConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<Level width={120} height={6} />, 10),
+			fn: () => measureMemoryDelta(<AudioLevel width={120} height={6} />, 10),
 		},
 	],
 };
@@ -638,9 +639,45 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 		},
 	],
 };
+function VideoControllerBenchmark({ padding = 64 }: { padding?: number }) {
+	React.useEffect(() => {
+		videoActions.show({ component: Video, props: { width: 320, height: 180, playing: false } });
+		return () => videoActions.clear();
+	}, []);
+	return <VideoController draggable={false} padding={padding} transition={{ duration: 0 }} />;
+}
+export const videoControllerConfig: ComponentBenchmarkConfig = {
+	componentName: 'VideoController',
+	tests: [
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<VideoControllerBenchmark />, 10) },
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<VideoControllerBenchmark />,
+					(container) => {
+						container.rerender(<VideoControllerBenchmark padding={32} />);
+					},
+					10,
+				),
+		},
+	],
+};
+
 export const videoConfig: ComponentBenchmarkConfig = {
 	componentName: 'Video',
 	tests: [
+		{
+			name: 'Render Function Controls',
+			type: 'mount',
+			fn: () => measureMountTime(<Video controls="custom" showProgressIndicator={false}>{({playing, toggleMute}) => <Button onClick={toggleMute}>{playing ? 'Playing' : 'Paused'}</Button>}</Video>, 25),
+		},
+		{
+			name: 'Explicit Play Only',
+			type: 'mount',
+			fn: () => measureMountTime(<Video width={320} height={180} controls="default" customControls={{ play: true }} showProgressIndicator={false} />, 25),
+		},
 		{
 			name: 'Mount Time',
 			type: 'mount',
@@ -802,6 +839,11 @@ export const attachmentConfig: ComponentBenchmarkConfig = {
 export const fileListConfig: ComponentBenchmarkConfig = {
 	componentName: 'FileList',
 	tests: [
+        {
+            name: 'Raw Files',
+            type: 'mount',
+            fn: () => measureMountTime(<FileList files={[new File(['pdf'], 'report.pdf')]} />, 50),
+        },
 		{
 			name: 'Attachment Cards',
 			type: 'mount',
@@ -1059,34 +1101,6 @@ export const chipConfig: ComponentBenchmarkConfig = {
 			name: 'Memory',
 			type: 'memory',
 			fn: () => measureMemoryDelta(<Chip label="Chip" icon="basic.check" />, 10),
-		},
-	],
-};
-
-export const labelConfig: ComponentBenchmarkConfig = {
-	componentName: 'Label',
-	tests: [
-		{
-			name: 'Mount Time',
-			type: 'mount',
-			fn: () => measureMountTime(<Label label="Label" />, 50),
-		},
-		{
-			name: 'Re-render',
-			type: 'rerender',
-			fn: () =>
-				measureRerenderTime(
-					<Label label="Initial" />,
-					(container) => {
-						container.rerender(<Label label="Updated Label Text" />);
-					},
-					50,
-				),
-		},
-		{
-			name: 'Memory',
-			type: 'memory',
-			fn: () => measureMemoryDelta(<Label label="Test Label" />, 10),
 		},
 	],
 };
@@ -1414,44 +1428,6 @@ export const errorSummaryConfig: ComponentBenchmarkConfig = {
 	],
 };
 
-export const grouperConfig: ComponentBenchmarkConfig = {
-	componentName: 'Grouper',
-	tests: [
-		{
-			name: 'Mount Time',
-			type: 'mount',
-			fn: () =>
-				measureMountTime(
-					<Grouper title={"title1"} open={false}/>,
-					50,
-				),
-		},
-		{
-			name: 'Re-render',
-			type: 'rerender',
-			fn: () =>
-				measureRerenderTime(
-					<Grouper title={"title1"} open={false} />,
-					(container) => {
-						container.rerender(
-							<Grouper title={"title1"} open={true} />,
-						);
-					},
-					50,
-				),
-		},
-		{
-			name: 'Memory',
-			type: 'memory',
-			fn: () =>
-				measureMemoryDelta(
-					<Grouper title={"title1"} open={false} />,
-					10,
-				),
-		},
-	],
-};
-
 export const iconButtonConfig: ComponentBenchmarkConfig = {
 	componentName: 'IconButton',
 	tests: [
@@ -1605,6 +1581,25 @@ export const pagerConfig: ComponentBenchmarkConfig = {
 			name: 'Memory',
 			type: 'memory',
 			fn: () => measureMemoryDelta(<Pager pages={15} selectedIndex={1} />, 10),
+		},
+	],
+};
+
+export const doneCheckConfig: ComponentBenchmarkConfig = {
+	componentName: 'DoneCheck',
+	tests: [
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<DoneCheck play={false} />, 50) },
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<DoneCheck play={false} size={24} />,
+					(container) => {
+						container.rerender(<DoneCheck play={false} size={48} statusLabel="Saved" />);
+					},
+					50,
+				),
 		},
 	],
 };
@@ -2076,11 +2071,10 @@ export const allBenchmarkConfigs = [
 	fileIconConfig,
 	fileListConfig,
 	attachmentConfig,
-	flexDivConfig,
-	grouperConfig,
+	flexBoxConfig,
 	iconConfig,
 	iconButtonConfig,
-	levelConfig,
+	audioLevelConfig,
 	dialogBoxConfig,
 	modalControllerConfig,
 	popMenuControllerConfig,
@@ -2088,6 +2082,7 @@ export const allBenchmarkConfigs = [
 	promptInputConfig,
 	overlayConfig,
 	pagerConfig,
+	doneCheckConfig,
 	progressConfig,
 	radioButtonConfig,
 	radioButtonListConfig,
@@ -2103,8 +2098,8 @@ export const allBenchmarkConfigs = [
 	buttonConfig,
 	buttonBarConfig,
 	chipConfig,
-	labelConfig,
 	toggleButtonConfig,
 	uploadAreaConfig,
 	videoConfig,
+	videoControllerConfig,
 ];

@@ -40,7 +40,7 @@ native Chromium touch dragging passed. Refreshed/rendered benchmarks report
 previous mount/rerender were 1.637ms/0.334ms). The main drag optimization removes
 internal React updates and panel ResizeObserver notifications from pointer moves.
 
-Follow-up: explicit FlexDiv overflow styles now take precedence over generated
+Follow-up: explicit FlexBox overflow styles now take precedence over generated
 scroll-axis defaults, so the rounded panel preview clips its background correctly.
 Regression stories cover clipping and explicit axis overrides. Docs also explain
 setting the inner content wrapper's minWidth to the pixel minimum constraint to

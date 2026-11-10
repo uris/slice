@@ -4,13 +4,13 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { ContentEditableClampExample, ContentEditableUsageExample } from './UsagePreviews';
 import { activationCode, clampCode, persistenceCode, usageCode } from './code';
 
 export function ContentEditableDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">ContentEditable component</H1>
 			<P clipWidth>Edit titles and labels in place, keeping quick changes close to the content.</P>
@@ -317,7 +317,7 @@ export function ContentEditableDoc() {
 				<Code>{'onPaste'}</Code>
 				{' skips the corresponding internal action.'}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

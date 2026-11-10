@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FlexDiv } from 'src/components/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox';
 import { Icon, SliceIcons } from 'src/components/Icon';
 import { runIconPlay } from 'src/components/playHelpers';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fireEvent, fn, userEvent, within } from 'storybook/test';
 
 const iconCategories = Object.values(SliceIcons);
 const icons = iconCategories.flatMap((category) => Object.values(category));
@@ -32,9 +32,9 @@ export default meta;
 export const Default: StoryObj<typeof Icon> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Icon {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -45,10 +45,10 @@ export const Default: StoryObj<typeof Icon> = {
 export const FilledMoreIcons: StoryObj<typeof Icon> = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv gap={16}>
+		<FlexBox gap={16}>
 			<Icon name={SliceIcons.basic.moreHorizFill} size={20} strokeColor="#123456" pointer={false} />
 			<Icon name={SliceIcons.basic.moreVertFill} size={20} strokeColor="#123456" pointer={false} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
@@ -64,5 +64,73 @@ export const FilledMoreIcons: StoryObj<typeof Icon> = {
 			await expect(bounds.width).toBe(width);
 			await expect(bounds.height).toBe(height);
 		}
+	},
+};
+
+export const DirectActivation: StoryObj<typeof Icon> = {
+	tags: ['tests'],
+	args: { onClick: fn(), pointer: false, actionName: 'Play video' },
+	render: (args) => <Icon {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const icon = within(canvasElement).getByRole('button', { name: 'Play video' });
+		await userEvent.click(icon);
+		icon.focus();
+		await userEvent.keyboard('{Enter}');
+		fireEvent.keyDown(icon, { key: ' ' });
+		expect(args.onClick).toHaveBeenCalledTimes(2);
+		fireEvent.keyUp(icon, { key: ' ' });
+		expect(args.onClick).toHaveBeenCalledTimes(3);
+		expect(args.onClick).toHaveBeenLastCalledWith(
+			expect.objectContaining({ type: 'click', target: icon, nativeEvent: expect.objectContaining({ type: 'click' }) }),
+		);
+		expect(icon).toHaveAttribute('tabindex', '0');
+	},
+};
+export const DisabledActivation: StoryObj<typeof Icon> = {
+	tags: ['tests'],
+	args: { disabled: true, onClick: fn(), actionName: 'Disabled action' },
+	render: (args) => <Icon {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const icon = within(canvasElement).getByRole('button', { name: 'Disabled action' });
+		await userEvent.click(icon);
+		fireEvent.keyDown(icon, { key: 'Enter' });
+		fireEvent.keyDown(icon, { key: ' ' });
+		fireEvent.keyUp(icon, { key: ' ' });
+		expect(args.onClick).not.toHaveBeenCalled();
+		expect(icon).toHaveAttribute('aria-disabled', 'true');
+		expect(icon).toHaveAttribute('tabindex', '-1');
+	},
+};
+export const StaticAndDecorative: StoryObj<typeof Icon> = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<Icon pointer iconName="Home" />
+			<Icon decorative data-testid="decorative-icon" />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		expect(canvas.getByRole('img', { name: 'Home' })).toHaveAttribute('tabindex', '-1');
+		expect(canvas.getByTestId('decorative-icon')).toHaveAttribute('aria-hidden', 'true');
+	},
+};
+export const ZeroFillOpacity: StoryObj<typeof Icon> = {
+	tags: ['tests'],
+	render: () => <Icon name="ai.sparkle" fill fillOpacity={0} />,
+	play: async ({ canvasElement }) => {
+		const icon = within(canvasElement).getByRole('img');
+		expect(icon.querySelector('[fill-opacity]')).toHaveAttribute('fill-opacity', '0');
+	},
+};
+export const CancelledKeyboardActivation: StoryObj<typeof Icon> = {
+	tags: ['tests'],
+	args: { onClick: fn(), onKeyDown: (event) => event.preventDefault() },
+	render: (args) => <Icon {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const icon = within(canvasElement).getByRole('button');
+		icon.focus();
+		await userEvent.keyboard('{Enter} ');
+		expect(args.onClick).not.toHaveBeenCalled();
 	},
 };

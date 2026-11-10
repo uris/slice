@@ -3,12 +3,12 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { RadioButtonSelectionExample, RadioButtonUsageExample } from './UsagePreviews';
 import { exampleCode, typedCode, usageCode } from './code';
 export function RadioButtonDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>RadioButton component</H1>
 			<P clipWidth>
@@ -369,7 +369,7 @@ export function RadioButtonDoc() {
 				<Code>form</Code>
 				{' behavior remain native; there are no drag or animation lifecycle callbacks.'}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [

@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Attachment } from './Attachment';
 import css from './Attachment.module.css';
+import type { AttachmentProps } from './_types';
 
 const meta = { title: 'Components/Attachment', component: Attachment } satisfies Meta<typeof Attachment>;
 export default meta;
@@ -54,8 +55,56 @@ export const PdfThumbnail: Story = {
 		await expect(group.querySelector(`.${css.fileThumbnail} svg`)).toBeVisible();
 		await expect(group.querySelector(`.${css.fileThumbnail} svg`)).toHaveAttribute('width', '48');
 		await expect(within(group).queryByRole('img')).toBeNull();
+		await expect(group).toHaveStyle({ width: '140px' });
+		await expect(group.querySelector(`.${css.canvas}`)).toHaveStyle({ height: '140px' });
 		await expect(within(group).getByText('5.5 k')).toBeVisible();
 		await expect(group).toHaveAccessibleDescription('pdf. 5.5 kilobytes');
+	},
+};
+
+function AttachmentSizesRow(props: AttachmentProps) {
+	return (
+		<div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: 24 }}>
+			{(['xs', 's', 'm', 'l', 'xl'] as const).map((size) => (
+				<figure key={size} style={{ margin: 0 }}>
+					<Attachment {...props} size={size} />
+					<figcaption style={{ marginTop: 8, textAlign: 'center' }}>{size}</figcaption>
+				</figure>
+			))}
+		</div>
+	);
+}
+
+export const Sizes: Story = {
+	parameters: { layout: 'padded' },
+	loaders: ImageThumbnail.loaders,
+	render: (args, { loaded }) => (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+			<AttachmentSizesRow {...args} content={loaded.image} />
+			<AttachmentSizesRow {...args} content={{ file: loaded.image, uploading: true, progress: 45 }} />
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const groups = canvas.getAllByRole('group');
+		await expect(groups).toHaveLength(10);
+		for (const [index, group] of groups.slice(0, 5).entries()) {
+			const fileSize = group.querySelector(`.${css.filesize}`);
+			if (index < 2) await expect(fileSize).toBeNull();
+			else await expect(fileSize).toBeVisible();
+			await expect(group.querySelector(`.${css.filetype}`)).toHaveTextContent('image');
+			await expect(group).toHaveAccessibleDescription(/megabytes/);
+		}
+		const bars = canvas.getAllByRole('progressbar');
+		await expect(bars).toHaveLength(5);
+		for (const [index, bar] of bars.entries()) {
+			await expect(bar).toHaveAttribute('aria-valuenow', '45');
+			await expect(bar).toHaveAttribute('aria-valuetext', 'Uploading 45%');
+			await expect(within(bar).getByText('Uploading')).toBeVisible();
+			await expect(bar.querySelector('svg')).toBeInTheDocument();
+			if (index < 2) await expect(within(bar).queryByText('45%')).toBeNull();
+			else await expect(within(bar).getByText('45%')).toBeVisible();
+		}
 	},
 };
 
@@ -111,8 +160,8 @@ export const WithoutRemove: Story = {
 	play: async ({ canvasElement }) => {
 		await expect(within(canvasElement).queryByRole('button')).toBeNull();
 		const group = within(canvasElement).getByRole('group');
-		await expect(group).toHaveStyle({ width: '80px' });
-		await expect(group.querySelector(`.${css.canvas}`)).toHaveStyle({ height: '80px' });
+		await expect(group).toHaveStyle({ width: '100px' });
+		await expect(group.querySelector(`.${css.canvas}`)).toHaveStyle({ height: '100px' });
 	},
 };
 
@@ -506,5 +555,24 @@ export const UploadErrorRecovery: Story = {
 		await expect(within(group).queryByRole('alert')).toBeNull();
 		await expect(within(group).getByRole('progressbar')).toHaveAttribute('aria-valuenow', '45');
 		await expect(group.querySelector(`.${css.fileThumbnail}`)).toBeVisible();
+	},
+};
+
+export const RawFile: Story = {
+	loaders: PdfThumbnail.loaders,
+	render: (args, { loaded }) => <Attachment {...args} content={loaded.pdf as File} />,
+	args: { onOpen: fn(), onRemove: fn() },
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const group = canvas.getByRole('group', { name: 'Annual-Convention-Summary-Report' });
+		await expect(group).toHaveAccessibleDescription('pdf. 5.5 kilobytes');
+		await expect(canvas.queryByRole('progressbar')).toBeNull();
+		await expect(canvas.queryByRole('alert')).toBeNull();
+		await userEvent.click(canvas.getByRole('button', { name: 'Open Annual-Convention-Summary-Report.pdf' }));
+		await expect(args.onOpen).toHaveBeenCalledOnce();
+		const remove = canvas.getByRole('button', { name: 'Remove Annual-Convention-Summary-Report.pdf' });
+		remove.focus();
+		await userEvent.click(remove);
+		await expect(args.onRemove).toHaveBeenCalledOnce();
 	},
 };

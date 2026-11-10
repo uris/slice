@@ -1,12 +1,12 @@
 'use client';
 
-import { Button, FlexDiv, Preset } from '@apple-pie/slice';
+import { Button, FlexBox, Preset } from '@apple-pie/slice';
 import { useWindow } from '@apple-pie/slice/hooks';
 
 export default function NotFound() {
 	const { height } = useWindow();
 	return (
-		<FlexDiv preset={Preset.Window} height={height} justify={'center'} align={'center'} direction={'column'}>
+		<FlexBox preset={Preset.Window} height={height} justify={'center'} align={'center'} direction={'column'}>
 			<p>404 old jedi mind trick ...</p>
 			<h1>This is not the page I'm looking for ...</h1>
 			<Button
@@ -22,6 +22,6 @@ export default function NotFound() {
 					window.open('/', '_top');
 				}}
 			/>
-		</FlexDiv>
+		</FlexBox>
 	);
 }

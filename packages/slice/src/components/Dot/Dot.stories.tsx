@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Dot } from 'src/components/Dot/Dot';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { runDotPlay, runDotVariantsPlay } from 'src/components/playHelpers';
 import { expect, within } from 'storybook/test';
 
@@ -31,9 +31,9 @@ export default meta;
 export const Default: StoryObj<typeof Dot> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Dot {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -46,7 +46,7 @@ export const Variants: StoryObj<typeof Dot> = {
 	// exercise position/color/state/motion branches together, one Dot per
 	// branch, distinguished by an extra className that lands in `rest`
 	render: () => (
-		<FlexDiv direction={'column'} gap={12}>
+		<FlexBox direction={'column'} gap={12}>
 			<Dot show className="corner" position="corner" state="blue" />
 			<Dot show className="explicit-color" color="#ff0000" state="blue" />
 			<Dot show className="state-red" state="red" />
@@ -57,7 +57,7 @@ export const Variants: StoryObj<typeof Dot> = {
 			<Dot show className="motion-values" motionValues={{ initial: { opacity: 0 } }} />
 			<Dot show className="custom-transition" transition={{ duration: 0.5 }} />
 			<Dot show={false} className="hidden" />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runDotVariantsPlay,
 };
@@ -74,12 +74,12 @@ export const ToggleVisibility: StoryObj<typeof Dot> = {
 	render: (args) => {
 		const [show, setShow] = useState(false);
 		return (
-			<FlexDiv gap={16} align="center">
+			<FlexBox gap={16} align="center">
 				<button type="button" onClick={() => setShow((value) => !value)}>
 					Toggle dot
 				</button>
 				<Dot {...args} show={show} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };

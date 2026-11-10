@@ -151,7 +151,7 @@ function AnimatedButton() {
 `;
 
 export const refCode = `
-import { type ButtonHandle, FlexDiv } from '@apple-pie/slice';
+import { type ButtonHandle, FlexBox } from '@apple-pie/slice';
 import { useRef } from 'react';
 
 function ButtonWithRef() {
@@ -159,12 +159,12 @@ function ButtonWithRef() {
     const [count, setCount] = useState(0);
 
     return (
-        <FlexDiv gap={12}>
+        <FlexBox gap={12}>
             <Button ref={buttonRef} label={\`Run action (\${count})\`}
                 onClick={() => setCount((value) => value + 1)} />
             <Button label="Run through the ref"
                 onClick={() => buttonRef.current?.triggerClick()} />
-        </FlexDiv>
+        </FlexBox>
     );
 }
 `;

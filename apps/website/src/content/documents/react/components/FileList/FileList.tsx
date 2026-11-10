@@ -2,7 +2,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { AttachmentCardsPreview, AttachmentsPreview, UploadStatesPreview } from './FileListPreview';
 import { cardsCode, statesCode, usageCode } from './code';
@@ -11,7 +11,7 @@ const listProps = [
 	{
 		name: 'attachmentSize',
 		type: "'xs' | 's' | 'm' | 'l' | 'xl'",
-		defaultValue: 's',
+		defaultValue: 'm',
 		description: (
 			<>
 				Card width and preview height for <Code>variant="attachments"</Code>: 80, 140, 160, 200, or 240 pixels.
@@ -39,10 +39,16 @@ const listProps = [
 	},
 	{
 		name: 'files',
-		type: 'FileItem[]',
+		type: 'File[] | FileItem[]',
 		defaultValue: '[]',
-		description:
-			'Controlled attachments. Each item has id?: string, file: File | string, uploading?: boolean, progress?: number, and error?: string. Use unique IDs when recreating attachment objects. Compact rows retain filename extensions; cards omit the final extension.',
+		description: (
+			<>
+				Raw files render without upload progress or errors in either variant. A <Code>FileItem</Code> has{' '}
+				<Code>id?: string</Code>, <Code>file: File | string</Code>, <Code>uploading?: boolean</Code>,{' '}
+				<Code>progress?: number</Code>, and <Code>error?: string</Code>. Use unique IDs when recreating attachment
+				objects. Compact rows retain filename extensions; cards omit the final extension.
+			</>
+		),
 	},
 	{ name: 'gap', type: 'number', defaultValue: '10', description: 'Space between attachments in pixels.' },
 	{
@@ -95,13 +101,14 @@ const listProps = [
 ];
 export function FileListDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">FileList component</H1>
 			<P>Display files as compact rows or thumbnail cards, with upload feedback and removal controls.</P>
 			<H2 id="usage">Usage</H2>
 			<P>
-				Keep attachments in state and pass the setter directly to <Code>onChange</Code>. The shared{' '}
+				Pass raw <Code>File[]</Code> for files without upload status, or <Code>FileItem[]</Code> to include progress and
+				errors. Keep the array in state and pass its setter directly to <Code>onChange</Code>. The shared{' '}
 				<Code>FileItem[]</Code> shape also works with UploadArea and PromptInput.
 			</P>
 			<ComponentCanvas
@@ -157,8 +164,8 @@ export function FileListDoc() {
 			<P>
 				<Code>progress</Code> is a percentage from 0 to 100, rounded and clamped. For example, 1 means 1% and 40 means
 				40%. Missing or nonfinite progress is indeterminate while uploading; completed items default to a full
-				background in compact rows. Cards keep the percentage outside the spinner and restore file type and size when
-				uploading ends.
+				background in compact rows. Cards show the percentage at <Code>attachmentSize="m"</Code>, <Code>"l"</Code>, or{' '}
+				<Code>"xl"</Code>. The spinner and upload label remain visible at every size.
 			</P>
 			<P>
 				Use a unique <Code>id</Code> to preserve identity through immutable updates and duplicate filenames. Without
@@ -176,7 +183,8 @@ export function FileListDoc() {
 			</P>
 			<P>
 				Cards preview browser image and text files, display an extension-free filename, and format known sizes with
-				1024-based units such as <Code>5.5 mb</Code>. Filename strings have no measured size and use a file-type icon.
+				1024-based units such as <Code>5.5 mb</Code>. Cards sized <Code>xs</Code> or <Code>s</Code> show only the file
+				type; larger cards also show file size. Filename strings have no measured size and use a file-type icon.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
@@ -203,11 +211,12 @@ export function FileListDoc() {
 			<H2 id="events">Events</H2>
 			<Definition id="onChange">
 				<Method>onChange</Method>
-				<TypeDef>(files: FileItem[]) =&gt; void</TypeDef>
+				<TypeDef>(files: T[]) =&gt; void</TypeDef>
 			</Definition>
 			<P>
 				Receives the remaining attachments after removal, preserving their original objects and order. Pass a state
-				setter directly.
+				setter directly. <Code>T</Code> is inferred from <Code>files</Code> and extends <Code>File | FileItem</Code>; a{' '}
+				<Code>File[]</Code> input receives a <Code>File[]</Code> callback payload.
 			</P>
 			<Definition id="onToolTip">
 				<Method>onToolTip</Method>
@@ -222,7 +231,7 @@ export function FileListDoc() {
 				<TypeDef>React.HTMLAttributes&lt;HTMLDivElement&gt;</TypeDef>
 			</Definition>
 			<P>Other DOM events are forwarded to the outer wrapper.</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [

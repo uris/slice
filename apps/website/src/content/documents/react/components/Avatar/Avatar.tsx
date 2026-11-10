@@ -3,12 +3,12 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { Avatar, FlexDiv, Preset } from '@apple-pie/slice';
+import { Avatar, FlexBox, Preset } from '@apple-pie/slice';
 import { infoCode, initialsCode, interactiveCode, lazyLoadCode, usageCode } from './code';
 
 export function AvatarDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>Avatar component</H1>
 			<P clipWidth>
@@ -255,7 +255,7 @@ export function AvatarDoc() {
 				such as <Code>onClickCapture</Code>. Custom hover and focus handlers run alongside the internal tooltip
 				handlers.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

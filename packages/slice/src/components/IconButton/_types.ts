@@ -8,6 +8,8 @@ type IconButtonBaseProps = {
 	actionName?: string;
 	buttonSize?: Exclude<ButtonSize, 'auto'>;
 	iconSize?: number;
+	/** Icon stroke width in the 20-unit viewBox. Omit to use Icon’s default. */
+	iconStrokeWidth?: number;
 	icon?: SliceIcon;
 	iconFill?: boolean;
 	iconColor?: ColorValue;

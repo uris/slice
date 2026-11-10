@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Component, type ReactNode, useState } from 'react';
 import { DialogBox } from 'src/components/DialogBox/DialogBox';
-import { FlexDiv } from 'src/components/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from '../Button';
 import { useDialogBox } from './useDialogBox';
@@ -44,7 +44,7 @@ export const Default: StoryObj<typeof DialogBox> = {
 		const children =
 			'Ohio’s GOP gubernatorial candidate Vivek Ramaswamy said he left a congratulatory message for his Democratic opponent, Amy Acton, after she was projected to win their race Tuesday night.';
 		return (
-			<FlexDiv absolute justify="center" align="center" padding={64}>
+			<FlexBox absolute justify="center" align="center" padding={64}>
 				<DialogBox {...panelProps} actions={actions}>
 					<DialogBox.Title>{title}</DialogBox.Title>
 					<DialogBox.Content>{children}</DialogBox.Content>
@@ -54,7 +54,7 @@ export const Default: StoryObj<typeof DialogBox> = {
 						</DialogBox.Actions>
 					)}
 				</DialogBox>
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };

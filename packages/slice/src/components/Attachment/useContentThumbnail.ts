@@ -7,7 +7,7 @@ export type ContentThumbnail = { type: 'image'; src: string } | { type: 'text'; 
 
 /** Image URLs belong to this hook and are revoked on replacement or unmount. */
 export function useContentThumbnail(content: Content | undefined) {
-	const file = typeof content === 'object' ? content.file : undefined;
+	const file = getFile(content);
 	const [preview, setPreview] = useState<{
 		file: File;
 		thumbnail?: ContentThumbnail;
@@ -68,6 +68,11 @@ export function useContentThumbnail(content: Content | undefined) {
 	};
 }
 
+function getFile(content: Content | undefined) {
+	if (typeof content !== 'object') return undefined;
+	return 'file' in content ? content.file : content;
+}
+
 function getContentType(content: Content | undefined) {
 	if (content === undefined) return undefined;
 	if (typeof content === 'string') return ContentType.Text;
@@ -77,9 +82,11 @@ function getContentType(content: Content | undefined) {
 function getContentFormat(content: Content | undefined) {
 	if (content === undefined) return undefined;
 	if (typeof content === 'string') return FileIconTypes.text;
-	if (typeof content.file === 'string') return resolveFileIconType(content.file);
-	if (content.file.type.startsWith('image/')) return FileIconTypes.image;
-	return resolveFileIconType(content.file.name);
+	const file = getFile(content);
+	if (file === undefined) return undefined;
+	if (typeof file === 'string') return resolveFileIconType(file);
+	if (file.type.startsWith('image/')) return FileIconTypes.image;
+	return resolveFileIconType(file.name);
 }
 
 function getBasename(file: File | string | undefined) {

@@ -3,7 +3,7 @@
 import { OnThisPage } from '@/components/OnThisPage/OnThisPage';
 import { useTrackedItems } from '@/docs/stores/store';
 import { detailsPanelConstraints } from '@/src/consts/consts';
-import { FlexDiv, Preset, Tab, TabBar } from '@apple-pie/slice';
+import { FlexBox, Preset, Tab, TabBar } from '@apple-pie/slice';
 import { AnimatePresence } from 'motion/react';
 import styles from './Layout.module.css';
 
@@ -11,7 +11,7 @@ export function Details() {
 	const trackedItems = useTrackedItems();
 	const showTrackedItems = trackedItems && trackedItems.length > 0;
 	return (
-		<FlexDiv
+		<FlexBox
 			preset={Preset.FillStart}
 			background={'core-surface-primary'}
 			style={{ minWidth: detailsPanelConstraints.min }}
@@ -29,7 +29,7 @@ export function Details() {
 				</TabBar>
 				<AnimatePresence>{showTrackedItems && <OnThisPage key={'on-this-page'} />}</AnimatePresence>
 			</div>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

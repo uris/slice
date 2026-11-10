@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createRef, useCallback, useEffect, useRef, useState } from 'react';
 import { expect, fn, spyOn, within } from 'storybook/test';
 import { Button } from '../Button';
-import { FlexDiv } from '../FlexDiv';
-import { Label } from '../Label';
+import { Chip } from '../Chip';
+import { FlexBox } from '../FlexBox';
 import {
 	runCameraDemoPlay,
 	runCameraImperativeRefControlsPlay,
@@ -66,29 +66,28 @@ function CameraDemo(args: any) {
 	}, [refreshStreamInfo]);
 
 	return (
-		<FlexDiv width={'fill'} height={'fill'} padding={32} gap={24}>
-			<FlexDiv direction={'row'} width={'fill'} gap={24} align={'start'}>
-				<FlexDiv width={460} height={460}>
+		<FlexBox width={'fill'} height={'fill'} padding={32} gap={24}>
+			<FlexBox direction={'row'} width={'fill'} gap={24} align={'start'}>
+				<FlexBox width={460} height={460}>
 					<Camera {...args} ref={cameraRef} onVideoStream={refreshStreamInfo} />
-				</FlexDiv>
-				<FlexDiv width={360} padding={16} gap={12}>
+				</FlexBox>
+				<FlexBox width={360} padding={16} gap={12}>
 					<div>NOTE: This demo uses the forwarded ref instead of component state events.</div>
-					Stream ID: <Label>{streamInfo.streamId ?? 'none'}</Label>
-					Video Device ID: <Label>{streamInfo.videoDeviceId ?? 'none'}</Label>
+					Stream ID: <Chip>{streamInfo.streamId ?? 'none'}</Chip>
+					Video Device ID: <Chip>{streamInfo.videoDeviceId ?? 'none'}</Chip>
 					Video Enabled:{' '}
 					<span>
-						<Label>{String(streamInfo.videoEnabled ?? false)}</Label> /{' '}
-						<Label>{streamInfo.videoReadyState ?? 'none'}</Label>
+						<Chip>{String(streamInfo.videoEnabled ?? false)}</Chip> /{' '}
+						<Chip>{streamInfo.videoReadyState ?? 'none'}</Chip>
 					</span>
-					Audio Device ID: <Label>{streamInfo.audioDeviceId ?? 'none'}</Label>
+					Audio Device ID: <Chip>{streamInfo.audioDeviceId ?? 'none'}</Chip>
 					Audio Enabled:{' '}
 					<span>
-						<Label>{String(streamInfo.audioEnabled ?? false)}</Label> /
-						<Label>{streamInfo.audioReadyState ?? 'none'}</Label>
+						<Chip>{String(streamInfo.audioEnabled ?? false)}</Chip> /<Chip>{streamInfo.audioReadyState ?? 'none'}</Chip>
 					</span>
-				</FlexDiv>
-			</FlexDiv>
-			<FlexDiv direction={'row'} wrap gap={8}>
+				</FlexBox>
+			</FlexBox>
+			<FlexBox direction={'row'} wrap gap={8}>
 				<Button label={'Refresh Ref Info'} onClick={() => refreshStreamInfo()} />
 				<Button
 					label={'Start Stream'}
@@ -125,8 +124,8 @@ function CameraDemo(args: any) {
 						refreshStreamInfo();
 					}}
 				/>
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 
@@ -176,11 +175,11 @@ function CameraImperativeRefDemo(args: any) {
 	}, []);
 
 	return (
-		<FlexDiv width={'fill'} height={'fill'} padding={32} gap={24}>
-			<FlexDiv width={460} height={460}>
+		<FlexBox width={'fill'} height={'fill'} padding={32} gap={24}>
+			<FlexBox width={460} height={460}>
 				<Camera {...args} ref={cameraRef} />
-			</FlexDiv>
-			<FlexDiv direction={'row'} wrap gap={8}>
+			</FlexBox>
+			<FlexBox direction={'row'} wrap gap={8}>
 				<Button label={'Disable Video (ref)'} onClick={() => append(String(cameraRef.current?.disableVideo?.()))} />
 				<Button label={'Enable Video (ref)'} onClick={() => append(String(cameraRef.current?.enableVideo?.()))} />
 				<Button label={'Start Stream'} onClick={async () => append(String(await cameraRef.current?.startCamera?.()))} />
@@ -205,9 +204,9 @@ function CameraImperativeRefDemo(args: any) {
 						)
 					}
 				/>
-			</FlexDiv>
+			</FlexBox>
 			<div data-testid={'ref-controls-log'}>{log.join(' | ')}</div>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

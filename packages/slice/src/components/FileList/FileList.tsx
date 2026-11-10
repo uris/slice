@@ -119,7 +119,7 @@ function FileRow({
 	);
 }
 
-const FileListBase = React.forwardRef<HTMLDivElement, FileListProps>((rawProps, ref) => {
+const FileListBase = React.forwardRef<HTMLDivElement, FileListProps<File | FileItem>>((rawProps, ref) => {
 	const {
 		files = [],
 		variant = 'list',
@@ -191,8 +191,9 @@ const FileListBase = React.forwardRef<HTMLDivElement, FileListProps>((rawProps, 
 			className={`${css.wrapper} ${className ?? ''}`}
 			style={{ ...style, ...cssVars }}
 		>
-			{files.map((item, index) => {
-				const key = fileItemKey(item);
+			{files.map((entry, index) => {
+				const item = 'file' in entry ? entry : { file: entry };
+				const key = fileItemKey(entry);
 				const occurrence = occurrences.get(key) ?? 0;
 				occurrences.set(key, occurrence + 1);
 				const remove = (button: HTMLButtonElement) => {
@@ -240,4 +241,6 @@ const FileListBase = React.forwardRef<HTMLDivElement, FileListProps>((rawProps, 
 	);
 });
 FileListBase.displayName = 'FileList';
-export const FileList = React.memo(FileListBase);
+export const FileList = React.memo(FileListBase) as <T extends File | FileItem = FileItem>(
+	props: FileListProps<T> & React.RefAttributes<HTMLDivElement>,
+) => React.JSX.Element;

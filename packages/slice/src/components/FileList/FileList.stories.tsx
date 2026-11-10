@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createRef, useState } from 'react';
-import { FlexDiv } from 'src/components/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from '../Button';
 import { FileList } from './FileList';
@@ -37,7 +37,7 @@ export default meta;
 export const Default: StoryObj<typeof FileList> = {
 	render: (args) => {
 		return (
-			<FlexDiv
+			<FlexBox
 				justify={'center'}
 				align={'center'}
 				padding={'0px 64px'}
@@ -46,7 +46,7 @@ export const Default: StoryObj<typeof FileList> = {
 				height={'viewport'}
 			>
 				<FileList {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -195,7 +195,7 @@ export const LongFilename: StoryObj<typeof FileList> = {
 };
 
 export const Attachments: StoryObj<typeof FileList> = {
-	args: { variant: 'attachments', attachmentSize: 's' },
+	args: { variant: 'attachments' },
 	loaders: [
 		async () => {
 			const response = await fetch('/public/images/flowers-sunflower.png');
@@ -228,7 +228,10 @@ export const Attachments: StoryObj<typeof FileList> = {
 			),
 		);
 		await expect(canvas.getAllByRole('listitem')).toHaveLength(5);
-		await expect(canvas.getByRole('group', { name: 'report' })).toHaveAccessibleDescription('pdf. 5.5 kilobytes');
+		const report = canvas.getByRole('group', { name: 'report' });
+		await expect(report).toHaveStyle({ width: '140px' });
+		await expect(within(report).getByText('5.5 k')).toBeVisible();
+		await expect(report).toHaveAccessibleDescription('pdf. 5.5 kilobytes');
 		await expect(canvas.getByRole('progressbar', { name: 'Uploading notes' })).toHaveAttribute('aria-valuenow', '45');
 		await expect(canvas.queryByRole('button', { name: 'Remove file notes.md' })).toBeNull();
 		const alert = canvas.getByRole('alert');
@@ -246,7 +249,7 @@ export const Attachments: StoryObj<typeof FileList> = {
 	},
 };
 
-function ControlledAttachments(props: FileListProps) {
+function ControlledAttachments<T extends File | FileItem>(props: FileListProps<T>) {
 	const [files, setFiles] = useState(props.files ?? []);
 	return (
 		<FileList
@@ -287,7 +290,7 @@ export const AttachmentsColumn: StoryObj<typeof FileList> = {
 		const canvas = within(canvasElement);
 		await expect(canvas.getByRole('list')).toHaveStyle({ flexDirection: 'column' });
 		await expect(canvas.queryByRole('button')).toBeNull();
-		await expect(canvas.getAllByRole('group')[0]).toHaveStyle({ width: '80px' });
+		await expect(canvas.getAllByRole('group')[0]).toHaveStyle({ width: '100px' });
 	},
 };
 
@@ -348,4 +351,38 @@ export const AttachmentSizing: StoryObj<typeof FileList> = {
 		await expect(narrow.querySelector('svg')).toHaveAttribute('width', '18');
 		await expect(within(narrow).getByText('report').parentElement).toHaveStyle({ padding: '0px' });
 	},
+};
+
+function RawFilesFixture({ variant }: Pick<FileListProps, 'variant'>) {
+	const [files, setFiles] = useState<File[]>(() => [
+		new File(['first'], 'report.pdf', { type: 'application/pdf' }),
+		new File(['second'], 'report.pdf', { type: 'application/pdf' }),
+	]);
+	return (
+		<>
+			<FileList variant={variant} files={files} onChange={setFiles} />
+			<output aria-label="Remaining raw files">{files.map((file) => `${file.name}: ${file.size}`).join(', ')}</output>
+		</>
+	);
+}
+
+export const RawFiles: StoryObj<typeof FileList> = {
+	render: () => <RawFilesFixture />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.queryByRole('progressbar')).toBeNull();
+		await expect(canvas.queryByRole('alert')).toBeNull();
+		const buttons = canvas.getAllByRole('button', { name: 'Remove file report.pdf' });
+		buttons[0].focus();
+		await userEvent.keyboard('{Enter}');
+		await expect(canvas.getAllByRole('listitem')).toHaveLength(1);
+		await expect(canvas.getByRole('button', { name: 'Remove file report.pdf' })).toBe(buttons[1]);
+		await expect(buttons[1]).toHaveFocus();
+		await expect(canvas.getByLabelText('Remaining raw files')).toHaveTextContent('report.pdf: 6');
+	},
+};
+
+export const RawFileAttachments: StoryObj<typeof FileList> = {
+	render: () => <RawFilesFixture variant="attachments" />,
+	play: RawFiles.play,
 };

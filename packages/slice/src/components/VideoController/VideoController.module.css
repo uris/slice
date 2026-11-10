@@ -29,16 +29,40 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 16px;
+	gap: var(--spacing-l);
 	z-index: var(--elevation-confirm);
 	pointer-events: all;
-	visibility: var(--video-visibility, hidden);
 	border-radius: var(--video-border-radius, var(--corner-xl));
 	overflow: visible;
 }
 
 .video {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
 	overflow: visible;
 	box-shadow: var(--surface-shadow-soft);
 	border-radius: var(--video-border-radius, var(--corner-xl));
+	padding: 0;
+}
+
+.loading {
+	overflow: hidden;
+	box-shadow: none;
+	min-height: 56px;
+	min-width: 56px;
+	border-radius: var(--video-border-radius, var(--corner-xl));
+	padding: 32px;
+}
+
+.dragHandle {
+	touch-action: none;
+	cursor: grab;
+	color: var(--core-text-light);
+	background: transparent;
+	border: 0;
+	outline: 0;
+	padding: 0 var(--spacing-s);
 }

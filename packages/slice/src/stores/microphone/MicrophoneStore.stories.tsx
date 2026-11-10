@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from 'src/components/Button';
-import { FlexDiv } from 'src/components/FlexDiv';
-import { Label } from 'src/components/Label';
+import { Chip } from 'src/components/Chip';
+import { FlexBox } from 'src/components/FlexBox';
 import { Slider } from 'src/components/Slider';
 import { useMicrophone } from 'src/hooks/useMicrophone/useMicrophone';
 import {
@@ -36,37 +36,37 @@ function MicrophoneStoreDemo() {
 	const actions = useMicrophoneStoreActions();
 
 	return (
-		<FlexDiv width={'fill'} height={'fill'} padding={32} gap={16}>
+		<FlexBox width={'fill'} height={'fill'} padding={32} gap={16}>
 			<div>Store-bound microphone state from a single `useMicrophone()` instance.</div>
 			<div>
-				Supported: <Label>{String(isSupported)}</Label>
+				Supported: <Chip>{String(isSupported)}</Chip>
 			</div>
 			<div>
-				Requesting: <Label>{String(isRequesting)}</Label>
+				Requesting: <Chip>{String(isRequesting)}</Chip>
 			</div>
 			<div>
-				Active: <Label>{String(isActive)}</Label>
+				Active: <Chip>{String(isActive)}</Chip>
 			</div>
 			<div>
-				Muted: <Label>{String(muted)}</Label>
+				Muted: <Chip>{String(muted)}</Chip>
 			</div>
 			<div>
-				Input Volume: <Label>{inputVolume.toFixed(2)}</Label>
+				Input Volume: <Chip>{inputVolume.toFixed(2)}</Chip>
 			</div>
 			<div>
-				Track ready: <Label>{micTrack.current?.readyState ?? 'none'}</Label>
+				Track ready: <Chip>{micTrack.current?.readyState ?? 'none'}</Chip>
 			</div>
 			<div>
-				Processed Stream: <Label>{processedMicStream.current?.id ?? 'none'}</Label>
+				Processed Stream: <Chip>{processedMicStream.current?.id ?? 'none'}</Chip>
 			</div>
 			<div>
-				Current Device Id: <Label>{currentDeviceId ?? 'none'}</Label>
+				Current Device Id: <Chip>{currentDeviceId ?? 'none'}</Chip>
 			</div>
 			<div>
-				Microphones: <Label>{String(micOptions.length)}</Label>
+				Microphones: <Chip>{String(micOptions.length)}</Chip>
 			</div>
 			<div>
-				Error: <Label>{error?.message ?? 'none'}</Label>
+				Error: <Chip>{error?.message ?? 'none'}</Chip>
 			</div>
 			<Slider
 				aria-label="Microphone volume"
@@ -77,13 +77,13 @@ function MicrophoneStoreDemo() {
 				width={240}
 				onChange={(value) => actions.setInputVolume(value)}
 			/>
-			<FlexDiv direction={'row'} wrap gap={8}>
+			<FlexBox direction={'row'} wrap gap={8}>
 				<Button label={'Request Microphone'} onClick={() => void actions.requestMicrophone()} />
 				<Button label={'Toggle Mute'} onClick={() => actions.toggleMute()} />
 				<Button label={'Refresh Devices'} onClick={() => void actions.refreshMicrophones()} />
 				<Button label={'Stop'} onClick={() => actions.stopMicrophone()} />
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

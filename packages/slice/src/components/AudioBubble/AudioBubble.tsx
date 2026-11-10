@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTheme } from '../../hooks';
-import { AudioVisualizer, type AudioVisualizerOptions, addOpacity } from '../../utils';
+import { addOpacity } from '../../utils';
+import { useAudioVisualizer } from '../../utils/audio/useAudioVisualizer';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import css from './AudioBubble.module.css';
 import type { AudioBubbleProps } from './_types';
 
@@ -26,14 +28,15 @@ export const AudioBubble = React.memo((rawProps: AudioBubbleProps) => {
 		intensity = 2.2,
 		peakIntensity = 0.5,
 		risePerSeconds = 4,
-		ReleasePerSeconds = 1.5,
+		releasePerSeconds = 1.5,
 		...divAttributes
 	} = props;
 	const { id: divId, className, style, ...rest } = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
-	const visualizerRef = useRef<AudioVisualizer | null>(null);
-	const [scale, setScale] = useState(minScale);
+	const restingScale = Number.isFinite(minScale) && minScale > 0 ? minScale : 1;
+	const reducedMotion = usePrefersReducedMotion();
+	const [scale, setScale] = useState(restingScale);
 
 	const visualizerSettings = useMemo(() => {
 		return {
@@ -42,10 +45,9 @@ export const AudioBubble = React.memo((rawProps: AudioBubbleProps) => {
 			intensityMultiplier: intensity,
 			peakIntensity,
 			risePerSecond: risePerSeconds,
-			releasePerSecond: ReleasePerSeconds,
-			onUpdate: ({ scale: nextScale }: { intensity: number; scale: number }) => setScale(nextScale),
-		} as AudioVisualizerOptions;
-	}, [minScale, maxScale, intensity, peakIntensity, risePerSeconds, ReleasePerSeconds]);
+			releasePerSecond: releasePerSeconds,
+		};
+	}, [minScale, maxScale, intensity, peakIntensity, risePerSeconds, releasePerSeconds]);
 
 	const setGlow = useMemo(() => {
 		if (!glow) return 'unset';
@@ -60,37 +62,13 @@ export const AudioBubble = React.memo((rawProps: AudioBubbleProps) => {
 		} as React.CSSProperties;
 	}, [size, backgroundColor, setGlow]);
 
-	useEffect(() => {
-		visualizerRef.current?.dispose();
-		visualizerRef.current = null;
-
-		if (!audioStream) {
-			setScale(minScale);
-			return;
-		}
-
-		const visualizer = new AudioVisualizer(audioStream, visualizerSettings);
-		visualizerRef.current = visualizer;
-
-		if (playing) visualizer.start();
-
-		return () => {
-			visualizer.dispose();
-			if (visualizerRef.current === visualizer) {
-				visualizerRef.current = null;
-			}
-		};
-	}, [audioStream, minScale, playing, visualizerSettings]);
-
-	useEffect(() => {
-		if (!visualizerRef.current) return;
-		if (playing) {
-			visualizerRef.current.start();
-			return;
-		}
-		visualizerRef.current.stop();
-		setScale(minScale);
-	}, [minScale, playing]);
+	useAudioVisualizer(
+		audioStream,
+		playing && !reducedMotion,
+		visualizerSettings,
+		({ scale: nextScale }) => setScale(nextScale),
+		() => setScale(restingScale),
+	);
 
 	return (
 		<div id={divId} className={`${css.wrapper}${divClass}`} style={divStyle} {...rest} aria-hidden={ariaHidden}>
@@ -99,6 +77,7 @@ export const AudioBubble = React.memo((rawProps: AudioBubbleProps) => {
 				style={{
 					...cssVars,
 					transform: `scale(${scale})`,
+					transition: reducedMotion ? 'none' : undefined,
 				}}
 			/>
 		</div>

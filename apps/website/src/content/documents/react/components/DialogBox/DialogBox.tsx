@@ -3,12 +3,12 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { DialogBoxPreview } from './DialogBoxPreview';
 import { actionCode, scrollingCode, sharedActionsCode, shorthandCode, usageCode } from './code';
 export function DialogBoxDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">DialogBox component</H1>
 			<P clipWidth>{'Bring a decision, its context, and the next action into one compact panel.'}</P>
@@ -454,7 +454,7 @@ export function DialogBoxDoc() {
 				Calls <Code>onResolve</Code> with the supplied value. A modal host resolves the pending response and dismisses
 				the panel.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [

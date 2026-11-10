@@ -1,11 +1,11 @@
 export const usageCode = `
-import { FileList, type FileItem } from '@apple-pie/slice';
+import { FileList } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export function Attachments() {
-  const [files, setFiles] = useState<FileItem[]>([
-    {id: 'report', file: 'Quarterly report.pdf'},
-    {id: 'notes', file: 'Project notes.md'},
+  const [files, setFiles] = useState<File[]>(() => [
+    new File(['Quarterly report'], 'Quarterly report.pdf', {type: 'application/pdf'}),
+    new File(['Project notes'], 'Project notes.md', {type: 'text/markdown'}),
   ]);
   return <FileList files={files} onChange={setFiles} />;
 }

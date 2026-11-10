@@ -1,13 +1,13 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import {FlexBox} from '../FlexBox';
 import * as CameraStories from './Camera.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 import {Spacer} from "../Spacer";
 
 <Meta of={CameraStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={820} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={820} height={"auto"}>
         <Unstyled>
         # Camera
         Renders a live camera preview with optional microphone access, inline capture controls, a poster fallback, and a picture-in-picture snapshot preview. This component is a special case in the library because it has both a prop interface and an imperative ref interface.
@@ -189,5 +189,5 @@ export function CameraRefExample() {
         - `stopCamera()` is the method that tears down the full stream.
         </Unstyled>
         <Spacer size="xxl"/>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

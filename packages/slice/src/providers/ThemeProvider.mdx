@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../components/FlexDiv';
+import {FlexBox} from '../components/FlexBox';
 import {RenderSource} from '../../documentation/_components/RenderSource/RenderSource';
 
 <Meta title="Providers/ThemeProvider" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # ThemeProvider
         Provides Slice theme behavior by writing `data-slice-theme` on `document.documentElement`, rendering a scoped wrapper with `data-slice-theme-scope`, and loading Slice CSS token/type styles.
@@ -109,5 +109,5 @@ import {RenderSource} from '../../documentation/_components/RenderSource/RenderS
         <Unstyled>
         For SSR-enabled environments, see <code>Providers/ThemeServer</code> for server-side theme helpers.
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

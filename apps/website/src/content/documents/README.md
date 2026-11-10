@@ -171,6 +171,16 @@ to explain stateful behavior.
   The canvas handles directional slide/fade transitions with Water timing; do not
   add another page-transition wrapper inside individual previews. Reduced motion
   switches pages immediately.
+- Set `hasRefresh: true` on an individual `components` entry to show the canvas’s
+  refresh button for that preview:
+  `components={[{ label: 'Dismissible chip', component: <ChipPreview />, hasRefresh: true }]}`.
+  Refresh remounts the preview content, restoring its initial local state. Use it
+  for examples that remove themselves from the canvas, such as removable chips,
+  or other interactions that need a way to return to their original state. Omit it
+  when a reset is unnecessary. This is a per-preview option, not a top-level
+  `ComponentCanvas` prop; use the built-in button instead of adding reset controls
+  inside the demo. State held outside the remounted preview, such as a shared store,
+  needs its own reset wiring when applicable.
 - Each canvas page should demonstrate a discernible visual or behavioral difference.
   Show equivalent composition and options-array APIs in Usage rather than duplicating
   an indistinguishable preview. Put an options alternative immediately after the basic
@@ -238,8 +248,8 @@ mounting additional instances or managing their own coordinates.
 
 Use Slice components in previews and copyable examples wherever an equivalent
 exists: for example, `Button` for actions and submission, `TextField` for inputs,
-and `FlexDiv` for layout. Keep native semantic containers such as `form`, `ul`,
-and `li` where appropriate. For form spacing, use a column `FlexDiv` with an
+and `FlexBox` for layout. Keep native semantic containers such as `form`, `ul`,
+and `li` where appropriate. For form spacing, use a column `FlexBox` with an
 explicit `gap` inside the form; do not rely on `gap` on a non-flex form.
 Use native controls only when the example specifically teaches native behavior
 that a Slice component cannot represent.

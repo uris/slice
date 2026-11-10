@@ -61,7 +61,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 		style,
 		...nativeAttributes
 	} = props;
-	const rootRef = useRef<HTMLDivElement | null>(null);
+	const rootRef = useRef<HTMLSpanElement | null>(null);
 	const reduceMotion = usePrefersReducedMotion();
 	const [removed, setRemoved] = useState(false);
 	const pendingRemoval = useRef<(() => void) | null>(null);
@@ -206,11 +206,11 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 				);
 			})()
 		: (() => {
-				const attributes = nativeAttributes as React.HTMLAttributes<HTMLDivElement>;
+				const attributes = nativeAttributes as React.HTMLAttributes<HTMLSpanElement>;
 				return (
-					<div {...attributes} {...actionShared} {...handlers(attributes)}>
+					<span {...attributes} {...actionShared} {...handlers(attributes)}>
 						{contentNodes}
-					</div>
+					</span>
 				);
 			})();
 	const readableLabel =
@@ -229,7 +229,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 			{!removed && (
 				<ChipPresence key="chip">
 					{(isPresent) => (
-						<motion.div
+						<motion.span
 							ref={rootRef}
 							className={`${css.chip}${className ? ` ${className}` : ''}`}
 							style={{ ...cssVars, ...style }}
@@ -270,7 +270,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 									</motion.span>
 								</button>
 							)}
-						</motion.div>
+						</motion.span>
 					)}
 				</ChipPresence>
 			)}

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import {
 	runVideoCustomClassNamePlay,
 	runVideoCustomControlsChildrenPlay,
@@ -14,9 +14,11 @@ import {
 	runVideoUndefinedControlledPropsPlay,
 } from 'src/components/playHelpers';
 import { expect, fireEvent, fn, spyOn, waitFor, within } from 'storybook/test';
-import { Preset } from '../FlexDiv';
+import { Button } from '../Button';
+import { Preset } from '../FlexBox';
+import { Slider } from '../Slider';
 import { Video } from './Video';
-import type { VideoElement } from './_types';
+import type { VideoElement, VideoProps } from './_types';
 
 const customControls = {
 	play: true,
@@ -38,7 +40,7 @@ const meta: Meta<typeof Video> = {
 		controls: 'simple',
 		muted: false,
 		showProgressIndicator: false,
-		customControls,
+		customControls: undefined,
 		onPlayStateChange: fn(),
 		onFullScreenChange: fn(),
 		onVolumeChange: fn(),
@@ -60,11 +62,11 @@ export default meta;
 
 function VideoDemo(args: Parameters<Exclude<StoryObj<typeof Video>['render'], undefined>>[0]) {
 	return (
-		<FlexDiv absolute preset={Preset.FillScroll} direction={'column'} scrollY={true} scrollX={false} padding={64}>
-			<FlexDiv height={'auto'} width={'fill'}>
+		<FlexBox absolute preset={Preset.FillScroll} direction={'column'} scrollY={true} scrollX={false} padding={64}>
+			<FlexBox height={'auto'} width={'fill'}>
 				<Video {...args} />
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 
@@ -77,7 +79,7 @@ function VideoWithRefControls(args: Parameters<Exclude<StoryObj<typeof Video>['r
 	const [videoElementFound, setVideoElementFound] = useState(false);
 
 	return (
-		<FlexDiv
+		<FlexBox
 			absolute
 			preset={Preset.FillScroll}
 			direction={'column'}
@@ -86,14 +88,14 @@ function VideoWithRefControls(args: Parameters<Exclude<StoryObj<typeof Video>['r
 			padding={64}
 			gap={16}
 		>
-			<FlexDiv gap={8} wrap={true}>
-				<button type={'button'} onClick={() => videoRef.current?.play?.()}>
+			<FlexBox gap={8} wrap={true}>
+				<button type={'button'} onClick={() => videoRef.current?.play?.().catch(() => undefined)}>
 					ref-play
 				</button>
 				<button type={'button'} onClick={() => videoRef.current?.stop?.()}>
 					ref-stop
 				</button>
-				<button type={'button'} onClick={() => videoRef.current?.restart?.()}>
+				<button type={'button'} onClick={() => videoRef.current?.restart?.().catch(() => undefined)}>
 					ref-restart
 				</button>
 				<button type={'button'} onClick={() => videoRef.current?.setVolume?.(0.6)}>
@@ -120,21 +122,21 @@ function VideoWithRefControls(args: Parameters<Exclude<StoryObj<typeof Video>['r
 				<button type={'button'} onClick={() => videoRef.current?.playbackRate?.(10)}>
 					ref-rate-high
 				</button>
-				<button type={'button'} onClick={() => videoRef.current?.fullscreen?.(true)}>
+				<button type={'button'} onClick={() => videoRef.current?.fullscreen?.(true).catch(() => undefined)}>
 					ref-fullscreen-on
 				</button>
-				<button type={'button'} onClick={() => videoRef.current?.fullscreen?.(false)}>
+				<button type={'button'} onClick={() => videoRef.current?.fullscreen?.(false).catch(() => undefined)}>
 					ref-fullscreen-off
 				</button>
 				<button type={'button'} onClick={() => setVideoElementFound(!!videoRef.current?.videoElement)}>
 					ref-check-element
 				</button>
-			</FlexDiv>
+			</FlexBox>
 			{videoElementFound && <span data-testid={'video-element-found'}>found</span>}
-			<FlexDiv height={'auto'} width={'fill'}>
+			<FlexBox height={'auto'} width={'fill'}>
 				<Video ref={videoRef} {...args} />
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 
@@ -400,5 +402,404 @@ export const PlayEventAfterPause: StoryObj<typeof Video> = {
 		} finally {
 			play.mockRestore();
 		}
+	},
+};
+
+function PlaybackPromiseDemo({ restart = false }: { restart?: boolean }) {
+	const ref = useRef<VideoElement>(null);
+	const [result, setResult] = useState('Idle');
+	return (
+		<>
+			<button
+				type="button"
+				onClick={() => {
+					setResult('Pending');
+					const request = restart ? ref.current?.restart() : ref.current?.play();
+					void request?.then(
+						() => setResult('Started'),
+						() => setResult('Rejected'),
+					);
+				}}
+			>
+				Await playback
+			</button>
+			<span data-testid="playback-result">{result}</span>
+			<Video ref={ref} showProgressIndicator={false} />
+		</>
+	);
+}
+
+export const AwaitPlayback: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	render: () => <PlaybackPromiseDemo />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const video = getStoryVideo(canvasElement);
+		let resolve = () => {};
+		const play = spyOn(video, 'play').mockImplementation(
+			() =>
+				new Promise<void>((done) => {
+					resolve = done;
+				}),
+		);
+		try {
+			await fireEvent.click(canvas.getByRole('button', { name: 'Await playback' }));
+			await expect(canvas.getByTestId('playback-result')).toHaveTextContent('Pending');
+			resolve();
+			await waitFor(() => expect(canvas.getByTestId('playback-result')).toHaveTextContent('Started'));
+		} finally {
+			play.mockRestore();
+		}
+	},
+};
+export const RejectedRestart: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	render: () => <PlaybackPromiseDemo restart />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const play = spyOn(getStoryVideo(canvasElement), 'play').mockRejectedValue(
+			new DOMException('Blocked', 'NotAllowedError'),
+		);
+		try {
+			fireEvent.click(canvas.getByRole('button', { name: 'Await playback' }));
+			await waitFor(() => expect(canvas.getByTestId('playback-result')).toHaveTextContent('Rejected'));
+		} finally {
+			play.mockRestore();
+		}
+	},
+};
+
+function SourceReplacementDemo() {
+	const [replaced, setReplaced] = useState(false);
+	return (
+		<>
+			<button type="button" onClick={() => setReplaced(true)}>
+				Replace source
+			</button>
+			<Video src={replaced ? undefined : '/public/video/sample.mp4'} muted />
+		</>
+	);
+}
+
+export const SourceReplacement: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	render: () => <SourceReplacementDemo />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const oldVideo = getStoryVideo(canvasElement);
+		await waitFor(() => expect(oldVideo.readyState).toBeGreaterThanOrEqual(3));
+		await waitFor(() => expect(canvas.queryByRole('status')).not.toBeInTheDocument());
+		fireEvent.click(canvas.getByRole('button', { name: 'Replace source' }));
+		await waitFor(() => expect(oldVideo.isConnected).toBe(false));
+		await expect(canvas.getByRole('status')).toHaveTextContent('Loading video');
+		await expect(canvas.getByRole('slider', { name: 'Playback position' })).toBeDisabled();
+	},
+};
+export const NativeVolumeSynchronization: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, muted: true, onVolumeChange: fn() },
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const video = getStoryVideo(canvasElement);
+		video.volume = 0.35;
+		video.muted = false;
+		await waitFor(() => expect(canvas.getByRole('slider', { name: 'Volume' })).toHaveValue('0.35'));
+		await expect(canvas.getByRole('button', { name: 'Mute' })).toBeInTheDocument();
+		await expect(args.onVolumeChange).toHaveBeenCalledWith(0.35);
+	},
+};
+export const InvalidDuration: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, onProgress: fn() },
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const video = getStoryVideo(canvasElement);
+		for (const duration of [0, Number.NaN, Number.POSITIVE_INFINITY]) {
+			Object.defineProperty(video, 'duration', { configurable: true, value: duration });
+			fireEvent.durationChange(video);
+			fireEvent.timeUpdate(video);
+			await expect(within(canvasElement).getByRole('slider', { name: 'Playback position' })).toBeDisabled();
+		}
+		await expect(args.onProgress).toHaveBeenCalledWith(0);
+	},
+};
+export const BufferingAndFailure: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, showProgressIndicator: true, onError: fn() },
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const video = getStoryVideo(canvasElement);
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		fireEvent.canPlay(video);
+		await waitFor(() => expect(canvas.queryByRole('status')).not.toBeInTheDocument());
+		fireEvent.waiting(video);
+		await expect(canvas.getByRole('status')).toHaveTextContent('Loading video');
+		fireEvent.error(video);
+		await expect(canvas.getByRole('alert')).toHaveTextContent('Unable to load video');
+		await expect(canvas.queryByRole('status')).not.toBeInTheDocument();
+		await expect(args.onError).toHaveBeenCalledWith(null);
+		fireEvent.loadStart(video);
+		await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+	},
+};
+export const NativeAttributesAndCaptions: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: {
+		src: '/public/video/sample.mp4',
+		muted: true,
+		videoName: 'Training clip',
+		videoAttributes: { preload: 'metadata', crossOrigin: 'anonymous', className: 'native-video' },
+		captionsSrc: '/public/video/sample.vtt',
+		captionsLanguage: 'en',
+		captionsLabel: 'English',
+		captionsDefault: true,
+	},
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const video = getStoryVideo(canvasElement);
+		await expect(video).toHaveAttribute('aria-label', 'Training clip');
+		await expect(video).toHaveAttribute('preload', 'metadata');
+		await expect(video).toHaveClass('native-video');
+		await expect(video).toHaveAttribute('crossorigin', 'anonymous');
+		await expect(video.querySelector('track')).toHaveAttribute('srclang', 'en');
+		await waitFor(() => expect(video.textTracks[0]?.mode).toBe('showing'));
+		fireEvent.click(canvas.getByRole('button', { name: 'Captions' }));
+		await waitFor(() => expect(video.textTracks[0]?.mode).toBe('hidden'));
+		await expect(canvas.getByRole('button', { name: 'Captions' })).toHaveAttribute('aria-pressed', 'false');
+	},
+};
+export const FullscreenContainsControls: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined },
+	render: (args) => <VideoWithRefControls {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const video = getStoryVideo(canvasElement);
+		const wrapper = video.parentElement;
+		if (!wrapper) throw new Error('Expected player wrapper');
+		const request = spyOn(wrapper, 'requestFullscreen').mockResolvedValue(undefined);
+		const exit = spyOn(document, 'exitFullscreen').mockResolvedValue(undefined);
+		const fullscreen = spyOn(document, 'fullscreenElement', 'get').mockReturnValue(wrapper);
+		try {
+			fireEvent.click(canvas.getByRole('button', { name: 'ref-fullscreen-on' }));
+			await expect(request).toHaveBeenCalledTimes(1);
+			fireEvent(document, new Event('fullscreenchange'));
+			await expect(args.onFullScreenChange).toHaveBeenCalledWith(true);
+			fireEvent.click(canvas.getByRole('button', { name: 'Exit fullscreen' }));
+			await expect(exit).toHaveBeenCalledTimes(1);
+		} finally {
+			request.mockRestore();
+			exit.mockRestore();
+			fullscreen.mockRestore();
+		}
+	},
+};
+
+function getStoryVideo(canvasElement: HTMLElement) {
+	const video = canvasElement.querySelector('video');
+	if (!video) throw new Error('Expected video element');
+	return video;
+}
+
+export const KeyboardFocusKeepsControlsVisible: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, onFocus: fn(), onMouseEnter: fn() },
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const video = getStoryVideo(canvasElement);
+		const root = video.parentElement;
+		if (!root) throw new Error('Expected video wrapper');
+		fireEvent.mouseOver(root);
+		const fullscreen = canvas.getByRole('button', { name: 'Enter fullscreen' });
+		fullscreen.focus();
+		await new Promise((resolve) => setTimeout(resolve, 2100));
+		await expect(getComputedStyle(root).getPropertyValue('--video-controls-opacity').trim()).toBe('1');
+		await expect(args.onFocus).toHaveBeenCalled();
+		await expect(args.onMouseEnter).toHaveBeenCalled();
+		canvas.getByRole('slider', { name: 'Volume' }).focus();
+		await expect(getComputedStyle(root).getPropertyValue('--video-controls-opacity').trim()).toBe('1');
+	},
+};
+const playSeekState: NonNullable<StoryObj<typeof Video>['play']> = async ({ canvasElement, args }) => {
+	const video = getStoryVideo(canvasElement);
+	const canvas = within(canvasElement);
+	await waitFor(() => expect(video.readyState).toBeGreaterThanOrEqual(3));
+	await waitFor(() => expect(video.paused).toBe(!args.playing));
+	canvas.getByRole('slider', { name: 'Playback position' }).focus();
+	fireEvent.keyDown(canvas.getByRole('slider', { name: 'Playback position' }), { key: 'ArrowRight' });
+	await expect(video.paused).toBe(true);
+	fireEvent.keyUp(canvas.getByRole('slider', { name: 'Playback position' }), { key: 'ArrowRight' });
+	await waitFor(() => expect(video.paused).toBe(!args.playing));
+};
+export const PausedSeekStaysPaused: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: '/public/video/sample.mp4', muted: true, loop: true, playing: false },
+	render: (args) => <Video {...args} />,
+	play: playSeekState,
+};
+export const PlayingSeekResumes: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: '/public/video/sample.mp4', muted: true, loop: true, playing: true },
+	render: (args) => <Video {...args} />,
+	play: playSeekState,
+};
+
+export const ExplicitPlayOnly: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, controls: 'default', customControls: { play: true } },
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getAllByRole('button')).toHaveLength(1);
+		await expect(canvas.getByRole('button', { name: 'Play' })).toBeInTheDocument();
+		await expect(canvas.queryByRole('slider')).not.toBeInTheDocument();
+		await expect(getStoryVideo(canvasElement).controls).toBe(false);
+	},
+};
+export const ExplicitEmptyControls: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, customControls: {} },
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).queryByRole('button')).not.toBeInTheDocument();
+		await expect(within(canvasElement).queryByRole('slider')).not.toBeInTheDocument();
+	},
+};
+export const ExplicitControlsReplaceChildren: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: {
+		src: undefined,
+		controls: 'custom',
+		customControls: { play: true },
+		children: <button type="button">Custom action</button>,
+	},
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('button', { name: 'Play' })).toBeInTheDocument();
+		await expect(canvas.queryByRole('button', { name: 'Custom action' })).not.toBeInTheDocument();
+	},
+};
+
+function RenderControlVideo(args: VideoProps) {
+	return (
+		<Video {...args} controls="custom">
+			{({ playing, muted, progress, volume, canSeek, togglePlay, toggleMute, setProgress, setVolume }) => (
+				<FlexBox direction="column" gap={8}>
+					<Button
+						onClick={() => {
+							void togglePlay().catch(() => undefined);
+						}}
+					>
+						{playing ? 'Pause custom' : 'Play custom'}
+					</Button>
+					<Button onClick={toggleMute}>{muted ? 'Unmute custom' : 'Mute custom'}</Button>
+					<Slider
+						aria-label="Custom progress"
+						min={0}
+						max={1}
+						step={0.1}
+						value={progress}
+						disabled={!canSeek}
+						onChange={setProgress}
+					/>
+					<Slider aria-label="Custom volume" min={0} max={1} step={0.1} value={volume} onChange={setVolume} />
+				</FlexBox>
+			)}
+		</Video>
+	);
+}
+export const RenderControlsActions: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: '/public/video/sample.mp4', muted: true, loop: true },
+	render: (args) => <RenderControlVideo {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const video = getStoryVideo(canvasElement);
+		await waitFor(() => expect(video.readyState).toBeGreaterThanOrEqual(3));
+		fireEvent.click(canvas.getByRole('button', { name: 'Play custom' }));
+		await waitFor(() => expect(video.paused).toBe(false));
+		await expect(canvas.getByRole('button', { name: 'Pause custom' })).toBeInTheDocument();
+		fireEvent.click(canvas.getByRole('button', { name: 'Unmute custom' }));
+		await waitFor(() => expect(video.muted).toBe(false));
+		await expect(canvas.getByRole('button', { name: 'Mute custom' })).toBeInTheDocument();
+		fireEvent.keyDown(canvas.getByRole('slider', { name: 'Custom volume' }), { key: 'ArrowLeft' });
+		await waitFor(() => expect(video.volume).toBeCloseTo(0.9));
+		video.pause();
+		await waitFor(() => expect(canvas.getByRole('button', { name: 'Play custom' })).toBeInTheDocument());
+	},
+};
+const seekWithRenderControls: NonNullable<StoryObj<typeof Video>['play']> = async ({ canvasElement, args }) => {
+	const canvas = within(canvasElement);
+	const video = getStoryVideo(canvasElement);
+	await waitFor(() => expect(video.readyState).toBeGreaterThanOrEqual(3));
+	await waitFor(() => expect(video.paused).toBe(!args.playing));
+	fireEvent.keyDown(canvas.getByRole('slider', { name: 'Custom progress' }), { key: 'Home' });
+	fireEvent.keyDown(canvas.getByRole('slider', { name: 'Custom progress' }), { key: 'ArrowRight' });
+	await waitFor(() => expect(video.currentTime).toBeGreaterThan(video.duration * 0.05));
+	await expect(video.paused).toBe(!args.playing);
+};
+export const RenderControlsSeekWhilePaused: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: '/public/video/sample.mp4', muted: true, playing: false, loop: true },
+	render: (args) => <RenderControlVideo {...args} />,
+	play: seekWithRenderControls,
+};
+export const RenderControlsSeekWhilePlaying: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: '/public/video/sample.mp4', muted: true, playing: true, loop: true },
+	render: (args) => <RenderControlVideo {...args} />,
+	play: seekWithRenderControls,
+};
+
+export const AutoplayUpdatesProgressControl: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: '/public/video/sample.mp4', playing: true, muted: true, loop: true, customControls: { progress: true } },
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement }) => {
+		const video = getStoryVideo(canvasElement);
+		await waitFor(() => expect(video.readyState).toBeGreaterThanOrEqual(3));
+		await waitFor(() => expect(video.paused).toBe(false));
+		await expect(within(canvasElement).getByRole('button', { name: 'Pause' })).toHaveAttribute('aria-pressed', 'true');
+	},
+};
+export const PlayingEventRestoresProgressControl: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, showProgressIndicator: false, customControls: { progress: true } },
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement }) => {
+		const video = getStoryVideo(canvasElement);
+		const paused = spyOn(video, 'paused', 'get').mockReturnValue(false);
+		try {
+			fireEvent.play(video);
+			fireEvent.loadStart(video);
+			fireEvent.playing(video);
+			await expect(within(canvasElement).getByRole('button', { name: 'Pause' })).toHaveAttribute(
+				'aria-pressed',
+				'true',
+			);
+		} finally {
+			paused.mockRestore();
+		}
+	},
+};
+
+export const BlockedAutoplayKeepsPlayControl: StoryObj<typeof Video> = {
+	tags: ['tests'],
+	args: { src: undefined, playing: true, showProgressIndicator: false, customControls: { progress: true } },
+	beforeEach: () => {
+		const play = spyOn(HTMLMediaElement.prototype, 'play').mockRejectedValue(
+			new DOMException('Autoplay blocked', 'NotAllowedError'),
+		);
+		return () => play.mockRestore();
+	},
+	render: (args) => <Video {...args} />,
+	play: async ({ canvasElement }) => {
+		await waitFor(() => expect(HTMLMediaElement.prototype.play).toHaveBeenCalled());
+		await expect(within(canvasElement).getByRole('button', { name: 'Play' })).toHaveAttribute('aria-pressed', 'false');
 	},
 };

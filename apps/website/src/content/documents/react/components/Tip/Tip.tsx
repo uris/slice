@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { TipPreview } from './TipPreview';
 import { applicationCode, customCode, motionCode, usageCode } from './code';
@@ -72,7 +72,7 @@ const tipProps = [
 
 export function TipDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">Tip component</H1>
 			<P clipWidth>Add a short hint beside an action without pulling people away from their work.</P>
@@ -199,7 +199,7 @@ export function TipDoc() {
 				Points to the mounted wrapper, including while hidden. Pass the same ref to <Code>useToolTip</Code>. Missing or
 				removed anchors produce undefined coordinates.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

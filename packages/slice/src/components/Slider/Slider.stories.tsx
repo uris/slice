@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { Slider } from 'src/components/Slider/Slider';
 import {
 	runSliderCollapsedRangePlay,
@@ -54,9 +54,9 @@ export default meta;
 export const Default: StoryObj<typeof Slider> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Slider {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -65,9 +65,9 @@ export const WithTestingActions: StoryObj<typeof Slider> = {
 	tags: ['tests'],
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Slider {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -79,9 +79,9 @@ export const WithoutHandlers: StoryObj<typeof Slider> = {
 	tags: ['tests'],
 	args: { onChange: undefined, onChangeEnd: undefined },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Slider {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		await runSliderWithoutHandlersPlay({ canvasElement });
@@ -92,9 +92,9 @@ export const CustomClassName: StoryObj<typeof Slider> = {
 	tags: ['tests'],
 	args: { className: 'slider-custom-class' },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Slider {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runSliderPlay({ canvasElement, args });
@@ -104,9 +104,9 @@ export const CustomClassName: StoryObj<typeof Slider> = {
 export const KeyboardControls: StoryObj<typeof Slider> = {
 	tags: ['tests'],
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Slider {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runSliderKeyboardPlay({ canvasElement, args });
@@ -117,9 +117,9 @@ export const Disabled: StoryObj<typeof Slider> = {
 	tags: ['tests'],
 	args: { disabled: true },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Slider {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runSliderDisabledPlay({ canvasElement, args });
@@ -129,9 +129,9 @@ export const Disabled: StoryObj<typeof Slider> = {
 export const DragBeyondBounds: StoryObj<typeof Slider> = {
 	tags: ['tests'],
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Slider {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runSliderEdgeDragPlay({ canvasElement, args });
@@ -142,9 +142,9 @@ export const CollapsedRange: StoryObj<typeof Slider> = {
 	tags: ['tests'],
 	args: { min: 50, max: 50, value: 50 },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Slider {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runSliderCollapsedRangePlay({ canvasElement, args });
@@ -162,9 +162,9 @@ export const NullableColorAndSizeDefaults: StoryObj<typeof Slider> = {
 		trackHeadSize: null as unknown as number,
 	},
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Slider {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runSliderPlay({ canvasElement, args });
@@ -175,9 +175,9 @@ export const AutoWidthAndZeroHeight: StoryObj<typeof Slider> = {
 	tags: ['tests'],
 	args: { width: 'auto', height: 0 },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Slider {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runSliderPlay({ canvasElement, args });

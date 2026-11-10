@@ -112,9 +112,6 @@ export type {
 	ErrorSummaryProps,
 } from './components/ErrorSummary';
 
-export { Grouper } from './components/Grouper';
-export type { GrouperProps } from './components/Grouper';
-
 export { Overlay } from './components/Overlay';
 export type { OverlayProps } from './components/Overlay';
 
@@ -124,7 +121,9 @@ export type { DialogBoxAction, DialogBoxProps, DialogBoxControls, DialogBoxSecti
 export { ModalController } from './components/ModalController';
 export type { ModalControllerProps } from './components/ModalController';
 
-export { FlexDiv, Size, Preset } from './components/FlexDiv';
+export { FlexBox, Size, Preset } from './components/FlexBox';
+export type { FlexBoxProps } from './components/FlexBox';
+export { FlexDiv } from './components/FlexDiv';
 export type { FlexDivProps } from './components/FlexDiv';
 
 export { Pager } from './components/Pager';
@@ -152,6 +151,7 @@ export { Slider } from './components/Slider';
 export type { SliderProps } from './components/Slider';
 
 export { Spacer } from './components/Spacer';
+export type { SpacerProps } from './components/Spacer';
 
 export { Switch } from './components/Switch';
 export type { SwitchProps } from './components/Switch';
@@ -193,12 +193,8 @@ export type { IconProps, SliceIcon } from './components/Icon/_types';
 export { ButtonBar } from './components/ButtonBar';
 export type { BarButton, ButtonBarProps } from './components/ButtonBar/_types';
 
-export { Label } from './components/Label';
-export { LabelBackground } from './components/Label';
-export type { LabelProps } from './components/Label';
-
-export { Level } from './components/Level';
-export type { LevelProps } from './components/Level';
+export { AudioLevel } from './components/AudioLevel';
+export type { AudioLevelProps } from './components/AudioLevel';
 
 export { UploadArea } from './components/UploadArea';
 export type { UploadAreaProps, UploadFileRejection } from './components/UploadArea/_types';
@@ -215,6 +211,7 @@ export { Video } from './components/Video';
 export type {
 	CustomVideoControls,
 	PlayState,
+	VideoControlsContext,
 	VideoElement,
 	VideoProps,
 } from './components/Video';

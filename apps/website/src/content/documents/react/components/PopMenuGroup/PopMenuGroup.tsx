@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { PopMenuGroupPreview } from './PopMenuGroupPreview';
 import { optionsCode, styleCode, usageCode } from './code';
@@ -134,7 +134,7 @@ const props = [
 
 export default function PopMenuGroupDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">PopMenuGroup component</H1>
 			<P clipWidth>Organize related menu actions with an optional title and separators between sections.</P>
@@ -239,7 +239,7 @@ export default function PopMenuGroupDoc() {
 				Native events apply to the group wrapper. Item click events stop propagation, so use <Code>onClickItem</Code>{' '}
 				for row actions.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

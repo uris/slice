@@ -1,13 +1,13 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../../components/FlexDiv';
+import {FlexBox} from '../../../components/FlexBox';
 import NoteSection from '../../../../documentation/_components/Notice/Notice';
 import {Spacer} from '../../../components/Spacer';
 
 <Meta title="Utils/IndexedDB Class" />
 
-<FlexDiv width={'fill'} height={'fill'} align={'center'}>
-    <FlexDiv width={'fill'} maxWidth={760} height={'auto'}>
+<FlexBox width={'fill'} height={'fill'} align={'center'}>
+    <FlexBox width={'fill'} maxWidth={760} height={'auto'}>
         <Unstyled>
         <NoteSection>
             `IndexedDB` is a low-level browser utility for reading and writing values in a named IndexedDB object store. Use it directly when you want explicit control over store creation, reads, writes, and database cleanup.
@@ -218,5 +218,5 @@ await users.destroy();
         </Unstyled>
         
         <Spacer size="xxl" />
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

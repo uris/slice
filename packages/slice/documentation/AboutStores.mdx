@@ -1,12 +1,12 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import {FlexDiv} from "../src/components/FlexDiv";
+import {FlexBox} from "../src/components/FlexBox";
 import {Spacer} from "../src/components/Spacer";
 import {RenderSource} from "./_components/RenderSource/RenderSource";
 
 <Meta title="Stores/About Slice Stores" />
 
-<FlexDiv width={"fill"} height={"fill"} justify={"start"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} justify={"start"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
             # About Slice Stores
 
@@ -66,5 +66,5 @@ $ npm install zustand
             <Spacer size="l" />
             <p className={"note"}>Tip: import store helpers from subpaths like `@apple-pie/slice/stores/toast` so bundlers can keep your app bundle focused on what you actually use.</p>
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

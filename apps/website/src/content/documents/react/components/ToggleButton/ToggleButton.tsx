@@ -3,13 +3,13 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { contentMaxWidth, contentMinWidth } from '@/src/consts/consts';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { ToggleButtonPreview } from './ToggleButtonPreview';
 import { childrenCode, disabledCode, exampleCode, motionCode, outsideCode, textOnly } from './code';
 
 export function ToggleButtonDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
+		<FlexBox preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
 			<Path />
 			<H1 id={'title'}>ToggleButton component</H1>
 			<P clipWidth>Make on/off actions easy to recognize with a label, an optional icon, and a clear selected state.</P>
@@ -340,6 +340,15 @@ export function ToggleButtonDoc() {
 				<DefaultVal>{'20'}</DefaultVal>
 			</Definition>
 			<P>{'Icon size in pixels. Negative or nonfinite values fall back to 20px; zero hides its geometry.'}</P>
+			<Definition id={'iconStrokeWidth'}>
+				<Prop>iconStrokeWidth</Prop>
+				<TypeDef>{'number'}</TypeDef>
+				<DefaultVal>{'undefined'}</DefaultVal>
+			</Definition>
+			<P>
+				Stroke width in the icon’s 20-unit viewBox. Omit to use <Code>Icon</Code>’s default. Zero removes strokes;
+				solid-filled artwork is unaffected.
+			</P>
 			<Definition id={'label'}>
 				<Prop>label</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -589,7 +598,7 @@ export function ToggleButtonDoc() {
 					'Other native button handlers are composed with internal behavior. Preventing default on mouse entry or focus suppresses that internal handling. No drag or pan gestures are implemented.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -623,6 +632,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'iconFill', title: 'iconFill', code: true },
 			{ id: 'iconSelected', title: 'iconSelected', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
+			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'label', title: 'label', code: true },
 			{ id: 'labelOutside', title: 'labelOutside', code: true },
 			{ id: 'padding', title: 'padding', code: true },

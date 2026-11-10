@@ -1,12 +1,12 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import * as SwitchStories from './Switch.stories';
 import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={SwitchStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # Switch
         Renders a binary on/off control for toggling settings and preferences.
@@ -122,5 +122,5 @@ import { RenderSource } from '../../../documentation/_components/RenderSource/Re
         }
         ```
         </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

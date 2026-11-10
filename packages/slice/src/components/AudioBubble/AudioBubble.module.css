@@ -19,3 +19,9 @@
 	box-shadow: var(--ab-box-shadow);
 	transition: transform 40ms linear 0s;
 }
+
+@media (prefers-reduced-motion: reduce) {
+	.bubble {
+		transition: none;
+	}
+}

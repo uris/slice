@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { Spacer } from '../../components/Spacer';
 import { TextField } from '../../components/Textfield';
 import { useIsConnected, useMessage, useWS, useWSStore } from './wsStore';
@@ -109,8 +109,8 @@ function WSStoreDemo() {
 	}, [lastMessage]);
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'start'} padding={24}>
-			<FlexDiv
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'start'} padding={24}>
+			<FlexBox
 				width={640}
 				height={'auto'}
 				direction={'column'}
@@ -128,7 +128,7 @@ function WSStoreDemo() {
 					placeholder={'wss://www.example.com/api/ws/ws-test'}
 					onChange={(value) => setUrl(value)}
 				/>
-				<FlexDiv direction={'row'} gap={12}>
+				<FlexBox direction={'row'} gap={12}>
 					<TextField
 						label={'Test message:'}
 						name={'ws-test-message'}
@@ -152,8 +152,8 @@ function WSStoreDemo() {
 						iconLeft={'arrows.arrow-right'}
 						state={isConnected && messageToSend.trim() ? 'normal' : 'disabled'}
 					/>
-				</FlexDiv>
-				<FlexDiv gap={12} direction={'row'} background={'transparent'}>
+				</FlexBox>
+				<FlexBox gap={12} direction={'row'} background={'transparent'}>
 					<Button
 						variant={'solid'}
 						label={isConnected ? 'Reconnect' : 'Connect'}
@@ -187,8 +187,8 @@ function WSStoreDemo() {
 						onClick={() => setEventLog([])}
 						state={eventLog.length === 0 ? 'disabled' : 'normal'}
 					/>
-				</FlexDiv>
-				<FlexDiv direction={'column'} gap={8} padding={8}>
+				</FlexBox>
+				<FlexBox direction={'column'} gap={8} padding={8}>
 					<strong>Event log</strong>
 					{eventLog.length === 0 ? (
 						<div>waiting for an active connection...</div>
@@ -199,9 +199,9 @@ function WSStoreDemo() {
 							</div>
 						))
 					)}
-				</FlexDiv>
-			</FlexDiv>
-		</FlexDiv>
+				</FlexBox>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

@@ -1,5 +1,5 @@
 export const usageCode = `
-import { Button, FlexDiv, PopMenu, PopMenuGroup, PopMenuItem, type PopMenuSubMenuProps } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuGroup, PopMenuItem, type PopMenuSubMenuProps } from '@apple-pie/slice';
 import { useState } from 'react';
 
 const colorOptions = [
@@ -13,14 +13,14 @@ function ColorsMenu(props: PopMenuSubMenuProps) {
         <PopMenu {...props} name="Colors">
             {colorOptions.map((option) => (
                 <PopMenuItem key={option.id} id={option.id} label={option.label}>
-                    <FlexDiv direction="row" align="center" gap={8} 
+                    <FlexBox direction="row" align="center" gap={8}
                         style={{ whiteSpace: 'nowrap' }}>
                         <span aria-hidden="true" style={{
                             display: 'inline-block', width: 12, height: 12, borderRadius: '50%',
                             backgroundColor: option.color, flexShrink: 0,
                         }} />
                         {option.label}
-                    </FlexDiv>
+                    </FlexBox>
                 </PopMenuItem>
             ))}
         </PopMenu>
@@ -33,7 +33,7 @@ export default function ProjectActions() {
     const close = () => setCaller(undefined);
 
     return (
-        <FlexDiv>
+        <FlexBox>
             <Button label="Open menu" onClick={(event) => {
                 if (event) setCaller(event.currentTarget);
             }} />
@@ -56,7 +56,7 @@ export default function ProjectActions() {
                     </PopMenuGroup>
                 </PopMenu>
             )}
-        </FlexDiv>
+        </FlexBox>
     );
 }
 `;

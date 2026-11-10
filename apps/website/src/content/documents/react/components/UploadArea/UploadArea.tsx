@@ -2,7 +2,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { AttachmentFilesPreview, BusyPreview, UploadPreview } from './UploadAreaPreview';
 import { attachmentsCode, busyCode, usageCode } from './code';
@@ -160,7 +160,7 @@ const areaProps = [
 ];
 export function UploadAreaDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">UploadArea component</H1>
 			<P>Choose or drop files, validate the selection, and display upload feedback with an attached file list.</P>
@@ -299,7 +299,7 @@ export function UploadAreaDoc() {
 				or onDrop cancels that event’s internal handling. Use onClickCapture to cancel picker activation. Cleanup still
 				clears drag highlighting.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [

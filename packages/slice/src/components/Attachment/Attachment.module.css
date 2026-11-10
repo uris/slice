@@ -101,6 +101,7 @@
 
 .filesize {
 	color: var(--text-color-light);
+	text-transform: uppercase;
 
 	&:before {
 		content: "•";

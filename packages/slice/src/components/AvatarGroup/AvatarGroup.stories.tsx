@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Fragment, useState } from 'react';
 import type { AvatarInfo } from 'src/components/AvatarGroup';
 import { AvatarGroup } from 'src/components/AvatarGroup';
-import { FlexDiv } from 'src/components/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox';
 import {
 	runAvatarGroupCustomClassPlay,
 	runAvatarGroupNoAvatarsPlay,
@@ -46,9 +46,9 @@ export default meta;
 export const Default: StoryObj<typeof AvatarGroup> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<AvatarGroup {...args} data-testid="avatar-group" />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {

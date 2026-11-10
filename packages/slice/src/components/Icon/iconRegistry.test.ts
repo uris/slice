@@ -67,3 +67,13 @@ it('exports one icon-name type for all artwork', () => {
  expectTypeOf<'basic.home' | 'ai.wand' | 'brands.google' | 'system.check-circle'>().toExtend<SliceIcon>();
  expectTypeOf<Extract<SliceIcon, 'home' | 'wand' | 'check circle'>>().toEqualTypeOf<never>();
 });
+
+it('provides opaque play and pause artwork independently of stroke and optional fill', () => {
+ for (const [outline, filled] of [[SliceIcons.media.play, SliceIcons.media.playFilled], [SliceIcons.media.pause, SliceIcons.media.pauseFilled]]) {
+  const solid = STATIC_ICON_REGISTRY.get(filled)?.line({ ...sampleProps, strokeColor: '#123456', stroke: 0, fillColor: 0 });
+  const line = STATIC_ICON_REGISTRY.get(outline)?.line(sampleProps);
+  expect(solid?.props).toMatchObject({ fill: '#123456', d: line?.props.d });
+  expect(solid?.props).not.toHaveProperty('strokeWidth');
+  expect(line?.props).toMatchObject({ fill: 'none', strokeWidth: 1.5 });
+ }
+});

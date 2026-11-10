@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { useLastUpdated } from './useLastUpdated';
 
 type UseLastUpdatedDemoProps = {
@@ -15,8 +15,8 @@ function UseLastUpdatedDemo(props: Readonly<UseLastUpdatedDemoProps>) {
 	const { lastUpdated } = useLastUpdated(timestamp, prefix, interval);
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
-			<FlexDiv
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
+			<FlexBox
 				width={420}
 				height={'auto'}
 				direction={'column'}
@@ -27,7 +27,7 @@ function UseLastUpdatedDemo(props: Readonly<UseLastUpdatedDemoProps>) {
 				align={'center'}
 			>
 				<span>Time: {timestamp}</span>
-				<FlexDiv width={'auto'} height={'auto'} gap={8} background={'none'} align={'center'}>
+				<FlexBox width={'auto'} height={'auto'} gap={8} background={'none'} align={'center'}>
 					<Button label={'Set Time Now'} variant={'outline'} onClick={() => setTimestamp(new Date().toISOString())} />
 					<Button
 						label={'Set Time 10 mins ago'}
@@ -40,9 +40,9 @@ function UseLastUpdatedDemo(props: Readonly<UseLastUpdatedDemoProps>) {
 						onClick={() => setTimestamp(new Date(Date.now() - 60 * 1000 * 60 * 24 * 2).toISOString())}
 					/>
 					<strong>{lastUpdated}</strong>
-				</FlexDiv>
-			</FlexDiv>
-		</FlexDiv>
+				</FlexBox>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

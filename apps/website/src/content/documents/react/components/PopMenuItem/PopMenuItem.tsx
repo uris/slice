@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import {
 	CustomContentPreview,
@@ -294,7 +294,7 @@ const props = [
 
 export default function PopMenuItemDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">PopMenuItem component</H1>
 			<P clipWidth>Compose an action, a controlled toggle, or custom row content inside a contextual menu.</P>
@@ -501,7 +501,7 @@ export default function PopMenuItemDoc() {
 				Native events are forwarded to the button. Mouse enter/leave handlers are merged with internal hover behavior
 				and suppressed while disabled. Item clicks stop propagation.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

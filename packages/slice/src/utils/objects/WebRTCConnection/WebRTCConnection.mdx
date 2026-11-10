@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../../components/FlexDiv';
+import {FlexBox} from '../../../components/FlexBox';
 import NoteSection from '../../../../documentation/_components/Notice/Notice';
 
 <Meta title="Utils/WebRTC Connection Class" />
 
-<FlexDiv width={'fill'} height={'fill'} align={'center'}>
-    <FlexDiv width={'fill'} maxWidth={760} height={'auto'}>
+<FlexBox width={'fill'} height={'fill'} align={'center'}>
+    <FlexBox width={'fill'} maxWidth={760} height={'auto'}>
         <Unstyled>
         <NoteSection>
             `WebRTCConnection` is the low-level browser utility for one WebRTC session. Use it directly when you want full control over one connection, use the WebRTC store when you want named singleton connections, and use `useBindWebRTC` when you want microphone-store and volume-store wiring handled for you.
@@ -152,5 +152,5 @@ await connection.initialize(
         - automatic volume-store synchronization
         - a returned `connection` and `error` state for React integration
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

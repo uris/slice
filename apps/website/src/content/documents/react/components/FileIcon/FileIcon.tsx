@@ -2,7 +2,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { CategoriesPreview, FilePreview, SizesPreview } from './FileIconPreview';
 import { categoriesCode, sizesCode, usageCode } from './code';
@@ -66,7 +66,7 @@ const iconProps = [
 
 export function FileIconDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">FileIcon component</H1>
 			<P clipWidth>Identify documents, images, and media with themed file-type artwork.</P>
@@ -170,7 +170,7 @@ export function FileIconDoc() {
 				Native handlers are composed with internal behavior. Calling <Code>preventDefault()</Code> in{' '}
 				<Code>onKeyDown</Code> or <Code>onKeyUp</Code> cancels the corresponding keyboard activation.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

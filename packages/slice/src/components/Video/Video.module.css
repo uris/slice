@@ -32,7 +32,7 @@
 	pointer-events: var(--video-controls-pointer-events, none);
 	opacity: var(--video-controls-opacity, 0);
 	z-index: var(--elevation-float);
-	transition: opacity 0.25s ease-in-out;
+	transition: var(--video-controls-transition, opacity 0.25s ease-in-out);
 }
 
 .controlsHeader {
@@ -71,11 +71,17 @@
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	gap: 8px;
+	gap: 0;
 	border-radius: var(--corner-round);
-	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
-	padding: var(--spacing-s) var(--spacing-m) var(--spacing-s) var(--spacing-s);
+	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.25));
+	padding-right: var(--spacing-m);
+	padding-left: var(--spacing-xs);
 	box-sizing: border-box;
+	transition: background-color var(--motion-water-duration) var(--motion-water) 0s;
+
+	&:hover {
+		background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
+	}
 }
 
 .left {
@@ -84,19 +90,31 @@
 	align-items: center;
 	gap: 8px;
 	border-radius: var(--corner-round);
-	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
-	padding: var(--spacing-s);
-	box-sizing: border-box;
+	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.25));
+	transition: background-color var(--motion-water-duration) var(--motion-water) 0s;
+
+	&:hover {
+		background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
+	}
 }
 
 .progress {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	gap: 8px;
 	border-radius: var(--corner-round);
-	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
-	padding: var(--spacing-s) var(--video-progress-padding-left) var(--spacing-s) var(--spacing-s);
+	background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.25));
+	padding: 0 var(--video-progress-padding-left) 0 var(--spacing-xs);
 	box-sizing: border-box;
 	width: 50%;
+
+	&:hover {
+		background-color: var(--video-controls-bg-color, rgba(0, 0, 0, 0.5));
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.controls {
+		transition: none;
+	}
 }

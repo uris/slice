@@ -12,8 +12,9 @@ export type FileItem = {
 	error?: string;
 };
 
-type FileListBaseProps = {
-	files?: FileItem[];
+type FileListBaseProps<T extends File | FileItem> = {
+	/** Raw files render without upload status. FileItem adds progress and errors. */
+	files?: T[];
 	/** Compact file rows by default; attachments render thumbnail cards. */
 	variant?: 'list' | 'attachments';
 	/** Card dimensions for the attachments variant. */
@@ -26,14 +27,14 @@ type FileListBaseProps = {
 	minWidth?: number | string;
 	padding?: number | string;
 	iconSize?: number;
-	onChange?: (files: FileItem[]) => void;
+	onChange?: (files: T[]) => void;
 	backgroundColor?: ColorValue;
 	canRemove?: boolean;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
-export type FileListProps = Omit<
+export type FileListProps<T extends File | FileItem = FileItem> = Omit<
 	React.HTMLAttributes<HTMLDivElement>,
-	keyof FileListBaseProps | 'role' | 'aria-label' | 'tabIndex' | 'children' | 'dangerouslySetInnerHTML'
+	keyof FileListBaseProps<T> | 'role' | 'aria-label' | 'tabIndex' | 'children' | 'dangerouslySetInnerHTML'
 > &
-	FileListBaseProps;
+	FileListBaseProps<T>;

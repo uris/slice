@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type React from 'react';
 import { useState } from 'react';
-import { FlexDiv } from 'src/components/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox';
 import {
 	runDataTableColumnResizeAndReorderPlay,
 	runDataTablePlainAndCustomHeaderColumnPlay,
@@ -61,9 +61,9 @@ export default meta;
 export const Default: StoryObj<typeof TypedDataTable> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<TypedDataTable {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -78,9 +78,9 @@ export const ColumnResizeAndReorder: StoryObj<typeof TypedDataTable> = {
 	tags: ['tests'],
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<TypedDataTable {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -114,9 +114,9 @@ export const PlainAndCustomHeaderColumn: StoryObj<typeof TypedDataTable> = {
 	},
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<TypedDataTable {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -137,9 +137,9 @@ export const ScrollShadows: StoryObj<typeof TypedDataTable> = {
 	},
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<TypedDataTable {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -153,12 +153,12 @@ const filter = (row: SampleTableData) => {
 export const FilteredNoCountry: StoryObj<typeof TypedDataTable> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={8}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64} gap={8}>
 				<code
 					style={{ padding: '4px 8px', borderRadius: corners['corner-xs'], fontSize: 14 }}
 				>{`const filter = (row: SampleTableData) => row.country !== ''`}</code>
 				<TypedDataTable {...args} filter={filter} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -176,12 +176,12 @@ const savedViewState: DataTableViewState = {
 export const WithPersistedViewState: StoryObj<typeof TypedDataTable> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<TypedDataTable
 					{...args}
 					columnDefinitions={applyDataTableViewState(sampleTableColumnDefinitions, savedViewState)}
 				/>
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -194,10 +194,10 @@ function VirtualizedDemo(props: Readonly<{ args: BigDatasetArgs; rowCount: numbe
 	const { args, rowCount, caption } = props;
 	const [tableData] = useState(() => manyRows(rowCount));
 	return (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={8}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64} gap={8}>
 			<code style={{ padding: '4px 8px', borderRadius: corners['corner-xs'], fontSize: 14 }}>{caption}</code>
 			<TypedDataTable {...args} tableData={tableData} />
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

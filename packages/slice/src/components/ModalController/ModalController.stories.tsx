@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { ModalController } from 'src/components/ModalController/ModalController';
 import {
 	runModalControllerDismissViaBackdropPlay,
@@ -158,12 +158,12 @@ function ModalControllerDemo({
 	};
 
 	return (
-		<FlexDiv absolute justify={'center'} align={'center'}>
+		<FlexBox absolute justify={'center'} align={'center'}>
 			<Button iconRight={'arrows.arrow-right'} onClick={showAsyncModalClick}>
 				Continue
 			</Button>
 			<ModalController draggable={draggable} />
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

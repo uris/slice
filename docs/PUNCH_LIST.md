@@ -32,7 +32,7 @@ Already wrapped today, for reference (don't re-add): `localStorage` (`useLocalSt
 
 ## 2. Components — gap check vs. Material Design 3 catalog
 
-Current Slice inventory (45): AudioBubble, Avatar, AvatarGroup, Badge, Button, ButtonBar, Camera, CheckBox, Chip, DataTable, ContentEditable, Dot, DraggablePanel, DropDown, ErrorSummary, FileIcon, FileList, FlexDiv, Grouper, Icon, IconButton, Label, Level, DialogBox, ModalController, Overlay, Pager, Progress (ProgressIndicator, DoneCheck), PromptInput, RadioButton, RadioButtonList, Slider, Spacer, Switch, TabBar, TextArea, Textfield, Tip, Toast, ToggleButton, UploadArea, Video, VideoController.
+Current Slice inventory (44): AudioBubble, Avatar, AvatarGroup, Badge, Button, ButtonBar, Camera, CheckBox, Chip, DataTable, ContentEditable, Dot, DraggablePanel, DropDown, ErrorSummary, FileIcon, FileList, FlexBox, FlexDiv (deprecated), Icon, IconButton, AudioLevel, DialogBox, ModalController, Overlay, Pager, Progress (ProgressIndicator, DoneCheck), PromptInput, RadioButton, RadioButtonList, Slider, Spacer, Switch, TabBar, TextArea, Textfield, Tip, Toast, ToggleButton, UploadArea, Video, VideoController.
 
 Already covered, functionally equivalent to an M3 component (naming differs — no action needed unless you want to formalize the mapping): Tooltip ≈ `Tip`, Menu ≈ `DropDown`, Snackbar ≈ `Toast`, Dialog ≈ `DialogBox`/`Overlay`.
 

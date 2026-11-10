@@ -4,14 +4,14 @@ import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { contentMaxWidth, contentMinWidth } from '@/src/consts/consts';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { AudioBubblePreview, AudioBubblePreviewProvider } from './AudioBubblePreview';
 import { glowCode, pausedCode, responseCode, statusCode, usageCode } from './code';
 
 export function AudioBubbleDoc() {
 	return (
 		<AudioBubblePreviewProvider>
-			<FlexDiv preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
+			<FlexBox preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
 				<Path />
 				<H1 id={'title'}>AudioBubble component</H1>
 				<P clipWidth>
@@ -85,9 +85,8 @@ export function AudioBubbleDoc() {
 					must be exposed. The component has no built-in label, keyboard behavior, or announcements.
 				</P>
 				<P>
-					Set <Code>playing</Code> to false when the user prefers reduced motion. <Code>useReducedMotion()</Code> from{' '}
-					<Code>motion/react</Code> reads that preference; the text status should remain available when animation is
-					paused.
+					Reduced-motion preferences keep the bubble at its resting size and suspend analysis. Keep a text status
+					available alongside it.
 				</P>
 				<ComponentCanvas
 					storybookUrl="https://react.slice-uikit.com/?path=/story/components-audiobubble--demo"
@@ -174,8 +173,8 @@ export function AudioBubbleDoc() {
 				<P>
 					Enables animation when a source is present. Set to false to return to minScale without stopping the source.
 				</P>
-				<Definition id={'ReleasePerSeconds'}>
-					<Prop>ReleasePerSeconds</Prop>
+				<Definition id={'releasePerSeconds'}>
+					<Prop>releasePerSeconds</Prop>
 					<TypeDef>{'number'}</TypeDef>
 					<DefaultVal>{'1.5'}</DefaultVal>
 				</Definition>
@@ -211,7 +210,7 @@ export function AudioBubbleDoc() {
 					Native React handlers such as <Code>onClick</Code>, <Code>onMouseEnter</Code>, and <Code>onMouseLeave</Code>
 					pass through to the wrapper and receive the standard React event.
 				</P>
-			</FlexDiv>
+			</FlexBox>
 		</AudioBubblePreviewProvider>
 	);
 }
@@ -236,7 +235,7 @@ export const audioBubbleTrackedItems: TrackedItem[] = [
 			{ id: 'minScale', title: 'minScale', code: true },
 			{ id: 'peakIntensity', title: 'peakIntensity', code: true },
 			{ id: 'playing', title: 'playing', code: true },
-			{ id: 'ReleasePerSeconds', title: 'ReleasePerSeconds', code: true },
+			{ id: 'releasePerSeconds', title: 'releasePerSeconds', code: true },
 			{ id: 'risePerSeconds', title: 'risePerSeconds', code: true },
 			{ id: 'size', title: 'size', code: true },
 			{ id: 'divAttributes', title: '...divAttributes', code: true },

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import { Switch } from './Switch';
 
 const meta = {
@@ -42,9 +42,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	render: (args) => (
-		<FlexDiv absolute justify="center" align="center" padding={64}>
+		<FlexBox absolute justify="center" align="center" padding={64}>
 			<Switch {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 };
 export const CustomTransition: Story = {

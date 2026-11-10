@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import {FlexBox} from '../FlexBox';
 import * as BadgeStories from './Badge.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={BadgeStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # Badge
         Renders a compact badge for counts, statuses, and lightweight notifications.
@@ -92,5 +92,5 @@ export function BadgeExample() {
 }
 ```
         </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

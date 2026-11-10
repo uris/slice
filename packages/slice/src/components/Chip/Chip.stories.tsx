@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Chip } from 'src/components/Chip';
-import { FlexDiv } from 'src/components/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox';
 import { runChipButtonVariantPlay, runChipDisabledPlay, runChipLayoutVariantsPlay } from 'src/components/playHelpers';
 import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
 
@@ -73,9 +73,9 @@ export default meta;
 export const Default: StoryObj<typeof Chip> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Chip {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -99,9 +99,9 @@ export const ButtonVariant: StoryObj<typeof Chip> = {
 	// isn't cleared by an explicit `undefined` override in `args`) by
 	// dropping it directly in JSX to exercise the no-tooltip hover branch
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Chip {...args} tooltip={undefined} className="button-chip" />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runChipButtonVariantPlay,
 };
@@ -109,12 +109,12 @@ export const ButtonVariant: StoryObj<typeof Chip> = {
 export const LayoutVariants: StoryObj<typeof Chip> = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv direction={'column'} gap={12}>
+		<FlexBox direction={'column'} gap={12}>
 			<Chip label="Right Icon" icon="ai.wand" iconPosition="right" />
 			<Chip className="no-icon-no-label" />
 			<Chip icon="ai.wand">Children Label</Chip>
 			<Chip className="custom-border" label="Border" borderWidth={3} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runChipLayoutVariantsPlay,
 };
@@ -539,10 +539,10 @@ export const DefaultPalette: StoryObj<typeof Chip> = {
 export const RemoveOnlyHoverPalette: StoryObj<typeof Chip> = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv gap={16}>
+		<FlexBox gap={16}>
 			<Chip label="Selectable" icon="basic.home" selected={false} onClick={() => {}} />
 			<Chip label="Removable" icon="basic.home" onRemove={() => {}} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
@@ -660,13 +660,37 @@ export const DefaultSelectedPalette: StoryObj<typeof Chip> = {
 
 export const StaticHoverPalette: StoryObj<typeof Chip> = {
 	tags: ['tests'],
-	render: () => <Chip label="Static defaults" />,
+	render: () => <Chip label="Static defaults" data-testid="static-defaults" />,
 	play: async ({ canvasElement }) => {
-		const chip = within(canvasElement).getByText('Static defaults').closest('div')?.parentElement as HTMLElement;
+		const chip = within(canvasElement).getByTestId('static-defaults').parentElement as HTMLElement;
 		for (const name of ['text-color', 'icon-color', 'bg-color', 'border-color'])
 			await expect(chip.style.getPropertyValue(`--ui-chip-${name}-hover`)).toBe(
 				chip.style.getPropertyValue(`--ui-chip-${name}`),
 			);
 		await expect(chip.style.getPropertyValue('--ui-chip-cursor')).toBe('default');
+	},
+};
+
+export const InlineWithText: StoryObj<typeof Chip> = {
+	tags: ['tests'],
+	render: () => (
+		<p data-testid="inline-paragraph">
+			Status <Chip label="Draft" data-testid="inline-static" /> before <Chip label="Edit" onClick={() => {}} /> and{' '}
+			<Chip label="Attachment" onRemove={() => {}} /> after.
+		</p>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const paragraph = canvas.getByTestId('inline-paragraph');
+		await expect(canvas.getByTestId('inline-static').tagName).toBe('SPAN');
+		await expect(paragraph.querySelector('div')).toBeNull();
+		await expect(paragraph.children).toHaveLength(3);
+		for (const root of Array.from(paragraph.children)) {
+			await expect(root.tagName).toBe('SPAN');
+			await expect(getComputedStyle(root).display).toBe('inline-flex');
+		}
+		await expect(canvas.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
+		await expect(canvas.getByRole('button', { name: 'Remove Attachment' })).toBeInTheDocument();
+		await expect(paragraph).toHaveTextContent('after.');
 	},
 };

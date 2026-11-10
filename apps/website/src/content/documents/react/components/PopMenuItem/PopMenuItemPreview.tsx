@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, FlexDiv, PopMenu, PopMenuItem } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export function LabelsPreview() {
@@ -14,7 +14,7 @@ export function LabelsPreview() {
 		</PopMenu>
 	);
 	return (
-		<FlexDiv justify="center" align="center" height={180}>
+		<FlexBox justify="center" align="center" height={180}>
 			<Button
 				label="Label items"
 				onClick={(event) => {
@@ -22,7 +22,7 @@ export function LabelsPreview() {
 				}}
 			/>
 			{menu}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -37,7 +37,7 @@ export function IconsPreview() {
 		</PopMenu>
 	);
 	return (
-		<FlexDiv justify="center" align="center" height={180}>
+		<FlexBox justify="center" align="center" height={180}>
 			<Button
 				label="Icon items"
 				onClick={(event) => {
@@ -45,7 +45,7 @@ export function IconsPreview() {
 				}}
 			/>
 			{menu}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -67,7 +67,7 @@ export function TogglesPreview() {
 		</PopMenu>
 	);
 	return (
-		<FlexDiv justify="center" align="center" height={180}>
+		<FlexBox justify="center" align="center" height={180}>
 			<Button
 				label="Toggle auto save"
 				onClick={(event) => {
@@ -75,7 +75,7 @@ export function TogglesPreview() {
 				}}
 			/>
 			{menu}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -115,7 +115,7 @@ export function SubmenusPreview() {
 		</PopMenu>
 	);
 	return (
-		<FlexDiv justify="center" align="center" height={180}>
+		<FlexBox justify="center" align="center" height={180}>
 			<Button
 				label="Nesting sub menus"
 				onClick={(event) => {
@@ -123,7 +123,7 @@ export function SubmenusPreview() {
 				}}
 			/>
 			{menu}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -140,7 +140,7 @@ export function CustomContentPreview() {
 		<PopMenu caller={caller} name="Colors" minWidth={200} dismissAll={close} onDismiss={close}>
 			{colorOptions.map((option) => (
 				<PopMenuItem key={option.id} id={option.id} label={option.label}>
-					<FlexDiv direction="row" align="center" gap={8} style={{ whiteSpace: 'nowrap' }}>
+					<FlexBox direction="row" align="center" gap={8} style={{ whiteSpace: 'nowrap' }}>
 						<span
 							aria-hidden="true"
 							style={{
@@ -153,13 +153,13 @@ export function CustomContentPreview() {
 							}}
 						/>
 						{option.label}
-					</FlexDiv>
+					</FlexBox>
 				</PopMenuItem>
 			))}
 		</PopMenu>
 	);
 	return (
-		<FlexDiv justify="center" align="center" height={180}>
+		<FlexBox justify="center" align="center" height={180}>
 			<Button
 				label="Custom colors items"
 				onClick={(event) => {
@@ -167,7 +167,7 @@ export function CustomContentPreview() {
 				}}
 			/>
 			{menu}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -175,7 +175,7 @@ export function DisabledPreview() {
 	const [caller, setCaller] = useState<HTMLButtonElement>();
 	const close = () => setCaller(undefined);
 	return (
-		<FlexDiv justify="center" align="center" height={180}>
+		<FlexBox justify="center" align="center" height={180}>
 			<Button
 				label="Disabled action"
 				onClick={(event) => {
@@ -194,6 +194,6 @@ export function DisabledPreview() {
 					/>
 				</PopMenu>
 			)}
-		</FlexDiv>
+		</FlexBox>
 	);
 }

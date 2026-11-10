@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { Spacer } from '../../components/Spacer';
 import { TextArea } from '../../components/TextArea';
 import { useLocalDB, useLocalDBError, useLocalDBValues, useManageLocalDB } from './localDBStore';
@@ -42,12 +42,12 @@ function LocalDBStoreDemo() {
 	};
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
-			<FlexDiv width={520} height={'auto'} direction={'column'} gap={12}>
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
+			<FlexBox width={520} height={'auto'} direction={'column'} gap={12}>
 				<h1>Local IndexedDB Store Demo</h1>
 				Add up to {MAX_MESSAGES} short messages. The list is stored in IndexedDB called '{STORE_NAME}' and survives page
 				refreshes. Note: inspect the browser dev tools to see the IndexedDB store.
-				<FlexDiv width={'fill'} gap={8} align={'end'}>
+				<FlexBox width={'fill'} gap={8} align={'end'}>
 					<TextArea
 						name={'message'}
 						value={draft}
@@ -61,7 +61,7 @@ function LocalDBStoreDemo() {
 						onClick={() => void handleAdd()}
 						state={!draft.trim() || values.length >= MAX_MESSAGES ? 'disabled' : 'normal'}
 					/>
-				</FlexDiv>
+				</FlexBox>
 				<h4>IndexedDB Store Entries</h4>
 				{values.length > 0 && (
 					<div>
@@ -69,12 +69,12 @@ function LocalDBStoreDemo() {
 					</div>
 				)}
 				{error && <div>Error: {error}</div>}
-				<FlexDiv direction={'column'} gap={8}>
+				<FlexBox direction={'column'} gap={8}>
 					{values.length === 0 ? (
 						<div>No messages added yet.</div>
 					) : (
 						values.map((message) => (
-							<FlexDiv
+							<FlexBox
 								key={String(message.id)}
 								width={'fill'}
 								justify={'between'}
@@ -96,14 +96,14 @@ function LocalDBStoreDemo() {
 									destructive={true}
 									onClick={() => void handleRemove(message)}
 								/>
-							</FlexDiv>
+							</FlexBox>
 						))
 					)}
-				</FlexDiv>
+				</FlexBox>
 				<Spacer size="l" />
 				<Button label={'Destroy Store'} destructive={true} onClick={() => void destroyStore(STORE_NAME)} />
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

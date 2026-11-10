@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, FlexDiv, PopMenu, PopMenuGroup, PopMenuItem, type PopMenuSubMenuProps } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuGroup, PopMenuItem, type PopMenuSubMenuProps } from '@apple-pie/slice';
 import { useState } from 'react';
 
 const colorOptions = [
@@ -14,7 +14,7 @@ function ColorsMenu(props: PopMenuSubMenuProps) {
 		<PopMenu {...props} name="Colors">
 			{colorOptions.map((option) => (
 				<PopMenuItem key={option.id} id={option.id} label={option.label}>
-					<FlexDiv direction="row" align="center" gap={8} style={{ whiteSpace: 'nowrap' }}>
+					<FlexBox direction="row" align="center" gap={8} style={{ whiteSpace: 'nowrap' }}>
 						<span
 							aria-hidden="true"
 							style={{
@@ -27,7 +27,7 @@ function ColorsMenu(props: PopMenuSubMenuProps) {
 							}}
 						/>
 						{option.label}
-					</FlexDiv>
+					</FlexBox>
 				</PopMenuItem>
 			))}
 		</PopMenu>
@@ -40,7 +40,7 @@ export function PopMenuPreview() {
 	const close = () => setCaller(undefined);
 
 	return (
-		<FlexDiv justify="center" align="center" height={180}>
+		<FlexBox justify="center" align="center" height={180}>
 			<Button
 				label="Open menu"
 				onClick={(event) => {
@@ -71,6 +71,6 @@ export function PopMenuPreview() {
 					</PopMenuGroup>
 				</PopMenu>
 			)}
-		</FlexDiv>
+		</FlexBox>
 	);
 }

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../components/Button';
-import { FlexDiv } from '../components/FlexDiv';
+import { FlexBox } from '../components/FlexBox';
 import { Spacer } from '../components/Spacer';
 import { useTheme } from '../hooks/useTheme/useTheme';
 import { ThemeProvider } from './ThemeProvider';
@@ -15,7 +15,7 @@ function ThemeProviderChildDemo() {
 	const theme = useTheme();
 
 	return (
-		<FlexDiv
+		<FlexBox
 			width={'fill'}
 			height={'auto'}
 			align={'center'}
@@ -29,12 +29,12 @@ function ThemeProviderChildDemo() {
 			<span>Current: {theme.current.name}</span>
 			<span>isDark: {theme.isDark ? 'true' : 'false'}</span>
 			<Spacer size="s" />
-			<FlexDiv direction={'row'} gap={8} width={'auto'} height={'auto'}>
+			<FlexBox direction={'row'} gap={8} width={'auto'} height={'auto'}>
 				<Button label={'Set Light'} onClick={() => theme.set('lightMode')} />
 				<Button label={'Set Dark'} onClick={() => theme.set('darkMode')} />
 				<Button label={'Toggle'} onClick={() => theme.toggle()} />
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

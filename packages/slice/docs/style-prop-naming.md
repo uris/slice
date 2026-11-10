@@ -54,7 +54,7 @@ Components must support `auto` explicitly in their layout implementation. Fixed-
 controls such as IconButton and ButtonBar use `Exclude<ButtonSize, 'auto'>`.
 ToggleButton accepts `ButtonSize`: explicit `auto` removes the minimum frame size,
 while an omitted size retains `m`, including when children are supplied.
-The existing FlexDiv `Size` enum describes layout dimensions and is separate.
+The existing FlexBox `Size` enum describes layout dimensions and is separate.
 
 Shared button padding props use `PaddingProps` and `ButtonStyleProps`. Button size
 values and padding defaults are defined once in `buttonStyleDefaults` in the same

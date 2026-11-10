@@ -3,6 +3,10 @@ import type { Metadata } from 'next';
 
 // all doc slugs (pages)
 export const reactDocSlugs = [
+	'video-controller',
+	'video',
+	'spacer',
+	'done-check',
 	'draggable-panel',
 	'textfield',
 	'text-area',
@@ -26,6 +30,10 @@ export const reactDocSlugs = [
 	'radio-button-list',
 	'tab',
 	'tab-bar',
+	'icon',
+	'flex-box',
+	'flex-div',
+	'audio-level',
 	'audio-bubble',
 	'avatar',
 	'avatar-group',
@@ -56,6 +64,40 @@ export type ReactDocSlug = (typeof reactDocSlugs)[number];
 
 // meta for all slugs including shared
 export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
+	icon: {
+		title: 'Icon | Slice UIKit',
+		description: 'Render theme-aware SVG icons with optional direct keyboard and pointer interaction.',
+	},
+	'flex-box': {
+		title: 'FlexBox | Slice UIKit',
+		description: 'Build flex layouts with spacing, scrolling, presets, and Motion support.',
+	},
+	'flex-div': {
+		title: 'FlexDiv (deprecated) | Slice UIKit',
+		description: 'Deprecated alias of FlexBox. Existing props, defaults, and forwarded refs remain supported.',
+	},
+	'audio-level': {
+		title: 'AudioLevel | Slice UIKit',
+		description: 'Display live microphone and audio stream volume with a configurable bar meter for React.',
+	},
+	'video-controller': {
+		title: 'VideoController | Slice UIKit',
+		description: 'Open a movable modal video player from application actions with VideoController for React.',
+	},
+	video: {
+		title: 'Video | Slice UIKit',
+		description:
+			'Play video with Slice controls, native browser controls, captions, and a typed playback ref in React.',
+	},
+	spacer: {
+		title: 'Spacer | Slice UIKit',
+		description: 'Reserve a fixed square of empty space using the theme spacing grid.',
+	},
+	'done-check': {
+		title: 'DoneCheck | Slice UIKit',
+		description: 'Show a completion checkmark with an optional scale animation.',
+	},
+
 	'draggable-panel': {
 		title: 'DraggablePanel | Slice UIKit',
 		description: 'Build accessible split workspaces with resizable sidebars using DraggablePanel for React.',

@@ -1,5 +1,5 @@
 export const usageCode = `
-import { Button, FlexDiv, PopMenu, PopMenuController, type PopMenuProps } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuController, type PopMenuProps } from '@apple-pie/slice';
 import { popMenuActions } from '@apple-pie/slice/stores/popMenu';
 
 function ProjectMenu(props: PopMenuProps) {
@@ -9,7 +9,7 @@ function ProjectMenu(props: PopMenuProps) {
 
 export default function AppActions() {
     return (
-        <FlexDiv>
+        <FlexBox>
             <Button label="Push props" onClick={(event) => {
                 if (!event) return;
                 popMenuActions.push({
@@ -22,7 +22,7 @@ export default function AppActions() {
                 if (event) popMenuActions.push(<ProjectMenu caller={event.currentTarget} />);
             }} />
             <PopMenuController />
-        </FlexDiv>
+        </FlexBox>
     );
 }
 `;

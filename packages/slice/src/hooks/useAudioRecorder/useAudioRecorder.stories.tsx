@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
-import { Label } from '../../components/Label';
+import { Chip } from '../../components/Chip';
+import { FlexBox } from '../../components/FlexBox';
 import { ProgressIndicator } from '../../components/Progress';
 import { useMicrophone } from '../useMicrophone/useMicrophone';
 import { useAudioRecorder } from './useAudioRecorder';
@@ -62,9 +62,9 @@ function UseAudioRecorderDemo(props: Readonly<UseAudioRecorderDemoProps>) {
 	}, [microphones, selectedDeviceId]);
 
 	return (
-		<FlexDiv width={'fill'} height={'fill'} padding={32} gap={24}>
-			<FlexDiv direction={'row'} width={'fill'} gap={24} align={'start'}>
-				<FlexDiv width={420} padding={16} gap={12}>
+		<FlexBox width={'fill'} height={'fill'} padding={32} gap={24}>
+			<FlexBox direction={'row'} width={'fill'} gap={24} align={'start'}>
+				<FlexBox width={420} padding={16} gap={12}>
 					<div>Select the default microphone or switch to another input.</div>
 					<label htmlFor={'audio-recorder-microphone-select'}>Microphone device</label>
 					<select
@@ -92,46 +92,46 @@ function UseAudioRecorderDemo(props: Readonly<UseAudioRecorderDemoProps>) {
 						))}
 					</select>
 					<div>
-						Selected mic: <Label>{selectedMicLabel}</Label>
+						Selected mic: <Chip>{selectedMicLabel}</Chip>
 					</div>
 					<div>
 						Requesting mic: <ProgressIndicator show={isRequesting} inline />
-						{!isRequesting && <Label>false</Label>}
+						{!isRequesting && <Chip>false</Chip>}
 					</div>
 					<div>
-						Muted: <Label>{String(muted)}</Label>
+						Muted: <Chip>{String(muted)}</Chip>
 					</div>
 					<div>
-						Recording: <Label>{String(isRecording)}</Label>
+						Recording: <Chip>{String(isRecording)}</Chip>
 					</div>
 					<div>
-						Recording size: <Label>{recordingSizeMb.toFixed(2)} MB</Label>
+						Recording size: <Chip>{recordingSizeMb.toFixed(2)} MB</Chip>
 					</div>
 					<div>
-						Mic supported: <Label>{String(isSupported)}</Label>
+						Mic supported: <Chip>{String(isSupported)}</Chip>
 					</div>
 					<div>
-						Recorder MIME type: <Label>{mimeType ?? 'none'}</Label>
+						Recorder MIME type: <Chip>{mimeType ?? 'none'}</Chip>
 					</div>
 					<div>
-						Mic error: <Label>{microphoneError?.message ?? 'none'}</Label>
+						Mic error: <Chip>{microphoneError?.message ?? 'none'}</Chip>
 					</div>
 					<div>
-						Recorder error: <Label>{recorderError?.message ?? 'none'}</Label>
+						Recorder error: <Chip>{recorderError?.message ?? 'none'}</Chip>
 					</div>
-				</FlexDiv>
-				<FlexDiv width={420} padding={16} gap={12}>
+				</FlexBox>
+				<FlexBox width={420} padding={16} gap={12}>
 					<div>Recording playback</div>
 					{audioUrl ? (
 						<audio controls autoPlay src={audioUrl} style={{ width: '100%' }}>
 							<track kind="captions" />
 						</audio>
 					) : (
-						<Label>No recording yet</Label>
+						<Chip>No recording yet</Chip>
 					)}
-				</FlexDiv>
-			</FlexDiv>
-			<FlexDiv direction={'row'} wrap gap={8}>
+				</FlexBox>
+			</FlexBox>
+			<FlexBox direction={'row'} wrap gap={8}>
 				<Button
 					label={muted ? 'Unmute Mic' : 'Mute Mic'}
 					onClick={() => {
@@ -171,8 +171,8 @@ function UseAudioRecorderDemo(props: Readonly<UseAudioRecorderDemoProps>) {
 					}}
 					state={audioUrl ? 'normal' : 'disabled'}
 				/>
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

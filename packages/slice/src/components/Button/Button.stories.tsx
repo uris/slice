@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StrictMode, useRef, useState } from 'react';
 import { Button } from 'src/components/Button/Button';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { SliceIcons } from 'src/components/Icon/_types';
 import {
 	runButtonDisabledInteractionsPlay,
@@ -123,11 +123,11 @@ export const ChildrenPaddingAndGap: StoryObj<typeof Button> = {
 export const SharedSizes: StoryObj<typeof Button> = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv gap={12}>
+		<FlexBox gap={12}>
 			{(['s', 'm', 'l', 'xl', 52] as const).map((buttonSize) => (
 				<Button key={buttonSize} label={String(buttonSize)} buttonSize={buttonSize} />
 			))}
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
@@ -146,9 +146,9 @@ export const SharedSizes: StoryObj<typeof Button> = {
 export const Default: StoryObj<typeof Button> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Button {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -195,11 +195,11 @@ export const TextVariantChildren: StoryObj<typeof Button> = {
 	// children take priority over `label`, and the meta default label isn't
 	// cleared by an `undefined` override in args, so drop it directly in JSX
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Button {...args} label={undefined}>
 				Children Label
 			</Button>
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runButtonTextVariantChildrenPlay,
 };
@@ -212,9 +212,9 @@ export const RoundIconOnly: StoryObj<typeof Button> = {
 		iconRight: undefined,
 	},
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Button {...args} label={undefined} aria-label="Home" />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runButtonRoundIconOnlyPlay,
 };
@@ -232,10 +232,10 @@ export const ShowDotAndCount: StoryObj<typeof Button> = {
 export const FillAndCustomWidth: StoryObj<typeof Button> = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv direction={'column'} gap={12}>
+		<FlexBox direction={'column'} gap={12}>
 			<Button className="fill-button" label="Fill" fill width={'fill'} />
 			<Button className="custom-width-button" label="Fixed" width={'200px'} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runButtonFillAndCustomWidthPlay,
 };
@@ -570,7 +570,7 @@ export const MotionEventSignatures: StoryObj<typeof Button> = {
 export const BorderOverrides: StoryObj<typeof Button> = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv gap={12}>
+		<FlexBox gap={12}>
 			{(['solid', 'outline', 'text'] as const).flatMap((variant) =>
 				(['s', 'auto', 52] as const).map((buttonSize) => (
 					<Button
@@ -585,7 +585,7 @@ export const BorderOverrides: StoryObj<typeof Button> = {
 			)}
 			<Button label="Disabled border" variant="solid" disabled borderWidth="3px" borderColor="#123456" />
 			<Button label="Destructive border" destructive fill borderWidth={2} borderColor="core-text-primary" />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
@@ -612,12 +612,12 @@ export const BorderOverrides: StoryObj<typeof Button> = {
 export const ZeroAndRoundBorders: StoryObj<typeof Button> = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv gap={12}>
+		<FlexBox gap={12}>
 			<Button label="Borderless outline" borderWidth={0} borderColor="transparent" />
 			<Button label="Color only" borderColor="#123456" />
 			<Button label="Width only" variant="solid" borderWidth={2} />
 			<Button buttonSize="auto" round iconLeft="basic.home" aria-label="Round bordered" borderWidth={3} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
@@ -647,16 +647,16 @@ export const BodyTextSizes: StoryObj<typeof Button> = {
 		},
 	},
 	render: () => (
-		<FlexDiv direction="column" gap={16} padding={24}>
+		<FlexBox direction="column" gap={16} padding={24}>
 			{(['xs', 's', 'm', 'l', 'xl'] as const).map((textSize) => (
-				<FlexDiv key={textSize} align="center" gap={16}>
+				<FlexBox key={textSize} align="center" gap={16}>
 					<span style={{ width: 24 }}>{textSize}</span>
 					<Button variant="solid" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
 					<Button variant="solid" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
 					<Button variant="outline" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
 					<Button variant="outline" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
-				</FlexDiv>
+				</FlexBox>
 			))}
-		</FlexDiv>
+		</FlexBox>
 	),
 };

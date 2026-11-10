@@ -3,13 +3,13 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { OverlayPreview } from './OverlayPreview';
 import { motionCode, usageCode } from './code';
 
 export function OverlayDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">Overlay component</H1>
 			<P clipWidth>Catch background clicks while a menu or dialog is open, with a clear or dimmed backdrop.</P>
@@ -181,7 +181,7 @@ export function OverlayDoc() {
 					' controls whether the matching handler on the layer runs. Motion gesture or animation-lifecycle callbacks are not exposed by the backdrop.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

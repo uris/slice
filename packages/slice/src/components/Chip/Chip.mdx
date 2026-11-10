@@ -1,10 +1,10 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import * as ChipStories from './Chip.stories';
 import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ChipStories} />
-<FlexDiv width="fill" maxWidth={760} height="auto">
+<FlexBox width="fill" maxWidth={760} height="auto">
 <Unstyled>
 # Chip
 
@@ -17,7 +17,7 @@ Providing onClick creates a native button with type=button by default. Without i
 the content is static. selected is controlled by your app. onRemove adds a separate
 remove button; after its exit transition, your handler updates the list. Removable chips share clickable chips’ default hover and focus colors without making their content a selection button. The wrapper
 animates layout when selected is supplied, using Water easing over 150ms.
-Chip owns removal presence internally. Its remove button fades the chip to zero opacity and scales it to 0.9 over 150ms with Water easing, then calls `onRemove` once so the parent can update its list. No presence wrapper is needed. Reduced motion skips the transition.
+The outer wrapper and static content are spans, with an inline-flex wrapper so chips can appear within text. Chip owns removal presence internally. Its remove button fades the chip to zero opacity and scales it to 0.9 over 150ms with Water easing, then calls `onRemove` once so the parent can update its list. No presence wrapper is needed. Reduced motion skips the transition.
 
 Default outer padding compensates for space inside SVG icons: subtract spacing-xs
 (4px) for m–xl text, or spacing-xxs (2px) for xs/s. A left icon adjusts the left edge;
@@ -449,12 +449,12 @@ Color props accept Slice theme tokens or CSS colors.
 <code>...elementAttributes</code>
 </td>
 <td>
-<code>React.HTMLAttributes&lt;HTMLDivElement&gt; &#124; React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;</code>
+<code>React.HTMLAttributes&lt;HTMLSpanElement&gt; &#124; React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;</code>
 </td>
 <td>
 <code>undefined</code>
 </td>
-<td>With onClick, native button attributes apply to the main action; otherwise div attributes apply to the static content. className and style apply to the outer layout wrapper. Button attributes such as type and form require onClick.</td>
+<td>With onClick, native button attributes apply to the main action; otherwise span attributes apply to the static content. className and style apply to the outer layout wrapper. Button attributes such as type and form require onClick.</td>
 </tr>
 </tbody>
 </table>
@@ -485,4 +485,4 @@ import { Chip } from '@apple-pie/slice';
 <Chip label="Open tag" onClick={myHandler} />
 ```
 </RenderSource>
-</FlexDiv>
+</FlexBox>

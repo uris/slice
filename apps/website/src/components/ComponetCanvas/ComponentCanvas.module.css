@@ -102,6 +102,13 @@
 	z-index: 5;
 }
 
+.refresh {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	z-index: 5;
+}
+
 .pager {
 	position: absolute;
 	bottom: 16px;

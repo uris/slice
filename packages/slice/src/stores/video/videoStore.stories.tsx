@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from 'src/components/Button';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { Video, type VideoProps } from 'src/components/Video';
 import { VideoController } from 'src/components/VideoController/VideoController';
 import { useVideoActions } from '..';
@@ -47,11 +47,11 @@ function VideoControllerDemo() {
 	};
 
 	return (
-		<FlexDiv absolute justify={'center'} align={'center'}>
+		<FlexBox absolute justify={'center'} align={'center'}>
 			<Button iconRight={'arrows.arrow-right'} onClick={handleShowVideo}>
 				Show Video
 			</Button>
 			<VideoController draggable={false} />
-		</FlexDiv>
+		</FlexBox>
 	);
 }

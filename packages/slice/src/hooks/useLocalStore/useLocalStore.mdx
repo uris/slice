@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Hooks/useLocalStore" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useLocalStore
         Persists a typed value in `localStorage` and keeps React state synchronized with the same key.
@@ -90,5 +90,5 @@ import {FlexDiv} from '../../components/FlexDiv';
         - Use <code>hydrated</code> when the rendered UI cannot safely show the fallback value during SSR.
         - If the value must match on the server and client first paint, use a server-readable source such as cookies instead of <code>localStorage</code>.
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

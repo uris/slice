@@ -1,7 +1,7 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {useState} from 'react';
 import {addons} from 'storybook/preview-api';
-import {FlexDiv} from "../src/components/FlexDiv";
+import {FlexBox} from "../src/components/FlexBox";
 import {ColorTileGroup} from "./_components/ColorTileGroup/ColorTileGroup";
 import {TabBar} from "../src/components/TabBar";
 import {darkTheme, lightTheme} from "../src/theme";
@@ -89,10 +89,10 @@ export function ThemeTokensPreview() {
     )
 }
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
             <ThemeTokensPreview />
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

@@ -1,5 +1,5 @@
 export const usageCode = `
-import { Button, FlexDiv, PopMenu, PopMenuItem } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export default function MenuItems() {
@@ -13,18 +13,18 @@ export default function MenuItems() {
         </PopMenu>
     );
     return (
-        <FlexDiv justify="center" align="center" height={180}>
+        <FlexBox justify="center" align="center" height={180}>
             <Button label="Open labels" onClick={(event) => {
                 if (event) setCaller(event.currentTarget);
             }} />
             {menu}
-        </FlexDiv>
+        </FlexBox>
     );
 }
 `;
 
 export const iconsCode = `
-import { Button, FlexDiv, PopMenu, PopMenuItem } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export default function MenuItems() {
@@ -38,18 +38,18 @@ export default function MenuItems() {
         </PopMenu>
     );
     return (
-        <FlexDiv justify="center" align="center" height={180}>
+        <FlexBox justify="center" align="center" height={180}>
             <Button label="Open icons" onClick={(event) => {
                 if (event) setCaller(event.currentTarget);
             }} />
             {menu}
-        </FlexDiv>
+        </FlexBox>
     );
 }
 `;
 
 export const toggleCode = `
-import { Button, FlexDiv, PopMenu, PopMenuItem } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export default function MenuItems() {
@@ -65,18 +65,18 @@ export default function MenuItems() {
         </PopMenu>
     );
     return (
-        <FlexDiv justify="center" align="center" height={180}>
+        <FlexBox justify="center" align="center" height={180}>
             <Button label="Open toggles" onClick={(event) => {
                 if (event) setCaller(event.currentTarget);
             }} />
             {menu}
-        </FlexDiv>
+        </FlexBox>
     );
 }
 `;
 
 export const submenuCode = `
-import { Button, FlexDiv, PopMenu, PopMenuItem } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export default function MenuItems() {
@@ -108,18 +108,18 @@ export default function MenuItems() {
         </PopMenu>
     );
     return (
-        <FlexDiv justify="center" align="center" height={180}>
+        <FlexBox justify="center" align="center" height={180}>
             <Button label="Open submenus" onClick={(event) => {
                 if (event) setCaller(event.currentTarget);
             }} />
             {menu}
-        </FlexDiv>
+        </FlexBox>
     );
 }
 `;
 
 export const customCode = `
-import { Button, FlexDiv, PopMenu, PopMenuItem } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuItem } from '@apple-pie/slice';
 import { useState } from 'react';
 
 const colorOptions = [
@@ -135,7 +135,7 @@ export default function ColorItems() {
         <PopMenu caller={caller} name="Colors" minWidth={200} dismissAll={close} onDismiss={close}>
 			{colorOptions.map((option) => (
 				<PopMenuItem key={option.id} id={option.id} label={option.label}>
-					<FlexDiv direction="row" align="center" gap={8} style={{ whiteSpace: 'nowrap' }}>
+					<FlexBox direction="row" align="center" gap={8} style={{ whiteSpace: 'nowrap' }}>
 						<span
 							aria-hidden="true"
 							style={{
@@ -148,18 +148,18 @@ export default function ColorItems() {
 							}}
 						/>
 						{option.label}
-					</FlexDiv>
+					</FlexBox>
 				</PopMenuItem>
 			))}
         </PopMenu>
     );
     return (
-        <FlexDiv justify="center" align="center" height={180}>
+        <FlexBox justify="center" align="center" height={180}>
             <Button label="Open colors" onClick={(event) => {
                 if (event) setCaller(event.currentTarget);
             }} />
             {menu}
-        </FlexDiv>
+        </FlexBox>
     );
 }
 `;

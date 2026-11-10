@@ -4,16 +4,16 @@ import { Path } from '@/components/Path/Path';
 import { H1, P } from '@/components/Type/Type';
 import { type DocumentLoader, type DocumentModule, getDocumentLoader } from '@/docs/registry/documents';
 import { useDocsActions, usePackageType, useScrollboxSize, useSlug } from '@/docs/stores/store';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { useEffect, useState } from 'react';
 
 function DocumentNotFound() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">Document not found</H1>
 			<P>This document isn't available yet. Choose another document from the sidebar.</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -47,11 +47,11 @@ function LoadedDocument({ loader }: Readonly<{ loader: DocumentLoader }>) {
 	// show unable to load page if unable to load module
 	if (failed) {
 		return (
-			<FlexDiv preset={Preset.Column} maxWidth={680}>
+			<FlexBox preset={Preset.Column} maxWidth={680}>
 				<Path />
 				<H1 id="title">Unable to load document</H1>
 				<P>Please reload the page to try again, or choose another document from the sidebar.</P>
-			</FlexDiv>
+			</FlexBox>
 		);
 	}
 
@@ -73,7 +73,7 @@ export function ContentLayout() {
 	const paddingBottom = height ? height / 2 : 48;
 
 	return (
-		<FlexDiv
+		<FlexBox
 			preset={Preset.Column}
 			justify={'center'}
 			direction={'row'}
@@ -81,7 +81,7 @@ export function ContentLayout() {
 			padding={`8px 48px ${paddingBottom}px 48px`}
 		>
 			{loader ? <LoadedDocument key={`${packageType}/${slug}`} loader={loader} /> : <DocumentNotFound />}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

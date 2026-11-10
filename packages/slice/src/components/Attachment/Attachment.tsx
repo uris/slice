@@ -20,7 +20,7 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 		backgroundColor = 'var(--core-surface-secondary)',
 		thumbColor = 'var(--core-text-primary)',
 		textSize = 's',
-		size = 's',
+		size = 'm',
 		width,
 		height,
 		borderColor = 'var(--core-outline-primary)',
@@ -46,14 +46,17 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 	} = resolveColorProps(props);
 	const descriptionId = useId();
 	const errorId = useId();
-	const fileItem = typeof content === 'object' ? content : undefined;
+	const fileItem = typeof content === 'object' && 'file' in content ? content : undefined;
 	const error = fileItem?.error?.trim() || undefined;
 	const uploading = Boolean(fileItem?.uploading) && !error;
 	const progress = fileItem ? fileProgress(fileItem) : undefined;
+	const showFileSize = size !== 'xs' && size !== 's';
+	const showUploadPercent = size !== 'xs' && size !== 's';
 	const { thumbnail, isLoading, contentFormat, fileSize, fileExtension, fileName } = useContentThumbnail(content);
 	const getLabel = () => {
 		if (content === undefined) return '';
 		if (typeof content === 'string') return 'Clipboard content';
+		if (!('file' in content)) return fileName ?? content.name;
 		if (typeof content.file === 'string') return fileName ?? content.file;
 		return fileName ?? content.file.name;
 	};
@@ -61,6 +64,7 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 	const accessibleName = attachmentName?.trim() || label || 'Attachment';
 	const getActionName = () => {
 		if (attachmentName?.trim()) return attachmentName.trim();
+		if (typeof content === 'object' && !('file' in content)) return content.name || accessibleName;
 		if (!fileItem) return accessibleName;
 		if (typeof fileItem.file === 'string') return fileItem.file || accessibleName;
 		return fileItem.file.name || accessibleName;
@@ -79,7 +83,7 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 		.filter(Boolean)
 		.join('. ');
 
-	const sizes = { xs: 80, s: 140, m: 160, l: 200, xl: 240 };
+	const sizes = { xs: 100, s: 125, m: 140, l: 160, xl: 180 };
 	const cssVars = {
 		'--text-color': textColor,
 		'--text-color-light': textColorLight,
@@ -186,17 +190,17 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 							color={textColorLight}
 						/>
 						<span className={styles.uploadLabel}>Uploading</span>
-						{progress !== undefined && <span className={styles.uploadPercent}>{progress}%</span>}
+						{showUploadPercent && progress !== undefined && <span className={styles.uploadPercent}>{progress}%</span>}
 					</div>
 				) : (
-					(contentFormat || fileExtension || fileSize) && (
+					(contentFormat || fileExtension || (showFileSize && fileSize)) && (
 						<div className={`${styles.textRow} ${styles.metadata}`} aria-hidden="true">
 							{(contentFormat || fileExtension) && (
 								<span className={`${styles.filetype} ${styles[textSize]}`} title={label}>
 									{contentFormat ?? fileExtension}
 								</span>
 							)}
-							{fileSize && (
+							{showFileSize && fileSize && (
 								<span className={`${styles.filesize} ${styles[textSize]}`} title={label}>
 									{fileSize}
 								</span>

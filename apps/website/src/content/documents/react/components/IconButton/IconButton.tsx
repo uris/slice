@@ -2,13 +2,13 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { IconButtonExampleExample, IconButtonMotionExample, IconButtonUsageExample } from './UsagePreviews';
 import { exampleCode, motionCode, usageCode } from './code';
 
 export function IconButtonDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>IconButton component</H1>
 			<P clipWidth>
@@ -244,6 +244,15 @@ export function IconButtonDoc() {
 				<DefaultVal>{'20'}</DefaultVal>
 			</Definition>
 			<P>{'Icon size in pixels. Zero hides its geometry; negative or nonfinite values fall back to 20px.'}</P>
+			<Definition id={'iconStrokeWidth'}>
+				<Prop>iconStrokeWidth</Prop>
+				<TypeDef>{'number'}</TypeDef>
+				<DefaultVal>{'undefined'}</DefaultVal>
+			</Definition>
+			<P>
+				Stroke width in the icon’s 20-unit viewBox. Omit to use <Code>Icon</Code>’s default. Zero removes strokes;
+				solid-filled artwork is unaffected.
+			</P>
 			<Definition id={'selected'}>
 				<Prop>selected</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -397,7 +406,7 @@ export function IconButtonDoc() {
 					' and focus handling. Preventing default on entry or focus suppresses the corresponding internal behavior. There are no drag or pan gestures.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -428,6 +437,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'iconColorSelected', title: 'iconColorSelected', code: true },
 			{ id: 'iconFill', title: 'iconFill', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
+			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'selected', title: 'selected', code: true },
 			{ id: 'showDot', title: 'showDot', code: true },
 			{ id: 'toggle', title: 'toggle', code: true },

@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 import NoteSection from "../../../documentation/_components/Notice/Notice";
 
 <Meta title="Stores/Tip Store" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         <NoteSection>
             Slice stores uses a module-level singleton pattern: each store is created once when the module is loaded - every import of the module module shares the same store instance.
@@ -120,5 +120,5 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
         ```
         </RenderSource>
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

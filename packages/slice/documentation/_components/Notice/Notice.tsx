@@ -1,10 +1,10 @@
 import React from 'react';
-import { FlexDiv } from '../../../src';
+import { FlexBox } from '../../../src';
 
 const NoteSection = React.memo((props: { children: React.ReactNode }) => {
 	const { children } = props;
 	return (
-		<FlexDiv
+		<FlexBox
 			className={'note-section'}
 			width={'fill'}
 			height={'fit'}
@@ -15,7 +15,7 @@ const NoteSection = React.memo((props: { children: React.ReactNode }) => {
 			margin={'0 0 24px 0'}
 		>
 			{children}
-		</FlexDiv>
+		</FlexBox>
 	);
 });
 

@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Hooks/useClipboard" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useClipboard
         Reads from and writes to the system clipboard, observes native `paste` events, and reports live `clipboard-read`/`clipboard-write` permission state. Upgrades the write-only `copyToClipboard` util into a full hook: `copy()` still falls back to the legacy `execCommand` approach when the async Clipboard API is unavailable or denied.
@@ -126,5 +126,5 @@ import {FlexDiv} from '../../components/FlexDiv';
         ```
         </RenderSource>
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

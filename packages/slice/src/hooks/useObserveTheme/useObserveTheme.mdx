@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 import {Spacer} from '../../components/Spacer';
 
 <Meta title="Hooks/useObserveTheme" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useObserveTheme
         Observes `document.documentElement.dataset.sliceTheme` and returns the resolved Slice theme object.
@@ -56,5 +56,5 @@ import {Spacer} from '../../components/Spacer';
         This hook reads the startup theme from `ThemeProvider`'s internal context before it begins observing the DOM, which keeps server-rendered and hydrated output aligned. Pair it with `ThemeProvider` startup props such as `initialTheme` and `initialSystem` when using SSR. Learn more about [Slice's ThemeServer](/docs/providers-themeserver-ssr--docs).
         </Unstyled>
         <Spacer size="xxl" />
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

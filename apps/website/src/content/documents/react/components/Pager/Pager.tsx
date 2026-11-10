@@ -4,13 +4,13 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { PagerOpacityExample, PagerScalingExample, PagerUsageExample, PagerWindowExample } from './UsagePreviews';
 import { controlledCode, opacityCode, scalingCode, transitionCode, usageCode, windowCode } from './code';
 
 export function PagerDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>Pager component</H1>
 			<P clipWidth>
@@ -269,7 +269,7 @@ export function PagerDoc() {
 				Standard events apply to the outer group. The component's onChange is a page-selection callback, not a native
 				change event. Motion gestures are not part of the public API.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

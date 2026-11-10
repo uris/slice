@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
-import { FlexDiv, Preset } from '../../components/FlexDiv';
+import { FlexBox, Preset } from '../../components/FlexBox';
 import { Slider } from '../../components/Slider';
 import { defaultOptions, useIntersecting } from './useIntersecting';
 
@@ -38,8 +38,8 @@ function UseIntersectingDemo() {
 	const items = Array.from({ length: 20 }, (_, index) => index + 1);
 
 	return (
-		<FlexDiv align={'center'} justify={'center'} padding={24} absolute direction={'column'} gap={12}>
-			<FlexDiv direction={'column'} align={'center'} height={'auto'} gap={12}>
+		<FlexBox align={'center'} justify={'center'} padding={24} absolute direction={'column'} gap={12}>
+			<FlexBox direction={'column'} align={'center'} height={'auto'} gap={12}>
 				Change Threshold
 				<Slider
 					aria-label="Visibility threshold"
@@ -51,7 +51,7 @@ function UseIntersectingDemo() {
 					trackHeadSize={0}
 					onChange={(v, _) => setThresholds(v)}
 				/>
-				<FlexDiv
+				<FlexBox
 					width={'fit'}
 					height={'auto'}
 					padding={'4px 12px'}
@@ -59,15 +59,15 @@ function UseIntersectingDemo() {
 					background={isVisible ? 'var(--core-surface-special)' : 'var(--core-surface-secondary)'}
 				>
 					{isVisible ? 'Sentinel is intersecting' : 'Sentinel is off-screen'}
-				</FlexDiv>
-				<FlexDiv width={'fit'} height={'auto'} gap={4}>
+				</FlexBox>
+				<FlexBox width={'fit'} height={'auto'} gap={4}>
 					<div>Currently intersecting: {onScreenIds || '—'}</div>
 					<div>Currently not intersecting: {offScreenIds || '—'}</div>
 					<div>Last entered: {enteredIds || '—'}</div>
 					<div>Last exited: {exitedIds || '—'}</div>
-				</FlexDiv>
-			</FlexDiv>
-			<FlexDiv
+				</FlexBox>
+			</FlexBox>
+			<FlexBox
 				ref={containerRef}
 				preset={Preset.FillScroll}
 				width={360}
@@ -78,7 +78,7 @@ function UseIntersectingDemo() {
 				gap={8}
 			>
 				{items.map((item) => (
-					<FlexDiv
+					<FlexBox
 						key={item}
 						data-item-id={item}
 						width={'fill'}
@@ -90,9 +90,9 @@ function UseIntersectingDemo() {
 						className={'list-item'}
 					>
 						Item {item}
-					</FlexDiv>
+					</FlexBox>
 				))}
-				<FlexDiv
+				<FlexBox
 					ref={sentinelRef}
 					width={'fill'}
 					height={'auto'}
@@ -104,9 +104,9 @@ function UseIntersectingDemo() {
 					background={isVisible ? 'var(--core-surface-special)' : 'transparent'}
 				>
 					sentinel
-				</FlexDiv>
-			</FlexDiv>
-		</FlexDiv>
+				</FlexBox>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

@@ -4,9 +4,10 @@ const identities = new WeakMap<object, number>();
 let nextIdentity = 0;
 
 /** IDs survive immutable updates; object identity supports existing controlled arrays. */
-export function fileItemKey(item: FileItem): string {
-	if (item.id !== undefined) return `id:${item.id}`;
-	const identity = typeof item.file === 'string' ? item : item.file;
+export function fileItemKey(item: File | FileItem): string {
+	const fileItem = 'file' in item ? item : undefined;
+	if (fileItem?.id !== undefined) return `id:${fileItem.id}`;
+	const identity = fileItem && typeof fileItem.file !== 'string' ? fileItem.file : item;
 	let key = identities.get(identity);
 	if (key === undefined) {
 		key = nextIdentity++;

@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import { accessibleKeyDown } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Icon.module.css';
 import type { IconProps } from './_types';
@@ -18,13 +17,19 @@ export const Icon = React.memo((rawProps: IconProps) => {
 		size = 20,
 		stroke = 1.25,
 		strokeColor = theme.current.colors['core-icon-primary'],
-		fillColor = undefined,
+		fillOpacity = undefined,
 		fill = false,
 		coverUp = theme.current.colors['core-surface-primary'],
 		toggle = false,
 		pointer = false,
 		disabled = false,
 		onClick,
+		onKeyDown,
+		onKeyUp,
+		onBlur,
+		iconName,
+		actionName,
+		decorative = false,
 		...svgAttributes
 	} = props;
 	const { id: svgId, className, style, ...rest } = svgAttributes;
@@ -44,10 +49,10 @@ export const Icon = React.memo((rawProps: IconProps) => {
 	// memo fill opacity value
 	const setFillColor = useMemo(() => {
 		if (!fill) return 0;
-		if (fillColor) return fillColor;
+		if (fillOpacity !== undefined && Number.isFinite(fillOpacity)) return Math.min(1, Math.max(0, fillOpacity));
 		if (theme.current.name.includes('dark')) return 0.2;
 		return 0.125;
-	}, [fillColor, fill, theme.current.name]);
+	}, [fillOpacity, fill, theme.current.name]);
 
 	// compose CSS custom properties for the icon wrapper
 	const iconStyle = useMemo(() => {
@@ -57,11 +62,13 @@ export const Icon = React.memo((rawProps: IconProps) => {
 		} as React.CSSProperties;
 	}, [cursor, onClick]);
 
-	// route keyboard activation through the same click callback
-	const handleKeyActivate = useMemo(
-		() => () => onClick?.(undefined as unknown as React.MouseEvent<SVGElement, MouseEvent>),
-		[onClick],
-	);
+	const spacePressed = useRef(false);
+	const interactive = Boolean(onClick);
+	const hidden = decorative && !interactive;
+	const accessibleName = (interactive ? actionName : iconName)?.trim() || `${name} icon`;
+	const activate = (element: SVGSVGElement) => {
+		element.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+	};
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Icon');
@@ -71,23 +78,55 @@ export const Icon = React.memo((rawProps: IconProps) => {
 
 	return (
 		<svg
+			{...rest}
 			id={svgId}
-			className={`${css.icon} ${className}`}
+			className={`${css.icon} ${className ?? ''}`}
 			xmlns="http://www.w3.org/2000/svg"
 			width={size}
 			height={size}
 			viewBox="0 0 20 20"
 			style={{ ...svgStyle, ...iconStyle }}
-			onClick={(e) => onClick?.(e)}
+			onClick={(e) => {
+				if (disabled) {
+					e.preventDefault();
+					e.stopPropagation();
+					return;
+				}
+				onClick?.(e);
+			}}
 			fill={'transparent'}
-			role="img"
-			aria-label={`${name} icon`}
-			tabIndex={pointer && !disabled ? 0 : -1}
-			onKeyDown={(e) => accessibleKeyDown(e, handleKeyActivate)}
+			role={interactive ? 'button' : 'img'}
+			aria-label={hidden ? undefined : accessibleName}
+			aria-hidden={hidden || undefined}
+			aria-disabled={interactive ? disabled : undefined}
+			tabIndex={interactive && !disabled ? 0 : -1}
+			onBlur={(e) => {
+				onBlur?.(e);
+				spacePressed.current = false;
+			}}
+			onKeyDown={(e) => {
+				onKeyDown?.(e);
+				if (e.defaultPrevented || disabled || !interactive) return;
+				if (e.key === 'Enter') {
+					e.preventDefault();
+					if (!e.repeat) activate(e.currentTarget);
+				}
+				if (e.key === ' ') {
+					e.preventDefault();
+					spacePressed.current = true;
+				}
+			}}
+			onKeyUp={(e) => {
+				onKeyUp?.(e);
+				const shouldActivate = e.key === ' ' && spacePressed.current;
+				spacePressed.current = false;
+				if (!e.defaultPrevented && !disabled && interactive && shouldActivate) {
+					e.preventDefault();
+					activate(e.currentTarget);
+				}
+			}}
 			opacity={disabled ? 0.5 : 1}
-			{...rest}
 		>
-			<title />
 			{shape({ stroke, strokeColor, fillColor: setFillColor, coverUp })}
 		</svg>
 	);

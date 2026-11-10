@@ -1,5 +1,5 @@
 export const usageCode = `
-import {Button, DraggablePanel, FlexDiv, Preset} from '@apple-pie/slice';
+import {Button, DraggablePanel, FlexBox, Preset} from '@apple-pie/slice';
 import {useRef, useState} from 'react';
 
 export function ProjectWorkspace({edge = 'right'}: Readonly<{ edge?: 'left' | 'right' }>) {
@@ -11,7 +11,7 @@ export function ProjectWorkspace({edge = 'right'}: Readonly<{ edge?: 'left' | 'r
     const containerRef = useRef<HTMLDivElement>(null);
     const [closed, setClosed] = useState(false);
     return (
-        <FlexDiv
+        <FlexBox
             width={'100%'}
             direction={'row'}
             height={300}
@@ -29,14 +29,14 @@ export function ProjectWorkspace({edge = 'right'}: Readonly<{ edge?: 'left' | 'r
                 backgroundColor="core-fill-primary"
                 resizeHandleLabel="Resize project sidebar"
             >
-                <FlexDiv preset={Preset.FillCenter} padding={24} style={{minWidth: dragConstraints.min}}>
+                <FlexBox preset={Preset.FillCenter} padding={24} style={{minWidth: dragConstraints.min}}>
                     <span>Panel A</span>
-                </FlexDiv>
+                </FlexBox>
             </DraggablePanel>
-            <FlexDiv preset={Preset.FillCenter} flex={1} padding={24}>
+            <FlexBox preset={Preset.FillCenter} flex={1} padding={24}>
                 <Button onClick={() => setClosed(!closed)}>{closed ? 'Open Panel A' : 'Close Panel A'}</Button>
-            </FlexDiv>
-        </FlexDiv>
+            </FlexBox>
+        </FlexBox>
     );
 }
 
@@ -55,20 +55,20 @@ const mixed = { initial: 300, min: 200, max: 0.8 };
 `;
 
 export const constraintsExampleCode = `
-import { Button, DraggablePanel, type DraggablePanelProps, FlexDiv, Preset } from '@apple-pie/slice';
+import { Button, DraggablePanel, type DraggablePanelProps, FlexBox, Preset } from '@apple-pie/slice';
 import { useRef, useState } from 'react';
 
 function ConstraintRow({label, constraints}: {label: string; constraints: DraggablePanelProps['sizeConstraints']}) {
     const containerRef = useRef<HTMLDivElement>(null);
     return <div style={{display: 'grid', gap: 8}}>
         <span>{label}</span>
-        <FlexDiv ref={containerRef} direction="row" height={100} width="100%" style={{border: '1px solid var(--core-outline-primary)'}}>
+        <FlexBox ref={containerRef} direction="row" height={100} width="100%" style={{border: '1px solid var(--core-outline-primary)'}}>
             <DraggablePanel isClosed={false} containerRef={containerRef} sizeConstraints={constraints}
                 backgroundColor="core-fill-primary" resizeHandleLabel={\`Resize \${label.toLowerCase()}\`}>
-                <FlexDiv preset={Preset.FillCenter}>Panel</FlexDiv>
+                <FlexBox preset={Preset.FillCenter}>Panel</FlexBox>
             </DraggablePanel>
-            <FlexDiv preset={Preset.FillCenter} flex={1} style={{minWidth: 0}}>Content</FlexDiv>
-        </FlexDiv>
+            <FlexBox preset={Preset.FillCenter} flex={1} style={{minWidth: 0}}>Content</FlexBox>
+        </FlexBox>
     </div>;
 }
 

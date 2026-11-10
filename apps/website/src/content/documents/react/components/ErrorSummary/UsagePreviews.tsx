@@ -1,5 +1,5 @@
 'use client';
-import { Button, type ErrorMessage, ErrorSummary, FlexDiv, Preset, TextField } from '@apple-pie/slice';
+import { Button, type ErrorMessage, ErrorSummary, FlexBox, Preset, TextField } from '@apple-pie/slice';
 import { useState } from 'react';
 
 export function ErrorSummaryUsageExample() {
@@ -25,7 +25,7 @@ function ContactForm({ validateEmail }: Readonly<{ validateEmail: (value: string
 				setSubmitted(true);
 			}}
 		>
-			<FlexDiv preset={Preset.Column} gap={16} width="100%">
+			<FlexBox preset={Preset.Column} gap={16} width="100%">
 				<ErrorSummary entries={errors} />
 				<TextField
 					name="email"
@@ -37,7 +37,7 @@ function ContactForm({ validateEmail }: Readonly<{ validateEmail: (value: string
 					onChange={(next) => setEmail(next ?? '')}
 				/>
 				<Button type="submit" label="Continue" />
-			</FlexDiv>
+			</FlexBox>
 		</form>
 	);
 }
@@ -82,7 +82,7 @@ export function ErrorSummaryLiveExample() {
 
 	return (
 		<form style={{ width: '100%', maxWidth: 440, marginTop: 24 }} onSubmit={(event) => event.preventDefault()}>
-			<FlexDiv preset={Preset.Column} gap={16} width="100%">
+			<FlexBox preset={Preset.Column} gap={16} width="100%">
 				<ErrorSummary entries={errors} />
 				<TextField
 					name="example-value"
@@ -92,7 +92,7 @@ export function ErrorSummaryLiveExample() {
 					onChange={(next) => setValue(next ?? '')}
 					error={errors.length > 0}
 				/>
-			</FlexDiv>
+			</FlexBox>
 		</form>
 	);
 }

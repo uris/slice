@@ -34,3 +34,10 @@ describe('fileItemKey', () => {
 		expect(fileItemKey({ file, progress: 1 })).toBe(fileItemKey({ file, progress: 2 }));
 	});
 });
+
+ it('preserves raw file identity across wrappers and distinguishes duplicate filenames', () => {
+ const first = new File(['a'], 'duplicate.pdf');
+ const second = new File(['b'], 'duplicate.pdf');
+ expect(fileItemKey(first)).toBe(fileItemKey({ file: first }));
+ expect(fileItemKey(first)).not.toBe(fileItemKey(second));
+ });

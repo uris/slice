@@ -4,8 +4,18 @@ import { detailsPanelConstraints, sidePanelConstraints } from '@/src/consts/cons
 import { Content } from '@/src/layout/Content';
 import { Details } from '@/src/layout/Details';
 import { Sidebar } from '@/src/layout/Sidebar';
-import { DraggablePanel, FlexDiv, ModalController, Preset, Tip, useToolTip, useWindow } from '@apple-pie/slice';
-import { useTip } from '@apple-pie/slice/stores';
+import {
+	DraggablePanel,
+	FlexBox,
+	ModalController,
+	Preset,
+	Tip,
+	Toast,
+	VideoController,
+	useToolTip,
+	useWindow,
+} from '@apple-pie/slice';
+import { useTip, useToast, useToastActions } from '@apple-pie/slice/stores';
 import { classNames } from '@apple-pie/slice/utils';
 import { useRef } from 'react';
 import styles from './Layout.module.css';
@@ -15,10 +25,12 @@ export function Layout() {
 	const { height } = useWindow();
 	const tipRef = useRef<HTMLDivElement>(null);
 	const tip = useTip();
+	const toast = useToast();
+	const { clear } = useToastActions();
 	const coords = useToolTip(tip, tipRef);
 
 	return (
-		<FlexDiv
+		<FlexBox
 			preset={Preset.Window}
 			height={height}
 			justify={'start'}
@@ -26,7 +38,7 @@ export function Layout() {
 			ref={viewRef}
 			background={'core-surface-primary'}
 		>
-			<FlexDiv preset={Preset.Draggable}>
+			<FlexBox preset={Preset.Draggable}>
 				<DraggablePanel
 					drags={'right'}
 					resizeHandleLabel="Resize navigation sidebar"
@@ -38,9 +50,9 @@ export function Layout() {
 				>
 					<Sidebar />
 				</DraggablePanel>
-			</FlexDiv>
+			</FlexBox>
 			<Content />
-			<FlexDiv preset={Preset.Draggable}>
+			<FlexBox preset={Preset.Draggable}>
 				<DraggablePanel
 					drags={'left'}
 					resizeHandleLabel="Resize page outline sidebar"
@@ -52,9 +64,11 @@ export function Layout() {
 				>
 					<Details />
 				</DraggablePanel>
-			</FlexDiv>
+			</FlexBox>
 			<Tip tip={tip} coords={coords} ref={tipRef} />
+			<Toast {...toast} onHide={clear} />
 			<ModalController dragConstraintsRef={viewRef} draggable={true} />
-		</FlexDiv>
+			<VideoController quit={'outside'} draggable={false} dragConstraintsRef={viewRef} />
+		</FlexBox>
 	);
 }

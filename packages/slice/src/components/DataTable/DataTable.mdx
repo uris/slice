@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import {FlexBox} from '../FlexBox';
 import * as DataTableStories from './DataTable.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={DataTableStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # DataTable
         `DataTable` renders a scrollable, typed table bound to an array of row data. Columns are declared separately from the row shape, each reading its value via a `key` or an accessor and carrying optional custom header/cell renderers, so the table's markup stays generic while every column stays fully typed.
@@ -394,5 +394,5 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         }
         ```
         </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

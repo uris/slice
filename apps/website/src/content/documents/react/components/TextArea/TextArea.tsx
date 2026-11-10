@@ -3,7 +3,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import {
 	TextAreaGuidanceExample,
 	TextAreaSizingExample,
@@ -13,7 +13,7 @@ import {
 import { controlledCode, guidanceCode, sizingCode, submitCode, usageCode } from './code';
 export function TextAreaDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">TextArea component</H1>
 			<P clipWidth>{'Make room for notes, comments, and longer messages, with content that can grow as you write.'}</P>
@@ -697,7 +697,7 @@ export function TextAreaDoc() {
 					'Other native handlers apply to the field wrapper. No Motion gesture or animation lifecycle callbacks are part of the documented API.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [

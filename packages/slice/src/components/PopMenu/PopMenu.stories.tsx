@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
 import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts/useKeyboardShortcuts';
 import { resolveShortcut } from '../../utils/functions/resolveShortcut';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import { PopMenu } from './PopMenu';
 import { PopMenuGroup } from './PopMenuGroup';
 import { PopMenuItem } from './PopMenuItem';
@@ -28,7 +28,7 @@ function Preview(args: PopMenuProps) {
 	const [caller, setCaller] = useState<HTMLElement | undefined>(undefined);
 
 	return (
-		<FlexDiv absolute gap={24} justify={'center'} align={'center'}>
+		<FlexBox absolute gap={24} justify={'center'} align={'center'}>
 			<button type="button" onClick={(event) => setCaller(event.currentTarget)}>
 				Button 1
 			</button>
@@ -36,7 +36,7 @@ function Preview(args: PopMenuProps) {
 				Button 2
 			</button>
 			{caller && <PopMenu {...args} caller={caller} onDismiss={() => setCaller(undefined)} />}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -160,7 +160,7 @@ function DismissAllPreview() {
 	const dismissAll = () => setCaller(undefined);
 
 	return (
-		<FlexDiv absolute justify="center" align="center">
+		<FlexBox absolute justify="center" align="center">
 			<button type="button" onClick={(event) => setCaller(event.currentTarget)}>
 				Open actions
 			</button>
@@ -203,7 +203,7 @@ function DismissAllPreview() {
 					</button>
 				</div>
 			)}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -714,15 +714,15 @@ export const IconCssStates: Story = {
 		if (MODE === 'test') {
 			const { userEvent: pointer } = await import('vitest/browser');
 			await pointer.hover(item);
-			await expect(getComputedStyle(icon).stroke).toBe('rgb(101, 67, 33)');
+			await waitFor(() => expect(getComputedStyle(icon).stroke).toBe('rgb(101, 67, 33)'));
 			await pointer.unhover(item);
-			await expect(getComputedStyle(icon).stroke).toBe('rgb(18, 52, 86)');
+			await waitFor(() => expect(getComputedStyle(icon).stroke).toBe('rgb(18, 52, 86)'));
 		}
 		canvas.getByRole('button', { name: 'Button 1' }).focus();
 		await userEvent.keyboard('{ArrowDown}');
 		item.focus();
 		await expect(item.matches(':focus-visible')).toBe(true);
-		await expect(getComputedStyle(icon).stroke).toBe('rgb(101, 67, 33)');
+		await waitFor(() => expect(getComputedStyle(icon).stroke).toBe('rgb(101, 67, 33)'));
 	},
 };
 

@@ -11,10 +11,10 @@ export enum ContentType {
 
 export type ContentFormat = FileIconTypes;
 
-export type Content = FileItem | string;
+export type Content = File | FileItem | string;
 
 export type AttachmentBaseProps = {
-	/** FileItem.uploading and FileItem.progress drive upload status; FileItem.error replaces the preview. */
+	/** Accepts a raw File, clipboard text, or FileItem. FileItem.uploading and FileItem.progress drive upload status; FileItem.error replaces the preview. */
 	content?: Content;
 	textColor?: ColorValue;
 	textColorLight?: ColorValue;

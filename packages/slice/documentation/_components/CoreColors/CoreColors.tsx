@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { FlexDiv, Tip, Toast, type ToolTip, useToolTip } from 'src';
+import { FlexBox, Tip, Toast, type ToolTip, useToolTip } from 'src';
 import { coreColors } from '../../../src/theme/colors/colors';
 import { corePaletteAnchors } from '../../../src/theme/colors/palette';
 import { ColorTile } from '../ColorTile/ColorTile';
@@ -53,12 +53,12 @@ export function CoreColors() {
 	}, []);
 
 	return (
-		<FlexDiv width={'fill'} height={'fit'} gap={16} justify={'start'} align={'start'} scrollY padding={'0 0 32px 0'}>
+		<FlexBox width={'fill'} height={'fit'} gap={16} justify={'start'} align={'start'} scrollY padding={'0 0 32px 0'}>
 			{groupedColors.map((group) => {
 				return (
-					<FlexDiv width={'fill'} height={'fit'} direction={'column'} key={group.key}>
+					<FlexBox width={'fill'} height={'fit'} direction={'column'} key={group.key}>
 						<h3 style={{ textTransform: 'capitalize' }}>{group.key}</h3>
-						<FlexDiv width={'fill'} height={'fit'} direction={'row'} wrap={true} gap={16}>
+						<FlexBox width={'fill'} height={'fit'} direction={'row'} wrap={true} gap={16}>
 							{group.values.map((color) => {
 								return (
 									<ColorTile
@@ -71,12 +71,12 @@ export function CoreColors() {
 									/>
 								);
 							})}
-						</FlexDiv>
-					</FlexDiv>
+						</FlexBox>
+					</FlexBox>
 				);
 			})}
 			<Tip ref={tipRef} coords={coords} tip={tip} />
 			<Toast message={message} onHide={() => setMessage(null)} close={false} />
-		</FlexDiv>
+		</FlexBox>
 	);
 }

@@ -9,24 +9,25 @@ export const imageCode = `
 import { Attachment } from '@apple-pie/slice';
 
 export function ImageAttachment({ file }: { file: File }) {
-  return <Attachment content={{ file }} canRemove={false} />;
+  return <Attachment content={file} canRemove={false} />;
 }
 `;
 export const pdfCode = `
 import { Attachment } from '@apple-pie/slice';
 
 export function PdfAttachment({ file }: { file: File }) {
-  return <Attachment content={{ file }} canRemove={false} />;
+  return <Attachment content={file} canRemove={false} />;
 }
 `;
 export const uploadCode = `
 <Attachment
   content={{ file, uploading: true, progress: 45 }}
+  size="l"
   canRemove={false}
 />
 `;
 export const indeterminateCode = `
-<Attachment content={{ file, uploading: true }} canRemove={false} />
+<Attachment content={{ file, uploading: true }} size="l" canRemove={false} />
 `;
 export const removalCode = `
 import { Attachment, type FileItem } from '@apple-pie/slice';
@@ -54,4 +55,10 @@ export const errorCode = `
   content={{ file, error: 'Upload failed. Check your connection and try again.' }}
   canRemove={false}
 />
+`;
+
+export const sizesCode = `
+// Default card widths and preview heights: xs 100, s 125, m 140, l 160, xl 180 px.
+// The size prop defaults to 'm'; width and height can override these dimensions.
+type AttachmentSize = 'xs' | 's' | 'm' | 'l' | 'xl';
 `;

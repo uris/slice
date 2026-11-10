@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, FlexDiv, PopMenu, PopMenuController, type PopMenuProps } from '@apple-pie/slice';
+import { Button, FlexBox, PopMenu, PopMenuController, type PopMenuProps } from '@apple-pie/slice';
 import { type PushedPopMenu, getPopMenu, popMenuActions } from '@apple-pie/slice/stores/popMenu';
 import { useEffect, useRef } from 'react';
 
@@ -18,7 +18,7 @@ export function PopMenuControllerPreview() {
 	);
 
 	return (
-		<FlexDiv justify="center" align="center" gap={16} height={180}>
+		<FlexBox justify="center" align="center" gap={16} height={180}>
 			<Button
 				label="Push props"
 				onClick={(event) => {
@@ -45,6 +45,6 @@ export function PopMenuControllerPreview() {
 				}}
 			/>
 			<PopMenuController />
-		</FlexDiv>
+		</FlexBox>
 	);
 }

@@ -4,13 +4,13 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, Definition, H1, H2, H3, Method, P, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { PopMenuControllerPreview } from './PopMenuControllerPreview';
 import { clearCode, composedCode, usageCode } from './code';
 
 export default function PopMenuControllerDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">PopMenuController component</H1>
 			<P clipWidth>Open one contextual menu from application code, using either props or a composed menu control.</P>
@@ -125,7 +125,7 @@ export default function PopMenuControllerDoc() {
 				Access the full store, including <Code>popMenu</Code>, the instance <Code>version</Code>, and{' '}
 				<Code>actions</Code>. Prefer the focused selector hooks for ordinary consumers.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

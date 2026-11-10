@@ -138,6 +138,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 		textColorSelected = 'var(--core-text-primary)',
 		buttonSize = 'm',
 		iconSize = 20,
+		iconStrokeWidth,
 		icon = 'basic.more-horiz',
 		iconFill = false,
 		iconColor = 'var(--core-text-primary)',
@@ -319,6 +320,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 								name={on && iconSelected ? iconSelected : icon}
 								size={resolvedIconSize}
 								strokeColor="currentColor"
+								stroke={iconStrokeWidth}
 								fill={iconFill}
 								toggle={toggleIcon && on}
 								pointer={false}

@@ -4,12 +4,15 @@ import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useRef, us
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
-import { IconButton } from '../IconButton';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
+import type { SliceIcon } from '../Icon';
+import { IconButton, type IconButtonProps } from '../IconButton';
 import { ProgressIndicator } from '../Progress';
 import { Slider } from '../Slider';
 import { ToggleButton } from '../ToggleButton';
 import css from './Video.module.css';
-import { PlayState, type VideoElement, type VideoProps } from './_types';
+import { PlayState, type VideoControlsContext, type VideoElement, type VideoProps } from './_types';
+import { getVideoControls } from './getVideoControls';
 
 const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => {
 	const props = resolveColorProps(rawProps);
@@ -24,20 +27,21 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 		volume = 1,
 		poster,
 		captionsSrc,
+		captionsLanguage = 'en',
+		captionsLabel = 'Captions',
+		captionsDefault = false,
+		videoName = 'Video',
+		videoAttributes,
+		onError,
 		playRate = 1,
 		width = '100%',
 		height = 'auto',
-		borderRadius,
-		borderSize,
+		borderRadius = 'var(--corner-s)',
+		borderWidth,
 		borderColor,
 		backgroundColor,
 		objectFit = 'contain',
-		customControls = {
-			play: false,
-			progress: true,
-			volume: true,
-			fullscreen: true,
-		},
+		customControls: controlOverrides,
 		showProgressIndicator = true,
 		onPlay,
 		onPause,
@@ -55,20 +59,41 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 		onQuit,
 		...divAttributes
 	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
+	const {
+		id: divId,
+		className,
+		style,
+		onMouseEnter,
+		onMouseLeave,
+		onMouseMove,
+		onFocus,
+		onBlur,
+		...rest
+	} = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
+	const customControls = getVideoControls(controlOverrides);
+	const controlMode = controlOverrides === undefined ? controls : 'simple';
+	const reducedMotion = usePrefersReducedMotion();
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const progress = useRef<number | null>(null);
-	const wasPlaying = useRef<boolean>(playing ?? false);
+	const wasPlaying = useRef<boolean | null>(null);
 	const playState = useRef<PlayState | null>(PlayState.Stopped); // normalize play state events
-	const [isPlaying, setIsPlaying] = useState<boolean>(playing ?? false);
+	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [isMuted, setIsMuted] = useState<boolean>(muted ?? false);
-	const [currentVolume, setCurrentVolume] = useState<number>(volume ?? 1);
+	const [currentVolume, setCurrentVolume] = useState<number>(
+		Number.isFinite(volume) ? Math.min(1, Math.max(0, volume)) : 1,
+	);
 	const [currentProgress, setCurrentProgress] = useState<number>(0);
 	const [hovered, setHovered] = useState<boolean>(false);
 	const [canPlay, setCanPlay] = useState<boolean>(false);
+	const [focused, setFocused] = useState(false);
+	const [duration, setDuration] = useState(0);
+	const [failed, setFailed] = useState(false);
+	const [fullscreen, setFullscreen] = useState(false);
+	const [captionsOn, setCaptionsOn] = useState(captionsDefault);
+	const seekFinished = useRef(false);
 	const timer = useRef<NodeJS.Timeout | null>(null);
 
 	// get the percent loaded from the video element via buffer
@@ -81,8 +106,8 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 				const bufferedEnd = target.buffered.end(target.buffered.length - 1);
 				const duration = target.duration;
 
-				if (duration > 0) {
-					const percentLoaded = bufferedEnd / duration;
+				if (Number.isFinite(duration) && duration > 0) {
+					const percentLoaded = Math.min(1, Math.max(0, bufferedEnd / duration));
 					onLoadProgress?.(percentLoaded);
 				}
 			}
@@ -94,7 +119,10 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 	const handlePlayProgress = useCallback(
 		(event: SyntheticEvent<HTMLElement, Event>) => {
 			const target = event.target as HTMLVideoElement;
-			const percentPlayed = target.currentTime / target.duration;
+			const percentPlayed =
+				Number.isFinite(target.duration) && target.duration > 0 && Number.isFinite(target.currentTime)
+					? Math.min(1, Math.max(0, target.currentTime / target.duration))
+					: 0;
 			setCurrentProgress(percentPlayed);
 			if (progress.current !== percentPlayed) {
 				onProgress?.(percentPlayed);
@@ -129,15 +157,14 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 	// mark the video ready and notify the consumer
 	const handleCanPlay = useCallback(() => {
 		setCanPlay(true);
+		setFailed(false);
 		onCanPlay?.();
 	}, [onCanPlay]);
 
-	// handle playing event
-	const handlePlay = useCallback(() => {
-		// Observe the event without restarting playback: a pause may already
-		// have happened by the time this queued event is delivered.
-		onPlay?.();
-		setIsPlaying(true);
+	// Read the native state: queued media events may arrive after another request.
+	const syncPlayingState = useCallback(() => {
+		setIsPlaying(!videoRef.current?.paused);
+		if (videoRef.current?.paused) return;
 		const isAtEnd = videoRef.current?.currentTime === videoRef.current?.duration;
 		if (isAtEnd) {
 			if (playState.current !== PlayState.Ended) onPlayStateChange?.(PlayState.Ended);
@@ -146,7 +173,15 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 			onPlayStateChange?.(PlayState.Playing);
 			playState.current = PlayState.Playing;
 		}
-	}, [onPlay, onPlayStateChange]);
+	}, [onPlayStateChange]);
+	const handlePlay = useCallback(() => {
+		onPlay?.();
+		syncPlayingState();
+	}, [onPlay, syncPlayingState]);
+	const handlePlaying = useCallback(() => {
+		setCanPlay(true);
+		syncPlayingState();
+	}, [syncPlayingState]);
 
 	// handle pause event
 	const handlePause = useCallback(() => {
@@ -154,7 +189,10 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 		setIsPlaying(false);
 		const isAtZero = videoRef.current?.currentTime === 0;
 		const isAtEnd = videoRef.current?.currentTime === videoRef.current?.duration;
-		if (!isAtEnd && !isAtZero) {
+		if (isAtZero && !isAtEnd) {
+			if (playState.current !== PlayState.Stopped) onPlayStateChange?.(PlayState.Stopped);
+			playState.current = PlayState.Stopped;
+		} else if (!isAtEnd) {
 			if (playState.current !== PlayState.Paused) {
 				onPlayStateChange?.(PlayState.Paused);
 				playState.current = PlayState.Paused;
@@ -164,13 +202,17 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 
 	// handle end event
 	const handleEnd = useCallback(() => {
+		setIsPlaying(false);
+		if (playState.current !== PlayState.Ended) onPlayStateChange?.(PlayState.Ended);
+		playState.current = PlayState.Ended;
 		onEnd?.();
-	}, [onEnd]);
+	}, [onEnd, onPlayStateChange]);
 
 	// handle load metadata
 	const handleLoadMetadata = useCallback(
 		(event: SyntheticEvent<HTMLElement, Event>) => {
 			const target = event.target as HTMLVideoElement;
+			setDuration(Number.isFinite(target.duration) ? target.duration : 0);
 			onLoadMetaData?.(target.duration);
 		},
 		[onLoadMetaData],
@@ -186,21 +228,24 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 		[onPlaybackRateChange],
 	);
 
-	// handle play button click
-	const handlePlayClick = useCallback((play?: boolean) => {
+	const requestPlayback = useCallback(async (play?: boolean) => {
 		const video = videoRef.current;
 		if (!video) return;
-		let setPlaying = video.paused;
-		if (play !== undefined) setPlaying = play;
-		if (setPlaying) {
-			video
-				.play()
-				.then(() => null)
-				.catch(() => null);
-		} else {
+		const nextPlaying = play ?? video.paused;
+		if (nextPlaying) await video.play();
+		else {
+			wasPlaying.current = null;
+			seekFinished.current = false;
 			video.pause();
 		}
 	}, []);
+	// UI and prop-driven requests handle browser rejection; imperative requests return it.
+	const handlePlayClick = useCallback(
+		(play?: boolean) => {
+			void requestPlayback(play).catch(() => undefined);
+		},
+		[requestPlayback],
+	);
 
 	// mouse events
 	const handleMouseOver = useCallback(() => {
@@ -217,12 +262,11 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 		setHovered(false);
 	}, []);
 
-	// handle full screen
-	const handleFullScreen = useCallback((state = true) => {
-		const video = videoRef.current;
-		if (!video) return;
-		if (state) video.requestFullscreen().catch(() => null);
-		else if (document.fullscreenElement === video) document.exitFullscreen().catch(() => null);
+	const handleFullScreen = useCallback(async (state = true) => {
+		const container = containerRef.current;
+		if (!container) return;
+		if (state) await container.requestFullscreen();
+		else if (document.fullscreenElement === container) await document.exitFullscreen();
 	}, []);
 
 	// handle mute / unmute
@@ -237,54 +281,58 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 	// update the rate change
 	const handleRateChange = useCallback((rate = 1) => {
 		if (!videoRef.current) return;
-		let nextRate = rate;
+		let nextRate = Number.isFinite(rate) ? rate : 1;
 		if (rate < 0.5) nextRate = 0.5;
 		if (rate > 3) nextRate = 3;
 		videoRef.current.playbackRate = nextRate;
 	}, []);
 
 	// restart video
-	const handleRestart = useCallback(() => {
+	const handleRestart = useCallback(async () => {
 		if (!videoRef.current) return;
 		videoRef.current.pause();
 		videoRef.current.currentTime = 0;
-		handlePlayClick(true);
-	}, [handlePlayClick]);
+		await requestPlayback(true);
+	}, [requestPlayback]);
 
-	// set volume
-	const handleVolumeChange = useCallback(
-		(volume = 1) => {
-			if (!videoRef.current) return;
-			let nextVolume = volume;
-			if (volume < 0) nextVolume = 0;
-			if (volume > 1) nextVolume = 1;
-			videoRef.current.volume = nextVolume;
-			setCurrentVolume(nextVolume);
-			onVolumeChange?.(nextVolume);
-		},
-		[onVolumeChange],
-	);
-
-	// handle set progress
-	const handleSetProgress = useCallback((progress: number) => {
-		if (videoRef.current) {
-			if (!wasPlaying.current) wasPlaying.current = !videoRef.current.paused;
-			videoRef.current.pause();
-			videoRef.current.currentTime = progress * videoRef.current.duration;
-		}
+	const handleVolumeChange = useCallback((volume = 1) => {
+		if (!videoRef.current) return;
+		videoRef.current.volume = Number.isFinite(volume) ? Math.min(1, Math.max(0, volume)) : 1;
 	}, []);
+	const handleNativeVolumeChange = () => {
+		const video = videoRef.current;
+		if (!video) return;
+		setCurrentVolume(video.volume);
+		setIsMuted(video.muted);
+		onVolumeChange?.(video.volume);
+	};
 
-	// handle seeking
+	const handleSetProgress = useCallback((position: number) => {
+		const video = videoRef.current;
+		if (!video || !Number.isFinite(video.duration) || video.duration <= 0 || !Number.isFinite(position)) return;
+		if (wasPlaying.current === null) wasPlaying.current = !video.paused;
+		seekFinished.current = false;
+		video.pause();
+		video.currentTime = Math.min(1, Math.max(0, position)) * video.duration;
+		setCurrentProgress(Math.min(1, Math.max(0, position)));
+	}, []);
 	const handleSeekEnd = useCallback(() => {
-		if (wasPlaying.current) {
-			handlePlayClick(true);
-			wasPlaying.current = false;
-		}
+		const video = videoRef.current;
+		if (!seekFinished.current || video?.seeking) return;
+		const resume = wasPlaying.current;
+		wasPlaying.current = null;
+		seekFinished.current = false;
+		if (resume && video && video.currentTime < video.duration) handlePlayClick(true);
 	}, [handlePlayClick]);
+	const handleScrubEnd = () => {
+		seekFinished.current = true;
+		handleSeekEnd();
+	};
 
 	// emit fullscreen changes from the browser event as the single source of truth
 	const handleFullScreenChange = useCallback(() => {
-		const isFullscreen = document.fullscreenElement === videoRef.current;
+		const isFullscreen = document.fullscreenElement === containerRef.current;
+		setFullscreen(isFullscreen);
 		onFullScreenChange?.(isFullscreen);
 	}, [onFullScreenChange]);
 
@@ -296,24 +344,16 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 	React.useImperativeHandle(
 		ref,
 		() => ({
-			play: async () => {
-				handlePlayClick(true);
-			},
-			stop: async () => {
-				handlePlayClick(false);
-			},
-			restart: async () => {
-				handleRestart();
-			},
+			play: () => requestPlayback(true),
+			stop: () => requestPlayback(false),
+			restart: handleRestart,
 			setVolume: (volume: number) => {
 				handleVolumeChange(volume);
 			},
 			mute: (mute: boolean) => {
 				handleMute(mute);
 			},
-			fullscreen: (state: boolean) => {
-				handleFullScreen(state);
-			},
+			fullscreen: handleFullScreen,
 			playbackRate: (rate: number) => {
 				handleRateChange(rate);
 			},
@@ -321,12 +361,34 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 				return videoRef.current ?? undefined;
 			},
 		}),
-		[handlePlayClick, handleRestart, handleMute, handleFullScreen, handleRateChange, handleVolumeChange],
+		[requestPlayback, handleRestart, handleMute, handleFullScreen, handleRateChange, handleVolumeChange],
 	);
 
-	const showCustomControls = useMemo(() => {
-		return controls !== 'default' && controls !== 'none';
-	}, [controls]);
+	const controlsContext: VideoControlsContext = {
+		playing: isPlaying,
+		muted: isMuted,
+		progress: currentProgress,
+		volume: currentVolume,
+		duration,
+		fullscreen,
+		canSeek: duration > 0,
+		play: () => requestPlayback(true),
+		pause: () => handlePlayClick(false),
+		togglePlay: () => requestPlayback(),
+		toggleMute: () => handleMute(),
+		setVolume: handleVolumeChange,
+		setProgress: (position) => {
+			const video = videoRef.current;
+			if (!video || !Number.isFinite(video.duration) || video.duration <= 0 || !Number.isFinite(position)) return;
+			const value = Math.min(1, Math.max(0, position));
+			video.currentTime = value * video.duration;
+			setCurrentProgress(value);
+		},
+		toggleFullscreen: () => handleFullScreen(!fullscreen),
+	};
+
+	const showCustomControls = controlMode === 'simple' || controlMode === 'custom';
+	const controlsVisible = hovered || focused;
 
 	// memo dynamic CSS
 	const cssVars = useMemo(() => {
@@ -334,22 +396,29 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 			'--video-width': setStyle(width, 'unset'),
 			'--video-height': setStyle(height, 'unset'),
 			'--video-border-radius': setStyle(borderRadius, corners['corner-none']),
-			'--video-border-size': setStyle(borderSize, 0),
+			'--video-border-size': setStyle(borderWidth, 0),
 			'--video-border-color': setStyle(borderColor, 'transparent'),
 			'--video-bg-color': setStyle(backgroundColor, 'transparent'),
+			'--video-controls-transition': reducedMotion ? 'none' : undefined,
 			'--video-object-fit': objectFit ?? 'contain',
-			'--video-controls-pointer-events': hovered ? 'auto' : 'none',
-			'--video-controls-opacity': hovered ? 1 : 0,
+			'--video-controls-pointer-events': controlsVisible ? 'auto' : 'none',
+			'--video-controls-opacity': controlsVisible ? 1 : 0,
 			'--video-progress-padding-left': customControls.quit ? 'var(--spacing-s)' : 'var(--spacing-m)',
 		} as React.CSSProperties;
-	}, [width, height, borderRadius, borderSize, borderColor, backgroundColor, objectFit, hovered, customControls.quit]);
+	}, [
+		width,
+		height,
+		borderRadius,
+		borderWidth,
+		borderColor,
+		backgroundColor,
+		objectFit,
+		controlsVisible,
+		reducedMotion,
+		customControls.quit,
+	]);
 
-	// memo speaker icon
-	const speakerIcon = useMemo(() => {
-		if (isMuted || currentVolume === 0) return 'media.volume-slash';
-		if (currentVolume > 0 || !isMuted) return 'media.volume-high';
-		return 'media.volume-high';
-	}, [isMuted, currentVolume]);
+	const speakerIcon: SliceIcon = isMuted || currentVolume === 0 ? 'media.volume-slash' : 'media.volume-low';
 
 	// update playback rate based on props
 	useEffect(() => handleRateChange(playRate), [playRate, handleRateChange]);
@@ -366,18 +435,56 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 	// handle volume prop changes
 	useEffect(() => handleVolumeChange(volume), [volume, handleVolumeChange]);
 
-	// attach seek end event listener -> used to restart video when scrubbing with custom controls to avoid
-	// playback issues trying to play when seeking is active (on safari sometimes stops audio)
 	useEffect(() => {
-		videoRef.current?.addEventListener('seeked', handleSeekEnd);
-		videoRef.current?.addEventListener('loadeddata', handleLoadedFrame);
 		document.addEventListener('fullscreenchange', handleFullScreenChange);
-		return () => {
-			videoRef.current?.removeEventListener('seeked', handleSeekEnd);
-			videoRef.current?.removeEventListener('loadeddata', handleLoadedFrame);
-			document.removeEventListener('fullscreenchange', handleFullScreenChange);
-		};
-	}, [handleSeekEnd, handleFullScreenChange, handleLoadedFrame]);
+		return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
+	}, [handleFullScreenChange]);
+
+	useEffect(
+		() => () => {
+			if (timer.current) clearTimeout(timer.current);
+		},
+		[],
+	);
+	const resetMedia = () => {
+		setCanPlay(false);
+		setFailed(false);
+		setIsPlaying(false);
+		setCurrentProgress(0);
+		setDuration(0);
+		progress.current = null;
+		wasPlaying.current = null;
+		seekFinished.current = false;
+		if (playState.current !== PlayState.Stopped) onPlayStateChange?.(PlayState.Stopped);
+		playState.current = PlayState.Stopped;
+	};
+	const syncCaptions = useCallback(() => {
+		const track = videoRef.current?.textTracks[0];
+		if (track) track.mode = captionsOn ? 'showing' : 'hidden';
+	}, [captionsOn]);
+	useEffect(() => {
+		syncCaptions();
+	}, [syncCaptions]);
+	useEffect(() => {
+		if (!captionsSrc) return;
+		const tracks = videoRef.current?.textTracks;
+		const update = () => setCaptionsOn(tracks?.[0]?.mode === 'showing');
+		tracks?.addEventListener('change', update);
+		return () => tracks?.removeEventListener('change', update);
+	}, [captionsSrc]);
+
+	const buttonProps: Partial<IconButtonProps> = {
+		backgroundColor: 'transparent',
+		backgroundColorHover: 'transparent',
+		backgroundColorSelected: 'transparent',
+		iconColor: 'var(--core-text-light)',
+		iconColorHover: 'var(--core-text-light)',
+		iconColorSelected: 'var(--core-text-light)',
+		iconSize: 16,
+		buttonSize: 'm',
+		borderRadius: '100%',
+		iconStrokeWidth: 1.5,
+	};
 
 	return (
 		<div
@@ -385,33 +492,54 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 			ref={containerRef}
 			className={`${css.wrapper}${divClass}`}
 			style={{ ...cssVars, ...divStyle }}
-			onMouseEnter={handleMouseOver}
-			onMouseLeave={handleMouseOut}
-			onBlur={handleMouseOut}
-			onFocus={handleMouseOver}
-			onMouseMove={handleMouseOver}
+			onMouseEnter={(event) => {
+				handleMouseOver();
+				onMouseEnter?.(event);
+			}}
+			onMouseLeave={(event) => {
+				handleMouseOut();
+				onMouseLeave?.(event);
+			}}
+			onBlur={(event) => {
+				if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false);
+				onBlur?.(event);
+			}}
+			onFocus={(event) => {
+				setFocused(true);
+				onFocus?.(event);
+			}}
+			onMouseMove={(event) => {
+				handleMouseOver();
+				onMouseMove?.(event);
+			}}
 			{...rest}
 		>
 			{showCustomControls && (
 				<div className={css.controls}>
-					{!children && controls === 'simple' && (
-						<div className={css.controls}>
+					{(controlOverrides !== undefined || !children) && controlMode === 'simple' && (
+						<>
 							<div className={css.controlsHeader}>
 								{customControls.fullscreen && (
 									<div className={css.left}>
 										<IconButton
-											actionName="Enter fullscreen"
+											actionName={fullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
 											icon={'arrows.maximize'}
-											iconFill={true}
-											buttonSize={'m'}
-											iconSize={18}
-											backgroundColor={'rgba(255,255,255,0.05)'}
-											backgroundColorHover={'rgba(0,0,0,0.7)'}
-											iconColor={'var(--core-text-light)'}
-											iconColorHover={'var(--core-text-light)'}
-											onClick={() => handleFullScreen(true)}
+											{...buttonProps}
+											onClick={() => {
+												void handleFullScreen(!fullscreen).catch(() => undefined);
+											}}
 										/>
 									</div>
+								)}
+								{captionsSrc && customControls.captions && (
+									<button
+										type="button"
+										aria-label="Captions"
+										aria-pressed={captionsOn}
+										onClick={() => setCaptionsOn((value) => !value)}
+									>
+										CC
+									</button>
 								)}
 								{customControls.volume && (
 									<div className={css.right}>
@@ -419,20 +547,14 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 											actionName={isMuted ? 'Unmute' : 'Mute'}
 											icon={speakerIcon}
 											iconFill={true}
-											buttonSize={'m'}
-											iconSize={20}
-											backgroundColor={'rgba(255,255,255,0.05)'}
-											backgroundColorHover={'rgba(0,0,0,0.7)'}
-											backgroundColorSelected={'rgba(0,0,0,0.5)'}
-											iconColor={'var(--core-text-light)'}
-											iconColorHover={'var(--core-text-light)'}
+											{...buttonProps}
 											onClick={() => handleMute()}
 										/>
 										<Slider
 											aria-label="Volume"
 											trackColor={'rgba(0,0,0,0.5)'}
 											progressColor={'var(--core-text-light)'}
-											trackHeadSize={16}
+											trackHeadSize={0}
 											trackHeadBorderWidth={0}
 											max={1}
 											min={0}
@@ -445,18 +567,17 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 							<div className={css.controlsBody}>
 								{customControls.play && (
 									<ToggleButton
-										actionName="Play"
+										{...buttonProps}
+										actionName={isPlaying ? 'Pause' : 'Play'}
 										selected={isPlaying}
-										icon={'media.play'}
-										iconSelected={'media.pause'}
-										iconSize={48}
+										icon={'media.play-filled'}
+										iconSelected={'media.pause-filled'}
+										iconSize={32}
+										backgroundColor="rgba(0, 0, 0, 0.25)"
+										backgroundColorHover="rgba(0, 0, 0, 0.5)"
+										backgroundColorSelected="rgba(0, 0, 0, 0.25)"
 										buttonSize={'xl'}
-										backgroundColor={'rgba(0,0,0,0.5)'}
-										backgroundColorHover={'rgba(0,0,0,0.7)'}
-										backgroundColorSelected={'rgba(0,0,0,0.5)'}
-										iconColor={'var(--core-text-light)'}
-										iconColorSelected={'var(--core-text-light)'}
-										iconColorHover={'var(--core-text-light)'}
+										iconStrokeWidth={0}
 										onChange={() => handlePlayClick()}
 									/>
 								)}
@@ -465,30 +586,29 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 								{customControls.progress && (
 									<div className={css.progress}>
 										<ToggleButton
-											actionName="Play"
+											{...buttonProps}
+											actionName={isPlaying ? 'Pause' : 'Play'}
 											selected={isPlaying}
-											icon={'media.play'}
-											iconSelected={'media.pause'}
-											buttonSize={'m'}
-											iconSize={28}
-											backgroundColor={'rgba(255,255,255,0.05)'}
-											backgroundColorHover={'rgba(0,0,0,0.7)'}
-											backgroundColorSelected={'rgba(255,255,255,0.05)'}
-											iconColor={'var(--core-text-light)'}
-											iconColorHover={'var(--core-text-light)'}
-											iconColorSelected={'var(--core-text-light)'}
+											icon={'media.play-filled'}
+											iconSelected={'media.pause-filled'}
+											iconStrokeWidth={0}
 											onChange={() => handlePlayClick()}
 										/>
 										<Slider
 											aria-label="Playback position"
 											trackColor={'rgba(0,0,0,0.5)'}
 											progressColor={'var(--core-text-light)'}
-											trackHeadSize={16}
+											trackHeadSize={0}
 											trackHeadBorderWidth={0}
 											max={1}
 											min={0}
 											value={currentProgress}
 											onChange={handleSetProgress}
+											onChangeEnd={handleScrubEnd}
+											onPointerCancel={handleScrubEnd}
+											onLostPointerCapture={handleScrubEnd}
+											onBlur={handleScrubEnd}
+											disabled={duration <= 0}
 											width={'100%'}
 										/>
 										{customControls.quit && (
@@ -496,33 +616,46 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 												actionName="Close video"
 												toggle={false}
 												icon={'basic.cross'}
-												buttonSize={'m'}
-												backgroundColor={'rgba(255,255,255,0.05)'}
-												backgroundColorHover={'rgba(0,0,0,0.7)'}
-												backgroundColorSelected={'rgba(255,255,255,0.05)'}
-												iconColor={'var(--core-text-light)'}
-												iconColorHover={'var(--core-text-light)'}
-												iconColorSelected={'var(--core-text-light)'}
+												{...buttonProps}
 												onClick={() => onQuit?.()}
 											/>
 										)}
 									</div>
 								)}
 							</div>
-						</div>
+						</>
 					)}
-					{controls === 'custom' && children}
+					{controlMode === 'custom' && (typeof children === 'function' ? children(controlsContext) : children)}
 				</div>
 			)}
 			<video
+				{...videoAttributes}
+				aria-label={videoName.trim() || 'Video'}
 				ref={videoRef}
 				src={src}
 				autoPlay={false}
 				playsInline={playsInline}
 				loop={loop}
 				muted={isMuted}
-				controls={controls === 'default'}
+				controls={controlMode === 'default'}
 				poster={poster}
+				onLoadStart={resetMedia}
+				onEmptied={resetMedia}
+				onWaiting={() => setCanPlay(false)}
+				onPlaying={handlePlaying}
+				onError={() => {
+					setFailed(true);
+					setCanPlay(false);
+					setIsPlaying(false);
+					if (playState.current !== PlayState.Stopped) onPlayStateChange?.(PlayState.Stopped);
+					playState.current = PlayState.Stopped;
+					onError?.(videoRef.current?.error ?? null);
+				}}
+				onVolumeChange={handleNativeVolumeChange}
+				onDurationChange={() => {
+					const value = videoRef.current?.duration;
+					setDuration(value && Number.isFinite(value) ? value : 0);
+				}}
 				onCanPlayThrough={handleCanPlayThrough}
 				onCanPlay={handleCanPlay}
 				onPlay={handlePlay}
@@ -532,15 +665,31 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 				onTimeUpdate={handlePlayProgress}
 				onRateChange={handlePlaybackRate}
 				onLoadedMetadata={handleLoadMetadata}
-				className={css.video}
+				onLoadedData={handleLoadedFrame}
+				onSeeked={handleSeekEnd}
+				className={[css.video, videoAttributes?.className].filter(Boolean).join(' ')}
 			>
-				<track kind="captions" src={captionsSrc} />
+				{captionsSrc && (
+					<track
+						kind="captions"
+						src={captionsSrc}
+						srcLang={captionsLanguage}
+						label={captionsLabel}
+						default={captionsDefault}
+						onLoad={syncCaptions}
+					/>
+				)}
 			</video>
-			{!canPlay && showProgressIndicator && <ProgressIndicator show label="Loading video" />}
+			{failed && <span role="alert">Unable to load video.</span>}
+			{!failed && !canPlay && showProgressIndicator && <ProgressIndicator show label="Loading video" />}
 		</div>
 	);
 });
 
 BaseVideo.displayName = 'Video';
 
-export const Video = React.memo(BaseVideo);
+// A new source owns a fresh media lifecycle, including refs, loading state, and scrubbing.
+export const Video: React.ForwardRefExoticComponent<VideoProps & React.RefAttributes<VideoElement>> = React.memo(
+	React.forwardRef<VideoElement, VideoProps>((props, ref) => <BaseVideo key={props.src ?? ''} {...props} ref={ref} />),
+);
+Video.displayName = 'Video';

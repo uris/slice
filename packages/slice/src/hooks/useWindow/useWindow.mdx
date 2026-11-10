@@ -1,13 +1,13 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 import {Spacer} from "../../components/Spacer";
 import Notice from "../../../documentation/_components/Notice/Notice";
 
 <Meta title="Hooks/useWindow" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useWindow
         Tracks viewport size, form factor, touch capability, pixel ratio, Electron runtime state, and optional geolocation requests.
@@ -161,5 +161,5 @@ import Notice from "../../../documentation/_components/Notice/Notice";
             Note: Slice also implements and alternative (but optional) [`WindowStore`](/docs/stores-window-store--docs) that creates a Zustand singleton window state object you can efficiently access throughout your application.
         </Notice>
         <Spacer size="xxl" />
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

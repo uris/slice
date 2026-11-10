@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { Spacer } from '../../components/Spacer';
 import { useDoubleClick } from './useDoubleClick';
 
@@ -25,7 +25,7 @@ function UseDoubleClickDemo(props: Readonly<UseDoubleClickDemoProps>) {
 	}
 
 	return (
-		<FlexDiv absolute justify={'center'} align={'center'} direction={'column'}>
+		<FlexBox absolute justify={'center'} align={'center'} direction={'column'}>
 			<Button
 				label={'Click Or Double Click Me'}
 				variant={'solid'}
@@ -38,7 +38,7 @@ function UseDoubleClickDemo(props: Readonly<UseDoubleClickDemoProps>) {
 				<span>Single: {singleCount}</span>
 				<span>Double: {doubleCount}</span>
 			</div>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

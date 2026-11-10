@@ -114,6 +114,30 @@
     "asset": "slice-icon-61692e737061726b6c65-normal-filled"
   },
   {
+    "name": "basic.more-horiz-fill",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d6f72652d686f72697a2d66696c6c-normal"
+  },
+  {
+    "name": "basic.more-vert-fill",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-62617369632e6d6f72652d766572742d66696c6c-normal"
+  },
+  {
+    "name": "media.play-filled",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e706c61792d66696c6c6564-normal"
+  },
+  {
+    "name": "media.pause-filled",
+    "state": "normal",
+    "filled": false,
+    "asset": "slice-icon-6d656469612e70617573652d66696c6c6564-normal"
+  },
+  {
     "name": "alerts.alert-circle",
     "state": "normal",
     "filled": false,

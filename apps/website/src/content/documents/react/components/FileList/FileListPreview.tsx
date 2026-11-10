@@ -5,10 +5,9 @@ import { tipActions } from '@apple-pie/slice/stores/tip';
 import { useEffect, useState } from 'react';
 
 export function AttachmentsPreview() {
-	const [files, setFiles] = useState<FileItem[]>([
-		{ file: 'Quarterly report.pdf' },
-		{ file: 'Project notes.md' },
-		{ file: 'Cover image.webp' },
+	const [files, setFiles] = useState<File[]>(() => [
+		new File(['Quarterly report'], 'Quarterly report.pdf', { type: 'application/pdf' }),
+		new File(['Project notes'], 'Project notes.md', { type: 'text/markdown' }),
 	]);
 	return <FileList files={files} onChange={setFiles} onToolTip={tipActions.push} />;
 }

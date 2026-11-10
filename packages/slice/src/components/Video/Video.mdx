@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import {FlexBox} from '../FlexBox';
 import * as VideoStories from './Video.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={VideoStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # Video
         Renders an HTML video element with optional built-in controls, custom controls, progress scrubbing, volume control, and an imperative ref API for playback actions.
@@ -52,7 +52,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Outer width of the component.</td></tr>
             <tr><td><code>height</code></td><td><code>{`number | string`}</code></td><td><code>'auto'</code></td><td>Outer height of the component.</td></tr>
             <tr><td><code>borderRadius</code></td><td><code>{`number | string`}</code></td><td><code>undefined</code></td><td>Border radius applied to the video wrapper.</td></tr>
-            <tr><td><code>borderSize</code></td><td><code>{`number | string`}</code></td><td><code>undefined</code></td><td>Border width applied to the wrapper.</td></tr>
+            <tr><td><code>borderWidth</code></td><td><code>{`number | string`}</code></td><td><code>undefined</code></td><td>Border width applied to the wrapper.</td></tr>
             <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Border color applied to the wrapper.</td></tr>
             <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Background color behind the video content.</td></tr>
             <tr><td><code>objectFit</code></td><td><code>{`'fill' | 'contain' | 'cover' | 'none' | 'scale-down'`}</code></td><td><code>'contain'</code></td><td>How the video content should scale within its bounds.</td></tr>
@@ -88,14 +88,21 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>onLoadMetaData</code></td><td><code>{`(duration: number) => void`}</code></td><td>Fires when metadata loads and provides the media duration in seconds.</td></tr>
             <tr><td><code>onLoadedFrameData</code></td><td><code>{`() => void`}</code></td><td>Fires when the current frame data has loaded. Useful for controller-level ready states before revealing the video.</td></tr>
             <tr><td><code>onFullScreenChange</code></td><td><code>{`(fullScreen: boolean) => void`}</code></td><td>Fires from the browser fullscreen change event for both programmatic and user-driven entry or exit.</td></tr>
-            <tr><td><code>onVolumeChange</code></td><td><code>{`(volume: number) => void`}</code></td><td>Fires when volume is updated through the component API or built-in controls.</td></tr>
+            <tr><td><code>onVolumeChange</code></td><td><code>{`(volume: number) => void`}</code></td><td>Fires from native volumechange events, including native controls and direct media-element changes. Muting also emits this event; the payload remains the current volume.</td></tr>
           </tbody>
         </table>
+
+        ## Media attributes and captions
+        `videoAttributes` forwards unmanaged native video attributes such as `preload` and `crossOrigin` to the video element. Layout attributes apply to the wrapper instead. Managed playback events use the component callbacks.
+
+        `videoName` names the video and defaults to “Video”. `captionsSrc` accepts a WebVTT URL; `captionsLanguage` defaults to `en`, `captionsLabel` to “Captions”, and `captionsDefault` to `false`. Simple controls include a captions toggle when a source is supplied; disable it with `customControls.captions=false`. Custom controls are merged with the built-in defaults, so an omitted flag retains its default.
+
+        Controls stay visible while keyboard focus is inside the player. Reduced motion disables control fades. Seek position is clamped to the finite duration, and seeking is disabled until that duration is known. Scrubbing resumes playback only when the video was playing before the interaction.
 
         ## Loading and readiness
         The loading indicator is enabled by default. It stays mounted until the video emits `canplay`; loading metadata or the first frame alone does not dismiss it. Set `showProgressIndicator={false}` when providing your own loading UI.
 
-        `onCanPlay` signals that playback can begin. `onCanPlayThrough` separately reports the browser's estimate that playback can finish without further buffering. The indicator covers initial readiness for the mounted component; it does not reappear during later buffering or reset when `src` changes on the same instance.
+        `onCanPlay` signals that playback can begin. `onCanPlayThrough` separately reports the browser's estimate that playback can finish without further buffering. The indicator reappears during buffering and resets when `src` changes. A source change creates a fresh media element and resets progress. A loading error replaces the indicator with an alert and invokes `onError`.
 
         ## Imperative Ref Methods
         <table style={{width: '100%'}}>
@@ -112,12 +119,12 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>play</code></td><td><code>{`() => Promise<void>`}</code></td><td>Starts playback.</td></tr>
+            <tr><td><code>play</code></td><td><code>{`() => Promise<void>`}</code></td><td>Starts playback. Resolves when playback starts; rejects if the browser blocks or interrupts the request.</td></tr>
             <tr><td><code>stop</code></td><td><code>{`() => Promise<void>`}</code></td><td>Pauses playback.</td></tr>
-            <tr><td><code>restart</code></td><td><code>{`() => Promise<void>`}</code></td><td>Seeks to the start and resumes playback.</td></tr>
+            <tr><td><code>restart</code></td><td><code>{`() => Promise<void>`}</code></td><td>Seeks to the start and resumes playback. Returns the browser playback result.</td></tr>
             <tr><td><code>setVolume</code></td><td><code>{`(volume: number) => void`}</code></td><td>Sets the media volume from <code>0</code> to <code>1</code>.</td></tr>
             <tr><td><code>mute</code></td><td><code>{`(mute: boolean) => void`}</code></td><td>Explicitly mutes or unmutes the video.</td></tr>
-            <tr><td><code>fullscreen</code></td><td><code>{`(state: boolean) => void`}</code></td><td>Requests or exits browser fullscreen for this video element.</td></tr>
+            <tr><td><code>fullscreen</code></td><td><code>{`(state: boolean) => Promise<void>`}</code></td><td>Requests or exits browser fullscreen for the player wrapper, keeping custom controls available.</td></tr>
             <tr><td><code>playbackRate</code></td><td><code>{`(rate: number) => void`}</code></td><td>Sets playback speed. Values are clamped internally between <code>0.5</code> and <code>3</code>.</td></tr>
             <tr><td><code>videoElement</code></td><td><code>HTMLVideoElement | undefined</code></td><td>Getter that exposes the underlying native <code>HTMLVideoElement</code>.</td></tr>
           </tbody>
@@ -186,5 +193,5 @@ export function VideoRefExample() {
 }
 ```
         </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

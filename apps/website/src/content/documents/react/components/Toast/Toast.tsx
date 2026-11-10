@@ -4,7 +4,7 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset, ToastType } from '@apple-pie/slice';
+import { FlexBox, Preset, ToastType } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import { ToastPreview } from './ToastPreview';
 import {
@@ -127,7 +127,7 @@ const toastProps = [
 
 export function ToastDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">Toast component</H1>
 			<P clipWidth>{'Confirm a result or share a brief update while people stay with their current task.'}</P>
@@ -307,7 +307,7 @@ export function ToastDoc() {
 				<TypeDef>{'React.Ref<HTMLDivElement>'}</TypeDef>
 			</Definition>
 			<P>{'The forwarded ref points to the visible notification div and becomes null when it unmounts.'}</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

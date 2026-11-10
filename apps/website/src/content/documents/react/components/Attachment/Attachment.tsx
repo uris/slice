@@ -4,9 +4,10 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { Fragment } from 'react';
 import {
+	AttachmentSizePreview,
 	ImageAttachmentPreview,
 	PdfAttachmentPreview,
 	RemovableAttachmentPreview,
@@ -21,6 +22,7 @@ import {
 	indeterminateCode,
 	pdfCode,
 	removalCode,
+	sizesCode,
 	textCode,
 	uploadCode,
 } from './code';
@@ -71,12 +73,13 @@ const attachmentProps = [
 	},
 	{
 		name: 'content',
-		type: 'FileItem | string',
+		type: 'File | FileItem | string',
 		defaultValue: 'undefined',
 		description: (
 			<>
-				A browser <Code>File</Code> or filename wrapped in <Code>FileItem</Code>, or clipboard text. Missing content
-				leaves the preview empty.
+				A raw browser <Code>File</Code>, a <Code>FileItem</Code> containing a file or filename, or clipboard text. Raw
+				files show previews and metadata without upload status. Use <Code>FileItem</Code> to add upload progress or
+				errors. Missing content leaves the preview empty.
 			</>
 		),
 	},
@@ -125,9 +128,9 @@ const attachmentProps = [
 	{
 		name: 'size',
 		type: "'xs' | 's' | 'm' | 'l' | 'xl'",
-		defaultValue: 's',
+		defaultValue: 'm',
 		description:
-			'Card width and preview height: 80, 140, 160, 200, or 240 pixels. Explicit dimensions override each axis.',
+			'Card width and preview height: 100, 125, 140, 160, or 180 pixels. Explicit dimensions override each axis.',
 	},
 	{ name: 'textColor', type: 'ColorValue', defaultValue: 'core-text-primary', description: 'Filename color.' },
 	{
@@ -168,7 +171,7 @@ const attachmentProps = [
 
 export function AttachmentDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">Attachment component</H1>
 			<P clipWidth>
@@ -176,8 +179,8 @@ export function AttachmentDoc() {
 			</P>
 			<H2 id="usage">Usage</H2>
 			<P>
-				Pass a <Code>FileItem</Code> as <Code>content</Code> for files, or a string for clipboard text. Browser images
-				use a visual preview; other files use their type icon.
+				Pass a raw <Code>File</Code> as <Code>content</Code>, or a string for clipboard text. Use <Code>FileItem</Code>
+				when you need upload progress or errors. Browser images use a visual preview; other files use their type icon.
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-attachment--text-thumbnail"
@@ -202,10 +205,22 @@ export function AttachmentDoc() {
 					},
 				]}
 			/>
+			<H3>Sizes</H3>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-attachment--sizes"
+				components={[false, true].flatMap((uploading) =>
+					(['xs', 's', 'm', 'l', 'xl'] as const).map((size) => ({
+						label: uploading ? `${size} · Uploading` : size,
+						component: <AttachmentSizePreview size={size} uploading={uploading} />,
+						code: sizesCode.trim(),
+					})),
+				)}
+			/>
 			<H3>Show upload progress</H3>
 			<P>
 				Update <Code>FileItem.uploading</Code> and <Code>FileItem.progress</Code> from your upload process. The spinner
-				and label stay on the left; the percentage stays on the right.
+				and label appear at every size. Sizes <Code>m</Code>, <Code>l</Code>, and <Code>xl</Code> also show the
+				percentage on the right.
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-attachment--uploading"
@@ -247,7 +262,9 @@ export function AttachmentDoc() {
 			</P>
 			<P>
 				File sizes use 1024-based units, with at most one decimal place: <Code>5 k</Code>, <Code>5 mb</Code>, or{' '}
-				<Code>5.5 mb</Code>. A filename string has no size because it contains no file data.
+				<Code>5.5 mb</Code>. Cards sized <Code>xs</Code> or <Code>s</Code> show only the file type;
+				<Code>m</Code>, <Code>l</Code>, and <Code>xl</Code> also show file size. The accessible description retains the
+				size at every card size. A filename string has no size because it contains no file data.
 			</P>
 			<P>
 				While <Code>uploading</Code> is true, the upload row replaces file type and size. Progress is rounded and
@@ -264,8 +281,8 @@ export function AttachmentDoc() {
 			<P>
 				For multiple files, <Code>FileList</Code> with <Code>variant="attachments"</Code> adds wrapping, upload errors,
 				controlled removal, and focus management. Errors stay inside each card’s preview area. The same{' '}
-				<Code>FileItem[]</Code> data connects directly to both APIs. Color props accept Slice theme tokens or CSS
-				colors.
+				<Code>File[]</Code> or <Code>FileItem[]</Code> data works with the list; each item can also be passed to an
+				individual card. Color props accept Slice theme tokens or CSS colors.
 			</P>
 			<P>
 				Images load lazily and stay behind a preview loader until decoded. Text previews show the loader while their
@@ -332,7 +349,7 @@ export function AttachmentDoc() {
 				Other native events target the outer card. A wrapper click handler alone does not make the preview a keyboard
 				action; use <Code>onOpen</Code> for that behavior.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

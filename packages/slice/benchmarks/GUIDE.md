@@ -61,7 +61,7 @@ benchmarks/
 ├── components/          # Component-specific benchmarks
 │   ├── Avatar.bench.tsx
 │   ├── Button.bench.tsx
-│   ├── FlexDiv.bench.tsx
+│   ├── FlexBox.bench.tsx
 │   └── Icon.bench.tsx
 ├── configs/
 │   └── all-configs.tsx  # Centralized component benchmark configs
@@ -298,7 +298,7 @@ Generated in `reports/benchmark-results.md`:
 |-----------|:------:|-------------|-----------------|-------------|--------------|:--------------:|
 | Avatar    | ⚡     | 0.414ms     | 0.486ms         | -           | 2.45KB       | ✓ No           |
 | Button  | ⚡     | 1.550ms     | 0.816ms         | 0.00400ms   | 3.21KB       | ✓ No           |
-| FlexDiv   | ⚡     | 0.752ms     | 0.476ms         | -           | 1.98KB       | ✓ No           |
+| FlexBox   | ⚡     | 0.752ms     | 0.476ms         | -           | 1.98KB       | ✓ No           |
 | Icon      | ⚡     | 0.724ms     | 0.404ms         | -           | 2.11KB       | ✓ No           |
 ```
 

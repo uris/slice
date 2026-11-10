@@ -43,7 +43,7 @@ type ChipBaseProps = {
 };
 
 type StaticChipProps = ChipBaseProps & { onClick?: undefined } & Omit<
-		React.HTMLAttributes<HTMLDivElement>,
+		React.HTMLAttributes<HTMLSpanElement>,
 		keyof ChipBaseProps | 'color' | 'onClick'
 	>;
 type ActionChipProps = ChipBaseProps & { onClick: React.MouseEventHandler<HTMLButtonElement> } & Omit<

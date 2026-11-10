@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import {FlexBox} from '../FlexBox';
 import * as AudioBubbleStories from './AudioBubble.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={AudioBubbleStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # AudioBubble
         Renders a simple circular bubble that reacts to live audio using the `AudioVisualizer` utility.
@@ -51,10 +51,12 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>intensity</code></td><td><code>number</code></td><td><code>2.2</code></td><td>A simple sensitivity knob. Higher values make the bubble react more strongly.</td></tr>
             <tr><td><code>peakIntensity</code></td><td><code>number</code></td><td><code>0.5</code></td><td>The audio level you want to treat as "full" speaking volume. Lower values make max scale easier to hit.</td></tr>
             <tr><td><code>risePerSeconds</code></td><td><code>number</code></td><td><code>4</code></td><td>How quickly the bubble grows when audio gets louder.</td></tr>
-            <tr><td><code>ReleasePerSeconds</code></td><td><code>number</code></td><td><code>1.5</code></td><td>How quickly the bubble settles back down after the audio drops.</td></tr>
+            <tr><td><code>releasePerSeconds</code></td><td><code>number</code></td><td><code>1.5</code></td><td>How quickly the bubble settles back down after the audio drops.</td></tr>
             <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through, including `className`, `style`, `id`, and `data-*` attributes.</td></tr>
           </tbody>
         </table>
+
+        With reduced motion enabled, the bubble stays at its resting scale. Pausing suspends analysis without stopping the input tracks.
 
         ## Code Example
         </Unstyled>
@@ -82,5 +84,5 @@ export function AudioBubbleExample() {
 }
 ```
         </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

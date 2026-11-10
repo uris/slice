@@ -3,7 +3,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import {
 	SwitchDisabledExample,
 	SwitchShapeExample,
@@ -14,7 +14,7 @@ import { example1Code, example2Code, motionCode, shapeCode, uncontrolledCode, us
 
 export function SwitchDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>Switch component</H1>
 			<P clipWidth>
@@ -260,7 +260,7 @@ export function SwitchDoc() {
 				<Code>event.preventDefault()</Code> to cancel the change. <Code>onChange</Code> above is the component callback,
 				not a native change event.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
