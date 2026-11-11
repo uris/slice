@@ -162,13 +162,13 @@ export function ProgressIndicatorDoc() {
 			<H3>Adjust the appearance</H3>
 			<P>
 				Set <Code>size</Code>, <Code>stroke</Code>, and <Code>color</Code> for your context. <Code>secondsPerSpin</Code>{' '}
-				controls speed; <Code>inset={false}</Code> lets the arc reach the SVG edge.
+				controls speed; <Code>{'inset = {false}'}</Code> lets the arc reach the SVG edge.
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-progressindicator--default"
 				components={[
 					{
-						label: 'Larger, slower spinner',
+						label: 'Larger, faster spinner',
 						component: <AppearancePreview />,
 						code: appearanceCode.trim(),
 						codeFilename: 'SpinnerAppearance.tsx',

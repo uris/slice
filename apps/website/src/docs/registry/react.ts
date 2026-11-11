@@ -226,7 +226,8 @@ export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
 	},
 	'button-bar': {
 		title: 'ButtonBar | Slice UIKit',
-		description: 'Group related icon actions with the Slice ButtonBar component for React.',
+		description:
+			'Compose related actions in horizontal or vertical stacks with the Slice ButtonBar component for React.',
 	},
 	'check-box': {
 		title: 'CheckBox | Slice UIKit',

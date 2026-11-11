@@ -1,6 +1,15 @@
 'use client';
 
-import { Button, type FileItem, PopMenu, PopMenuItem, PromptInput, ToggleButton } from '@apple-pie/slice';
+import {
+	Button,
+	type FileItem,
+	FlexBox,
+	PopMenu,
+	PopMenuItem,
+	Preset,
+	PromptInput,
+	ToggleButton,
+} from '@apple-pie/slice';
 import { tipActions } from '@apple-pie/slice/stores/tip';
 import { useEffect, useState } from 'react';
 
@@ -97,16 +106,7 @@ export function ModelsPromptPreview() {
 			onToolTip={tipActions.push}
 			onSubmit={(message) => console.log(model, message)}
 		>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'flex-end',
-					flex: 1,
-					paddingRight: 8,
-					gap: 16,
-				}}
-			>
+			<FlexBox preset={Preset.ButtonBar} flex={1} justify={'end'} padding={'0-8'}>
 				<Button
 					label={model}
 					variant="outline"
@@ -135,7 +135,7 @@ export function ModelsPromptPreview() {
 						))}
 					</PopMenu>
 				)}
-			</div>
+			</FlexBox>
 		</PromptInput>
 	);
 }

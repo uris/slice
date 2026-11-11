@@ -47,7 +47,7 @@ const meta = {
 		hover: true,
 		iconFill: false,
 		toggleIcon: false,
-		gap: 4,
+		gap: 6,
 		borderWidth: 0,
 		borderRadius: 4,
 		borderColor: 'core-outline-primary',

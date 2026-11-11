@@ -261,7 +261,7 @@ export function TextFieldDoc() {
 			<Definition id={'borderColorBlurred'}>
 				<Prop>borderColorBlurred</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-outline-primary'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>{'Border color when the input is not focused.'}</P>
 			<Definition id={'borderColorError'}>
@@ -279,7 +279,7 @@ export function TextFieldDoc() {
 			<Definition id={'borderColorFocused'}>
 				<Prop>borderColorFocused</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-link-primary'}</DefaultVal>
+				<DefaultVal>{'core-fill-secondary'}</DefaultVal>
 			</Definition>
 			<P>
 				{'Border color while focused, unless '}
@@ -295,7 +295,7 @@ export function TextFieldDoc() {
 			</Definition>
 			<P>
 				{
-					'Corner radius. Defaults to 0 for underline borders, otherwise 8px. Explicit values take precedence. Numbers are pixels; strings accept CSS radii.'
+					'Corner radius. Simple fields default to 100px; stacked and outlined fields use 0 for underline borders and 16px otherwise. Explicit values take precedence. Numbers are pixels; strings accept CSS radii.'
 				}
 			</P>
 			<Definition id={'borderStyle'}>
@@ -652,12 +652,12 @@ export function TextFieldDoc() {
 			<Definition id={'width'}>
 				<Prop>width</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'100%'}</DefaultVal>
+				<DefaultVal>{'fill'}</DefaultVal>
 			</Definition>
 			<P>
-				{'Wrapper width in pixels or CSS units. '}
-				<Code>{'auto'}</Code>
-				{' uses content sizing where the browser supports it.'}
+				<Code>fill</Code> uses flex sizing to take the available space alongside sibling controls. Numbers use pixels;
+				CSS widths such as <Code>max-content</Code> are also accepted. Use <Code>auto</Code> for content sizing where
+				the browser supports it.
 			</P>
 			<Definition id={'divAttributes'}>
 				<Prop>...divAttributes</Prop>

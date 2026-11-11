@@ -97,7 +97,7 @@ export function WorkingPrompt() {
 `;
 
 export const modelsCode = `
-import { Button, PopMenu, PopMenuItem, PromptInput, ToggleButton } from '@apple-pie/slice';
+import { FlexBox, Preset, Button, PopMenu, PopMenuItem, PromptInput, ToggleButton } from '@apple-pie/slice';
 import { tipActions } from '@apple-pie/slice/stores/tip';
 import { useState } from 'react';
 
@@ -107,25 +107,29 @@ export function ModelsComposer() {
     const [model, setModel] = useState(models[0]);
     const [caller, setCaller] = useState<HTMLButtonElement>();
     const close = () => setCaller(undefined);
+    
+    const Models = (caller:HTMLDivElement) => {
+        return (
+            <PopMenu caller={caller} name="Models" dismissAll={close} onDismiss={close}>
+                {models.map((name) => {
+                    return <PopMenuItem key={name}  id={name} label={name} toggle toggled={model === name} autoDismiss onClick={() => setModel(name)} />
+                })}
+            </PopMenu>
+        );
+    }
+    
     return (
         <PromptInput
             fileListProps={{variant: 'attachments', attachmentSize: 's'}}
             onToolTip={tipActions.push}
             onSubmit={(message) => console.log(model, message)}
         >
-            <div style={{
-                display: "flex",
-                flexDirection: 'row',
-                justifyContent: "flex-end",
-                flex: 1,
-                paddingRight: 8,
-                gap: 16,
-            }}>
+            <FlexBox preset={Preset.ButtonBar} flex={1} justify={'end'} padding={"0-8"}>
                 <Button
                     label={model}
                     variant="outline"
-                    backgroundColor={"core-fill-primary"}
-                    iconRight={"arrows.chevron-down"}
+                    backgroundColor={'core-fill-primary'}
+                    iconRight={'arrows.chevron-down'}
                     aria-haspopup="menu"
                     borderWidth={0}
                     aria-expanded={Boolean(caller)}
@@ -133,23 +137,9 @@ export function ModelsComposer() {
                         if (event) setCaller(event.currentTarget);
                     }}
                 />
-                <ToggleButton icon={"media.mic"} backgroundColor={"core-fill-primary"} borderRadius={100}/>
-                {caller && (
-                    <PopMenu caller={caller} name="Models" dismissAll={close} onDismiss={close}>
-                        {models.map((name) => (
-                            <PopMenuItem
-                                key={name}
-                                id={name}
-                                label={name}
-                                toggle
-                                toggled={model === name}
-                                autoDismiss
-                                onClick={() => setModel(name)}
-                            />
-                        ))}
-                    </PopMenu>
-                )}
-            </div>
+                <ToggleButton icon={'media.mic'} backgroundColor={'core-fill-primary'} borderRadius={100}/>
+                {caller && <Models caller={caller} />}
+            </FlexBox>
         </PromptInput>
     );
 }

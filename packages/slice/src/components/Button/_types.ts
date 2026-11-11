@@ -1,7 +1,7 @@
 import type { HTMLMotionProps, Transition, Variants } from 'motion/react';
 import type React from 'react';
-import type { ColorValue } from '../../theme/colors/resolveColor';
-import type { SliceIcon } from '../Icon/_types';
+import type { ColorValue } from '../../theme';
+import type { SliceIcon } from '../Icon';
 import type { ButtonStyleProps, FixedSize, ToolTip } from '../sharedTypes';
 
 type ButtonBaseProps = ButtonStyleProps & {
@@ -18,16 +18,22 @@ type ButtonBaseProps = ButtonStyleProps & {
 	showDot?: boolean;
 	round?: boolean;
 	tooltip?: string;
+	/** Icon size in pixels, clamped to a minimum of 14. */
 	iconSize?: number;
+	/** Defaults to 1.5 at 14px; otherwise uses Icon’s default. */
+	iconStrokeWidth?: number;
 	borderRadius?: number | string;
 	/** Overrides the variant border width in every state. Numbers use pixels. */
 	borderWidth?: number | string;
 	/** Overrides the variant border color in every state. */
 	borderColor?: ColorValue;
 	iconColor?: ColorValue;
+	iconColorHover?: ColorValue;
 	backgroundColor?: ColorValue;
+	backgroundColorHover?: ColorValue;
 	backgroundColorDisabled?: ColorValue;
 	textColor?: ColorValue;
+	textColorHover?: ColorValue;
 	textSize?: FixedSize;
 	transition?: Transition;
 	variants?: Variants;

@@ -196,7 +196,12 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 		return sizes[buttonSize] ?? sizes.m;
 	};
 	const size = getSize();
-	const resolvedIconSize = Number.isFinite(iconSize) && iconSize >= 0 ? iconSize : 20;
+	const resolvedIconSize = Number.isFinite(iconSize)
+		? Math.max(buttonStyleDefaults.minIconSize, iconSize)
+		: buttonStyleDefaults.iconSize;
+	const resolvedIconStrokeWidth =
+		iconStrokeWidth ??
+		(resolvedIconSize === buttonStyleDefaults.minIconSize ? buttonStyleDefaults.minIconStrokeWidth : undefined);
 	const radius =
 		typeof borderRadius === 'number'
 			? `${Number.isFinite(borderRadius) ? Math.max(0, borderRadius) : 0}px`
@@ -320,7 +325,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 								name={on && iconSelected ? iconSelected : icon}
 								size={resolvedIconSize}
 								strokeColor="currentColor"
-								stroke={iconStrokeWidth}
+								stroke={resolvedIconStrokeWidth}
 								fill={iconFill}
 								toggle={toggleIcon && on}
 								pointer={false}

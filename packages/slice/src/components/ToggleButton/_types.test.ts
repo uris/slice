@@ -15,5 +15,5 @@ import type { ButtonBarProps } from '../ButtonBar';
 it('limits auto sizing to controls that support it', () => {
  expectTypeOf<Extract<ToggleButtonProps['buttonSize'], 'auto'>>().toEqualTypeOf<'auto'>();
  expectTypeOf<Extract<IconButtonProps['buttonSize'], 'auto'>>().toEqualTypeOf<never>();
- expectTypeOf<Extract<ButtonBarProps['buttonSize'], 'auto'>>().toEqualTypeOf<never>();
+ expectTypeOf<Extract<ButtonBarProps['buttonSize'], 'auto'>>().toEqualTypeOf<'auto'>();
 });

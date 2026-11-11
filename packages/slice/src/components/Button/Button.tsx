@@ -40,16 +40,20 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		round = false,
 		state = 'normal',
 		fill = false,
-		iconSize = props.iconSize === undefined ? 20 : Number(props.iconSize),
+		iconSize: requestedIconSize = buttonStyleDefaults.iconSize,
+		iconStrokeWidth,
 		width = 'min-content',
 		underline = false,
 		borderRadius = undefined,
 		borderWidth = undefined,
 		borderColor = undefined,
 		iconColor = undefined,
+		iconColorHover = undefined,
 		backgroundColor = undefined,
+		backgroundColorHover = undefined,
 		backgroundColorDisabled = undefined,
 		textColor = undefined,
+		textColorHover = undefined,
 		transition = undefined,
 		variants = undefined,
 		initial = undefined,
@@ -68,6 +72,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		onToolTip,
 		...divAttributes
 	} = props;
+	const iconSize = Number.isFinite(requestedIconSize)
+		? Math.max(buttonStyleDefaults.minIconSize, requestedIconSize)
+		: buttonStyleDefaults.iconSize;
+	const resolvedIconStrokeWidth =
+		iconStrokeWidth ??
+		(iconSize === buttonStyleDefaults.minIconSize ? buttonStyleDefaults.minIconStrokeWidth : undefined);
 	const { id: divId, className, style, ...rest } = divAttributes;
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
@@ -278,12 +288,18 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	const height = getHeight();
 	const resolvedGap = Number.isFinite(gap) ? Math.max(0, gap) : buttonStyleDefaults.gap;
 	const hasChildren = children !== undefined && children !== null;
+	const hasComposedContent = hasChildren && typeof children !== 'string' && typeof children !== 'number';
+	const buttonContent = children ?? label;
+	const hasContent =
+		buttonContent !== undefined && buttonContent !== null && buttonContent !== false && buttonContent !== '';
 	const verticalPadding = hasChildren || autoSize ? buttonStyleDefaults.padding.childrenTop : 0;
 	const bottomPadding = hasChildren || autoSize ? buttonStyleDefaults.padding.childrenBottom : 0;
 	const getSidePadding = (side: 'left' | 'right') => {
 		if (padding !== undefined) return undefined;
 		if (round) return 0;
 		const base = variant === 'text' ? 'var(--spacing-xs)' : buttonStyleDefaults.padding.horizontal;
+		// Icon-only buttons need equal insets, including when ButtonBar removes round corners.
+		if (!hasContent && (iconLeft || iconRight)) return `calc(${base} - var(--spacing-xs))`;
 		const hasIcon = side === 'left' ? iconLeft : iconRight;
 		if (hasIcon) return `calc(${base} - var(--spacing-xs))`;
 		return base;
@@ -328,10 +344,6 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		[onBlur, tooltip, onToolTip],
 	);
 
-	const buttonContent = children ?? label;
-
-	const hasContent =
-		buttonContent !== undefined && buttonContent !== null && buttonContent !== false && buttonContent !== '';
 	// normalize style values before applying them as CSS
 	const setStyle = useCallback((value: string | number | undefined) => {
 		if (value === undefined) return 'unset';
@@ -350,9 +362,17 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	// Explicit padding wins over optical defaults; auto releases all height constraints.
 	const resolvedPaddingRight = paddingRight ?? getSidePadding('right');
 	const resolvedPaddingLeft = paddingLeft ?? getSidePadding('left');
+	const getBackgroundColor = () => {
+		if (btnState === 'hover' && backgroundColorHover !== undefined) return backgroundColorHover;
+		if (fill && !isDisabled) return 'var(--core-surface-primary)';
+		return colorStyles[variant].background[btnState];
+	};
 	const buttonStyle = {
-		color: colorStyles[variant].color[btnState],
-		backgroundColor: fill && !isDisabled ? 'var(--core-surface-primary)' : colorStyles[variant].background[btnState],
+		color:
+			btnState === 'hover'
+				? (textColorHover ?? colorStyles[variant].color[btnState])
+				: colorStyles[variant].color[btnState],
+		backgroundColor: getBackgroundColor(),
 		backgroundClip: 'padding-box' as const,
 		...(resolvedPaddingRight === undefined ? {} : { paddingRight: resolvedPaddingRight }),
 		...(resolvedPaddingLeft === undefined ? {} : { paddingLeft: resolvedPaddingLeft }),
@@ -433,7 +453,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 					<Icon
 						name={iconLeft}
 						size={iconSize}
-						strokeColor={colorStyles[variant].iconColor[btnState]}
+						stroke={resolvedIconStrokeWidth}
+						strokeColor={
+							btnState === 'hover'
+								? (iconColorHover ?? colorStyles[variant].iconColor[btnState])
+								: colorStyles[variant].iconColor[btnState]
+						}
 						pointer={false}
 						tabIndex={-1}
 						fill={iconFill}
@@ -452,7 +477,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 			)}
 			{hasContent && (
 				<div
-					className={`${css.label}${hasChildren ? ` ${css.children}` : ''}${playing && !iconLeft && !iconRight ? ` ${css.labelHidden}` : ''}`}
+					className={`${css.label}${hasComposedContent ? ` ${css.children}` : ''}${playing && !iconLeft && !iconRight ? ` ${css.labelHidden}` : ''}`}
 				>
 					{buttonContent}
 				</div>
@@ -467,7 +492,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 					<Icon
 						name={iconRight}
 						size={iconSize}
-						strokeColor={colorStyles[variant].iconColor[btnState]}
+						stroke={resolvedIconStrokeWidth}
+						strokeColor={
+							btnState === 'hover'
+								? (iconColorHover ?? colorStyles[variant].iconColor[btnState])
+								: colorStyles[variant].iconColor[btnState]
+						}
 						pointer={false}
 						tabIndex={-1}
 						fill={iconFill}

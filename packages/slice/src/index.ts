@@ -190,7 +190,12 @@ export { Icon, SliceIcons } from './components/Icon';
 export type { IconProps, SliceIcon } from './components/Icon/_types';
 
 export { ButtonBar } from './components/ButtonBar';
-export type { BarButton, ButtonBarProps } from './components/ButtonBar/_types';
+export type {
+	ButtonBarBaseProps,
+	ButtonBarItemClickInfo,
+	ButtonBarItemInfo,
+	ButtonBarProps,
+} from './components/ButtonBar/_types';
 
 export { AudioLevel } from './components/AudioLevel';
 export type { AudioLevelProps } from './components/AudioLevel';

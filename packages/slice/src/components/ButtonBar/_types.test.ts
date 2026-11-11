@@ -1,23 +1,18 @@
-import { expectTypeOf, it } from 'vitest';
-import type { BarButton, ButtonBarProps } from './_types';
+import {expectTypeOf, it} from 'vitest';
+import type {ButtonProps} from '../Button';
+import type {ButtonBarBaseProps, ButtonBarItemInfo, ButtonBarProps} from './_types';
 
-it('exposes normalized props without legacy label, border, or frame aliases', () => {
-    expectTypeOf<Extract<'selected' | 'defaultSelected' | 'frameSize' | 'borderSize' | 'labelColor' | 'backgroundColorActive', keyof ButtonBarProps>>().toEqualTypeOf<never>();
-    expectTypeOf<Extract<'label', keyof BarButton>>().toEqualTypeOf<never>();
-    expectTypeOf<ButtonBarProps['buttonSize']>().toEqualTypeOf<'s' | 'm' | 'l' | 'xl' | number | undefined>();
+it('composes Button props and callbacks directly', () => {
+    expectTypeOf<ButtonBarProps['buttons']>().toEqualTypeOf<ButtonProps[] | undefined>();
+    expectTypeOf<Parameters<NonNullable<ButtonBarProps['onClick']>>[0]>().toEqualTypeOf<Parameters<NonNullable<ButtonProps['onClick']>>[0]>();
+    expectTypeOf<ButtonBarProps['onToolTip']>().toEqualTypeOf<ButtonProps['onToolTip']>();
+    expectTypeOf<ButtonBarProps['buttonSize']>().toEqualTypeOf<ButtonProps['buttonSize']>();
+    expectTypeOf<ButtonBarBaseProps>().toExtend<ButtonBarProps>();
 });
 
-it('supports explicit empty selection and preserves item callback payloads', () => {
-    expectTypeOf<ButtonBarProps['selectedIndex']>().toEqualTypeOf<number | null | undefined>();
-    expectTypeOf<ButtonBarProps['defaultSelectedIndex']>().toEqualTypeOf<number | null | undefined>();
-    expectTypeOf<Parameters<NonNullable<ButtonBarProps['onChange']>>>().toEqualTypeOf<[BarButton]>();
-});
 
-it('exposes independent highlight radius and numeric spacing', () => {
-    expectTypeOf<ButtonBarProps['selectionRadius']>().toEqualTypeOf<number | string | undefined>();
-    expectTypeOf<ButtonBarProps['buttonGap']>().toEqualTypeOf<number | undefined>();
-});
-
-it('exposes uniform wrapper padding in pixels', () => {
-    expectTypeOf<ButtonBarProps['padding']>().toEqualTypeOf<number | undefined>();
+it('shares item metadata and supports direct state setters', () => {
+    expectTypeOf<Parameters<NonNullable<ButtonBarProps['onChange']>>>().toEqualTypeOf<[string, ButtonBarItemInfo]>();
+    expectTypeOf<Parameters<NonNullable<ButtonBarProps['onClick']>>[1]>().toEqualTypeOf<ButtonBarItemInfo>();
+    expectTypeOf<(value: string) => void>().toExtend<NonNullable<ButtonBarProps['onChange']>>();
 });

@@ -24,12 +24,13 @@ export enum Preset {
 	Column = 'column',
 	ColumnBetween = 'column-between',
 	Draggable = 'draggable',
+	ButtonBar = 'button-bar',
 }
 
 type FlexBoxLayout = Required<
 	Pick<FlexBoxBaseProps, 'width' | 'height' | 'justify' | 'align' | 'direction' | 'shrinkChildren'>
 > &
-	Pick<FlexBoxBaseProps, 'flex' | 'scrollX' | 'scrollY' | 'overflow' | 'wrap'> & {
+	Pick<FlexBoxBaseProps, 'flex' | 'scrollX' | 'scrollY' | 'overflow' | 'wrap' | 'gap'> & {
 		alignContent?: React.CSSProperties['alignContent'];
 	};
 
@@ -151,6 +152,18 @@ export const layoutSets: Record<Preset, FlexBoxLayout> = {
 		overflow: 'hidden',
 		direction: 'row',
 		shrinkChildren: false,
+	},
+	[Preset.ButtonBar]: {
+		width: 'fit',
+		height: 'fit',
+		justify: 'start',
+		align: 'center',
+		scrollY: false,
+		scrollX: false,
+		overflow: 'hidden',
+		direction: 'row',
+		shrinkChildren: false,
+		gap: 16,
 	},
 	[Preset.Column]: {
 		width: 'fit',

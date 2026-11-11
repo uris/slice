@@ -12,6 +12,8 @@ export enum SidebarListItemType {
 }
 
 export interface SidebarListItemProps {
+	/** Full DOM ID override. Otherwise document entries use sidebar.<slug>; section headings have no ID. */
+	id?: string;
 	type?: SidebarListItemType;
 	title?: string;
 	slug?: DocsSlug | null;
@@ -29,6 +31,7 @@ export interface SidebarListItemProps {
 
 export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 	const {
+		id,
 		type = SidebarListItemType.DocTitle,
 		title = 'Missing Item Title',
 		code = false,
@@ -69,7 +72,7 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.wrapper} id={`sidebar.${slug}`}>
+			<div className={styles.wrapper} id={id ?? (slug ? `sidebar.${slug}` : undefined)}>
 				<input type={'button'} className={className} style={cssVars} onClick={handleClick} value={title} />
 				{deprecated && <span className={classNames(styles.tag, styles.deprecated)}>deprecated</span>}
 				{isNew && <span className={classNames(styles.tag, styles.new)}>new</span>}
@@ -78,14 +81,14 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 			</div>
 			{selected &&
 				childDocs?.map((doc) => {
-					const { slug: cSlug, title: cTitle, deprecated: cDeprecated, isNew: cIsNew, beta: cBeta } = doc;
+					const { id: cId, slug: cSlug, title: cTitle, deprecated: cDeprecated, isNew: cIsNew, beta: cBeta } = doc;
 					const isSelected = cSlug === selectedChild?.slug;
 					return (
 						<div
 							className={styles.wrapper}
 							style={{ paddingLeft: 16 }}
-							key={`sidebar.${cSlug}`}
-							id={`sidebar.${cSlug}`}
+							key={cId ?? cSlug ?? cTitle}
+							id={cId ?? (cSlug ? `sidebar.${cSlug}` : undefined)}
 						>
 							<input
 								type={'button'}

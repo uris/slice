@@ -51,7 +51,7 @@ Use the exported types in `src/components/sharedTypes.ts` for matching size APIs
 - `ButtonSize`: excludes `xs` and also accepts numeric pixel sizes.
 
 Components must support `auto` explicitly in their layout implementation. Fixed-frame
-controls such as IconButton and ButtonBar use `Exclude<ButtonSize, 'auto'>`.
+controls such as IconButton use `Exclude<ButtonSize, 'auto'>`.
 ToggleButton accepts `ButtonSize`: explicit `auto` removes the minimum frame size,
 while an omitted size retains `m`, including when children are supplied.
 The existing FlexBox `Size` enum describes layout dimensions and is separate.
