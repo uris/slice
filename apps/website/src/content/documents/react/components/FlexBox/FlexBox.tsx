@@ -1,19 +1,36 @@
 import { CodeBlock } from '@/components/CodeBlock/CodeBlock';
-import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
+import { ComponentCanvas, type ComponentCanvasItem } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
-import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
+import { Code, DefaultVal, Definition, H1, H2, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { contentMaxWidth, contentMinWidth } from '@/src/consts/consts';
 import { FlexBox, Preset } from '@apple-pie/slice';
-import { ColumnPreview, RowPreview, ScrollPreview } from './Preview';
-import { columnCode, motionCode, rowCode, scrollCode } from './code';
+import { PresetPreview } from './Preview';
+import { motionCode, presetCode } from './code';
+
+const getPresets = () => {
+	const options: ComponentCanvasItem[] = [];
+	for (const value of Object.values(Preset)) {
+		if (value === Preset.Window) continue;
+		const label = value.toString()[0].toUpperCase() + value.toString().slice(1);
+		const preview = {
+			label: `Preset: ${label}`,
+			component: <PresetPreview preset={value} />,
+			code: presetCode(value).trim(),
+		};
+		options.push(preview);
+	}
+	return options;
+};
+
 export default function FlexBoxDoc() {
 	return (
 		<FlexBox preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
 			<Path />
 			<H1 id="title">FlexBox component</H1>
 			<P clipWidth>
-				Arrange content with flex layouts, spacing, scrolling, and reusable presets in a single container.
+				Arrange content with an intuitive layout system. FlexBox wraps a flex container with typically used layout
+				presets.
 			</P>
 			<H2 id="usage">Usage</H2>
 			<P>
@@ -21,20 +38,32 @@ export default function FlexBoxDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-flexbox--default"
-				components={[
-					{ label: 'Row', component: <RowPreview />, code: rowCode.trim() },
-					{ label: 'Column', component: <ColumnPreview />, code: columnCode.trim() },
-				]}
+				components={getPresets()}
 			/>
-			<H3>Scrolling</H3>
 			<P>
-				Give scrolling containers a bounded height. Children that must retain their height can use{' '}
-				<Code>flexShrink: 0</Code>.
+				<strong>
+					<em>Shrinking Logic:</em>
+				</strong>{' '}
+				By default, all presets set <Code>flex-shrink</Code> to <Code>0</Code> on direct children, opting them out of
+				automatic shrinking along the main axis (width in rows, height in columns). Use <Code>shrinkChildren</Code> to
+				allow shrinking, or override an individual child with inline flex styles.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-flexbox--default"
-				components={[{ label: 'Scrollable column', component: <ScrollPreview />, code: scrollCode.trim() }]}
-			/>
+			<P>
+				<strong>
+					<em>Fill Logic:</em>
+				</strong>{' '}
+				By default, all "fill" based presets attempt to stretch their box to maximum height and width (setting{' '}
+				<Code>width & height</Code> to <Code>100%</Code> and <Code>flex</Code> to <Code>1</Code>). Growing fills
+				remaining space along the parent’s main axis; percentage sizing on the other axis still depends on the parent’s
+				size.
+			</P>
+			<P>
+				<strong>
+					<em>Between Logic:</em>
+				</strong>{' '}
+				By default, all "between" based presets attempt to stretch their flex direction box to maximum length (setting{' '}
+				<Code>width | height</Code> to <Code>100%</Code>) placing equal space between items.
+			</P>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				Explicit layout props override the selected preset; <Code>style</Code> overrides generated styles. Presets
@@ -47,9 +76,13 @@ export default function FlexBoxDoc() {
 				separately to grow as a flex item.
 			</P>
 			<P>
-				<Code>Preset.Row</Code> and <Code>Preset.RowBetween</Code> arrange a full-width row; <Code>Preset.Column</Code>{' '}
-				and <Code>Preset.Default</Code> arrange a full-width column. <Code>Preset.FillStart</Code> and{' '}
-				<Code>Preset.FillCenter</Code> fill both dimensions. <Code>Preset.Window</Code> fills the viewport.{' '}
+				<Code>Preset.Row</Code> and <Code>Preset.Column</Code> use automatic sizing.
+				<Code>Preset.RowBetween</Code> fills the width; <Code>Preset.ColumnBetween</Code> fills the height.
+				<Code>Preset.FillStart</Code>, <Code>Preset.FillCenter</Code>, and <Code>Preset.FillEnd</Code>
+				align a column’s children left, center, or right while keeping them at the top.
+				<Code>Preset.FillCenterMiddle</Code> centers on both axes. <Code>Preset.FillWrap</Code> fills the available
+				space with a wrapping row; items and wrapped rows stay at the top. <Code>Preset.Window</Code> fills the
+				viewport.
 				<Code>Preset.Draggable</Code> uses automatic width and full height.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
@@ -118,13 +151,25 @@ export default function FlexBoxDoc() {
 				<TypeDef>{'number'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>CSS flex shorthand as a number. Use flex={1} when the container should grow as a flex item.</P>
+			<P>
+				CSS flex shorthand as a number. Fill presets default to <Code>1</Code>; other presets leave it unset. An
+				explicit value overrides the parent’s child grow and shrink settings.
+			</P>
 			<Definition id="gap">
 				<Prop>gap</Prop>
 				<TypeDef>{'number'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>Space between children in pixels. Zero is applied explicitly.</P>
+			<Definition id="growChildren">
+				<Prop>growChildren</Prop>
+				<TypeDef>{'boolean'}</TypeDef>
+				<DefaultVal>{'undefined'}</DefaultVal>
+			</Definition>
+			<P>
+				Allows direct children to grow along the main axis. Omission leaves their own grow styles unchanged; false sets
+				growth to zero. Inline child flex styles take precedence.
+			</P>
 			<Definition id="height">
 				<Prop>height</Prop>
 				<TypeDef>{'number | Size | string'}</TypeDef>
@@ -149,7 +194,8 @@ export default function FlexBoxDoc() {
 				<DefaultVal>{'0'}</DefaultVal>
 			</Definition>
 			<P>
-				Outer margin in pixels or CSS shorthand. <Code>centerSelf</Code> takes precedence.
+				Outer margin in pixels, CSS shorthand, or dash-separated numbers such as <Code>8-16</Code>.{' '}
+				<Code>centerSelf</Code> takes precedence.
 			</P>
 			<Definition id="maxWidth">
 				<Prop>maxWidth</Prop>
@@ -157,13 +203,23 @@ export default function FlexBoxDoc() {
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>Maximum width in pixels or a CSS length. Zero is applied explicitly.</P>
+			<Definition id="overflow">
+				<Prop>overflow</Prop>
+				<TypeDef>{"React.CSSProperties['overflow']"}</TypeDef>
+				<DefaultVal>{'preset-dependent'}</DefaultVal>
+			</Definition>
+			<P>
+				CSS overflow shorthand. Overrides preset overflow axes; explicit <Code>scrollX</Code> and <Code>scrollY</Code>{' '}
+				override the corresponding axis.
+			</P>
 			<Definition id="padding">
 				<Prop>padding</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'0'}</DefaultVal>
 			</Definition>
 			<P>
-				Inner spacing in pixels or CSS shorthand. Explicit values, including zero, take precedence over the{' '}
+				Inner spacing in pixels, CSS shorthand, or dash-separated numbers. <Code>padding="8-8-8-0"</Code> sets top,
+				right, bottom, and left to 8px, 8px, 8px, and 0px. Explicit values, including zero, take precedence over the{' '}
 				<Code>scrollBox</Code> inset.
 			</P>
 			<Definition id="preset">
@@ -208,6 +264,15 @@ export default function FlexBoxDoc() {
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>True enables automatic vertical scrolling; false hides overflow. Omission uses the preset.</P>
+			<Definition id="shrinkChildren">
+				<Prop>shrinkChildren</Prop>
+				<TypeDef>{'boolean'}</TypeDef>
+				<DefaultVal>{'false'}</DefaultVal>
+			</Definition>
+			<P>
+				Allows direct children to shrink along the main axis. All presets default to false. Applies to plain elements
+				and nested FlexBoxes; inline child flex styles take precedence.
+			</P>
 			<Definition id="width">
 				<Prop>width</Prop>
 				<TypeDef>{'number | Size | string'}</TypeDef>
@@ -314,10 +379,12 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'direction', title: 'direction', code: true },
 			{ id: 'flex', title: 'flex', code: true },
 			{ id: 'gap', title: 'gap', code: true },
+			{ id: 'growChildren', title: 'growChildren', code: true },
 			{ id: 'height', title: 'height', code: true },
 			{ id: 'justify', title: 'justify', code: true },
 			{ id: 'margin', title: 'margin', code: true },
 			{ id: 'maxWidth', title: 'maxWidth', code: true },
+			{ id: 'overflow', title: 'overflow', code: true },
 			{ id: 'padding', title: 'padding', code: true },
 			{ id: 'preset', title: 'preset', code: true },
 			{ id: 'reverse', title: 'reverse', code: true },
@@ -326,6 +393,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'scrollHandleHover', title: 'scrollHandleHover', code: true },
 			{ id: 'scrollX', title: 'scrollX', code: true },
 			{ id: 'scrollY', title: 'scrollY', code: true },
+			{ id: 'shrinkChildren', title: 'shrinkChildren', code: true },
 			{ id: 'width', title: 'width', code: true },
 			{ id: 'wrap', title: 'wrap', code: true },
 			{ id: 'divAttributes', title: '...divAttributes', code: true },

@@ -19,7 +19,7 @@ export type ColRefs = React.RefObject<Record<string, HTMLTableColElement | null>
 const resolveClientPos = (e: MouseEvent | TouchEvent) => {
 	if (e.type.startsWith('touch')) {
 		const touchEvent = e as TouchEvent;
-		return { x: touchEvent.touches[0].clientX, y: touchEvent.touches[0].clientY };
+		return { x: touchEvent.touches[0]?.clientX ?? 0, y: touchEvent.touches[0]?.clientY ?? 0 };
 	}
 	const mouseEvent = e as MouseEvent;
 	return { x: mouseEvent.clientX, y: mouseEvent.clientY };
@@ -31,10 +31,14 @@ export function useResizeColumn(
 	setColumnWidths: (value: React.SetStateAction<Record<string, string | number>>) => void,
 	onColumnResize: ((columnId: string, width: number) => void) | undefined,
 ) {
+	const resizeCallback = useRef(onColumnResize);
+	resizeCallback.current = onColumnResize;
 	const [resizeCol, setResizeCol] = useState<ResizeColElements | null>(null);
 	const [client, setClient] = useState<{ x: number; y: number } | null>(null);
 	const [resizing, setResizing] = useState(false);
 	const didSetListenersRef = useRef<boolean>(false);
+	const previousStyles = useRef({ userSelect: '', webkitUserSelect: '', cursor: '' });
+	const originalWidth = useRef('');
 	const colStartX = useRef<number>(0);
 	const lastWidthRef = useRef<number>(0);
 	const hasMovedRef = useRef<boolean>(false);
@@ -61,7 +65,7 @@ export function useResizeColumn(
 	const applyWidth = useCallback(
 		(clientX: number) => {
 			if (!resizeCol?.col) return;
-			const newWidth = Math.max(0, clientX - colStartX.current);
+			const newWidth = Math.max(40, clientX - colStartX.current);
 			resizeCol.col.style.width = `${newWidth}px`;
 			lastWidthRef.current = newWidth;
 			hasMovedRef.current = true;
@@ -93,24 +97,39 @@ export function useResizeColumn(
 				const colId = resizeCol.id;
 				const width = lastWidthRef.current;
 				setColumnWidths((prev) => ({ ...prev, [colId]: width }));
-				onColumnResize?.(colId, width);
+				resizeCallback.current?.(colId, width);
 			}
 			setResizing(false);
 			setClient(null);
 			applyHandlePos(false);
 			setResizeCol(null);
 		},
-		[resizeCol, applyHandlePos, setColumnWidths, onColumnResize],
+		[resizeCol, applyHandlePos, setColumnWidths],
 	);
+
+	const cancelResize = useCallback(() => {
+		if (resizeCol) resizeCol.col.style.width = originalWidth.current;
+		setResizing(false);
+		setClient(null);
+		applyHandlePos(false);
+		setResizeCol(null);
+	}, [resizeCol, applyHandlePos]);
 
 	// install listeners for move/up
 	const initListeners = useCallback(() => {
 		if (!didSetListenersRef.current) {
 			document.documentElement.addEventListener('mousemove', handleMouseMove, false);
 			document.documentElement.addEventListener('mouseup', handleMouseUp, false);
-			document.documentElement.addEventListener('touchmove', handleMouseMove, false);
+			document.documentElement.addEventListener('touchmove', handleMouseMove, { passive: false });
 			document.documentElement.addEventListener('touchend', handleMouseUp, false);
-			// styles
+			document.documentElement.addEventListener('touchcancel', cancelResize, false);
+			window.addEventListener('blur', cancelResize);
+			// Preserve the host application's global styles.
+			previousStyles.current = {
+				userSelect: document.documentElement.style.userSelect,
+				webkitUserSelect: document.documentElement.style.webkitUserSelect,
+				cursor: document.documentElement.style.cursor,
+			};
 			document.documentElement.style.userSelect = 'none';
 			document.documentElement.style.webkitUserSelect = 'none'; // needed for ios/sfari
 			document.documentElement.style.cursor = 'col-resize';
@@ -118,7 +137,7 @@ export function useResizeColumn(
 			colStartX.current = resolveStartingXPos();
 			didSetListenersRef.current = true;
 		}
-	}, [handleMouseMove, handleMouseUp, resolveStartingXPos]);
+	}, [handleMouseMove, handleMouseUp, resolveStartingXPos, cancelResize]);
 
 	// clean up
 	const clearListeners = useCallback(() => {
@@ -127,27 +146,31 @@ export function useResizeColumn(
 			document.documentElement.removeEventListener('mouseup', handleMouseUp);
 			document.documentElement.removeEventListener('touchmove', handleMouseMove, false);
 			document.documentElement.removeEventListener('touchend', handleMouseUp, false);
-			// styles
-			document.documentElement.style.userSelect = 'auto';
-			document.documentElement.style.webkitUserSelect = 'auto'; // needed for ios/sfari
-			document.documentElement.style.cursor = 'default';
+			document.documentElement.removeEventListener('touchcancel', cancelResize, false);
+			window.removeEventListener('blur', cancelResize);
+			document.documentElement.style.userSelect = previousStyles.current.userSelect;
+			document.documentElement.style.webkitUserSelect = previousStyles.current.webkitUserSelect; // needed for ios/sfari
+			document.documentElement.style.cursor = previousStyles.current.cursor;
 			// calc helpers
 			colStartX.current = 0;
 			lastWidthRef.current = 0;
 			hasMovedRef.current = false;
 			didSetListenersRef.current = false;
 		}
-	}, [handleMouseMove, handleMouseUp]);
+	}, [handleMouseMove, handleMouseUp, cancelResize]);
 
 	// handler to trigger resize start
 	const dragResize = useCallback(
-		(id: string, e: React.MouseEvent<HTMLDivElement>, colRefs: ColRefs) => {
+		(id: string, e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, colRefs: ColRefs) => {
 			e.stopPropagation();
 			e.preventDefault();
 			if (!colResize) return;
 			const cell = e.currentTarget.parentElement as HTMLElement | null;
 			const col = colRefs.current[id];
-			if (cell && col) setResizeCol({ id, cell, col });
+			if (cell && col) {
+				originalWidth.current = col.style.width;
+				setResizeCol({ id, cell, col });
+			}
 		},
 		[colResize],
 	);
@@ -166,10 +189,14 @@ export function useResizeColumn(
 	);
 
 	useEffect(() => {
+		if (resizeCol && !colResize) {
+			cancelResize();
+			return;
+		}
 		if (resizeCol) initListeners();
 		else clearListeners();
 		return () => clearListeners();
-	}, [resizeCol, initListeners, clearListeners]);
+	}, [resizeCol, initListeners, clearListeners, colResize, cancelResize]);
 
 	return { clientX: client?.x, clientY: client?.y, resizing, dragResize, hoverResize };
 }

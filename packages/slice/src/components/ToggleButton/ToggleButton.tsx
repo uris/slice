@@ -14,6 +14,7 @@ export const ToggleButton = React.memo(function ToggleButton(props: ToggleButton
 		actionName,
 		label,
 		labelOutside = false,
+		labelPosition = 'right',
 		children,
 		textSize = 's',
 		textColor = 'core-text-primary',
@@ -86,7 +87,7 @@ export const ToggleButton = React.memo(function ToggleButton(props: ToggleButton
 			backgroundColorSelected={backgroundColorSelected}
 			iconColorSelected={iconColorSelected}
 			borderRadius={borderRadius}
-			className={`${css.toggleButton}${className ? ` ${className}` : ''}`}
+			className={`${css.toggleButton}${labelPosition === 'bottom' && icon ? ` ${css.bottom}` : ''}${className ? ` ${className}` : ''}`}
 			style={{ ...style, ...cssVars }}
 		/>
 	);

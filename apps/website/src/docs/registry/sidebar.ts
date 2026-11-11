@@ -43,8 +43,8 @@ const reactComponentSection: ListSection = [
 	{ title: 'ErrorSummary', slug: 'error-summary', code: true },
 	{ title: 'FileIcon', slug: 'file-icon', code: true },
 	{ title: 'FileList', slug: 'file-list', code: true },
-	{ title: 'FlexBox', slug: 'flex-box', code: true },
-	{ title: 'FlexDiv (deprecated)', slug: 'flex-div', code: true },
+	{ title: 'FlexBox', slug: 'flex-box', code: true, isNew: true },
+	{ title: 'FlexDiv', slug: 'flex-div', code: true, deprecated: true },
 	{ title: 'Icon', slug: 'icon', code: true },
 	{ title: 'IconButton', slug: 'icon-button', code: true },
 

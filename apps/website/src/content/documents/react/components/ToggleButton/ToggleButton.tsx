@@ -369,6 +369,15 @@ export function ToggleButtonDoc() {
 				one clickable control. Without an icon, the background stays on the whole button. Default outer padding is 4px
 				horizontally and zero vertically in this mode; explicit padding still applies.
 			</P>
+			<Definition id={'labelPosition'}>
+				<Prop>labelPosition</Prop>
+				<TypeDef>{'"right" | "bottom"'}</TypeDef>
+				<DefaultVal>{'right'}</DefaultVal>
+			</Definition>
+			<P>
+				Places the label beside or below the icon. Works with <Code>labelOutside</Code>, which controls whether the
+				background surrounds only the icon. Without an icon, content keeps its normal layout.
+			</P>
 			<Definition id={'padding'}>
 				<Prop>padding</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
@@ -635,6 +644,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'label', title: 'label', code: true },
 			{ id: 'labelOutside', title: 'labelOutside', code: true },
+			{ id: 'labelPosition', title: 'labelPosition', code: true },
 			{ id: 'padding', title: 'padding', code: true },
 			{ id: 'paddingBottom', title: 'paddingBottom', code: true },
 			{ id: 'paddingLeft', title: 'paddingLeft', code: true },

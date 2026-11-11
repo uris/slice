@@ -24,9 +24,13 @@ type ColumnBase<T, V> = {
 	title: string;
 	width?: number | string;
 	justify?: 'start' | 'center' | 'end';
+	justifyHeader?: 'start' | 'center' | 'end';
+	/* Only affects the default header renderer. */
+	showSortIcon?: boolean;
 	align?: 'start' | 'center' | 'end';
 	padding?: number | string;
 	nowrap?: boolean;
+	compare?: (a: T, b: T) => number;
 	sort?: keyof T /* defining a key makes the header click sortable asc/desc */;
 	renderHeader?: (ctx: HeaderContext<T, V>) => ReactNode /* custom header cell renderer */;
 	renderCell?: (ctx: CellContext<T, V>) => ReactNode /* custom body cell renderer */;
@@ -52,16 +56,17 @@ type PlainColumn<T> = ColumnBase<T, undefined> & { key?: never; accessor?: never
 export type ColumnDefinition<T, V = unknown> = KeyColumn<T> | AccessorColumn<T, V> | PlainColumn<T>;
 
 export interface DataTableProps<T> {
-	height: number | string;
-	width: number | string;
+	height?: number | string;
+	width?: number | string;
 	maxWidth?: number | string;
 	margin?: number | string;
-	headerSticky: boolean;
-	freezeColumn: boolean;
+	headerSticky?: boolean;
+	freezeColumn?: boolean;
 	backgroundColor?: ColorValue;
 	backgroundColorHoverRow?: ColorValue;
 	freezeColumnBackgroundColor?: ColorValue;
 	headerBackgroundColor?: ColorValue;
+	headerBackgroundColorHover?: ColorValue;
 	candyStripeBackgroundColor?: ColorValue;
 	handleHoverColor?: ColorValue;
 	borderStyle?: 'box' | 'row' | 'none';
@@ -69,11 +74,17 @@ export interface DataTableProps<T> {
 	borderColor?: ColorValue;
 	tableData?: T[];
 	colResize?: boolean;
+	colReorder?: boolean;
+	columnOrder?: string[];
+	columnWidths?: Record<string, number | string>;
+	defaultSort?: SortKey<T>;
+	/* Row activation by click or Enter/Space; nested interactive controls are excluded. */
+	onRowClick?: (row: T, rowIndex: number) => void;
 	/* Fires when a column resize drag ends, with its new width in px. Not persisted internally -
 	 * feed it into your own DataTableViewState (e.g. columnWidths: {...prev.columnWidths, [columnId]: width})
 	 * if the resize should survive a reload. */
 	onColumnResize?: (columnId: string, width: number) => void;
-	/* Fires when a column drag-and-drop reorder completes, with the new full column id order.
+	/* Fires with each live order change and when a cancelled drag restores the original order.
 	 * Not persisted internally - same as onColumnResize, feed it into your own DataTableViewState
 	 * (e.g. columnOrder: newOrder) if the order should survive a reload. */
 	onColumnReorder?: (columnOrder: string[]) => void;
@@ -98,11 +109,10 @@ export interface DataTableProps<T> {
 	 * `false` explicitly to override that auto-detection in either direction regardless of row count. */
 	virtualizeRows?: boolean;
 	/* Row count above which `virtualizeRows` auto-enables when left unset. Has no effect once
-	 * `virtualizeRows` is passed explicitly. Defaults to 200. */
+	 * `virtualizeRows` is passed explicitly. Defaults to 500. */
 	virtualizeRowThreshold?: number;
 	/* Fixed px height every rendered row is expected to have. Only read when row windowing is
-	 * active. Must match (or closely approximate) each row's real rendered height - too small leaves
-	 * gaps, too large causes overlap. Defaults to 44. */
+	 * active. Enforced on rendered rows; overflowing content is clipped. Defaults to 44. */
 	rowHeight?: number;
 	/* Extra rows kept mounted past each edge of the visible viewport, so fast scrolling and keyboard
 	 * paging don't flash blank space before new rows mount. Only read when row windowing is active.

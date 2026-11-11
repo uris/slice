@@ -115,6 +115,15 @@ export function Caption(props: Readonly<TextProps>) {
 	);
 }
 
+export function Title(props: Readonly<TextProps>) {
+	const { children } = props;
+	return (
+		<span className={styles.title} style={{ color: surfaceYellow }}>
+			{children}
+		</span>
+	);
+}
+
 export function Code(props: Readonly<TextProps>) {
 	const visibility = useTextVisibility<HTMLSpanElement>(props);
 	const { children, openURL, style, target } = props;

@@ -186,3 +186,190 @@ export const ImmediateReducedMotion: StoryObj<typeof FlexBox> = {
 		await waitFor(() => expect(within(canvasElement).getByTestId('motion-box')).toHaveStyle({ opacity: '1' }));
 	},
 };
+
+export const ChildrenKeepTheirHeightByDefault: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox preset={Preset.FillScroll} height={80} width={200} data-testid="sizing-parent">
+			<div style={{ height: 56 }} data-testid="plain-child">
+				Plain child
+			</div>
+			<FlexBox height={56} data-testid="nested-child">
+				Nested child
+			</FlexBox>
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const id of ['plain-child', 'nested-child']) {
+			const child = canvas.getByTestId(id);
+			expect(child.getBoundingClientRect().height).toBe(56);
+			expect(getComputedStyle(child).flexShrink).toBe('0');
+		}
+		const parent = canvas.getByTestId('sizing-parent');
+		expect(parent.scrollHeight).toBeGreaterThan(parent.clientHeight);
+	},
+};
+
+export const ChildrenDoNotGrowByDefault: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox height={200}>
+			<FlexBox height={56} data-testid="sized-child">
+				Child
+			</FlexBox>
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const child = within(canvasElement).getByTestId('sized-child');
+		expect(child.getBoundingClientRect().height).toBe(56);
+		expect(getComputedStyle(child).flexGrow).toBe('0');
+	},
+};
+
+export const NestedChildrenCanGrowIndependently: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox growChildren height={200}>
+			<FlexBox height={56} data-testid="nested-child">
+				<div style={{ height: 20 }} data-testid="grandchild">
+					Content
+				</div>
+			</FlexBox>
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		expect(canvas.getByTestId('nested-child').getBoundingClientRect().height).toBe(200);
+		expect(canvas.getByTestId('grandchild').getBoundingClientRect().height).toBe(20);
+	},
+};
+
+export const NestedChildrenCanShrinkIndependently: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox shrinkChildren height={40}>
+			<FlexBox height={56} data-testid="nested-child">
+				<div style={{ height: 56 }} data-testid="grandchild">
+					Content
+				</div>
+			</FlexBox>
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		expect(canvas.getByTestId('nested-child').getBoundingClientRect().height).toBe(40);
+		expect(canvas.getByTestId('grandchild').getBoundingClientRect().height).toBe(56);
+	},
+};
+
+export const ExplicitChildFlexOverridesParentDefaults: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox height={200}>
+			<FlexBox flex={1} data-testid="explicit-flex">
+				Content
+			</FlexBox>
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const child = within(canvasElement).getByTestId('explicit-flex');
+		expect(child.getBoundingClientRect().height).toBe(200);
+		expect(getComputedStyle(child).flexGrow).toBe('1');
+		expect(getComputedStyle(child).flexShrink).toBe('1');
+	},
+};
+
+export const ExplicitScrollAxesOverridePreset: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => <FlexBox scrollX scrollY={false} preset={Preset.FillScroll} data-testid="scroll-axes" />,
+	play: async ({ canvasElement }) => {
+		const style = getComputedStyle(within(canvasElement).getByTestId('scroll-axes'));
+		expect(style.overflowX).toBe('auto');
+		expect(style.overflowY).toBe('hidden');
+	},
+};
+
+export const OverflowPropOverridesPresetAxes: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => <FlexBox overflow="visible" preset={Preset.FillScroll} data-testid="overflow-prop" />,
+	play: async ({ canvasElement }) => {
+		const box = within(canvasElement).getByTestId('overflow-prop');
+		expect(getComputedStyle(box).overflowX).toBe('visible');
+		expect(getComputedStyle(box).overflowY).toBe('visible');
+		expect(box).not.toHaveAttribute('overflow');
+	},
+};
+
+export const FillPresetUsesRemainingColumnHeight: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox height={200}>
+			<div style={{ height: 56 }}>Header</div>
+			<FlexBox preset={Preset.FillScroll} data-testid="remaining-height">
+				Content
+			</FlexBox>
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		expect(within(canvasElement).getByTestId('remaining-height').getBoundingClientRect().height).toBe(144);
+	},
+};
+
+export const FillCenterAlignsAtTop: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => <FlexBox preset={Preset.FillCenter} data-testid="fill-center" />,
+	play: async ({ canvasElement }) => {
+		const style = getComputedStyle(within(canvasElement).getByTestId('fill-center'));
+		expect(style.justifyContent).toBe('flex-start');
+		expect(style.alignItems).toBe('center');
+	},
+};
+
+export const FillCenterMiddleCentersBothAxes: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => <FlexBox preset={Preset.FillCenterMiddle} data-testid="fill-middle" />,
+	play: async ({ canvasElement }) => {
+		const style = getComputedStyle(within(canvasElement).getByTestId('fill-middle'));
+		expect(style.justifyContent).toBe('center');
+		expect(style.alignItems).toBe('center');
+	},
+};
+
+export const DashSeparatedPadding: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => <FlexBox scrollBox padding="8-8-8-0" data-testid="dash-padding" />,
+	play: async ({ canvasElement }) => {
+		const style = getComputedStyle(within(canvasElement).getByTestId('dash-padding'));
+		expect(style.paddingTop).toBe('8px');
+		expect(style.paddingRight).toBe('8px');
+		expect(style.paddingBottom).toBe('8px');
+		expect(style.paddingLeft).toBe('0px');
+	},
+};
+
+export const FillWrapPacksRowsAtTop: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox preset={Preset.FillWrap} width={200} height={200} gap={10} data-testid="wrap-container">
+			<div style={{ width: 80, height: 20 }} data-testid="first-item">
+				One
+			</div>
+			<div style={{ width: 80, height: 40 }} data-testid="second-item">
+				Two
+			</div>
+			<div style={{ width: 80, height: 30 }} data-testid="third-item">
+				Three
+			</div>
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const parent = canvas.getByTestId('wrap-container');
+		const top = parent.getBoundingClientRect().top;
+		expect(getComputedStyle(parent).flexWrap).toBe('wrap');
+		expect(canvas.getByTestId('first-item').getBoundingClientRect().top - top).toBe(0);
+		expect(canvas.getByTestId('second-item').getBoundingClientRect().top - top).toBe(0);
+		expect(canvas.getByTestId('third-item').getBoundingClientRect().top - top).toBe(50);
+	},
+};

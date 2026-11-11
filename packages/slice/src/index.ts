@@ -86,7 +86,6 @@ export type {
 	CameraElement,
 	CameraProps,
 	CameraSnapshotOptions,
-	Controls,
 	UserProfile,
 	Settings,
 } from './components/Camera';

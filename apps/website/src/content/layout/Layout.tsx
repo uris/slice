@@ -75,6 +75,7 @@ export function ContentLayout() {
 	return (
 		<FlexBox
 			preset={Preset.Column}
+			width={'fill'}
 			justify={'center'}
 			direction={'row'}
 			gap={64}

@@ -38,7 +38,7 @@ export function Layout() {
 			ref={viewRef}
 			background={'core-surface-primary'}
 		>
-			<FlexBox preset={Preset.Draggable}>
+			<FlexBox preset={Preset.Column} height={'fill'}>
 				<DraggablePanel
 					drags={'right'}
 					resizeHandleLabel="Resize navigation sidebar"
@@ -52,7 +52,7 @@ export function Layout() {
 				</DraggablePanel>
 			</FlexBox>
 			<Content />
-			<FlexBox preset={Preset.Draggable}>
+			<FlexBox preset={Preset.Column} height={'fill'}>
 				<DraggablePanel
 					drags={'left'}
 					resizeHandleLabel="Resize page outline sidebar"

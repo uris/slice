@@ -1353,6 +1353,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 						columnDefinitions={mockDataTableColumns}
 						tableData={mockDataTableRows}
 						getRowId={(row) => row.id}
+                        onRowClick={() => {}}
 					/>,
 					50,
 				),
@@ -1366,6 +1367,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 						columnDefinitions={mockDataTableColumns}
 						tableData={mockDataTableRows}
 						getRowId={(row) => row.id}
+                        onRowClick={() => {}}
 					/>,
 					(container) => {
 						container.rerender(
@@ -1373,6 +1375,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 								columnDefinitions={mockDataTableColumns}
 								tableData={[...mockDataTableRows].reverse()}
 								getRowId={(row) => row.id}
+                        onRowClick={() => {}}
 							/>,
 						);
 					},
@@ -1388,6 +1391,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 						columnDefinitions={mockDataTableColumns}
 						tableData={mockDataTableRows}
 						getRowId={(row) => row.id}
+                        onRowClick={() => {}}
 					/>,
 					10,
 				),

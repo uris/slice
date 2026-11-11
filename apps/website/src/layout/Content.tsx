@@ -23,7 +23,7 @@ export function Content() {
 	return (
 		<FlexBox
 			preset={Preset.FillStart}
-			padding={'8px 8px 8px 0'}
+			padding={'8-8-8-0'}
 			background={'core-surface-primary'}
 			style={{ minWidth: minScreenSize }}
 		>

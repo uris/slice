@@ -65,18 +65,33 @@
 	cursor: pointer;
 }
 
-.counter {
+.tag {
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	padding: 2px 8px;
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-medium);
 	font-size: 13px;
 	line-height: var(--line-height-m);
 	letter-spacing: 0.0125em;
+	border-radius: 4px;
+}
+
+.counter {
+	padding: 2px 8px;
 	color: var(--text-color);
 	background-color: var(--core-fill-primary);
-	border-radius: 4px;
+}
+
+.deprecated {
+	padding: 2px 8px 3px 8px;
+	color: var(--core-text-secondary);
+	background-color: var(--core-fill-primary);
+}
+
+.new {
+	padding: 2px 8px 3px 8px;
+	color: var(--core-text-primary);
+	background-color: var(--feedback-positive);
 }

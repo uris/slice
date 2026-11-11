@@ -104,11 +104,11 @@ describe('useResizeColumn', () => {
 		expect(result.current.clientX).toBeUndefined();
 	});
 
-	it('clamps the dragged width to zero rather than going negative', () => {
+	it('clamps the dragged width to the minimum rather than going negative', () => {
 		const { result, colEl, cellEl, colRefs } = setup(true);
 		act(() => result.current.dragResize('colA', makeReactMouseEvent(cellEl), colRefs));
 		act(() => dispatchMouseMove(-50, 0)); // clientX(-50) - colStartX(40) is negative
-		expect(colEl.style.width).toBe('0px');
+		expect(colEl.style.width).toBe('40px');
 	});
 
 	it('does not commit a width when the pointer never actually moved before mouse up', () => {
@@ -162,4 +162,23 @@ describe('useResizeColumn', () => {
 			expect(handleEl.style.left).toBe('-500px');
 		});
 	});
+});
+
+describe('resize lifecycle', () => {
+    it('restores the original global styles and abandons a cancelled touch drag', () => {
+        document.documentElement.style.cursor = 'crosshair';
+        document.documentElement.style.userSelect = 'text';
+        const { result, colEl, cellEl, colRefs, onColumnResize, unmount } = setup(true);
+        colEl.style.width = '90px';
+        act(() => result.current.dragResize('colA', makeReactMouseEvent(cellEl), colRefs));
+        act(() => dispatchMouseMove(180, 0));
+        act(() => document.documentElement.dispatchEvent(new Event('touchcancel')));
+        expect(colEl.style.width).toBe('90px');
+        expect(onColumnResize).not.toHaveBeenCalled();
+        expect(document.documentElement.style.cursor).toBe('crosshair');
+        expect(document.documentElement.style.userSelect).toBe('text');
+        unmount();
+        document.documentElement.style.cursor = '';
+        document.documentElement.style.userSelect = '';
+    });
 });

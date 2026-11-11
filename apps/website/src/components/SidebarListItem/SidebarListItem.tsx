@@ -22,6 +22,9 @@ export interface SidebarListItemProps {
 	onClick?: (itemInfo: DocsContext) => void;
 	childDocs?: SideBarDoc[];
 	selectedChild?: SideBarDoc;
+	isNew?: boolean;
+	deprecated?: boolean;
+	beta?: boolean;
 }
 
 export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
@@ -36,6 +39,9 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 		onClick,
 		childDocs,
 		selectedChild,
+		deprecated,
+		isNew,
+		beta,
 	} = props;
 
 	const className = useMemo(() => {
@@ -65,11 +71,14 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 		<div className={styles.container}>
 			<div className={styles.wrapper} id={`sidebar.${slug}`}>
 				<input type={'button'} className={className} style={cssVars} onClick={handleClick} value={title} />
+				{deprecated && <span className={classNames(styles.tag, styles.deprecated)}>deprecated</span>}
+				{isNew && <span className={classNames(styles.tag, styles.new)}>new</span>}
+				{beta && <span className={classNames(styles.tag, styles.deprecated)}>beta</span>}
 				{childDocs && childDocs.length > 0 && <span className={styles.counter}>{childDocs.length}</span>}
 			</div>
 			{selected &&
 				childDocs?.map((doc) => {
-					const { slug: cSlug, title: cTitle } = doc;
+					const { slug: cSlug, title: cTitle, deprecated: cDeprecated, isNew: cIsNew, beta: cBeta } = doc;
 					const isSelected = cSlug === selectedChild?.slug;
 					return (
 						<div
@@ -85,6 +94,9 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 								onClick={() => handleClickChild(cSlug)}
 								value={cTitle}
 							/>
+							{cDeprecated && <span className={classNames(styles.tag, styles.deprecated)}>deprecated</span>}
+							{cIsNew && <span className={classNames(styles.tag, styles.new)}>new</span>}
+							{cBeta && <span className={classNames(styles.tag, styles.deprecated)}>beta</span>}
 						</div>
 					);
 				})}

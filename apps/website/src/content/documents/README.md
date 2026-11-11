@@ -162,7 +162,7 @@ specific preview. Keep hooks and interactive wiring in the colocated preview fil
 Every item in the first preview array must have a complete, independently copyable
 example, including imports and an exported component. Later snippets can focus on
 the relevant props without repeating the initial setup; retain any wiring needed
-to explain stateful behavior.
+to explain stateful behavior. Omit layout wrappers, sizing, and show/hide scaffolding used only to arrange or launch the demo canvas; keep snippets focused on the component API.
 
 - Pass `ComponentCanvas` an array through `components`, even for one preview:
   `components={[{ label: 'Example', component: <ExamplePreview /> }]}`. Each entry

@@ -518,3 +518,17 @@ export const IconStrokeWidth: Story = {
 		}
 	},
 };
+
+export const LabelBelow: Story = {
+	args: { labelPosition: 'bottom', labelOutside: true },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button');
+		const label = canvas.getByText('Highlight');
+		const icon = button.querySelector('svg');
+		if (!icon) throw new Error('Expected icon');
+		await expect(label.getBoundingClientRect().top).toBeGreaterThanOrEqual(icon.getBoundingClientRect().bottom);
+		await userEvent.click(label);
+		await expect(button).toHaveAttribute('aria-pressed', 'true');
+	},
+};

@@ -1,11 +1,12 @@
 .wrapper {
 	position: relative;
 	composes: column from "../../utils/styling/flexBox.module.css";
-	width: 100%;
-	height: 100%;
-	background-color: var(--core-surface-secondary);
+	width: var(--camera-width, 100%);
+	height: var(--camera-height, 100%);
+	background-color: var(--camera-background-color);
+	border: var(--camera-border-width) solid var(--camera-border-color);
 	overflow: hidden;
-	border-radius: var(--corner-xs);
+	border-radius: var(--camera-border-radius);
 }
 
 .video {
@@ -20,11 +21,12 @@
 	left: 0;
 	right: 0;
 	composes: rowBetween from "../../utils/styling/flexBox.module.css";
-	padding: var(--spacing-m) !important;
+	padding: var(--spacing-m);
 	gap: 16px;
 	background-color: var(--camera-controls-bg);
 	transform: var(--camera-controls-transform);
 	transition: transform var(--motion-water-duration) var(--motion-water) 0s;
+	border-top: var(--camera-border-width) solid var(--camera-border-color);
 }
 
 .controlsRight {
@@ -90,33 +92,19 @@
 	z-index: 2;
 }
 
-.toolbarButton {
-	composes: columnStartCenter from "../../utils/styling/flexBox.module.css";
-	gap: 4px;
-	cursor: pointer;
-	user-select: none;
-	-webkit-user-select: none;
+.controls:focus-within {
+	transform: translateY(0);
+	transition: none;
 }
 
-.buttonIcon {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	min-height: var(--toolbar-button-size);
-	max-height: var(--toolbar-button-size);
-	min-width: var(--toolbar-button-size);
-	max-width: var(--toolbar-button-size);
-	background: var(--toolbar-button-bg-color);
-	border: 1px solid transparent;
-	border-radius: 100%;
-	opacity: var(--toolbar-button-opacity);
-	transition: background, border var(--motion-water-duration) var(--motion-water) 0s;
+@media (prefers-reduced-motion: reduce) {
+	.controls {
+		transition: none;
+	}
 }
 
-.buttonIcon:hover {
-	border: 1px solid var(--core-outline-special);
-}
-
-.buttonLabel {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	composes: body-xs-regular from "../../utils/styling/type.module.css";
-	color: var(--toolbar-button-label-color);
+.offMessage {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-s);
 }

@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 
 // all doc slugs (pages)
 export const reactDocSlugs = [
+	'data-table',
+	'camera',
 	'video-controller',
 	'video',
 	'spacer',
@@ -64,6 +66,14 @@ export type ReactDocSlug = (typeof reactDocSlugs)[number];
 
 // meta for all slugs including shared
 export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
+	'data-table': {
+		title: 'DataTable | Slice UIKit',
+		description: 'Build sortable tables with custom cells, row actions, and automatic virtualization.',
+	},
+	camera: {
+		title: 'Camera | Slice UIKit',
+		description: 'Preview camera video, control microphone capture, and take still snapshots with Camera for React.',
+	},
 	icon: {
 		title: 'Icon | Slice UIKit',
 		description: 'Render theme-aware SVG icons with optional direct keyboard and pointer interaction.',

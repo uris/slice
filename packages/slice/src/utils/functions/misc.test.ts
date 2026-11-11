@@ -17,13 +17,23 @@ import {
 } from './misc';
 
 describe('setSizeStyle', () => {
-	it('returns "auto" for undefined or falsy values', () => {
+	it('defaults undefined to auto and preserves zero', () => {
 		expect(setSizeStyle(undefined)).toBe('auto');
-		expect(setSizeStyle(0)).toBe('auto');
+		expect(setSizeStyle(0)).toBe('0px');
 	});
 
 	it('returns a string value unchanged', () => {
 		expect(setSizeStyle('100%')).toBe('100%');
+		expect(setSizeStyle('var(--spacing-xs)')).toBe('var(--spacing-xs)');
+		expect(setSizeStyle('-8px')).toBe('-8px');
+		expect(setSizeStyle('24px 48px')).toBe('24px 48px');
+	});
+
+	it('converts two to four dash-separated numeric spacing values', () => {
+		expect(setSizeStyle('8-0')).toBe('8px 0px');
+		expect(setSizeStyle('8-16-0')).toBe('8px 16px 0px');
+		expect(setSizeStyle('8-8-8-0')).toBe('8px 8px 8px 0px');
+		expect(setSizeStyle('1.5-0.5')).toBe('1.5px 0.5px');
 	});
 
 	it('appends px to a number', () => {

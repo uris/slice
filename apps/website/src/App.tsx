@@ -8,7 +8,7 @@ export function App() {
 	const theme = useTheme();
 	return (
 		<FlexBox preset={Preset.Window}>
-			<FlexBox preset={Preset.FillCenter}>
+			<FlexBox preset={Preset.FillCenterMiddle}>
 				<SliceLogo size={64} />
 				<Spacer size={'l'} />
 				<p style={{ maxWidth: 300, color: theme.colors['core-text-disabled'] }}>

@@ -50,13 +50,15 @@ export function IconColorsPreview() {
 		<div
 			style={{
 				display: 'grid',
-				gridTemplateColumns: 'repeat(auto-fit, 40px)',
+				gridTemplateColumns: 'repeat(5, 40px)',
 				gridAutoRows: '40px',
 				justifyContent: 'center',
 				justifyItems: 'center',
 				alignItems: 'center',
 				gap: 24,
 				width: '100%',
+				maxWidth: 360,
+				padding: '24px 64px',
 			}}
 		>
 			{primeColors.map((token) => (
@@ -81,6 +83,7 @@ export function IconSizesPreview() {
 				gap: 24,
 				width: '100%',
 				maxWidth: 360,
+				padding: '24px 64px',
 			}}
 		>
 			{strokes.flatMap((stroke) =>

@@ -98,6 +98,7 @@ padding values are pixels; negative values become zero.
 | `iconSize` | `number` | `20` | Icon size in pixels. Negative or nonfinite values fall back to 20px; zero hides its geometry. |
 | `iconStrokeWidth` | `number` | `undefined` | Stroke width in the icon’s 20-unit viewBox. Omit to use the Icon default. Zero removes strokes; solid-filled artwork is unaffected. |
 | `label` | `string` | `undefined` | Visible text. Takes priority over children. |
+| `labelPosition` | `"right" \| "bottom"` | `"right"` | Places content beside or below the icon. Works with `labelOutside`; without an icon, content keeps its normal layout. |
 | `labelOutside` | `boolean` | `false` | Applies background, border, and radius only to the icon. Label clicks still toggle the same control. Falls back to the whole button without an icon. For labels, outer padding defaults to 4px horizontally and zero vertically; children use 6px top and bottom padding. |
 | `padding` | `number \| string` | `undefined` | Uniform padding. Children default to 6px top and bottom padding, keeping the same horizontal and optical icon padding as labels. Wrap children to add further spacing. Labels and icon-only content default to zero vertical padding and spacing-s + spacing-xs horizontally (12px by default), with spacing-xs subtracted on an icon edge; icon-only content adjusts both edges. An explicit value disables this optical adjustment. Numbers are pixels. |
 | `paddingBottom` | `number \| string` | `undefined` | Bottom padding; overrides padding. |

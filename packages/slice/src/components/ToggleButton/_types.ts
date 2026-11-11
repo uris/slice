@@ -8,6 +8,7 @@ type ToggleButtonBaseProps = ButtonStyleProps & {
 	actionName?: string;
 	label?: string;
 	labelOutside?: boolean;
+	labelPosition?: 'right' | 'bottom';
 	children?: React.ReactNode;
 	textSize?: FixedSize;
 	textColor?: ColorValue;

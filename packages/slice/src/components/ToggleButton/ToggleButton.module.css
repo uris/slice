@@ -33,3 +33,7 @@
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }
+
+.toggleButton.bottom {
+	flex-direction: column;
+}

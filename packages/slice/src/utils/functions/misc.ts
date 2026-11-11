@@ -2,12 +2,18 @@ import type { Variants } from 'motion/react';
 import type React from 'react';
 
 /**
- * Convert a numeric or string size into a CSS-ready size value.
+ * Convert numeric sizes and dash-separated numeric spacing into CSS pixel values.
  */
 export function setSizeStyle(size: string | number | undefined): string {
-	if (!size) return 'auto';
-	if (typeof size === 'string') return size;
-	return `${size}px`;
+	if (size === undefined) return 'auto';
+	if (typeof size === 'number') return `${size}px`;
+	if (/^\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?){1,3}$/.test(size)) {
+		return size
+			.split('-')
+			.map((value) => `${value}px`)
+			.join(' ');
+	}
+	return size;
 }
 
 /**

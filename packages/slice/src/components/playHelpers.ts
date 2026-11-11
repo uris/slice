@@ -587,7 +587,7 @@ export async function runModalControllerRejectWithoutCallbacksPlay<TArgs>({ canv
 // track) so Camera's success path — attachStreamToVideo, syncMediaState,
 // enable/disableVideo, mute/unmuteMic, takeSnapshot — can run for real in a
 // headless browser with no actual camera or microphone device.
-function createFakeCameraStream(options?: { includeAudio?: boolean }): MediaStream {
+export function createFakeCameraStream(options?: { includeAudio?: boolean }): MediaStream {
 	const includeAudio = options?.includeAudio ?? true;
 	const canvas = document.createElement('canvas');
 	canvas.width = 64;
@@ -1237,7 +1237,7 @@ export async function runDataTableColumnResizeAndReorderPlay<TArgs>({ canvasElem
 
 		fireEvent.mouseUp(document.documentElement);
 		await waitFor(() => expect(storyArgs.onColumnResize).toHaveBeenCalled());
-		await waitFor(() => expect(document.documentElement.style.cursor).toBe('default'));
+		await waitFor(() => expect(document.documentElement.style.cursor).not.toBe('col-resize'));
 	}
 
 	// drag-and-drop reorder: move the second header into the third header's slot
