@@ -27,7 +27,7 @@ export function AudioBubblePreview({
 		return isActive ? 'Listening' : 'Not listening';
 	};
 	return (
-		<FlexBox justify={'start'} align={'center'} direction={'column'} gap={16}>
+		<FlexBox justify={'start'} align={'center'} direction={'column'} overflow={'visible'} gap={16}>
 			<AudioBubble
 				audioStream={isRequesting ? null : micStream.current}
 				playing={playing}

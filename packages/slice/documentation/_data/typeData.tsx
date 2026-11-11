@@ -1,5 +1,5 @@
 import type React from 'react';
-import { type ColumnDefinition, Icon, type SortKey, type Type } from '../../src';
+import { type ColumnDefinition, type HeaderContext, Icon, type SortKey, type Type } from '../../src';
 import { typeStyles } from '../../src/theme/type/type';
 
 // 1. define your data model for the table - one row per core type style
@@ -162,7 +162,7 @@ export function SizeRenderer<T>(props: Readonly<CellRendererProps<T>>) {
 }
 
 interface HeaderRendererProps<T> {
-	column: ColumnDefinition<TypeDataRow, any>;
+	column: HeaderContext<TypeDataRow, any>['column'];
 	sortKey: SortKey<T>;
 	center?: boolean;
 }

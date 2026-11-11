@@ -14,8 +14,12 @@ export type CellContext<T, V> = {
 
 // the context data for rendering a table header
 export type HeaderContext<T, V> = {
-	column: ColumnDefinition<T, V>;
+	column: ResolvedColumnDefinition<T, V>;
 	sortKey?: SortKey<T>;
+	/** Whether this column matches the active sort. */
+	sorted: boolean;
+	/** True for ascending, false for descending; undefined when this column is not sorted. */
+	ascending: boolean | undefined;
 };
 
 // fields shared by every column shape, regardless of how its value is resolved
@@ -31,7 +35,8 @@ type ColumnBase<T, V> = {
 	padding?: number | string;
 	nowrap?: boolean;
 	compare?: (a: T, b: T) => number;
-	sort?: keyof T /* defining a key makes the header click sortable asc/desc */;
+	/* Defaults to true: sort by key, falling back to id. False disables sorting. */
+	sort?: boolean | keyof T;
 	renderHeader?: (ctx: HeaderContext<T, V>) => ReactNode /* custom header cell renderer */;
 	renderCell?: (ctx: CellContext<T, V>) => ReactNode /* custom body cell renderer */;
 };
@@ -40,20 +45,30 @@ type ColumnBase<T, V> = {
 // distributes over every K in keyof T so V is inferred as T[K] per-column -
 // no wrapper/helper call needed, `renderCell`'s `value` just comes out typed.
 type KeyColumn<T> = {
-	[K in keyof T]: ColumnBase<T, T[K]> & { key: K; accessor?: never };
+	[K in keyof T]-?: ColumnBase<T, T[K]> & { key: K; accessor?: never };
 }[keyof T];
+
+// A field column can omit key when its id names the row field.
+type IdColumn<T> = {
+	[K in keyof T & string]-?: ColumnBase<T, T[K]> & { id: K; key?: never; accessor?: never };
+}[keyof T & string];
 
 // a column whose value is computed. Build these with createColumnHelper() so
 // V gets inferred from the accessor fn's return type instead of written by hand.
 export type AccessorColumn<T, V> = ColumnBase<T, V> & { accessor: (row: T) => V; key?: never };
 
 // a purely presentational column with no row-derived value (e.g. row actions)
-type PlainColumn<T> = ColumnBase<T, undefined> & { key?: never; accessor?: never };
+type PlainColumn<T> = ColumnBase<T, undefined> & { sort: false; key?: never; accessor?: never };
 
 // shape for how to define a table column. Prefer `key` for a plain field
 // lookup; fall back to `accessor` (via createColumnHelper) when the cell
 // value needs to be computed from more than one field.
-export type ColumnDefinition<T, V = unknown> = KeyColumn<T> | AccessorColumn<T, V> | PlainColumn<T>;
+export type ColumnDefinition<T, V = unknown> = KeyColumn<T> | IdColumn<T> | AccessorColumn<T, V> | PlainColumn<T>;
+
+type ResolveColumn<T, C> = C extends unknown ? Omit<C, 'sort'> & { sort?: keyof T } : never;
+
+/** Column received by renderHeader, with sorting defaults resolved. */
+export type ResolvedColumnDefinition<T, V = unknown> = ResolveColumn<T, ColumnDefinition<T, V>>;
 
 export interface DataTableProps<T> {
 	height?: number | string;

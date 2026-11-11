@@ -10,7 +10,7 @@ import {
 
 type Row = { name: string; age: number };
 
-function col(id: string, sort?: keyof Row): ColumnDefinition<Row, unknown> {
+function col(id: string, sort: boolean | keyof Row = false): ColumnDefinition<Row, unknown> {
 	return { id, title: id, sort, accessor: (row) => row[id as keyof Row] };
 }
 
@@ -159,4 +159,20 @@ describe('captureSortToViewState', () => {
 		const state: DataTableViewState = { columnOrder: [], sort: captured };
 		expect(resolveSortFromViewState(columns, state)).toEqual(sort);
 	});
+});
+
+
+it('round-trips shorthand sorts and ignores explicitly disabled columns', () => {
+	const shorthand: ColumnDefinition<Row>[] = [
+		{ id: 'name', title: 'Name' },
+		{ id: 'years', key: 'age', title: 'Age', sort: true },
+		{ id: 'disabled', title: 'Disabled', sort: false },
+	];
+	for (const [columnId, key] of [['name', 'name'], ['years', 'age']] as const) {
+		const saved = { columnOrder: [], sort: { columnId, dir: 'desc' as const } };
+		const sort = resolveSortFromViewState(shorthand, saved);
+		expect(sort).toEqual({ key, dir: 'desc' });
+		expect(captureSortToViewState(shorthand, sort)).toEqual(saved.sort);
+	}
+	expect(resolveSortFromViewState(shorthand, { columnOrder: [], sort: { columnId: 'disabled', dir: 'asc' } })).toBeUndefined();
 });

@@ -139,7 +139,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
           <tbody>
             <tr><td><code>id</code></td><td><code>string</code></td><td><code>-</code></td><td>Unique column id. Used for the React key and as the reference point for persisted layout - see <a href="#persisting-column-layout">Persisting column layout</a>.</td></tr>
             <tr><td><code>title</code></td><td><code>string</code></td><td><code>-</code></td><td>Header text, shown when no <code>renderHeader</code> is given.</td></tr>
-            <tr><td><code>key</code></td><td><code>keyof T</code></td><td><code>-</code></td><td>Reads this column's value straight off the row via <code>row[key]</code>. Mutually exclusive with <code>accessor</code> - see <a href="#building-columns">Building columns</a>.</td></tr>
+            <tr><td><code>key</code></td><td><code>keyof T</code></td><td><code>id</code></td><td>Reads this column's value straight off the row via <code>row[key]</code>, defaulting to <code>row[id]</code>. Mutually exclusive with <code>accessor</code> - see <a href="#building-columns">Building columns</a>.</td></tr>
             <tr><td><code>accessor</code></td><td><code>{`(row: T) => V`}</code></td><td><code>-</code></td><td>Computes this column's value from a row. Mutually exclusive with <code>key</code> - build these with <code>createColumnHelper(...).accessor(...)</code>, see <a href="#building-columns">Building columns</a>.</td></tr>
             <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Column width.</td></tr>
             <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>16</code></td><td>Cell padding, for both header and body cells. A number is treated as pixels.</td></tr>
@@ -148,8 +148,8 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             <tr><td><code>showSortIcon</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Shows the icon beside sortable header text in the default renderer. Custom header renderers are unaffected.</td></tr>
             <tr><td><code>justify</code></td><td><code>{`'start' | 'center' | 'end'`}</code></td><td><code>'start'</code></td><td>Horizontal alignment of cells and, by default, headers.</td></tr>
             <tr><td><code>align</code></td><td><code>{`'start' | 'center' | 'end'`}</code></td><td><code>'center'</code></td><td>Vertical alignment of cell content.</td></tr>
-            <tr><td><code>sort</code></td><td><code>{`keyof T`}</code></td><td><code>-</code></td><td>Makes the header clickable to sort ascending/descending by this row field. See <a href="#sorting">Sorting</a>.</td></tr>
-            <tr><td><code>renderHeader</code></td><td><code>{`(ctx: { column, sortKey }) => ReactNode`}</code></td><td><code>-</code></td><td>Custom header cell. Falls back to a default renderer that shows <code>title</code> plus a sort indicator on sortable columns. <code>sortKey</code> is the table's current sort, if any - read it to draw your own indicator. See <a href="#sorting">Sorting</a>.</td></tr>
+            <tr><td><code>sort</code></td><td><code>{`boolean | keyof T`}</code></td><td><code>true</code></td><td>Sorts by key, falling back to id. Pass a row field to override it or false to disable sorting. See <a href="#sorting">Sorting</a>.</td></tr>
+            <tr><td><code>renderHeader</code></td><td><code>{`(ctx: { column, sortKey, sorted, ascending }) => ReactNode`}</code></td><td><code>-</code></td><td>Custom header cell. Falls back to a default renderer that shows <code>title</code> plus a sort indicator on sortable columns. <code>sortKey</code> is the table's current sort, if any - read it to draw your own indicator. See <a href="#sorting">Sorting</a>.</td></tr>
             <tr><td><code>renderCell</code></td><td><code>{`(ctx: { row, value, rowIndex }) => ReactNode`}</code></td><td><code>-</code></td><td>Custom body cell. Falls back to <code>String(value)</code> when omitted. Receives the whole row, not just <code>value</code> - useful for fallbacks, see <a href="#cell-fallbacks">Cell fallbacks</a>.</td></tr>
           </tbody>
         </table>
@@ -184,7 +184,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         `DataTable` doesn't manage filter state itself - `filter` is a plain predicate prop, so building a search box or a set of toggles on top of it is just component state feeding a new predicate in on every render. Because filtering happens before rendering, `rowIndex` everywhere downstream (`getRowId`, `onClick`/`onDoubleClick`/`onMouseOver`/`onMouseOut`, and `renderCell`'s `CellContext`) reflects the row's position in the filtered rows, not the original `tableData` array.
 
         ## Sorting
-        Give a column a `sort` field - the row key to sort by - and its header becomes clickable: click once to sort ascending, click again to flip to descending, click a different sortable header to switch to that column instead. Only one column is sorted at a time.
+        Columns are sortable by default using `key`, or `id` when `key` is omitted. Set `sort` to a row field to override it, or `false` to disable sorting. Header clicks change the active sort: click once to sort ascending, click again to flip to descending, click a different sortable header to switch to that column instead. Only one column is sorted at a time.
 
         <RenderSource>
         ```
@@ -192,22 +192,21 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
             id: 'age',
             title: 'Age',
             align: 'end',
-            sort: 'age',
             renderCell: ({ value }) => <span>{value} yrs</span>,
         })
         ```
         </RenderSource>
 
-        The default header renderer shows a small up/down arrow next to the title of whichever column is currently sorted, and reserves that same space (rather than shifting the title around) on every other sortable column. A custom `renderHeader` gets the same information through `sortKey` on its context, so it can draw its own indicator instead:
+        The default header renderer shows a small up/down arrow next to the title of whichever column is currently sorted, and reserves that same space (rather than shifting the title around) on every other sortable column. A custom `renderHeader` receives `column.sort` resolved to the row field (or `undefined` for `sort: false`), alongside `sortKey`, so existing comparisons keep working. The context also provides `sorted` and `ascending`: `ascending` is `true` for ascending, `false` for descending, and `undefined` when that column is not sorted:
 
         <RenderSource>
         ```
-        renderHeader: ({ column, sortKey }) => {
-            const sorted = sortKey?.key === column.sort;
+        renderHeader: ({ column, sorted, ascending }) => {
+            const sortIcon = ascending ? 'arrows.arrow-top' : 'arrows.arrow-bottom';
             return (
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                     <span>{column.title}</span>
-                    <Icon name={sorted ? (sortKey.dir === 'asc' ? 'arrows.arrow-top' : 'arrows.arrow-bottom') : 'system.blank'} size={16} />
+                    <Icon name={sorted ? sortIcon : 'system.blank'} size={16} />
                 </div>
             );
         }
@@ -344,7 +343,6 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
                 id: 'age',
                 title: 'Age',
                 align: 'end',
-                sort: 'age',
                 renderCell: ({ value }) => <span>{value} yrs</span>,
             }),
             column.accessor(row => row.compensation, {

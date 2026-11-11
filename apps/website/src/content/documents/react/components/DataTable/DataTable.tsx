@@ -303,8 +303,9 @@ export default function DataTableDoc() {
 			<P>Width of the scroll area.</P>
 			<H2 id="columns">Columns</H2>
 			<P>
-				Each <Code>ColumnDefinition&lt;T&gt;</Code> describes one column. Key-based columns infer the cell value type;
-				use <Code>createColumnHelper&lt;T&gt;()</Code> for computed values.
+				Each <Code>ColumnDefinition&lt;T&gt;</Code> describes one column. Columns read the row field named by{' '}
+				<Code>id</Code> unless <Code>key</Code> overrides it; use <Code>createColumnHelper&lt;T&gt;()</Code> for
+				computed values.
 			</P>
 			<Definition id="column-accessor">
 				<Prop>accessor</Prop>
@@ -351,9 +352,12 @@ export default function DataTableDoc() {
 			<Definition id="column-key">
 				<Prop>key</Prop>
 				<TypeDef>{'keyof T'}</TypeDef>
-				<DefaultVal>{'undefined'}</DefaultVal>
+				<DefaultVal>{'id'}</DefaultVal>
 			</Definition>
-			<P>Read a field directly from each row. Use key or accessor, not both; omit both for an actions column.</P>
+			<P>
+				Read a field directly from each row. Defaults to <Code>id</Code>. Use <Code>key</Code> or <Code>accessor</Code>,
+				not both; set <Code>sort={false}</Code> for an actions column.
+			</P>
 			<Definition id="column-nowrap">
 				<Prop>nowrap</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -374,10 +378,15 @@ export default function DataTableDoc() {
 			<P>Render custom cell content. Otherwise values are converted to text.</P>
 			<Definition id="column-renderHeader">
 				<Prop>renderHeader</Prop>
-				<TypeDef>{'({ column, sortKey }) => ReactNode'}</TypeDef>
+				<TypeDef>{'({ column, sortKey, sorted, ascending }) => ReactNode'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Render a custom header. The table keeps sorting and reordering behavior.</P>
+			<P>
+				Render a custom header. <Code>column.sort</Code> is the resolved row field, or <Code>undefined</Code> when
+				sorting is disabled. <Code>sorted</Code> indicates whether this column is sorted. <Code>ascending</Code> is{' '}
+				<Code>true</Code> for ascending, <Code>false</Code> for descending, and <Code>undefined</Code> when this column
+				is not sorted. The table keeps sorting and reordering behavior.
+			</P>
 			<Definition id="column-showSortIcon">
 				<Prop>showSortIcon</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -389,10 +398,13 @@ export default function DataTableDoc() {
 			</P>
 			<Definition id="column-sort">
 				<Prop>sort</Prop>
-				<TypeDef>{'keyof T'}</TypeDef>
-				<DefaultVal>{'undefined'}</DefaultVal>
+				<TypeDef>{'boolean | keyof T'}</TypeDef>
+				<DefaultVal>{'true'}</DefaultVal>
 			</Definition>
-			<P>Makes the column sortable by this row field.</P>
+			<P>
+				Defaults to <Code>true</Code>, sorting by <Code>key</Code> or <Code>id</Code>. Pass a row field to override it,
+				or <Code>false</Code> to disable sorting.
+			</P>
 			<Definition id="column-title">
 				<Prop>title</Prop>
 				<TypeDef>{'string'}</TypeDef>
