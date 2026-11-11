@@ -1464,8 +1464,19 @@ export async function runChipButtonVariantPlay({ canvasElement }: { canvasElemen
 	const icon = wrapper.querySelector('svg')?.parentElement;
 	if (!icon) throw new Error('Chip icon wrapper is missing');
 	icon.style.transition = 'none';
+	// Browser hover survives synthetic mouseleave events, so move the real pointer
+	// away before checking the unfocused palette in the Chromium runner.
+	const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+	const clearHover = async () => {
+		if (MODE === 'test') {
+			const { userEvent: pointer } = await import('vitest/browser');
+			await pointer.hover(wrapper.parentElement?.parentElement as HTMLElement, { position: { x: 1, y: 1 } });
+			return;
+		}
+		await userEvent.unhover(wrapper);
+	};
 	wrapper.blur();
-	await userEvent.unhover(wrapper);
+	await clearHover();
 	const before = getComputedStyle(icon).color;
 	// DOM-simulated hover does not activate CSS :hover; focus-visible uses the same palette.
 	wrapper.focus();
@@ -1474,7 +1485,7 @@ export async function runChipButtonVariantPlay({ canvasElement }: { canvasElemen
 		'var(--core-text-special)',
 	);
 	wrapper.blur();
-	await userEvent.unhover(wrapper);
+	await clearHover();
 	await waitFor(() => expect(getComputedStyle(icon).color).toBe(before));
 	wrapper.focus();
 	await userEvent.keyboard('{Enter}');
