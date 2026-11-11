@@ -53,6 +53,7 @@ const reactComponentSection: ListSection = [
 	{ title: 'Pager', slug: 'pager', code: true },
 	{
 		title: 'PopMenu',
+		id: 'sidebar.group.pop-menu',
 		slug: 'pop-menu',
 		code: true,
 		childDocs: [
@@ -71,6 +72,7 @@ const reactComponentSection: ListSection = [
 	{ title: 'Switch', slug: 'switch', code: true },
 	{
 		title: 'TabBar',
+		id: 'sidebar.group.tab-bar',
 		slug: 'tab-bar',
 		code: true,
 		childDocs: [

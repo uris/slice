@@ -101,8 +101,9 @@ export const FlexBox = React.memo(
 				overflow: overflow ?? layoutSets[preset].overflow,
 				wrap: wrap ?? layoutSets[preset].wrap,
 				alignContent: layoutSets[preset].alignContent,
+				gap: gap ?? layoutSets[preset].gap,
 			};
-		}, [preset, width, height, direction, align, justify, scrollY, scrollX, shrinkChildren, flex, overflow, wrap]);
+		}, [preset, width, height, direction, align, justify, scrollY, scrollX, shrinkChildren, flex, overflow, wrap, gap]);
 
 		const setScroll = useCallback((value: boolean | undefined) => {
 			if (value === undefined) return undefined;
@@ -131,7 +132,7 @@ export const FlexBox = React.memo(
 				bottom: `${absolute ? '0' : 'unset'}`,
 				left: `${absolute ? '0' : 'unset'}`,
 				right: `${absolute ? '0' : 'unset'}`,
-				gap: gap !== undefined ? `${gap}px` : 'unset',
+				gap: presets.gap !== undefined ? `${presets.gap}px` : 'unset',
 				border: `${border ?? 'unset'}`,
 				background: `${background ?? 'transparent'}`,
 				overflow: presets.overflow,
@@ -148,7 +149,6 @@ export const FlexBox = React.memo(
 			reverse,
 			padding,
 			margin,
-			gap,
 			border,
 			background,
 			centerSelf,

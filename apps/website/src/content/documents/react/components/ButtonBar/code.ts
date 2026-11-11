@@ -1,65 +1,13 @@
-export const usageCode = `
-import { ButtonBar } from '@apple-pie/slice';
+export const usageCode =
+	'import { Button, ButtonBar } from \'@apple-pie/slice\';\n\nexport function DocumentActions() {\n  return (\n    <ButtonBar aria-label="Document actions">\n      <Button label="Edit" iconLeft="editor.edit" />\n      <Button label="Options" iconRight="arrows.chevron-down" />\n      <Button iconLeft="basic.more-horiz-fill" aria-label="More actions" />\n    </ButtonBar>\n  );\n}';
+export const optionsCode =
+	"<ButtonBar\n  aria-label=\"Document actions\"\n  buttons={[{ label: 'Edit' }, { label: 'Duplicate' }, { label: 'Archive' }]}\n/>";
 
-export function ButtonBarUsageExample() {
-	const runAction = (button: unknown) => console.log(button);
+export const verticalOrientation =
+	"<FlexBox preset={Preset.ButtonBar}>\n  <ButtonBar aria-label=\"Document zoom\" orientation=\"vertical\" buttonSize=\"s\"\n    buttons={[{iconRight: 'basic.plus', 'aria-label': 'Increase'}, {iconRight: 'basic.minus', 'aria-label': 'Decrease'}]} />\n  <ButtonBar aria-label=\"Document navigation\" orientation=\"vertical\" buttonSize=\"s\"\n    buttons={[{iconRight: 'arrows.chevron-up', 'aria-label': 'Previous'}, {iconRight: 'arrows.chevron-down', 'aria-label': 'Next'}]} />\n</FlexBox>";
 
-	return (
-		<ButtonBar
-			buttons={[
-				{ icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
-				{ icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
-			]}
-			onClick={runAction}
-		/>
-	);
-}
-`;
+export const flexBoxCode =
+	'import { Button, ButtonBar, FlexBox, Preset } from \'@apple-pie/slice\';\n\nexport function GroupedActions() {\n\treturn (\n\t\t<FlexBox preset={Preset.FillCenterMiddle} gap={16}>\n\t\t\t<FlexBox preset={Preset.ButtonBar}>\n\t\t\t\t<ButtonBar aria-label="Document actions">\n\t\t\t\t\t<Button label="Edit" iconLeft="editor.edit" />\n\t\t\t\t\t<Button label="Options" iconRight="arrows.chevron-down" />\n\t\t\t\t\t<Button iconLeft="basic.more-horiz-fill" aria-label="More actions" />\n\t\t\t\t</ButtonBar>\n\t\t\t\t<ButtonBar aria-label="Document actions">\n\t\t\t\t\t<Button iconRight="basic.plus" aria-label="Increase" />\n\t\t\t\t\t<Button iconLeft="basic.minus" aria-label="Decrease" />\n\t\t\t\t</ButtonBar>\n\t\t\t\t<ButtonBar aria-label="Document actions">\n\t\t\t\t\t<Button label={\'search\'} iconLeft="basic.search" />\n\t\t\t\t</ButtonBar>\n\t\t\t</FlexBox>\n\t\t</FlexBox>\n\t);\n}';
 
-export const example2Code = `
-import { ButtonBar } from '@apple-pie/slice';
-
-export function ButtonBarAppearanceExample() {
-	const buttons: NonNullable<React.ComponentProps<typeof ButtonBar>['buttons']> = [
-		{ icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
-		{ icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
-	];
-
-	return <ButtonBar buttons={buttons} buttonSize={40} borderWidth={1} borderRadius={12} />;
-}
-`;
-
-export const controlledCode = `
-import { ButtonBar } from '@apple-pie/slice';
-import { useState } from 'react';
-
-export function ButtonBarControlledExample() {
-	const buttons: NonNullable<React.ComponentProps<typeof ButtonBar>['buttons']> = [
-		{ icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
-		{ icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
-	];
-	const [selectedIndex, setSelectedIndex] = useState(0);
-
-	return (
-		<ButtonBar
-			buttons={buttons}
-			toggle
-			selectedIndex={selectedIndex}
-			onChange={(button) => setSelectedIndex(buttons.indexOf(button))}
-		/>
-	);
-}
-`;
-
-export const overlapCode = `
-import { ButtonBar } from '@apple-pie/slice';
-
-export function ButtonBarOverlapExample() {
-	const buttons: NonNullable<React.ComponentProps<typeof ButtonBar>['buttons']> = [
-		{ icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
-		{ icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
-	];
-
-	return <ButtonBar buttons={buttons} selectionRadius={12} buttonGap={-4} padding={8} />;
-}
-`;
+export const inputField =
+	"import { Button, ButtonBar, FileIcon, FlexBox, PopMenu, PopMenuItem, Preset, TextField } from '@apple-pie/slice';\nimport { useState } from 'react';\n\nexport function InputBarExample() {\n\tconst [quantity, setQuantity] = useState('100');\n\tconst [recentDocument, setRecentDocument] = useState('');\n\tconst [menuCaller, setMenuCaller] = useState<HTMLElement>();\n\tconst adjust = (amount: number) => setQuantity(String((Number(quantity) || 0) + amount));\n\treturn (\n\t\t<FlexBox preset={Preset.ButtonBar}>\n\t\t\t<ButtonBar aria-label=\"Adjust zoom\" onChange={setQuantity}>\n\t\t\t\t<Button iconLeft=\"basic.plus\" aria-label=\"Increase\" onClick={() => adjust(1)} />\n\t\t\t\t<TextField inputName=\"Zoom\" width={'7ch'} value={quantity} textAlign=\"center\" />\n\t\t\t\t<Button iconLeft=\"basic.minus\" aria-label=\"Decrease\" onClick={() => adjust(-1)} />\n\t\t\t</ButtonBar>\n\t\t\t<ButtonBar\n\t\t\t\taria-label=\"Recent documents\"\n\t\t\t\tonClick={(event) => {\n\t\t\t\t\tif (!event) return;\n\t\t\t\t\tconst group = event.currentTarget.closest<HTMLElement>('[role=\"group\"]');\n\t\t\t\t\tif (group) setMenuCaller(menuCaller ? undefined : group);\n\t\t\t\t}}\n\t\t\t>\n\t\t\t\t<TextField\n\t\t\t\t\tinputName=\"Recent\"\n\t\t\t\t\twidth=\"fill\"\n\t\t\t\t\tplaceholder=\"Recent ...\"\n\t\t\t\t\tvalue={recentDocument}\n\t\t\t\t\tonChange={setRecentDocument}\n\t\t\t\t/>\n\t\t\t\t<Button\n\t\t\t\t\ticonLeft=\"basic.more-horiz-fill\"\n\t\t\t\t\taria-label=\"Show recent documents\"\n\t\t\t\t\taria-haspopup=\"menu\"\n\t\t\t\t\taria-expanded={Boolean(menuCaller)}\n\t\t\t\t/>\n\t\t\t</ButtonBar>\n\t\t\t{menuCaller && (\n\t\t\t\t<PopMenu\n\t\t\t\t\tcaller={menuCaller}\n\t\t\t\t\toffset=\"bottom\"\n\t\t\t\t\tgap={8}\n\t\t\t\t\tminWidth={240}\n\t\t\t\t\tstyle={{ width: 280 }}\n\t\t\t\t\tonClickItem={(_, item) => setRecentDocument(item.label ?? '')}\n\t\t\t\t\tonDismiss={() => setMenuCaller(undefined)}\n\t\t\t\t>\n\t\t\t\t\t{[\n\t\t\t\t\t\t{ id: 'design-brief', label: 'Website redesign brief.pdf' },\n\t\t\t\t\t\t{ id: 'product-roadmap', label: 'Product roadmap.xlsx' },\n\t\t\t\t\t\t{ id: 'meeting-notes', label: 'Monday meeting notes.docx' },\n\t\t\t\t\t\t{ id: 'research', label: 'Customer research summary.pdf' },\n\t\t\t\t\t\t{ id: 'launch', label: 'Launch presentation.pptx' },\n\t\t\t\t\t].map((document) => (\n\t\t\t\t\t\t<PopMenuItem key={document.id} id={document.id} label={document.label}>\n\t\t\t\t\t\t\t<span\n\t\t\t\t\t\t\t\tstyle={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-s)', minWidth: 0, width: '100%' }}\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\t<FileIcon filename={document.label} size={20} decorative style={{ flexShrink: 0 }} />\n\t\t\t\t\t\t\t\t<span\n\t\t\t\t\t\t\t\t\tstyle={{ minWidth: 0, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}\n\t\t\t\t\t\t\t\t\ttitle={document.label}\n\t\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\t\t{document.label}\n\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</PopMenuItem>\n\t\t\t\t\t))}\n\t\t\t\t</PopMenu>\n\t\t\t)}\n\t\t</FlexBox>\n\t);\n}";

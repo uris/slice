@@ -1,313 +1,130 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexBox } from '../FlexBox';
 import * as ButtonBarStories from './ButtonBar.stories';
-import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ButtonBarStories} />
 
-<FlexBox width="fill" maxWidth={760} height="auto">
 <Unstyled>
+
 # ButtonBar
 
-Group icon actions with circular hover and selection highlights. The bar uses a
-native button group; `tip` provides each accessible name. Icons are decorative.
+Group related actions in a horizontal or vertical stack, with shared styling and optional separators.
 
-## Usage and behavior
+## Usage
 
-Enable `toggle`, then use `defaultSelectedIndex` for local selection or `selectedIndex` plus `onChange` for controlled
-selection. Indices are zero-based. Set `selectedIndex={null}` to clear a controlled
-selection. Invalid indices display no selection. Defaults are read once;
-controlled selection changes only when the parent updates `selectedIndex`.
+```tsx
+import { Button, ButtonBar } from '@apple-pie/slice';
 
-Buttons are independent actions by default. Enable `toggle` for selection: buttons expose `aria-pressed`. Activating a different item calls
-`onClick`, then `onChange`. With `toggle={false}`, items are independent actions without
-pressed state or change notifications. Items render no labels.
+export function DocumentActions() {
+  return (
+    <ButtonBar aria-label="Document actions">
+      <Button label="Edit" iconLeft="editor.edit" />
+      <Button label="Options" iconRight="arrows.chevron-down" />
+      <Button iconLeft="basic.more-horiz-fill" aria-label="More actions" />
+    </ButtonBar>
+  );
+}
+```
 
-`buttonSize` presets match Button’s overall height: s=24px, m=36px, l=44px, and xl=56px. The inner circles subtract the default 4px inset on each side and the outer border. Positive numeric sizes instead specify the inner circle diameter. `iconSize` controls its icon. The bar
-uses padding (4px by default) uniformly inside its wrapper, and buttonGap (-2px by default) between buttons. Set padding to 0 for no inset. Negative
-buttonGap values overlap buttons and their hit areas. selectionRadius shapes each
-hover/selection highlight and its inset focus indicator; the default is 50% (a circle). `backgroundColor` colors the bar; hover and
-selected colors apply to the individual circles. `borderRadius` affects only the
-outer bar, and `borderWidth` adds an outer border without internal separators.
+Or supply Button props:
+
+```tsx
+<ButtonBar
+  aria-label="Document actions"
+  buttons={[{ label: 'Edit' }, { label: 'Duplicate' }, { label: 'Archive' }]}
+/>
+```
+
+## Compose a text field
+
+```tsx
+<ButtonBar aria-label="Quantity" onChange={setQuantity}>
+  <Button iconLeft="basic.plus" aria-label="Increase" onClick={increase} />
+  <TextField inputName="Quantity" width={120} value={quantity} textAlign="center" />
+  <Button iconLeft="basic.minus" aria-label="Decrease" onClick={decrease} />
+</ButtonBar>
+```
+
+Import `TextField` from `@apple-pie/slice`. The application owns `quantity`, `setQuantity`, `increase`, and `decrease`.
+The bar fits its children by default. A field keeps its explicit width; without one it uses content sizing.
+Its variant is always `simple`, its height follows `buttonSize`, and its border/radius are removed to share the frame.
+TextFields retain their own padding, including their standard defaults. The bar's padding props apply only to buttons; `inset` adds separate space at the outer edges.
+Other field callbacks stay on the field; Button callbacks remain button-only.
+
+## Behavior
+
+Defined parent styles override child styles. Omitted values preserve child settings before applying bar defaults. Borders and corners belong to the wrapper; child buttons are square and borderless. When both APIs are used, button definitions render before composed children. The bar does not manage selection.
 
 ## Accessibility
 
-The root is a group named “Actions”; override its `aria-label` for context. Each
-button uses `tip` as its name. Enter and Space activate a button, Tab visits each
-button, and focus-visible shows an inset indicator. This is not a tab list or radio group.
-Tooltips can be requested on focus as well as hover; the application renders them.
-Color changes use the theme’s Water duration and easing, with transitions disabled
-when the viewer prefers reduced motion.
+The wrapper uses role="group". Name it with aria-label or aria-labelledby, and give icon-only buttons their own aria-label. Buttons retain native Tab, Enter, and Space behavior. Separators are decorative. Focusing any child changes the wrapper border color. Buttons additionally retain their inset keyboard focus ring.
 
 ## Props
 
+Colors accept Slice tokens or CSS colors. Shared style overrides apply only when defined.
+
 <table>
-<thead>
-<tr>
-<th>Prop</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
+<thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
 <tbody>
-<tr>
-<td>
-<code>backgroundColor</code>
-</td>
-<td>
-<code>ColorValue</code>
-</td>
-<td>
-<code>core-surface-secondary</code>
-</td>
-<td>Background of the bar. Unselected buttons are transparent.</td>
-</tr>
-<tr>
-<td>
-<code>backgroundColorHover</code>
-</td>
-<td>
-<code>ColorValue</code>
-</td>
-<td>
-<code>core-outline-primary</code>
-</td>
-<td>Circular highlight on hover. A selected button keeps backgroundColorSelected.</td>
-</tr>
-<tr>
-<td>
-<code>backgroundColorSelected</code>
-</td>
-<td>
-<code>ColorValue</code>
-</td>
-<td>
-<code>core-outline-primary</code>
-</td>
-<td>Circular highlight for the selected button.</td>
-</tr>
-<tr>
-<td>
-<code>borderColor</code>
-</td>
-<td>
-<code>ColorValue</code>
-</td>
-<td>
-<code>core-outline-primary</code>
-</td>
-<td>Outer border color. Buttons have no internal separators.</td>
-</tr>
-<tr>
-<td>
-<code>borderRadius</code>
-</td>
-<td>
-<code>number &#124; string</code>
-</td>
-<td>
-<code>corner-round</code>
-</td>
-<td>Outer bar corner radius. Numbers are pixels; strings are CSS values. selectionRadius controls the individual highlights.</td>
-</tr>
-<tr>
-<td>
-<code>borderWidth</code>
-</td>
-<td>
-<code>number</code>
-</td>
-<td>
-<code>0</code>
-</td>
-<td>Outer border width in pixels.</td>
-</tr>
-<tr>
-<td>
-<code>buttonGap</code>
-</td>
-<td>
-<code>number</code>
-</td>
-<td>
-<code>-2</code>
-</td>
-<td>Space between buttons in pixels. Negative values overlap buttons and their hit areas. Selected, hovered, and focused buttons are raised above idle neighbors.</td>
-</tr>
-<tr>
-<td>
-<code>buttons</code>
-</td>
-<td>
-<code>BarButton[]</code>
-</td>
-<td>
-<code>[]</code>
-</td>
-<td>Icon action records: &#123; icon?: string; action?: string; tip: string &#125;. tip names the button and supplies tooltip text. action is optional application metadata; callbacks receive the original record.</td>
-</tr>
-<tr>
-<td>
-<code>buttonSize</code>
-</td>
-<td>
-<code>'s' &#124; 'm' &#124; 'l' &#124; 'xl' &#124; number</code>
-</td>
-<td>
-<code>m</code>
-</td>
-<td>Overall height presets: s=24px, m=36px, l=44px, xl=56px. Default wrapper padding and borders are compensated inside these heights. A positive finite number sets the inner circle diameter instead. Invalid runtime values use m.</td>
-</tr>
-<tr>
-<td>
-<code>defaultSelectedIndex</code>
-</td>
-<td>
-<code>number &#124; null</code>
-</td>
-<td>
-<code>null</code>
-</td>
-<td>Initial uncontrolled selected index, read once. Ignored when selectedIndex is supplied. null starts without selection.</td>
-</tr>
-<tr>
-<td>
-<code>iconSize</code>
-</td>
-<td>
-<code>number</code>
-</td>
-<td>
-<code>20</code>
-</td>
-<td>Icon dimensions in pixels.</td>
-</tr>
-<tr>
-<td>
-<code>padding</code>
-</td>
-<td>
-<code>number</code>
-</td>
-<td>
-<code>4</code>
-</td>
-<td>Uniform wrapper inset in pixels; defaults to spacing-xs (4px). Explicit overrides are exact and change the overall height without shrinking the inner circles further. Set 0 for no inset. Independent of buttonGap.</td>
-</tr>
-<tr>
-<td>
-<code>selectedIndex</code>
-</td>
-<td>
-<code>number &#124; null</code>
-</td>
-<td>
-<code>undefined</code>
-</td>
-<td>Controlled zero-based selected index. null means no selection; undefined enables local selection. onChange does not change a controlled selection until this prop changes.</td>
-</tr>
-<tr>
-<td>
-<code>selectionRadius</code>
-</td>
-<td>
-<code>number | string</code>
-</td>
-<td>
-<code>'50%'</code>
-</td>
-<td>Individual hover/selection highlight and focus-indicator radius. Numbers are pixels; strings are CSS values. Outer bar radius remains borderRadius.</td>
-</tr>
-<tr>
-<td>
-<code>toggle</code>
-</td>
-<td>
-<code>boolean</code>
-</td>
-<td>
-<code>false</code>
-</td>
-<td>Enables single selection with aria-pressed. false makes buttons independent actions and suppresses onChange.</td>
-</tr>
-<tr>
-<td>
-<code>...divAttributes</code>
-</td>
-<td>
-<code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code>
-</td>
-<td>
-<code>undefined</code>
-</td>
-<td>Other attributes apply to the group root. className is appended; style is merged after component variables. Override aria-label to name the group. Children are not rendered; items come from buttons.</td>
-</tr>
+<tr><td><code>animate</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Motion animation target forwarded to each Button.</td></tr>
+<tr><td><code>backgroundColor</code></td><td><code>ColorValue</code></td><td><code>core-surface-secondary</code></td><td>Surface color for the wrapper and all buttons. When omitted, individual button backgrounds are preserved.</td></tr>
+<tr><td><code>backgroundColorDisabled</code></td><td><code>ColorValue</code></td><td><code>Button variant default</code></td><td>Shared disabled button background.</td></tr>
+<tr><td><code>backgroundColorHover</code></td><td><code>ColorValue</code></td><td><code>derived from hoverTint</code></td><td>Explicit hover background; takes precedence over the derived tint.</td></tr>
+<tr><td><code>borderColor</code></td><td><code>ColorValue</code></td><td><code>core-fill-primary</code></td><td>Wrapper border color; children have no borders.</td></tr>
+<tr><td><code>borderColorFocused</code></td><td><code>ColorValue</code></td><td><code>core-fill-secondary</code></td><td>Wrapper border color while a child has focus. Composed fields use this instead of an inner outline.</td></tr>
+<tr><td><code>borderRadius</code></td><td><code>number  /  string</code></td><td><code>half buttonSize</code></td><td>Wrapper corner radius. Numeric sizes use half their pixel value; auto uses 18px.</td></tr>
+<tr><td><code>borderStyle</code></td><td><code>CSSProperties[&#x27;borderStyle&#x27;]</code></td><td><code>solid</code></td><td>Wrapper border style.</td></tr>
+<tr><td><code>borderWidth</code></td><td><code>number  /  string</code></td><td><code>1</code></td><td>Wrapper border thickness. Numbers use pixels.</td></tr>
+<tr><td><code>buttons</code></td><td><code>ButtonProps[]</code></td><td><code>[]</code></td><td>Button definitions rendered before composed Button children.</td></tr>
+<tr><td><code>buttonSize</code></td><td><code>s  /  m  /  l  /  xl  /  auto  /  number</code></td><td><code>m</code></td><td>Shared button size: 24, 36, 44, or 56px. Small buttons add 2px top and bottom by default for a 28px frame. Numeric padding contributes to that small frame; CSS string padding is applied within its fixed frame. Auto follows content.</td></tr>
+<tr><td><code>children</code></td><td><code>ReactNode</code></td><td><code>undefined</code></td><td>Only direct Button and TextField elements are processed. TextField is forced to simple/persistent, uses the bar height, and retains its own width and value callbacks. Other nodes, including fragments and custom wrapper components, are ignored.</td></tr>
+<tr><td><code>destructive</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shared destructive Button styling.</td></tr>
+<tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables every button and field when supplied; false also overrides disabled child values.</td></tr>
+<tr><td><code>divider</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show decorative separators between adjacent buttons.</td></tr>
+<tr><td><code>dividerColor</code></td><td><code>ColorValue</code></td><td><code>core-fill-primary</code></td><td>Separator color.</td></tr>
+<tr><td><code>dividerOpacity</code></td><td><code>number</code></td><td><code>0.75</code></td><td>Separator opacity from 0 to 1.</td></tr>
+<tr><td><code>dividerStyle</code></td><td><code>CSSProperties[&#x27;borderStyle&#x27;]</code></td><td><code>solid</code></td><td>Separator border style.</td></tr>
+<tr><td><code>dividerWidth</code></td><td><code>number  /  string</code></td><td><code>1</code></td><td>Separator thickness. Numbers use pixels.</td></tr>
+<tr><td><code>exit</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Motion exit target forwarded to each Button.</td></tr>
+<tr><td><code>fill</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Button fill treatment; separate from choosing a filled icon name.</td></tr>
+<tr><td><code>gap</code></td><td><code>number</code></td><td><code>6</code></td><td>Pixel gap between icons and content, and between composed children. Does not space buttons apart.</td></tr>
+<tr><td><code>hoverTint</code></td><td><code>number</code></td><td><code>4</code></td><td>Percentage mixed toward white on hover, clamped to 0–100. Zero disables tinting. Explicit hover backgrounds take precedence.</td></tr>
+<tr><td><code>iconColor</code></td><td><code>ColorValue</code></td><td><code>core-text-secondary</code></td><td>Shared icon color; individual child colors are retained when omitted.</td></tr>
+<tr><td><code>iconColorHover</code></td><td><code>ColorValue</code></td><td><code>core-text-primary</code></td><td>Shared hover icon color.</td></tr>
+<tr><td><code>iconFill</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Passes Button icon fill behavior through to its icons.</td></tr>
+<tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>20</code></td><td>Icon dimensions in pixels, clamped to a 14px minimum.</td></tr>
+<tr><td><code>iconStrokeWidth</code></td><td><code>number</code></td><td><code>1.5 at 14px; otherwise 1.25</code></td><td>Explicit icon stroke width overrides the size-dependent default.</td></tr>
+<tr><td><code>initial</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Motion initial target forwarded to each Button.</td></tr>
+<tr><td><code>inset</code></td><td><code>number  /  string</code></td><td><code>4; l: 6; xl: 10; vertical: 0</code></td><td>Extra left/right space inside edge button backgrounds. Horizontal bars apply it at the first and last item, including fields; vertical bars apply it on both sides of every item. Zero is respected.</td></tr>
+<tr><td><code>orientation</code></td><td><code>horizontal  /  vertical</code></td><td><code>horizontal</code></td><td>Stack direction. Vertical buttons fill the bar width.</td></tr>
+<tr><td><code>padding</code></td><td><code>number  /  string</code></td><td><code>Button default</code></td><td>Shared button padding shorthand; does not pad the wrapper. Explicit padding bypasses small-size padding defaults.</td></tr>
+<tr><td><code>paddingBottom</code></td><td><code>number  /  string</code></td><td><code>2 for s; Button default otherwise</code></td><td>Button bottom padding. Explicit side values override shorthand and defaults.</td></tr>
+<tr><td><code>paddingLeft</code></td><td><code>number  /  string</code></td><td><code>Button default</code></td><td>Button left padding, separate from the bar edge inset.</td></tr>
+<tr><td><code>paddingRight</code></td><td><code>number  /  string</code></td><td><code>Button default</code></td><td>Button right padding, separate from the bar edge inset.</td></tr>
+<tr><td><code>paddingTop</code></td><td><code>number  /  string</code></td><td><code>2 for s; Button default otherwise</code></td><td>Button top padding. Explicit side values override shorthand and defaults.</td></tr>
+<tr><td><code>state</code></td><td><code>normal  /  hover  /  disabled</code></td><td><code>normal</code></td><td>Shared Button visual state.</td></tr>
+<tr><td><code>textColor</code></td><td><code>ColorValue</code></td><td><code>core-text-secondary</code></td><td>Shared text color; individual child colors are retained when omitted.</td></tr>
+<tr><td><code>textColorHover</code></td><td><code>ColorValue</code></td><td><code>core-text-primary</code></td><td>Shared hover text color.</td></tr>
+<tr><td><code>textSize</code></td><td><code>xs  /  s  /  m  /  l  /  xl</code></td><td><code>m</code></td><td>Shared text size, independent of buttonSize.</td></tr>
+<tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>Button default</code></td><td>Motion transition forwarded to each Button.</td></tr>
+<tr><td><code>underline</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Underline Button content on hover and keyboard focus.</td></tr>
+<tr><td><code>variant</code></td><td><code>solid  /  outline  /  text</code></td><td><code>outline</code></td><td>Shared Button variant. The wrapper always owns borders and corners.</td></tr>
+<tr><td><code>variants</code></td><td><code>Variants</code></td><td><code>undefined</code></td><td>Motion variants forwarded to each Button.</td></tr>
+<tr><td><code>width</code></td><td><code>string</code></td><td><code>content width</code></td><td>Wrapper width; fill means 100%. Vertical child buttons fill this width.</td></tr>
+<tr><td><code>...divAttributes</code></td><td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td><td><code>undefined</code></td><td>Other non-event DOM attributes apply to the group wrapper. className is appended; component geometry takes precedence over style. Supply aria-label or aria-labelledby to name the group.</td></tr>
 </tbody>
 </table>
 
 ## Events
 
-<table>
-<thead>
-<tr>
-<th>Event</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>onChange</code>
-</td>
-<td>
-<code>(button: BarButton) =&gt; void</code>
-</td>
-<td>Requests a different selection when toggle is true. Receives the original record, not its index. Suppressed when the selected item is activated again. Programmatic prop changes do not emit this callback.</td>
-</tr>
-<tr>
-<td>
-<code>onClick</code>
-</td>
-<td>
-<code>(button: BarButton) =&gt; void</code>
-</td>
-<td>Runs for every pointer or keyboard activation, including the already selected item. Runs before onChange when both are emitted.</td>
-</tr>
-<tr>
-<td>
-<code>onToolTip</code>
-</td>
-<td>
-<code>(tip: ToolTip &#124; null) =&gt; void</code>
-</td>
-<td>Receives text and the button ref on hover or focus; a mouse event is included for hover only. Receives null on activation or after both hover and focus have left. Your application renders the tooltip.</td>
-</tr>
-</tbody>
-</table>
+Child callbacks run before parent callbacks. Parent click/change callbacks receive the original event/value followed by item metadata. Parent handlers receive button events rather than wrapper events. onClick can receive undefined for programmatic or deferred Button activation; onToolTip receives a tooltip or null to dismiss it.
 
-Other native events apply to the group root. `onClick` and `onChange` above use
-component item payloads rather than native event objects.
+- `onChange`: `(value: string, item: ButtonBarItemInfo) => void`, forwarded from composed TextField children after their own callback. Item details include the zero-based mixed-item index, label (label/inputName/name), and optional ID (inputId/id). Does not run for button clicks or programmatic value updates.
+- `onClick`: `(event: Parameters<NonNullable<ButtonProps["onClick"]>>[0], item: ButtonBarItemClickInfo) => void`. Item details include zero-based `index`, optional `id`, and `label` from text content or an accessible label/tooltip. The index counts every processed item, including TextFields; definitions render before composed children. Use explicit button IDs for stable identity when reordering.
+- `onToolTip`: `ButtonProps["onToolTip"]`.
+- Other Button event callbacks (for example `onFocus`, `onBlur`, and pointer events) are forwarded using their Button signatures.
+
+## Migration
+
+The previous icon-record API has been replaced. Use `ButtonProps` (`iconLeft` and `aria-label` instead of `icon` and `tip`), and handle actions in each Button or the bar callback. `BarButton`, `toggle`, `selectedIndex`, `defaultSelectedIndex`, `selectionRadius`, and `buttonGap` are removed. Use `inset` for outer content spacing and `divider` for separators. `onClick` now receives the Button event rather than an item record; selection belongs to the application.
+
 </Unstyled>
-
-<RenderSource>
-```
-import { ButtonBar } from '@apple-pie/slice';
-
-<ButtonBar
-    aria-label="Navigation"
-    buttons={[
-        { icon: 'arrows.arrow-left', action: 'previous', tip: 'Previous' },
-        { icon: 'arrows.arrow-right', action: 'next', tip: 'Next' },
-    ]}
-    onClick={runAction}
-/>
-```
-</RenderSource>
-<RenderSource>
-```
-<ButtonBar buttons={buttons} selectionRadius={12} buttonGap={-4} padding={8} />
-```
-</RenderSource>
-</FlexBox>

@@ -409,6 +409,12 @@ For example, React's AudioBubble route is `/docs/react/audio-bubble/`. Documents
 are package-specific; registering a React doc does not register a React Native doc.
 The [website README](../../../README.md#documents) explains the routing workflow.
 
+Sidebar entries accept an optional `id` field that overrides the full DOM ID.
+Document entries otherwise use `sidebar.<slug>`; entries without a slug omit the ID.
+When a parent and one of its child documents share a slug, give the parent a unique
+ID such as `sidebar.group.pop-menu`. Keep the child's default `sidebar.pop-menu`
+ID so document scrolling continues to target the document entry.
+
 ## Checks and guidance for AI contributors
 
 Before considering a document complete:

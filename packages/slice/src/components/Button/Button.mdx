@@ -55,12 +55,13 @@ ColorValue accepts Slice color tokens and CSS colors. Native button attributes a
 | `duration` | `number` | `undefined` | Timed progress delay in seconds. Requires progress and a positive, finite value. Has no effect on controlled working state. |
 | `exit` | `string` | `undefined` | Named Motion variant for exit animation. Requires an AnimatePresence parent to animate removal. |
 | `fill` | `boolean` | `false` | Uses core-surface-primary for the enabled background, ahead of variant and backgroundColor. This controls the fill color, not width. |
-| `gap` | `number` | `4` | Pixel gap between icons and content, and between children. Use 0 to remove it. |
+| `gap` | `number` | `6` | Pixel gap between icons and content, and between children. Use 0 to remove it. |
 | `iconColor` | `ColorValue` | `variant icon color` | Color of both icons. Overrides the preset in all states. |
 | `iconFill` | `boolean` | `false` | Fills icon shapes that support a filled appearance. |
 | `iconLeft` | `string` | `undefined` | Registered icon name displayed before the label. |
 | `iconRight` | `string` | `undefined` | Registered icon name displayed after the label. |
-| `iconSize` | `number` | `20` | Icon and spinner size in pixels. |
+| `iconSize` | `number` | `20` | Icon and spinner size in pixels, clamped to a 14px minimum. |
+| `iconStrokeWidth` | `number` | `1.5 at 14px; otherwise 1.25` | Explicit stroke width overrides the size-dependent default. |
 | `initial` | `string` | `undefined` | Named Motion variant used for the initial appearance. |
 | `label` | `string` | `undefined` | Visible action label when children is not supplied. |
 | `link` | `string` | `undefined` | URL opened after a normal activation with window.open. onClick can cancel navigation with event.preventDefault(). Timed progress does not navigate on completion. |

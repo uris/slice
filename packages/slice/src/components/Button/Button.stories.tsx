@@ -86,7 +86,7 @@ export const AutoChildren: StoryObj<typeof Button> = {
 		const text = canvas.getByText('Profile Info').getBoundingClientRect();
 		expect(avatar.top - button.top).toBeCloseTo(6, 1);
 		expect(button.bottom - avatar.bottom).toBeCloseTo(6, 1);
-		expect(text.left - avatar.right).toBeCloseTo(4, 1);
+		expect(text.left - avatar.right).toBeCloseTo(6, 1);
 		expect(text.top + text.height / 2).toBeCloseTo(avatar.top + avatar.height / 2, 1);
 	},
 };

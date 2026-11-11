@@ -27,6 +27,7 @@ const withoutAria = (attributes: object) =>
 const useClientLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 const defaultClearButton = { size: 20 };
 type ActionMotion = { reduced: boolean; transition: Transition };
+
 function ActionFrame({ children, settings }: { children: React.ReactNode; settings: ActionMotion }) {
 	const [present, safeToRemove] = usePresence();
 	const presenceSettings = usePresenceData() as ActionMotion | undefined;
@@ -59,6 +60,7 @@ function ActionFrame({ children, settings }: { children: React.ReactNode; settin
 		</motion.div>
 	);
 }
+
 function TextFieldComponent(rawProps: TextFieldProps) {
 	const props = resolveColorProps(rawProps);
 	const theme = useTheme();
@@ -91,7 +93,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		actionButton = false,
 		actionLabel = 'Action',
 		maxLength,
-		width = '100%',
+		width = 'fill',
 		height = 'auto',
 		padding,
 		borderRadius,
@@ -103,8 +105,8 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		error = false,
 		errorMessage,
 		tip,
-		borderColorFocused = 'var(--core-link-primary)',
-		borderColorBlurred = 'var(--core-outline-primary)',
+		borderColorFocused = 'var(--core-fill-secondary)',
+		borderColorBlurred = 'var(--core-fill-primary)',
 		borderColorError = 'var(--feedback-warning)',
 		backgroundColorFocused,
 		backgroundColorBlurred,
@@ -146,8 +148,8 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		if (!wrapper || !field) return;
 		const measure = () => {
 			const padding = getComputedStyle(wrapper);
-			field.style.setProperty('--tf-message-left', padding.paddingLeft);
-			field.style.setProperty('--tf-message-right', padding.paddingRight);
+			field.style.setProperty('--tf-message-left', `calc(${padding.paddingLeft} + ${padding.borderLeftWidth})`);
+			field.style.setProperty('--tf-message-right', `calc(${padding.paddingRight} + ${padding.borderRightWidth})`);
 		};
 		measure();
 		const observer = new ResizeObserver(measure);
@@ -282,19 +284,27 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		if (isFocused) return backgroundColorFocused ?? fallback;
 		return backgroundColorBlurred ?? fallback;
 	};
-	const getBoxShadow = () => {
-		if (borderStyle === 'none') return 'none';
-		const borderColor = getBorderColor();
-		if (borderStyle === 'underline') return `0 1px 0 0 ${borderColor}`;
-		return `0 0 0 1px ${borderColor}`;
+	const getBorderWidth = () => {
+		if (borderStyle === 'none') return '0';
+		if (borderStyle === 'underline') return '0 0 1px';
+		return '1px';
 	};
+
+	const resolvedBorderRadius = () => {
+		let baseRadius = borderStyle === 'underline' ? 0 : 16;
+		if (variant === 'simple') baseRadius = 100;
+		return setStyle(borderRadius, baseRadius);
+	};
+
 	const cssVars = {
 		'--tf-width': setStyle(width),
 		'--tf-height': setStyle(height),
 		'--tf-padding': getPadding(),
-		'--tf-border-radius': setStyle(borderRadius, borderStyle === 'underline' ? 0 : 8),
+		'--tf-border-radius': resolvedBorderRadius(),
 		'--tf-bg-color': getBackgroundColor(),
-		'--tf-box-shadow': getBoxShadow(),
+		'--tf-border-color': getBorderColor(),
+		'--tf-border-width': getBorderWidth(),
+		'--tf-border-top-width': borderStyle === 'box' ? '1px' : '0px',
 		'--tf-text-color': getTextColor(),
 		'--tf-label-color': disabled ? textColorDisabled : labelColor,
 		'--tf-text-align': textAlign,
@@ -319,7 +329,13 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		</span>
 	) : null;
 	return (
-		<div className={css.field} style={{ width: setStyle(width) }}>
+		<div
+			className={css.field}
+			style={{
+				width: width === 'fill' ? '100%' : setStyle(width),
+				flex: width === 'fill' ? '1 1 0%' : undefined,
+			}}
+		>
 			<div
 				{...withoutAria(divAttributes)}
 				data-variant={variant}
@@ -471,5 +487,6 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		</div>
 	);
 }
+
 TextFieldComponent.displayName = 'TextField';
 export const TextField = React.memo<TextFieldProps>(TextFieldComponent);

@@ -26,10 +26,13 @@
 	gap: 8px;
 	border-radius: var(--tf-border-radius);
 	background: var(--tf-bg-color);
-	box-shadow: var(--tf-box-shadow);
-	transition: background-color var(--motion-water-duration) var(--motion-water), box-shadow var(--motion-water-duration)
-		var(--motion-water);
+	background-clip: border-box;
+	border: solid var(--tf-border-color);
+	border-width: var(--tf-border-width);
+	transition: background-color var(--motion-water-duration) var(--motion-water), border-color
+		var(--motion-water-duration) var(--motion-water);
 }
+
 .container {
 	display: flex;
 	flex-direction: row;
@@ -42,6 +45,9 @@
 	flex: 0 0 auto;
 	color: var(--tf-label-color);
 	white-space: nowrap;
+}
+.wrapper[data-variant="simple"] > .label {
+	translate: 0 -0.067em;
 }
 .input {
 	flex: 1 1 auto;
@@ -56,6 +62,9 @@
 	margin: 0;
 	padding: 0;
 	text-align: var(--tf-text-align);
+	text-overflow: ellipsis;
+	/* Match Button's optical text lift without replacing the appear animation transform. */
+	translate: 0 -0.067em;
 	transition: color var(--motion-water-duration) var(--motion-water);
 }
 .input::placeholder {
@@ -171,8 +180,9 @@
 	pointer-events: none;
 }
 .wrapper[data-variant="outlined"] .labelSlot {
+	z-index: 1;
 	position: absolute;
-	top: calc(-1 * var(--tf-column-top, var(--spacing-s)) - var(--spacing-xxs) / 2);
+	top: calc(-1 * var(--tf-column-top, var(--spacing-s)) - var(--spacing-xxs) / 2 - var(--tf-border-top-width));
 	left: calc(-1 * var(--spacing-xs));
 	max-width: calc(100% + var(--spacing-xs) + var(--spacing-xs));
 	margin: 0;

@@ -15,30 +15,12 @@ Route: `/docs/react/button-bar/`. Source:
 [ButtonBar](../../../../../packages/slice/src/components/ButtonBar/ButtonBar.tsx),
 [types](../../../../../packages/slice/src/components/ButtonBar/_types.ts).
 
-- Removed unused item `label` and `labelColor` styling.
-- Removed `frameSize`; `buttonSize` now accepts a preset or a positive finite pixel
-  diameter. Removed `borderSize` in favor of `borderWidth`.
-- Renamed `backgroundColorActive` to `backgroundColorSelected` without an alias.
-- Selected and hovered items have circular highlights, inside a separately styled
-  bar. Uniform padding defaults to 4px and is configurable through padding;
-  buttonGap defaults to -2px and allows negative
-  overlap. selectionRadius defaults to 50% and accepts pixel or CSS radii. Borders
-  apply only to the outside edge.
-- Independent actions are the default (`toggle=false`), with no initial selection.
-  The website and main story show Previous/Next only.
-- With toggle enabled, selection is controlled when `selectedIndex` is supplied, including `null` for no
-  selection. `defaultSelectedIndex` initializes local selection once. Repeat activation
-  emits `onClick` without another `onChange`; independent action mode has no pressed state.
-- Native buttons expose `aria-pressed` in selection mode, use `tip` for accessible
-  names, hide decorative icons, and show a focus ring. The root is a named group;
-  Tab visits its buttons rather than introducing a toolbar arrow-key contract.
-- Tooltips support keyboard focus and hover; focus requests include the button ref
-  without a mouse event. Application tooltip rendering remains external.
-- Updated website docs, MDX, stories, type checks, and benchmark fixtures together.
-
-Optional follow-ups: stable item IDs for reorder identity, per-item disabled
-support, and an identity-based selection API if dynamic item reordering is needed.
-These were not necessary for the agreed index-based selection contract.
+- Replaced the legacy icon-record/selection API with composed `Button` and `TextField` elements plus `ButtonProps[]` definitions.
+- Added horizontal/vertical layouts, decorative dividers, hover tint, size-dependent edge insets, wrapper-only borders/corners, and a focus border state.
+- Parent `onClick` and `onChange` callbacks include `{ index, label, id }` metadata; child callbacks run first. Fields retain their width/padding and use the bar height with the simple variant.
+- Updated live website previews, snippets, full prop/event references, and tracked navigation. The existing route now documents the replacement.
+- Legacy `BarButton`, selection props, and overlap spacing are removed. Migration guidance lives in the component MDX.
+- Focused stories cover composition, multiple-input metadata, callback order, child widths/padding, simple-only layout, shared focus borders, keyboard/disabled behavior, hover colors, size defaults, label alignment, icon centering, and menu interaction.
 
 ## CheckBox — completed
 

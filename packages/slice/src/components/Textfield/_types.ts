@@ -59,10 +59,11 @@ type TextFieldBaseProps = {
 	tip?: string;
 	inline?: boolean;
 	maxLength?: number;
+	/** Defaults to fill: flexes into available space. Use auto for content sizing or a CSS width such as max-content. */
 	width?: number | string;
 	height?: number | string;
 	padding?: string | number;
-	/** Defaults to 0 for underline borders, otherwise 8px. */
+	/** Simple fields default to 100px; stacked/outlined fields use 0 for underline borders, otherwise 16px. */
 	borderRadius?: number | string;
 	textAlign?: 'left' | 'center';
 	borderColorFocused?: ColorValue;

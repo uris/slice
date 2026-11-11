@@ -37,12 +37,12 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 		placeholder = 'Enter text here...',
 		padding = 'var(--spacing-m) var(--spacing-s) var(--spacing-m) var(--spacing-m)',
 		borderStyle = 'box',
-		borderRadius = corners['corner-xs'],
+		borderRadius = corners['corner-l'],
 		error = false,
 		errorMessage,
 		tip,
-		borderColor = 'var(--core-outline-primary)',
-		borderColorFocused = 'var(--core-link-primary)',
+		borderColor = 'var(--core-fill-primary)',
+		borderColorFocused = 'var(--core-fill-secondary)',
 		borderColorError = 'var(--feedback-warning)',
 		backgroundColor = 'var(--core-surface-secondary)',
 		resizable = true,
@@ -157,8 +157,14 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 				Number.parseFloat(styles.paddingBottom) - Number.parseFloat(styles.paddingRight),
 			);
 			wrapper.style.setProperty('--ta-resize-offset', `${resizeOffset}px`);
-			wrapper.parentElement?.style.setProperty('--ta-message-left', styles.paddingLeft);
-			wrapper.parentElement?.style.setProperty('--ta-message-right', styles.paddingRight);
+			wrapper.parentElement?.style.setProperty(
+				'--ta-message-left',
+				`calc(${styles.paddingLeft} + ${styles.borderLeftWidth})`,
+			);
+			wrapper.parentElement?.style.setProperty(
+				'--ta-message-right',
+				`calc(${styles.paddingRight} + ${styles.borderRightWidth})`,
+			);
 			if (!growing) return;
 			element.style.height = 'auto';
 			const baseline = element.offsetHeight;
@@ -222,10 +228,10 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 		if (isFocused) return borderColorFocused;
 		return borderColor;
 	};
-	const getBoxShadow = () => {
-		if (borderStyle === 'none') return 'none';
-		if (borderStyle === 'underline') return `0 1px 0 0 ${getBorderColor()}`;
-		return `0 0 0 1px ${getBorderColor()}`;
+	const getBorderWidth = () => {
+		if (borderStyle === 'none') return '0';
+		if (borderStyle === 'underline') return '0 0 1px';
+		return '1px';
 	};
 	const getResize = () => {
 		if (!resizable || growing || height !== 'auto') return 'none';
@@ -237,7 +243,8 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 		'--ta-padding': setStyle(padding),
 		'--ta-border-radius': setStyle(borderRadius),
 		'--ta-bg-color': backgroundColor,
-		'--ta-box-shadow': getBoxShadow(),
+		'--ta-border-color': getBorderColor(),
+		'--ta-border-width': getBorderWidth(),
 		'--ta-text-color': disabled ? textColorDisabled : textColor,
 		'--ta-placeholder-color': textColorPlaceholder,
 		'--ta-label-color': disabled ? textColorDisabled : labelColor,
@@ -338,5 +345,6 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 		</div>
 	);
 }
+
 TextAreaComponent.displayName = 'TextArea';
 export const TextArea = React.memo<TextAreaProps>(TextAreaComponent);

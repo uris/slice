@@ -76,8 +76,8 @@ color and icon animation, including custom delays/repeats, without losing focus.
 | `iconColorHover` | `ColorValue` | `core-text-primary` | Hover icon color while unselected. |
 | `iconColorSelected` | `ColorValue` | `core-text-primary` | Selected icon color; takes priority over hover. |
 | `iconFill` | `boolean` | `false` | Uses the icon’s filled appearance. |
-| `iconSize` | `number` | `20` | Icon size in pixels. Zero hides its geometry; negative or nonfinite values fall back to 20px. |
-| `iconStrokeWidth` | `number` | `undefined` | Stroke width in the icon’s 20-unit viewBox. Omit to use the Icon default. Zero removes strokes; solid-filled artwork is unaffected. |
+| `iconSize` | `number` | `20` | Icon size in pixels, clamped to a 14px minimum. Nonfinite values fall back to 20px. |
+| `iconStrokeWidth` | `number` | `undefined` | Stroke width in the icon’s 20-unit viewBox. Omit for 1.5 at 14px, otherwise the Icon default (1.25). Zero removes strokes; solid-filled artwork is unaffected. |
 | `selected` | `boolean` | `undefined` | Controls selection when toggle=true. Update it from onChange. User activation requests a change without mutating this value. |
 | `showDot` | `boolean` | `false` | Shows a decorative activity dot. |
 | `toggle` | `boolean` | `false` | Enables on/off selection. Ordinary actions do not emit onChange. |

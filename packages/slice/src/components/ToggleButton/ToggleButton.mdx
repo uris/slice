@@ -87,7 +87,7 @@ padding values are pixels; negative values become zero.
 | `defaultSelected` | `boolean` | `false` | Initial local selection. Later changes are ignored; use selected for external control. |
 | `deselect` | `boolean` | `true` | Allows clearing an active selection. False keeps it selected without another onChange; onClick still runs. |
 | `disabled` | `boolean` | `false` | Disables the whole control, dims icon and text, and dismisses an open tooltip. |
-| `gap` | `number` | `4` | Pixel gap between icon and content, and between items in the children flex row. Set to 0 for no gap. Negative or nonfinite values resolve to zero or the shared 4px default respectively. |
+| `gap` | `number` | `6` | Pixel gap between icon and content, and between items in the children flex row. Set to 0 for no gap. Negative or nonfinite values resolve to zero or the shared 6px default respectively. |
 | `hover` | `boolean` | `true` | Enables background, icon, and text hover colors. |
 | `icon` | `string` | `undefined` | Optional icon before the content. |
 | `iconColor` | `ColorValue` | `core-text-primary` | Resting icon color. |
@@ -95,8 +95,8 @@ padding values are pixels; negative values become zero.
 | `iconColorSelected` | `ColorValue` | `core-surface-primary` | Selected icon color; takes priority over hover. |
 | `iconFill` | `boolean` | `false` | Uses the icon’s filled appearance. |
 | `iconSelected` | `string` | `undefined` | Alternate icon when selected. Requires icon; otherwise the original icon remains. |
-| `iconSize` | `number` | `20` | Icon size in pixels. Negative or nonfinite values fall back to 20px; zero hides its geometry. |
-| `iconStrokeWidth` | `number` | `undefined` | Stroke width in the icon’s 20-unit viewBox. Omit to use the Icon default. Zero removes strokes; solid-filled artwork is unaffected. |
+| `iconSize` | `number` | `20` | Icon size in pixels, clamped to a 14px minimum. Nonfinite values fall back to 20px. |
+| `iconStrokeWidth` | `number` | `undefined` | Stroke width in the icon’s 20-unit viewBox. Omit for 1.5 at 14px, otherwise the Icon default (1.25). Zero removes strokes; solid-filled artwork is unaffected. |
 | `label` | `string` | `undefined` | Visible text. Takes priority over children. |
 | `labelPosition` | `"right" \| "bottom"` | `"right"` | Places content beside or below the icon. Works with `labelOutside`; without an icon, content keeps its normal layout. |
 | `labelOutside` | `boolean` | `false` | Applies background, border, and radius only to the icon. Label clicks still toggle the same control. Falls back to the whole button without an icon. For labels, outer padding defaults to 4px horizontally and zero vertically; children use 6px top and bottom padding. |

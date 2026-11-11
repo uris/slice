@@ -28,7 +28,7 @@
 	-webkit-box-orient: vertical;
 }
 
-/* Optically lift text labels with the font size; composed content keeps its own alignment. */
+/* Optically lift label props and plain-text children; composed elements keep their own alignment. */
 .label:not(.children) {
 	transform: translateY(-0.067em);
 }

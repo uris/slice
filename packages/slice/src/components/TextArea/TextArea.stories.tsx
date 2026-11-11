@@ -332,7 +332,7 @@ export const SupportingMessages: Story = {
 		const message = canvas.getByText('Add more detail.');
 		expect(getComputedStyle(message).color).toBe('rgb(171, 205, 239)');
 		expect(getComputedStyle(message).paddingTop).toBe('4px');
-		expect(getComputedStyle(message).paddingLeft).toBe('24px');
+		expect(getComputedStyle(message).paddingLeft).toBe('25px');
 		expect(canvas.queryByText('Share useful details.')).not.toBeInTheDocument();
 	},
 };
@@ -470,7 +470,7 @@ export const ErrorBorderPriority: Story = {
 		const input = within(canvasElement).getByRole('textbox');
 		await userEvent.click(input);
 		await waitFor(() =>
-			expect(getComputedStyle(input.parentElement as HTMLElement).boxShadow).toContain('rgb(18, 52, 86)'),
+			expect(getComputedStyle(input.parentElement as HTMLElement).borderBottomColor).toBe('rgb(18, 52, 86)'),
 		);
 	},
 };
@@ -615,8 +615,8 @@ export const SupportingMessageDefaultInset: Story = {
 			await waitFor(() => {
 				const style = getComputedStyle(message);
 				expect(style.paddingTop).toBe('4px');
-				expect(style.paddingLeft).toBe('16px');
-				expect(style.paddingRight).toBe('8px');
+				expect(style.paddingLeft).toBe('17px');
+				expect(style.paddingRight).toBe('9px');
 				expect(
 					Math.abs(
 						message.getBoundingClientRect().left +
@@ -683,9 +683,13 @@ export const ResizeGripBottomAlignment: Story = {
 		const styles = getComputedStyle(input);
 		expect(styles.paddingBottom).toBe('8px');
 		expect(styles.marginBottom).toBe('-8px');
-		expect(wrapper.getBoundingClientRect().bottom - input.getBoundingClientRect().bottom).toBe(8);
+		expect(wrapper.getBoundingClientRect().bottom - input.getBoundingClientRect().bottom).toBe(
+			8 + Number.parseFloat(getComputedStyle(wrapper).borderBottomWidth),
+		);
 		fireEvent.change(input, { target: { value: 'Long note\n'.repeat(40) } });
-		expect(wrapper.getBoundingClientRect().bottom - input.getBoundingClientRect().bottom).toBe(8);
+		expect(wrapper.getBoundingClientRect().bottom - input.getBoundingClientRect().bottom).toBe(
+			8 + Number.parseFloat(getComputedStyle(wrapper).borderBottomWidth),
+		);
 	},
 };
 
@@ -731,5 +735,25 @@ export const ComposedEditorRef: StoryObj<typeof TextArea> = {
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		await expect(canvas.getByRole('textbox')).toHaveAttribute('data-composed-ref', 'attached');
+	},
+};
+
+export const ClippedContainerBorder: Story = {
+	args: { inputName: 'Notes', backgroundColor: 'core-surface-secondary', borderColor: 'core-fill-primary' },
+	render: (args) => (
+		<div style={{ overflow: 'hidden' }}>
+			<TextArea {...args} />
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const input = within(canvasElement).getByRole('textbox');
+		const wrapper = input.parentElement;
+		if (!wrapper) throw new Error('Missing textarea frame');
+		const frame = getComputedStyle(wrapper);
+		expect(frame.boxShadow).toBe('none');
+		expect(frame.borderWidth).toBe('1px');
+		expect(frame.borderStyle).toBe('solid');
+		expect(frame.backgroundClip).toBe('border-box');
+		expect(frame.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
 	},
 };

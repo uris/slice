@@ -97,10 +97,10 @@ Reduced-motion preferences disable color and focus transitions. Auto-grow follow
 | `allowEmptySubmit` | `boolean` | `false` | Allows a composed control to submit associated content even with empty editor text. |
 | `autoGrow` | `boolean` | `true` | Grows and shrinks with content when `height` is `auto`. `rows` sets the starting height; `maxHeight` caps growth. Native resizing is disabled while growing. |
 | `backgroundColor` | `ColorValue` | `core-surface-secondary` | Field background. |
-| `borderColor` | `ColorValue` | `core-outline-primary` | Outline color while not focused or in an error state. |
+| `borderColor` | `ColorValue` | `core-fill-primary` | Outline color while not focused or in an error state. |
 | `borderColorError` | `ColorValue` | `feedback-warning` | Outline color when `error` is `true`, including while focused. |
-| `borderColorFocused` | `ColorValue` | `core-link-primary` | Outline color while focused, unless `error` is `true`. |
-| `borderRadius` | `number  /  string` | `4` | Field corner radius. Numbers are pixels; CSS values pass through. |
+| `borderColorFocused` | `ColorValue` | `core-fill-secondary` | Outline color while focused, unless `error` is `true`. |
+| `borderRadius` | `number  /  string` | `12` | Field corner radius. Numbers are pixels; CSS values pass through. |
 | `borderStyle` | `'box'  /  'underline'  /  'none'` | `box` | Choose a full outline, bottom line, or no outline. |
 | `defaultValue` | `string` | `empty string` | Initial text for local editing. Native form reset restores this initial value without emitting `onChange`. |
 | `disabled` | `boolean` | `false` | Disables the textarea and send button. |

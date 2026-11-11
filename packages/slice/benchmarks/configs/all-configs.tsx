@@ -1017,14 +1017,26 @@ export const buttonConfig: ComponentBenchmarkConfig = {
 };
 
 const mockButtons = [
-	{ icon: 'basic.check', tip: 'check' },
-	{ icon: 'close', tip: 'close' },
-	{ icon: 'trash', tip: 'delete' },
+	{ iconLeft: 'basic.check', 'aria-label': 'check' },
+	{ iconLeft: 'basic.close', 'aria-label': 'close' },
+	{ iconLeft: 'basic.trash', 'aria-label': 'delete' },
 ];
 
 export const buttonBarConfig: ComponentBenchmarkConfig = {
 	componentName: 'ButtonBar',
 	tests: [
+		{
+			name: 'Mixed Input Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<ButtonBar aria-label="Quantity">
+					<Button iconLeft="basic.plus" aria-label="Increase" />
+					<TextField inputName="Quantity" width={120} defaultValue="100" />
+					<Button iconLeft="basic.minus" aria-label="Decrease" />
+				</ButtonBar>,
+				50,
+			),
+		},
 		{
 			name: 'Mount Time',
 			type: 'mount',
@@ -1037,7 +1049,7 @@ export const buttonBarConfig: ComponentBenchmarkConfig = {
 				measureRerenderTime(
 					<ButtonBar buttons={mockButtons} />,
 					(container) => {
-						const updatedButtons = [...mockButtons, { icon: 'basic.plus', tip:'plus' }];
+						const updatedButtons = [...mockButtons, { iconLeft: 'basic.plus', 'aria-label': 'plus' }];
 						container.rerender(<ButtonBar buttons={updatedButtons} buttonSize="l" />);
 					},
 					50,
@@ -1048,7 +1060,7 @@ export const buttonBarConfig: ComponentBenchmarkConfig = {
 			type: 'event',
 			fn: () =>
 				measureEventResponseTime(
-					<ButtonBar buttons={mockButtons} onChange={() => {}} />,
+					<ButtonBar buttons={mockButtons} onClick={() => {}} />,
 					(container) => {
 						const button = container.container.querySelector('button');
 						if (button) fireEvent.click(button);

@@ -38,6 +38,8 @@ const meta = {
 } satisfies Meta<typeof TextField>;
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const inputOpticalLift = (input: HTMLElement) => Number.parseFloat(getComputedStyle(input).fontSize) * 0.067;
 export const Default: Story = {
 	play: async ({ canvasElement, args }) => {
 		const input = within(canvasElement).getByRole('textbox', { name: 'Email' });
@@ -334,7 +336,7 @@ export const Underline: Story = {
 		if (!wrapper) throw new Error('Missing wrapper');
 		expect(getComputedStyle(wrapper).padding).toBe('0px');
 		expect(getComputedStyle(wrapper).backgroundColor).toBe('rgba(0, 0, 0, 0)');
-		expect(getComputedStyle(wrapper).boxShadow).not.toBe('none');
+		expect(getComputedStyle(wrapper).borderBottomWidth).toBe('1px');
 	},
 };
 export const NoBorder: Story = {
@@ -343,7 +345,7 @@ export const NoBorder: Story = {
 	play: async ({ canvasElement }) => {
 		const wrapper = within(canvasElement).getByRole('textbox').closest('[data-variant]');
 		if (!wrapper) throw new Error('Missing wrapper');
-		expect(getComputedStyle(wrapper).boxShadow).toBe('none');
+		expect(getComputedStyle(wrapper).borderWidth).toBe('0px');
 	},
 };
 function UpdatedField() {
@@ -603,7 +605,10 @@ export const Stacked: Story = {
 		const label = canvas.getByText('Email', { selector: 'label' });
 		expect(input).toHaveAttribute('placeholder', 'Enter your email');
 		expect(Math.abs(label.getBoundingClientRect().left - input.getBoundingClientRect().left)).toBeLessThan(1);
-		expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(2, 0);
+		expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(
+			2 - inputOpticalLift(input),
+			0,
+		);
 	},
 };
 export const Outlined: Story = {
@@ -649,7 +654,7 @@ export const AppearingLabel: Story = {
 		await waitFor(() => {
 			const field = wrapper.getBoundingClientRect();
 			const value = input.getBoundingClientRect();
-			expect(value.top + value.height / 2 - field.top - field.height / 2).toBeCloseTo(0, 1);
+			expect(value.top + value.height / 2 - field.top - field.height / 2).toBeCloseTo(-inputOpticalLift(input), 1);
 		});
 		const initialHeight = wrapper.getBoundingClientRect().height;
 		const labelStyle = getComputedStyle(slot);
@@ -663,7 +668,10 @@ export const AppearingLabel: Story = {
 		await waitFor(() => {
 			expect(getComputedStyle(slot).opacity).toBe('1');
 			expect(label.getBoundingClientRect().height).toBeGreaterThan(10);
-			expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(2, 0);
+			expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(
+				2 - inputOpticalLift(input),
+				0,
+			);
 			expect(input.getBoundingClientRect().top - initialInputTop).toBeCloseTo(adjustment / 2, 0);
 		});
 		expect(wrapper.getBoundingClientRect().height).toBe(initialHeight);
@@ -691,7 +699,10 @@ export const ReducedMotionLabel: Story = {
 		const label = canvas.getByText('Email', { selector: 'label' });
 		expect(input).toHaveAttribute('placeholder', 'Your email address');
 		expect(getComputedStyle(label.parentElement as HTMLElement).opacity).toBe('1');
-		expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(2, 0);
+		expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(
+			2 - inputOpticalLift(input),
+			0,
+		);
 		await userEvent.click(input);
 		labelPreference.set(false);
 		await waitFor(() => expect(input).toHaveAttribute('placeholder', 'Email'));
@@ -736,7 +747,10 @@ export const StackedTypography: Story = {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
 		const label = canvas.getByText('Email', { selector: 'label' });
-		expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(8, 0);
+		expect(input.getBoundingClientRect().top - label.getBoundingClientRect().bottom).toBeCloseTo(
+			8 - inputOpticalLift(input),
+			0,
+		);
 		expect(Math.abs(label.getBoundingClientRect().left - input.getBoundingClientRect().left)).toBeLessThan(1);
 		expect(getComputedStyle(label.parentElement as HTMLElement).backgroundColor).toBe('rgba(0, 0, 0, 0)');
 		expect(getComputedStyle(label).fontWeight).toBe('420');
@@ -812,7 +826,9 @@ export const OutlinedDefaultPadding: Story = {
 		expect(style.paddingBottom).toBe(style.paddingTop);
 		const bounds = wrapper.getBoundingClientRect();
 		const valueBounds = input.getBoundingClientRect();
-		expect(Math.abs(valueBounds.top + valueBounds.height / 2 - bounds.top - bounds.height / 2)).toBeLessThan(0.5);
+		expect(
+			Math.abs(valueBounds.top + valueBounds.height / 2 - bounds.top - bounds.height / 2 + inputOpticalLift(input)),
+		).toBeLessThan(0.5);
 		expect(Math.abs(label.getBoundingClientRect().left - input.getBoundingClientRect().left)).toBeLessThan(1);
 		expect(
 			Math.abs(
@@ -861,7 +877,7 @@ export const AppearingValueAndIconMoveTogether: Story = {
 		await waitFor(() => {
 			const value = input.getBoundingClientRect();
 			const field = wrapper.getBoundingClientRect();
-			expect(value.top + value.height / 2 - field.top - field.height / 2).toBeCloseTo(0, 1);
+			expect(value.top + value.height / 2 - field.top - field.height / 2).toBeCloseTo(-inputOpticalLift(input), 1);
 		});
 		const initialTop = input.getBoundingClientRect().top;
 		const initialIconTop = icon.getBoundingClientRect().top;
@@ -963,7 +979,10 @@ export const SupportingMessageAlignment: Story = {
 				expect(
 					Math.abs(bounds.left + Number.parseFloat(style.paddingLeft) - firstContent.getBoundingClientRect().left),
 				).toBeLessThan(1);
-				expect(style.paddingRight).toBe(getComputedStyle(wrapper).paddingRight);
+				const frameStyle = getComputedStyle(wrapper);
+				expect(Number.parseFloat(style.paddingRight)).toBe(
+					Number.parseFloat(frameStyle.paddingRight) + Number.parseFloat(frameStyle.borderRightWidth),
+				);
 				expect(style.paddingTop).toBe('4px');
 			});
 		}
@@ -1008,7 +1027,8 @@ export const UnderlineDefaults: Story = {
 		const wrapper = input.closest('[data-variant]') as HTMLElement;
 		expect(getComputedStyle(wrapper).borderRadius).toBe('0px');
 		expect(getComputedStyle(wrapper).backgroundColor).toBe('rgba(0, 0, 0, 0)');
-		expect(getComputedStyle(wrapper).boxShadow).toMatch(/0px 1px 0px 0px/);
+		expect(getComputedStyle(wrapper).borderBottomWidth).toBe('1px');
+		expect(getComputedStyle(wrapper).borderTopWidth).toBe('0px');
 		await userEvent.click(input);
 		expect(getComputedStyle(wrapper).borderRadius).toBe('0px');
 		expect(getComputedStyle(wrapper).backgroundColor).toBe('rgba(0, 0, 0, 0)');
@@ -1031,5 +1051,42 @@ export const UnderlineExplicitAppearance: Story = {
 		await userEvent.click(input);
 		await waitFor(() => expect(getComputedStyle(wrapper).backgroundColor).toBe('rgb(52, 86, 120)'));
 		expect(getComputedStyle(wrapper).borderRadius).toBe('6px');
+	},
+};
+
+export const ClippedContainerBorder: Story = {
+	args: {
+		label: 'Search',
+		borderRadius: 18,
+		backgroundColorBlurred: 'core-surface-secondary',
+		borderColorBlurred: 'core-fill-primary',
+	},
+	render: (args) => (
+		<div style={{ overflow: 'hidden', width: 340 }}>
+			<TextField {...args} />
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const input = within(canvasElement).getByRole('textbox');
+		const wrapper = input.closest('[data-variant]');
+		if (!wrapper) throw new Error('Expected the field frame');
+		const frame = getComputedStyle(wrapper);
+		const border = getComputedStyle(wrapper);
+		expect(frame.boxShadow).toBe('none');
+		expect(border.borderWidth).toBe('1px');
+		expect(border.borderRadius).toBe(frame.borderRadius);
+		expect(frame.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+		expect(frame.backgroundClip).toBe('border-box');
+		const blurredColor = border.borderColor;
+		await userEvent.click(input);
+		await waitFor(() => expect(getComputedStyle(wrapper).borderColor).not.toBe(blurredColor));
+	},
+};
+
+export const LongPlaceholder: Story = {
+	args: {
+		label: 'Search',
+		width: 240,
+		placeholder: 'Search documents, projects, and conversations',
 	},
 };

@@ -1,93 +1,72 @@
 .wrapper {
-	font: inherit;
-	font-size: var(--font-size-m);
-	line-height: var(--line-height-l);
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
+	display: inline-flex;
+	align-items: stretch;
+	max-width: 100%;
 	box-sizing: border-box;
-	margin: 0;
-	border-radius: var(--bb-border-radius);
-	border: var(--bb-border-width) solid var(--bb-border-color);
-	background: var(--bb-bg-color);
-	padding: var(--bb-padding);
-	gap: 0;
-	overflow: visible;
-	transition: background-color var(--motion-water-duration) var(--motion-water), border-color
-		var(--motion-water-duration) var(--motion-water);
+	overflow: hidden;
+	isolation: isolate;
+	border-color: var(--ui-button-bar-border-color);
+	transition: border-color var(--motion-water-duration) var(--motion-water);
 }
 
-.button {
-	font: inherit;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	box-sizing: border-box;
-	margin: 0;
-	height: var(--bb-button-size);
-	width: var(--bb-button-size);
-	min-height: var(--bb-button-size);
-	min-width: var(--bb-button-size);
+.wrapper:focus-within {
+	border-color: var(--ui-button-bar-border-color-focused);
+}
+
+.wrapper > button {
 	flex-shrink: 0;
-	position: relative;
-	z-index: 0;
-	padding: 0;
-	border-radius: var(--bb-selection-radius);
-	cursor: pointer;
-	background: transparent;
-	color: var(--core-text-secondary);
-	border: 0;
-	outline: none;
-	transition: color var(--motion-water-duration) var(--motion-water);
-	user-select: none;
-	-webkit-user-select: none;
-	appearance: none;
-	-webkit-appearance: none;
 }
 
-.button + .button {
-	font: inherit;
-	margin-inline-start: var(--bb-button-gap);
+/* Spacers extend the edge buttons' content insets without breaking their backgrounds.
+   Cancel the flex gap so inset is the exact extra space requested. */
+.horizontal > button:first-child::before,
+.horizontal > button:last-child::after,
+.vertical > button::before,
+.vertical > button::after {
+	content: "";
+	flex: 0 0 var(--ui-button-bar-inset);
+	width: var(--ui-button-bar-inset);
 }
 
-.button:hover {
-	z-index: 2;
-	color: var(--core-text-primary);
+.horizontal > button:first-child::before,
+.vertical > button::before {
+	margin-right: calc(-1 * var(--ui-button-gap));
 }
 
-.button:hover .icon {
-	background: var(--bb-bg-color-hover);
+.horizontal > button:last-child::after,
+.vertical > button::after {
+	margin-left: calc(-1 * var(--ui-button-gap));
 }
 
-.button[aria-pressed="true"] {
-	z-index: 1;
-	color: var(--core-text-special);
+/* Keep keyboard focus visible inside the clipped outer frame. */
+.wrapper > button:focus-visible {
+	outline-offset: -3px;
 }
 
-.button[aria-pressed="true"] .icon {
-	background: var(--bb-bg-color-selected);
+.divider {
+	align-self: stretch;
+	flex: none;
+	border-width: 0;
 }
 
-.button:focus-visible {
-	z-index: 3;
-	box-shadow: inset 0 0 0 2px var(--core-outline-special);
-}
-
-.icon {
-	background-color: transparent;
-	transition: background-color var(--motion-water-duration) var(--motion-water);
-	width: 100%;
-	height: 100%;
-	border-radius: var(--bb-selection-radius);
+.inputSlot {
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	flex: 0 0 auto;
+	min-width: 0;
+}
+
+/* Fields share the outer content inset without adding space between middle items. */
+.horizontal > .inputSlot:first-child::before,
+.horizontal > .inputSlot:last-child::after,
+.vertical > .inputSlot::before,
+.vertical > .inputSlot::after {
+	content: "";
+	flex: 0 0 var(--ui-button-bar-inset);
+	width: var(--ui-button-bar-inset);
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.wrapper,
-	.button,
-	.icon {
+	.wrapper {
 		transition: none;
 	}
 }
