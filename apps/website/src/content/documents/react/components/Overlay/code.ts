@@ -2,11 +2,11 @@ export const usageCode = `
 import { useState } from 'react';
 import { Button, Overlay } from '@apple-pie/slice';
 
-function OverlayExample() {
+export function OverlayExample() {
   const [show, setShow] = useState(false);
   return <>
     <Button label="Show overlay" onClick={() => setShow(true)} />
-    <Overlay show={show} onClick={() => setShow(false)} />
+    <Overlay show={show} opacity={0.75} onPointerDown={() => setShow(false)} />
   </>;
 }
 `;
@@ -14,10 +14,10 @@ export const menuCode = `
 function ProjectActions() {
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   return <>
-    <button type="button" onContextMenu={(event) => {
+    <Button label="Project actions" onContextMenu={(event) => {
       event.preventDefault();
       setMenu({ x: event.clientX, y: event.clientY });
-    }}>Project actions</button>
+    }} />
     <Overlay show={menu !== null}
       onPointerDown={() => setMenu(null)}
       onContextMenu={(event) => event.preventDefault()}>
@@ -25,8 +25,8 @@ function ProjectActions() {
         style={{ position: 'absolute', left: menu.x, top: menu.y,
           background: 'var(--core-surface-secondary)', padding: 16 }}
         onPointerDown={(event) => event.stopPropagation()}>
-        <button type="button" onClick={myHandler}>Rename project</button>
-        <button type="button" onClick={myHandler}>Duplicate project</button>
+        <Button label="Rename project" onClick={myHandler} />
+        <Button label="Duplicate project" onClick={myHandler} />
       </div>}
     </Overlay>
   </>;

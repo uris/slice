@@ -6,9 +6,9 @@ export function ToastPreview({
 	type = ToastType.Info,
 	timed = false,
 	progress = false,
-}: { type?: ToastType; timed?: boolean; progress?: boolean }) {
+	position = 'bottom',
+}: { type?: ToastType; timed?: boolean; progress?: boolean; position?: 'top' | 'bottom' }) {
 	const [key, setKey] = useState(0);
-	const [visible, setVisible] = useState(true);
 	const message = progress ? 'Uploading files…' : 'Your changes have been saved.';
 	return (
 		<div className={styles.stage}>
@@ -16,18 +16,16 @@ export function ToastPreview({
 				label="Show toast"
 				onClick={() => {
 					setKey((value) => value + 1);
-					setVisible(true);
 				}}
 			/>
 			<Toast
-				key={key}
-				notifId={`preview-${key}`}
-				message={visible ? message : null}
+				notificationId={`preview-${key}`}
+				message={message}
 				type={type}
 				container="parent"
-				duration={timed ? 4000 : 'Infinite'}
+				position={position}
+				duration={timed ? 4000 : 'infinite'}
 				progress={progress}
-				didHide={() => setVisible(false)}
 				offset={24}
 			/>
 		</div>

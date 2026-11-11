@@ -4,10 +4,13 @@ This guide records the editorial and implementation conventions for the website'
 component docs. Extend it as we agree on new patterns. Apply it to new documents
 and edits to existing ones; preserve deliberate user changes.
 
-Use [Avatar](react/components/Avatar/Avatar.tsx) as the structural reference and
-[AudioBubble](react/components/AudioBubble/AudioBubble.tsx) as a reference for concise
-copy, a live preview, and a separate preview tip. These are examples, not sources
-of truth for another component's API.
+Use [Avatar](react/components/Avatar/Avatar.tsx),
+[Button](react/components/Button/Button.tsx), and
+[ToggleButton](react/components/ToggleButton/ToggleButton.tsx) as references for
+structure and focused preview-and-code examples.
+[AudioBubble](react/components/AudioBubble/AudioBubble.tsx) also demonstrates a live
+preview and a separate preview tip. These are examples, not sources of truth for
+another component's API.
 
 ## Intent and audience
 
@@ -85,14 +88,30 @@ Use the existing shared components and this order:
 Follow the [component composition convention](../../../../../packages/slice/docs/component-composition.md)
 when choosing notation and documentation ownership:
 
-- Parent-only sections use dot notation, such as `DialogBox.Title`,
-  `DialogBox.Content`, and `DialogBox.Actions`. Document their supported children,
-  props, and events on the parent page; do not give them standalone slugs or imply
-  they work outside that parent.
-- Independently useful controls remain named exports and have their own pages.
-  For example, a `RadioButton` can stand alone or participate in a
-  `RadioButtonList`. `Tab` and `TabBar` also retain separate API pages. Link related
-  pages and include a required parent in examples when applicable.
+- Use a sidebar `childDocs` group only when a control depends on its parent for
+  meaningful use, rather than merely composing well with it. When those dependent
+  controls have their own props, events, methods, or refs, give them focused pages
+  with separate slugs. The group is named for the parent; its first child is the
+  parent's own page, followed by the dependent controls. For example, `TabBar`
+  contains `TabBar` and `Tab`; `PopMenu` contains `PopMenu`, `PopMenuGroup`, and
+  `PopMenuItem`.
+- Keep the parent page focused on composition, shared behavior, and its own API.
+  Link to each child page rather than repeating its full reference. Child pages
+  demonstrate their own usage inside the required parent when applicable.
+- Preserve the actual public API: named controls such as `PopMenuGroup` and
+  `PopMenuItem` remain named exports; structural sections that use dot notation
+  keep that notation. A separate doc page does not imply standalone behavior.
+- Independently useful controls retain separate top-level sidebar entries and
+  pages, even when another control can host them. `RadioButton` works independently
+  and composes with `RadioButtonList`; it is not a dependent child doc of that list.
+  Link related pages and explain which behavior the containing control adds.
+- Sidebar grouping describes the supported usage relationship. It does not require
+  a runtime parent check or change exports, types, or component behavior. Structural
+  sections documented on their parent's page do not need separate child-doc pages.
+
+When related Slice APIs compose directly, show that connection: reuse shared data
+shapes and pass compatible callbacks directly instead of adding adapter functions
+or casts. Follow the [composable API guideline](../../../../../CONTRIBUTING.md#composable-apis).
 
 Verify current public exports before writing usage snippets; a convention does not
 mean every component has already adopted it. For components
@@ -127,6 +146,24 @@ and document each prop only once.
 
 ## Preview and tips
 
+Choose previews for the value of seeing or trying the result. Key visual variants,
+layout changes, validation states, and meaningful interactions belong in a canvas
+beside their Usage explanation. Minor adjustments, typed metadata, persistence,
+and equivalent APIs can use a code snippet alone. Avoid a separate lead gallery
+when Usage already demonstrates the component.
+
+For the paired preview-and-code presentation used by ToggleButton and Button,
+place each focused usage example in `ComponentCanvas` and pass its snippet as the
+item's `code` (and optional `codeFilename`). The canvas owns the collapsible code
+display; do not repeat the same snippet in a separate `CodeBlock`. A page may start
+its previews under Usage rather than duplicating a lead preview above Usage.
+For paged examples, give each item a distinct caption and code matching that
+specific preview. Keep hooks and interactive wiring in the colocated preview file.
+Every item in the first preview array must have a complete, independently copyable
+example, including imports and an exported component. Later snippets can focus on
+the relevant props without repeating the initial setup; retain any wiring needed
+to explain stateful behavior. Omit layout wrappers, sizing, and show/hide scaffolding used only to arrange or launch the demo canvas; keep snippets focused on the component API.
+
 - Pass `ComponentCanvas` an array through `components`, even for one preview:
   `components={[{ label: 'Example', component: <ExamplePreview /> }]}`. Each entry
   is one pager page, and its label becomes the caption when selected. Keep
@@ -134,6 +171,16 @@ and document each prop only once.
   The canvas handles directional slide/fade transitions with Water timing; do not
   add another page-transition wrapper inside individual previews. Reduced motion
   switches pages immediately.
+- Set `hasRefresh: true` on an individual `components` entry to show the canvas’s
+  refresh button for that preview:
+  `components={[{ label: 'Dismissible chip', component: <ChipPreview />, hasRefresh: true }]}`.
+  Refresh remounts the preview content, restoring its initial local state. Use it
+  for examples that remove themselves from the canvas, such as removable chips,
+  or other interactions that need a way to return to their original state. Omit it
+  when a reset is unnecessary. This is a per-preview option, not a top-level
+  `ComponentCanvas` prop; use the built-in button instead of adding reset controls
+  inside the demo. State held outside the remounted preview, such as a shared store,
+  needs its own reset wiring when applicable.
 - Each canvas page should demonstrate a discernible visual or behavioral difference.
   Show equivalent composition and options-array APIs in Usage rather than duplicating
   an indistinguishable preview. Put an options alternative immediately after the basic
@@ -182,7 +229,33 @@ it into a second API reference. Essential behavior and accessibility guidance
 still belong in their respective sections; a tip can supplement that content.
 Omit the box when the example is already clear without instructions.
 
+For menus and their controllers, render the component normally in snippets and
+previews; PopMenu manages its portal internally by default. Explain portalContainer
+under Behavior: auto preserves the nearest theme/dialog or shadow-root scope,
+false renders in place, and an explicit HTMLElement lets the application choose
+its overlay layer. Do not imply that auto escapes every stacking or clipping
+context. Submenus inherit the resolved host unless explicitly overridden.
+
 ## Code snippets
+
+Lead with the normal integration between related Slice APIs. Keep each example
+focused on one task; put measurement, mounting, and timer details in Behavior.
+For Tip, start with a control's `tooltip` and `onToolTip` connected to the shared
+Tip, followed by one app-wide setup example. Explain custom triggers separately;
+do not lead with disconnected, hardcoded coordinates. Tip previews should use
+the website layout’s existing Tip instance through `tipActions.push`, rather than
+mounting additional instances or managing their own coordinates.
+
+Use Slice components in previews and copyable examples wherever an equivalent
+exists: for example, `Button` for actions and submission, `TextField` for inputs,
+and `FlexBox` for layout. Keep native semantic containers such as `form`, `ul`,
+and `li` where appropriate. For form spacing, use a column `FlexBox` with an
+explicit `gap` inside the form; do not rely on `gap` on a non-flex form.
+Use native controls only when the example specifically teaches native behavior
+that a Slice component cannot represent.
+
+Keep copyable examples framework-neutral: omit `'use client'` directives. The actual
+Next.js preview modules still declare their client boundary where required.
 
 Store snippet strings in a colocated `code.ts` and render them with `CodeBlock`.
 Use the first basic example to introduce the public package import. Later snippets
@@ -291,6 +364,11 @@ Documentation work must not invent a normalized prop or compatibility alias that
 is absent from the implementation. If the existing API has an unusual name, document
 it accurately and flag a potential API cleanup separately. Make breaking API changes
 only as part of an authorized component change, updating its consumers and docs together.
+
+Use the component's existing `name`, `label`, `title`, and ID-based fallbacks for
+accessible naming wherever supported. Avoid redundant `aria-label` props in
+examples. Explain the actual naming sources and fallback order in Accessibility;
+keep explicit ARIA overrides for cases the normal naming props cannot express.
 
 ## Accessibility
 

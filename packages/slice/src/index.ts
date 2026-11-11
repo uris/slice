@@ -1,7 +1,15 @@
 import './theme.css';
 
-export type { ToolTip, ToolTipInfo } from './components/sharedTypes';
-export { ToolTipType } from './components/sharedTypes';
+export type {
+	ComponentSize,
+	FixedSize,
+	ButtonSize,
+	PaddingProps,
+	ButtonStyleProps,
+	ToolTip,
+	ToolTipInfo,
+} from './components/sharedTypes';
+export { ToolTipType, buttonStyleDefaults } from './components/sharedTypes';
 
 export {
 	light,
@@ -78,7 +86,6 @@ export type {
 	CameraElement,
 	CameraProps,
 	CameraSnapshotOptions,
-	Controls,
 	UserProfile,
 	Settings,
 } from './components/Camera';
@@ -93,7 +100,7 @@ export { Dot } from './components/Dot';
 export type { DotProps } from './components/Dot';
 
 export { DraggablePanel } from './components/DraggablePanel';
-export type { DraggablePanelProps } from './components/DraggablePanel';
+export type { DraggablePanelProps, DraggablePanelResizeInfo } from './components/DraggablePanel';
 
 export { DropDown } from './components/DropDown';
 export type { DropDownOption, DropDownProps } from './components/DropDown';
@@ -104,9 +111,6 @@ export type {
 	ErrorSummaryProps,
 } from './components/ErrorSummary';
 
-export { Grouper } from './components/Grouper';
-export type { GrouperProps } from './components/Grouper';
-
 export { Overlay } from './components/Overlay';
 export type { OverlayProps } from './components/Overlay';
 
@@ -116,14 +120,16 @@ export type { DialogBoxAction, DialogBoxProps, DialogBoxControls, DialogBoxSecti
 export { ModalController } from './components/ModalController';
 export type { ModalControllerProps } from './components/ModalController';
 
-export { FlexDiv, Size, Preset } from './components/FlexDiv';
+export { FlexBox, Size, Preset } from './components/FlexBox';
+export type { FlexBoxProps } from './components/FlexBox';
+export { FlexDiv } from './components/FlexDiv';
 export type { FlexDivProps } from './components/FlexDiv';
 
 export { Pager } from './components/Pager';
 export type { PagerProps } from './components/Pager';
 
 export { PromptInput } from './components/PromptInput';
-export type { PromptProps } from './components/PromptInput';
+export type { PromptProps, PromptActions, PromptTextAreaProps } from './components/PromptInput';
 
 export { DoneCheck, ProgressIndicator } from './components/Progress';
 export type {
@@ -144,6 +150,7 @@ export { Slider } from './components/Slider';
 export type { SliderProps } from './components/Slider';
 
 export { Spacer } from './components/Spacer';
+export type { SpacerProps } from './components/Spacer';
 
 export { Switch } from './components/Switch';
 export type { SwitchProps } from './components/Switch';
@@ -168,7 +175,7 @@ export { Tip } from './components/Tip';
 export type { ToolTipProps } from './components/Tip';
 
 export { Toast, ToastType } from './components/Toast';
-export type { ToastProps } from './components/Toast';
+export type { ToastProps, ToastInfo, ToastHideInfo, ToastHideReason } from './components/Toast';
 
 export { Button } from './components/Button';
 export type { ButtonProps, ButtonHandle } from './components/Button';
@@ -176,8 +183,8 @@ export type { ButtonProps, ButtonHandle } from './components/Button';
 export { Chip } from './components/Chip';
 export type { ChipProps } from './components/Chip';
 
-export { FileIcon, FileIconNames } from './components/FileIcon';
-export type { FileIconProps } from './components/FileIcon/_types';
+export { FileIcon, FileIconTypes } from './components/FileIcon';
+export type { FileIconProps, FileIconType } from './components/FileIcon/_types';
 
 export { Icon, SliceIcons } from './components/Icon';
 export type { IconProps, SliceIcon } from './components/Icon/_types';
@@ -185,15 +192,11 @@ export type { IconProps, SliceIcon } from './components/Icon/_types';
 export { ButtonBar } from './components/ButtonBar';
 export type { BarButton, ButtonBarProps } from './components/ButtonBar/_types';
 
-export { Label } from './components/Label';
-export { LabelBackground } from './components/Label';
-export type { LabelProps } from './components/Label';
-
-export { Level } from './components/Level';
-export type { LevelProps } from './components/Level';
+export { AudioLevel } from './components/AudioLevel';
+export type { AudioLevelProps } from './components/AudioLevel';
 
 export { UploadArea } from './components/UploadArea';
-export type { UploadAreaProps } from './components/UploadArea/_types';
+export type { UploadAreaProps, UploadFileRejection } from './components/UploadArea/_types';
 export {
 	imageTypes,
 	videoTypes,
@@ -207,6 +210,7 @@ export { Video } from './components/Video';
 export type {
 	CustomVideoControls,
 	PlayState,
+	VideoControlsContext,
 	VideoElement,
 	VideoProps,
 } from './components/Video';
@@ -237,3 +241,26 @@ export {
 	type UseInfiniteScrollOptions,
 	type UseInfiniteScrollReturn,
 } from './hooks/useInfiniteScroll/useInfiniteScroll';
+
+export { PopMenu, PopMenuItem, PopMenuGroup } from './components/PopMenu';
+export type {
+	PopMenuProps,
+	PropMenuEntry,
+	PopMenuItemBase,
+	PopMenuItemGroupBase,
+	PopMenuItemProps,
+	PopMenuItemGroupProps,
+	PopMenuItemClickInfo,
+	PopMenuSubMenuProps,
+} from './components/PopMenu';
+export { PopMenuController } from './components/PopMenuController';
+
+export { resolveShortcut } from './utils/functions/resolveShortcut';
+
+export { resolveFileIconType } from './utils/functions/files';
+
+export { FileList } from './components/FileList';
+export type { FileItem, FileListProps } from './components/FileList';
+
+export { Attachment, ContentType } from './components/Attachment';
+export type { AttachmentProps, Content, ContentFormat } from './components/Attachment';

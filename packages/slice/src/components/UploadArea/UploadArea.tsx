@@ -1,219 +1,208 @@
 'use client';
 
-import React, { useCallback, useId, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { corners } from '../../theme/corners/corners';
-import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
+import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { FileList } from '../FileList';
 import { Icon } from '../Icon';
 import { ProgressIndicator } from '../Progress';
 import css from './UploadArea.module.css';
 import { type UploadAreaProps, allTypes } from './_types';
+import { useFileSelection } from './useFileSelection';
 
 const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawProps, ref) => {
-	const props = resolveColorProps(rawProps);
 	const {
-		icon = 'arrows.export',
+		icon = 'documents.file-upload',
 		iconColor = 'var(--core-text-primary)',
 		iconColorHover = 'var(--core-text-special)',
 		title = 'Upload Files',
+		actionName,
 		width = '100%',
 		height = 'auto',
 		message = 'Drag and drop files here or click to upload',
 		busyMessage = 'Uploading in progress',
 		iconSize = 24,
 		textSize = 'm',
-		borderWidth,
-		border = 1,
+		borderWidth = 1,
 		borderStyle = 'dashed',
 		borderColor = 'var(--core-outline-primary)',
 		borderColorHover = 'var(--core-outline-special)',
-		borderRadius,
-		radius = corners['corner-m'],
+		borderRadius = corners['corner-m'],
 		padding = 'var(--spacing-xl)',
 		backgroundColor = 'var(--core-surface-secondary)',
 		backgroundColorHover = 'var(--core-surface-special)',
 		acceptedTypes = allTypes,
 		multiple = true,
 		busy = false,
+		disabled = false,
 		canRemove = true,
 		showProgress = true,
 		files = [],
+		fileListProps,
 		onUpload,
-	} = props;
-	const [hovered, setHovered] = useState<boolean>(false);
-	const inputRef = useRef<HTMLInputElement>(null);
+		onFilesChange,
+		onReject,
+		onToolTip,
+		className,
+		style,
+		onDragEnter,
+		onDragOver,
+		onDragLeave,
+		onDrop,
+		...attributes
+	} = resolveColorProps(rawProps);
+	// Keep state semantics on the trigger, including when callers use untyped native props.
+	const wrapperAttributes: React.HTMLAttributes<HTMLDivElement> = attributes;
+	wrapperAttributes.role = undefined;
+	wrapperAttributes['aria-disabled'] = undefined;
+	wrapperAttributes['aria-busy'] = undefined;
+	wrapperAttributes.children = undefined;
+	wrapperAttributes.dangerouslySetInnerHTML = undefined;
+	const [hovered, setHovered] = useState(false);
+
+	const triggerRef = useRef<HTMLButtonElement>(null);
 	const dragDepth = useRef(0);
-	const inputId = useId();
-	const titleId = useId();
 	const messageId = useId();
-	const isInteractive = !busy && files.length < 1;
-	const resolvedBorderWidth = borderWidth ?? border;
-	const resolvedBorderRadius = borderRadius ?? radius;
-	const resolvedBackgroundColor = backgroundColor;
-	const resolvedBackgroundColorHover = backgroundColorHover;
-
-	// open the native file picker when the area is idle
-	const handleClickUpload = useCallback(() => {
-		if (!isInteractive) return;
-		if (!inputRef?.current) return;
-		inputRef.current.value = '';
-		inputRef.current?.click();
-	}, [isInteractive]);
-
-	// forward file selections from the hidden file input
-	const handleFileInputChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			if (busy) return;
-			if (!e.target.files) return;
-			onUpload?.(Array.from(e.target.files));
-		},
-		[busy, onUpload],
-	);
-
-	// detect whether the drag event currently contains files
-	const hasFilesInDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-		return Array.from(e.dataTransfer?.types ?? []).includes('Files');
-	}, []);
-
-	// track nested drag enter events so hover state stays stable
-	const handleDragEnter = useCallback(
-		(e: React.DragEvent<HTMLDivElement>) => {
-			e.preventDefault();
-			if (busy || !hasFilesInDrag(e)) return;
-			dragDepth.current += 1;
-			if (dragDepth.current === 1) setHovered(true);
-		},
-		[busy, hasFilesInDrag],
-	);
-
-	// prevent the browser from opening files on drag over
-	const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-		e.preventDefault();
+	const rejectionId = useId();
+	const enabled = !busy && !disabled;
+	const selection = useFileSelection({
+		files,
+		acceptedTypes,
+		multiple,
+		disabled: !enabled,
+		onFilesChange,
+		onUpload,
+		onReject,
+	});
+	const { inputRef } = selection;
+	const dragging = enabled && hovered;
+	const resetDrag = () => {
+		dragDepth.current = 0;
+		setHovered(false);
 	};
-
-	// clear hover state once the drag stack fully leaves the area
-	const handleDragLeave = useCallback(
-		(e: React.DragEvent<HTMLDivElement>) => {
-			e.preventDefault();
-			if (busy) return;
-			dragDepth.current = Math.max(0, dragDepth.current - 1);
-			if (dragDepth.current === 0) setHovered(false);
-		},
-		[busy],
-	);
-
-	// accept dropped files and reset drag state
-	const handleDrop = useCallback(
-		(e: React.DragEvent<HTMLDivElement>) => {
-			e.preventDefault();
-			if (busy) return;
+	// A cancelled drag or an availability change must not leave the drop highlight active.
+	useEffect(() => {
+		if (!enabled) {
 			dragDepth.current = 0;
 			setHovered(false);
-			const files = Array.from(e.dataTransfer?.files ?? []);
-			onUpload?.(files);
-		},
-		[busy, onUpload],
-	);
-
-	// resolve the icon color from hover state
-	const iconStrokeColor = useMemo(() => {
-		if (hovered) return iconColorHover;
-		return iconColor;
-	}, [hovered, iconColor, iconColorHover]);
-
-	// compose CSS custom properties for layout, color, and interaction state
-	const cssVars = useMemo(() => {
-		return {
-			'--ua-border': `${resolvedBorderWidth}px`,
-			'--ua-border-style': borderStyle,
-			'--ua-border-color': hovered || busy ? borderColorHover : borderColor,
-			'--ua-radius': setStyle(resolvedBorderRadius),
-			'--ua-padding': setStyle(padding),
-			'--ua-bg-color': hovered ? resolvedBackgroundColorHover : resolvedBackgroundColor,
-			'--ua-icon-size': `${iconSize}px`,
-			'--ua-cursor': busy || files.length > 0 ? 'default' : 'pointer',
-			'--ua-width': setStyle(width),
-			'--ua-height': setStyle(height),
-		} as React.CSSProperties;
-	}, [
-		resolvedBorderWidth,
-		borderStyle,
-		borderColor,
-		borderColorHover,
-		resolvedBorderRadius,
-		padding,
-		resolvedBackgroundColor,
-		resolvedBackgroundColorHover,
-		iconSize,
-		busy,
-		hovered,
-		height,
-		files.length,
-		width,
-	]);
-
+		}
+	}, [enabled]);
+	useEffect(() => {
+		const view = inputRef.current?.ownerDocument.defaultView;
+		if (!view) return;
+		const reset = () => {
+			dragDepth.current = 0;
+			setHovered(false);
+		};
+		const handleEscape = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') reset();
+		};
+		view.addEventListener('dragend', reset);
+		view.addEventListener('drop', reset);
+		view.addEventListener('blur', reset);
+		view.addEventListener('keydown', handleEscape);
+		return () => {
+			view.removeEventListener('dragend', reset);
+			view.removeEventListener('drop', reset);
+			view.removeEventListener('blur', reset);
+			view.removeEventListener('keydown', handleEscape);
+		};
+	}, [inputRef]);
+	const cssVars = {
+		'--ua-border': `${borderWidth}px`,
+		'--ua-border-style': borderStyle,
+		'--ua-border-color': dragging || busy ? borderColorHover : borderColor,
+		'--ua-radius': setStyle(borderRadius),
+		'--ua-padding': setStyle(padding),
+		'--ua-bg-color': dragging ? backgroundColorHover : backgroundColor,
+		'--ua-icon-size': `${iconSize}px`,
+		'--ua-width': setStyle(width),
+		'--ua-height': setStyle(height),
+	} as React.CSSProperties;
 	return (
 		<div
-			className={css.wrapper}
-			style={cssVars}
+			{...wrapperAttributes}
+			className={`${css.wrapper} ${className ?? ''}`}
+			style={{ ...style, ...cssVars }}
 			ref={ref}
-			role={isInteractive ? 'button' : undefined}
-			aria-label={isInteractive ? 'Click to upload files' : undefined}
-			aria-describedby={`${titleId} ${messageId}`}
-			aria-disabled={!isInteractive}
-			tabIndex={isInteractive ? 0 : -1}
-			onClick={isInteractive ? handleClickUpload : undefined}
-			onKeyDown={isInteractive ? (e) => accessibleKeyDown(e, () => handleClickUpload()) : undefined}
-			onDragEnter={handleDragEnter}
-			onDragOver={handleDragOver}
-			onDragLeave={handleDragLeave}
-			onDrop={handleDrop}
+			onDragEnter={(event) => {
+				onDragEnter?.(event);
+				if (event.defaultPrevented || !enabled || !Array.from(event.dataTransfer?.types ?? []).includes('Files'))
+					return;
+				event.preventDefault();
+				dragDepth.current += 1;
+				setHovered(true);
+			}}
+			onDragOver={(event) => {
+				onDragOver?.(event);
+				if (!event.defaultPrevented && Array.from(event.dataTransfer?.types ?? []).includes('Files')) {
+					event.preventDefault();
+					event.dataTransfer.dropEffect = enabled ? 'copy' : 'none';
+				}
+			}}
+			onDragLeave={(event) => {
+				onDragLeave?.(event);
+				dragDepth.current = Math.max(0, dragDepth.current - 1);
+				if (!dragDepth.current) setHovered(false);
+			}}
+			onDrop={(event) => {
+				onDrop?.(event);
+				const cancelled = event.defaultPrevented;
+				event.preventDefault();
+				resetDrag();
+				if (!cancelled) selection.selectFiles(Array.from(event.dataTransfer?.files ?? []));
+			}}
 		>
-			<div className={css.icon}>
-				<Icon size={iconSize} name={icon} strokeColor={iconStrokeColor} pointer={false} />
-			</div>
-			<div id={titleId} className={css.title}>
-				{title}
-			</div>
-			<div id={messageId} className={`${css.message} ${css[textSize]}`}>
-				{busy && showProgress && <ProgressIndicator show size={20} inline color={iconStrokeColor} />}
-				{busy ? busyMessage : message}
-			</div>
+			<button
+				type="button"
+				ref={triggerRef}
+				className={css.trigger}
+				disabled={!enabled}
+				aria-busy={busy || undefined}
+				aria-label={actionName?.trim() || title.trim() || 'Upload files'}
+				aria-describedby={`${messageId} ${rejectionId}`}
+				onClick={(event) => {
+					if (!event.defaultPrevented) selection.openPicker();
+				}}
+			>
+				<span className={css.icon}>
+					<Icon size={iconSize} name={icon} strokeColor={dragging ? iconColorHover : iconColor} decorative />
+				</span>
+				<span className={css.title}>{title}</span>
+				<span id={messageId} className={`${css.message} ${css[textSize]}`}>
+					{busy && showProgress && <ProgressIndicator decorative show size={20} inline color={iconColor} />}
+					{busy ? busyMessage : message}
+				</span>
+			</button>
+			<span className={css.srOnly} role="status" aria-atomic="true">
+				{busy ? busyMessage : ''}
+			</span>
+			<span id={rejectionId} className={css.rejection} role="alert" aria-atomic="true">
+				{selection.rejection}
+			</span>
 			{files.length > 0 && (
 				<div className={css.files}>
 					<FileList
-						files={files}
-						backgroundColor={'var(--core-surface-primary)'}
-						textSize={'m'}
-						direction={'column'}
+						backgroundColor="var(--core-surface-primary)"
+						textSize="m"
+						direction={fileListProps?.variant === 'attachments' ? 'row' : 'column'}
 						gap={8}
-						iconSize={24}
-						style={
-							{
-								'--file-row-vertical': 'var(--spacing-s)',
-								'--file-row-horizontal': 'var(--spacing-m)',
-								'--file-row-adjustment': 'var(--spacing-xs)',
-							} as React.CSSProperties
-						}
-						canRemove={canRemove}
+						{...fileListProps}
+						files={files}
+						canRemove={canRemove && enabled && Boolean(onFilesChange)}
+						onToolTip={onToolTip}
+						onChange={(next) => {
+							if (!enabled) return;
+							onFilesChange?.(next);
+							if (next.length === 0) triggerRef.current?.focus();
+						}}
 					/>
 				</div>
 			)}
-			<input
-				id={inputId}
-				ref={inputRef}
-				type="file"
-				hidden={true}
-				disabled={busy}
-				multiple={multiple}
-				accept={acceptedTypes ? acceptedTypes.join(', ') : undefined}
-				onChange={handleFileInputChange}
-			/>
+			<input {...selection.inputProps} />
 		</div>
 	);
 });
-
 UploadAreaBase.displayName = 'UploadArea';
-
 export const UploadArea = React.memo(UploadAreaBase);

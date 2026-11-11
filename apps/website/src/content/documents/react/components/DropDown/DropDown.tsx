@@ -3,12 +3,18 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
-import { DropDownPreview } from './DropDownPreview';
-import { controlledCode, guidanceCode, labelsCode, optionsCode, typedCode, usageCode } from './code';
+import { FlexBox, Preset } from '@apple-pie/slice';
+import {
+	DropDownGuidanceExample,
+	DropDownLabelsExample,
+	DropDownUnderlineExample,
+	DropDownUsageExample,
+} from './UsagePreviews';
+import { controlledCode, guidanceCode, labelsCode, optionsCode, typedCode, underlineCode, usageCode } from './code';
+
 export function DropDownDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">DropDown component</H1>
 			<P clipWidth>
@@ -16,19 +22,6 @@ export function DropDownDoc() {
 					'Keep a short list of choices easy to scan and select, with native keyboard interaction and typed option data.'
 				}
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-dropdown--default"
-				components={[
-					{ label: 'Status selection', component: <DropDownPreview /> },
-					{ label: 'Simple with label', component: <DropDownPreview variant="labeled" /> },
-					{ label: 'Stacked', component: <DropDownPreview variant="stacked" /> },
-					{ label: 'Stacked appearing label', component: <DropDownPreview variant="appear" /> },
-					{ label: 'Outlined', component: <DropDownPreview variant="outlined" /> },
-					{ label: 'Underline', component: <DropDownPreview variant="underline" /> },
-					{ label: 'Disabled', component: <DropDownPreview variant="disabled" /> },
-					{ label: 'Error state', component: <DropDownPreview variant="error" /> },
-				]}
-			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Compose native '}
@@ -39,7 +32,17 @@ export function DropDownDoc() {
 				<Code>{'onChange'}</Code>
 				{' to receive the selected value and option data.'}
 			</P>
-			<CodeBlock filename="DropDownExample1.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-dropdown--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <DropDownUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'DropDownExample1.tsx',
+					},
+				]}
+			/>
 			<H3>Use options</H3>
 			<P>
 				{'Pass an '}
@@ -55,7 +58,34 @@ export function DropDownDoc() {
 				<Code>{'behavior="appear"'}</Code>
 				{' animates stacked labels when a choice is selected.'}
 			</P>
-			<CodeBlock filename="DropDownExample3.tsx" language="tsx" code={labelsCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-dropdown--default"
+				components={[
+					{
+						label: 'Position the label',
+						component: <DropDownLabelsExample />,
+						code: labelsCode.trim(),
+						codeFilename: 'DropDownExample3.tsx',
+					},
+				]}
+			/>
+			<H3>Underline border style</H3>
+			<P>
+				{'Use '}
+				<Code>{'borderStyle'}</Code>
+				{' to control weather to show a complete border or simply an underline accent.'}
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-dropdown--default"
+				components={[
+					{
+						label: 'Border style underline',
+						component: <DropDownUnderlineExample />,
+						code: underlineCode.trim(),
+						codeFilename: 'DropDownExample.tsx',
+					},
+				]}
+			/>
 			<H3>Control selection</H3>
 			<P>
 				{'Use '}
@@ -82,7 +112,17 @@ export function DropDownDoc() {
 				<Code>{'errorMessage'}</Code>
 				{' for validation feedback.'}
 			</P>
-			<CodeBlock filename="DropDownExample6.tsx" language="tsx" code={guidanceCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-dropdown--default"
+				components={[
+					{
+						label: 'Add field guidance',
+						component: <DropDownGuidanceExample />,
+						code: guidanceCode.trim(),
+						codeFilename: 'DropDownExample6.tsx',
+					},
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				{'A leading '}
@@ -499,15 +539,14 @@ export function DropDownDoc() {
 			</P>
 			<Definition id={'placeholder'}>
 				<Prop>placeholder</Prop>
-				<TypeDef>{'boolean'}</TypeDef>
-				<DefaultVal>{'true'}</DefaultVal>
+				<TypeDef>boolean</TypeDef>
+				<DefaultVal>inferred from first option</DefaultVal>
 			</Definition>
 			<P>
-				{'Keeps the existing prompt convention: index zero uses '}
-				<Code>{'textColorPlaceholder'}</Code>
-				{'. Include a first option such as '}
-				<Code>{'-- Choose a status'}</Code>
-				{' to make that prompt selectable. This flag does not insert a visible option.'}
+				The first option is treated as a prompt by default only when its value is an empty string. Set <Code>true</Code>{' '}
+				to mark a nonempty first option as a prompt, or <Code>false</Code> to treat every option as a real selection.
+				This flag does not insert an option. Real selections use <Code>textColor</Code>; prompts use{' '}
+				<Code>textColorPlaceholder</Code>.
 			</P>
 			<Definition id={'stackedGap'}>
 				<Prop>stackedGap</Prop>
@@ -648,9 +687,10 @@ export function DropDownDoc() {
 					' for native select keyboard/focus handlers. No Motion gesture or animation lifecycle events are part of the documented API.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
+
 export const trackedItems: TrackedItem[] = [
 	{ id: 'title', title: 'DropDown component' },
 	{ id: 'usage', title: 'Usage' },

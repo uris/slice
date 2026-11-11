@@ -40,8 +40,8 @@ function MenuDemo(args: OverlayProps) {
 						border: '1px solid var(--core-outline-primary)',
 					}}
 				>
-					<Button label="Rename project" size="small" variant="text" width="100%" />
-					<Button label="Duplicate project" size="small" variant="text" width="100%" />
+					<Button label="Rename project" buttonSize="s" variant="text" width="100%" />
+					<Button label="Duplicate project" buttonSize="s" variant="text" width="100%" />
 				</div>
 			</Overlay>
 		</div>

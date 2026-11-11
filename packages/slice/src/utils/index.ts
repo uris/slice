@@ -1,4 +1,5 @@
-export { copyToClipboard, hexToRgb, setStyle } from './functions/misc';
+export { resolveShortcut } from './functions/resolveShortcut';
+export { copyToClipboard, hexToRgb, setStyle, classNames } from './functions/misc';
 export { debounce } from './functions/debounce';
 export { rafThrottle } from './functions/rafThrottle';
 export * from './functions/colors';
@@ -34,3 +35,5 @@ export type {
 	WebRTCConnectionOptions,
 	WSConnectionOptions,
 } from './objects';
+
+export { resolveFileIconType } from './functions/files';

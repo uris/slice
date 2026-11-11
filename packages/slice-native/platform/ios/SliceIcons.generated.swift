@@ -23,6 +23,10 @@ public enum SliceNativeIcon: String, CaseIterable {
     case `systemCheckboxPartial` = "system.checkbox-partial"
     case `aiWand` = "ai.wand"
     case `aiSparkle` = "ai.sparkle"
+    case `basicMoreHorizFill` = "basic.more-horiz-fill"
+    case `basicMoreVertFill` = "basic.more-vert-fill"
+    case `mediaPlayFilled` = "media.play-filled"
+    case `mediaPauseFilled` = "media.pause-filled"
     case `alertsAlertCircle` = "alerts.alert-circle"
     case `alertsAlertOctagon` = "alerts.alert-octagon"
     case `alertsAlertTriangle` = "alerts.alert-triangle"
@@ -895,6 +899,10 @@ public enum SliceNativeIcon: String, CaseIterable {
         "ai.wand|normal|false": "slice-icon-61692e77616e64-normal",
         "ai.sparkle|normal|false": "slice-icon-61692e737061726b6c65-normal",
         "ai.sparkle|normal|true": "slice-icon-61692e737061726b6c65-normal-filled",
+        "basic.more-horiz-fill|normal|false": "slice-icon-62617369632e6d6f72652d686f72697a2d66696c6c-normal",
+        "basic.more-vert-fill|normal|false": "slice-icon-62617369632e6d6f72652d766572742d66696c6c-normal",
+        "media.play-filled|normal|false": "slice-icon-6d656469612e706c61792d66696c6c6564-normal",
+        "media.pause-filled|normal|false": "slice-icon-6d656469612e70617573652d66696c6c6564-normal",
         "alerts.alert-circle|normal|false": "slice-icon-616c657274732e616c6572742d636972636c65-normal",
         "alerts.alert-octagon|normal|false": "slice-icon-616c657274732e616c6572742d6f637461676f6e-normal",
         "alerts.alert-triangle|normal|false": "slice-icon-616c657274732e616c6572742d747269616e676c65-normal",

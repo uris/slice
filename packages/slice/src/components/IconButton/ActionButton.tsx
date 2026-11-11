@@ -1,11 +1,20 @@
 'use client';
 
-import { type TargetAndTransition, type Transition, motion, useAnimationControls } from 'motion/react';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { animate as animateBackground } from 'motion/mini';
+import {
+	type TargetAndTransition,
+	type Transition,
+	createGeneratorEasing,
+	getValueTransition,
+	inertia,
+	motion,
+	spring,
+	useAnimationControls,
+} from 'motion/react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import type { ColorValue } from '../../theme';
-import { resolveTransparent } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -13,11 +22,12 @@ import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import type { SliceIcon } from '../Icon';
 import { Icon } from '../Icon';
-import { ToolTipType } from '../sharedTypes';
+import { type ButtonSize, ToolTipType, buttonStyleDefaults } from '../sharedTypes';
 import css from './IconButton.module.css';
 import type { IconButtonProps } from './_types';
 
-type ActionButtonProps = Omit<IconButtonProps, 'icon'> & {
+type ActionButtonProps = Omit<IconButtonProps, 'icon' | 'buttonSize'> & {
+	buttonSize?: ButtonSize;
 	icon?: SliceIcon | null;
 	iconSelected?: SliceIcon;
 	iconFrame?: boolean;
@@ -29,7 +39,7 @@ type ActionButtonProps = Omit<IconButtonProps, 'icon'> & {
 	deselect?: boolean;
 };
 
-const sizes = { s: 24, m: 36, l: 44, xl: 56 };
+const sizes = buttonStyleDefaults.sizes;
 
 /** Keep the native button mounted when a live motion preference changes. */
 function AnimatedSurface({
@@ -69,6 +79,51 @@ function AnimatedSurface({
 	);
 }
 
+/** Let the browser blend translucent CSS colors, including live theme color-mix() values. */
+function AnimatedBackground({
+	color,
+	transition,
+	reduceMotion,
+}: {
+	color: string;
+	transition: Transition;
+	reduceMotion: boolean;
+}) {
+	const ref = useRef<HTMLSpanElement>(null);
+	const mounted = useRef(false);
+	useLayoutEffect(() => {
+		const element = ref.current;
+		if (!element) return;
+		const { type, ...timing } = getValueTransition(transition, 'backgroundColor');
+		if (!mounted.current || reduceMotion || type === false || typeof element.animate !== 'function') {
+			element.style.backgroundColor = color;
+			mounted.current = true;
+			return;
+		}
+		const getNativeType = () => {
+			if (type === 'spring') return spring;
+			if (type === 'inertia' || type === 'decay') return inertia;
+			if (typeof type === 'function') return type;
+			return undefined;
+		};
+		const generator = getNativeType();
+		const getNativeTiming = () => {
+			if (!generator || generator.applyToOptions) return { ...timing, type: generator };
+			// Custom/inertia generators need a numeric easing curve for native color interpolation.
+			const generated = createGeneratorEasing(
+				{ ...timing, duration: timing.duration === undefined ? undefined : timing.duration * 1000 },
+				100,
+				generator,
+			);
+			return { ...timing, ease: generated.ease, duration: generated.duration };
+		};
+		const animation = animateBackground(element, { backgroundColor: color }, getNativeTiming());
+		// stop() commits the current color so rapid hover reversals continue from the visible frame.
+		return () => animation.stop();
+	}, [color, transition, reduceMotion]);
+	return <span ref={ref} aria-hidden="true" className={css.background} />;
+}
+
 export const ActionButton = React.memo(function ActionButton(rawProps: ActionButtonProps) {
 	const props = resolveColorProps(rawProps);
 	const {
@@ -83,6 +138,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 		textColorSelected = 'var(--core-text-primary)',
 		buttonSize = 'm',
 		iconSize = 20,
+		iconStrokeWidth,
 		icon = 'basic.more-horiz',
 		iconFill = false,
 		iconColor = 'var(--core-text-primary)',
@@ -127,16 +183,19 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 	const tipCallback = useRef(onToolTip);
 	const hasTipCallback = Boolean(onToolTip);
 	const reduceMotion = usePrefersReducedMotion();
-	const { current: theme, isDark } = useTheme();
+	const { current: theme } = useTheme();
 	const themeMotion = theme.motion;
 	const motionTransition = useMemo(() => getWaterTransition(themeMotion, transition), [themeMotion, transition]);
 	const activeHover = hover && hovered && !disabled;
-	const size =
-		typeof buttonSize === 'number'
-			? Number.isFinite(buttonSize) && buttonSize > 0
-				? buttonSize
-				: sizes.m
-			: (sizes[buttonSize] ?? sizes.m);
+	const getSize = () => {
+		if (buttonSize === 'auto') return 0;
+		if (typeof buttonSize === 'number') {
+			if (Number.isFinite(buttonSize) && buttonSize > 0) return buttonSize;
+			return sizes.m;
+		}
+		return sizes[buttonSize] ?? sizes.m;
+	};
+	const size = getSize();
 	const resolvedIconSize = Number.isFinite(iconSize) && iconSize >= 0 ? iconSize : 20;
 	const radius =
 		typeof borderRadius === 'number'
@@ -157,19 +216,6 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 	}, [motionValues, on, color]);
 	const contentColor = on ? textColorSelected : activeHover ? textColorHover : textColor;
 	const textTarget = useMemo(() => ({ color: contentColor }), [contentColor]);
-	const backgroundTarget = useMemo(
-		() => ({
-			backgroundColor: resolveTransparent(
-				background,
-				on || activeHover
-					? [backgroundColor, on ? backgroundColorHover : backgroundColorSelected]
-					: [backgroundColorHover, backgroundColorSelected],
-				theme.colors,
-				isDark,
-			),
-		}),
-		[background, on, activeHover, backgroundColor, backgroundColorHover, backgroundColorSelected, theme.colors, isDark],
-	);
 	const cssVars = {
 		'--ib-button-size': `${size}px`,
 		'--ib-icon-size': `${resolvedIconSize}px`,
@@ -256,22 +302,12 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 			}}
 		>
 			{!iconFrame && (
-				<AnimatedSurface
-					className={css.background}
-					target={backgroundTarget}
-					transition={motionTransition}
-					reduceMotion={reduceMotion}
-				/>
+				<AnimatedBackground color={background} transition={motionTransition} reduceMotion={reduceMotion} />
 			)}
 			{icon && (
 				<span className={`${css.slot}${iconFrame ? ` ${css.frame}` : ''}`} aria-hidden="true">
 					{iconFrame && (
-						<AnimatedSurface
-							className={css.background}
-							target={backgroundTarget}
-							transition={motionTransition}
-							reduceMotion={reduceMotion}
-						/>
+						<AnimatedBackground color={background} transition={motionTransition} reduceMotion={reduceMotion} />
 					)}
 					<span className={css.content}>
 						<AnimatedSurface
@@ -284,6 +320,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 								name={on && iconSelected ? iconSelected : icon}
 								size={resolvedIconSize}
 								strokeColor="currentColor"
+								stroke={iconStrokeWidth}
 								fill={iconFill}
 								toggle={toggleIcon && on}
 								pointer={false}

@@ -15,8 +15,9 @@ export const Dot = React.memo((rawProps: DotProps) => {
 	const themeMotion = useTheme().current.motion;
 	const {
 		size = 8,
-		topOffset = 2,
-		rightOffset = 2,
+		offSet = 2,
+		topOffset = offSet,
+		rightOffset = offSet,
 		border = 3,
 		position = 'corner',
 		color = undefined,
@@ -86,8 +87,8 @@ export const Dot = React.memo((rawProps: DotProps) => {
 			'--dot-size': `${size}px`,
 			'--dot-display': position === 'inline' ? 'inline-flex' : 'flex',
 			'--dot-position': position === 'inline' ? 'relative' : 'absolute',
-			'--dot-top': position === 'inline' ? 'unset' : `${topOffset}px`,
-			'--dot-right': position === 'inline' ? 'unset' : `${rightOffset}px`,
+			'--dot-top': position === 'inline' ? 'unset' : `${-topOffset}px`,
+			'--dot-right': position === 'inline' ? 'unset' : `${-rightOffset}px`,
 			'--dot-vertical-align': position === 'inline' ? 'middle' : 'unset',
 			'--dot-border': `${border}px solid`,
 			'--dot-border-color': 'var(--core-surface-primary)',

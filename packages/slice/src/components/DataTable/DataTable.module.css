@@ -39,12 +39,17 @@
 	min-width: 100%;
 	padding: 0;
 	margin: 0;
-	color: var(--core-text-primary);
+	color: var(--core-text-secondary);
 }
 
 /* hide caption - in code for accessibility */
 .table caption {
-	display: none;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	clip-path: inset(50%);
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 /* each table header cell is sticky by default */
@@ -56,7 +61,8 @@
 	border-right-width: var(--table-border-sides);
 	border-bottom: var(--table-border-width) solid var(--table-border-color);
 	box-shadow: var(--table-header-box-shadow);
-	background: var(--table-header-background-color);
+	background: var(--table-header-cell-background, var(--table-header-background-color));
+	color: var(--core-text-primary);
 }
 
 /* last th of the header row, remove the right border */
@@ -71,11 +77,6 @@
 	border-bottom: var(--table-border-width) solid var(--table-border-color);
 }
 
-/* candy stripe all even body rows */
-.table tbody tr:nth-child(even) td {
-	background-color: var(--table-candy-stripe-background-color);
-}
-
 /* remove right border from last cell of each body row */
 .table tbody tr td:last-child {
 	border-right: 0;
@@ -87,7 +88,7 @@
 }
 
 /* style first cell in each row of the body */
-.table tbody tr td:nth-child(1) {
+.table tbody tr:not([data-spacer]) td:nth-child(1) {
 	position: var(--table-freeze-column-position);
 	left: 0;
 	z-index: 2;
@@ -98,7 +99,7 @@
 .table thead tr th:nth-child(1) {
 	position: var(--table-corner-position);
 	left: var(--table-corner-left);
-	top: 0;
+	top: var(--table-corner-top);
 	z-index: 3;
 	box-shadow: var(--table-corner-box-shadow);
 }
@@ -109,7 +110,7 @@
 	padding: 0;
 	margin: 0;
 	border: 0;
-	background-color: var(--table-background-color);
+	background-color: var(--table-cell-background, var(--table-background-color));
 }
 
 .baseCellWrapper,
@@ -182,4 +183,33 @@
 
 .scroll {
 	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
+}
+
+.table tbody tr:not([data-spacer]):hover td,
+.table tbody tr:not([data-spacer]):focus-within td {
+	background-color: var(--table-hover-background, var(--table-cell-background));
+}
+
+.fixedCell {
+	height: var(--table-row-height);
+}
+
+.cellViewport {
+	display: contents;
+}
+
+.fixedCell .cellViewport {
+	display: block;
+	height: calc(var(--table-row-height) - 1px);
+	overflow: hidden;
+}
+
+.table tr:focus-visible,
+.colResizeHandle:focus-visible {
+	outline: 2px solid var(--core-outline-special);
+	outline-offset: -2px;
+}
+
+.table thead tr th:hover {
+	background: var(--table-header-background-color-hover);
 }

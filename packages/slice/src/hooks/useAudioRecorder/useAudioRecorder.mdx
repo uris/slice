@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Hooks/useAudioRecorder" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useAudioRecorder
         Records audio from a `MediaStream` or a single `MediaStreamTrack` using `MediaRecorder` and returns the finished audio blob plus simple recording state.
@@ -107,5 +107,5 @@ import {FlexDiv} from '../../components/FlexDiv';
         }
         ```
         </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

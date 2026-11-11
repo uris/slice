@@ -9,8 +9,16 @@ const config: NextConfig = {
 	trailingSlash: true,
 	transpilePackages: ['@apple-pie/slice'],
 	// keep local slice package source edits visible without a separate library build.
-	webpack(config) {
+	webpack(config, { dev, webpack }) {
 		config.resolve.alias['@apple-pie/slice/styles.css'] = join(sliceSource, 'theme.css');
+		if (dev) {
+			config.plugins.push(
+				new webpack.NormalModuleReplacementPlugin(
+					/[\\/]mini-css-extract-plugin[\\/]hmr[\\/]hotModuleReplacement\.js$/,
+					join(__dirname, 'loaders/css-hot-reload.js'),
+				),
+			);
+		}
 		// Motion's relative map comments can survive in client boundary modules.
 		// Strip the upstream references before Next.js generates its own maps.
 		config.module.rules.push({

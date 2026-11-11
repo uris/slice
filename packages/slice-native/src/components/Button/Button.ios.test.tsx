@@ -400,7 +400,7 @@ describe('native Liquid Glass Button', () => {
 it('resolves button foreground literals to assets and falls back for unmatched colors', () => {
     const view = render(button({ tintColor: 'core-text-secondary' }));
     expect(state.native.tintToken).toBe('core-text-secondary');
-    view.rerender(button({ tintColor: '#405261' }));
+    view.rerender(button({ tintColor: lightTheme.colors['core-text-secondary'] }));
     expect(state.native.tintToken).toBe('core-text-secondary');
     view.rerender(button({ tintColor: 'red' }));
     expect(state.native.tintToken).toBe('core-text-primary');

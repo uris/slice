@@ -1,12 +1,19 @@
+import type { Variants } from 'motion/react';
 import type React from 'react';
 
 /**
- * Convert a numeric or string size into a CSS-ready size value.
+ * Convert numeric sizes and dash-separated numeric spacing into CSS pixel values.
  */
 export function setSizeStyle(size: string | number | undefined): string {
-	if (!size) return 'auto';
-	if (typeof size === 'string') return size;
-	return `${size}px`;
+	if (size === undefined) return 'auto';
+	if (typeof size === 'number') return `${size}px`;
+	if (/^\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?){1,3}$/.test(size)) {
+		return size
+			.split('-')
+			.map((value) => `${value}px`)
+			.join(' ');
+	}
+	return size;
 }
 
 /**
@@ -167,4 +174,26 @@ export function normalizedPercent(value: number | string): number {
 	if (typeof value === 'number') return value;
 	if (value.endsWith('%')) return Number.parseFloat(value);
 	return Number.parseFloat(value) / 100;
+}
+
+/**
+ * Concatenate class names
+ */
+export function classNames(...args: string[]): string {
+	return args.join(' ');
+}
+
+/**
+ * Merge presence motion value variants
+ */
+export function mergedPresenceMotionValues(defaults?: Variants | null, updated?: Variants | null) {
+	const resolvedDefaults = defaults ?? {};
+	const resolvedUpdated = updated ?? {};
+	if (!updated) return resolvedDefaults;
+	const merged: Variants = { ...resolvedDefaults, ...resolvedUpdated };
+	for (const state of ['initial', 'animate', 'exit'] as const) {
+		const override = updated?.[state];
+		if (override && typeof override !== 'function') merged[state] = { ...resolvedDefaults[state], ...override };
+	}
+	return merged;
 }

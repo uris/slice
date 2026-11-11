@@ -9,6 +9,12 @@
 	display: inline-block;
 	white-space: nowrap;
 }
+.label.children {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--tb-gap);
+}
 .toggleButton:disabled .label {
 	opacity: 0.3;
 }
@@ -26,4 +32,8 @@
 }
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+
+.toggleButton.bottom {
+	flex-direction: column;
 }

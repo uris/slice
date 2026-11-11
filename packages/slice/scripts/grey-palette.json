@@ -1,0 +1,30 @@
+{
+	"grays": {
+		"black": { "light": "#000000", "dark": "#000000" },
+		"gray": { "light": "#939292", "dark": "#939290" },
+		"gray-2": { "light": "#b2b1b0", "dark": "#666564" },
+		"gray-3": { "light": "#cccbca", "dark": "#4a4949" },
+		"gray-4": { "light": "#d6d5d4", "dark": "#3c3c3b" },
+		"gray-5": { "light": "#eae9e8", "dark": "#2e2e2d" },
+		"gray-6": { "light": "#f7f6f5", "dark": "#1e1e1d" },
+		"white": { "light": "#ffffff", "dark": "#ffffff" }
+	},
+	"fills": {
+		"primary": { "light": "#808080", "dark": "#808080", "opacity": 0.12 },
+		"secondary": { "light": "#3c3c43", "dark": "#ebebf5", "opacity": 0.6 },
+		"tertiary": { "light": "#787878", "dark": "#787878", "opacity": 0.2 },
+		"elevated": { "light": "#ffffff", "dark": "#1f1e1e" },
+		"liquid-glass": { "light": "#ffffff", "dark": "#1f1e1e", "opacity": 0.8 }
+	},
+	"text": {
+		"primary": { "light": "#000000", "dark": "#ffffff" },
+		"secondary": { "light": "#434242", "dark": "#f5f3f0", "opacity": 0.6 },
+		"tertiary": { "light": "#434242", "dark": "#f5f3f0", "opacity": 0.3 },
+		"quaternary": { "light": "#434242", "dark": "#ebebf5", "opacity": 0.18 }
+	},
+	"background": {
+		"primary": { "light": "#ffffff", "dark": "#000000" },
+		"secondary": { "light": "#f5f4f2", "dark": "#1f1e1e" },
+		"elevated": { "light": "#ffffff", "dark": "#1f1e1e" }
+	}
+}

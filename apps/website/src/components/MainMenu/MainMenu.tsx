@@ -1,6 +1,7 @@
+import { LogoHeader } from '@/components/LogoHeader/LogoHeader';
 import { menuOptionsReact, menuOptionsReactNative } from '@/docs/registry/menu';
 import { usePackageType } from '@/docs/stores/store';
-import { Package, surfaceDarker, surfaceYellow } from '@/src/consts/consts';
+import { Package, surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
 import { usePathname } from 'next/navigation';
 import styles from './MainMenu.module.css';
@@ -31,7 +32,8 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
 
 	return (
 		<div className={styles.wrapper}>
-			<div className={styles.menu} style={{ background: surfaceDarker }}>
+			<div className={styles.menu}>
+				<LogoHeader />
 				{options.map((option: MainMenuOption, index: number) => {
 					const { label, param } = option;
 					const color = params.has(param) ? surfaceYellow : 'var(--core-text-primary)';

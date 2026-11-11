@@ -41,16 +41,26 @@ Supply id and panelId when your application renders panels:
 
 ## Props
 
+Color props accept Slice theme tokens or CSS colors and inherit from `TabBar` when omitted. Explicit selected colors, including inherited ones, take precedence over `accentColor`.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `accentColor` | `ColorValue` | `undefined` | Fallback color for selected text, icons, and the moving underline. Explicit selected-color props take precedence. |
 | `children` | `React.ReactNode` | `undefined` | Custom label content when label is not supplied. |
 | `count` | `number` | `undefined` | Optional count badge. Zero hides the badge. |
 | `disabled` | `boolean` | `false` | Disables this choice. Keyboard navigation skips it; a disabled group cannot be overridden by a child. |
 | `icon` | `string  /  null` | `undefined` | Optional decorative icon before the label. |
+| `iconColor` | `ColorValue` | `undefined` | Icon color for unselected tabs. Defaults to the tab’s text color. |
+| `iconColorSelected` | `ColorValue` | `undefined` | Selected icon color. Takes precedence over `accentColor`; without either, icons follow the selected text color. |
+| `iconSize` | `number` | inherited from TabBar (20px by default) | Per-tab icon size in pixels; also available on TabBar options. |
 | `id` | `string` | `generated` | ID of the tab button. Supply a stable ID when a panel references it through aria-labelledby. |
 | `label` | `string` | `undefined` | Tab text. Takes priority over children; the fallback is Tab. |
 | `panelId` | `string` | `undefined` | ID of the corresponding panel, used as the button’s aria-controls. Your application renders the panel. |
+| `textColor` | `ColorValue` | `undefined` | Text color for unselected tabs. Defaults to `core-text-primary`. |
+| `textColorSelected` | `ColorValue` | `undefined` | Selected text color. Takes precedence over `accentColor`; without either, uses `core-text-special`. |
 | `toolTip` | `string` | `undefined` | Tooltip text sent to the group’s onToolTip callback. Your application displays the tooltip. |
+| `underlineColor` | `ColorValue` | `undefined` | Baseline color beneath the tabs. Overrides TabBar’s `borderColor`. A Tab override applies while that tab is selected. |
+| `underlineSelectedColor` | `ColorValue` | `undefined` | Moving selected-underline color. Takes precedence over `accentColor`; without either, uses `core-text-special`. |
 | `value` | `T` | `required` | Unique, non-null identity for this tab. Prefer stable strings or numbers. Object values are matched by reference. |
 | `buttonAttributes` | `React.ButtonHTMLAttributes<HTMLButtonElement>` | `undefined` | Other native button attributes and events apply to this tab. Selection, disabled state, role, type, ARIA attributes, and tab order are managed by the group. onClick and onKeyDown run before group handling; preventDefault cancels it. |
 

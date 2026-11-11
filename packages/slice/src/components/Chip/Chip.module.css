@@ -48,8 +48,10 @@
 	-webkit-appearance: none;
 }
 .action {
-	padding: var(--ui-chip-padding-top) var(--ui-chip-padding-right) var(--ui-chip-padding-bottom)
-		var(--ui-chip-padding-left);
+	padding: var(
+		--ui-chip-padding,
+		var(--ui-chip-padding-top) var(--ui-chip-padding-right) var(--ui-chip-padding-bottom) var(--ui-chip-padding-left)
+	);
 	cursor: inherit;
 }
 .content {
@@ -63,7 +65,11 @@
 }
 .remove {
 	align-self: stretch;
-	padding: var(--ui-chip-padding-top) var(--ui-chip-padding-right) var(--ui-chip-padding-bottom) 0;
+	padding: var(
+		--ui-chip-padding,
+		var(--ui-chip-padding-top) var(--ui-chip-padding-right) var(--ui-chip-padding-bottom) 0
+	);
+	padding-left: 0;
 	cursor: pointer;
 }
 .remove:disabled {

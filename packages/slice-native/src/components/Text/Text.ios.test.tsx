@@ -1,3 +1,4 @@
+import { lightTheme } from '../../theme';
 // @vitest-environment jsdom
 import { act, cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -93,7 +94,7 @@ describe('native text defaults and updates', () => {
 });
 
 it('resolves named and palette foregrounds for glass text, including style overrides', () => {
-    const view = render(text({ textColor: '#405261' }));
+    const view = render(text({ textColor: lightTheme.colors['core-text-secondary'] }));
     expect(state.native.colorToken).toBe('core-text-secondary');
     view.rerender(text({ textColor: 'core-text-tertiary' }));
     expect(state.native.colorToken).toBe('core-text-tertiary');

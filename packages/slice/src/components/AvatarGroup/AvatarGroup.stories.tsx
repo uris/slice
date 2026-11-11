@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Fragment, useState } from 'react';
 import type { AvatarInfo } from 'src/components/AvatarGroup';
 import { AvatarGroup } from 'src/components/AvatarGroup';
-import { FlexDiv } from 'src/components/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox';
 import {
 	runAvatarGroupCustomClassPlay,
 	runAvatarGroupNoAvatarsPlay,
@@ -46,13 +46,79 @@ export default meta;
 export const Default: StoryObj<typeof AvatarGroup> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<AvatarGroup {...args} data-testid="avatar-group" />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
 		await runAvatarGroupPlay({ canvasElement, args });
+	},
+};
+
+export const DefaultSizeFromRecords: StoryObj<typeof AvatarGroup> = {
+	tags: ['tests'],
+	render: () => <AvatarGroup avatars={[{ first: 'Jane' }, { first: 'Morgan' }, { first: 'Alex' }]} limit={2} />,
+	play: async ({ canvasElement }) => {
+		const avatars = within(canvasElement).getAllByRole('img');
+		await expect(avatars).toHaveLength(3);
+		for (const avatar of avatars) {
+			await expect(avatar.getBoundingClientRect().width).toBe(40);
+			await expect(avatar.getBoundingClientRect().height).toBe(40);
+		}
+	},
+};
+
+export const DefaultSizeFromChildren: StoryObj<typeof AvatarGroup> = {
+	tags: ['tests'],
+	render: () => (
+		<AvatarGroup size={undefined}>
+			<Avatar name="Jane" />
+			<Avatar name="Morgan" size={undefined} />
+			<Avatar name="Alex" size={56} />
+		</AvatarGroup>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const name of ['Jane', 'Morgan', 'Alex']) {
+			const avatar = canvas.getByRole('img', { name: `User Avatar - ${name}` });
+			const expectedSize = name === 'Alex' ? 56 : 40;
+			await expect(avatar.getBoundingClientRect().width).toBe(expectedSize);
+			await expect(avatar.getBoundingClientRect().height).toBe(expectedSize);
+		}
+	},
+};
+
+export const AccessibleGroupName: StoryObj<typeof AvatarGroup> = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<AvatarGroup avatars={[{ first: 'Jane' }]} />
+			<AvatarGroup groupName="  Project collaborators  ">
+				<Avatar name="Morgan" />
+			</AvatarGroup>
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('group', { name: 'people' })).toBeVisible();
+		const custom = canvas.getByRole('group', { name: 'Project collaborators' });
+		await expect(within(custom).getByRole('img', { name: 'User Avatar - Morgan' })).toBeVisible();
+		await expect(custom).not.toHaveAttribute('groupName');
+	},
+};
+
+export const ManagedGroupSemantics: StoryObj<typeof AvatarGroup> = {
+	tags: ['tests'],
+	render: () => {
+		const raw = { role: 'presentation', 'aria-label': 'Override', 'aria-labelledby': 'external', 'aria-hidden': true };
+		return <AvatarGroup {...raw} groupName="   " avatars={[{ first: 'Jane' }]} data-testid="managed-group" />;
+	},
+	play: async ({ canvasElement }) => {
+		const group = within(canvasElement).getByRole('group', { name: 'people' });
+		await expect(group).toHaveAttribute('data-testid', 'managed-group');
+		await expect(group).not.toHaveAttribute('aria-labelledby');
+		await expect(group).not.toHaveAttribute('aria-hidden');
 	},
 };
 
@@ -120,10 +186,17 @@ export const NormalizedBordersAndColors: StoryObj<typeof AvatarGroup> = {
 	play: async ({ canvasElement }) => {
 		const avatar = within(canvasElement).getByRole('img', { name: 'User Avatar - Jane Smith' });
 		const frame = avatar.firstElementChild as HTMLElement;
+		// Check the resting border after moving the browser pointer off the avatar.
+		const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+		if (MODE === 'test') {
+			const { userEvent: pointer } = await import('vitest/browser');
+			const container = within(canvasElement).getByTestId('avatar-group').parentElement as HTMLElement;
+			await pointer.hover(container, { position: { x: 1, y: 1 } });
+		}
 		await expect(getComputedStyle(avatar).borderTopWidth).toBe('4px');
 		await expect(getComputedStyle(avatar).borderTopColor).toBe('rgb(0, 255, 0)');
 		await expect(getComputedStyle(frame).borderTopWidth).toBe('2px');
-		await expect(getComputedStyle(frame).borderTopColor).toBe('rgb(255, 0, 0)');
+		await waitFor(() => expect(getComputedStyle(frame).borderTopColor).toBe('rgb(255, 0, 0)'));
 		await expect(getComputedStyle(frame).color).toBe('rgb(255, 255, 255)');
 		await expect(getComputedStyle(frame).backgroundColor).toBe('rgb(37, 99, 235)');
 		await expect(avatar.getBoundingClientRect().width).toBe(48);
@@ -132,12 +205,22 @@ export const NormalizedBordersAndColors: StoryObj<typeof AvatarGroup> = {
 
 export const DefaultBorderWidths: StoryObj<typeof AvatarGroup> = {
 	tags: ['tests'],
-	args: { borderWidth: undefined, avatars: [{ first: 'Jane' }] },
-	render: Default.render,
+	render: () => (
+		<AvatarGroup>
+			<Avatar name="Default border" />
+			<Avatar name="Custom border" borderWidth={1} />
+		</AvatarGroup>
+	),
 	play: async ({ canvasElement }) => {
-		const avatar = within(canvasElement).getByRole('img');
-		await expect(getComputedStyle(avatar).borderTopWidth).toBe('3px');
-		await expect(getComputedStyle(avatar.firstElementChild as HTMLElement).borderTopWidth).toBe('3px');
+		const canvas = within(canvasElement);
+		for (const [name, borderWidth] of [
+			['Default border', '0px'],
+			['Custom border', '1px'],
+		]) {
+			const avatar = canvas.getByRole('img', { name: `User Avatar - ${name}` });
+			await expect(getComputedStyle(avatar).borderTopWidth).toBe('3px');
+			await expect(getComputedStyle(avatar.firstElementChild as HTMLElement).borderTopWidth).toBe(borderWidth);
+		}
 	},
 };
 

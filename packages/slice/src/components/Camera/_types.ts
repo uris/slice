@@ -1,8 +1,8 @@
 import type React from 'react';
+import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { SliceIcon } from '../Icon/_types';
 
 export interface DefaultNoVideoPosterProps {
-	size?: number | string;
 	user?: UserProfile;
 	message?: string;
 }
@@ -14,7 +14,8 @@ export interface ToolbarButtonProps {
 	active?: boolean;
 	label?: string;
 	disabled?: boolean;
-	onMouseOver?: (e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => void;
+	borderWidth?: number;
+	onMouseOver?: (e: React.MouseEvent<HTMLButtonElement> | React.FocusEvent<HTMLButtonElement>) => void;
 }
 
 export interface CameraElement {
@@ -23,33 +24,22 @@ export interface CameraElement {
 	stream?: MediaStream;
 	videoTrack?: MediaStreamTrack;
 	audioTrack?: MediaStreamTrack;
-	snapshot?: (options?: CameraSnapshotOptions) => Blob | undefined;
-	startCamera?: () => Promise<MediaStream | Error>;
-	stopCamera?: () => Promise<boolean | Error>;
-	enableVideo?: () => MediaStream | Error;
-	disableVideo?: () => boolean | Error;
-	muteMic?: () => boolean | Error;
-	unmuteMic?: () => boolean | Error;
-	toggleVideo?: () => Promise<MediaStream | boolean | Error>;
-	toggleMic?: () => boolean | Error;
-	devices?: () => Promise<MediaDeviceInfo[] | Error>;
+	snapshot: (options?: CameraSnapshotOptions) => Blob | undefined;
+	startCamera: () => Promise<MediaStream | Error>;
+	stopCamera: () => Promise<boolean | Error>;
+	enableVideo: () => MediaStream | Error;
+	disableVideo: () => boolean | Error;
+	muteMic: () => boolean | Error;
+	unmuteMic: () => boolean | Error;
+	toggleVideo: () => Promise<MediaStream | boolean | Error>;
+	toggleMic: () => boolean | Error;
+	devices: () => Promise<MediaDeviceInfo[] | Error>;
 }
 
 export interface CameraSnapshotOptions {
 	width?: number;
 	height?: number;
 	toggle?: boolean;
-}
-
-export interface Controls {
-	mic?: boolean;
-	camera?: boolean;
-	play?: boolean;
-	stop?: boolean;
-	pause?: boolean;
-	videoDevices?: boolean;
-	audioDevices?: boolean;
-	flipCamera?: boolean;
 }
 
 export interface UserProfile {
@@ -60,15 +50,18 @@ export interface UserProfile {
 
 export interface Settings {
 	micDeviceId?: string;
-	micVolume?: number;
 	videoDeviceId?: string;
 }
 
 export interface BaseCameraProps {
+	backgroundColor?: ColorValue;
+	borderColor?: ColorValue;
+	borderWidth?: number | string;
+	borderRadius?: number | string;
+	audio?: boolean;
 	width?: number | string;
 	height?: number | string;
 	noVideoPoster?: React.ReactNode;
-	videoFit?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
 	startCameraOff?: boolean;
 	startAudioMuted?: boolean;
 	playLocalAudio?: boolean;
@@ -76,13 +69,14 @@ export interface BaseCameraProps {
 	sessionSettings?: Settings;
 	onVideoStream?: (stream: MediaStream) => void;
 	onSnapshot?: (blob: Blob | undefined) => void;
-	onNoVideo?: (reason?: string | Error) => void;
-	onNoAudio?: (reason?: string | Error) => void;
+	onNoVideo?: (reason: Error) => void;
+	onNoAudio?: (reason: Error) => void;
 	onChangeProfile?: (profile?: UserProfile) => void;
 	onChangeSettings?: (settings?: Settings, devices?: MediaDeviceInfo[] | Error) => void;
 	showControlBar?: boolean;
+	showProfileButton?: boolean;
+	showSettingsButton?: boolean;
 	autoHideControlBar?: boolean;
-	controls?: Controls;
 	pipSnapshot?: boolean;
 }
 

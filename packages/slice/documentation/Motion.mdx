@@ -1,12 +1,12 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv, Spacer } from 'src';
+import { FlexBox, Spacer } from 'src';
 import { MotionSimulation } from './_components/MotionSimulation/MotionSimulation';
 import { RenderSource } from './_components/RenderSource/RenderSource';
 
 <Meta title="Motion/Slice Motion" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
             # Slice Motion
             Slice is a product-first UI kit. Motion and state transitions help the
@@ -80,5 +80,5 @@ export const motion: SliceMotion = {
 
             <Spacer size="xxl" />
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

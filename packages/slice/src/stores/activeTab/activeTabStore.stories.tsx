@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect } from 'react';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { useInitializeActiveTab, useIsActiveTab, useIsTabFocused, useTabVisibilityState } from './activeTabStore';
 
 function ActiveTabDemo() {
@@ -10,13 +10,13 @@ function ActiveTabDemo() {
 	const focused = useIsTabFocused();
 	const visibility = useTabVisibilityState();
 	return (
-		<FlexDiv direction={'column'} gap={12} padding={24}>
+		<FlexBox direction={'column'} gap={12} padding={24}>
 			<span>
 				Focused: {String(focused)} · Visibility: {visibility}
 			</span>
 			<strong>Tab state: {active ? 'Active' : 'Inactive'}</strong>
 			<span>Switch browser tabs or minimize the window to change visibility.</span>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

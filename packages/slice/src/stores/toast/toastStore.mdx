@@ -1,19 +1,43 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 import NoteSection from "../../../documentation/_components/Notice/Notice";
 
 <Meta title="Stores/Toast Store" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         <NoteSection>
             Slice stores uses a module-level singleton pattern: each store is created once when the module is loaded - every import of the module module shares the same store instance.
         </NoteSection>
             
         # ToastStore
-        Global toast state helpers built with Zustand. Supports atomic selector hooks for React and imperative access outside React.
+        Global toast state helpers built with Zustand.
+
+        ## Compose with Toast
+        Each push generates a new `notificationId` unless supplied, so repeated
+        identical messages replay. Values use the component's `ToastProps` shape
+        with a required nullable message. Spread them directly into `Toast` and
+        pass `toastActions.clear` to `onHide`. Its identity check prevents an older
+        exit callback from clearing a replacement. Calling `clear()` without a
+        payload clears unconditionally. The store is a single slot, without queuing. `push` infers the type of `data`
+        for its `onClick(event, data)` handler; the shared slot can hold different
+        payload shapes while retaining each action and its attached data.
+
+        <RenderSource language="tsx">
+        {`import { Toast } from '@apple-pie/slice';
+import { useToast, toastActions } from '@apple-pie/slice/stores/toast';
+
+function Notifications() {
+  const notification = useToast();
+  return <Toast {...notification} onHide={toastActions.clear} />;
+}
+
+toastActions.push({ message: 'Saved', type: 'success' });`}
+        </RenderSource>
+
+        Supports atomic selector hooks for React and imperative access outside React.
             
         ## React exports (reactive)
         React exports are reactive subscriptions for components updating automatically as state changes/mutates.
@@ -120,5 +144,5 @@ import NoteSection from "../../../documentation/_components/Notice/Notice";
         ```
         </RenderSource>
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

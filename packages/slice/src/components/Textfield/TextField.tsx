@@ -94,7 +94,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		width = '100%',
 		height = 'auto',
 		padding,
-		borderRadius = 8,
+		borderRadius,
 		readOnly = false,
 		textAlign = 'left',
 		inline = false,
@@ -106,8 +106,8 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		borderColorFocused = 'var(--core-link-primary)',
 		borderColorBlurred = 'var(--core-outline-primary)',
 		borderColorError = 'var(--feedback-warning)',
-		backgroundColorFocused = 'var(--core-surface-secondary)',
-		backgroundColorBlurred = 'var(--core-surface-secondary)',
+		backgroundColorFocused,
+		backgroundColorBlurred,
 		textColorFocused = 'var(--core-text-primary)',
 		textColorBlurred = 'var(--core-text-primary)',
 		textColorError = 'var(--feedback-warning)',
@@ -278,8 +278,9 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 	};
 	const getBackgroundColor = () => {
 		if (inline) return 'transparent';
-		if (isFocused) return backgroundColorFocused;
-		return backgroundColorBlurred;
+		const fallback = borderStyle === 'underline' ? 'transparent' : 'var(--core-surface-secondary)';
+		if (isFocused) return backgroundColorFocused ?? fallback;
+		return backgroundColorBlurred ?? fallback;
 	};
 	const getBoxShadow = () => {
 		if (borderStyle === 'none') return 'none';
@@ -291,7 +292,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		'--tf-width': setStyle(width),
 		'--tf-height': setStyle(height),
 		'--tf-padding': getPadding(),
-		'--tf-border-radius': setStyle(borderRadius),
+		'--tf-border-radius': setStyle(borderRadius, borderStyle === 'underline' ? 0 : 8),
 		'--tf-bg-color': getBackgroundColor(),
 		'--tf-box-shadow': getBoxShadow(),
 		'--tf-text-color': getTextColor(),
@@ -429,7 +430,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 								<Button
 									label={actionLabel.trim() || 'Action'}
 									variant="text"
-									size="small"
+									buttonSize="s"
 									state={!canEdit || text === '' ? 'disabled' : 'normal'}
 									textColor={theme.current.colors['core-button-primary']}
 									onClick={() => {
@@ -443,8 +444,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 						<div className={css.showPassword}>
 							<IconButton
 								actionName={show ? 'Hide password' : 'Show password'}
-								icon="system.view"
-								toggleIcon
+								icon={show ? 'security.eye-slash' : 'security.eye'}
 								toggle
 								selected={show}
 								iconSize={18}

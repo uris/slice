@@ -4,8 +4,14 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { AvatarGroup, FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { MoreAvatarsPreview } from './AvatarGroupPreview';
+import {
+	AvatarGroupColorsExample,
+	AvatarGroupSpacingExample,
+	AvatarGroupTypographyExample,
+	AvatarGroupUsageExample,
+} from './UsagePreviews';
 import {
 	accessibilityCode,
 	childrenCode,
@@ -18,59 +24,32 @@ import {
 	typographyCode,
 	usageCode,
 } from './code';
-import { participants } from './data';
 
 export function AvatarGroupDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>AvatarGroup component</H1>
 			<P clipWidth>
 				Bring a team into view. AvatarGroup gathers profile photos and initials into a compact row for collaborators,
 				assignees, and participants.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
-				components={[
-					{
-						label: 'Avatar group',
-						component: (
-							<AvatarGroup
-								avatars={participants}
-								size={44}
-								borderWidth={0}
-								outerBorderColor="core-surface-primary-tint"
-								role="group"
-								aria-label="Project collaborators"
-							/>
-						),
-					},
-					{
-						label: 'Compact avatar group',
-						component: (
-							<AvatarGroup
-								avatars={participants}
-								size={40}
-								overlap={20}
-								borderWidth={0}
-								outerBorderColor="core-surface-primary-tint"
-								role="group"
-								aria-label="Project collaborators"
-							/>
-						),
-					},
-					{ label: 'Avatars overflow', component: <MoreAvatarsPreview /> },
-				]}
-			/>
-			<TipBox inline noBorder title="Tip:">
-				On the overflow example, click "+10" to open the full team in a modal.
-			</TipBox>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Pass an <Code>avatars</Code> array to render a row of <Code openURL="/docs/react/avatar/">Avatar</Code>{' '}
 				components.
 			</P>
-			<CodeBlock filename="AvatarGroupExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <AvatarGroupUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'AvatarGroupExample.tsx',
+					},
+				]}
+			/>
 			<H3>Compose individual avatars</H3>
 			<P>
 				Add <Code openURL="/docs/react/avatar/">Avatar</Code> children when each person needs custom props or an action.
@@ -83,20 +62,46 @@ export function AvatarGroupDoc() {
 				five avatars appear followed by <Code>+10</Code>. Use <Code>onMore</Code> to handle displaying all avatars in
 				your app.
 			</P>
-			<CodeBlock filename="TeamAvatars.tsx" language="tsx" code={moreCode.trim()} />
+			<TipBox inline noBorder>
+				Select the overflow avatar to see the full team.
+			</TipBox>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
+				components={[{ label: 'Overflow avatars', component: <MoreAvatarsPreview />, code: moreCode.trim() }]}
+			/>
 			<H3>Adjust the spacing</H3>
 			<P>
 				Set <Code>overlap</Code> to zero and add a <Code>gap</Code> for a separated row. Increase overlap for a tighter
 				stack.
 			</P>
-			<CodeBlock filename="AvatarGroupSpacing.tsx" language="tsx" code={spacingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
+				components={[
+					{
+						label: 'Adjust the spacing',
+						component: <AvatarGroupSpacingExample />,
+						code: spacingCode.trim(),
+						codeFilename: 'AvatarGroupSpacing.tsx',
+					},
+				]}
+			/>
 			<H3>Style individual people</H3>
 			<P>
 				Set text and background colors on each record. Use <Code>backgroundColor</Code> on the group for a shared
 				fallback, including the overflow avatar. Group appearance settings provide defaults; explicit props on Avatar
 				children override them.
 			</P>
-			<CodeBlock filename="AvatarGroupColors.tsx" language="tsx" code={colorsCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
+				components={[
+					{
+						label: 'Style individual people',
+						component: <AvatarGroupColorsExample />,
+						code: colorsCode.trim(),
+						codeFilename: 'AvatarGroupColors.tsx',
+					},
+				]}
+			/>
 			<H3>Load photos as needed</H3>
 			<P>
 				Enable <Code>lazyLoad</Code> for groups in long lists. The browser defers photos until they approach the
@@ -107,7 +112,17 @@ export function AvatarGroupDoc() {
 			<P>
 				Use <Code>textSize</Code> to set the initials independently of the avatar dimensions.
 			</P>
-			<CodeBlock filename="AvatarGroupTypography.tsx" language="tsx" code={typographyCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
+				components={[
+					{
+						label: 'Size the initials',
+						component: <AvatarGroupTypographyExample />,
+						code: typographyCode.trim(),
+						codeFilename: 'AvatarGroupTypography.tsx',
+					},
+				]}
+			/>
 			<H3>Connect a tooltip</H3>
 			<P>
 				Use <Code>onToolTip</Code> to connect your tooltip UI. Your handler receives the person’s label and avatar ref
@@ -129,8 +144,8 @@ export function AvatarGroupDoc() {
 			</P>
 			<H2 id={'accessibility'}>Accessibility</H2>
 			<P>
-				Each avatar has an image role and a label based on its name or email. Give the group an overall label when its
-				purpose adds useful context.
+				The wrapper supplies <Code>role="group"</Code> and uses <Code>groupName</Code> for its accessible label,
+				defaulting to <Code>people</Code>. Each avatar has its own role and label based on its name or email.
 			</P>
 			<CodeBlock filename="AvatarGroupAccessibility.tsx" language="tsx" code={accessibilityCode.trim()} />
 			<P>
@@ -179,9 +194,12 @@ export function AvatarGroupDoc() {
 			<Definition id={'borderWidth'}>
 				<Prop>borderWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'3'}</DefaultVal>
+				<DefaultVal>undefined</DefaultVal>
 			</Definition>
-			<P>Inner border width in pixels for every avatar.</P>
+			<P>
+				Inner border width in pixels. When omitted, each avatar keeps its own border width or the <Code>Avatar</Code>{' '}
+				default of <Code>0</Code>. Explicit child values override the group.
+			</P>
 			<Definition id={'children'}>
 				<Prop>children</Prop>
 				<TypeDef>React.ReactNode</TypeDef>
@@ -199,6 +217,15 @@ export function AvatarGroupDoc() {
 			</Definition>
 			<P>
 				Extra space between avatar wrappers in pixels. Combines with overlap; use overlap set to 0 for a separated row.
+			</P>
+			<Definition id={'groupName'}>
+				<Prop>groupName</Prop>
+				<TypeDef>string</TypeDef>
+				<DefaultVal>people</DefaultVal>
+			</Definition>
+			<P>
+				Accessible label for the group. Surrounding whitespace is trimmed; omitted or blank names use{' '}
+				<Code>people</Code>.
 			</P>
 			<Definition id={'lazyLoad'}>
 				<Prop>lazyLoad</Prop>
@@ -250,7 +277,7 @@ export function AvatarGroupDoc() {
 			<Definition id={'size'}>
 				<Prop>size</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'32'}</DefaultVal>
+				<DefaultVal>{'40'}</DefaultVal>
 			</Definition>
 			<P>Width and height of each avatar in pixels, including its borders.</P>
 			<Definition id={'textSize'}>
@@ -265,8 +292,9 @@ export function AvatarGroupDoc() {
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
-				Native div attributes pass through to the group wrapper, including id, className, style, data-* and aria-*. They
-				do not apply to individual avatars. Supply Avatar children to render individual people.
+				Native div attributes pass through to the group wrapper, including id, className, style, and data-*. Role and
+				ARIA attributes are managed internally. These attributes do not apply to individual avatars. Supply Avatar
+				children to render individual people.
 			</P>
 			<H2 id={'events'}>Events</H2>
 			<Definition id={'onMore'}>
@@ -303,7 +331,7 @@ export function AvatarGroupDoc() {
 				and run before the container’s bubbling handlers. Call event.stopPropagation() in a child handler to prevent
 				bubbling to the container.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -323,6 +351,7 @@ export const avatarGroupTrackedItems: TrackedItem[] = [
 			{ id: 'borderWidth', title: 'borderWidth', code: true },
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'gap', title: 'gap', code: true },
+			{ id: 'groupName', title: 'groupName', code: true },
 			{ id: 'lazyLoad', title: 'lazyLoad', code: true },
 			{ id: 'limit', title: 'limit', code: true },
 			{ id: 'margin', title: 'margin', code: true },

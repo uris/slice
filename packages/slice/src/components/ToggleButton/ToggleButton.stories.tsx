@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
-import { FlexDiv } from '../FlexDiv';
+import { Avatar } from '../Avatar';
+import { FlexBox } from '../FlexBox';
 import { SliceIcons } from '../Icon/_types';
 import { installReducedMotionPreference } from '../playHelpers';
 import type { ToolTip } from '../sharedTypes';
@@ -11,13 +12,13 @@ const meta = {
 	title: 'Components/ToggleButton',
 	component: ToggleButton,
 	render: (args) => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<ToggleButton {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	argTypes: {
 		icon: { control: 'select', options: Object.values(SliceIcons).flatMap(Object.values) },
-		buttonSize: { control: 'select', options: ['s', 'm', 'l', 'xl', 48] },
+		buttonSize: { control: 'select', options: ['auto', 's', 'm', 'l', 'xl', 48] },
 		textSize: { control: 'select', options: ['xs', 's', 'm', 'l', 'xl'] },
 		textColor: { control: 'text' },
 		textColorHover: { control: 'text' },
@@ -133,6 +134,7 @@ export const TextOnly: Story = {
 	args: { icon: undefined, label: 'Follow' },
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);
+		expect(getComputedStyle(c.getByRole('button')).padding).toBe('0px 12px');
 		await userEvent.click(c.getByRole('button', { name: 'Follow' }));
 		await expect(c.getByRole('button')).toHaveAttribute('aria-pressed', 'true');
 		await expect(canvasElement.querySelector('svg')).not.toBeInTheDocument();
@@ -143,6 +145,110 @@ export const IconOnly: Story = {
 	args: { label: undefined, actionName: 'Highlight' },
 	play: async ({ canvasElement }) => {
 		await expect(within(canvasElement).getByRole('button', { name: 'Highlight' })).toBeInTheDocument();
+	},
+};
+export const ChildrenRow: Story = {
+	tags: ['tests'],
+	args: {
+		label: undefined,
+		actionName: 'Custom content',
+		buttonSize: 'auto',
+		gap: 8,
+		children: (
+			<>
+				<span style={{ display: 'block' }}>First</span>
+				<span style={{ display: 'block' }}>Second</span>
+			</>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		const first = c.getByText('First').getBoundingClientRect();
+		const second = c.getByText('Second').getBoundingClientRect();
+		const button = c.getByRole('button', { name: 'Custom content' });
+		expect(getComputedStyle(button).padding).toBe('6px 12px 6px 8px');
+		expect(button.getBoundingClientRect().height).toBeLessThan(56);
+		expect(second.top).toBeCloseTo(first.top, 1);
+		expect(second.left - first.right).toBeCloseTo(8, 1);
+		await userEvent.click(c.getByRole('button', { name: 'Custom content' }));
+		expect(c.getByRole('button')).toHaveAttribute('aria-pressed', 'true');
+	},
+};
+export const ChildrenPaddingOverride: Story = {
+	tags: ['tests'],
+	args: { ...ChildrenRow.args, padding: '2px 10px', paddingTop: 6, paddingRight: 20 },
+	play: async ({ canvasElement }) => {
+		const styles = getComputedStyle(within(canvasElement).getByRole('button', { name: 'Custom content' }));
+		expect(styles.paddingTop).toBe('6px');
+		expect(styles.paddingRight).toBe('20px');
+		expect(styles.paddingBottom).toBe('2px');
+		expect(styles.paddingLeft).toBe('10px');
+	},
+};
+export const ChildrenWithoutGap: Story = {
+	tags: ['tests'],
+	args: { ...ChildrenRow.args, gap: 0 },
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		const first = c.getByText('First').getBoundingClientRect();
+		const second = c.getByText('Second').getBoundingClientRect();
+		expect(second.left - first.right).toBeCloseTo(0, 1);
+	},
+};
+export const ChildrenWithoutIcon: Story = {
+	tags: ['tests'],
+	args: { ...ChildrenRow.args, icon: undefined },
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		const button = c.getByRole('button', { name: 'Custom content' });
+		expect(getComputedStyle(button).padding).toBe('6px 12px');
+		expect(button.getBoundingClientRect().height).toBeCloseTo(
+			c.getByText('First').getBoundingClientRect().height + 12,
+			1,
+		);
+	},
+};
+export const ChildrenDefaultSize: Story = {
+	tags: ['tests'],
+	args: { ...ChildrenRow.args, buttonSize: undefined, icon: undefined },
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Custom content' });
+		expect(getComputedStyle(button).minHeight).toBe('36px');
+		expect(button.getBoundingClientRect().height).toBeGreaterThanOrEqual(36);
+	},
+};
+export const AvatarAndText: Story = {
+	args: {
+		label: undefined,
+		icon: undefined,
+		buttonSize: 'auto',
+		actionName: 'Profile Info',
+		children: (
+			<>
+				<Avatar name="John Wick" />
+				<span>Profile Info</span>
+			</>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const c = within(canvasElement);
+		const button = c.getByRole('button', { name: 'Profile Info' }).getBoundingClientRect();
+		const avatar = c.getByLabelText('User Avatar - John Wick').getBoundingClientRect();
+		expect(avatar.top - button.top).toBeCloseTo(6, 1);
+		expect(button.bottom - avatar.bottom).toBeCloseTo(6, 1);
+		expect(avatar.left - button.left).toBeCloseTo(12, 1);
+		const text = c.getByText('Profile Info').getBoundingClientRect();
+		expect(text.left).toBeGreaterThanOrEqual(avatar.right);
+		expect(text.top + text.height / 2).toBeCloseTo(avatar.top + avatar.height / 2, 1);
+	},
+};
+export const ChildrenFixedSize: Story = {
+	tags: ['tests'],
+	args: { ...ChildrenRow.args, buttonSize: 'xl' },
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Custom content' });
+		expect(getComputedStyle(button).minHeight).toBe('56px');
+		expect(button.getBoundingClientRect().height).toBeGreaterThanOrEqual(56);
 	},
 };
 export const SelectedIcon: Story = {
@@ -205,7 +311,7 @@ export const ReducedMotion: Story = {
 function GroupedExample() {
 	const [theme, setTheme] = useState('system');
 	return (
-		<FlexDiv gap={12}>
+		<FlexBox gap={12}>
 			{(
 				[
 					{ label: 'System', icon: 'electronics.laptop', value: 'system' },
@@ -224,15 +330,15 @@ function GroupedExample() {
 					}}
 				/>
 			))}
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const Grouped: Story = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<GroupedExample />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);
@@ -290,12 +396,12 @@ export const LabelOutsideWithoutIcon: Story = { ...TextOnly, args: { ...TextOnly
 export const ContentAndNaming: Story = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv gap={16}>
+		<FlexBox gap={16}>
 			<ToggleButton label="Follow">Other</ToggleButton>
 			<ToggleButton>{0}</ToggleButton>
 			<ToggleButton icon="weather.sun" />
 			<ToggleButton label="Follow" actionName="Follow Jane" />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);
@@ -383,5 +489,46 @@ export const LiveReducedMotion: Story = {
 		motionPreference.set(true);
 		await waitFor(() => expect(icon.style.transform).not.toContain('180deg'));
 		await expect(document.activeElement).toBe(button);
+	},
+};
+
+export const IconStrokeWidth: Story = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<ToggleButton actionName="Default stroke" icon="media.play" iconSelected="media.pause" />
+			<ToggleButton actionName="Stroke 0" icon="media.play" iconSelected="media.pause" iconStrokeWidth={0} />
+			<ToggleButton actionName="Stroke 2.5" icon="media.play" iconSelected="media.pause" iconStrokeWidth={2.5} />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, width] of [
+			['Default stroke', '1.25'],
+			['Stroke 0', '0'],
+			['Stroke 2.5', '2.5'],
+		]) {
+			const button = canvas.getByRole('button', { name });
+			const path = button.querySelector('svg path');
+			if (!path) throw new Error('Expected stroked icon');
+			await expect(path).toHaveAttribute('stroke-width', width);
+			await expect(button).not.toHaveAttribute('iconStrokeWidth');
+			await userEvent.click(button);
+			await expect(button.querySelector('svg path')).toHaveAttribute('stroke-width', width);
+		}
+	},
+};
+
+export const LabelBelow: Story = {
+	args: { labelPosition: 'bottom', labelOutside: true },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button');
+		const label = canvas.getByText('Highlight');
+		const icon = button.querySelector('svg');
+		if (!icon) throw new Error('Expected icon');
+		await expect(label.getBoundingClientRect().top).toBeGreaterThanOrEqual(icon.getBoundingClientRect().bottom);
+		await userEvent.click(label);
+		await expect(button).toHaveAttribute('aria-pressed', 'true');
 	},
 };

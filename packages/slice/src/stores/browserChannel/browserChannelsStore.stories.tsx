@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect } from 'react';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { MessageType } from '../../utils';
 import { useBrowserChannelActions, useMessage } from './browserChannelsStore';
 
@@ -110,13 +110,13 @@ function frameDocument(label: string) {
 
 function DemoFrame({ label }: { label: string }) {
 	return (
-		<FlexDiv width={'fill'} height={280} border={'1px solid var(--core-outline-primary)'} borderRadius={8}>
+		<FlexBox width={'fill'} height={280} border={'1px solid var(--core-outline-primary)'} borderRadius={8}>
 			<iframe
 				title={label}
 				srcDoc={frameDocument(label)}
 				style={{ width: '100%', height: '100%', border: 'none', borderRadius: 8 }}
 			/>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -134,8 +134,8 @@ function BroadcastChannelDemo() {
 	const isError = message?.type === MessageType.Error;
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'start'} padding={24}>
-			<FlexDiv width={760} height={'auto'} direction={'column'} gap={16}>
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'start'} padding={24}>
+			<FlexBox width={760} height={'auto'} direction={'column'} gap={16}>
 				<div>
 					Each frame below is its own <code>{'<iframe>'}</code> - a separate browsing context with its own JavaScript
 					realm, both same-origin as this page. Each one opens a <code>BroadcastChannel</code> named{' '}
@@ -144,11 +144,11 @@ function BroadcastChannelDemo() {
 					frame delivers it to the other - and to this page too, via <code>useMessage</code> from{' '}
 					<code>useBrowserChannelsStore</code>, which lets you tell messages apart by who sent them.
 				</div>
-				<FlexDiv direction={'row'} gap={16}>
+				<FlexBox direction={'row'} gap={16}>
 					<DemoFrame label={'Frame A'} />
 					<DemoFrame label={'Frame B'} />
-				</FlexDiv>
-				<FlexDiv
+				</FlexBox>
+				<FlexBox
 					direction={'column'}
 					gap={4}
 					padding={12}
@@ -165,9 +165,9 @@ function BroadcastChannelDemo() {
 					</div>
 					{message ? <div>{`origin: ${message.origin}`}</div> : null}
 					{isError ? <div>Received a message that could not be deserialized.</div> : null}
-				</FlexDiv>
-			</FlexDiv>
-		</FlexDiv>
+				</FlexBox>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

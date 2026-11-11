@@ -3,9 +3,9 @@
 import { HeaderCoverUp } from '@/components/HeaderCoverUp/HeaderCoverUp';
 import { MainMenu } from '@/components/MainMenu/MainMenu';
 import { useDocsActions, useScrollBox } from '@/docs/stores/store';
-import { minScreenSize, surfaceDark } from '@/src/consts/consts';
+import { minScreenSize } from '@/src/consts/consts';
 import { ContentLayout } from '@/src/content/layout/Layout';
-import { FlexDiv, Preset, useObserveResize } from '@apple-pie/slice';
+import { FlexBox, Preset, useObserveResize } from '@apple-pie/slice';
 import { useCallback, useEffect } from 'react';
 
 export function Content() {
@@ -21,17 +21,17 @@ export function Content() {
 	useEffect(() => setScrollBoxSize(size), [size, setScrollBoxSize]);
 
 	return (
-		<FlexDiv
+		<FlexBox
 			preset={Preset.FillStart}
-			padding={'8px 8px 8px 0'}
-			background={surfaceDark}
+			padding={'8-8-8-0'}
+			background={'core-surface-primary'}
 			style={{ minWidth: minScreenSize }}
 		>
-			<FlexDiv preset={Preset.FillScroll} ref={containerRef} onScroll={handleScroll}>
+			<FlexBox preset={Preset.FillScroll} ref={containerRef} onScroll={handleScroll}>
 				<MainMenu />
 				<ContentLayout />
-			</FlexDiv>
+			</FlexBox>
 			<HeaderCoverUp />
-		</FlexDiv>
+		</FlexBox>
 	);
 }

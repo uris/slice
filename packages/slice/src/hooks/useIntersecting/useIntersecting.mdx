@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Hooks/useIntersecting" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useIntersecting
         Tracks intersection of one or more elements — by ref or CSS selector — against a container using `IntersectionObserver`, returning the latest intersection state for every resolved target, plus enter/exit transitions and on/off-screen partitions. Commonly used for infinite scroll sentinels, lazy loading, and view/impression tracking.
@@ -116,5 +116,5 @@ import {FlexDiv} from '../../components/FlexDiv';
         const exitedIds = exited.map((result) => result.target.dataset.itemId);
         ```
         </RenderSource>
-</FlexDiv>
-</FlexDiv>
+</FlexBox>
+</FlexBox>

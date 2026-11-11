@@ -4,17 +4,15 @@ import { motion } from 'motion/react';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
+import { setStyle as resolveStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import { Icon } from '../Icon';
 import { ProgressIndicator } from '../Progress';
-import { ToolTipType } from '../sharedTypes';
-import type { ToolTip } from '../sharedTypes';
+import { ToolTipType, buttonStyleDefaults } from '../sharedTypes';
 import css from './Button.module.css';
 import type { ButtonHandle, ButtonProps } from './_types';
-
-const noop = () => {};
 
 const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonRef: React.Ref<ButtonHandle>) => {
 	const props = resolveColorProps(rawProps);
@@ -25,7 +23,11 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		onMouseLeave,
 		onFocus,
 		onBlur,
-		size = 'medium',
+		buttonSize = 'm',
+		gap = buttonStyleDefaults.gap,
+		padding,
+		paddingTop,
+		paddingBottom,
 		variant = 'outline',
 		label = undefined,
 		textSize = 'm',
@@ -42,6 +44,8 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		width = 'min-content',
 		underline = false,
 		borderRadius = undefined,
+		borderWidth = undefined,
+		borderColor = undefined,
 		iconColor = undefined,
 		backgroundColor = undefined,
 		backgroundColorDisabled = undefined,
@@ -142,11 +146,13 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	useEffect(() => {
 		if (working) lockCurrentWidth();
 	}, [working, lockCurrentWidth]);
+
 	useEffect(() => {
 		if (!playing) setLockedWidth(undefined);
 	}, [playing]);
 
 	useImperativeHandle(buttonRef, () => ({ triggerClick: () => handleClick(undefined) }), [handleClick]);
+
 	useEffect(() => {
 		if (trigger && (!wasTriggered.current || replayTimedTrigger.current)) {
 			wasTriggered.current = true;
@@ -258,53 +264,33 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		};
 	}, [solid, outline, text]);
 
-	// resolve side-specific padding based on shape and icon placement
-	const setPadding = useCallback(
-		(side: 'left' | 'right') => {
-			if (round) return 0;
-			const padding =
-				variant === 'text' ? 'var(--spacing-xs)' : size === 'small' ? 'var(--spacing-m)' : 'var(--spacing-l)';
-			const hasIcon = side === 'left' ? iconLeft : iconRight;
-			return hasIcon ? `calc(${padding} - var(--spacing-xs))` : padding;
-		},
-		[round, variant, size, iconLeft, iconRight],
-	);
-
-	// resolve dimensions and spacing for each button size
-	const sizingStyles = useMemo(() => {
-		return {
-			large: {
-				height: 48,
-				gap: 8,
-				iconSize,
-				paddingLeft: setPadding('left'),
-				paddingRight: setPadding('right'),
-				paddingTop: 0,
-				paddingBottom: 0,
-				borderRadius: borderRadius ?? corners['corner-round'],
-			},
-			medium: {
-				height: 36,
-				gap: 8,
-				iconSize,
-				paddingLeft: setPadding('left'),
-				paddingRight: setPadding('right'),
-				paddingTop: 0,
-				paddingBottom: 0,
-				borderRadius: borderRadius ?? corners['corner-round'],
-			},
-			small: {
-				height: 'auto',
-				gap: 8,
-				iconSize,
-				paddingLeft: setPadding('left'),
-				paddingRight: setPadding('right'),
-				paddingTop: 'var(--spacing-xs)',
-				paddingBottom: 'var(--spacing-xs)',
-				borderRadius: borderRadius ?? corners['corner-round'],
-			},
-		};
-	}, [iconSize, borderRadius, setPadding]);
+	const resolvedBorderWidth = resolveStyle(borderWidth, colorStyles[variant].border);
+	const resolvedBorderColor = borderColor ?? colorStyles[variant].borderColor[btnState];
+	const autoSize = buttonSize === 'auto';
+	const getHeight = () => {
+		if (autoSize) return 'auto';
+		if (typeof buttonSize === 'number') {
+			if (Number.isFinite(buttonSize) && buttonSize > 0) return buttonSize;
+			return buttonStyleDefaults.sizes.m;
+		}
+		return buttonStyleDefaults.sizes[buttonSize] ?? buttonStyleDefaults.sizes.m;
+	};
+	const height = getHeight();
+	const resolvedGap = Number.isFinite(gap) ? Math.max(0, gap) : buttonStyleDefaults.gap;
+	const hasChildren = children !== undefined && children !== null;
+	const verticalPadding = hasChildren || autoSize ? buttonStyleDefaults.padding.childrenTop : 0;
+	const bottomPadding = hasChildren || autoSize ? buttonStyleDefaults.padding.childrenBottom : 0;
+	const getSidePadding = (side: 'left' | 'right') => {
+		if (padding !== undefined) return undefined;
+		if (round) return 0;
+		const base = variant === 'text' ? 'var(--spacing-xs)' : buttonStyleDefaults.padding.horizontal;
+		const hasIcon = side === 'left' ? iconLeft : iconRight;
+		if (hasIcon) return `calc(${base} - var(--spacing-xs))`;
+		return base;
+	};
+	const roundWidth = autoSize
+		? `calc(${iconSize + verticalPadding + bottomPadding}px + 2 * ${resolvedBorderWidth})`
+		: height;
 
 	const handleMouseEnter = useCallback(
 		(event: React.MouseEvent<HTMLButtonElement>) => {
@@ -361,52 +347,32 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		return 'min-content';
 	}, [playing, lockedWidth, width, setStyle]);
 
-	// compose the resolved inline styles for the active variant and size
-	const buttonStyle = useMemo(
-		() => ({
-			color: colorStyles[variant].color[btnState],
-			background: fill && !isDisabled ? 'var(--core-surface-primary)' : colorStyles[variant].background[btnState],
-			paddingRight: paddingRight ?? sizingStyles[size].paddingRight,
-			paddingLeft: paddingLeft ?? sizingStyles[size].paddingLeft,
-			paddingTop: variant === 'text' ? 0 : sizingStyles[size].paddingTop,
-			paddingBottom: variant === 'text' ? 0 : sizingStyles[size].paddingBottom,
-			borderRadius: sizingStyles[size].borderRadius,
-			height: round && size === 'small' ? `calc(${iconSize}px + 2 * var(--spacing-xs))` : sizingStyles[size].height,
-			maxHeight: round && size === 'small' ? `calc(${iconSize}px + 2 * var(--spacing-xs))` : sizingStyles[size].height,
-			minHeight: round && size === 'small' ? `calc(${iconSize}px + 2 * var(--spacing-xs))` : sizingStyles[size].height,
-			flex: width === 'fill' ? 1 : 'unset',
-			width:
-				round && width === 'min-content'
-					? size === 'small'
-						? `calc(${iconSize}px + 2 * var(--spacing-xs))`
-						: sizingStyles[size].height
-					: setWidth,
-			maxWidth: round && width === 'min-content' ? 'unset' : setWidth,
-			minWidth: 0,
-			gap: sizingStyles[size].gap,
-			borderWidth: colorStyles[variant].border,
-			borderStyle: 'solid' as const,
-			borderColor: colorStyles[variant].borderColor[btnState],
-			cursor: isDisabled || playing ? ('default' as const) : ('pointer' as const),
-			transition: 'all var(--motion-water-duration) var(--motion-water) 0s',
-		}),
-		[
-			colorStyles,
-			variant,
-			btnState,
-			fill,
-			paddingRight,
-			paddingLeft,
-			sizingStyles,
-			size,
-			setWidth,
-			width,
-			round,
-			iconSize,
-			isDisabled,
-			playing,
-		],
-	);
+	// Explicit padding wins over optical defaults; auto releases all height constraints.
+	const resolvedPaddingRight = paddingRight ?? getSidePadding('right');
+	const resolvedPaddingLeft = paddingLeft ?? getSidePadding('left');
+	const buttonStyle = {
+		color: colorStyles[variant].color[btnState],
+		backgroundColor: fill && !isDisabled ? 'var(--core-surface-primary)' : colorStyles[variant].background[btnState],
+		backgroundClip: 'padding-box' as const,
+		...(resolvedPaddingRight === undefined ? {} : { paddingRight: resolvedPaddingRight }),
+		...(resolvedPaddingLeft === undefined ? {} : { paddingLeft: resolvedPaddingLeft }),
+		...(paddingTop === undefined ? {} : { paddingTop }),
+		...(paddingBottom === undefined ? {} : { paddingBottom }),
+		borderRadius: borderRadius ?? corners['corner-round'],
+		height,
+		maxHeight: autoSize ? 'unset' : height,
+		minHeight: autoSize ? 0 : height,
+		flex: width === 'fill' ? 1 : 'unset',
+		width: round && width === 'min-content' ? roundWidth : setWidth,
+		maxWidth: round && width === 'min-content' ? 'unset' : setWidth,
+		minWidth: 0,
+		gap: resolvedGap,
+		borderWidth: resolvedBorderWidth,
+		borderStyle: 'solid' as const,
+		borderColor: resolvedBorderColor,
+		cursor: isDisabled || playing ? ('default' as const) : ('pointer' as const),
+		transition: 'all var(--motion-water-duration) var(--motion-water) 0s',
+	};
 
 	// resolve the progress indicator color from variant and destructive state
 	const progressColor = useMemo(
@@ -422,11 +388,19 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 
 	// compose CSS custom properties for decoration and icon sizing
 	const cssVars = useMemo(() => {
+		const getPadding = () => {
+			if (typeof padding === 'number') return `${padding}px`;
+			if (padding !== undefined) return padding;
+			if (round && !autoSize) return '0px';
+			return `${verticalPadding}px 0 ${bottomPadding}px`;
+		};
 		return {
 			'--ui-button-decoration': underline ? 'underline' : 'unset',
 			'--ui-button-icon-size': iconDivSize,
+			'--ui-button-gap': `${resolvedGap}px`,
+			'--ui-button-padding': getPadding(),
 		} as React.CSSProperties;
-	}, [underline, iconDivSize]);
+	}, [underline, iconDivSize, resolvedGap, padding, round, autoSize, verticalPadding, bottomPadding]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Button');
@@ -458,7 +432,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				<div className={css.icon} aria-hidden="true">
 					<Icon
 						name={iconLeft}
-						size={sizingStyles[size].iconSize}
+						size={iconSize}
 						strokeColor={colorStyles[variant].iconColor[btnState]}
 						pointer={false}
 						tabIndex={-1}
@@ -468,50 +442,31 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 			)}
 			{playing && iconLeft && (
 				<div className={css.icon} aria-hidden="true">
-					<ProgressIndicator
-						show={playing}
-						didStart={noop}
-						didStop={noop}
-						size={sizingStyles[size].iconSize}
-						color={progressColor}
-						inline
-					/>
+					<ProgressIndicator decorative show={playing} size={iconSize} color={progressColor} inline />
 				</div>
 			)}
 			{playing && !iconLeft && !iconRight && (
 				<div className={css.centerProgress} aria-hidden="true">
-					<ProgressIndicator
-						show={playing}
-						didStart={noop}
-						didStop={noop}
-						size={sizingStyles[size].iconSize}
-						color={progressColor}
-						inline={false}
-					/>
+					<ProgressIndicator decorative show={playing} size={iconSize} color={progressColor} inline={false} />
 				</div>
 			)}
 			{hasContent && (
-				<div className={`${css.label}${playing && !iconLeft && !iconRight ? ` ${css.labelHidden}` : ''}`}>
+				<div
+					className={`${css.label}${hasChildren ? ` ${css.children}` : ''}${playing && !iconLeft && !iconRight ? ` ${css.labelHidden}` : ''}`}
+				>
 					{buttonContent}
 				</div>
 			)}
 			{playing && iconRight && (
 				<div className={css.icon} aria-hidden="true">
-					<ProgressIndicator
-						show={playing}
-						didStart={noop}
-						didStop={noop}
-						size={sizingStyles[size].iconSize}
-						color={progressColor}
-						inline
-					/>
+					<ProgressIndicator decorative show={playing} size={iconSize} color={progressColor} inline />
 				</div>
 			)}
 			{!playing && iconRight && (
 				<div className={css.icon} aria-hidden="true">
 					<Icon
 						name={iconRight}
-						size={sizingStyles[size].iconSize}
+						size={iconSize}
 						strokeColor={colorStyles[variant].iconColor[btnState]}
 						pointer={false}
 						tabIndex={-1}

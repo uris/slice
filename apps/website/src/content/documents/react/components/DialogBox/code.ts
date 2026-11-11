@@ -2,7 +2,7 @@ export const usageCode = `
 import { useState } from 'react';
 import { Button, DialogBox } from '@apple-pie/slice';
 
-function Confirmation() {
+export function Confirmation() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   return <>
@@ -12,7 +12,7 @@ function Confirmation() {
       <DialogBox.Content>You can restore this project later.</DialogBox.Content>
       <DialogBox.Actions>
         <Button label="Cancel" variant="outline" onClick={close} />
-        <Button label="Archive" onClick={() => { myHandler(); close(); }} />
+        <Button label="Archive" onClick={() => { console.log('Archive project'); close(); }} />
       </DialogBox.Actions>
     </DialogBox>}
   </>;

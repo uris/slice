@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { Button } from '../Button';
 import { Tab } from '../Tab';
 import type { TabOption } from '../Tab/_types';
 import { installReducedMotionPreference } from '../playHelpers';
@@ -408,5 +409,128 @@ export const ManagedAria: Story = {
 		expect(tab).not.toHaveAttribute('aria-hidden');
 		expect(tab).toHaveAttribute('aria-controls', 'overview-panel');
 		expect(tab).toHaveAttribute('aria-selected', 'true');
+	},
+};
+
+export const AccentColors: Story = {
+	tags: ['tests'],
+	render: () => (
+		<TabBar
+			tabBarName="Accent colors"
+			accentColor="#00ccff"
+			textColor="#ddddee"
+			iconColor="#ffaa55"
+			borderColor="#333333"
+			underlineColor="#58606a"
+			transition={{ duration: 0 }}
+		>
+			<Tab value="first" label="First" icon="basic.home" />
+			<Tab value="second" label="Second" icon="basic.inbox" />
+			<Tab value="disabled" label="Disabled" icon="basic.home" disabled />
+		</TabBar>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const first = canvas.getByRole('tab', { name: 'First' });
+		const second = canvas.getByRole('tab', { name: 'Second' });
+		const list = canvas.getByRole('tablist');
+		await waitFor(() => expect(getComputedStyle(first).color).toBe('rgb(0, 204, 255)'));
+		await expect(getComputedStyle(first.querySelector('svg') as SVGElement).color).toBe('rgb(0, 204, 255)');
+		await expect(getComputedStyle(second).color).toBe('rgb(221, 221, 238)');
+		await expect(getComputedStyle(second.querySelector('svg') as SVGElement).color).toBe('rgb(255, 170, 85)');
+		await expect(getComputedStyle(list).borderBottomColor).toBe('rgb(88, 96, 106)');
+		await waitFor(() =>
+			expect(getComputedStyle(list.lastElementChild as HTMLElement).backgroundColor).toBe('rgb(0, 204, 255)'),
+		);
+		await userEvent.click(second);
+		await waitFor(() => expect(getComputedStyle(second).color).toBe('rgb(0, 204, 255)'));
+		await waitFor(() => expect(getComputedStyle(first).color).toBe('rgb(221, 221, 238)'));
+		const disabled = canvas.getByRole('tab', { name: 'Disabled' });
+		await expect(disabled).toBeDisabled();
+		await expect(getComputedStyle(disabled.querySelector('svg') as SVGElement).color).toBe(
+			getComputedStyle(disabled).color,
+		);
+		await expect(first).not.toHaveAttribute('accentColor');
+	},
+};
+
+export const SelectedColorOverrides: Story = {
+	tags: ['tests'],
+	render: () => (
+		<TabBar
+			tabBarName="Explicit colors"
+			accentColor="#00ccff"
+			textColorSelected="#ffdd55"
+			iconColorSelected="#ffaaee"
+			underlineSelectedColor="#aaffaa"
+			borderColor="#778899"
+			transition={{ duration: 0 }}
+			options={[
+				{ value: 'group', label: 'Group', icon: 'basic.home', accentColor: '#ffffff' },
+				{
+					value: 'custom',
+					label: 'Custom',
+					icon: 'basic.inbox',
+					accentColor: '#00ff00',
+					textColorSelected: '#abcdef',
+					iconColorSelected: '#fedcba',
+					underlineSelectedColor: '#cc99ff',
+					underlineColor: '#667788',
+				},
+			]}
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const group = canvas.getByRole('tab', { name: 'Group' });
+		const list = canvas.getByRole('tablist');
+		await waitFor(() => expect(getComputedStyle(group).color).toBe('rgb(255, 221, 85)'));
+		await expect(getComputedStyle(group.querySelector('svg') as SVGElement).color).toBe('rgb(255, 170, 238)');
+		await waitFor(() =>
+			expect(getComputedStyle(list.lastElementChild as HTMLElement).backgroundColor).toBe('rgb(170, 255, 170)'),
+		);
+		await expect(getComputedStyle(list).borderBottomColor).toBe('rgb(119, 136, 153)');
+		const custom = canvas.getByRole('tab', { name: 'Custom' });
+		await userEvent.click(custom);
+		await waitFor(() => expect(getComputedStyle(custom).color).toBe('rgb(171, 205, 239)'));
+		await expect(getComputedStyle(custom.querySelector('svg') as SVGElement).color).toBe('rgb(254, 220, 186)');
+		await waitFor(() =>
+			expect(getComputedStyle(list.lastElementChild as HTMLElement).backgroundColor).toBe('rgb(204, 153, 255)'),
+		);
+		await expect(getComputedStyle(list).borderBottomColor).toBe('rgb(102, 119, 136)');
+		await userEvent.click(group);
+		await waitFor(() => expect(getComputedStyle(list).borderBottomColor).toBe('rgb(119, 136, 153)'));
+	},
+};
+
+export const DynamicAccentColor: Story = {
+	tags: ['tests'],
+	render: function ColorsExample() {
+		const [accent, setAccent] = useState('#00ccff');
+		return (
+			<>
+				<Button label="Change accent" onClick={() => setAccent('#ffdd55')} />
+				<TabBar tabBarName="Dynamic accent" accentColor={accent} transition={{ duration: 0 }}>
+					<Tab value="first" label="First" icon="basic.home" />
+					<Tab value="second" label="Second" icon="basic.inbox" accentColor="#aaffaa" />
+				</TabBar>
+			</>
+		);
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const first = canvas.getByRole('tab', { name: 'First' });
+		const list = canvas.getByRole('tablist');
+		await userEvent.click(canvas.getByRole('button', { name: 'Change accent' }));
+		await waitFor(() => expect(getComputedStyle(first).color).toBe('rgb(255, 221, 85)'));
+		await waitFor(() =>
+			expect(getComputedStyle(list.lastElementChild as HTMLElement).backgroundColor).toBe('rgb(255, 221, 85)'),
+		);
+		const second = canvas.getByRole('tab', { name: 'Second' });
+		await userEvent.click(second);
+		await waitFor(() => expect(getComputedStyle(second).color).toBe('rgb(170, 255, 170)'));
+		await waitFor(() =>
+			expect(getComputedStyle(list.lastElementChild as HTMLElement).backgroundColor).toBe('rgb(170, 255, 170)'),
+		);
 	},
 };

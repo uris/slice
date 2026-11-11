@@ -11,5 +11,5 @@
 }
 
 .badge.badge {
-	padding: var(--spacing-xxs) var(--spacing-xxs);
+	padding: var(--spacing-xxs) calc(var(--spacing-xs) + var(--spacing-xxs));
 }

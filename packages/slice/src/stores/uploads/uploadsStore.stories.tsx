@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useEffect } from 'react';
 import { Button } from '../../components/Button';
 import type { FileItem } from '../../components/FileList';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { UploadArea } from '../../components/UploadArea';
 import { type ConfigurationOptions, FileUploadStatus, WorkerStatus } from '../../workers/uploads/uploads-worker';
 // @ts-expect-error Vite resolves ?url imports in Storybook
@@ -54,13 +54,13 @@ const WorkerDemo = () => {
 	}, [uploads]);
 
 	return (
-		<FlexDiv absolute direction={'column'} justify={'center'} align={'center'} padding={48} gap={16}>
-			<FlexDiv direction={'column'} width={'fill'} justify={'center'} align={'center'} gap={8}>
+		<FlexBox absolute direction={'column'} justify={'center'} align={'center'} padding={48} gap={16}>
+			<FlexBox direction={'column'} width={'fill'} justify={'center'} align={'center'} gap={8}>
 				<div>Uploads Worker Initialized: {initialized ? 'yes' : 'no'}</div>
 				<div>Upload Worker Status: {workerStatus}</div>
 				<div>Uploads Worker Error: {error ?? 'none'}</div>
 				{uploads.length > 0 && <div>Uploads: {uploads.length}</div>}
-			</FlexDiv>
+			</FlexBox>
 
 			<UploadArea
 				width={'100%'}
@@ -71,7 +71,7 @@ const WorkerDemo = () => {
 				busy={workerStatus === WorkerStatus.Busy}
 				onUpload={(nextFiles) => actions.push(nextFiles)}
 			/>
-			<FlexDiv gap={12} width={'fill'} direction={'column'} align={'center'} justify={'center'}>
+			<FlexBox gap={12} width={'fill'} direction={'column'} align={'center'} justify={'center'}>
 				{!initialized && (
 					<Button
 						label={'Initialize'}
@@ -91,8 +91,8 @@ const WorkerDemo = () => {
 					}}
 				/>
 				Note: for demo, there is no valid upload server so uploads will fail
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 };
 

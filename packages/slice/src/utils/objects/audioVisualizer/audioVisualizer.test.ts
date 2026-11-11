@@ -29,6 +29,7 @@ class MockAudioContext {
 	analyser = new MockAnalyserNode();
 	sourceNode = new MockSourceNode();
 	resume = vi.fn().mockResolvedValue(undefined);
+	suspend = vi.fn().mockResolvedValue(undefined);
 	close = vi.fn().mockResolvedValue(undefined);
 
 	constructor() {
@@ -181,4 +182,62 @@ describe('AudioVisualizer', () => {
 		expect(context.close).toHaveBeenCalled();
 		expect(visualizer.getIntensity()).toBe(0);
 	});
+});
+
+describe('AudioVisualizer resilience', () => {
+ it('reuses the graph and resets intensity when stopped and restarted', () => {
+  const visualizer = new AudioVisualizer(new MockMediaStream() as unknown as MediaStream);
+  visualizer.start(); MockAudioContext.instances[0].analyser.sampleValue = 255; runNextFrame(500);
+  expect(visualizer.getIntensity()).toBeGreaterThan(0);
+  visualizer.stop(); expect(visualizer.getIntensity()).toBe(0);
+  visualizer.start(); expect(MockAudioContext.instances).toHaveLength(1);
+  expect(MockAudioContext.instances[0].resume).toHaveBeenCalledTimes(2);
+ });
+ it('normalizes invalid settings and keeps reported values finite', () => {
+  const update = vi.fn();
+  const visualizer = new AudioVisualizer(new MockMediaStream() as unknown as MediaStream, {
+   fftSize: 7, intensityMultiplier: Number.NaN, peakIntensity: 0, risePerSecond: -1, releasePerSecond: Infinity,
+   minScale: -1, maxScale: Number.NaN, onUpdate: update,
+  });
+  visualizer.start(); expect(MockAudioContext.instances[0].analyser.fftSize).toBe(32);
+  MockAudioContext.instances[0].analyser.sampleValue = 255; runNextFrame(500);
+  expect(visualizer.getIntensity()).toBe(1); expect(Number.isFinite(visualizer.getScale())).toBe(true);
+  MockAudioContext.instances[0].analyser.sampleValue = 128; runNextFrame(1500);
+  expect(visualizer.getIntensity()).toBe(0);
+ });
+ it('cleans up a partially constructed graph on startup failure', () => {
+  vi.spyOn(MockAudioContext.prototype, 'createMediaStreamSource').mockImplementation(() => { throw new Error('No audio'); });
+  const visualizer = new AudioVisualizer(new MockMediaStream() as unknown as MediaStream);
+  expect(() => visualizer.start()).toThrow('No audio');
+  expect(MockAudioContext.instances[0].close).toHaveBeenCalled(); expect(frameCallbacks.filter(Boolean)).toHaveLength(0);
+ });
+ it('handles resume rejection without leaving an animation loop running', async () => {
+  const error = new Error('Blocked'); const onError = vi.fn(); const onUpdate = vi.fn();
+  const visualizer = new AudioVisualizer(new MockMediaStream() as unknown as MediaStream, { onError, onUpdate });
+  visualizer.start(); visualizer.stop(); MockAudioContext.instances[0].resume.mockRejectedValue(error);
+  visualizer.start(); await Promise.resolve();
+  expect(onError).toHaveBeenCalledWith(error); expect(onUpdate).toHaveBeenCalledWith({ intensity: 0, scale: 1 });
+  expect(frameCallbacks.filter(Boolean)).toHaveLength(0);
+ });
+ it('ignores an old resume failure after disposal', async () => {
+  const onError = vi.fn(); let reject!: (reason: Error) => void;
+  const visualizer = new AudioVisualizer(new MockMediaStream() as unknown as MediaStream, { onError });
+  visualizer.start(); visualizer.stop();
+  MockAudioContext.instances[0].resume.mockReturnValue(new Promise((_resolve, fail) => { reject = fail; }));
+  visualizer.start(); visualizer.dispose(); reject(new Error('Late')); await Promise.resolve();
+  expect(onError).not.toHaveBeenCalled();
+ });
+});
+
+it('does not schedule another frame if its update callback disposes it', () => {
+ const visualizer = new AudioVisualizer(new MockMediaStream() as unknown as MediaStream, { onUpdate: () => visualizer.dispose() });
+ visualizer.start(); runNextFrame(16); expect(frameCallbacks.filter(Boolean)).toHaveLength(0);
+});
+it('does not let an earlier resume rejection stop a later run', async () => {
+ let reject!: (reason: Error) => void;
+ const visualizer = new AudioVisualizer(new MockMediaStream() as unknown as MediaStream);
+ visualizer.start(); visualizer.stop();
+ MockAudioContext.instances[0].resume.mockReturnValueOnce(new Promise((_resolve, fail) => { reject = fail; }));
+ visualizer.start(); visualizer.stop(); visualizer.start(); reject(new Error('Old resume')); await Promise.resolve();
+ expect(frameCallbacks.filter(Boolean)).toHaveLength(1);
 });

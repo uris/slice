@@ -21,5 +21,13 @@
 	"ai": {
 		"wand": "ai.wand",
 		"sparkle": "ai.sparkle"
+	},
+	"basic": {
+		"moreHorizFill": "basic.more-horiz-fill",
+		"moreVertFill": "basic.more-vert-fill"
+	},
+	"media": {
+		"playFilled": "media.play-filled",
+		"pauseFilled": "media.pause-filled"
 	}
 }

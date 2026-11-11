@@ -46,6 +46,7 @@ type DropDownBaseProps<T = string> = {
 	value?: T | null;
 	defaultValue?: T | null;
 	valueKey?: string;
+	/** Treat the first option as a prompt. Defaults to true only when its value is an empty string. */
 	placeholder?: boolean;
 	borderRadius?: number | string;
 	borderStyle?: 'underline' | 'box' | 'none';
@@ -73,6 +74,7 @@ type DropDownBaseProps<T = string> = {
 	inline?: boolean;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	onChange?: (value: T, option: DropDownOption<T>, index: number) => void;
+	onChangeOption?: (option: DropDownOption<T>) => void;
 };
 export type DropDownProps<T = string> = Omit<
 	React.HTMLAttributes<HTMLSpanElement>,

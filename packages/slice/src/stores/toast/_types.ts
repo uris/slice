@@ -1,19 +1,12 @@
-import type { ToastType } from '../../components/Toast';
+import type { ToastHideInfo, ToastProps } from '../../components/Toast';
 
-export type Toast = {
-	notifId?: string;
-	message: string | null;
-	duration?: number | 'Infinite';
-	type?: ToastType;
-	close?: boolean;
-	position?: 'top' | 'bottom';
-	progress?: boolean;
-	container?: 'parent' | 'window';
-};
+/** Store values can be spread directly into Toast, including motion and lifecycle options. */
+export type Toast<T = unknown> = ToastProps<T> & { message: string | null };
 export interface ToastStore {
 	toast: Toast | null;
 	actions: {
-		push: (toast: Toast | null) => void;
-		clear: () => void;
+		push: <T = unknown>(toast: Toast<T> | null) => void;
+		/** With onHide metadata, clear only the matching notification; with no argument, clear unconditionally. */
+		clear: (notification?: ToastHideInfo) => void;
 	};
 }

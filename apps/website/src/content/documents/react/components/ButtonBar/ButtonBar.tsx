@@ -1,47 +1,87 @@
-import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
-import { ButtonBarPreview } from './ButtonBarPreview';
+import { FlexBox, Preset } from '@apple-pie/slice';
+import {
+	ButtonBarAppearanceExample,
+	ButtonBarControlledExample,
+	ButtonBarOverlapExample,
+	ButtonBarUsageExample,
+} from './UsagePreviews';
 import { controlledCode, example2Code, overlapCode, usageCode } from './code';
 
 export function ButtonBarDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>ButtonBar component</H1>
 			<P clipWidth>Keep related icon actions together in a compact bar, with optional selection.</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-buttonbar--default"
-				components={[{ label: 'ButtonBar', component: <ButtonBarPreview /> }]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Pass a <Code>buttons</Code> array and handle <Code>onClick</Code> for independent actions. Enable{' '}
 				<Code>toggle</Code> for selection.
 			</P>
-			<CodeBlock filename="ButtonBarExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-buttonbar--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <ButtonBarUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'ButtonBarExample.tsx',
+					},
+				]}
+			/>
 			<H3>Adjust the frame</H3>
 			<P>
 				<Code>buttonSize</Code> accepts a preset or a custom pixel diameter. <Code>borderWidth</Code> applies to the
 				outer bar.
 			</P>
-			<CodeBlock filename="ButtonBarExample2.tsx" language="tsx" code={example2Code.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-buttonbar--default"
+				components={[
+					{
+						label: 'Adjust the frame',
+						component: <ButtonBarAppearanceExample />,
+						code: example2Code.trim(),
+						codeFilename: 'ButtonBarExample2.tsx',
+					},
+				]}
+			/>
 			<H3>Control selection</H3>
 			<P>
 				Enable <Code>toggle</Code>, pass <Code>selectedIndex</Code>, and update it in <Code>onChange</Code>. Indices
 				start at 0; use null for no selection.
 			</P>
-			<CodeBlock filename="ControlledButtonBar.tsx" language="tsx" code={controlledCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-buttonbar--default"
+				components={[
+					{
+						label: 'Control selection',
+						component: <ButtonBarControlledExample />,
+						code: controlledCode.trim(),
+						codeFilename: 'ControlledButtonBar.tsx',
+					},
+				]}
+			/>
 			<H3>Adjust highlights and spacing</H3>
 			<P>
 				Use <Code>selectionRadius</Code> to shape hover and selection highlights. <Code>buttonGap</Code> is in pixels;
 				negative values overlap buttons and their hit areas. Use <Code>padding</Code> to inset the buttons from the
 				wrapper edge.
 			</P>
-			<CodeBlock filename="ButtonBarSpacing.tsx" language="tsx" code={overlapCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-buttonbar--default"
+				components={[
+					{
+						label: 'Adjust highlights and spacing',
+						component: <ButtonBarOverlapExample />,
+						code: overlapCode.trim(),
+						codeFilename: 'ButtonBarSpacing.tsx',
+					},
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				Buttons run independent actions by default. Enable <Code>toggle</Code> to keep one selected. Without{' '}
@@ -142,9 +182,9 @@ export function ButtonBarDoc() {
 				<DefaultVal>{'m'}</DefaultVal>
 			</Definition>
 			<P>
-				Overall height presets: small matches the default outlined small Button (31px with the default theme), medium is
-				36px, large is 48px, and extra large is 56px. Inner circles compensate for default wrapper padding and borders.
-				A positive finite number sets the inner circle diameter instead. Invalid runtime values use medium.
+				Shared overall height presets: s=24px, m=36px, l=44px, and xl=56px. Inner circles compensate for default wrapper
+				padding and borders. A positive finite number sets the inner circle diameter instead. Invalid runtime values use
+				m.
 			</P>
 			<Definition id={'defaultSelectedIndex'}>
 				<Prop>defaultSelectedIndex</Prop>
@@ -241,7 +281,7 @@ export function ButtonBarDoc() {
 				Standard group-root events pass through. <Code>onClick</Code> and <Code>onChange</Code> above are component
 				callbacks with item payloads, not native div events.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

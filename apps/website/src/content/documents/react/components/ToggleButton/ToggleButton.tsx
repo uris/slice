@@ -1,47 +1,109 @@
-import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { contentMaxWidth, contentMinWidth } from '@/src/consts/consts';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { ToggleButtonPreview } from './ToggleButtonPreview';
-import { exampleCode, motionCode, outsideCode, usageCode } from './code';
+import { childrenCode, disabledCode, exampleCode, motionCode, outsideCode, textOnly } from './code';
+
 export function ToggleButtonDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
 			<Path />
 			<H1 id={'title'}>ToggleButton component</H1>
 			<P clipWidth>Make on/off actions easy to recognize with a label, an optional icon, and a clear selected state.</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
-				components={[
-					{ label: 'Default', component: <ToggleButtonPreview /> },
-					{ label: 'Animated icon', component: <ToggleButtonPreview variant="animated" /> },
-					{ label: 'Label outside', component: <ToggleButtonPreview variant="outside" /> },
-					{ label: 'Text only', component: <ToggleButtonPreview variant="text" /> },
-					{ label: 'Disabled', component: <ToggleButtonPreview variant="disabled" /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
-			<CodeBlock filename="ToggleButtonExample.tsx" language="tsx" code={usageCode.trim()} />
-			<H3>Control selection</H3>
+			<H3>Basic usage</H3>
 			<P>
 				Use <Code>selected</Code> and <Code>onChange</Code> to keep selection in application state. Use{' '}
 				<Code>defaultSelected</Code> instead for local state. Set <Code>deselect</Code> to false when an active choice
 				should stay selected.
 			</P>
-			<CodeBlock filename="ToggleButtonSelection.tsx" language="tsx" code={exampleCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
+				components={[{ label: 'Basic usage', component: <ToggleButtonPreview />, code: exampleCode.trim() }]}
+			/>
+
+			<H3>Disabled</H3>
+			<P>
+				Use <Code>disabled</Code> to control enabling and disabling the button. The button stops responding to click
+				events.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
+				components={[
+					{
+						label: 'Disabled',
+						component: <ToggleButtonPreview variant="disabled" />,
+						code: disabledCode.trim(),
+					},
+				]}
+			/>
+
 			<H3>Keep the label outside the background</H3>
 			<P>
 				Use <Code>labelOutside</Code> for an icon highlight with text beside it.
 			</P>
-			<CodeBlock filename="ToggleButtonLabelOutside.tsx" language="tsx" code={outsideCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
+				components={[
+					{
+						label: 'Label outside',
+						component: <ToggleButtonPreview variant="outside" />,
+						code: outsideCode.trim(),
+					},
+				]}
+			/>
+
 			<H3>Animate an icon on toggle</H3>
 			<P>
 				Give <Code>selected</Code> and <Code>unselected</Code> different animation targets, such as rotation or scale.
 				This example uses rotation.
 			</P>
-			<CodeBlock filename="ToggleButtonMotion.tsx" language="tsx" code={motionCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
+				components={[
+					{
+						label: 'Animated',
+						component: <ToggleButtonPreview variant="animated" />,
+						code: motionCode.trim(),
+					},
+				]}
+			/>
+
+			<H3>Text only</H3>
+			<P>
+				Omit <Code>icon</Code> to display the label only.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
+				components={[
+					{
+						label: 'Text only',
+						component: <ToggleButtonPreview variant="text" />,
+						code: textOnly.trim(),
+					},
+				]}
+			/>
+
+			<H3>Custom content</H3>
+			<P>
+				Use children when you want to provide custom content with <Code>buttonSize</Code> set to <Code>"auto"</Code> to
+				allow the button to resize freely (or add your own content wrapper). Include an <Code>actionName</Code> for
+				accessibility.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
+				components={[
+					{
+						label: 'Custom content',
+						component: <ToggleButtonPreview variant="children" />,
+						code: childrenCode.trim(),
+					},
+				]}
+			/>
+
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				The icon and text form one button. <Code>label</Code> takes priority over <Code>children</Code>; omit the icon
@@ -278,6 +340,15 @@ export function ToggleButtonDoc() {
 				<DefaultVal>{'20'}</DefaultVal>
 			</Definition>
 			<P>{'Icon size in pixels. Negative or nonfinite values fall back to 20px; zero hides its geometry.'}</P>
+			<Definition id={'iconStrokeWidth'}>
+				<Prop>iconStrokeWidth</Prop>
+				<TypeDef>{'number'}</TypeDef>
+				<DefaultVal>{'undefined'}</DefaultVal>
+			</Definition>
+			<P>
+				Stroke width in the icon’s 20-unit viewBox. Omit to use <Code>Icon</Code>’s default. Zero removes strokes;
+				solid-filled artwork is unaffected.
+			</P>
 			<Definition id={'label'}>
 				<Prop>label</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -297,6 +368,15 @@ export function ToggleButtonDoc() {
 				Applies the background, border, and corner radius only around the icon, leaving the label outside. Both remain
 				one clickable control. Without an icon, the background stays on the whole button. Default outer padding is 4px
 				horizontally and zero vertically in this mode; explicit padding still applies.
+			</P>
+			<Definition id={'labelPosition'}>
+				<Prop>labelPosition</Prop>
+				<TypeDef>{'"right" | "bottom"'}</TypeDef>
+				<DefaultVal>{'right'}</DefaultVal>
+			</Definition>
+			<P>
+				Places the label beside or below the icon. Works with <Code>labelOutside</Code>, which controls whether the
+				background surrounds only the icon. Without an icon, content keeps its normal layout.
 			</P>
 			<Definition id={'padding'}>
 				<Prop>padding</Prop>
@@ -527,9 +607,10 @@ export function ToggleButtonDoc() {
 					'Other native button handlers are composed with internal behavior. Preventing default on mouse entry or focus suppresses that internal handling. No drag or pan gestures are implemented.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
+
 export const trackedItems: TrackedItem[] = [
 	{ id: 'title', title: 'ToggleButton component' },
 	{ id: 'usage', title: 'Usage' },
@@ -560,8 +641,10 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'iconFill', title: 'iconFill', code: true },
 			{ id: 'iconSelected', title: 'iconSelected', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
+			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'label', title: 'label', code: true },
 			{ id: 'labelOutside', title: 'labelOutside', code: true },
+			{ id: 'labelPosition', title: 'labelPosition', code: true },
 			{ id: 'padding', title: 'padding', code: true },
 			{ id: 'paddingBottom', title: 'paddingBottom', code: true },
 			{ id: 'paddingLeft', title: 'paddingLeft', code: true },

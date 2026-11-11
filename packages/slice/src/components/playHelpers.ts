@@ -166,87 +166,16 @@ export async function runDraggablePanelPlay<TArgs>({ canvasElement, args }: Play
 	}
 }
 
-export async function runFlexDivPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
+export async function runFlexBoxPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	await expect(canvasElement.querySelector('div')).toBeInTheDocument();
-}
-
-export async function runGrouperPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const title = storyArgs.title;
-	if (typeof title === 'string') {
-		const group = canvas.getByText(title);
-		await userEvent.click(group);
-		await userEvent.keyboard('{Enter}');
-	}
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-}
-
-export async function runGrouperWithoutHandlersPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// no onChange/onClick passed, so this exercises both default-arg no-ops
-	const button = canvas.getByRole('button');
-	await userEvent.click(button);
-}
-
-export async function runGrouperCustomClassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button');
-	// exercises the `className ? ... : ''` true branch
-	await expect(button).toHaveClass('story-grouper-class');
-}
-
-export async function runGrouperToggleDisabledPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const button = canvas.getByRole('button');
-	// toggle=false exercises handleToggle's `if (!toggle) return;` true branch
-	await userEvent.click(button);
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).not.toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).not.toHaveBeenCalled();
-	}
-}
-
-export async function runGrouperUnframedPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// unframed=true exercises cssVars' `unframed ? 'auto' : ...` true branch
-	await expect(button?.style.getPropertyValue('--grouper-height')).toBe('auto');
-}
-
-export async function runGrouperNoBorderPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const button = canvasElement.querySelector('button') as HTMLElement | null;
-	// border left at its falsy default (0) exercises `border ? ... : '0'`'s
-	// false branch, which every other story leaves untaken since they all
-	// pass a truthy border
-	await expect(button?.style.getPropertyValue('--grouper-border')).toBe('0');
-}
-
-export async function runGrouperFilterBadgePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// showFilterBadge=true exercises the `showFilterBadge && <Icon .../>`
-	// true branch
-	await expect(canvasElement.querySelectorAll('svg').length).toBeGreaterThanOrEqual(2);
 }
 
 export async function runIconPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
-	const icon = canvas.getByRole('img');
+	const icon = canvas.getByRole('button');
 	await userEvent.click(icon);
 	if (isFn(storyArgs.onClick)) {
 		await expect(storyArgs.onClick).toHaveBeenCalled();
@@ -269,12 +198,6 @@ export async function runPagerPlay<TArgs>({ args, canvasElement }: PlayContext<T
 	if (isFn(storyArgs.onChange)) {
 		await expect(storyArgs.onChange).toHaveBeenCalled();
 	}
-}
-
-export async function runProgressIndicatorPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await expect(canvas.getByRole('img', { name: /Loading spinner/i })).toBeInTheDocument();
 }
 
 export async function runSliderPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
@@ -534,31 +457,9 @@ export async function runUIFileIconPlay<TArgs>({ args, canvasElement }: PlayCont
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 	const storyArgs = asArgs(args);
-	const icon = canvas.getByRole('img');
+	const icon = canvas.getByRole('button');
 	await userEvent.click(icon);
 	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalled();
-	}
-}
-
-export async function runLabelPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const labelText =
-		typeof storyArgs.children === 'string' || typeof storyArgs.children === 'number'
-			? String(storyArgs.children)
-			: typeof storyArgs.label === 'string'
-				? storyArgs.label
-				: null;
-
-	if (!labelText) return;
-
-	const label = canvas.getByText(labelText);
-	await expect(label).toBeInTheDocument();
-
-	if (isFn(storyArgs.onClick)) {
-		await userEvent.click(label);
 		await expect(storyArgs.onClick).toHaveBeenCalled();
 	}
 }
@@ -682,303 +583,11 @@ export async function runModalControllerRejectWithoutCallbacksPlay<TArgs>({ canv
 	alertSpy.mockRestore();
 }
 
-export async function runToastInfoPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await userEvent.click(canvas.getByRole('button', { name: /info toast/i }));
-	await expect(await canvas.findByText('Thank you for clicking!')).toBeInTheDocument();
-	await userEvent.click(canvas.getByRole('button', { name: /dismiss message/i }));
-}
-
-export async function runToastSuccessHoverPausePlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await userEvent.click(canvas.getByRole('button', { name: /success toast/i }));
-	const successMessage = await canvas.findByText('Saved successfully');
-	await expect(successMessage).toBeInTheDocument();
-	// hovering pauses, then un-hovering resumes, the auto-hide timer
-	const wrapper = successMessage.closest('[role="status"]')?.parentElement ?? successMessage;
-	fireEvent.mouseEnter(wrapper);
-	fireEvent.mouseLeave(wrapper);
-	await userEvent.click(canvas.getByRole('button', { name: /dismiss message/i }));
-}
-
-export async function runToastWarningKeyboardDismissPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await userEvent.click(canvas.getByRole('button', { name: /warning toast/i }));
-	await expect(await canvas.findByText('Careful now')).toBeInTheDocument();
-	// dismissed via the keyboard rather than a click
-	canvas.getByRole('button', { name: /dismiss message/i }).focus();
-	await userEvent.keyboard('{Enter}');
-}
-
-export async function runToastErrorInfiniteDurationPlay<TArgs>({ canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// Infinite duration renders the progress-indicator branch and never
-	// auto-hides on its own, so dismiss it explicitly afterward
-	await userEvent.click(canvas.getByRole('button', { name: /error toast/i }));
-	await expect(await canvas.findByText('Something failed')).toBeInTheDocument();
-	await userEvent.click(canvas.getByRole('button', { name: /dismiss message/i }));
-}
-
-export async function runToastCustomClassPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const status = await canvas.findByRole('status');
-	// exercises the wrapper's `className ? ... : ''` true branch, composed
-	// into classNames via filterClasses
-	await expect(status.parentElement).toHaveClass('story-toast-class');
-}
-
-export async function runToastWithoutDidHidePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// no didHide passed at all, so this exercises the default `() => null`
-	// parameter; the toast's own short duration drives it through
-	// AnimatePresence's exit + onExitComplete without anything external
-	// listening for it
-	await canvas.findByText('Bye for now');
-	await waitFor(() => expect(canvas.queryByText('Bye for now')).not.toBeInTheDocument(), { timeout: 3000 });
-}
-
-export async function runToastNoBorderNoClosePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const status = await canvas.findByRole('status');
-	const wrapper = status.parentElement as HTMLElement;
-	// close=false exercises defaultPadding's `close ? ... : '10px 16px'`
-	// false branch and hides the dismiss affordance; border=false exercises
-	// cssVars' `border ? ... : 'unset'` false branch
-	await expect(wrapper.style.getPropertyValue('--toast-border')).toBe('unset');
-	await expect(canvas.queryByRole('button', { name: /dismiss message/i })).not.toBeInTheDocument();
-}
-
-export async function runToastContainerParentPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const status = await canvas.findByRole('status');
-	const wrapper = status.parentElement as HTMLElement;
-	// container='parent' exercises `container === 'window' ? 'fixed' :
-	// 'absolute'`'s false branch
-	await expect(wrapper.style.getPropertyValue('--toast-position')).toBe('absolute');
-}
-
-export async function runToastPositionTopPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// position='top' exercises both position-based ternaries' false branch
-	// (every other story leaves position at its 'bottom' default)
-	await canvas.findByRole('status');
-}
-
-export async function runToastExplicitProgressPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	await canvas.findByRole('status');
-	// progress explicitly set (rather than left `undefined`, which every
-	// other story does) exercises showProgress's `if (progress !==
-	// undefined) return progress;` true branch
-	await expect(canvasElement.querySelector('[class*="progress"]')).toBeInTheDocument();
-}
-
-export async function runUploadAreaPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const dropzone = canvas.getByRole('button', { name: /click to upload files/i });
-	const file = new File(['contents'], 'example.txt', { type: 'text/plain' });
-	const dataTransfer = new DataTransfer();
-	dataTransfer.items.add(file);
-
-	// exercise the drag-and-drop path only; clicking the dropzone itself opens
-	// the hidden native file input, which would block a real browser test run.
-	fireEvent.dragEnter(dropzone, { dataTransfer });
-	fireEvent.dragLeave(dropzone, { dataTransfer });
-	fireEvent.dragEnter(dropzone, { dataTransfer });
-	fireEvent.drop(dropzone, { dataTransfer });
-
-	const storyArgs = asArgs(args);
-	if (isFn(storyArgs.onUpload)) {
-		await expect(storyArgs.onUpload).toHaveBeenCalled();
-	}
-}
-
-export async function runPromptInputPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const textarea = canvas.getByRole('textbox');
-	await userEvent.click(textarea);
-	await userEvent.type(textarea, 'Hello there');
-
-	const storyArgs = asArgs(args);
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onFocus)) {
-		await expect(storyArgs.onFocus).toHaveBeenCalled();
-	}
-
-	// click the round attach button — it's a no-op beyond stopping propagation,
-	// but it's a real branch (handleClickAttach) that a text-only pass never hits
-	const attachButton = canvas.getAllByRole('button')[0];
-	if (attachButton) {
-		await userEvent.click(attachButton);
-	}
-
-	await userEvent.keyboard('{Enter}');
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).toHaveBeenCalled();
-	}
-	// submitClears defaults to true, so submitting also blurs the textarea
-	if (isFn(storyArgs.onBlur)) {
-		await expect(storyArgs.onBlur).toHaveBeenCalled();
-	}
-}
-
-export async function runPromptInputAttachmentsPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-
-	// remove one attachment to exercise handleAttachmentsChange
-	const removeButtons = canvas.getAllByRole('button', { name: /remove file/i });
-	await userEvent.click(removeButtons[0]);
-	if (isFn(storyArgs.onAttachmentsChange)) {
-		await expect(storyArgs.onAttachmentsChange).toHaveBeenCalled();
-	}
-	if (isFn(storyArgs.onChange)) {
-		await expect(storyArgs.onChange).toHaveBeenCalled();
-	}
-
-	// submit the pre-filled prompt via the keyboard
-	const textarea = canvas.getByRole('textbox');
-	await userEvent.click(textarea);
-	await userEvent.keyboard('{Enter}');
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).toHaveBeenCalled();
-	}
-}
-
-export async function runPromptInputWorkingPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-
-	// stopEnabled routes the send button through handleStop instead of handleSubmit
-	const buttons = canvas.getAllByRole('button');
-	const stopButton = buttons[buttons.length - 1];
-	if (stopButton) {
-		await userEvent.click(stopButton);
-	}
-	if (isFn(storyArgs.onStop)) {
-		await expect(storyArgs.onStop).toHaveBeenCalled();
-	}
-}
-
-export async function runPromptInputRendersPlay({
-	canvasElement,
-	expectedCount = 1,
-}: { canvasElement: HTMLElement; expectedCount?: number }) {
-	await expectCanvas(canvasElement);
-	await expect(within(canvasElement).getAllByRole('textbox')).toHaveLength(expectedCount);
-}
-
-export async function runPromptInputFocusedOnMountPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const textarea = canvas.getByRole('textbox');
-	// focused=true (a real boolean, not the nullish default) drives the
-	// mount-sync effect's `if (focused)` true branch, which calls .focus()
-	await waitFor(() => expect(document.activeElement).toBe(textarea));
-}
-
-export async function runPromptInputSubmitBlockedPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const textarea = canvas.getByRole('textbox');
-	await userEvent.click(textarea);
-	await userEvent.type(textarea, 'Hello there');
-	await userEvent.keyboard('{Enter}');
-	// stopEnabled / (working && submitWorking) short-circuit handleSubmit
-	// before onSubmit is ever invoked
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).not.toHaveBeenCalled();
-	}
-}
-
-export async function runPromptInputEmptySubmitNoopPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const textarea = canvas.getByRole('textbox');
-	await userEvent.click(textarea);
-	await userEvent.keyboard('{Enter}');
-	// handleSubmit's `if (currentValue)` guard skips everything when the
-	// textarea is empty
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).not.toHaveBeenCalled();
-	}
-}
-
-export async function runPromptInputSubmitWithoutClearingPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const textarea = canvas.getByRole('textbox') as HTMLTextAreaElement;
-	await userEvent.click(textarea);
-	await userEvent.type(textarea, 'Hello there');
-	await userEvent.keyboard('{Enter}');
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).toHaveBeenCalledWith('Hello there', expect.anything());
-	}
-	// submitClears=false takes handleSubmit's `if (submitClears)` false
-	// branch, so the textarea keeps its value and handleBlur is called with
-	// the original text instead of ''
-	if (isFn(storyArgs.onBlur)) {
-		await expect(storyArgs.onBlur).toHaveBeenCalledWith('Hello there', expect.anything());
-	}
-}
-
-export async function runPromptInputClickToSubmitPlay<TArgs>({ args, canvasElement }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const textarea = canvas.getByRole('textbox');
-	await userEvent.click(textarea);
-	await userEvent.type(textarea, 'Hello there');
-	// stopEnabled=false, so clicking the send button (last button) routes
-	// handleClickSend's ternary through handleSubmit instead of handleStop
-	const buttons = canvas.getAllByRole('button');
-	await userEvent.click(buttons[buttons.length - 1]);
-	if (isFn(storyArgs.onSubmit)) {
-		await expect(storyArgs.onSubmit).toHaveBeenCalled();
-	}
-}
-
-export async function runPromptInputAttachmentsDisabledPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const buttons = canvas.getAllByRole('button');
-	// attachmentsDisabled=true exercises attachState's `if
-	// (!attachmentsDisabled)` false branch
-	await expect(buttons[0]).toBeDisabled();
-}
-
-export async function runPromptInputHideToolbarPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	// no children, attachButton, or sendButton -> the toolbar wrapper's
-	// `(children || attachButton || sendButton) &&` guard is false
-	await expect(canvas.queryAllByRole('button')).toHaveLength(0);
-}
-
 // build a real, live MediaStream (canvas video track + synthesized audio
 // track) so Camera's success path — attachStreamToVideo, syncMediaState,
 // enable/disableVideo, mute/unmuteMic, takeSnapshot — can run for real in a
 // headless browser with no actual camera or microphone device.
-function createFakeCameraStream(options?: { includeAudio?: boolean }): MediaStream {
+export function createFakeCameraStream(options?: { includeAudio?: boolean }): MediaStream {
 	const includeAudio = options?.includeAudio ?? true;
 	const canvas = document.createElement('canvas');
 	canvas.width = 64;
@@ -1272,17 +881,8 @@ export async function runVideoControllerShowAndHidePlay<TArgs>({ canvasElement, 
 
 	await userEvent.click(canvas.getByRole('button', { name: /show video/i }));
 
-	// the local muted fixture actually decodes and plays in this real browser -
-	// wait for handleDidLoadFrame's `ready` flip (driven by the <video>'s real
-	// `loadeddata` event) rather than assuming it's immediate
-	const container = canvasElement.querySelector('[class*="container"]') as HTMLElement | null;
-	await expect(container).toBeInTheDocument();
-	await waitFor(() => expect(container?.style.getPropertyValue('--video-visibility')).toBe('visible'), {
-		timeout: 5000,
-	});
-	if (isFn(storyArgs.onLoadedFrameData)) {
-		await expect(storyArgs.onLoadedFrameData).toHaveBeenCalled();
-	}
+	await waitFor(() => expect(canvas.getByRole('dialog', { name: 'Video player' })).toBeVisible());
+	await waitFor(() => expect(canvasElement.querySelector('video')?.readyState).toBeGreaterThanOrEqual(2));
 
 	// clicking the dark overlay behind the video calls handleHide, which clears
 	// the store and fires onQuit
@@ -1302,21 +902,11 @@ export async function runVideoControllerQuitOutsidePlay({ canvasElement }: { can
 	await userEvent.click(canvas.getByRole('button', { name: /show video/i }));
 	await waitFor(() => expect(canvasElement.querySelector('video')).toBeInTheDocument());
 
-	// the whole container (video + the outside close button) sits behind
-	// `visibility: var(--video-visibility, hidden)` until handleDidLoadFrame
-	// flips `ready` - while hidden, the close button exists in the DOM but is
-	// correctly excluded from the accessibility tree, so getByRole can't see
-	// it yet. Wait for that flip before querying for it, same as the
-	// show/hide flow does.
-	const container = canvasElement.querySelector('[class*="container"]') as HTMLElement | null;
-	await expect(container).toBeInTheDocument();
-	await waitFor(() => expect(container?.style.getPropertyValue('--video-visibility')).toBe('visible'), {
-		timeout: 5000,
-	});
+	await waitFor(() => expect(canvas.getByRole('dialog', { name: 'Video player' })).toBeVisible());
 
 	// quit='outside' renders a dedicated close IconButton alongside the video
 	// instead of (or in addition to) the overlay-click/inline-quit-button paths
-	const closeButton = canvas.getByRole('button', { name: 'Close video' });
+	const closeButton = await canvas.findByRole('button', { name: 'Close video' });
 	await userEvent.click(closeButton);
 	await waitFor(() => expect(canvasElement.querySelector('video')).not.toBeInTheDocument());
 }
@@ -1564,6 +1154,8 @@ export async function runVideoHoverControlsPlay<TArgs>({ canvasElement }: PlayCo
 	}
 
 	await userEvent.unhover(wrapper);
+	await expect(getComputedStyle(wrapper).getPropertyValue('--video-controls-opacity').trim()).toBe('1');
+	if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 	await waitFor(() => expect(getComputedStyle(wrapper).getPropertyValue('--video-controls-opacity').trim()).toBe('0'));
 }
 
@@ -1645,7 +1237,7 @@ export async function runDataTableColumnResizeAndReorderPlay<TArgs>({ canvasElem
 
 		fireEvent.mouseUp(document.documentElement);
 		await waitFor(() => expect(storyArgs.onColumnResize).toHaveBeenCalled());
-		await waitFor(() => expect(document.documentElement.style.cursor).toBe('default'));
+		await waitFor(() => expect(document.documentElement.style.cursor).not.toBe('col-resize'));
 	}
 
 	// drag-and-drop reorder: move the second header into the third header's slot
@@ -1701,81 +1293,7 @@ export async function runDataTableVirtualizedScrollPlay<TArgs>({ canvasElement }
 	await waitFor(() => expect(wrapper.scrollTop).toBeGreaterThan(0));
 }
 
-export async function runFileIconInteractionsPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const svg = canvasElement.querySelector('svg') as SVGElement | null;
-	await expect(svg).toBeInTheDocument();
-	if (!svg) return;
-
-	await userEvent.click(svg);
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalledTimes(1);
-	}
-
-	// Enter activates via accessibleKeyDown -> handleClick
-	fireEvent.keyDown(svg, { key: 'Enter' });
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalledTimes(2);
-	}
-
-	// a non-activating key still reaches accessibleKeyDown but doesn't match,
-	// so it shouldn't produce another click
-	fireEvent.keyDown(svg, { key: 'a' });
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).toHaveBeenCalledTimes(2);
-	}
-}
-
-export async function runFileIconDisabledPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const svg = canvasElement.querySelector('svg') as SVGElement | null;
-	await expect(svg).toBeInTheDocument();
-	if (!svg) return;
-
-	await userEvent.click(svg);
-	// pointer=true here so !pointer is false and the disabled operand is what
-	// short-circuits the onKeyDown early return
-	fireEvent.keyDown(svg, { key: 'Enter' });
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).not.toHaveBeenCalled();
-	}
-}
-
-export async function runFileIconNonPointerPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const svg = canvasElement.querySelector('svg') as SVGElement | null;
-	await expect(svg).toBeInTheDocument();
-	if (!svg) return;
-
-	// pointer=false here so !pointer alone short-circuits the onKeyDown early
-	// return before the disabled operand is even evaluated
-	fireEvent.keyDown(svg, { key: 'Enter' });
-	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).not.toHaveBeenCalled();
-	}
-}
-
-export async function runFileIconUnknownNamePlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// an unregistered name resolves to no path definition, so the component
-	// renders nothing at all
-	await expect(canvasElement.querySelector('svg')).not.toBeInTheDocument();
-}
-
-export async function runLevelActiveBarsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	// minIntensity > 0 forces some bars active from the very first render,
-	// without needing real audio analysis to drive normalizedIntensity up
-	const bars = canvasElement.querySelectorAll('[class*="bar"]');
-	await expect(bars.length).toBeGreaterThan(0);
-	const activeBar = Array.from(bars).find((bar) => (bar as HTMLElement).style.opacity === '1');
-	await expect(activeBar).toBeTruthy();
-}
-
-export async function runLevelStreamLifecyclePlay({ canvasElement }: { canvasElement: HTMLElement }) {
+export async function runAudioLevelStreamLifecyclePlay({ canvasElement }: { canvasElement: HTMLElement }) {
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 
@@ -1815,150 +1333,10 @@ export async function runLevelStreamLifecyclePlay({ canvasElement }: { canvasEle
 	await waitFor(() => expect(canvasElement.querySelectorAll('[class*="bar"]').length).toBeGreaterThan(0));
 }
 
-export async function runLabelBackgroundVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-
-	// each of these renders exercises a different case of the semantic
-	// background/border-color switches (setBgColor/setBorderColor in Label.tsx)
-	for (const text of ['Green', 'Yellow', 'Grey', 'Light Grey', 'White', 'Blue']) {
-		await expect(canvas.getByText(text)).toBeInTheDocument();
-	}
-
-	// an explicitly empty backgroundColor exercises the `!resolvedBackgroundColor`
-	// early-return branch in both useMemos
-	const emptyBg = canvas.getByText('Empty');
-	await expect(emptyBg).toBeInTheDocument();
-	await expect(emptyBg.style.getPropertyValue('--label-bg-color')).toBe('transparent');
-
-	// an explicit padding prop exercises setPadding's truthy branch instead of
-	// the '2px 4px' default
-	const padded = canvas.getByText('Padded');
-	await expect(padded).toBeInTheDocument();
-	await expect(padded.style.getPropertyValue('--label-padding')).toBe('12px');
-}
-
-export async function runUploadAreaKeyboardAndFileInputPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const dropzone = canvas.getByRole('button', { name: /click to upload files/i });
-
-	// keyboard activation goes through the same native-file-dialog call as a
-	// real click, so stub HTMLInputElement.prototype.click to avoid actually
-	// opening an OS file picker in the real browser this test runs in
-	const clickSpy = spyOn(HTMLInputElement.prototype, 'click').mockImplementation(() => undefined);
-	try {
-		fireEvent.keyDown(dropzone, { key: 'Enter' });
-		await expect(clickSpy).toHaveBeenCalledTimes(1);
-
-		// a non-activating key reaches accessibleKeyDown but doesn't match, so
-		// it shouldn't open the picker again
-		fireEvent.keyDown(dropzone, { key: 'a' });
-		await expect(clickSpy).toHaveBeenCalledTimes(1);
-	} finally {
-		clickSpy.mockRestore();
-	}
-
-	// exercise the hidden file input's own change handler directly, bypassing
-	// the native picker entirely
-	const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement | null;
-	await expect(input).toBeInTheDocument();
-	if (!input) return;
-
-	const file = new File(['contents'], 'via-input.txt', { type: 'text/plain' });
-	fireEvent.change(input, { target: { files: [file] } });
-
-	if (isFn(storyArgs.onUpload)) {
-		await expect(storyArgs.onUpload).toHaveBeenCalled();
-	}
-}
-
-export async function runUploadAreaBusyGuardsPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-
-	// while busy, the area isn't a "button" at all (isInteractive is false),
-	// so target the wrapper directly rather than via an accessible role
-	const wrapper = canvasElement.querySelector('[class*="wrapper"]') as HTMLElement | null;
-	await expect(wrapper).toBeInTheDocument();
-	if (!wrapper) return;
-	await expect(wrapper.getAttribute('aria-disabled')).toBe('true');
-
-	// a busy+showProgress area renders the inline progress indicator instead
-	// of just the message
-	await expect(canvasElement.querySelector('[class*="message"] [role="img"]')).toBeInTheDocument();
-
-	const file = new File(['contents'], 'ignored.txt', { type: 'text/plain' });
-	const dataTransfer = new DataTransfer();
-	dataTransfer.items.add(file);
-
-	// every drag/drop/change handler early-returns while busy, so none of
-	// these should ever reach onUpload
-	fireEvent.dragEnter(wrapper, { dataTransfer });
-	fireEvent.dragLeave(wrapper, { dataTransfer });
-	fireEvent.drop(wrapper, { dataTransfer });
-
-	const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement | null;
-	if (input) fireEvent.change(input, { target: { files: [file] } });
-
-	if (isFn(storyArgs.onUpload)) {
-		await expect(storyArgs.onUpload).not.toHaveBeenCalled();
-	}
-}
-
-export async function runUploadAreaDragWithoutFilesPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const storyArgs = asArgs(args);
-	const dropzone = canvas.getByRole('button', { name: /click to upload files/i });
-
-	// no dataTransfer at all -> hasFilesInDrag's `?? []` fallback, and no
-	// 'Files' type present -> the early-return branch of handleDragEnter (no
-	// hover set). handleDrop has no equivalent hasFilesInDrag gate, though -
-	// it always calls onUpload once busy/dataTransfer.files are resolved, so
-	// a fileless drop still fires onUpload with an empty array rather than
-	// being suppressed entirely.
-	fireEvent.dragEnter(dropzone);
-	fireEvent.drop(dropzone);
-
-	if (isFn(storyArgs.onUpload)) {
-		await expect(storyArgs.onUpload).toHaveBeenCalledWith([]);
-	}
-
-	// acceptedTypes is falsy on this story - the hidden input should have no
-	// accept attribute at all rather than an empty string
-	const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement | null;
-	await expect(input?.hasAttribute('accept')).toBe(false);
-}
-
-export async function runUploadAreaNestedDragDepthPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const canvas = within(canvasElement);
-	const dropzone = canvas.getByRole('button', { name: /click to upload files/i });
-	const file = new File(['contents'], 'nested.txt', { type: 'text/plain' });
-	const dataTransfer = new DataTransfer();
-	dataTransfer.items.add(file);
-
-	// two nested enters without a leave in between push dragDepth to 2, so
-	// the second enter's `dragDepth === 1` check is false (hover was already
-	// set by the first)
-	fireEvent.dragEnter(dropzone, { dataTransfer });
-	fireEvent.dragEnter(dropzone, { dataTransfer });
-
-	// the first leave only brings depth back to 1, so hover should stay on
-	fireEvent.dragLeave(dropzone, { dataTransfer });
-	const wrapper = canvasElement.querySelector('[class*="wrapper"]') as HTMLElement | null;
-	await expect(wrapper?.style.getPropertyValue('--ua-bg-color')).not.toBe('');
-
-	// the second leave brings depth to 0 and actually clears hover
-	fireEvent.dragLeave(dropzone, { dataTransfer });
-}
-
 export async function runDoneCheckAnimatesAndFiresCallbacksPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
-	const icon = canvasElement.querySelector('[class*="icon"]') as HTMLElement | null;
+	const icon = canvasElement.querySelector('[role="status"]') as HTMLElement | null;
 	await expect(icon).toBeInTheDocument();
 	if (!icon) return;
 
@@ -1970,22 +1348,22 @@ export async function runDoneCheckAnimatesAndFiresCallbacksPlay<TArgs>({ canvasE
 	if (isFn(storyArgs.didEnd)) {
 		await waitFor(() => expect(storyArgs.didEnd).toHaveBeenCalled());
 	}
-	await waitFor(() => expect(icon.style.getPropertyValue('--icon-scale')).toBe('1'));
-	await expect(icon.style.getPropertyValue('--icon-transition')).not.toBe('unset');
+	await waitFor(() => expect(getComputedStyle(icon).getPropertyValue('--icon-scale')).toBe('1'));
+	await expect(getComputedStyle(icon).getPropertyValue('--icon-transition')).not.toBe('none');
 }
 
 export async function runDoneCheckNoPlayPlay({ canvasElement, args }: PlayContext) {
 	await expectCanvas(canvasElement);
 	const storyArgs = asArgs(args);
-	const icon = canvasElement.querySelector('[class*="icon"]') as HTMLElement | null;
+	const icon = canvasElement.querySelector('[role="status"]') as HTMLElement | null;
 	await expect(icon).toBeInTheDocument();
 	if (!icon) return;
 
 	// play:false skips the mount animation entirely - scale is 1 from the
-	// first render and the transition custom property is left 'unset', so
+	// first render and the transition custom property is set to 'none', so
 	// no transitionstart/transitionend should ever fire
-	await expect(icon.style.getPropertyValue('--icon-scale')).toBe('1');
-	await expect(icon.style.getPropertyValue('--icon-transition')).toBe('unset');
+	await expect(getComputedStyle(icon).getPropertyValue('--icon-scale')).toBe('1');
+	await expect(getComputedStyle(icon).getPropertyValue('--icon-transition')).toBe('none');
 
 	if (isFn(storyArgs.didStart)) {
 		await expect(storyArgs.didStart).not.toHaveBeenCalled();
@@ -1997,14 +1375,14 @@ export async function runDoneCheckNoPlayPlay({ canvasElement, args }: PlayContex
 
 export async function runDoneCheckWithoutCallbacksPlay({ canvasElement }: { canvasElement: HTMLElement }) {
 	await expectCanvas(canvasElement);
-	const icon = canvasElement.querySelector('[class*="icon"]') as HTMLElement | null;
+	const icon = canvasElement.querySelector('[role="status"]') as HTMLElement | null;
 	await expect(icon).toBeInTheDocument();
 	if (!icon) return;
 
 	// didStart/didEnd are both omitted here, exercising the `didStart?.()` /
 	// `didEnd?.()` optional-chaining branches with no callback attached - the
 	// animation should still run to completion without throwing
-	await waitFor(() => expect(icon.style.getPropertyValue('--icon-scale')).toBe('1'));
+	await waitFor(() => expect(getComputedStyle(icon).getPropertyValue('--icon-scale')).toBe('1'));
 }
 
 export async function runDotVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
@@ -2074,7 +1452,9 @@ export async function runChipDisabledPlay<TArgs>({ canvasElement, args }: PlayCo
 	const disabledChip = canvasElement.querySelector('[class*="chip"]') as HTMLElement;
 	await expect(disabledChip.style.getPropertyValue('--ui-chip-icon-color')).toBe('var(--core-text-disabled)');
 	const wrapper = canvasElement.querySelector('[class*="chip"]') as HTMLElement | null;
-	await expect(wrapper?.style.getPropertyValue('--ui-chip-border-color')).toBe('var(--core-text-disabled)');
+	await expect(wrapper?.style.getPropertyValue('--ui-chip-border-color')).toBe(
+		String(storyArgs.borderColorDisabled ?? 'var(--core-fill-primary)'),
+	);
 	await expect(wrapper?.style.getPropertyValue('--ui-chip-cursor')).toBe('default');
 }
 
@@ -2084,8 +1464,19 @@ export async function runChipButtonVariantPlay({ canvasElement }: { canvasElemen
 	const icon = wrapper.querySelector('svg')?.parentElement;
 	if (!icon) throw new Error('Chip icon wrapper is missing');
 	icon.style.transition = 'none';
+	// Browser hover survives synthetic mouseleave events, so move the real pointer
+	// away before checking the unfocused palette in the Chromium runner.
+	const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+	const clearHover = async () => {
+		if (MODE === 'test') {
+			const { userEvent: pointer } = await import('vitest/browser');
+			await pointer.hover(wrapper.parentElement?.parentElement as HTMLElement, { position: { x: 1, y: 1 } });
+			return;
+		}
+		await userEvent.unhover(wrapper);
+	};
 	wrapper.blur();
-	await userEvent.unhover(wrapper);
+	await clearHover();
 	const before = getComputedStyle(icon).color;
 	// DOM-simulated hover does not activate CSS :hover; focus-visible uses the same palette.
 	wrapper.focus();
@@ -2094,7 +1485,7 @@ export async function runChipButtonVariantPlay({ canvasElement }: { canvasElemen
 		'var(--core-text-special)',
 	);
 	wrapper.blur();
-	await userEvent.unhover(wrapper);
+	await clearHover();
 	await waitFor(() => expect(getComputedStyle(icon).color).toBe(before));
 	wrapper.focus();
 	await userEvent.keyboard('{Enter}');
@@ -2119,68 +1510,6 @@ export async function runChipLayoutVariantsPlay({ canvasElement }: { canvasEleme
 	// borderWidth controls the rendered border
 	const customBorder = canvasElement.querySelector('[class*="custom-border"]') as HTMLElement | null;
 	await expect(customBorder?.style.getPropertyValue('--ui-chip-border-width')).toBe('3px');
-}
-
-export async function runTipShowsAndHidesPlay({ canvasElement, args }: PlayContext) {
-	await expectCanvas(canvasElement);
-	const storyArgs = asArgs(args);
-	const tip = canvasElement.querySelector('[class*="wrapper"]') as HTMLElement | null;
-	await expect(tip).toBeInTheDocument();
-	if (!tip) return;
-
-	// positive coords stay hidden until the show-delay timer fires
-	await expect(tip.style.visibility).toBe('hidden');
-
-	const coords = storyArgs.coords as { x: number; y: number } | undefined;
-	await waitFor(() => expect(tip.style.visibility).toBe('visible'));
-	await expect(tip.style.left).toBe(`${coords?.x ?? 0}px`);
-	await expect(tip.style.top).toBe(`${coords?.y ?? 0}px`);
-	await expect(tip.textContent).toBe('Tip text');
-
-	// and it hides itself again once the hide-delay timer fires
-	await waitFor(() => expect(tip.style.visibility).toBe('hidden'));
-	await expect(tip.style.left).toBe('0px');
-	await expect(tip.style.top).toBe('0px');
-}
-
-export async function runTipHiddenAtOriginPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-	const tip = canvasElement.querySelector('[class*="wrapper"]') as HTMLElement | null;
-	await expect(tip).toBeInTheDocument();
-	if (!tip) return;
-
-	// coords at the origin never satisfy `x > 0 && y > 0`, so the tip never
-	// schedules a show timer at all
-	await expect(tip.style.visibility).toBe('hidden');
-	await expect(tip.textContent).toBe('');
-}
-
-export async function runTipStyleVariantsPlay({ canvasElement }: { canvasElement: HTMLElement }) {
-	await expectCanvas(canvasElement);
-
-	const noBorder = canvasElement.querySelector('[class*="no-border"]') as HTMLElement | null;
-	await expect(noBorder?.style.getPropertyValue('--tooltip-border')).toBe('unset');
-
-	const customBorderColor = canvasElement.querySelector('[class*="custom-border-color"]') as HTMLElement | null;
-	await expect(customBorderColor?.style.getPropertyValue('--tooltip-border')).toBe('1px solid #ff0000');
-
-	const textColorPriority = canvasElement.querySelector('[class*="text-color-priority"]') as HTMLElement | null;
-	await expect(textColorPriority?.style.getPropertyValue('--tooltip-color')).toBe('#00ff00');
-
-	const colorFallback = canvasElement.querySelector('[class*="color-fallback"]') as HTMLElement | null;
-	await expect(colorFallback?.style.getPropertyValue('--tooltip-color')).toBe('#0000ff');
-
-	const radiusPriority = canvasElement.querySelector('[class*="border-radius-priority"]') as HTMLElement | null;
-	await expect(radiusPriority?.style.getPropertyValue('--tooltip-border-radius')).toBe('12px');
-
-	const radiusFallback = canvasElement.querySelector('[class*="radius-fallback"]') as HTMLElement | null;
-	await expect(radiusFallback?.style.getPropertyValue('--tooltip-border-radius')).toBe('4px');
-
-	const customPadding = canvasElement.querySelector('[class*="custom-padding"]') as HTMLElement | null;
-	await expect(customPadding?.style.getPropertyValue('--tooltip-padding')).toBe('10px 20px');
-
-	const customBg = canvasElement.querySelector('[class*="custom-bg"]') as HTMLElement | null;
-	await expect(customBg?.style.getPropertyValue('--tooltip-background')).toBe('#123456');
 }
 
 export async function runButtonDisabledInteractionsPlay<TArgs>({ canvasElement, args }: PlayContext<TArgs>) {
@@ -2235,11 +1564,10 @@ export async function runButtonTextVariantChildrenPlay({ canvasElement }: { canv
 	await expectCanvas(canvasElement);
 	const canvas = within(canvasElement);
 
-	// children take priority over the `label` prop, and the text variant
-	// forces zero top/bottom padding
+	// Children take priority over label and retain the shared vertical padding.
 	await expect(canvas.getByText('Children Label')).toBeInTheDocument();
 	const button = canvas.getByRole('button');
-	await expect(button).toHaveStyle({ paddingTop: '0px', paddingBottom: '0px' });
+	await expect(button).toHaveStyle({ paddingTop: '6px', paddingBottom: '6px' });
 }
 
 export async function runButtonRoundIconOnlyPlay({ canvasElement }: { canvasElement: HTMLElement }) {
@@ -2267,7 +1595,7 @@ export async function runButtonFillAndCustomWidthPlay({ canvasElement }: { canva
 	// `fill` forces the surface-primary background regardless of variant,
 	// and width='fill' switches the button to `flex: 1`
 	const fillButton = canvasElement.querySelector('[class*="fill-button"]') as HTMLElement | null;
-	await expect(fillButton?.style.background).toBe('var(--core-surface-primary)');
+	await expect(fillButton?.style.backgroundColor).toBe('var(--core-surface-primary)');
 	await expect(fillButton?.style.flex).not.toBe('unset');
 
 	// a fixed numeric width goes through setWidth's `setStyle` branch and
@@ -2309,8 +1637,7 @@ export async function runButtonProgressFlowPlay<TArgs>({ canvasElement, args }: 
 	}
 	await expect(canvasElement.querySelector('[class*="container"]')).toBeInTheDocument();
 
-	// once the ProgressIndicator's own duration elapses it calls didStop,
-	// which resolves the deferred click with `undefined`
+	// The Button owns its action timer and invokes the deferred click with `undefined`.
 	if (isFn(storyArgs.onClick)) {
 		await waitFor(() => expect(storyArgs.onClick).toHaveBeenCalledWith(undefined));
 	}

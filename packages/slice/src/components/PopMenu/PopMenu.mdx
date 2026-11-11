@@ -1,0 +1,154 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './PopMenu.stories';
+
+<Meta of={Stories} />
+
+# PopMenu
+
+A menu can contain individual options and visual groups. A group adds an optional
+title above its items and a top separator between groups. It does not own a separate submenu or
+dismissal lifecycle.
+
+```tsx
+<PopMenu caller={caller} dismissAll={closeMenus} options={[
+    { title: 'Actions', items: [{ label: 'Edit' }, { label: 'Duplicate' }] },
+    { title: 'Preferences', items: [{ label: 'Archived', toggle: true, toggled }] },
+]} />
+```
+
+Use the named `PopMenuGroup` control for composition:
+
+```tsx
+import { PopMenu, PopMenuGroup, PopMenuItem } from '@apple-pie/slice';
+
+<PopMenu caller={caller} dismissAll={closeMenus} onClickItem={handleItem}>
+    <PopMenuGroup title="Actions">
+        <PopMenuItem label="Edit" />
+        <PopMenuItem label="Duplicate" />
+    </PopMenuGroup>
+    <PopMenuGroup title="Preferences" items={preferences} />
+</PopMenu>
+```
+
+## Item actions and typed payloads
+
+Items accept `data?: T` and `onClick(event, item)`. The same API works in root
+`options`, grouped `items`, and composed `PopMenuItem` children. Click details use
+`PopMenuItemClickInfo<T>` and include the original payload as `item.data` (undefined
+when omitted). Item callbacks run before groups, then the menu, then dismissal;
+disabled items do not emit callbacks. Keyboard activation uses the same flow.
+Async callbacks are not awaited. Use `autoDismiss={false}` when an action should
+keep the menu open, and call `item.dismissAll()` when ready.
+
+```tsx
+const options: PropMenuEntry<{ documentId: string }>[] = [{
+  id: 'open', label: 'Open document', data: { documentId: 'doc-42' },
+  onClick: (_event, item) => {
+    if (item.data) window.location.assign('/documents/' + item.data.documentId);
+  },
+}];
+<PopMenu options={options} onClickItem={(_event, item) => console.log(item.data)} />
+```
+
+`T` is inferred from descriptors or supplied explicitly on the component and prop
+types. For composed children, use the same `T` on parent `PopMenu<T>` and
+`PopMenuGroup<T>` shared handlers and their items. React does not infer a parent's
+payload type from JSX children. Nested menus establish their own payload scope.
+
+Items and groups connect to their containing menu through React context,
+including inside custom wrappers, fragments, and conditional children. Custom
+wrappers do not need to forward menu handlers. Authored order is preserved, and
+group `children` take precedence over its `items` shorthand. Item callbacks run
+first, followed by their containing groups from inner to outer, then the menu.
+Nested menus establish their own callback scope.
+
+Item and group callbacks run before the parent `onClickItem` callback and automatic
+dismissal. All groups share the menu's one active submenu branch. Actions dismiss
+all menus by default; toggles and submenu openers stay open unless `autoDismiss`
+is explicitly overridden.
+
+Group `textColor`, `textColorHover`, and `textSize` style the title. Defaults are
+secondary text and size `s`. `borderColor` defaults to the primary fill, and
+`borderWidth` defaults to `1`; pass `0` to hide it. The first group has no top
+border or top margin, and its title has no top padding. The final child group has
+no bottom margin.
+
+`padding` styles the title; its default is 8px at the top, 10px at the sides,
+and zero at the bottom, expressed with theme spacing tokens. `gap` defaults to
+2px and controls the group's vertical margins and top padding when untitled.
+Explicit `padding` and `gap` support numbers and CSS strings; the positional
+first/last-group rules still apply.
+Group HTML attributes, `className`, and `style` are forwarded to its wrapper.
+
+Menus focus their first enabled item when opened. Up/Down arrows move between
+items, Home/End select the first/last item, and Right opens a submenu. Escape
+closes the current menu and restores focus to its opener; Left does the same
+inside a submenu. Tab/Shift+Tab close the menu tree and move beyond its trigger.
+Focus outlines use `:focus-visible` so pointer interaction does not receive a
+blanket outline.
+
+Items expose `menuitem` semantics, or `menuitemcheckbox` and `aria-checked` for
+controlled toggles. Submenu openers expose `aria-haspopup` and `aria-expanded`.
+`PopMenuItem` forwards button attributes and merges custom styles and mouse
+handlers. Set `disabled` to prevent activation and skip an item during keyboard
+navigation; use `aria-disabled` to retain a focusable, inactive item.
+
+Clicks on menu padding or group titles keep the menu open. Portaled descendant
+menus are included in inside-click and inside-scroll detection. Side placement
+supports `left` and `right`; right-opening submenus flip left at the viewport edge.
+
+`disabled` is available on composed items and option/group item objects.
+`textColorDisabled` and `iconColorDisabled` default to the tertiary text token;
+the text color also applies to shortcut hints and the icon color to checkmarks
+and submenu indicators. Disabled items retain their normal background and ignore
+hover colors and hover callbacks. These visual rules also apply to `aria-disabled`
+items, which remain keyboard-focusable.
+
+Supply unique, stable `id` values for options, groups, and grouped items when
+entries can be reordered, inserted, or removed. IDs are used as React keys, so
+changing a label or group title preserves the entry's identity. Entries without
+an ID use their position as a fallback for static lists; duplicate labels and
+untitled groups are supported. IDs must also be unique in the document because
+they are forwarded to the rendered elements.
+
+`portalContainer` defaults to `'auto'`. Automatic menus use a managed host in the
+caller's nearest theme scope or dialog, falling back to its shadow root or the
+owning document's body. Concurrent menus share that host; it is removed after
+its last owner unmounts. Shadow-root consumers must provide Slice styles within
+their shadow root.
+
+Pass an `HTMLElement` to use an application-owned host (which Slice never removes),
+or `false` to render in place. Submenus inherit the resolved host or inline mode
+through context, even through custom submenu wrappers. A submenu can explicitly
+set its own `portalContainer` to override that inheritance. In-place rendering
+retains ancestor clipping and stacking constraints; custom hosts control their
+own CSS inheritance and layout scope.
+
+Pass the same `KeyboardShortcut` definition used by `useKeyboardShortcuts`
+directly to `PopMenuItem.shortcut`. The item resolves the platform display
+internally; it does not register the shortcut. Custom strings render unchanged.
+`metaPressed` displays Command on Apple and Control elsewhere; the current shortcut
+model does not represent a separate Apple Control modifier.
+
+```
+import { PopMenuItem, type KeyboardShortcut } from '@apple-pie/slice';
+
+const quickOpen: KeyboardShortcut = {
+    name: 'Quick open', key: 'k', metaPressed: true, shiftPressed: true,
+};
+
+function QuickOpenItem() {
+    return <PopMenuItem label={quickOpen.name} shortcut={quickOpen} />;
+}
+```
+
+This displays `⇧⌘K` on Apple or `Ctrl+Shift+K` elsewhere. For formatting outside
+menus or explicit platform control, use `resolveShortcut(shortcut, isAppleDevice?)`,
+exported from the package root and `@apple-pie/slice/utils`. Pass the resulting string
+to an item when you need a custom or deterministic platform display. Enter, Escape,
+and Tab display as text on both platforms.
+
+PopMenu observes `prefers-reduced-motion`, including live preference changes. When
+enabled, menus and submenus appear and dismiss immediately without translating,
+scaling, rotating, or fading. Custom `motionValues` and `transition` delays are
+bypassed, while focus management and dismissal callbacks remain active.

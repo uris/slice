@@ -33,15 +33,18 @@ export type AvatarGroupBaseProps = Pick<
 	limit?: number;
 	/** Runs when the overflow avatar is clicked or activated by keyboard. */
 	onMore?: (details: AvatarGroupMore) => void;
+	/** Width and height of each avatar in pixels. Defaults to 40. */
 	size?: number;
 	overlap?: number;
 	gap?: number;
+	/** Accessible group label. Defaults to people when omitted or blank. */
+	groupName?: string;
 	margin?: number;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
 export type AvatarGroupProps = Omit<
 	React.HTMLAttributes<HTMLDivElement>,
-	keyof AvatarGroupBaseProps | 'color' | 'children'
+	keyof AvatarGroupBaseProps | keyof React.AriaAttributes | 'role' | 'color' | 'children'
 > &
 	AvatarGroupBaseProps;

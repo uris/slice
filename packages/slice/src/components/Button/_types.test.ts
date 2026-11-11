@@ -8,6 +8,13 @@ it('uses normalized primary text props without old aliases', () => {
 	expectTypeOf<ButtonProps['textSize']>().toEqualTypeOf<'xs' | 's' | 'm' | 'l' | 'xl' | undefined>();
 });
 
+it('uses shared buttonSize and spacing props with explicit auto sizing', () => {
+	expectTypeOf<Extract<'size', keyof ButtonProps>>().toBeNever();
+	expectTypeOf<ButtonProps['buttonSize']>().toEqualTypeOf<'auto' | 's' | 'm' | 'l' | 'xl' | number | undefined>();
+	expectTypeOf<ButtonProps['paddingTop']>().toEqualTypeOf<number | string | undefined>();
+	expectTypeOf<ButtonProps['gap']>().toEqualTypeOf<number | undefined>();
+});
+
 it('documents native and programmatic activation types', () => {
 	expectTypeOf<NonNullable<ButtonProps['onClick']>>().parameters.toEqualTypeOf<[React.MouseEvent<HTMLButtonElement> | undefined]>();
 	expectTypeOf<ButtonHandle['triggerClick']>().toEqualTypeOf<() => void>();

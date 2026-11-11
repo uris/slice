@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Hooks/useMicrophone" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useMicrophone
         Requests microphone access, keeps both the raw microphone stream and a processed microphone stream in refs, and exposes controls for muting, input gain, switching devices, refreshing available devices, and stopping the stream.
@@ -137,5 +137,5 @@ import {FlexDiv} from '../../components/FlexDiv';
         }
         ```
         </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

@@ -4,13 +4,13 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { LastUpdatedPreview } from './LastUpdatedPreview';
 import { optionsCode, usageCode } from './code';
 
 export function UseLastUpdatedDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>useLastUpdated hook</H1>
 			<P clipWidth>
@@ -107,7 +107,7 @@ export function UseLastUpdatedDoc() {
 				The interval argument, defaulting to 1. This is a number of minutes, not a timer handle or countdown. It retains
 				the supplied value even when the actual refresh cadence is clamped to one minute.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

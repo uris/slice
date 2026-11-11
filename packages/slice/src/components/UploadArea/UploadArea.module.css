@@ -1,60 +1,90 @@
 .wrapper {
-	composes: column from "../../utils/styling/flexBox.module.css";
-	padding: var(--ua-padding) !important;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	box-sizing: border-box;
+	padding: var(--ua-padding);
 	border: var(--ua-border) var(--ua-border-style) var(--ua-border-color);
 	border-radius: var(--ua-radius);
 	background: var(--ua-bg-color);
-	gap: 8px;
-	cursor: var(--ua-cursor);
+	gap: var(--spacing-s);
 	width: var(--ua-width);
 	height: var(--ua-height);
-	user-select: none;
-	-webkit-user-select: none;
 }
-
+.trigger {
+	appearance: none;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-s);
+	width: 100%;
+	min-width: 0;
+	padding: 0;
+	border: 0;
+	border-radius: var(--corner-xs);
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+.trigger:disabled {
+	cursor: default;
+}
+.trigger:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: var(--spacing-xs);
+}
 .icon {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	min-height: var(--ua-icon-size);
-	height: var(--ua-icon-size);
-	min-width: var(--ua-icon-size);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: var(--ua-icon-size);
-	pointer-events: none;
+	height: var(--ua-icon-size);
 }
-
 .title {
 	composes: body-l-bold from "../../utils/styling/type.module.css";
-	pointer-events: none;
 }
-
 .message {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	color: var(--core-text-tertiary);
-	pointer-events: none;
-	gap: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-s);
+	color: var(--core-text-secondary);
 }
-
 .files {
-	composes: column from "../../utils/styling/flexBox.module.css";
-	margin-top: var(--spacing-m) !important;
 	width: 100%;
+	margin-top: var(--spacing-m);
 }
-
+.rejection {
+	composes: body-s-regular from "../../utils/styling/type.module.css";
+	color: var(--core-text-primary);
+}
+.rejection:empty {
+	display: none;
+}
+.srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }
-
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
-
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
 }
-
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
-
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }

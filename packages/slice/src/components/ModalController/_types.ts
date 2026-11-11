@@ -7,9 +7,6 @@ export type ModalControllerProps = {
 	overlayColor?: ColorValue;
 	overlayOpacity?: number;
 	transition?: Transition;
-	variants?: Variants;
-	initial?: string;
-	animate?: string;
-	exit?: string;
+	motionValues?: Variants;
 	draggable?: boolean;
 };

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv, Preset } from '../../components/FlexDiv';
+import { FlexBox, Preset } from '../../components/FlexBox';
 import { ProgressIndicator } from '../../components/Progress';
 import { useInfiniteScroll } from './useInfiniteScroll';
 
@@ -32,11 +32,11 @@ function UseInfiniteScrollDemo() {
 	};
 
 	return (
-		<FlexDiv align={'center'} justify={'center'} padding={24} absolute direction={'column'} gap={12}>
-			<FlexDiv direction={'column'} align={'center'} height={'auto'} gap={12}>
+		<FlexBox align={'center'} justify={'center'} padding={24} absolute direction={'column'} gap={12}>
+			<FlexBox direction={'column'} align={'center'} height={'auto'} gap={12}>
 				<strong>useInfiniteScroll</strong>
 				<span>{items.length} of 50 items loaded. Scroll to load more.</span>
-				<FlexDiv width={'auto'} height={'auto'} direction={'row'} gap={8} background={'none'} align={'center'}>
+				<FlexBox width={'auto'} height={'auto'} direction={'row'} gap={8} background={'none'} align={'center'}>
 					<Button label={'Start again'} variant={'outline'} disabled={isLoading} onClick={startAgain} />
 					<Button
 						label={'Load more'}
@@ -45,10 +45,10 @@ function UseInfiniteScrollDemo() {
 						onClick={() => loadMore()}
 					/>
 					{error ? <Button label={'Retry'} variant={'outline'} onClick={() => retry()} /> : null}
-				</FlexDiv>
+				</FlexBox>
 				{error ? <span style={{ color: 'var(--core-error)' }}>{error.message}</span> : null}
-			</FlexDiv>
-			<FlexDiv
+			</FlexBox>
+			<FlexBox
 				ref={setRoot}
 				preset={Preset.FillScroll}
 				width={360}
@@ -59,7 +59,7 @@ function UseInfiniteScrollDemo() {
 				gap={8}
 			>
 				{items.map((item) => (
-					<FlexDiv
+					<FlexBox
 						key={item.id}
 						width={'fill'}
 						height={'auto'}
@@ -69,9 +69,9 @@ function UseInfiniteScrollDemo() {
 						background={'var(--core-surface-primary)'}
 					>
 						{item.name}
-					</FlexDiv>
+					</FlexBox>
 				))}
-				<FlexDiv
+				<FlexBox
 					ref={sentinelRef}
 					width={'fill'}
 					height={'auto'}
@@ -90,9 +90,9 @@ function UseInfiniteScrollDemo() {
 					) : (
 						'You’ve reached the end.'
 					)}
-				</FlexDiv>
-			</FlexDiv>
-		</FlexDiv>
+				</FlexBox>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

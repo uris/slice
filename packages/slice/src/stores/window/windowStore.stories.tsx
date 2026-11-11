@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import {
 	useDpr,
 	useFormFactor,
@@ -37,8 +37,8 @@ function WindowStoreDemo() {
 	useEffect(() => initialize(), [initialize]);
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
-			<FlexDiv
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
+			<FlexBox
 				width={420}
 				height={'auto'}
 				direction={'column'}
@@ -70,8 +70,8 @@ function WindowStoreDemo() {
 					working={gettingLocation}
 					progress={true}
 				/>
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

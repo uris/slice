@@ -1,13 +1,13 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import {FlexBox} from '../FlexBox';
 import * as CameraStories from './Camera.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 import {Spacer} from "../Spacer";
 
 <Meta of={CameraStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={820} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={820} height={"auto"}>
         <Unstyled>
         # Camera
         Renders a live camera preview with optional microphone access, inline capture controls, a poster fallback, and a picture-in-picture snapshot preview. This component is a special case in the library because it has both a prop interface and an imperative ref interface.
@@ -46,6 +46,7 @@ import {Spacer} from "../Spacer";
             </tr>
           </thead>
           <tbody>
+            <tr><td><code>audio</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Requests microphone input alongside video. Set false for video-only capture and no microphone control.</td></tr>
             <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Outer width of the camera frame.</td></tr>
             <tr><td><code>height</code></td><td><code>{`number | string`}</code></td><td><code>-</code></td><td>Outer height of the camera frame.</td></tr>
             <tr><td><code>noVideoPoster</code></td><td><code>React.ReactNode</code></td><td><code>default poster</code></td><td>Fallback content shown when video is off or unsupported.</td></tr>
@@ -53,14 +54,20 @@ import {Spacer} from "../Spacer";
             <tr><td><code>startAudioMuted</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables the microphone track when the stream starts.</td></tr>
             <tr><td><code>playLocalAudio</code></td><td><code>boolean</code></td><td><code>false</code></td><td>When <code>true</code>, the preview element plays the captured audio track through the local output device. Leave this <code>false</code> to avoid microphone monitoring / speaker feedback.</td></tr>
             <tr><td><code>pipSnapshot</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Shows the captured still image as a small overlay preview.</td></tr>
-            <tr><td><code>showControlBar</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Controls whether the built-in control bar is rendered.</td></tr>
+            <tr><td><code>showProfileButton</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the profile action when explicitly enabled.</td></tr>
+            <tr><td><code>showSettingsButton</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the settings action when explicitly enabled.</td></tr>
+            <tr><td><code>backgroundColor</code></td><td><code>ColorValue</code></td><td><code>core-surface-secondary</code></td><td>Frame background, including when video is off. Accepts a Slice color token or CSS color.</td></tr>
+<tr><td><code>borderColor</code></td><td><code>ColorValue</code></td><td><code>core-fill-primary</code></td><td>Frame border color. Accepts a Slice color token or CSS color.</td></tr>
+<tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>var(--corner-xxl)</code></td><td>Frame corner radius. Numbers are pixels; strings are CSS lengths.</td></tr>
+<tr><td><code>borderWidth</code></td><td><code>number | string</code></td><td><code>1</code></td><td>Solid frame border width. Numbers are pixels; strings are CSS lengths.</td></tr>
+<tr><td><code>showControlBar</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Controls whether the built-in control bar is rendered.</td></tr>
             <tr><td><code>autoHideControlBar</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When <code>false</code>, the control bar remains visible.</td></tr>
-            <tr><td><code>userProfile</code></td><td><code>{`{ first?: string; last?: string; avatar?: string }`}</code></td><td><code>-</code></td><td>Profile metadata used by the default no-video poster and profile action.</td></tr>
-            <tr><td><code>sessionSettings</code></td><td><code>{`{ micDeviceId?: string; micVolume?: number; videoDeviceId?: string }`}</code></td><td><code>-</code></td><td>Preferred device IDs used when requesting media streams. If the requested device is missing, the component falls back to default devices.</td></tr>
+            <tr><td><code>userProfile</code></td><td><code>{`{ name?: string; email?: string; avatar?: string }`}</code></td><td><code>-</code></td><td>Profile metadata used by the default no-video poster and profile action.</td></tr>
+            <tr><td><code>sessionSettings</code></td><td><code>{`{ micDeviceId?: string; videoDeviceId?: string }`}</code></td><td><code>-</code></td><td>Preferred device IDs used when requesting media streams. If the requested device is missing, the component falls back to default devices.</td></tr>
             <tr><td><code>onVideoStream</code></td><td><code>{`(stream: MediaStream) => void`}</code></td><td><code>-</code></td><td>Fires when a media stream is successfully available.</td></tr>
             <tr><td><code>onSnapshot</code></td><td><code>{`(blob: Blob | undefined) => void`}</code></td><td><code>-</code></td><td>Fires after a snapshot attempt with the captured image blob, if any.</td></tr>
-            <tr><td><code>onNoVideo</code></td><td><code>{`(reason?: string | Error) => void`}</code></td><td><code>-</code></td><td>Fires when video cannot be acquired.</td></tr>
-            <tr><td><code>onNoAudio</code></td><td><code>{`(reason?: string | Error) => void`}</code></td><td><code>-</code></td><td>Fires when audio cannot be acquired.</td></tr>
+            <tr><td><code>onNoVideo</code></td><td><code>{`(reason: Error) => void`}</code></td><td><code>-</code></td><td>Fires when video cannot be acquired.</td></tr>
+            <tr><td><code>onNoAudio</code></td><td><code>{`(reason: Error) => void`}</code></td><td><code>-</code></td><td>Fires when audio cannot be acquired.</td></tr>
             <tr><td><code>onChangeProfile</code></td><td><code>{`(profile?: UserProfile) => void`}</code></td><td><code>-</code></td><td>Fires when the profile action is triggered from the toolbar.</td></tr>
             <tr><td><code>onChangeSettings</code></td><td><code>{`(settings?: Settings, devices?: MediaDeviceInfo[] | Error) => void`}</code></td><td><code>-</code></td><td>Fires when the settings action is triggered, including the current cached device list when available.</td></tr>
             <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native <code>div</code> props pass through to the wrapper.</td></tr>
@@ -104,7 +111,7 @@ import {Spacer} from "../Spacer";
         Because stream details are not mirrored into React events, parent components should treat the camera ref as the source of truth for low-level media state.
         </Unstyled>
 
-        <RenderSource language={"tsx"}>
+        <RenderSource>
 ```
 import { useEffect, useRef, useState } from 'react';
 import { Camera } from '@apple-pie/slice';
@@ -170,6 +177,8 @@ export function CameraRefExample() {
 
         The expected flow is:
             
+        Enable `showSettingsButton` to offer the settings action.
+
         #### 1. User clicks "settings" action button
         This fires `onChangeSettings`, providing:
         - the current `sessionSettings`
@@ -187,7 +196,17 @@ export function CameraRefExample() {
         - Turning video off disables the video track instead of stopping the full stream, so audio can remain active.
         - Audio capture and local audio playback are separate concerns. Use <code>startAudioMuted</code> to disable the microphone track itself, and <code>playLocalAudio</code> to control whether the live preview outputs audio to local speakers.
         - `stopCamera()` is the method that tears down the full stream.
+        Device enumeration runs in the background and does not delay `onVideoStream` or `startCamera()`. The cached list may initially be empty; use the ref’s `devices()` method to request a fresh list.
+
+        ## Capture lifecycle
+        Streams acquired by Camera are owned by it: stopping, unmounting, device replacement, or failed attachment releases their tracks.
+        Concurrent starts share one request. Results from cancelled requests are stopped and never published.
+        Changing device IDs replaces active capture; changing callbacks does not restart it or undo manually disabled video.
+        If microphone acquisition fails, Camera can retry video-only capture and report the audio failure through `onNoAudio`.
+        The controls stay visible while focused. `showControlBar={false}` removes them entirely, and decorative transitions respect reduced motion.
+        Snapshots remain synchronous PNG blobs; the encoding and ref return type are unchanged.
+
         </Unstyled>
         <Spacer size="xxl"/>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

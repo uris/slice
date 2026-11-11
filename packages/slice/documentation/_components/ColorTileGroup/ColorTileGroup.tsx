@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { type Colors, FlexDiv, Tip, Toast, type ToolTip, lightTheme, useToolTip } from 'src';
+import { type Colors, FlexBox, Tip, Toast, type ToolTip, lightTheme, useToolTip } from 'src';
 import { colorClass, coreColors } from '../../../src/theme/colors/colors';
 import { ColorTile } from '../ColorTile/ColorTile';
 import type { ColorTileGroupProps } from '../ColorTile/types';
@@ -45,7 +45,7 @@ const BaseColorTileGroup = (props: Readonly<ColorTileGroupProps>) => {
 
 	return (
 		<>
-			<FlexDiv width={'fill'} height={'fit'} direction={'row'} wrap={true} gap={16}>
+			<FlexBox width={'fill'} height={'fit'} direction={'row'} wrap={true} gap={16}>
 				{colors.map((color) => {
 					return (
 						<ColorTile
@@ -58,9 +58,9 @@ const BaseColorTileGroup = (props: Readonly<ColorTileGroupProps>) => {
 						/>
 					);
 				})}
-			</FlexDiv>
+			</FlexBox>
 			<Tip ref={tipRef} coords={coords} tip={tip} />
-			<Toast message={message} didHide={() => setMessage(null)} close={false} />
+			<Toast message={message} onHide={() => setMessage(null)} close={false} />
 		</>
 	);
 };

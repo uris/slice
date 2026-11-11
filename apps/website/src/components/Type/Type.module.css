@@ -35,6 +35,7 @@
 	line-height: 140%;
 	letter-spacing: 1.25%;
 	color: var(--core-text-primary);
+	margin-top: 16px;
 }
 
 .p {
@@ -44,7 +45,7 @@
 	font-size: 16px;
 	line-height: 162.5%;
 	letter-spacing: 0.63%;
-	color: var(--core-text-tertiary);
+	color: var(--core-text-secondary);
 }
 
 .paragraph + .paragraph {
@@ -64,13 +65,13 @@
 	box-sizing: border-box;
 	padding: 0 6px;
 	border-radius: 4px;
-	background-color: var(--core-surface-primary);
+	background-color: var(--core-surface-secondary);
 }
 
 .prop {
 	font-family: var(--font-mono), monospace;
-	font-weight: 460;
-	font-size: 12px;
+	font-weight: 550;
+	font-size: 13px;
 	font-variant-ligatures: none;
 	line-height: 162.5%;
 	letter-spacing: 0.94%;
@@ -88,8 +89,17 @@
 	font-size: 15px;
 	line-height: 140%;
 	letter-spacing: 0.94%;
-	color: var(--core-text-tertiary);
+	color: var(--core-text-secondary);
 	opacity: 0.5;
+}
+
+.title {
+	font-family: var(--font-special), sans-serif;
+	font-weight: 560;
+	font-size: 15px;
+	line-height: 140%;
+	letter-spacing: 0.94%;
+	text-transform: uppercase;
 }
 
 .spacer {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import type { BarButton } from 'src/components/ButtonBar';
 import { ButtonBar } from 'src/components/ButtonBar/ButtonBar';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import {
 	runButtonBarCustomClassPlay,
 	runButtonBarMissingTipPlay,
@@ -91,9 +91,9 @@ export default meta;
 export const Default: StoryObj<typeof ButtonBar> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<ButtonBar key={args.defaultSelectedIndex ?? 'none'} {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -102,9 +102,9 @@ export const SmallSize: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
 	args: { buttonSize: 's' },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<ButtonBar {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runButtonBarPlay({ canvasElement, args });
@@ -115,9 +115,9 @@ export const LargeSize: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
 	args: { buttonSize: 'l' },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<ButtonBar {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runButtonBarPlay({ canvasElement, args });
@@ -128,9 +128,9 @@ export const ExtraLargeSize: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
 	args: { buttonSize: 'xl' },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<ButtonBar {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runButtonBarPlay({ canvasElement, args });
@@ -140,12 +140,12 @@ export const ExtraLargeSize: StoryObj<typeof ButtonBar> = {
 export const SizeEdgeCases: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={24}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64} gap={24}>
 			{/* Invalid runtime values fall back to the medium frame. */}
 			<ButtonBar {...args} buttonSize={'' as unknown as 's'} />
 			{/* Unknown string presets also use medium. */}
 			<ButtonBar {...args} buttonSize={'huge' as unknown as 's'} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		await runButtonBarSizeEdgeCasesPlay({ canvasElement });
@@ -156,9 +156,9 @@ export const NoToggle: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
 	args: { toggle: false },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<ButtonBar {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runButtonBarNoTogglePlay({ canvasElement, args });
@@ -169,9 +169,9 @@ export const WithoutHandlers: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
 	args: { onClick: undefined, onChange: undefined, onToolTip: undefined },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<ButtonBar {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		await runButtonBarWithoutHandlersPlay({ canvasElement });
@@ -182,9 +182,9 @@ export const CustomClassName: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
 	args: { className: 'bb-custom-class' },
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<ButtonBar {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runButtonBarCustomClassPlay({ canvasElement, args });
@@ -197,9 +197,9 @@ export const MissingTipFallback: StoryObj<typeof ButtonBar> = {
 		buttons: [{ icon: 'basic.home', action: 'gallery' } as unknown as BarButton, ...listView],
 	},
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<ButtonBar {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement, args }) => {
 		await runButtonBarMissingTipPlay({ canvasElement, args });
@@ -405,9 +405,9 @@ export const DefaultActionBehavior: StoryObj<typeof ButtonBar> = {
 };
 
 const matchingButtonSizes = [
-	{ bar: 's', button: 'small' },
-	{ bar: 'm', button: 'medium' },
-	{ bar: 'l', button: 'large' },
+	{ bar: 's', button: 's' },
+	{ bar: 'm', button: 'm' },
+	{ bar: 'l', button: 'l' },
 ] as const;
 export const MatchesButtonHeights: StoryObj<typeof ButtonBar> = {
 	tags: ['tests'],
@@ -415,7 +415,7 @@ export const MatchesButtonHeights: StoryObj<typeof ButtonBar> = {
 		<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 			{matchingButtonSizes.map((size) => (
 				<div key={size.bar} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-					<Button label={size.button} size={size.button} />
+					<Button label={size.button} buttonSize={size.button} />
 					<ButtonBar buttons={listView} buttonSize={size.bar} aria-label={size.button} />
 				</div>
 			))}

@@ -47,25 +47,32 @@ Use tabBarName to name the tablist. The component supplies its ARIA label, with 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `accentColor` | `ColorValue` | `undefined` | Fallback color for selected text, icons, and the moving underline. Explicit selected-color props take precedence. |
 | `border` | `boolean` | `true` | Shows the baseline beneath the tabs. |
-| `borderColor` | `ColorValue` | `core-outline-secondary` | Baseline color. Accepts Slice color tokens or CSS colors. |
+| `borderColor` | `ColorValue` | `core-outline-secondary` | Baseline color. Accepts Slice color tokens or CSS colors; underlineColor takes precedence when supplied. |
 | `children` | `React.ReactNode` | `undefined` | Composed Tab choices. Takes priority over options, including when explicitly set to null. |
 | `closeWidth` | `number  /  string` | `auto` | Width of the separate close area. Numbers are pixels; strings accept CSS dimensions. |
 | `defaultValue` | `T  /  null` | `first enabled value` | Initial selection for an uncontrolled bar. Use null to start with no selection. |
 | `disabled` | `boolean` | `false` | Disables all tabs and the close action. |
 | `hasClose` | `boolean` | `false` | Shows one close action for the entire bar. Handle it with onClose. |
 | `height` | `number  /  string` | `auto` | Height of the bar. Numbers are pixels; strings accept CSS dimensions. |
+| `iconColor` | `ColorValue` | `undefined` | Icon color for unselected tabs. Defaults to the tab’s text color. |
+| `iconColorSelected` | `ColorValue` | `undefined` | Selected icon color. Takes precedence over `accentColor`; without either, icons follow the selected text color. |
 | `iconFill` | `boolean` | `false` | Uses the filled treatment for tab icons and the close icon. |
 | `iconGap` | `number` | `8` | Gap in pixels between the icon, label, and count. |
-| `iconSize` | `number` | `20` | Size of tab icons in pixels. |
+| `iconSize` | `number` | `20` | Default size of tab icons in pixels. Tab/TabOption iconSize overrides it. |
 | `justify` | `'start'  /  'center'  /  'end'` | `start` | Aligns compact or fixed-width tabs within the bar. Filled tabs occupy the available width. |
 | `options` | `TabOption<T>[]` | `[]` | Creates tabs from data. Each entry supplies Tab content and state, including a unique non-null value. Use composed Tab children for native button attributes and handlers. |
 | `padding` | `number  /  string` | `var(--spacing-s)` | Padding inside each tab and the close area. Numbers are pixels; strings accept CSS padding syntax. Explicit zero is preserved. |
 | `tabBarName` | `string` | `Tabs` | Accessible name for the tab group. ARIA attributes are managed internally. |
 | `tabGap` | `number` | `8` | Gap between tabs in pixels. |
 | `tabWidth` | `'compact'  /  'fill'  /  number` | `compact` | Use compact for natural content widths that shrink when space is limited, fill for equal shares of the available space, or a number for a fixed pixel width. |
+| `textColor` | `ColorValue` | `undefined` | Text color for unselected tabs. Defaults to `core-text-primary`. |
+| `textColorSelected` | `ColorValue` | `undefined` | Selected text color. Takes precedence over `accentColor`; without either, uses `core-text-special`. |
 | `textSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Text size for tab labels. |
 | `underline` | `boolean` | `true` | Shows the moving selection indicator. It slides and resizes to the selected enabled tab. |
+| `underlineColor` | `ColorValue` | `undefined` | Baseline color beneath the tabs. Overrides TabBar’s `borderColor`. A Tab override applies while that tab is selected. |
+| `underlineSelectedColor` | `ColorValue` | `undefined` | Moving selected-underline color. Takes precedence over `accentColor`; without either, uses `core-text-special`. |
 | `value` | `T  /  null` | `undefined` | Controlled selection. Use null to clear it. An unmatched value selects no tab. |
 | `width` | `number  /  string` | `100%` | Width of the complete bar, including its close area. Numbers are pixels; strings accept CSS dimensions. |
 | `divAttributes` | `React.HTMLAttributes<HTMLDivElement>` | `undefined` | Native attributes and events apply to the tablist. className and style apply to the outer layout wrapper. The tablist role, name, ARIA attributes, and horizontal orientation are managed by the component. |

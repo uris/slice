@@ -1,46 +1,67 @@
-import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
-import { IconButtonPreview } from './IconButtonPreview';
+import { FlexBox, Preset } from '@apple-pie/slice';
+import { IconButtonExampleExample, IconButtonMotionExample, IconButtonUsageExample } from './UsagePreviews';
 import { exampleCode, motionCode, usageCode } from './code';
 
 export function IconButtonDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>IconButton component</H1>
 			<P clipWidth>
 				Keep frequent actions within easy reach. IconButton pairs a compact action with optional activity dots and
 				counts.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-iconbutton--default"
-				components={[
-					{ label: 'Default', component: <IconButtonPreview /> },
-					{ label: 'Animated Toggle', component: <IconButtonPreview toggle /> },
-					{ label: 'With Count', component: <IconButtonPreview count={12} /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Set <Code>actionName</Code> and provide your click handler.
 			</P>
-			<CodeBlock filename="IconButtonExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-iconbutton--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <IconButtonUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'IconButtonExample.tsx',
+					},
+				]}
+			/>
 			<H3>Control selection</H3>
 			<P>
 				Use <Code>selected</Code> and <Code>onChange</Code> to control a toggle. For local state, use{' '}
 				<Code>defaultSelected</Code> instead.
 			</P>
-			<CodeBlock filename="IconButtonToggle.tsx" language="tsx" code={exampleCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-iconbutton--default"
+				components={[
+					{
+						label: 'Control selection',
+						component: <IconButtonExampleExample />,
+						code: exampleCode.trim(),
+						codeFilename: 'IconButtonToggle.tsx',
+					},
+				]}
+			/>
 			<H3>Animate an icon on toggle</H3>
 			<P>
 				Give <Code>selected</Code> and <Code>unselected</Code> different animation targets, such as rotation or scale.
 				The icon animates between them when toggled. This example uses rotation.
 			</P>
-			<CodeBlock filename="IconButtonMotion.tsx" language="tsx" code={motionCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-iconbutton--default"
+				components={[
+					{
+						label: 'Animate an icon on toggle',
+						component: <IconButtonMotionExample />,
+						code: motionCode.trim(),
+						codeFilename: 'IconButtonMotion.tsx',
+					},
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				Selected colors take priority over hover colors. Setting <Code>hover</Code> to false disables both background
@@ -223,6 +244,15 @@ export function IconButtonDoc() {
 				<DefaultVal>{'20'}</DefaultVal>
 			</Definition>
 			<P>{'Icon size in pixels. Zero hides its geometry; negative or nonfinite values fall back to 20px.'}</P>
+			<Definition id={'iconStrokeWidth'}>
+				<Prop>iconStrokeWidth</Prop>
+				<TypeDef>{'number'}</TypeDef>
+				<DefaultVal>{'undefined'}</DefaultVal>
+			</Definition>
+			<P>
+				Stroke width in the icon’s 20-unit viewBox. Omit to use <Code>Icon</Code>’s default. Zero removes strokes;
+				solid-filled artwork is unaffected.
+			</P>
 			<Definition id={'selected'}>
 				<Prop>selected</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -376,7 +406,7 @@ export function IconButtonDoc() {
 					' and focus handling. Preventing default on entry or focus suppresses the corresponding internal behavior. There are no drag or pan gestures.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -407,6 +437,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'iconColorSelected', title: 'iconColorSelected', code: true },
 			{ id: 'iconFill', title: 'iconFill', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
+			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'selected', title: 'selected', code: true },
 			{ id: 'showDot', title: 'showDot', code: true },
 			{ id: 'toggle', title: 'toggle', code: true },

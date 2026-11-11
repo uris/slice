@@ -28,13 +28,14 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 		children,
 		limit,
 		onMore,
-		size = 32,
+		size = 40,
 		lazyLoad = false,
 		textSize = 'm',
-		borderWidth = 3,
+		borderWidth,
 		backgroundColor,
 		overlap = 8,
 		gap = 0,
+		groupName,
 		borderColor,
 		borderColorHover,
 		outerBorderWidth = 3,
@@ -44,6 +45,10 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 		...divAttributes
 	} = props;
 	const { id: divId, className, style, ...rest } = divAttributes;
+	const accessibleName = groupName?.trim() || 'people';
+	const nativeAttributes = Object.fromEntries(
+		Object.entries(rest).filter(([key]) => key !== 'role' && !key.startsWith('aria-')),
+	);
 	const divStyle = style ?? ({} as React.CSSProperties);
 	const divClass = className ? ` ${className}` : '';
 
@@ -123,7 +128,14 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 	/* END.DEBUG */
 
 	return (
-		<div id={divId} className={classNames} style={{ ...divStyle, ...cssVars }} {...rest}>
+		<div
+			id={divId}
+			className={classNames}
+			style={{ ...divStyle, ...cssVars }}
+			{...nativeAttributes}
+			role="group"
+			aria-label={accessibleName}
+		>
 			<AvatarGroupContext.Provider value={context}>
 				{renderedAvatars}
 				{overflowCount > 0 && (

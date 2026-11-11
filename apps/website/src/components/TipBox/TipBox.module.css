@@ -6,16 +6,17 @@
 	justify-content: flex-start;
 	box-sizing: border-box;
 	width: 100%;
-	padding: 24px;
+	padding: 20px 24px;
 	margin: 24px 0;
 	gap: 8px;
 	border-style: solid;
+	border-radius: 16px;
 }
 
 .title {
 	font-family: var(--font-special), monospace;
 	font-weight: 500;
-	font-size: 13px;
+	font-size: 14px;
 	line-height: 1.42em;
 	letter-spacing: 6%;
 	text-transform: uppercase;

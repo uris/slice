@@ -19,6 +19,7 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 		borderRadius = 'var(--corner-round)',
 		knobRadius = 'var(--corner-round)',
 		knobWidth = 26,
+		name,
 		checked,
 		defaultChecked = false,
 		value,
@@ -39,6 +40,7 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 	} = props;
 	const [internalChecked, setInternalChecked] = useState(defaultChecked);
 	const on = checked ?? internalChecked;
+	const accessibleName = name?.trim() || 'Switch';
 	const reduceMotion = usePrefersReducedMotion();
 	const themeMotion = useTheme().current.motion;
 	const motionTransition = getWaterTransition(themeMotion, transition);
@@ -63,7 +65,10 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 
 	return (
 		<button
-			{...buttonAttributes}
+			{...Object.fromEntries(
+				Object.entries(buttonAttributes).filter(([key]) => key !== 'role' && !key.startsWith('aria-')),
+			)}
+			name={name}
 			type={type}
 			disabled={disabled}
 			className={`${css.wrapper}${className ? ` ${className}` : ''}`}
@@ -77,7 +82,7 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 				onChange?.(value, next);
 			}}
 			role="switch"
-			aria-label={buttonAttributes['aria-label'] ?? (buttonAttributes['aria-labelledby'] ? undefined : 'Switch')}
+			aria-label={accessibleName}
 			aria-checked={on}
 		>
 			{reduceMotion ? (

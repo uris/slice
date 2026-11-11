@@ -24,7 +24,7 @@
 	bottom: calc(-1 * var(--tab-bar-border));
 	left: 0;
 	height: 1px;
-	background: var(--core-text-special);
+	background: var(--tab-bar-underline-selected-color, var(--core-text-special));
 	pointer-events: none;
 }
 .close {

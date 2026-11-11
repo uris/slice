@@ -501,7 +501,7 @@ describe('regular input style overrides', () => {
  });
  it('preserves the existing glass editor style path and uses wrapper styles on fallback', () => {
   state.supportsLiquidGlass = true;
-  const props = { style: { borderRadius: 8, backgroundColor: 'purple', minHeight: 24, color: '#405261', fontSize: 20 }, borderRadius: 12, textColor: 'core-text-primary' as const, liquidGlassBackground: true };
+  const props = { style: { borderRadius: 8, backgroundColor: 'purple', minHeight: 24, color: lightTheme.colors['core-text-secondary'], fontSize: 20 }, borderRadius: 12, textColor: 'core-text-primary' as const, liquidGlassBackground: true };
   const view = render(tree(props));
   expect(surface()).toMatchObject({ borderRadius: 12, backgroundColor: 'transparent', minHeight: 48, borderWidth: 0 });
   expect(editor()).toMatchObject({ borderRadius: 8, backgroundColor: 'purple', minHeight: 24, fontSize: 20 });

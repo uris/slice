@@ -12,6 +12,7 @@ export function useReorderColumns<T>(
 	const draggedColId = React.useRef<string | null>(null);
 	const draggedColIndex = React.useRef<number | null>(null);
 	const draggedOverColId = React.useRef<string | null>(null);
+	const currentOrderRef = React.useRef<string[]>(columnDefinitions.map((column) => column.id));
 	const initialColumnOrder = React.useRef<string[] | null>(null);
 
 	// move column - draggedId is the dragged column's id, targetId is the id of the
@@ -19,12 +20,12 @@ export function useReorderColumns<T>(
 	const moveColumn = useCallback(
 		(draggedId: string, targetId: string) => {
 			if (draggedId === targetId) return;
-			setColumnOrder((prev) => {
-				const currentOrder = prev ?? columnDefinitions.map((column) => column.id);
+			{
+				const currentOrder = currentOrderRef.current;
 				const draggedIndex = currentOrder.indexOf(draggedId);
 				const targetIndex = currentOrder.indexOf(targetId);
-				if (draggedIndex === -1 || targetIndex === -1) return prev;
-				if (freezeColumn && (draggedIndex === 0 || targetIndex === 0)) return prev;
+				if (draggedIndex === -1 || targetIndex === -1) return;
+				if (freezeColumn && (draggedIndex === 0 || targetIndex === 0)) return;
 
 				/* if this is the first time moving columns save reference to the order before any move. */
 				if (!initialColumnOrder.current) initialColumnOrder.current = currentOrder;
@@ -42,29 +43,32 @@ export function useReorderColumns<T>(
 				}
 				next.splice(insertAt, 0, draggedId);
 
+				currentOrderRef.current = next;
+				setColumnOrder(next);
 				onColumnReorder?.(next);
-				return next;
-			});
+			}
 		},
-		[columnDefinitions, freezeColumn, onColumnReorder, setColumnOrder],
+		[freezeColumn, onColumnReorder, setColumnOrder],
 	);
 
 	// trigger drag start.
 	const dragStart = useCallback(
 		(col: ColumnDefinition<T, unknown>, e: React.DragEvent) => {
+			currentOrderRef.current = columnDefinitions.map((column) => column.id);
 			e.dataTransfer.setData('text/plain', col.id);
 			draggedColId.current = col.id;
 			setDraggedColId(col.id);
 			setIsDragging(true);
 			initialColumnOrder.current = null;
 		},
-		[setDraggedColId],
+		[setDraggedColId, columnDefinitions],
 	);
 
 	// dragover: e.preventDefault() is what tells the browser a drop is allowed
 	// here, so skipping it for the frozen column
 	const dragOver = useCallback(
 		(col: ColumnDefinition<T, unknown>, colIndex: number, e: React.DragEvent<HTMLTableCellElement>) => {
+			if (!draggedColId.current) return;
 			e.preventDefault();
 
 			/* prevent endless swap and prevent global from capturing event */
@@ -90,6 +94,7 @@ export function useReorderColumns<T>(
 	const dragDrop = useCallback(
 		(e: React.DragEvent | DragEvent, global = false) => {
 			e.preventDefault();
+			e.stopPropagation();
 
 			/* global drops, or drops on forzen column, revert moves - and tell the consumer,
 			 * since onColumnReorder already fired with the (now-abandoned) in-progress order */

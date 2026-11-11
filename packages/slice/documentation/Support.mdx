@@ -1,15 +1,15 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv, Label } from 'src';
+import { Chip, FlexBox } from 'src';
 import Notice from "./_components/Notice/Notice";
 
 <Meta title="Welcome/Support" />
 
-<FlexDiv width={"fill"} height={"fill"} justify={"start"} align={"center"}>
-  <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} justify={"start"} align={"center"}>
+  <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
     <Unstyled>
       <Notice>Note: During beta, repository access is limited to authorized contributors/collaborators.</Notice>
         # Support
-        Slice is currently in <Label>Beta</Label> - For support, please contact:
+        Slice is currently in <Chip>Beta</Chip> - For support, please contact:
         <a href={"mailto:urisvirott@gmail.com"}>urisvirott@gmail.com</a>
         
         - Feature requests
@@ -23,5 +23,5 @@ import Notice from "./_components/Notice/Notice";
         #### Coming soon!
         Full access to code base, track bugs, make feature requests via git hub.
     </Unstyled>
-  </FlexDiv>
-</FlexDiv>
+  </FlexBox>
+</FlexBox>

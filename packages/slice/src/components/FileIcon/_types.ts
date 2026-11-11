@@ -1,16 +1,34 @@
 import type React from 'react';
 
-type FileIconBaseProps = {
-	name?: string;
+export type FileIconType = `${FileIconTypes}`;
+
+export interface FileIconBaseProps {
+	type?: FileIconType;
+	filename?: string | File;
 	size?: number;
+	/** Cursor preference only; onClick determines keyboard interaction. */
 	pointer?: boolean;
 	disabled?: boolean;
-	onClick?: (e: React.MouseEvent<SVGElement, MouseEvent> | React.KeyboardEvent<SVGSVGElement>) => void;
-};
+	label?: string;
+	decorative?: boolean;
+	onClick?: React.MouseEventHandler<SVGSVGElement>;
+}
+export type FileIconProps = FileIconBaseProps &
+	Omit<
+		React.SVGAttributes<SVGSVGElement>,
+		| keyof FileIconBaseProps
+		| 'name'
+		| 'role'
+		| 'tabIndex'
+		| 'aria-hidden'
+		| 'aria-disabled'
+		| 'opacity'
+		| 'children'
+		| 'dangerouslySetInnerHTML'
+		| 'focusable'
+	>;
 
-export type FileIconProps = Omit<React.SVGAttributes<SVGSVGElement>, keyof FileIconBaseProps> & FileIconBaseProps;
-
-export enum FileIconNames {
+export enum FileIconTypes {
 	pdf = 'pdf',
 	text = 'text',
 	sheet = 'sheet',

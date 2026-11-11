@@ -17,6 +17,14 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 	const {
 		children,
 		tabBarName,
+		accentColor,
+		textColor,
+		textColorSelected,
+		underlineColor,
+		underlineSelectedColor,
+		iconColor,
+		iconColorSelected,
+
 		options = [],
 		value,
 		defaultValue,
@@ -174,9 +182,26 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		textSize,
 		width,
 	]);
+	const colors = useMemo(
+		() => ({
+			accentColor,
+			textColor,
+			textColorSelected,
+			underlineColor,
+			underlineSelectedColor,
+			iconColor,
+			iconColorSelected,
+		}),
+		[accentColor, textColor, textColorSelected, underlineColor, underlineSelectedColor, iconColor, iconColorSelected],
+	);
+	const selectedOption = Array.from(entries.current.values()).find((option) => Object.is(option.value, active));
+	const selectedAccent = selectedOption?.accentColor ?? accentColor;
+	const indicatorColor =
+		selectedOption?.underlineSelectedColor ?? underlineSelectedColor ?? selectedAccent ?? 'var(--core-text-special)';
+	const baselineColor = selectedOption?.underlineColor ?? underlineColor ?? borderColor;
 	const context = useMemo(
-		() => ({ value: active, firstValue, iconFill, disabled, register, select, navigate, onToolTip }),
-		[active, firstValue, iconFill, disabled, register, select, navigate, onToolTip],
+		() => ({ value: active, firstValue, iconFill, disabled, register, select, navigate, onToolTip, colors }),
+		[active, firstValue, iconFill, disabled, register, select, navigate, onToolTip, colors],
 	);
 	const vars = {
 		'--tab-bar-height': setStyle(height),
@@ -188,7 +213,8 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		'--tab-bar-tab-width': tabWidth === 'fill' ? 'auto' : tabWidth === 'compact' ? 'max-content' : setStyle(tabWidth),
 		'--tab-bar-tab-flex': tabWidth === 'fill' ? '1 1 0' : tabWidth === 'compact' ? '0 1 auto' : '0 0 auto',
 		'--tab-bar-border': border ? '1px' : '0px',
-		'--tab-bar-border-color': borderColor,
+		'--tab-bar-border-color': baselineColor,
+		'--tab-bar-underline-selected-color': indicatorColor,
 		'--tab-bar-justify': justify === 'start' ? 'flex-start' : justify === 'end' ? 'flex-end' : 'center',
 		'--tab-bar-close-width': setStyle(closeWidth),
 	} as React.CSSProperties;

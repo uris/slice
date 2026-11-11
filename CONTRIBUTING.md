@@ -37,6 +37,38 @@ const textColor = getTextColor();
 Apply this when writing or editing code; avoid unrelated repository-wide rewrites.
 Do not add memoization solely to make an extracted helper look optimized.
 
+## Composable APIs
+
+**Composability is a core Slice requirement.** Always look for useful connections
+between components, hooks, stores, and utilities when designing or changing an API.
+A value or callback produced by one Slice API should be directly usable by related
+APIs, with compatible types and semantics. Avoid forcing consumers to write adapter
+callbacks, reshape equivalent data, or use type assertions just to connect Slice APIs.
+
+For example, the web `useMicrophone` hook exposes `micOptions` as
+`DropDownOption<MicOption>[]`, and its `setMicrophone` callback accepts the selected
+option. Consumers can connect them directly:
+
+```
+import { DropDown, useMicrophone } from '@apple-pie/slice';
+
+function MicrophonePicker() {
+    const { micOptions, setMicrophone } = useMicrophone();
+    return <DropDown options={micOptions} onChangeOption={setMicrophone} />;
+}
+```
+
+Likewise, a `KeyboardShortcut` definition should work with both
+`useKeyboardShortcuts` and `PopMenuItem.shortcut`; the item handles its own display
+formatting while the application owns activation.
+
+Before introducing a new shape or callback signature, inspect related public APIs
+and reuse their types where their meaning matches. Preserve generic inference and
+optional/null behavior across the connection. Prefer explicit, typed integrations
+over coupling unrelated APIs or introducing broad unions merely to hide a mismatch.
+Document and test the direct composition, including assigning callbacks without
+casts or glue code, so future changes preserve the contract.
+
 ## Commands
 
 Run a workspace's command with `npm run <script> --workspace=<name>`.

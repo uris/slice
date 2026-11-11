@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import { RadioButton } from './RadioButton';
 import type { RadioButtonProps } from './_types';
 
@@ -9,9 +9,9 @@ const meta = {
 	title: 'Components/RadioButton',
 	component: RadioButton,
 	render: (args) => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<RadioButton {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	args: {
 		label: 'Monthly',
@@ -104,10 +104,10 @@ export const Cancelled: Story = {
 export const Group: Story = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv padding={64} gap={16}>
+		<FlexBox padding={64} gap={16}>
 			<RadioButton label="Monthly" name="schedule" value="monthly" defaultChecked />
 			<RadioButton label="Annual" name="schedule" value="annual" />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);
@@ -218,12 +218,12 @@ export const ControlledUpdates: Story = {
 export const ContentAndNaming: Story = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv direction="column" gap={16} padding={32}>
+		<FlexBox direction="column" gap={16} padding={32}>
 			<RadioButton label="Monthly">Annual</RadioButton>
 			<RadioButton>{0}</RadioButton>
 			<RadioButton actionName="Choose annual" />
 			<RadioButton />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const c = within(canvasElement);

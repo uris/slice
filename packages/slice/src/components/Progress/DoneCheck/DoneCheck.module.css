@@ -1,18 +1,22 @@
 .wrapper {
 	composes: row from "../../../utils/styling/flexBox.module.css";
-	height: var(--icon-height);
-	max-height: var(--icon-height);
-	width: var(--icon-width);
-	max-width: var(--icon-width);
+	width: var(--icon-size);
+	height: var(--icon-size);
+	flex-shrink: 0;
 	overflow: visible;
 }
 
 .icon {
 	composes: row from "../../../utils/styling/flexBox.module.css";
-	height: var(--icon-height);
-	max-height: var(--icon-height);
-	width: var(--icon-width);
-	max-width: var(--icon-width);
+	width: var(--icon-size);
+	height: var(--icon-size);
 	scale: var(--icon-scale);
 	transition: var(--icon-transition);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.icon {
+		scale: 1;
+		transition: none;
+	}
 }

@@ -1,3 +1,4 @@
+import { lightTheme } from '../../theme';
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -69,7 +70,7 @@ describe('Icon in glass', () => {
 it('resolves icon tokens and palette values before falling back to primary', () => {
     const view = render(icon({ iconColor: 'core-icon-secondary' }));
     expect(state.native.tintToken).toBe('core-icon-secondary');
-    view.rerender(icon({ iconColor: '#405261' }));
+    view.rerender(icon({ iconColor: lightTheme.colors['core-icon-secondary'] }));
     expect(state.native.tintToken).toBe('core-icon-secondary');
     view.rerender(icon({ iconColor: '#123456' }));
     expect(state.native.tintToken).toBe('core-icon-primary');

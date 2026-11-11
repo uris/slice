@@ -4,29 +4,16 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
-import { ContentEditablePreview } from './ContentEditablePreview';
-import { activationCode, persistenceCode, usageCode } from './code';
+import { FlexBox, Preset } from '@apple-pie/slice';
+import { ContentEditableClampExample, ContentEditableUsageExample } from './UsagePreviews';
+import { activationCode, clampCode, persistenceCode, usageCode } from './code';
 
 export function ContentEditableDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">ContentEditable component</H1>
 			<P clipWidth>Edit titles and labels in place, keeping quick changes close to the content.</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-contenteditable--default"
-				components={[
-					{ label: 'Click to edit', component: <ContentEditablePreview variant="click" /> },
-					{
-						label: 'Clamped title',
-						component: <ContentEditablePreview variant="wrapped" />,
-					},
-				]}
-			/>
-			<TipBox title={'Tip:'} inline>
-				Click the title to directly focus and edit content, then click away or press Enter to save; Escape cancels.
-			</TipBox>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{
@@ -36,7 +23,39 @@ export function ContentEditableDoc() {
 				{'making its content editable. Exiting saves changed text through '}
 				<Code>{'onCommit'}</Code>.
 			</P>
-			<CodeBlock filename="ProjectTitle.tsx" language="tsx" code={usageCode.trim()} />
+			<TipBox inline noBorder>
+				Click the title to directly focus and edit content, then click away or press Enter to save; Escape cancels.
+			</TipBox>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-contenteditable--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <ContentEditableUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'ProjectTitle.tsx',
+					},
+				]}
+			/>
+			<H3>Clamp overflowing text to one line</H3>
+			<P>
+				Set <Code>{'clamp={1}'}</Code> and constrain <Code>width</Code> to show long text on one line with an ellipsis.
+				Editing reveals the full text; finishing restores the clamp.
+			</P>
+			<TipBox inline noBorder>
+				Click the title to edit the full text. Press Enter to save or Escape to cancel.
+			</TipBox>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-contenteditable--default"
+				components={[
+					{
+						label: 'One-line overflow',
+						component: <ContentEditableClampExample />,
+						code: clampCode.trim(),
+						codeFilename: 'ClampedTitle.tsx',
+					},
+				]}
+			/>
 			<H3>Choose how editing starts</H3>
 			<P>
 				{'Use '}
@@ -298,7 +317,7 @@ export function ContentEditableDoc() {
 				<Code>{'onPaste'}</Code>
 				{' skips the corresponding internal action.'}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

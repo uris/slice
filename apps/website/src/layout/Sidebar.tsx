@@ -2,27 +2,21 @@
 
 import { SidebarDocList } from '@/components/SidebarDocList/SidebarDocList';
 import { SidebarDocuments } from '@/components/SidebarDocuments/SidebarDocuments';
-import { SidebarHeader } from '@/components/SidebarHeader/SidebarHeader';
-import { SquareTabs, type Tab } from '@/components/SqaureTabs/SqaureTabs';
 import { getSidebarDocSections } from '@/docs/registry/sidebar';
 import { usePackageType, useSlug } from '@/docs/stores/store';
-import { Package, sidePanelConstraints, surfaceDarker } from '@/src/consts/consts';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { Package, sidePanelConstraints, surfaceYellow } from '@/src/consts/consts';
+import { FlexBox, Preset, Tab, TabBar } from '@apple-pie/slice';
 import { useCallback, useEffect } from 'react';
-
-const packageTabs: readonly Tab<Package>[] = [
-	{ name: 'React', id: Package.React, value: '/docs/react/get-started/' },
-	{ name: 'React Native', id: Package.ReactNative, value: '/docs/react-native/get-started/' },
-];
 
 export function Sidebar() {
 	const packageType = usePackageType();
 	const slug = useSlug();
 
 	const handleChangeTab = useCallback(
-		(tab: Tab<Package>) => {
-			if (tab.id === packageType) return;
-			window.open(tab.value, '_top');
+		(tab: Package) => {
+			console.log(`/${tab}`);
+			if (tab === packageType) return;
+			window.open(`/docs/${tab}/overview`, '_top');
 		},
 		[packageType],
 	);
@@ -34,21 +28,23 @@ export function Sidebar() {
 	}, [slug]);
 
 	return (
-		<FlexDiv
+		<FlexBox
 			preset={Preset.FillStart}
-			background={surfaceDarker}
+			background={'core-surface-primary'}
 			style={{
 				minWidth: sidePanelConstraints.min,
 			}}
 		>
-			<SidebarHeader />
 			<SidebarDocuments>
-				<SquareTabs<Package> tabs={packageTabs} selected={packageType} onChange={handleChangeTab} />
-				<FlexDiv preset={Preset.FillScroll}>
+				<TabBar<Package> tabWidth="fill" accentColor={surfaceYellow} value={packageType} onChange={handleChangeTab}>
+					<Tab value={Package.React}>React</Tab>
+					<Tab value={Package.ReactNative}>React Native</Tab>
+				</TabBar>
+				<FlexBox preset={Preset.FillScroll}>
 					<SidebarDocList items={getSidebarDocSections(packageType)} />
-				</FlexDiv>
+				</FlexBox>
 			</SidebarDocuments>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

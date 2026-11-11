@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Hooks/useTheme" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useTheme
         Main Slice theming hook. Returns the active theme plus helpers and token maps for CSS variables, class names, and typography.
@@ -80,5 +80,5 @@ import {FlexDiv} from '../../components/FlexDiv';
         - Theme changes triggered through `set()` or `toggle()` also refresh the `slice-theme` and `slice-system-theme` cookies for future server renders.
         - Calling <code>set('system')</code> marks the theme as system-derived, while calling <code>set('lightMode')</code>, <code>set('darkMode')</code>, or <code>toggle()</code> marks it as explicitly selected.
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

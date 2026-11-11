@@ -100,6 +100,10 @@ export const LightVariant: Story = {
 		await expect(badge.style.getPropertyValue('--badge-color')).toBe('var(--core-text-primary)');
 		await expect(badge.style.getPropertyValue('--badge-bg')).toBe('var(--core-badge-secondary)');
 		await expect(getComputedStyle(badge).minWidth).toBe('24px');
+		await expect(getComputedStyle(badge).paddingInlineStart).toBe('6px');
+		await expect(getComputedStyle(badge).paddingInlineEnd).toBe('6px');
+		await expect(getComputedStyle(badge).paddingTop).toBe('2px');
+		await expect(getComputedStyle(badge).paddingBottom).toBe('2px');
 	},
 };
 

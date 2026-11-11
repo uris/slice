@@ -1,107 +1,199 @@
-import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { Button, FlexDiv, Preset } from '@apple-pie/slice';
+import { contentMaxWidth, contentMinWidth } from '@/src/consts/consts';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import {
+	ButtonActionPreview,
+	ButtonChildrenPreview,
+	ButtonFormPreview,
+	ButtonMotionPreview,
+	ButtonPreview,
+	ButtonProgressPreview,
+	ButtonRefPreview,
+	ButtonTooltipPreview,
+	ButtonWorkingPreview,
+} from './ButtonPreview';
+import {
+	childrenCode,
+	disabledCode,
 	formCode,
+	iconOnlyCode,
 	iconsCode,
 	motionCode,
+	outlineCode,
 	progressCode,
 	refCode,
+	solidCode,
 	stylingCode,
+	textCode,
 	tooltipCode,
 	usageCode,
-	variantsCode,
 	workingCode,
 } from './code';
 
 export function ButtonDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={contentMaxWidth} style={{ minWidth: contentMinWidth }}>
 			<Path />
 			<H1 id={'title'}>Button component</H1>
-			<P clipWidth>
-				Make the next step clear. Button brings labels, icons, and busy states to the actions in your interface.
+			<P clipWidth>Make the next step clear. Button brings labels, icons, and busy states to the actions in your UI.</P>
+			<H2 id={'usage'}>Usage</H2>
+			<H3>Basic use of variants</H3>
+			<P>
+				Use <Code>solid</Code> for emphasis, <Code>outline</Code> for a bordered action, or <Code>text</Code> for a
+				quieter option.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[
+					{ label: 'Solid', component: <ButtonPreview label="Solid" variant="solid" />, code: solidCode.trim() },
+					{
+						label: 'Outline',
+						component: <ButtonPreview label="Outline" variant="outline" />,
+						code: outlineCode.trim(),
+					},
+					{
+						label: 'Text',
+						component: <ButtonPreview label="Text Button" variant="text" />,
+						code: textCode.trim(),
+					},
+				]}
+			/>
+			<H3>Handle actions</H3>
+			<P>
+				Set a <Code>label</Code> and connect <Code>onClick</Code> to your application action.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[{ label: 'Handle actions', component: <ButtonActionPreview />, code: usageCode.trim() }]}
+			/>
+
+			<H3>Add icons</H3>
+			<P>
+				Place an icon on either side of the label. Give icon-only actions an <Code>aria-label</Code>.
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
 				components={[
 					{
-						label: 'Primary buttons',
-						component: (
-							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-								<Button label="Primary" variant="solid" iconRight="arrows.arrow-right" />
-								<Button label="Primary" variant="solid" iconRight="arrows.arrow-right" working />
-							</div>
-						),
+						label: 'Icon beside a label',
+						component: <ButtonPreview label="Continue" iconRight="arrows.arrow-right" />,
+						code: iconsCode.trim(),
 					},
 					{
-						label: 'Secondary buttons',
-						component: (
-							<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-								<Button label="Secondary" variant="outline" />
-								<Button label="Secondary" variant="outline" working />
-							</div>
-						),
+						label: 'Icon only',
+						component: <ButtonPreview iconLeft="basic.cross" round aria-label="Quit" />,
+						code: iconOnlyCode.trim(),
 					},
 				]}
 			/>
-			<H2 id={'usage'}>Usage</H2>
+
+			<H3>Custom content</H3>
 			<P>
-				Set a <Code>label</Code> and connect <Code>onClick</Code> to your application action.
+				Use <Code>children</Code> for an avatar and text or another custom composition. Set{' '}
+				<Code>buttonSize="auto"</Code> to fit the content, with 6px top and bottom padding. Children form a centered
+				flex row; <Code>gap</Code> defaults to 4px and accepts 0. Use padding props or a wrapper for additional spacing.
 			</P>
-			<CodeBlock filename="ButtonExample.tsx" language="tsx" code={usageCode.trim()} />
-			<H3>Choose a variant</H3>
-			<P>Use solid for emphasis, outline for a bordered action, or text for a quieter option.</P>
-			<CodeBlock filename="ButtonVariants.tsx" language="tsx" code={variantsCode.trim()} />
-			<H3>Add icons</H3>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--auto-children"
+				components={[{ label: 'Custom content', component: <ButtonChildrenPreview />, code: childrenCode.trim() }]}
+			/>
+			<H3>Disable an action</H3>
 			<P>
-				Place an icon on either side of the label. Give icon-only actions an <Code>aria-label</Code>.
+				Set <Code>disabled</Code> while an action is unavailable. Disabled buttons cannot be activated by mouse or
+				keyboard.
 			</P>
-			<CodeBlock filename="ButtonIcons.tsx" language="tsx" code={iconsCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[
+					{
+						label: 'Disabled',
+						component: <ButtonPreview label="Continue" disabled />,
+						code: disabledCode.trim(),
+					},
+				]}
+			/>
 			<H3>Adjust size and color</H3>
 			<P>
-				Use <Code>size</Code> for layout, <Code>textSize</Code> for typography, and <Code>width="fill"</Code> to fill
-				the parent.
+				Use <Code>buttonSize</Code> for layout, <Code>textSize</Code> for typography, and <Code>width="fill"</Code> to
+				fill the parent.
 			</P>
-			<CodeBlock filename="ButtonStyling.tsx" language="tsx" code={stylingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[
+					{
+						label: 'Size and color',
+						component: (
+							<div style={{ width: 320, maxWidth: '100%' }}>
+								<ButtonPreview
+									label="Continue"
+									variant="solid"
+									buttonSize="l"
+									textSize="l"
+									backgroundColor="#2563eb"
+									textColor="#ffffff"
+									width="fill"
+								/>
+							</div>
+						),
+						code: stylingCode.trim(),
+					},
+				]}
+			/>
+
 			<H3>Show real work in progress</H3>
 			<P>
-				Your application controls <Code>isSaving</Code> and performs <Code>saveChanges</Code>. Set <Code>working</Code>{' '}
-				while the request runs, then clear it when the request finishes.
+				Pass your application’s async <Code>saveChanges</Code> function to this example. Set <Code>working</Code> while
+				the request runs, then clear it when the request finishes.
 			</P>
-			<CodeBlock filename="ButtonWorking.tsx" language="tsx" code={workingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[{ label: 'Working', component: <ButtonWorkingPreview />, code: workingCode.trim() }]}
+			/>
+
 			<H3>Delay an action</H3>
 			<P>
 				Use <Code>progress</Code> with a <Code>duration</Code> for a timed delay before the callback runs. This timer
 				does not track a real operation; use <Code>working</Code> for requests and form submissions.
 			</P>
-			<CodeBlock filename="ButtonProgress.tsx" language="tsx" code={progressCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[{ label: 'Delayed action', component: <ButtonProgressPreview />, code: progressCode.trim() }]}
+			/>
+
 			<H3>Submit a form</H3>
 			<P>
 				Native form attributes pass through. The default type is button, so set <Code>type="submit"</Code> explicitly.
 			</P>
-			<CodeBlock filename="ButtonForm.tsx" language="tsx" code={formCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[{ label: 'Form submission', component: <ButtonFormPreview />, code: formCode.trim() }]}
+			/>
+
 			<H3>Connect a tooltip</H3>
 			<P>
 				Provide the tooltip text and connect <Code>onToolTip</Code> to your tooltip UI.
 			</P>
-			<CodeBlock filename="ButtonTooltip.tsx" language="tsx" code={tooltipCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[{ label: 'Tooltip', component: <ButtonTooltipPreview />, code: tooltipCode.trim() }]}
+			/>
+
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
-				Children take priority over label. Icons are decorative and do not add tab stops. The optional count uses{' '}
-				<Code openURL="/docs/react/badge/">Badge</Code> and hides zero or invalid values.
+				<Code>children</Code> take priority over <Code>label</Code>. Icons are decorative and do not add tab stops. The
+				optional count uses <Code openURL="/docs/react/badge/">Badge</Code> and hides zero or invalid values.
 			</P>
 			<P>
 				Both native <Code>disabled</Code> and <Code>state="disabled"</Code> block activation. Busy buttons also block
 				repeated actions and hide the count and dot until they return to normal.
 			</P>
 			<P>
-				Controlled working shows the spinner until your application clears it, without firing another click. Timed
-				progress waits for its duration, then calls onClick once with undefined. Disabling the button or unmounting it
-				cancels that pending action.
+				Controlled <Code>working</Code> shows the spinner until your application clears it, without firing another
+				click. Timed progress waits for its duration, then calls <Code>onClick</Code> once with <Code>undefined</Code>.
+				Disabling the button or unmounting it cancels that pending action.
 			</P>
 			<P>
 				Timed progress suppresses immediate form submission and does not submit a form or follow a link on completion.
@@ -141,18 +233,48 @@ export function ButtonDoc() {
 				<DefaultVal>{'variant disabled background'}</DefaultVal>
 			</Definition>
 			<P>Background color when disabled. Independent of backgroundColor.</P>
+			<Definition id={'borderColor'}>
+				<Prop>borderColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Overrides the border color for every variant, size, and state, including hover and disabled. When omitted, the
+				variant’s color applies.
+			</P>
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'corner-round'}</DefaultVal>
 			</Definition>
 			<P>Corner radius. Numbers use pixels; strings accept CSS lengths.</P>
+			<Definition id={'borderWidth'}>
+				<Prop>borderWidth</Prop>
+				<TypeDef>{'number | string'}</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Overrides the border width for every variant and size. Numbers use pixels; strings accept CSS lengths. Explicit
+				zero removes the border. When omitted, the variant’s width applies.
+			</P>
+			<Definition id={'buttonSize'}>
+				<Prop>buttonSize</Prop>
+				<TypeDef>{"'auto' | 's' | 'm' | 'l' | 'xl' | number"}</TypeDef>
+				<DefaultVal>{'m'}</DefaultVal>
+			</Definition>
+			<P>
+				Shared frame sizes: s=24, m=36, l=44, and xl=56px. A positive number sets a pixel height; auto fits the content
+				and padding. Typography is controlled separately by textSize.
+			</P>
 			<Definition id={'children'}>
 				<Prop>children</Prop>
 				<TypeDef>{'React.ReactNode'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Custom label content. Takes priority over label; use non-interactive content inside the button.</P>
+			<P>
+				Custom content in a vertically centered flex row. Takes priority over label; keep it noninteractive. Use
+				buttonSize="auto" to fit taller children.
+			</P>
 			<Definition id={'count'}>
 				<Prop>count</Prop>
 				<TypeDef>{'number'}</TypeDef>
@@ -192,6 +314,12 @@ export function ButtonDoc() {
 				Uses core-surface-primary for the enabled background, ahead of variant and backgroundColor. This controls the
 				fill color, not width.
 			</P>
+			<Definition id="gap">
+				<Prop>gap</Prop>
+				<TypeDef>number</TypeDef>
+				<DefaultVal>4</DefaultVal>
+			</Definition>
+			<P>Spacing in pixels between icons and content, and between children. Use 0 for no gap.</P>
 			<Definition id={'iconColor'}>
 				<Prop>iconColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
@@ -237,18 +365,40 @@ export function ButtonDoc() {
 				URL opened after a normal activation with window.open. onClick can cancel navigation with
 				event.preventDefault(). Timed progress does not navigate on completion.
 			</P>
+			<Definition id="padding">
+				<Prop>padding</Prop>
+				<TypeDef>number | string</TypeDef>
+				<DefaultVal>automatic</DefaultVal>
+			</Definition>
+			<P>
+				Overrides padding on all sides. Children and auto-sized buttons default to 6px vertically; labels in fixed
+				frames use zero vertical padding. Regular horizontal padding is 12px, reduced by 4px on icon edges. Text buttons
+				use 4px horizontally; round buttons center their content. Individual side props take precedence.
+			</P>
+			<Definition id="paddingBottom">
+				<Prop>paddingBottom</Prop>
+				<TypeDef>number | string</TypeDef>
+				<DefaultVal>automatic</DefaultVal>
+			</Definition>
+			<P>Bottom padding; overrides padding.</P>
 			<Definition id={'paddingLeft'}>
 				<Prop>paddingLeft</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'automatic'}</DefaultVal>
 			</Definition>
-			<P>Left padding in pixels, overriding the size, variant, and round defaults.</P>
+			<P>Left padding, overriding the shared optical defaults and padding. Numbers are pixels.</P>
 			<Definition id={'paddingRight'}>
 				<Prop>paddingRight</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'automatic'}</DefaultVal>
 			</Definition>
-			<P>Right padding in pixels, overriding the size, variant, and round defaults.</P>
+			<P>Right padding, overriding the shared optical defaults and padding. Numbers are pixels.</P>
+			<Definition id="paddingTop">
+				<Prop>paddingTop</Prop>
+				<TypeDef>number | string</TypeDef>
+				<DefaultVal>automatic</DefaultVal>
+			</Definition>
+			<P>Top padding; overrides padding.</P>
 			<Definition id={'progress'}>
 				<Prop>progress</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -270,15 +420,6 @@ export function ButtonDoc() {
 				<DefaultVal>{'false'}</DefaultVal>
 			</Definition>
 			<P>Shows a status dot. Hidden while busy.</P>
-			<Definition id={'size'}>
-				<Prop>size</Prop>
-				<TypeDef>{"'large' | 'medium' | 'small'"}</TypeDef>
-				<DefaultVal>{'medium'}</DefaultVal>
-			</Definition>
-			<P>
-				Layout size: large is 48px high, medium is 36px, and small fits the content with compact padding. Typography is
-				controlled separately by textSize.
-			</P>
 			<Definition id={'state'}>
 				<Prop>state</Prop>
 				<TypeDef>{"'normal' | 'hover' | 'disabled'"}</TypeDef>
@@ -379,7 +520,10 @@ export function ButtonDoc() {
 				Define named <Code>variants</Code> and select them with <Code>initial</Code> and <Code>animate</Code>. Exit
 				animations also need an <Code>AnimatePresence</Code> parent.
 			</P>
-			<CodeBlock filename="ButtonMotion.tsx" language="tsx" code={motionCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[{ label: 'Animation', component: <ButtonMotionPreview />, code: motionCode.trim() }]}
+			/>
 			<Definition id={'animate'}>
 				<Prop>animate</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -450,7 +594,10 @@ export function ButtonDoc() {
 				The ref exposes <Code>ButtonHandle</Code>, not the DOM button. In a client component, use the handle when a
 				separate control needs to activate the same action.
 			</P>
-			<CodeBlock filename="ButtonWithRef.tsx" language="tsx" code={refCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
+				components={[{ label: 'Activate through a ref', component: <ButtonRefPreview />, code: refCode.trim() }]}
+			/>
 			<Definition id={'triggerClick'}>
 				<Method>triggerClick</Method>
 				<TypeDef>{'() => void'}</TypeDef>
@@ -459,7 +606,7 @@ export function ButtonDoc() {
 				Runs the same activation path with no mouse event. Honors disabled and busy state, link behavior, and timed
 				progress. It does not focus the button or perform native submit/reset behavior.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 
@@ -474,13 +621,17 @@ export const buttonTrackedItems: TrackedItem[] = [
 		items: [
 			{ id: 'backgroundColor', title: 'backgroundColor', code: true },
 			{ id: 'backgroundColorDisabled', title: 'backgroundColorDisabled', code: true },
+			{ id: 'borderColor', title: 'borderColor', code: true },
 			{ id: 'borderRadius', title: 'borderRadius', code: true },
+			{ id: 'borderWidth', title: 'borderWidth', code: true },
+			{ id: 'buttonSize', title: 'buttonSize', code: true },
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'count', title: 'count', code: true },
 			{ id: 'destructive', title: 'destructive', code: true },
 			{ id: 'disabled', title: 'disabled', code: true },
 			{ id: 'duration', title: 'duration', code: true },
 			{ id: 'fill', title: 'fill', code: true },
+			{ id: 'gap', title: 'gap', code: true },
 			{ id: 'iconColor', title: 'iconColor', code: true },
 			{ id: 'iconFill', title: 'iconFill', code: true },
 			{ id: 'iconLeft', title: 'iconLeft', code: true },
@@ -488,12 +639,14 @@ export const buttonTrackedItems: TrackedItem[] = [
 			{ id: 'iconSize', title: 'iconSize', code: true },
 			{ id: 'label', title: 'label', code: true },
 			{ id: 'link', title: 'link', code: true },
+			{ id: 'padding', title: 'padding', code: true },
+			{ id: 'paddingBottom', title: 'paddingBottom', code: true },
 			{ id: 'paddingLeft', title: 'paddingLeft', code: true },
 			{ id: 'paddingRight', title: 'paddingRight', code: true },
+			{ id: 'paddingTop', title: 'paddingTop', code: true },
 			{ id: 'progress', title: 'progress', code: true },
 			{ id: 'round', title: 'round', code: true },
 			{ id: 'showDot', title: 'showDot', code: true },
-			{ id: 'size', title: 'size', code: true },
 			{ id: 'state', title: 'state', code: true },
 			{ id: 'target', title: 'target', code: true },
 			{ id: 'textColor', title: 'textColor', code: true },

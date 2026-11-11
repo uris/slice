@@ -1,10 +1,10 @@
-import { FlexDiv, Preset, useTheme } from '@apple-pie/slice';
+import { FlexBox, Preset, useTheme } from '@apple-pie/slice';
 
 export function SliceLogo(props: Readonly<{ size?: number; color?: string }>) {
 	const theme = useTheme();
 	const { size = 44, color = theme.colors['core-icon-primary'] } = props;
 	return (
-		<FlexDiv width={'auto'}>
+		<FlexBox width={'auto'}>
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277.63 121.92" height={size}>
 				<title>Slice Logo</title>
 				<path
@@ -28,6 +28,6 @@ export function SliceLogo(props: Readonly<{ size?: number; color?: string }>) {
 					fill={color}
 				/>
 			</svg>
-		</FlexDiv>
+		</FlexBox>
 	);
 }

@@ -1,92 +1,35 @@
 'use client';
 
-import React, { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useObserveResize, useTheme } from '../../hooks';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useObserveResize } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import type { ColorValue } from '../../theme/colors/resolveColor';
 import { corners } from '../../theme/corners/corners';
-import { pointerPosition, setStyle } from '../../utils/functions/misc';
+import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import css from './DraggablePanel.module.css';
-import type { Constraint } from './_types';
+import type { DragHandleProps, DraggablePanelProps, DraggablePanelResizeInfo } from './_types';
+import { resolvePanelConstraints } from './panelConstraints';
+export type { DragHandleProps, DraggablePanelProps } from './_types';
 
-type Info = {
-	div: RefObject<HTMLDivElement | null>;
-	divWidth: number;
-	divHeight: number;
-	deltaWidth: number;
+const defaultConstraints = { initial: 250, min: 250, max: 500 };
+type Gesture = {
+	pointerId: number;
+	startX: number;
+	startWidth: number;
+	width: number;
+	height: number;
+	release: () => void;
 };
 
-type ResizeHandle = {
-	width?: number;
-	color?: ColorValue;
-	offsetX?: boolean;
-};
-
-type DraggablePanelBaseProps = {
-	children?: any;
-	onResize?: (info: Info) => void;
-	onResizeEnd?: (info: Info) => void;
-	onResizeStart?: (info: Info) => void;
-	containerRef?: React.RefObject<HTMLDivElement | null>;
-	sizeConstraints?: Constraint;
-	isClosed?: boolean;
-	resizeHandle?: Partial<ResizeHandle>;
-	borderRight?: any;
-	borderLeft?: any;
-	backgroundColor?: ColorValue;
-	drags?: 'left' | 'right' | false;
-	dragHandle?: boolean;
-	dragHandleStyle?: DragHandleProps;
-	disableOnContext?: boolean;
-	isTouchDevice?: boolean;
-	/**
-	 * Overrides the initial width transition while relative constraints are
-	 * resolved after mount. Fixed pixel widths render at their initial size
-	 * on the server and do not need an opening transition. Numbers are in
-	 * milliseconds; strings are CSS durations (e.g. '0.5s'). Later width
-	 * changes use the normal --motion-water-duration timing.
-	 */
-	transitionDurationOnInit?: string | number;
-};
-
-export type DraggablePanelProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof DraggablePanelBaseProps> &
-	DraggablePanelBaseProps;
-
-const MIN_SIZE = 50;
-
-function normalizeConstraintValue(value: number, containerWidth: number | undefined, fallback: number) {
-	let normalized = value;
-	if (normalized <= 1 && normalized >= 0) {
-		normalized = containerWidth ? containerWidth * normalized : fallback;
-	}
-	if (normalized > 1 && normalized < MIN_SIZE) normalized = MIN_SIZE;
-	return normalized;
-}
-
-function resolveConstraints(sizeConstraints: Constraint, containerWidth?: number) {
-	const initial = normalizeConstraintValue(sizeConstraints.initial, containerWidth, sizeConstraints.initial);
-	const min = normalizeConstraintValue(sizeConstraints.min, containerWidth, initial);
-	const max = normalizeConstraintValue(sizeConstraints.max, containerWidth, initial);
-	return {
-		initial,
-		min,
-		max,
-	};
-}
-
-export const DraggablePanel = React.memo((rawProps: DraggablePanelProps) => {
+export const DraggablePanel = React.memo(function DraggablePanel(rawProps: DraggablePanelProps) {
 	const props = resolveColorProps(rawProps);
-	const theme = useTheme();
 	const {
 		children,
-		sizeConstraints = { initial: 250, min: 250, max: 500 },
+		sizeConstraints = defaultConstraints,
 		isClosed = true,
-		resizeHandle = {
-			width: 10,
-			color: 'transparent',
-			offsetX: true,
-		},
+		resizeHandle,
+		resizeHandleLabel = 'Resize panel',
 		borderRight = '1px solid var(--core-outline-secondary)',
 		borderLeft = '1px solid var(--core-outline-secondary)',
 		backgroundColor = 'transparent',
@@ -97,407 +40,296 @@ export const DraggablePanel = React.memo((rawProps: DraggablePanelProps) => {
 		dragHandleStyle = { height: 24, width: 9 },
 		transitionDurationOnInit,
 		containerRef,
-		onResize = () => null,
-		onResizeStart = () => null,
-		onResizeEnd = () => null,
-		...divAttributes
+		onResize,
+		onResizeStart,
+		onResizeEnd,
+		onContextMenu,
+		id,
+		className,
+		style,
+		...attributes
 	} = props;
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
-	const handle = useRef<HTMLDivElement>(null);
 	const div = useRef<HTMLDivElement>(null);
-	const [isDragging, setIsDragging] = useState(false);
-	const isOver = useRef<boolean>(false);
-	const gripper = { ...resizeHandle };
+	const handle = useRef<HTMLDivElement>(null);
+	const generatedId = useId();
+	const panelId = id ?? generatedId;
 	const containerSize = useObserveResize(containerRef);
-	const panelSize = useObserveResize(div);
-	const [handleHighlight, setHandleHighlight] = useState(false);
-	const [lastWidth, setLastWidth] = useState<number | string | null>(null);
-	const [panelClosed, setPanelClosed] = useState<boolean>(isClosed);
-	const [constraints, setConstraints] = useState<Constraint>(() => resolveConstraints(sizeConstraints));
-	const [contWidth, setContWidth] = useState<number | undefined>(resolveInitContWidth());
-	const [mounted, setMounted] = useState<boolean>(false);
-	const timer = useRef<any>(null);
-	const closed = panelSize.width <= 1;
-
-	const startX = useRef<number>(0);
-	const startWidth = useRef<number>(0);
-	const divWidth = useRef<number>(0);
-	const divHeight = useRef<number>(0);
-	const deltaWidth = useRef<number>(0);
-
-	// resolve the initial size of the container to window or ref
-	function resolveInitContWidth() {
-		if (containerRef?.current) return containerRef.current.offsetWidth;
-		if (globalThis.window !== undefined) return window.innerWidth;
-		return undefined;
-	}
-
-	// fall back to the window width when no container ref is provided
-	const handleWindowResize = useCallback(() => {
-		if (!containerRef?.current) setContWidth(window.innerWidth);
+	const [windowWidth, setWindowWidth] = useState<number>();
+	const containerWidth = containerRef ? containerSize.width || undefined : windowWidth;
+	const { initial, min, max } = resolvePanelConstraints(sizeConstraints, containerWidth);
+	const [lastWidth, setLastWidth] = useState<number>();
+	const [dragWidth, setDragWidth] = useState<number>();
+	const [highlight, setHighlight] = useState(false);
+	const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+	const gesture = useRef<Gesture | undefined>(undefined);
+	const latest = useRef({ onResize, onResizeStart, onResizeEnd, min, max });
+	useLayoutEffect(() => {
+		latest.current = { onResize, onResizeStart, onResizeEnd, min, max };
+	});
+	const reducedMotion = usePrefersReducedMotion();
+	const width = Math.min(max, Math.max(min, dragWidth ?? lastWidth ?? initial));
+	const unresolvedInitial =
+		lastWidth === undefined &&
+		containerWidth === undefined &&
+		sizeConstraints.initial >= 0 &&
+		sizeConstraints.initial <= 1;
+	const closed = isClosed || (Boolean(drags) && (width <= 1 || unresolvedInitial));
+	const [settled, setSettled] = useState(false);
+	useEffect(() => {
+		if (containerWidth !== undefined) setSettled(true);
+	}, [containerWidth]);
+	useEffect(() => {
+		if (containerRef) return;
+		const view = div.current?.ownerDocument.defaultView;
+		if (!view) return;
+		const update = () => setWindowWidth(view.innerWidth);
+		update();
+		view.addEventListener('resize', update);
+		return () => view.removeEventListener('resize', update);
 	}, [containerRef]);
-
-	// track hover state over the resize handle
-	const handleMouseOver = useCallback(() => {
-		isOver.current = true;
-		setHighlight(true);
+	const clearHighlightTimer = useCallback(() => {
+		if (timer.current !== undefined) clearTimeout(timer.current);
+		timer.current = undefined;
 	}, []);
-
-	// clear hover state when leaving the resize handle
-	const handleMouseOut = useCallback(() => {
-		isOver.current = false;
-		if (!isDragging) setHighlight(false);
-	}, [isDragging]);
-
-	// show handle feedback when the resize handle receives focus
-	const handleFocus = useCallback(() => {
-		isOver.current = true;
-		setHighlight(true);
-	}, []);
-
-	// clear focused handle feedback when focus leaves the resize handle
-	const handleBlur = useCallback(() => {
-		isOver.current = false;
-		if (!isDragging) setHighlight(false);
-	}, [isDragging]);
-
-	// show handle feedback on touch start
-	const handleTouchStart = useCallback(() => {
-		isOver.current = true;
-		setHighlight(true);
-	}, []);
-
-	// clear handle feedback on touch end
-	const handleTouchEnd = useCallback(() => {
-		isOver.current = false;
-		if (!isDragging) setHighlight(false);
-	}, [isDragging]);
-
-	// update the available container width from the observed container size
-	useEffect(() => {
-		if (!containerRef) return;
-		if (containerSize.width > 0) setContWidth(containerSize.width);
-	}, [containerSize, containerRef]);
-
-	// initialize and maintain the fallback container width from the window
-	// biome-ignore lint/correctness/useExhaustiveDependencies: on mount only
-	useEffect(() => {
-		if (!contWidth) setContWidth(window.innerWidth);
-		globalThis.addEventListener('resize', handleWindowResize);
-		return () => globalThis.removeEventListener('resize', handleWindowResize);
-	}, []);
-
-	// sync the closed state from the controlled prop
-	useEffect(() => setPanelClosed(isClosed), [isClosed]);
-
-	// clamp the current panel width when new constraints tighten the max width
-	const adjustCurrentWidth = useCallback((relConst: Constraint) => {
-		if (div?.current && relConst.max) {
-			const currentWidth = div.current.offsetWidth;
-			if (currentWidth > relConst.max) {
-				div.current.style.width = `${relConst.max}px`;
-				divWidth.current = relConst.max;
-				setLastWidth(relConst.max);
+	const showHighlight = () => {
+		clearHighlightTimer();
+		timer.current = setTimeout(() => setHighlight(true), isTouchDevice ? 0 : 350);
+	};
+	const hideHighlight = () => {
+		clearHighlightTimer();
+		if (!gesture.current) setHighlight(false);
+	};
+	const info = (nextWidth: number, height: number, deltaWidth = 0): DraggablePanelResizeInfo => ({
+		div,
+		divWidth: nextWidth,
+		divHeight: height,
+		deltaWidth,
+	});
+	// Cancellation and unmount release capture/listeners and restore the exact selection styles we borrowed.
+	const finish = useCallback(
+		(notify: boolean) => {
+			const active = gesture.current;
+			if (!active) return;
+			gesture.current = undefined;
+			active.release();
+			if (!notify) {
+				clearHighlightTimer();
+				return;
 			}
-		}
-	}, []);
-
-	// normalize relative constraints and reapply them when inputs change
-	useEffect(() => {
-		if (!contWidth) return;
-		const relativeConstraints = resolveConstraints(sizeConstraints, contWidth);
-		setConstraints(relativeConstraints);
-		adjustCurrentWidth(relativeConstraints);
-	}, [sizeConstraints, contWidth, adjustCurrentWidth]);
-
-	// debounce resize-handle highlighting for pointer and touch interactions
-	const setHighlight = useCallback(
-		(state: boolean | null) => {
-			if (timer.current) clearTimeout(timer.current);
-			if (state) {
-				timer.current = setTimeout(
-					() => {
-						setHandleHighlight(state);
-					},
-					isTouchDevice ? 0 : 350,
-				);
-			} else setHandleHighlight(false);
-		},
-		[isTouchDevice],
-	);
-
-	// read the current pointer x-position from mouse or touch input
-	const getClientX = useCallback((e: MouseEvent | TouchEvent) => {
-		return pointerPosition(e);
-	}, []);
-
-	// convert the current pointer x-position into a new panel width
-	const getNewWidth = useCallback(
-		(clientX: number) => {
-			return drags === 'right'
-				? startWidth.current + clientX - startX.current
-				: startWidth.current - clientX + startX.current;
-		},
-		[drags],
-	);
-
-	// enforce min and max width constraints during drag
-	const canDrag = useCallback(
-		(newWidth: number, clientX: number) => {
-			if (constraints?.min && newWidth < constraints.min) return false;
-			if (constraints?.max && newWidth > constraints.max) {
-				if (clientX - startX.current > 0) return false;
-			}
-			return true;
-		},
-		[constraints],
-	);
-
-	// resize the panel while dragging and notify resize listeners
-	const doDrag = useCallback(
-		(e: MouseEvent | TouchEvent) => {
-			if (div?.current) {
-				e.stopPropagation();
-				e.preventDefault();
-				const el = div.current;
-				const clientX = getClientX(e);
-				const newWidth = getNewWidth(clientX);
-				if (!canDrag(newWidth, clientX)) return;
-				el.style.width = `${newWidth}px`;
-				divWidth.current = newWidth;
-				deltaWidth.current = clientX - startX.current;
-				onResize({
-					div,
-					divWidth: divWidth.current,
-					divHeight: divHeight.current,
-					deltaWidth: deltaWidth.current,
-				});
-			}
-			return false;
-		},
-		[onResize, canDrag, getNewWidth, getClientX],
-	);
-
-	// stop dragging, restore document selection, and emit final resize events
-	const stopDrag = useCallback(() => {
-		setIsDragging(false);
-		document.documentElement.removeEventListener('mousemove', doDrag, false);
-		document.documentElement.removeEventListener('mouseup', stopDrag, false);
-		document.documentElement.removeEventListener('touchmove', doDrag, false);
-		document.documentElement.removeEventListener('touchend', stopDrag, false);
-		document.documentElement.style.userSelect = 'auto';
-		// noinspection JSDeprecatedSymbols
-		document.documentElement.style.webkitUserSelect = 'auto'; // reuqired for safari / iOS
-		if (div?.current) {
-			divWidth.current = div.current.offsetWidth;
-			divHeight.current = div.current.offsetHeight;
-			deltaWidth.current = 0;
+			const finalWidth = Math.min(latest.current.max, Math.max(latest.current.min, active.width));
+			setLastWidth(finalWidth);
+			setDragWidth(undefined);
+			clearHighlightTimer();
+			setHighlight(false);
 			const update = {
 				div,
-				divWidth: divWidth.current,
-				divHeight: divHeight.current,
-				deltaWidth: deltaWidth.current,
+				divWidth: finalWidth,
+				divHeight: div.current?.offsetHeight ?? active.height,
+				deltaWidth: 0,
 			};
-			onResize(update);
-			onResizeEnd(update);
+			latest.current.onResize?.(update);
+			latest.current.onResizeEnd?.(update);
+		},
+		[clearHighlightTimer],
+	);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: finish a gesture when availability, direction, or bounds change.
+	useLayoutEffect(() => {
+		if (gesture.current) finish(true);
+	}, [isClosed, drags, min, max, finish]);
+	useEffect(
+		() => () => {
+			finish(false);
+			clearHighlightTimer();
+		},
+		[finish, clearHighlightTimer],
+	);
+	const start = (event: React.PointerEvent<HTMLDivElement>) => {
+		if (closed || !drags || event.button !== 0 || !event.isPrimary || gesture.current) return;
+		event.preventDefault();
+		const panel = div.current;
+		const rail = event.currentTarget;
+		const document = rail.ownerDocument;
+		const view = document.defaultView;
+		if (!panel || !view) return;
+		// Programmatic focus after a prevented pointer-down can retain the browser's keyboard focus ring.
+		rail.setAttribute('data-pointer-focus', '');
+		rail.focus({ preventScroll: true });
+		clearHighlightTimer();
+		const root = document.documentElement;
+		const previous = { userSelect: root.style.userSelect, webkitUserSelect: root.style.webkitUserSelect };
+		const startWidth = panel.offsetWidth;
+		const active: Gesture = {
+			pointerId: event.pointerId,
+			startX: event.clientX,
+			startWidth,
+			width: startWidth,
+			height: panel.offsetHeight,
+			release: () => {},
+		};
+		gesture.current = active;
+		const move = (next: PointerEvent) => {
+			if (next.pointerId !== active.pointerId) return;
+			next.preventDefault();
+			const delta = next.clientX - active.startX;
+			const nextWidth = active.startWidth + (drags === 'right' ? delta : -delta);
+			// Retain the existing stop-at-bounds feel, consistently for either panel edge.
+			if (nextWidth < min || nextWidth > max) return;
+			active.width = nextWidth;
+			panel.style.width = `${nextWidth}px`;
+			rail.setAttribute('aria-valuenow', String(nextWidth));
+			rail.setAttribute('aria-valuetext', `${Math.round(nextWidth)} pixels`);
+			latest.current.onResize?.(info(nextWidth, active.height, delta));
+		};
+		const end = (next: PointerEvent) => {
+			if (next.pointerId === active.pointerId) finish(true);
+		};
+		const cancel = () => finish(true);
+		const handleEscape = (next: KeyboardEvent) => {
+			if (next.key === 'Escape') finish(true);
+		};
+		active.release = () => {
+			document.removeEventListener('pointermove', move);
+			document.removeEventListener('pointerup', end);
+			document.removeEventListener('pointercancel', end);
+			rail.removeEventListener('lostpointercapture', cancel);
+			view.removeEventListener('blur', cancel);
+			view.removeEventListener('keydown', handleEscape);
+			if (rail.hasPointerCapture(active.pointerId)) rail.releasePointerCapture(active.pointerId);
+			root.style.userSelect = previous.userSelect;
+			root.style.webkitUserSelect = previous.webkitUserSelect;
+		};
+		document.addEventListener('pointermove', move, { passive: false });
+		document.addEventListener('pointerup', end);
+		document.addEventListener('pointercancel', end);
+		rail.addEventListener('lostpointercapture', cancel);
+		view.addEventListener('blur', cancel);
+		view.addEventListener('keydown', handleEscape);
+		root.style.userSelect = 'none';
+		root.style.webkitUserSelect = 'none';
+		// Synthetic events have no active native pointer to capture; document listeners still make tests/embedders work.
+		try {
+			rail.setPointerCapture(active.pointerId);
+		} catch {
+			/* No native active pointer. */
 		}
-		setLastWidth(divWidth.current);
-		if (!isOver.current) setHighlight(false);
-	}, [doDrag, onResizeEnd, onResize, setHighlight]);
-
-	// Relative initial widths settle after mount, when container measurements exist.
-	const [initialOpenSettled, setInitialOpenSettled] = useState(false);
-	useEffect(() => {
-		if (mounted) setInitialOpenSettled(true);
-	}, [mounted]);
-
-	// resolve the width transition
-	const transition = useMemo(() => {
-		const usingInitDuration = !initialOpenSettled && transitionDurationOnInit !== undefined;
-		if (usingInitDuration) {
+		setDragWidth(startWidth);
+		setHighlight(true);
+		const update = info(startWidth, active.height);
+		latest.current.onResize?.(update);
+		latest.current.onResizeStart?.(update);
+	};
+	const keyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+		event.currentTarget.removeAttribute('data-pointer-focus');
+		if (!drags || closed || gesture.current || event.altKey || event.ctrlKey || event.metaKey) return;
+		const current = width;
+		let next: number;
+		if (event.key === 'Home') next = min;
+		else if (event.key === 'End') next = max;
+		else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+			const direction = event.key === 'ArrowRight' ? 1 : -1;
+			const step = event.shiftKey ? 50 : 10;
+			next = current + direction * step * (drags === 'right' ? 1 : -1);
+		} else return;
+		event.preventDefault();
+		next = Math.min(max, Math.max(min, next));
+		if (next === current) return;
+		const height = div.current?.offsetHeight ?? 0;
+		latest.current.onResize?.(info(current, height));
+		latest.current.onResizeStart?.(info(current, height));
+		setLastWidth(next);
+		latest.current.onResize?.(info(next, height, (next - current) * (drags === 'right' ? 1 : -1)));
+		latest.current.onResize?.(info(next, height));
+		latest.current.onResizeEnd?.(info(next, height));
+	};
+	// Width is kept during close/reopen; only relative initial sizing needs a client measurement.
+	const getWidth = () => {
+		if (isClosed) return 0;
+		if (!drags) return '100%';
+		if (unresolvedInitial) return '0px';
+		return width;
+	};
+	const getTransition = () => {
+		if (dragWidth !== undefined || reducedMotion) return 'none';
+		if (!settled && transitionDurationOnInit !== undefined) {
 			const duration =
-				typeof transitionDurationOnInit === 'number' ? `${transitionDurationOnInit}ms` : transitionDurationOnInit;
+				typeof transitionDurationOnInit === 'number'
+					? `${Math.max(0, transitionDurationOnInit)}ms`
+					: transitionDurationOnInit;
 			return `width ${duration} var(--motion-water)`;
 		}
 		return 'width var(--motion-water-duration) var(--motion-water)';
-	}, [initialOpenSettled, transitionDurationOnInit]);
-
-	// capture the starting drag measurements and attach drag listeners
-	const initDrag = useCallback(
-		(e: any) => {
-			if (div?.current && document.defaultView) {
-				setIsDragging(true);
-				const el = div.current;
-				divWidth.current = div.current.offsetWidth;
-				divHeight.current = div.current.offsetHeight;
-				deltaWidth.current = 0;
-				startX.current = pointerPosition(e);
-				startWidth.current = Number.parseInt(document.defaultView.getComputedStyle(el).width, 10);
-				document.documentElement.addEventListener('mousemove', doDrag, false);
-				document.documentElement.addEventListener('mouseup', stopDrag, false);
-				document.documentElement.addEventListener('touchmove', doDrag, false);
-				document.documentElement.addEventListener('touchend', stopDrag, false);
-				document.documentElement.style.userSelect = 'none';
-				// noinspection JSDeprecatedSymbols
-				document.documentElement.style.webkitUserSelect = 'none'; // reuqired for safari / iOS
-				const update = {
-					div,
-					divWidth: divWidth.current,
-					divHeight: divHeight.current,
-					deltaWidth: deltaWidth.current,
-				};
-				onResize(update);
-				onResizeStart(update);
-			}
-		},
-		[doDrag, stopDrag, onResize, onResizeStart],
-	);
-
-	// attach or detach the low-level drag listeners on the resize handle
-	useEffect(() => {
-		const hl = handle?.current;
-		if (hl && drags) {
-			hl.addEventListener('mousedown', initDrag, false);
-			hl.addEventListener('touchstart', initDrag, { passive: true });
-		}
-		return () => {
-			if (hl) {
-				hl.removeEventListener('mousedown', initDrag, false);
-				hl.removeEventListener('touchstart', initDrag);
-			}
-		};
-	}, [drags, initDrag]);
-
-	// set mounted for SSR width calc
-	useEffect(() => setMounted(true), []);
-
-	// resolve the handle offset based on drag direction and touch mode
-	const leftRightStyle = useMemo(() => {
-		if (drags === 'right') {
-			return { right: isTouchDevice ? -22 : -((gripper.width || 10) / 2) };
-		}
-		return { left: isTouchDevice ? -22 : -((gripper.width || 10) / 2) };
-	}, [drags, isTouchDevice, gripper.width]);
-
-	// normalize the initial width to a true CSS value
-	const normalizeWidth = useCallback(
-		(width: number | string) => {
-			if (typeof width === 'number') {
-				if (width <= 1 && width >= 0) {
-					// Only relative widths require a client-side container measurement.
-					if (!mounted) return '0px';
-					if (contWidth) return `${contWidth * width}px`;
-					return 0;
-				}
-				return `${width}px`;
-			}
-			return width;
-		},
-		[contWidth, mounted],
-	);
-
-	// resolve the rendered panel width from drag state and constraints
-	const width = useMemo(() => {
-		if (!drags) return '100%';
-		if (panelClosed) return 0;
-		if (lastWidth) return lastWidth;
-		return normalizeWidth(constraints.initial);
-	}, [drags, panelClosed, lastWidth, constraints.initial, normalizeWidth]);
-
-	// compose CSS custom properties for the panel background
-	const cssVars = useMemo(() => {
-		return {
-			'--panel-bg': backgroundColor ?? 'transparent',
-		} as React.CSSProperties;
-	}, [backgroundColor]);
-
+	};
+	const railWidth = isTouchDevice ? 44 : (resizeHandle?.width ?? 10);
+	const offset = isTouchDevice ? -22 : -railWidth / 2;
+	const variables = { '--panel-bg': backgroundColor ?? 'transparent' } as React.CSSProperties;
 	/* START.DEBUG */
-	useTrackRenders(props, 'DraggableDiv');
+	useTrackRenders(props, 'DraggablePanel');
 	/* END.DEBUG */
-
 	return (
 		<div
-			id={divId}
-			className={`${css.panel}${divClass}`}
+			{...attributes}
+			id={panelId}
 			ref={div}
-			onContextMenu={(e) => {
-				if (disableOnContext) e.preventDefault();
-				return true;
+			className={`${css.panel}${className ? ` ${className}` : ''}`}
+			onContextMenu={(event) => {
+				onContextMenu?.(event);
+				if (disableOnContext) event.preventDefault();
 			}}
 			style={{
-				...divStyle,
-				...cssVars,
+				...style,
+				...variables,
 				overflow: 'visible',
-				// without this, a plain flex-row ancestor's default
-				// `flex-shrink: 1` can silently collapse the panel's real
-				// rendered width far below both `width` and the declared
-				// `sizeConstraints.min` floor whenever the row runs short on
-				// space (especially with no children giving it an intrinsic
-				// minimum content size) - the panel already manages its own
-				// width via drag constraints, so it shouldn't be at the
-				// mercy of ordinary flexbox shrinking too
 				flexShrink: 0,
-				width: width,
+				width: getWidth(),
 				height: '100%',
-				maxWidth: drags ? constraints.max : 'unset',
-				transition: isDragging ? '' : transition,
-				borderRight: closed || drags !== 'right' ? 'none' : borderRight,
-				borderLeft: closed || drags !== 'left' ? 'none' : borderLeft,
+				maxWidth: drags ? max : 'unset',
+				transition: getTransition(),
+				borderRight: closed || drags !== 'right' ? 'none' : (borderRight ?? undefined),
+				borderLeft: closed || drags !== 'left' ? 'none' : (borderLeft ?? undefined),
 			}}
-			{...rest}
 		>
-			<div className={css.content}>{children}</div>
+			<div className={css.content} inert={closed || undefined} aria-hidden={closed || undefined}>
+				{children}
+			</div>
 			<div
 				ref={handle}
-				style={{
-					position: 'absolute',
-					boxSizing: 'border-box',
-					display: closed || !drags ? 'none' : 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					zIndex: 'var(--elevation-overlay)',
-					top: 0,
-					...leftRightStyle,
-					bottom: 0,
-					width: isTouchDevice ? 44 : gripper.width,
-					backgroundColor: resizeHandle.color,
-					cursor: 'col-resize',
-					overflow: 'visible',
+				className={css.rail}
+				role="separator"
+				aria-orientation="vertical"
+				aria-label={resizeHandleLabel.trim() || 'Resize panel'}
+				aria-controls={panelId}
+				aria-valuemin={min}
+				aria-valuemax={max}
+				aria-valuenow={width}
+				aria-valuetext={`${Math.round(width)} pixels`}
+				tabIndex={closed || !drags ? -1 : 0}
+				onKeyDown={keyDown}
+				onPointerDown={start}
+				onPointerEnter={showHighlight}
+				onPointerLeave={hideHighlight}
+				onFocus={() => {
+					clearHighlightTimer();
+					setHighlight(true);
 				}}
-				onMouseOver={handleMouseOver}
-				onMouseOut={handleMouseOut}
-				onFocus={handleFocus}
-				onBlur={handleBlur}
-				onTouchStart={handleTouchStart}
-				onTouchEnd={handleTouchEnd}
+				onBlur={(event) => {
+					event.currentTarget.removeAttribute('data-pointer-focus');
+					hideHighlight();
+				}}
+				onPointerCancel={() => finish(true)}
+				style={{
+					display: closed || !drags ? 'none' : 'flex',
+					width: railWidth,
+					backgroundColor: resizeHandle?.color ?? 'transparent',
+					right: drags === 'right' ? offset : undefined,
+					left: drags === 'left' ? offset : undefined,
+				}}
 			>
-				{dragHandle && !closed && <DragHandle {...(dragHandleStyle ?? {})} />}
-				<div
-					style={{
-						backgroundColor: handleHighlight ? theme.current.colors['core-outline-primary'] : 'transparent',
-						flex: 1,
-						maxWidth: 3,
-						height: '100%',
-						pointerEvents: 'none',
-						transition: 'background-color var(--motion-water-duration) var(--motion-water)',
-					}}
-				/>
+				{dragHandle && !closed && <DragHandle {...dragHandleStyle} />}
+				<span className={css.highlight} data-active={highlight || undefined} />
 			</div>
 		</div>
 	);
 });
-
-// Customizable visual affordance for draggable resize handles.
-export type DragHandleProps = {
-	width?: number;
-	height?: number;
-	radius?: number | string;
-	stroke?: number;
-	strokeColor?: ColorValue;
-	color?: ColorValue;
-};
 export const DragHandle = React.memo((rawProps: Readonly<DragHandleProps>) => {
 	const props = resolveColorProps(rawProps);
 	const {

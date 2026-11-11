@@ -1,12 +1,12 @@
 import { Meta, Unstyled, Markdown } from '@storybook/addon-docs/blocks';
-import {FlexDiv} from "../src"
+import {FlexBox} from "../src"
 import Benchmarks from "../reports/benchmark-results.md?raw";
 
 <Meta title="Welcome/Performance Notes" />
 
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
             # Component Raw Performance
             Slice's components are optimized for fast mount times, fast re-renders and low memory usage. The table below summarizes basic performance benchmarks for Slice.
@@ -14,6 +14,6 @@ import Benchmarks from "../reports/benchmark-results.md?raw";
             Note: take these benchmarks as directional - they were not derived in a controlled environment (they were run on a development PC). Feel free to put Slice through the [CodSpeed](https://codspeed.io) ringer.
         </Unstyled>
         <Markdown>{Benchmarks}</Markdown>
-    </FlexDiv>
+    </FlexBox>
 
-</FlexDiv>
+</FlexBox>

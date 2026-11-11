@@ -15,7 +15,7 @@ export type AudioBubbleBaseProps = {
 	intensity?: number;
 	peakIntensity?: number;
 	risePerSeconds?: number;
-	ReleasePerSeconds?: number;
+	releasePerSeconds?: number;
 };
 
 export type AudioBubbleProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof AudioBubbleBaseProps> &

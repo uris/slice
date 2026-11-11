@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../../components/FlexDiv';
+import {FlexBox} from '../../../components/FlexBox';
 import NoteSection from '../../../../documentation/_components/Notice/Notice';
 
 <Meta title="Utils/AudioVisualizer" />
 
-<FlexDiv width={'fill'} height={'fill'} align={'center'}>
-	<FlexDiv width={'fill'} maxWidth={760} height={'auto'}>
+<FlexBox width={'fill'} height={'fill'} align={'center'}>
+	<FlexBox width={'fill'} maxWidth={760} height={'auto'}>
 		<Unstyled>
 			<NoteSection>
 				`AudioVisualizer` watches a live audio stream or track, estimates how strong the audio is, and turns that into a smooth value you can use to scale or animate UI.
@@ -16,7 +16,7 @@ import NoteSection from '../../../../documentation/_components/Notice/Notice';
 			Use `AudioVisualizer` when you want a microphone bubble, speaking indicator, or any other audio-reactive effect without building your own analyser loop.
 
 			## Import
-			<RenderSource language={'tsx'}>
+			<RenderSource>
             ```
             import { AudioVisualizer } from '@apple-pie/slice/utils/objects';
             ```
@@ -57,7 +57,7 @@ import NoteSection from '../../../../documentation/_components/Notice/Notice';
 			</table>
 
 			## Basic usage
-			<RenderSource language={'tsx'}>
+			<RenderSource>
             ```
             import { useEffect, useRef, useState } from 'react';
             import { AudioVisualizer } from '@apple-pie/slice/utils/objects';
@@ -108,9 +108,11 @@ import NoteSection from '../../../../documentation/_components/Notice/Notice';
 			</RenderSource>
 
 			## Start, stop, and cleanup
-			Use `start()` to begin the analyser loop, `stop()` to pause it, and `dispose()` when you are fully done.
+			Use `start()` to begin or resume analysis, `stop()` to suspend it and reset its intensity to zero, and `dispose()` when you are fully done. These methods never stop the input tracks.
 
-			<RenderSource language={'tsx'}>
+            Invalid non-positive or non-finite sensitivity and response settings use defaults. `start()` throws on synchronous setup failures; the optional `onError` callback receives asynchronous audio-context resume failures.
+
+			<RenderSource>
             ```
             visualizer.start();
             visualizer.stop();
@@ -121,12 +123,12 @@ import NoteSection from '../../../../documentation/_components/Notice/Notice';
 			## Reading values directly
 			If you do not want to use `onUpdate`, you can read the latest values directly.
 
-			<RenderSource language={'tsx'}>
+			<RenderSource>
             ```
             const intensity = visualizer.getIntensity();
             const scale = visualizer.getScale();
             ```
 			</RenderSource>
 		</Unstyled>
-	</FlexDiv>
-</FlexDiv>
+	</FlexBox>
+</FlexBox>

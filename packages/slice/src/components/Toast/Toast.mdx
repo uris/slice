@@ -1,144 +1,87 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as ToastStories from './Toast.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ToastStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Toast
-        Renders transient status messaging with optional auto-dismiss and close action.
+# Toast
 
-        ## Singleton usage pattern
-        Add a single `Toast` instance for the app (or app shell), not one per component. Use shared state management to set `message` so that one toast handles notifications across the UI.
+Brief status notifications with optional automatic dismissal. Render one instance
+for an application shell, or a contained instance with `container="parent"` inside
+a positioned parent. The optional toast store holds one notification, without a queue.
 
-        ## Base element
-        `motion.div`
+## Identity and timing
 
-        ## Interface
-        `ReservedToastEvents = 'onMouseEnter' | 'onMouseLeave' | 'onFocus' | 'onBlur'`
-        `Omit<HTMLMotionProps<'div'>, keyof ToastBaseProps | ReservedToastEvents> & ToastBaseProps`
+A new `message` or `notificationId` starts a notification after `showDelay`.
+Changing the ID replays identical text without a React key. Empty text or `null`
+clears it. Hover and focus pause the remaining duration; both must end to resume.
+Changing `duration` restarts its lifetime while respecting an active pause.
+Changing `showDelay` only reschedules a pending show.
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>border</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When <code>true</code>, shows a border using the selected <code>type</code> color scheme.</td></tr>
-            <tr><td><code>close</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When <code>true</code>, renders a close icon that dismisses the toast immediately.</td></tr>
-            <tr><td><code>duration</code></td><td><code>number | "Infinite"</code></td><td><code>5000</code></td><td>Auto-dismiss duration in milliseconds or "Infinite" with no auto-dismiss (forces close button to be visible).</td></tr>
-            <tr><td><code>message</code></td><td><code>string | null</code></td><td><code>null</code></td><td>Message content. Empty or <code>null</code> hides the toast.</td></tr>
-            <tr><td><code>offset</code></td><td><code>number</code></td><td><code>24</code></td><td>Distance in pixels from the top or bottom edge based on <code>position</code>.</td></tr>
-            <tr><td><code>padding</code></td><td><code>number | string</code></td><td><code>close ? '8px 12px 8px 16px' : '8px 16px' (theme tokens)</code></td><td>Inner spacing for the toast container.</td></tr>
-            <tr><td><code>position</code></td><td><code>'top' | 'bottom'</code></td><td><code>'bottom'</code></td><td>Edge of the viewport used for anchored placement and enter/exit animation direction.</td></tr>
-            <tr><td><code>container</code></td><td><code>'window' | 'parent'</code></td><td><code>'window'</code></td><td>Controls whether the toast is positioned relative to the viewport with <code>fixed</code> positioning or relative to a positioned parent with <code>absolute</code> positioning.</td></tr>
-            <tr><td><code>radius</code></td><td><code>number | string</code></td><td><code>8</code></td><td>Container border radius.</td></tr>
-            <tr><td><code>showDelay</code></td><td><code>number</code></td><td><code>0</code></td><td>Delay in milliseconds before a new toast message appears.</td></tr>
-            <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Typography size preset for the message text.</td></tr>
-            <tr><td><code>type</code></td><td><code>'success' | 'error' | 'warning' | 'info'</code></td><td><code>'info'</code></td><td>Visual status variant used for background, border, and text colors.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>HTMLMotionProps</code><br/><code>HTMLDivElement</code></td><td><code>-</code></td><td>Native/motion <code>div</code> props pass through to the wrapper (for example <code>id</code>, <code>data-testid</code>, <code>className</code>, <code>style</code>, <code>aria-*</code>). Internal hover/focus lifecycle handlers are reserved: <code>onMouseEnter</code>, <code>onMouseLeave</code>, <code>onFocus</code>, <code>onBlur</code>.</td></tr>
-          </tbody>
-        </table>
+## Props
 
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '10%'}} />
-            <col style={{width: '50%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>didHide</code></td><td><code>() =&gt; void</code></td><td>Triggered when toast animates out</td></tr>
-          </tbody>
-        </table>
+| Prop | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| border | boolean | true | Notification border. |
+| borderRadius | number or string | corner-m (8px) | Corner radius. |
+| close | boolean | true | Native dismiss button, independent of duration. |
+| closeLabel | string | Dismiss notification | Accessible button label; empty uses the default. |
+| container | window or parent | window | Fixed viewport or absolute parent positioning. |
+| data | T | undefined | Application payload passed to onClick. |
+| duration | number or 'infinite' | 5000 | Visible lifetime in milliseconds. |
+| message | string or null | null | Notification text. |
+| notificationId | string | undefined | Replay identity. |
+| offset | number | 24 | Edge inset and minimum horizontal clearance in pixels. |
+| padding | number or string | 8px 16px; close edge 12px | Inner spacing; zero is respected. |
+| position | top or bottom | bottom | Placement edge and motion direction. |
+| progress | boolean | false | Working indicator, independent of duration. |
+| showDelay | number | 0 | Delay before showing, in milliseconds. |
+| textSize | xs, s, m, l, xl | m | Body text size. |
+| type | ToastType or matching string | info | info, success, warning, error treatment. |
+| urgency | polite or assertive | polite | Live announcement priority. |
 
-        ## Code Examples
-        </Unstyled>
+Native div attributes are forwarded to the visible wrapper; class names are
+appended and styles merged. Content, ARIA semantics and animation are managed
+internally. Native drag and animation-start handlers are excluded. The forwarded
+ref targets the visible div. Long messages wrap inside the available width.
 
-        <RenderSource language={"tsx"}>
+## Motion
+
+`motionValues?: Variants` merges `initial`, `animate`, and `exit` states.
+`transition?: Transition` overrides the Water theme transition. Defaults fade and
+move 8px from the selected edge. Live reduced-motion preferences override custom
+motion and delays, and replace the spinning indicator with a static one.
+
+## Events
+
+`Toast<T>` and `ToastProps<T>` infer the payload type from `data`.
+`onClick(event: React.MouseEvent<HTMLDivElement>, data: T | undefined)` receives
+that payload on pointer activation or Enter/Space. A native action button uses the
+message as its accessible name, separate from the dismiss button. Dismissal never
+triggers the action. Clicking does not dismiss automatically. Data is undefined
+when omitted. The shared store accepts typed payloads and handlers directly.
+
+```tsx
+<Toast message="Open saved document" data={{ documentId: 'doc-42' }}
+  onClick={(_event, data) => {
+    if (data) window.location.assign('/documents/' + data.documentId);
+  }} />
 ```
-import { useState } from 'react';
-import { Toast, Button } from '@apple-pie/slice';
 
-export function ToastStatusExample() {
-    const [message, setMessage] = useState<string | null>(null);
+`onShow(info: ToastInfo)` runs once when shown after the delay. Its payload contains
+`notificationId` and `message`. `onHide(info: ToastHideInfo)` runs once after exit
+and adds `reason`: timeout, dismiss, cleared, or replaced. Notifications retain
+their original callback and identity across replacement. Unmount cancels timers
+without a hide callback. Native hover/focus callbacks run alongside timer handling.
 
-    return (
-        <>
-            <Button
-                label="Save profile"
-                onClick={() => setMessage('Profile saved successfully')}
-            />
+## Accessibility
 
-            <Toast
-                message={message}
-                type="success"
-                close={true}
-                position="bottom"
-                didHide={() => setMessage(null)}
-                id="profile-save-toast"
-                data-testid="profile-save-toast"
-                aria-live="polite"
-            />
-        </>
-    );
-}
-```
-        </RenderSource>
+A persistent live region announces updates. Use `urgency="assertive"` for urgent
+alerts. Notifications do not take focus automatically. The native close button
+supports Enter and Space, shows keyboard focus, and restores prior focus when
+dismissing from inside the notification. Timers pause during hover or focus.
 
-        <RenderSource language={"tsx"}>
-```
-import { useState } from 'react';
-import { Toast, IconButton } from '@apple-pie/slice';
+## Migration
 
-export function DelayedWarningToast() {
-    const [message, setMessage] = useState<string | null>(null);
-
-    return (
-        <>
-            <IconButton actionName="Trigger warning toast"
-                icon="alert-triangle"
-                tooltip="Trigger warning toast"
-                onClick={() => setMessage('Connection is unstable')}
-            />
-
-            <Toast
-                message={message}
-                type="warning"
-                showDelay={300}
-                duration={4000}
-                close={false}
-                position="top"
-                offset={20}
-                didHide={() => setMessage(null)}
-                className="network-toast"
-                style={{ maxWidth: 420 }}
-            />
-        </>
-    );
-}
-```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+Use `borderRadius`, `notificationId`, `onHide`, and lowercase `'infinite'` in place
+of `radius`, `notifId`, `didHide`, and `'Infinite'`. Persistence no longer forces
+progress or a close button; set those props explicitly.

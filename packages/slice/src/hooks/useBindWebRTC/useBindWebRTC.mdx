@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 
 <Meta title="Hooks/useBindWebRTC" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useBindWebRTC
         Binds a named `WebRTCConnection` to the microphone and volume stores with an explicit `bind()` / `unbind()` lifecycle. The hook reads the processed microphone stream from the microphone store and the current volume from the volume store, then keeps those values synchronized to one named WebRTC store connection after binding.
@@ -139,5 +139,5 @@ function CallSession() {
         - you want to attach or update connections from non-React code
         - you want to reuse an existing connection rather than requiring explicit ownership through `bind()`
         </Unstyled>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

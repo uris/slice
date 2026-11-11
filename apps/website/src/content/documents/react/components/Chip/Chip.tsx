@@ -3,31 +3,33 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
-import { DefaultChipPreview, RemovableChipPreview, SelectableChipPreview } from './ChipPreview';
+import { FlexBox, Preset } from '@apple-pie/slice';
+import { ChipRemoveExample, ChipSelectionExample, ChipStylingExample, ChipUsageExample } from './UsagePreviews';
 import { actionCode, removeCode, selectionCode, stylingCode, tooltipCode, usageCode } from './code';
 
 export function ChipDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>Chip component</H1>
 			<P clipWidth>
 				Give tags and compact actions a clear shape. Chip combines text, an optional icon, and colors that fit your UI.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
-				components={[
-					{ label: 'Default chip', component: <DefaultChipPreview /> },
-					{ label: 'Removable chip', component: <RemovableChipPreview /> },
-					{ label: 'Selectable chip', component: <SelectableChipPreview /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Set <Code>label</Code> for text, or omit it and pass children for custom content.
 			</P>
-			<CodeBlock filename="ChipExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <ChipUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'ChipExample.tsx',
+					},
+				]}
+			/>
 			<H3>Add an action</H3>
 			<P>
 				Provide <Code>onClick</Code> to make the chip a native button and handle the action in your app.
@@ -38,19 +40,50 @@ export function ChipDoc() {
 				Pass <Code>selected</Code> and update it in <Code>onClick</Code>. A changing label resizes smoothly with Water
 				motion.
 			</P>
-			<CodeBlock filename="SelectableChip.tsx" language="tsx" code={selectionCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
+				components={[
+					{
+						label: 'Select a chip',
+						component: <ChipSelectionExample />,
+						code: selectionCode.trim(),
+						codeFilename: 'SelectableChip.tsx',
+					},
+				]}
+			/>
 			<H3>Allow removal</H3>
 			<P>
 				Provide <Code>onRemove</Code> to show a separate remove button. Your handler removes the chip from your app’s
 				state.
 			</P>
-			<CodeBlock filename="RemovableChip.tsx" language="tsx" code={removeCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
+				components={[
+					{
+						label: 'Allow removal',
+						component: <ChipRemoveExample />,
+						code: removeCode.trim(),
+						codeFilename: 'RemovableChip.tsx',
+						hasRefresh: true,
+					},
+				]}
+			/>
 			<H3>Adjust appearance and spacing</H3>
 			<P>
-				Use <Code>textSize</Code> for typography and <Code>padding</Code> for uniform spacing. Individual padding sides
-				override that value.
+				Use <Code>textSize</Code> for typography and <Code>padding</Code> for spacing, including CSS shorthands such as
+				<Code>"4px 8px"</Code>. Individual padding sides override that value.
 			</P>
-			<CodeBlock filename="StyledChip.tsx" language="tsx" code={stylingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-chip--default"
+				components={[
+					{
+						label: 'Adjust appearance and spacing',
+						component: <ChipStylingExample />,
+						code: stylingCode.trim(),
+						codeFilename: 'StyledChip.tsx',
+					},
+				]}
+			/>
 			<H3>Connect a tooltip</H3>
 			<P>
 				Provide text and connect <Code>onToolTip</Code> to your tooltip UI.
@@ -58,8 +91,13 @@ export function ChipDoc() {
 			<CodeBlock filename="ChipTooltip.tsx" language="tsx" code={tooltipCode.trim()} />
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
-				Without onClick, the chip’s content is static. With onClick, it becomes a native button. Selection and removal
-				are controlled by your app.
+				The outer wrapper is an inline-flex <Code>span</Code>, so chips can sit within a line of text. Static content is
+				also a span; clickable and remove actions remain native buttons.
+			</P>
+			<P>
+				Without <Code>onClick</Code>, the chip’s content is static. Removable chips share clickable chips’ default hover
+				and focus colors, while removal stays on the separate remove button. With onClick, it becomes a native button.
+				Selection and removal are controlled by your app.
 			</P>
 			<P>
 				Default padding is reduced on icon edges to account for space inside SVGs, including the remove icon. Explicit
@@ -85,17 +123,17 @@ export function ChipDoc() {
 			<Definition id={'backgroundColor'}>
 				<Prop>backgroundColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'transparent'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>Chip background.</P>
 			<Definition id={'backgroundColorHover'}>
 				<Prop>backgroundColorHover</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'click-dependent'}</DefaultVal>
+				<DefaultVal>{'interaction-dependent'}</DefaultVal>
 			</Definition>
 			<P>
-				Hover and keyboard-focus background. Static chips keep backgroundColor; clickable chips use
-				core-surface-secondary. Disabled chips keep backgroundColor.
+				Hover and keyboard-focus background. Static chips keep backgroundColor; clickable or removable chips use
+				core-fill-primary. Disabled chips keep backgroundColor.
 			</P>
 			<Definition id={'backgroundColorSelected'}>
 				<Prop>backgroundColorSelected</Prop>
@@ -106,39 +144,40 @@ export function ChipDoc() {
 			<Definition id={'borderColor'}>
 				<Prop>borderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-primary'}</DefaultVal>
+				<DefaultVal>{'core-outline-primary'}</DefaultVal>
 			</Definition>
 			<P>Normal border color.</P>
 			<Definition id={'borderColorDisabled'}>
 				<Prop>borderColorDisabled</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-disabled'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>Border color while disabled, including hover.</P>
 			<Definition id={'borderColorHover'}>
 				<Prop>borderColorHover</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'click-dependent'}</DefaultVal>
+				<DefaultVal>{'interaction-dependent'}</DefaultVal>
 			</Definition>
 			<P>
-				Hover and keyboard-focus border color. Static chips keep borderColor; clickable chips use core-text-special.
+				Hover and keyboard-focus border color. Static chips keep borderColor; clickable or removable chips use
+				core-text-special.
 			</P>
 			<Definition id={'borderColorSelected'}>
 				<Prop>borderColorSelected</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-special'}</DefaultVal>
+				<DefaultVal>{'transparent'}</DefaultVal>
 			</Definition>
 			<P>Selected border color. Disabled chips use borderColorDisabled.</P>
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'corner-m'}</DefaultVal>
+				<DefaultVal>{'corner-l'}</DefaultVal>
 			</Definition>
 			<P>Corner radius. Numbers are pixels; strings accept CSS values.</P>
 			<Definition id={'borderWidth'}>
 				<Prop>borderWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'1'}</DefaultVal>
+				<DefaultVal>{'0'}</DefaultVal>
 			</Definition>
 			<P>Border width in pixels.</P>
 			<Definition id={'children'}>
@@ -177,11 +216,11 @@ export function ChipDoc() {
 			<Definition id={'iconColorHover'}>
 				<Prop>iconColorHover</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'click-dependent'}</DefaultVal>
+				<DefaultVal>{'interaction-dependent'}</DefaultVal>
 			</Definition>
 			<P>
-				Hover and keyboard-focus icon color. Static chips keep iconColor; clickable chips use core-text-special.
-				Disabled chips use core-text-disabled.
+				Hover and keyboard-focus icon color. Static chips keep iconColor; clickable or removable chips use
+				core-text-special. Disabled chips use core-text-disabled.
 			</P>
 			<Definition id={'iconColorSelected'}>
 				<Prop>iconColorSelected</Prop>
@@ -198,7 +237,7 @@ export function ChipDoc() {
 			<Definition id={'iconSize'}>
 				<Prop>iconSize</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'20'}</DefaultVal>
+				<DefaultVal>{'16'}</DefaultVal>
 			</Definition>
 			<P>Icon width and height in pixels.</P>
 			<Definition id={'label'}>
@@ -209,37 +248,38 @@ export function ChipDoc() {
 			<P>Primary text. Replaces children whenever supplied, including an empty string.</P>
 			<Definition id={'padding'}>
 				<Prop>padding</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
-				Uniform padding in pixels. Individual side props take priority. When omitted, spacing follows textSize with
-				optical adjustment at icon edges, including the remove icon.
+				Padding shorthand. Numbers use pixels; strings accept CSS lengths, theme tokens, and one to four values.
+				Individual side props take priority. When omitted, spacing follows textSize with optical adjustment at icon
+				edges, including the remove icon.
 			</P>
 			<Definition id={'paddingBottom'}>
 				<Prop>paddingBottom</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Bottom padding in pixels. Overrides padding for this side.</P>
+			<P>Bottom padding as a pixel number or CSS length. Overrides padding for this side.</P>
 			<Definition id={'paddingLeft'}>
 				<Prop>paddingLeft</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Left padding in pixels. Overrides padding for this side.</P>
+			<P>Left padding as a pixel number or CSS length. Overrides padding for this side.</P>
 			<Definition id={'paddingRight'}>
 				<Prop>paddingRight</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Right padding in pixels. Overrides padding for this side.</P>
+			<P>Right padding as a pixel number or CSS length. Overrides padding for this side.</P>
 			<Definition id={'paddingTop'}>
 				<Prop>paddingTop</Prop>
-				<TypeDef>{'number'}</TypeDef>
+				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
-			<P>Top padding in pixels. Overrides padding for this side.</P>
+			<P>Top padding as a pixel number or CSS length. Overrides padding for this side.</P>
 			<Definition id={'removeLabel'}>
 				<Prop>removeLabel</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -267,11 +307,11 @@ export function ChipDoc() {
 			<Definition id={'textColorHover'}>
 				<Prop>textColorHover</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'click-dependent'}</DefaultVal>
+				<DefaultVal>{'interaction-dependent'}</DefaultVal>
 			</Definition>
 			<P>
-				Hover and keyboard-focus text color. Static chips keep textColor; clickable chips use core-text-special.
-				Disabled chips use core-text-disabled.
+				Hover and keyboard-focus text color. Static chips keep textColor; clickable or removable chips use
+				core-text-special. Disabled chips use core-text-disabled.
 			</P>
 			<Definition id={'textColorSelected'}>
 				<Prop>textColorSelected</Prop>
@@ -293,19 +333,20 @@ export function ChipDoc() {
 			<P>Text sent to onToolTip on hover or focus. Your application renders the tooltip.</P>
 			<Definition id={'elementAttributes'}>
 				<Prop>...elementAttributes</Prop>
-				<TypeDef>{'React.HTMLAttributes<HTMLDivElement> | React.ButtonHTMLAttributes<HTMLButtonElement>'}</TypeDef>
+				<TypeDef>{'React.HTMLAttributes<HTMLSpanElement> | React.ButtonHTMLAttributes<HTMLButtonElement>'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
-				With onClick, native button attributes apply to the main action; otherwise div attributes apply to the static
+				With onClick, native button attributes apply to the main action; otherwise span attributes apply to the static
 				content. className and style apply to the outer layout wrapper. Button attributes such as type and form require
 				onClick.
 			</P>
 
 			<H2 id={'motion'}>Motion</H2>
 			<P>
-				Chip uses <Code openURL="https://motion.dev/">Motion</Code> layout animation on a <Code>motion.div</Code>{' '}
-				wrapper to resize smoothly when its label changes.
+				Chip uses <Code openURL="https://motion.dev/">Motion</Code> layout animation on a <Code>motion.span</Code>{' '}
+				wrapper with <Code>display: inline-flex</Code>, so it can appear inside text and resize smoothly when its label
+				changes.
 			</P>
 			<P>
 				Chip manages removal presence internally; no parent presence wrapper is needed. Pressing remove fades the chip
@@ -358,14 +399,14 @@ export function ChipDoc() {
 			</P>
 			<Definition id={'elementEvents'}>
 				<Method>...elementEvents</Method>
-				<TypeDef>{'React.DOMAttributes<HTMLDivElement> | React.DOMAttributes<HTMLButtonElement>'}</TypeDef>
+				<TypeDef>{'React.DOMAttributes<HTMLSpanElement> | React.DOMAttributes<HTMLButtonElement>'}</TypeDef>
 			</Definition>
 			<P>
 				Native events apply to the main button or static content, according to onClick. Mouse and focus handlers compose
 				with tooltip behavior; native keyboard handlers pass through. Preventing default on mouse enter or focus
 				suppresses its tooltip request.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

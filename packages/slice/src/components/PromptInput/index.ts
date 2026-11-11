@@ -1,2 +1,2 @@
 export { PromptInput } from './PromptInput';
-export type { PromptProps } from './_types';
+export type { PromptProps, PromptActions, PromptTextAreaProps } from './_types';

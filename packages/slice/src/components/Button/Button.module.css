@@ -12,6 +12,10 @@
 	}
 }
 
+.button.button {
+	padding: var(--ui-button-padding);
+}
+
 .label {
 	user-select: none;
 	-webkit-user-select: none;
@@ -22,6 +26,11 @@
 	display: -webkit-box;
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
+}
+
+/* Optically lift text labels with the font size; composed content keeps its own alignment. */
+.label:not(.children) {
+	transform: translateY(-0.067em);
 }
 
 .count {
@@ -77,4 +86,15 @@
 .button:hover .label,
 .button:focus-visible .label {
 	text-decoration: var(--ui-button-decoration);
+}
+
+.label.children {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--ui-button-gap);
+	overflow: visible;
+	-webkit-line-clamp: unset;
+	-webkit-box-orient: initial;
+	word-break: normal;
 }

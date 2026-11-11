@@ -3,20 +3,16 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { OverlayPreview } from './OverlayPreview';
 import { motionCode, usageCode } from './code';
 
 export function OverlayDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">Overlay component</H1>
 			<P clipWidth>Catch background clicks while a menu or dialog is open, with a clear or dimmed backdrop.</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-overlay--default"
-				components={[{ label: 'Overlay', component: <OverlayPreview opacity={0.75} /> }]}
-			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Control '}
@@ -29,7 +25,17 @@ export function OverlayDoc() {
 				<Code>{'opacity'}</Code>
 				{' for a dimmed backdrop, or leave it at zero for a clear pointer-catching layer.'}
 			</P>
-			<CodeBlock filename="OverlayExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-overlay--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <OverlayPreview opacity={0.75} />,
+						code: usageCode.trim(),
+						codeFilename: 'OverlayExample.tsx',
+					},
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				{
@@ -175,7 +181,7 @@ export function OverlayDoc() {
 					' controls whether the matching handler on the layer runs. Motion gesture or animation-lifecycle callbacks are not exposed by the backdrop.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

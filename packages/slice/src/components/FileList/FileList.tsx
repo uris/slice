@@ -1,191 +1,246 @@
 'use client';
 
-import React, { useCallback, useMemo } from 'react';
-import { fileIconName, nameAndExtension } from '../../utils/functions/files';
-import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { Attachment } from '../Attachment';
 import { FileIcon } from '../FileIcon';
 import { Icon } from '../Icon';
 import { ProgressIndicator } from '../Progress';
-import type { ToolTip } from '../sharedTypes';
 import css from './FileList.module.css';
 import type { FileItem, FileListProps } from './_types';
+import { fileItemKey, fileProgress } from './fileListValues';
 
-/**
- * utility get file name from file item
- */
-function fileNameFromItem(item: FileItem): string {
-	return typeof item.file === 'string' ? item.file : item.file.name;
+function FileRow({
+	item,
+	canRemove,
+	iconSize,
+	textSize,
+	onRemove,
+	onToolTip,
+}: {
+	item: FileItem;
+	canRemove: boolean;
+	iconSize: number;
+	textSize: NonNullable<FileListProps['textSize']>;
+	onRemove: (button: HTMLButtonElement) => void;
+	onToolTip: FileListProps['onToolTip'];
+}) {
+	const name = typeof item.file === 'string' ? item.file : item.file.name;
+	const progress = fileProgress(item);
+	const removable = canRemove && !item.uploading;
+	const tooltip = useRef({ hovered: false, focused: false, shown: false });
+	// Clear only this row's active tip when its trigger disappears or its handler changes.
+	useEffect(() => {
+		if (!removable) tooltip.current = { hovered: false, focused: false, shown: false };
+		return () => {
+			if (tooltip.current.shown) onToolTip?.(null);
+			tooltip.current.shown = false;
+		};
+	}, [onToolTip, removable]);
+	const updateTip = (button: HTMLButtonElement) => {
+		const state = tooltip.current;
+		if (state.hovered || state.focused) {
+			if (!state.shown && onToolTip) {
+				state.shown = true;
+				onToolTip({ payload: { label: `Remove file ${name}` }, ref: { current: button } });
+			}
+		} else if (state.shown) {
+			state.shown = false;
+			onToolTip?.(null);
+		}
+	};
+	const style = {
+		'--file-progress': `${progress ?? 0}%`,
+		'--file-row-right': removable
+			? 'calc(var(--file-row-horizontal, var(--spacing-xs)) - var(--file-row-adjustment, var(--spacing-xxs)))'
+			: 'var(--file-row-horizontal, var(--spacing-xs))',
+		'--file-border-color': item.error ? 'var(--feedback-warning)' : 'var(--core-outline-primary)',
+	} as React.CSSProperties;
+	return (
+		<div role="listitem" className={`${css.file} ${css[textSize]}`} style={style}>
+			<div className={css.fileIcon}>
+				<FileIcon filename={item.file} size={iconSize} decorative />
+			</div>
+			<div className={css.meta}>
+				<div className={css.fileName} title={name}>
+					{name}
+				</div>
+				{item.error && (
+					<div className={`${css.status} ${css.error}`} role="alert">
+						{name}: {item.error}
+					</div>
+				)}
+			</div>
+			{item.uploading && (
+				<div
+					className={css.progress}
+					role="progressbar"
+					tabIndex={-1}
+					aria-label={`Uploading ${name}`}
+					aria-valuemin={0}
+					aria-valuemax={100}
+					aria-valuenow={progress}
+				>
+					<ProgressIndicator decorative inline size={20} show />
+				</div>
+			)}
+			{removable && (
+				<button
+					type="button"
+					className={css.remove}
+					aria-label={`Remove file ${name}`}
+					onMouseEnter={(e) => {
+						tooltip.current.hovered = true;
+						updateTip(e.currentTarget);
+					}}
+					onMouseLeave={(e) => {
+						tooltip.current.hovered = false;
+						updateTip(e.currentTarget);
+					}}
+					onFocus={(e) => {
+						tooltip.current.focused = true;
+						updateTip(e.currentTarget);
+					}}
+					onBlur={(e) => {
+						tooltip.current.focused = false;
+						updateTip(e.currentTarget);
+					}}
+					onClick={(e) => {
+						if (tooltip.current.shown) onToolTip?.(null);
+						tooltip.current = { hovered: false, focused: false, shown: false };
+						onRemove(e.currentTarget);
+					}}
+				>
+					<Icon name="basic.cross" aria-hidden="true" />
+				</button>
+			)}
+		</div>
+	);
 }
 
-/**
- * cal progress as a percentage string
- */
-function normalizeProgress(uploading?: boolean, progress?: number): string {
-	if (progress === undefined || Number.isNaN(progress)) {
-		return uploading ? '0%' : '100%';
-	}
-	const percent = progress <= 1 ? progress * 100 : progress;
-	const clamped = Math.max(0, Math.min(100, percent));
-	return `${Math.round(clamped)}%`;
-}
-
-/**
- * display the progress indicator if uploading
- */
-function displayProgress(uploading: boolean | undefined): React.CSSProperties {
-	if (!uploading) return { display: 'none' };
-	return { display: 'flex' };
-}
-
-/**
- * display the remove button if not uploading
- */
-function displayClose(uploading: boolean | undefined): React.CSSProperties {
-	if (!uploading) return { display: 'flex' };
-	return { display: 'none' };
-}
-
-export const FileList = React.memo((rawProps: FileListProps) => {
-	const props = resolveColorProps(rawProps);
+const FileListBase = React.forwardRef<HTMLDivElement, FileListProps<File | FileItem>>((rawProps, ref) => {
 	const {
 		files = [],
+		variant = 'list',
+		attachmentSize,
 		onChange,
 		onToolTip,
+		listName = 'Files',
 		maxWidth,
 		minWidth,
 		direction = 'row',
 		padding,
 		gap = 10,
 		textSize = 's',
-		iconSize = 24,
+		iconSize,
 		backgroundColor,
 		canRemove = true,
-		...divAttributes
-	} = props;
-
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? ` ${className}` : '';
-	const resolvedBackgroundColor = backgroundColor;
-
-	// derive display metadata from the raw file name
-	const fileNameToFileItem = useCallback((fileName: string) => {
-		const { ext, name } = nameAndExtension(fileName);
-		const icon = fileIconName(ext);
-		return { name, ext, icon };
-	}, []);
-
-	// derive the rendered file metadata list from the incoming files
-	const displayList = useMemo(() => {
-		return files.map((item, index) => {
-			const fileName = fileNameFromItem(item);
-			const fileMeta = fileNameToFileItem(fileName);
-			const progress = normalizeProgress(item.uploading, item.progress);
-			return {
-				...fileMeta,
-				key: `${fileMeta.name}-${index}`,
-				index,
-				uploading: item.uploading ?? false,
-				progress,
-				error: item.error,
-			};
-		});
-	}, [files, fileNameToFileItem]);
-
-	// remove a file from the list and notify the consumer
-	const handleRemove = useCallback(
-		(index: number) => {
-			const updated = files.filter((_, itemIndex) => itemIndex !== index);
-			onChange?.(updated);
+		className,
+		style,
+		...attributes
+	} = resolveColorProps(rawProps);
+	const root = useRef<HTMLDivElement>(null);
+	const setRoot = useCallback(
+		(node: HTMLDivElement | null) => {
+			root.current = node;
+			if (typeof ref === 'function') return ref(node);
+			if (ref) ref.current = node;
 		},
-		[files, onChange],
+		[ref],
 	);
-
-	// show the remove action tooltip on hover or focus
-	const handleMouseOver = useCallback(
-		(e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
-			const toolTip: ToolTip = {
-				payload: { label: 'Remove file' },
-				ref: { current: e.currentTarget },
-			};
-			onToolTip?.(toolTip);
-		},
-		[onToolTip],
-	);
-
-	// clear the remove action tooltip
-	const handleMouseOut = useCallback(() => {
-		onToolTip?.(null);
-	}, [onToolTip]);
-
-	// compose CSS custom properties for layout, spacing, and colors
-	const cssVars = useMemo(() => {
-		return {
-			'--file-max-width': direction === 'column' ? '100%' : setStyle(maxWidth),
-			'--file-min-width': direction === 'column' && !minWidth ? '100%' : setStyle(minWidth),
-			'--file-gap': setStyle(gap),
-			'--file-direction': direction,
-			'--file-wrap': direction === 'column' ? 'nowrap' : 'wrap',
-			'--file-padding': padding != null ? (typeof padding === 'number' ? `${padding}px` : padding) : undefined,
-			'--file-icon-size': setStyle(iconSize),
-			'--file-overflow': direction === 'column' ? 'unset' : 'hidden',
-			'--file-bg-color': resolvedBackgroundColor ?? 'var(--core-surface-secondary)',
-		} as React.CSSProperties;
-	}, [maxWidth, gap, direction, minWidth, padding, iconSize, resolvedBackgroundColor]);
-
-	// compose per-file CSS custom properties for progress and error state
-	const fileCSSVars = useCallback(
-		(progress: string, uploading: boolean, error?: string) => {
-			return {
-				'--file-progress': `${progress}`,
-				'--file-row-right':
-					canRemove && !uploading
-						? 'calc(var(--file-row-horizontal, var(--spacing-xs)) - var(--file-row-adjustment, var(--spacing-xxs)))'
-						: 'var(--file-row-horizontal, var(--spacing-xs))',
-				'--file-border-color': error ? 'var(--feedback-warning)' : 'var(--core-outline-primary)',
-			} as React.CSSProperties;
-		},
-		[canRemove],
-	);
-
+	const focusAfterRemoval = useRef<{ removed: HTMLElement; next?: HTMLElement } | undefined>(undefined);
+	// Controlled updates keep surviving nodes; move focus only when the active trigger was removed.
+	useLayoutEffect(() => {
+		const pending = focusAfterRemoval.current;
+		if (!pending || pending.removed.isConnected) return;
+		focusAfterRemoval.current = undefined;
+		const document = pending.removed.ownerDocument;
+		if (document.activeElement !== document.body && document.activeElement !== pending.removed) return;
+		if (pending.next?.isConnected) pending.next.focus();
+		else root.current?.focus();
+	});
+	const occurrences = new Map<string, number>();
+	const getMaxWidth = () => {
+		if (variant === 'list' && direction === 'column') return '100%';
+		if (variant === 'attachments') return setStyle(maxWidth ?? '100%');
+		return setStyle(maxWidth);
+	};
+	const getMinWidth = () => {
+		if (variant === 'list' && direction === 'column' && minWidth == null) return '100%';
+		if (variant === 'attachments') return setStyle(minWidth ?? 0);
+		return setStyle(minWidth);
+	};
+	const cssVars = {
+		'--file-max-width': getMaxWidth(),
+		'--file-min-width': getMinWidth(),
+		'--file-gap': setStyle(gap),
+		'--file-direction': direction,
+		'--file-wrap': direction === 'column' ? 'nowrap' : 'wrap',
+		'--file-padding': setStyle(padding ?? 'calc(var(--spacing-xs) + var(--spacing-xxs))'),
+		'--file-icon-size': setStyle(iconSize ?? 24),
+		'--file-bg-color': backgroundColor ?? 'var(--core-surface-secondary)',
+	} as React.CSSProperties;
 	return (
-		<div className={`${css.wrapper}${divClass}`} style={{ ...divStyle, ...cssVars }} id={divId} {...rest}>
-			{displayList.map((i) => (
-				<div
-					key={i.key}
-					className={`${css.file} ${css[textSize]}`}
-					style={fileCSSVars(i.progress, i.uploading, i.error)}
-				>
-					<div className={css.fileIcon}>
-						<FileIcon name={i.icon} size={iconSize} />
-					</div>
-					<div className={css.meta}>
-						<div className={css.fileName}>{i.name}</div>
-						{i.error && <div className={`${css.status} ${i.error ? css.error : ''}`}>{i.error}</div>}
-					</div>
-					<div className={css.icon} style={displayProgress(i.uploading)}>
-						<ProgressIndicator inline size={20} show={i.uploading} />
-					</div>
-					{canRemove && (
-						<div
-							className={css.icon}
-							style={displayClose(i.uploading)}
-							role={'button'}
-							aria-label={'remove file'}
-							onMouseOver={handleMouseOver}
-							onMouseOut={handleMouseOut}
-							onFocus={handleMouseOver}
-							onBlur={handleMouseOut}
-							onClick={() => handleRemove(i.index)}
-							onKeyDown={(e) => accessibleKeyDown(e, () => handleRemove(i.index))}
-							tabIndex={0}
-						>
-							<Icon name={'basic.cross'} style={{ pointerEvents: 'none' }} />
+		<div
+			{...attributes}
+			ref={setRoot}
+			role="list"
+			aria-label={listName}
+			tabIndex={-1}
+			className={`${css.wrapper} ${className ?? ''}`}
+			style={{ ...style, ...cssVars }}
+		>
+			{files.map((entry, index) => {
+				const item = 'file' in entry ? entry : { file: entry };
+				const key = fileItemKey(entry);
+				const occurrence = occurrences.get(key) ?? 0;
+				occurrences.set(key, occurrence + 1);
+				const remove = (button: HTMLButtonElement) => {
+					if (button.ownerDocument.activeElement === button) {
+						const buttons = Array.from(root.current?.querySelectorAll<HTMLButtonElement>('button') ?? []);
+						const position = buttons.indexOf(button);
+						focusAfterRemoval.current = { removed: button, next: buttons[position + 1] ?? buttons[position - 1] };
+					}
+					onChange?.(files.filter((_, itemIndex) => itemIndex !== index));
+				};
+				const rowKey = `${key}:${occurrence}`;
+				if (variant === 'attachments') {
+					const name = typeof item.file === 'string' ? item.file : item.file.name;
+					return (
+						<div role="listitem" className={css.attachment} key={rowKey}>
+							<Attachment
+								content={item}
+								size={attachmentSize}
+								textSize={textSize}
+								iconSize={iconSize}
+								padding={padding}
+								backgroundColor={backgroundColor}
+								canRemove={canRemove && (!item.uploading || Boolean(item.error?.trim()))}
+								removeLabel={`Remove file ${name}`}
+								onRemove={(event) => remove(event.currentTarget)}
+								onToolTip={onToolTip}
+								style={{ maxWidth: '100%', minWidth: 'var(--file-min-width)' }}
+							/>
 						</div>
-					)}
-				</div>
-			))}
+					);
+				}
+				return (
+					<FileRow
+						key={rowKey}
+						item={item}
+						canRemove={canRemove}
+						iconSize={iconSize ?? 24}
+						textSize={textSize}
+						onToolTip={onToolTip}
+						onRemove={remove}
+					/>
+				);
+			})}
 		</div>
 	);
 });
+FileListBase.displayName = 'FileList';
+export const FileList = React.memo(FileListBase) as <T extends File | FileItem = FileItem>(
+	props: FileListProps<T> & React.RefAttributes<HTMLDivElement>,
+) => React.JSX.Element;

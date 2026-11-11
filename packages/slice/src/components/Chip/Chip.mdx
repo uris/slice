@@ -1,10 +1,10 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import * as ChipStories from './Chip.stories';
 import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={ChipStories} />
-<FlexDiv width="fill" maxWidth={760} height="auto">
+<FlexBox width="fill" maxWidth={760} height="auto">
 <Unstyled>
 # Chip
 
@@ -15,9 +15,9 @@ precedence over children; numeric children such as 0 are supported.
 
 Providing onClick creates a native button with type=button by default. Without it,
 the content is static. selected is controlled by your app. onRemove adds a separate
-remove button; after its exit transition, your handler updates the list. The wrapper
+remove button; after its exit transition, your handler updates the list. Removable chips share clickable chips’ default hover and focus colors without making their content a selection button. The wrapper
 animates layout when selected is supplied, using Water easing over 150ms.
-Chip owns removal presence internally. Its remove button fades the chip to zero opacity and scales it to 0.9 over 150ms with Water easing, then calls `onRemove` once so the parent can update its list. No presence wrapper is needed. Reduced motion skips the transition.
+The outer wrapper and static content are spans, with an inline-flex wrapper so chips can appear within text. Chip owns removal presence internally. Its remove button fades the chip to zero opacity and scales it to 0.9 over 150ms with Water easing, then calls `onRemove` once so the parent can update its list. No presence wrapper is needed. Reduced motion skips the transition.
 
 Default outer padding compensates for space inside SVG icons: subtract spacing-xs
 (4px) for m–xl text, or spacing-xxs (2px) for xs/s. A left icon adjusts the left edge;
@@ -56,7 +56,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>transparent</code>
+<code>core-fill-primary</code>
 </td>
 <td>Chip background.</td>
 </tr>
@@ -68,9 +68,9 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>click-dependent</code>
+<code>interaction-dependent</code>
 </td>
-<td>Hover and keyboard-focus background. Static chips keep backgroundColor; clickable chips use core-surface-secondary. Disabled chips keep backgroundColor.</td>
+<td>Hover and keyboard-focus background. Static chips keep backgroundColor; clickable or removable chips use core-fill-primary. Disabled chips keep backgroundColor.</td>
 </tr>
 <tr>
 <td>
@@ -92,7 +92,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>core-text-primary</code>
+<code>core-outline-primary</code>
 </td>
 <td>Normal border color.</td>
 </tr>
@@ -104,7 +104,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>core-text-disabled</code>
+<code>core-fill-primary</code>
 </td>
 <td>Border color while disabled, including hover.</td>
 </tr>
@@ -116,9 +116,9 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>click-dependent</code>
+<code>interaction-dependent</code>
 </td>
-<td>Hover and keyboard-focus border color. Static chips keep borderColor; clickable chips use core-text-special.</td>
+<td>Hover and keyboard-focus border color. Static chips keep borderColor; clickable or removable chips use core-text-special.</td>
 </tr>
 <tr>
 <td>
@@ -128,7 +128,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>core-text-special</code>
+<code>transparent</code>
 </td>
 <td>Selected border color. Disabled chips use borderColorDisabled.</td>
 </tr>
@@ -140,7 +140,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>number &#124; string</code>
 </td>
 <td>
-<code>corner-m</code>
+<code>corner-l</code>
 </td>
 <td>Corner radius. Numbers are pixels; strings accept CSS values.</td>
 </tr>
@@ -152,7 +152,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>number</code>
 </td>
 <td>
-<code>1</code>
+<code>0</code>
 </td>
 <td>Border width in pixels.</td>
 </tr>
@@ -224,9 +224,9 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>click-dependent</code>
+<code>interaction-dependent</code>
 </td>
-<td>Hover and keyboard-focus icon color. Static chips keep iconColor; clickable chips use core-text-special. Disabled chips use core-text-disabled.</td>
+<td>Hover and keyboard-focus icon color. Static chips keep iconColor; clickable or removable chips use core-text-special. Disabled chips use core-text-disabled.</td>
 </tr>
 <tr>
 <td>
@@ -260,7 +260,7 @@ Color props accept Slice theme tokens or CSS colors.
 <code>number</code>
 </td>
 <td>
-<code>20</code>
+<code>16</code>
 </td>
 <td>Icon width and height in pixels.</td>
 </tr>
@@ -293,60 +293,60 @@ Color props accept Slice theme tokens or CSS colors.
 <code>padding</code>
 </td>
 <td>
-<code>number</code>
+<code>number &#124; string</code>
 </td>
 <td>
 <code>undefined</code>
 </td>
-<td>Uniform padding in pixels. Individual side props take priority. When omitted, spacing follows textSize with optical adjustment at icon edges, including removal.</td>
+<td>Padding shorthand. Numbers use pixels; strings accept CSS lengths, theme tokens, and one to four values. Individual side props take priority. When omitted, spacing follows textSize with optical adjustment at icon edges, including removal.</td>
 </tr>
 <tr>
 <td>
 <code>paddingBottom</code>
 </td>
 <td>
-<code>number</code>
+<code>number &#124; string</code>
 </td>
 <td>
 <code>undefined</code>
 </td>
-<td>Bottom padding in pixels. Overrides padding for this side.</td>
+<td>Bottom padding as a pixel number or CSS length. Overrides padding for this side.</td>
 </tr>
 <tr>
 <td>
 <code>paddingLeft</code>
 </td>
 <td>
-<code>number</code>
+<code>number &#124; string</code>
 </td>
 <td>
 <code>undefined</code>
 </td>
-<td>Left padding in pixels. Overrides padding for this side.</td>
+<td>Left padding as a pixel number or CSS length. Overrides padding for this side.</td>
 </tr>
 <tr>
 <td>
 <code>paddingRight</code>
 </td>
 <td>
-<code>number</code>
+<code>number &#124; string</code>
 </td>
 <td>
 <code>undefined</code>
 </td>
-<td>Right padding in pixels. Overrides padding for this side.</td>
+<td>Right padding as a pixel number or CSS length. Overrides padding for this side.</td>
 </tr>
 <tr>
 <td>
 <code>paddingTop</code>
 </td>
 <td>
-<code>number</code>
+<code>number &#124; string</code>
 </td>
 <td>
 <code>undefined</code>
 </td>
-<td>Top padding in pixels. Overrides padding for this side.</td>
+<td>Top padding as a pixel number or CSS length. Overrides padding for this side.</td>
 </tr>
 <tr>
 <td>
@@ -392,9 +392,9 @@ Color props accept Slice theme tokens or CSS colors.
 <code>ColorValue</code>
 </td>
 <td>
-<code>click-dependent</code>
+<code>interaction-dependent</code>
 </td>
-<td>Hover and keyboard-focus text color. Static chips keep textColor; clickable chips use core-text-special. Disabled chips use core-text-disabled.</td>
+<td>Hover and keyboard-focus text color. Static chips keep textColor; clickable or removable chips use core-text-special. Disabled chips use core-text-disabled.</td>
 </tr>
 <tr>
 <td>
@@ -449,12 +449,12 @@ Color props accept Slice theme tokens or CSS colors.
 <code>...elementAttributes</code>
 </td>
 <td>
-<code>React.HTMLAttributes&lt;HTMLDivElement&gt; &#124; React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;</code>
+<code>React.HTMLAttributes&lt;HTMLSpanElement&gt; &#124; React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;</code>
 </td>
 <td>
 <code>undefined</code>
 </td>
-<td>With onClick, native button attributes apply to the main action; otherwise div attributes apply to the static content. className and style apply to the outer layout wrapper. Button attributes such as type and form require onClick.</td>
+<td>With onClick, native button attributes apply to the main action; otherwise span attributes apply to the static content. className and style apply to the outer layout wrapper. Button attributes such as type and form require onClick.</td>
 </tr>
 </tbody>
 </table>
@@ -485,4 +485,4 @@ import { Chip } from '@apple-pie/slice';
 <Chip label="Open tag" onClick={myHandler} />
 ```
 </RenderSource>
-</FlexDiv>
+</FlexBox>

@@ -717,3 +717,19 @@ export const LabelValueAndTipAlignment: Story = {
 		}
 	},
 };
+
+export const ComposedEditorRef: StoryObj<typeof TextArea> = {
+	tags: ['tests'],
+	render: (args) => (
+		<TextArea
+			{...args}
+			inputRef={(element) => {
+				if (element) element.dataset.composedRef = 'attached';
+			}}
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('textbox')).toHaveAttribute('data-composed-ref', 'attached');
+	},
+};

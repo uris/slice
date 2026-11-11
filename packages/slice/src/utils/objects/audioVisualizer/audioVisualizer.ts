@@ -2,6 +2,7 @@ type AudioVisualizerSource = MediaStream | MediaStreamTrack;
 
 type AudioVisualizerOptions = {
 	fftSize?: number;
+	onError?: (error: unknown) => void;
 	intensityMultiplier?: number;
 	maxScale?: number;
 	minScale?: number;
@@ -27,8 +28,13 @@ const toMediaStream = (source: AudioVisualizerSource): MediaStream => {
 	return new MediaStream([source]);
 };
 
+const positive = (value: number | undefined, fallback: number) => {
+	return value !== undefined && Number.isFinite(value) && value > 0 ? value : fallback;
+};
+
 export class AudioVisualizer {
 	private readonly fftSize: number;
+	private readonly onError?: (error: unknown) => void;
 	private readonly intensityMultiplier: number;
 	private readonly maxScale: number;
 	private readonly minScale: number;
@@ -45,20 +51,22 @@ export class AudioVisualizer {
 	private animationFrameId: number | null = null;
 	private audioContext: AudioContext | null = null;
 	private currentIntensity = 0;
+	private runId = 0;
 	private lastFrameTime = 0;
 	private sourceNode: MediaStreamAudioSourceNode | null = null;
 	private timeDomainData: Uint8Array<ArrayBuffer> | null = null;
 
 	constructor(source: AudioVisualizerSource, options: AudioVisualizerOptions = {}) {
 		this.source = source;
-		this.fftSize = options.fftSize ?? 512;
-		this.intensityMultiplier = options.intensityMultiplier ?? 2.2;
-		this.maxScale = options.maxScale ?? 2;
-		this.minScale = options.minScale ?? 1;
+		this.onError = options.onError;
+		this.fftSize = 2 ** Math.round(Math.log2(clamp(positive(options.fftSize, 512), 32, 32768)));
+		this.intensityMultiplier = positive(options.intensityMultiplier, 2.2);
+		this.maxScale = Math.max(positive(options.minScale, 1), positive(options.maxScale, 2));
+		this.minScale = positive(options.minScale, 1);
 		this.onUpdate = options.onUpdate;
-		this.peakIntensity = options.peakIntensity ?? 0.2;
-		this.releasePerSecond = options.releasePerSecond ?? 1.5;
-		this.risePerSecond = options.risePerSecond ?? 4;
+		this.peakIntensity = positive(options.peakIntensity, 0.2);
+		this.releasePerSecond = positive(options.releasePerSecond, 1.5);
+		this.risePerSecond = positive(options.risePerSecond, 4);
 	}
 
 	public start() {
@@ -68,32 +76,47 @@ export class AudioVisualizer {
 
 		if (this.animationFrameId !== null) return;
 
-		if (!this.audioContext) {
-			this.audioContext = new AudioContext();
-			this.analyser = this.audioContext.createAnalyser();
-			this.analyser.fftSize = this.fftSize;
-			this.sourceNode = this.audioContext.createMediaStreamSource(toMediaStream(this.source));
-			this.sourceNode.connect(this.analyser);
-			this.timeDomainData = new Uint8Array(new ArrayBuffer(this.analyser.fftSize));
+		try {
+			if (!this.audioContext) {
+				this.audioContext = new AudioContext();
+				this.analyser = this.audioContext.createAnalyser();
+				this.analyser.fftSize = this.fftSize;
+				this.sourceNode = this.audioContext.createMediaStreamSource(toMediaStream(this.source));
+				this.sourceNode.connect(this.analyser);
+				this.timeDomainData = new Uint8Array(new ArrayBuffer(this.analyser.fftSize));
+			}
+		} catch (error) {
+			this.dispose();
+			throw error;
 		}
 
-		void this.audioContext.resume();
+		const context = this.audioContext;
+		const runId = ++this.runId;
+		void context.resume().catch((error: unknown) => {
+			if (this.audioContext !== context || this.runId !== runId || this.animationFrameId === null) return;
+			this.stop();
+			this.onUpdate?.({ intensity: 0, scale: this.minScale });
+			this.onError?.(error);
+		});
 		this.lastFrameTime = performance.now();
 		this.animationFrameId = requestAnimationFrame(this.onFrame);
 	}
 
 	public stop() {
+		this.runId++;
 		if (this.animationFrameId !== null) {
 			cancelAnimationFrame(this.animationFrameId);
 			this.animationFrameId = null;
 		}
+		this.currentIntensity = 0;
+		void this.audioContext?.suspend().catch(() => undefined);
 	}
 
 	public dispose() {
 		this.stop();
 		this.sourceNode?.disconnect();
 		this.analyser?.disconnect();
-		void this.audioContext?.close();
+		void this.audioContext?.close().catch(() => undefined);
 		this.sourceNode = null;
 		this.analyser = null;
 		this.audioContext = null;
@@ -134,7 +157,7 @@ export class AudioVisualizer {
 			scale: this.getScale(),
 		});
 
-		this.animationFrameId = requestAnimationFrame(this.onFrame);
+		if (this.animationFrameId !== null) this.animationFrameId = requestAnimationFrame(this.onFrame);
 	};
 }
 

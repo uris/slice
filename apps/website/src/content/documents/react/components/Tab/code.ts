@@ -1,24 +1,42 @@
 export const usageCode = `
 import { Tab, TabBar } from '@apple-pie/slice';
 
-<TabBar tabBarName="Project views" defaultValue="overview">
-  <Tab value="overview" label="Overview" />
-  <Tab value="details" label="Details" />
-</TabBar>
+export function TabUsageExample() {
+	return (
+		<TabBar tabBarName="Project views" defaultValue="overview">
+			<Tab value="overview" label="Overview" />
+			<Tab value="details" label="Details" />
+		</TabBar>
+	);
+}
 `;
 export const extrasCode = `
-<TabBar tabBarName="Project views" defaultValue="overview">
-  <Tab value="overview" label="Overview" />
-  <Tab value="activity" label="Activity" icon="basic.home" count={12} />
-</TabBar>
+import { Tab, TabBar } from '@apple-pie/slice';
+
+export function TabExtrasExample() {
+	return (
+		<TabBar tabBarName="Project views" defaultValue="overview">
+			<Tab value="overview" label="Overview" />
+			<Tab value="activity" label="Activity" icon="basic.home" count={12} />
+		</TabBar>
+	);
+}
 `;
 export const customCode = `
-<TabBar tabBarName="Project views" defaultValue="overview">
-  <Tab value="overview" label="Overview" />
-  <Tab value="activity">
-    <span>Activity <em>Live</em></span>
-  </Tab>
-</TabBar>
+import { Tab, TabBar } from '@apple-pie/slice';
+
+export function TabCustomExample() {
+	return (
+		<TabBar tabBarName="Project views" defaultValue="overview">
+			<Tab value="overview" label="Overview" />
+			<Tab value="activity">
+				<span>
+					Activity <em>Live</em>
+				</span>
+			</Tab>
+		</TabBar>
+	);
+}
 `;
 export const panelsCode = `
 <>
@@ -33,4 +51,15 @@ export const panelsCode = `
     Activity content
   </div>
 </>
+`;
+
+export const colorsCode = `
+import { Tab, TabBar } from '@apple-pie/slice';
+
+export function TabColorExample() {
+    return <TabBar tabBarName="Custom tab colors" accentColor="#22c55e" width={360}>
+        <Tab value="overview" label="Overview" icon="basic.home" />
+        <Tab value="activity" label="Activity" icon="basic.inbox" textColorSelected="#fbbf24" iconColorSelected="#f472b6" underlineSelectedColor="#a78bfa" />
+    </TabBar>;
+}
 `;

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StrictMode, useRef, useState } from 'react';
 import { Button } from 'src/components/Button/Button';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { SliceIcons } from 'src/components/Icon/_types';
 import {
 	runButtonDisabledInteractionsPlay,
@@ -15,6 +15,7 @@ import {
 	runButtonTextVariantChildrenPlay,
 } from 'src/components/playHelpers';
 import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import { Avatar } from '../Avatar';
 import type { ButtonHandle } from './_types';
 
 const meta: Meta<typeof Button> = {
@@ -30,7 +31,7 @@ const meta: Meta<typeof Button> = {
 		},
 	},
 	args: {
-		size: 'large',
+		buttonSize: 'l',
 		variant: 'solid',
 		label: 'Button Label',
 		textSize: 'm',
@@ -65,12 +66,89 @@ const meta: Meta<typeof Button> = {
 
 export default meta;
 
+export const AutoChildren: StoryObj<typeof Button> = {
+	args: {
+		buttonSize: 'auto',
+		variant: 'solid',
+		iconLeft: undefined,
+		iconRight: undefined,
+		children: (
+			<>
+				<Avatar name="John Wick" />
+				<span>Profile Info</span>
+			</>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button', { name: /Profile Info/ }).getBoundingClientRect();
+		const avatar = canvas.getByLabelText('User Avatar - John Wick').getBoundingClientRect();
+		const text = canvas.getByText('Profile Info').getBoundingClientRect();
+		expect(avatar.top - button.top).toBeCloseTo(6, 1);
+		expect(button.bottom - avatar.bottom).toBeCloseTo(6, 1);
+		expect(text.left - avatar.right).toBeCloseTo(4, 1);
+		expect(text.top + text.height / 2).toBeCloseTo(avatar.top + avatar.height / 2, 1);
+	},
+};
+
+export const ChildrenPaddingAndGap: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: {
+		buttonSize: 'auto',
+		variant: 'solid',
+		iconLeft: undefined,
+		iconRight: undefined,
+		padding: '2px 10px',
+		paddingTop: 8,
+		paddingBottom: 4,
+		paddingLeft: 20,
+		gap: 0,
+		children: (
+			<>
+				<span style={{ display: 'block' }}>First</span>
+				<span style={{ display: 'block' }}>Second</span>
+			</>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button');
+		expect(getComputedStyle(button).padding).toBe('8px 10px 4px 20px');
+		const first = canvas.getByText('First').getBoundingClientRect();
+		const second = canvas.getByText('Second').getBoundingClientRect();
+		expect(second.left - first.right).toBeCloseTo(0, 1);
+	},
+};
+
+export const SharedSizes: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox gap={12}>
+			{(['s', 'm', 'l', 'xl', 52] as const).map((buttonSize) => (
+				<Button key={buttonSize} label={String(buttonSize)} buttonSize={buttonSize} />
+			))}
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, height] of [
+			['s', 24],
+			['m', 36],
+			['l', 44],
+			['xl', 56],
+			['52', 52],
+		] as const) {
+			expect(canvas.getByRole('button', { name }).getBoundingClientRect().height).toBeCloseTo(height, 1);
+		}
+	},
+};
+
 export const Default: StoryObj<typeof Button> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<Button {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -80,7 +158,7 @@ export const Default: StoryObj<typeof Button> = {
 
 export const Small: StoryObj<typeof Button> = {
 	args: {
-		size: 'small',
+		buttonSize: 's',
 		label: 'Small Button',
 		iconRight: undefined,
 	},
@@ -117,11 +195,11 @@ export const TextVariantChildren: StoryObj<typeof Button> = {
 	// children take priority over `label`, and the meta default label isn't
 	// cleared by an `undefined` override in args, so drop it directly in JSX
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Button {...args} label={undefined}>
 				Children Label
 			</Button>
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runButtonTextVariantChildrenPlay,
 };
@@ -134,9 +212,9 @@ export const RoundIconOnly: StoryObj<typeof Button> = {
 		iconRight: undefined,
 	},
 	render: (args) => (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 			<Button {...args} label={undefined} aria-label="Home" />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runButtonRoundIconOnlyPlay,
 };
@@ -154,10 +232,10 @@ export const ShowDotAndCount: StoryObj<typeof Button> = {
 export const FillAndCustomWidth: StoryObj<typeof Button> = {
 	tags: ['tests'],
 	render: () => (
-		<FlexDiv direction={'column'} gap={12}>
+		<FlexBox direction={'column'} gap={12}>
 			<Button className="fill-button" label="Fill" fill width={'fill'} />
 			<Button className="custom-width-button" label="Fixed" width={'200px'} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	play: runButtonFillAndCustomWidthPlay,
 };
@@ -350,12 +428,19 @@ export const ZeroCountHasNoStrayText: StoryObj<typeof Button> = {
 
 export const SmallRoundGeometry: StoryObj<typeof Button> = {
 	tags: ['tests'],
-	args: { round: true, size: 'small', iconLeft: 'basic.home', iconRight: undefined },
+	args: { round: true, buttonSize: 's', iconLeft: 'basic.home', iconRight: undefined },
 	render: (args) => <Button {...args} label={undefined} aria-label="Home" />,
 	play: async ({ canvasElement }) => {
 		const button = within(canvasElement).getByRole('button', { name: 'Home' });
 		await expect(button.getBoundingClientRect().width).toBe(button.getBoundingClientRect().height);
 	},
+};
+
+export const AutoRoundGeometry: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { ...SmallRoundGeometry.args, buttonSize: 'auto' },
+	render: SmallRoundGeometry.render,
+	play: SmallRoundGeometry.play,
 };
 
 export const ActualFillWidth: StoryObj<typeof Button> = {
@@ -376,7 +461,7 @@ export const TextVariantColorOverrides: StoryObj<typeof Button> = {
 	render: Default.render,
 	play: async ({ canvasElement }) => {
 		const button = within(canvasElement).getByRole('button');
-		await expect(button.style.background).toBe('rgb(37, 99, 235)');
+		await expect(button.style.backgroundColor).toBe('rgb(37, 99, 235)');
 		await expect(button.style.color).toBe('rgb(255, 255, 255)');
 	},
 };
@@ -480,4 +565,98 @@ export const MotionEventSignatures: StoryObj<typeof Button> = {
 	play: async ({ args }) => {
 		await waitFor(() => expect((args.onAnimationStart as ReturnType<typeof fn>).mock.calls[0]?.[0]).toBe('visible'));
 	},
+};
+
+export const BorderOverrides: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox gap={12}>
+			{(['solid', 'outline', 'text'] as const).flatMap((variant) =>
+				(['s', 'auto', 52] as const).map((buttonSize) => (
+					<Button
+						key={`${variant}-${buttonSize}`}
+						label={`${variant}-${buttonSize}`}
+						variant={variant}
+						buttonSize={buttonSize}
+						borderWidth={2}
+						borderColor="#123456"
+					/>
+				)),
+			)}
+			<Button label="Disabled border" variant="solid" disabled borderWidth="3px" borderColor="#123456" />
+			<Button label="Destructive border" destructive fill borderWidth={2} borderColor="core-text-primary" />
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const variant of ['solid', 'outline', 'text']) {
+			for (const size of ['s', 'auto', 52]) {
+				const button = canvas.getByRole('button', { name: `${variant}-${size}` });
+				await expect(getComputedStyle(button).borderTopWidth).toBe('2px');
+				await expect(getComputedStyle(button).backgroundClip).toBe('padding-box');
+				await expect(getComputedStyle(button).borderTopColor).toBe('rgb(18, 52, 86)');
+				await userEvent.hover(button);
+				await expect(getComputedStyle(button).borderTopColor).toBe('rgb(18, 52, 86)');
+				await expect(button).not.toHaveAttribute('borderWidth');
+				await expect(button).not.toHaveAttribute('borderColor');
+			}
+		}
+		const disabled = canvas.getByRole('button', { name: 'Disabled border' });
+		await expect(getComputedStyle(disabled).borderTopWidth).toBe('3px');
+		await expect(getComputedStyle(disabled).borderTopColor).toBe('rgb(18, 52, 86)');
+		const destructive = canvas.getByRole('button', { name: 'Destructive border' });
+		await expect(destructive.style.borderColor).toBe('var(--core-text-primary)');
+	},
+};
+
+export const ZeroAndRoundBorders: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox gap={12}>
+			<Button label="Borderless outline" borderWidth={0} borderColor="transparent" />
+			<Button label="Color only" borderColor="#123456" />
+			<Button label="Width only" variant="solid" borderWidth={2} />
+			<Button buttonSize="auto" round iconLeft="basic.home" aria-label="Round bordered" borderWidth={3} />
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(getComputedStyle(canvas.getByRole('button', { name: 'Borderless outline' })).borderTopWidth).toBe(
+			'0px',
+		);
+		const colorOnly = canvas.getByRole('button', { name: 'Color only' });
+		await expect(getComputedStyle(colorOnly).borderTopWidth).toBe('1px');
+		await expect(getComputedStyle(colorOnly).borderTopColor).toBe('rgb(18, 52, 86)');
+		const widthOnly = canvas.getByRole('button', { name: 'Width only' });
+		await expect(getComputedStyle(widthOnly).borderTopWidth).toBe('2px');
+		await expect(getComputedStyle(widthOnly).borderTopColor).toBe('rgba(0, 0, 0, 0)');
+		const round = canvas.getByRole('button', { name: 'Round bordered' }).getBoundingClientRect();
+		await expect(round.width).toBe(round.height);
+		await expect(round.width).toBe(38);
+	},
+};
+
+export const BodyTextSizes: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Compare all body text sizes at the default 36px button height. Each row compares labels without descenders (Button Label) and with descenders (Typography), paired in solid and outline variants.',
+			},
+		},
+	},
+	render: () => (
+		<FlexBox direction="column" gap={16} padding={24}>
+			{(['xs', 's', 'm', 'l', 'xl'] as const).map((textSize) => (
+				<FlexBox key={textSize} align="center" gap={16}>
+					<span style={{ width: 24 }}>{textSize}</span>
+					<Button variant="solid" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
+					<Button variant="solid" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
+					<Button variant="outline" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
+					<Button variant="outline" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
+				</FlexBox>
+			))}
+		</FlexBox>
+	),
 };

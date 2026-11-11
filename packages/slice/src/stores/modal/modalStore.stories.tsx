@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef } from 'react';
 import { Button } from 'src/components/Button';
 import { DialogBox } from 'src/components/DialogBox/DialogBox';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { ModalController } from 'src/components/ModalController/ModalController';
 import { useModalActions } from 'src/stores/modal';
 import type { DialogBoxAction, DialogBoxProps } from '../../components/DialogBox/_types';
@@ -63,11 +63,11 @@ function ModalStoreDemo(args: React.ComponentProps<typeof ModalController>) {
 	};
 
 	return (
-		<FlexDiv absolute justify={'center'} align={'center'} ref={ref}>
+		<FlexBox absolute justify={'center'} align={'center'} ref={ref}>
 			<Button iconRight={'arrows.arrow-right'} onClick={showAsyncModalClick}>
 				Continue
 			</Button>
 			<ModalController {...args} dragConstraintsRef={ref} draggable={true} />
-		</FlexDiv>
+		</FlexBox>
 	);
 }

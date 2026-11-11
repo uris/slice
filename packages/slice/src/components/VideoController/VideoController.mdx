@@ -1,17 +1,17 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import {FlexBox} from '../FlexBox';
 import * as VideoControllerStories from './VideoController.stories';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={VideoControllerStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # VideoController
         Renders the active global video from `VideoStore` and places an overlay beneath it.
 
-        Mount one `VideoController` near the app root when using the video store. The controller owns overlay rendering, enter and exit animation, optional dragging, and a small readiness gate that prevents a size flash before the first frame loads.
+        Mount one `VideoController` near the app root when using the video store. The controller owns overlay rendering, enter and exit animation, optional dragging, keyboard focus containment, and dismissal while media is loading.
 
         ## Base element
         `HTMLDivElement`
@@ -37,16 +37,16 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
           </thead>
           <tbody>
             <tr><td><code>animate</code></td><td><code>string</code></td><td><code>'animate'</code></td><td>Variant key used for the active animation state.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>{`number | string`}</code></td><td><code>8</code></td><td>Fallback border radius applied to the rendered video when the active video props do not provide one.</td></tr>
+            <tr><td><code>borderRadius</code></td><td><code>{`number | string`}</code></td><td><code>8</code></td><td>Explicit controller radius takes priority over the descriptor radius; otherwise the descriptor radius or corner-m is used.</td></tr>
             <tr><td><code>dragConstraintsRef</code></td><td><code>{`RefObject<HTMLElement | null>`}</code></td><td><code>-</code></td><td>Optional ref used to constrain dragging.</td></tr>
-            <tr><td><code>draggable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enables dragging on the controller wrapper.</td></tr>
+            <tr><td><code>draggable</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enables a dedicated drag handle; arrow keys also move the video within its constraints.</td></tr>
             <tr><td><code>exit</code></td><td><code>string</code></td><td><code>'exit'</code></td><td>Variant key used during unmount.</td></tr>
             <tr><td><code>initial</code></td><td><code>string</code></td><td><code>'initial'</code></td><td>Variant key used before the video enters.</td></tr>
             <tr><td><code>overlayColor</code></td><td><code>string</code></td><td><code>'rgb(0,0,0)'</code></td><td>Background color for the overlay behind the active video.</td></tr>
             <tr><td><code>overlayOpacity</code></td><td><code>number</code></td><td><code>0.7</code></td><td>Opacity applied to the overlay.</td></tr>
             <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>64</code></td><td>Viewport padding used to keep the controller away from the screen edges.</td></tr>
             <tr><td><code>showProgressIndicator</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Controls the rendered video's loading indicator. Overrides <code>showProgressIndicator</code> in the active video descriptor's props.</td></tr>
-            <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>{`{ ease: 'easeOut', duration: 0.25, delay: 0.1 }`}</code></td><td>Motion transition applied to the controller wrapper.</td></tr>
+            <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>{`Water timing`}</code></td><td>Motion transition overrides merged with theme Water timing. Reduced motion disables entrance and exit animations, including custom variants.</td></tr>
             <tr><td><code>variants</code></td><td><code>Variants</code></td><td><code>{`{ initial, animate, exit }`}</code></td><td>Motion variants applied to the controller wrapper.</td></tr>
           </tbody>
         </table>
@@ -55,27 +55,31 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
         `VideoController` reads the current video descriptor from the video store and renders its `component` with the provided `props`.
 
         Controller-owned props include:
-        - `borderRadius`, unless the active video already provides one
+        - `borderRadius`, when explicitly supplied
         - `showProgressIndicator`, which defaults to `true` and overrides the active video's setting
-        - `onLoadedFrameData`, which is used internally to reveal the controller once the first frame is ready, and then forwards to any caller-provided `onLoadedFrameData`
+        - `onLoadedFrameData`, which tracks readiness and also forwards to the descriptor callback
 
-        The controller keeps its contents, including the video's spinner, hidden until `onLoadedFrameData` fires. Once revealed, the built-in `Video` keeps its spinner mounted until `canplay`. Set `showProgressIndicator={false}` on the controller to disable the spinner.
+        Loading, error feedback, and dismissal remain available before the first frame. Set `showProgressIndicator={false}` on the controller to disable the spinner. Each replacement descriptor owns a fresh player lifecycle, even when its optional ID is omitted or reused. Exiting players pause immediately.
 
         To receive readiness notifications, pass `onCanPlay` in the video descriptor's `props`. The controller forwards it to the video component.
+
+        `customControls` overrides descriptor control options, which override Video's defaults. `quit` defaults to `inside`; `outside` places a close button beside the player, and `none` omits the close button. A fallback close button remains available while loading or when the chosen player controls cannot show an inside close button.
+
+        `dialogName` names the modal and defaults to “Video player”. The controller contains keyboard focus, locks background interaction and scrolling, handles Escape, and restores the opener on dismissal. Backdrop, Escape, and close-button dismissal call both the descriptor's and controller's `onQuit` callbacks once. A store clear or replacement does not emit those callbacks.
 
         ## Code Examples
         </Unstyled>
 
         <RenderSource language={"tsx"}>
 ```
-import { Button, FlexDiv, Video, VideoController } from '@apple-pie/slice';
+import { Button, FlexBox, Video, VideoController } from '@apple-pie/slice';
 import { useVideoActions } from '@apple-pie/slice/stores/video';
 
 export function VideoControllerExample() {
     const actions = useVideoActions();
 
     return (
-        <FlexDiv justify="center" align="center" height={320}>
+        <FlexBox justify="center" align="center" height={320}>
             <Button
                 onClick={() =>
                     actions.show({
@@ -94,7 +98,7 @@ export function VideoControllerExample() {
                 Open Video
             </Button>
             <VideoController showProgressIndicator={false} />
-        </FlexDiv>
+        </FlexBox>
     );
 }
 ```
@@ -108,18 +112,18 @@ export function VideoControllerExample() {
         <RenderSource language={"tsx"}>
 ```
 import { useRef } from 'react';
-import { FlexDiv, VideoController } from '@apple-pie/slice';
+import { FlexBox, VideoController } from '@apple-pie/slice';
 
 export function ConstrainedVideoControllerExample() {
     const ref = useRef<HTMLDivElement>(null);
 
     return (
-        <FlexDiv ref={ref} height={360} justify="center" align="center">
+        <FlexBox ref={ref} height={360} justify="center" align="center">
             <VideoController dragConstraintsRef={ref} />
-        </FlexDiv>
+        </FlexBox>
     );
 }
 ```
         </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

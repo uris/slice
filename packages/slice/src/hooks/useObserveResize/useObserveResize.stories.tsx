@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { Slider } from '../../components/Slider';
 import { useObserveResize } from './useObserveResize';
 
@@ -18,8 +18,8 @@ function UseObserveResizeDemo(props: Readonly<ResizeDemoProps>) {
 	const size = useObserveResize(boxRef, { ignore });
 
 	return (
-		<FlexDiv align={'center'} justify={'center'} padding={24} absolute direction={'column'} gap={12}>
-			<FlexDiv direction={'column'} align={'center'} height={'auto'} gap={12}>
+		<FlexBox align={'center'} justify={'center'} padding={24} absolute direction={'column'} gap={12}>
+			<FlexBox direction={'column'} align={'center'} height={'auto'} gap={12}>
 				Change Width
 				<Slider
 					aria-label="Width"
@@ -40,8 +40,8 @@ function UseObserveResizeDemo(props: Readonly<ResizeDemoProps>) {
 					trackHeadSize={0}
 					onChange={(v, _) => setHeight(v)}
 				/>
-			</FlexDiv>
-			<FlexDiv
+			</FlexBox>
+			<FlexBox
 				ref={boxRef}
 				width={width}
 				height={height}
@@ -51,8 +51,8 @@ function UseObserveResizeDemo(props: Readonly<ResizeDemoProps>) {
 				background={'var(--core-surface-secondary)'}
 			>
 				Observed size: {size.width} x {size.height}
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

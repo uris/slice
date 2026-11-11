@@ -42,6 +42,25 @@ Do not introduce:
 - generic `color` for main text
 - generic `radius` when the prop is border radius
 
+## Shared size types
+
+Use the exported types in `src/components/sharedTypes.ts` for matching size APIs:
+
+- `ComponentSize`: `xs | s | m | l | xl | auto`.
+- `FixedSize`: excludes `auto`, for typography and other fixed tiers.
+- `ButtonSize`: excludes `xs` and also accepts numeric pixel sizes.
+
+Components must support `auto` explicitly in their layout implementation. Fixed-frame
+controls such as IconButton and ButtonBar use `Exclude<ButtonSize, 'auto'>`.
+ToggleButton accepts `ButtonSize`: explicit `auto` removes the minimum frame size,
+while an omitted size retains `m`, including when children are supplied.
+The existing FlexBox `Size` enum describes layout dimensions and is separate.
+
+Shared button padding props use `PaddingProps` and `ButtonStyleProps`. Button size
+values and padding defaults are defined once in `buttonStyleDefaults` in the same
+shared file. ToggleButton children use 6px top and bottom padding; horizontal
+padding retains the standard text/icon calculations.
+
 ## State suffixes
 When a style changes by state, keep the base prop name and append a state suffix.
 

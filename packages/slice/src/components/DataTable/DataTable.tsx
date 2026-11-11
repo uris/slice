@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { useObserveResize } from '../../hooks';
 import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
@@ -11,21 +14,29 @@ import { useReorderColumns } from './_useReorderColumns';
 import { useResizeColumn } from './_useResizeColumn';
 import { useRowWindow } from './_useRowWindow';
 import { resolveAlignValue, resolveColumnValue } from './columnHelper';
+import { compareValues } from './compareValues';
 
 export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	const props = resolveColorProps(rawProps);
 	const {
 		backgroundColor = 'var(--core-surface-primary)',
 		headerBackgroundColor = 'var(--core-surface-secondary)',
+		headerBackgroundColorHover = 'var(--core-surface-primary-tint)',
 		candyStripeBackgroundColor = 'var(--core-surface-primary-tint)',
 		backgroundColorHoverRow = 'var(--core-surface-primary-tint)',
-		handleHoverColor = 'var(--core-outline-special)',
+		handleHoverColor = 'var(--core-button-primary)',
 		freezeColumn = false,
 		headerSticky = true,
 		height = 'auto',
 		width = '100%',
 		maxWidth,
 		colResize = true,
+		colReorder = true,
+		columnOrder: controlledColumnOrder,
+		columnWidths: controlledColumnWidths,
+		defaultSort,
+		onRowClick,
+		freezeColumnBackgroundColor,
 		borderColor = 'var(--core-outline-primary)',
 		borderStyle = 'box',
 		columnDefinitions = [],
@@ -43,19 +54,36 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 		onColumnReorder,
 		borderRadius = corners['corner-m'],
 		virtualizeRows,
-		virtualizeRowThreshold = 200,
+		virtualizeRowThreshold = 500,
 		rowHeight = 44,
 		overscanRows,
 		margin,
 	} = props;
 	const [hScroll, setHScroll] = useState<boolean>(false);
 	const [vScroll, setVScroll] = useState<boolean>(false);
-	const [hoveredRow, setHoveredRow] = useState<number | null>(null);
-	const [sortKey, setSortKey] = useState<SortKey<T>>(sort);
-	const [columnWidths, setColumnWidths] = useState<Record<string, number | string>>({});
-	const [columnOrder, setColumnOrder] = useState<string[] | null>(null);
+	const [internalSort, setInternalSort] = useState<SortKey<T>>(defaultSort);
+	const sortControlled = Object.hasOwn(rawProps, 'sort');
+	const sortKey = sortControlled ? sort : internalSort;
+	const [internalColumnWidths, setInternalColumnWidths] = useState<Record<string, number | string>>({});
+	const [internalColumnOrder, setInternalColumnOrder] = useState<string[] | null>(null);
+	const columnOrder = controlledColumnOrder ?? internalColumnOrder;
+	const columnWidths = controlledColumnWidths ?? internalColumnWidths;
+	const setColumnWidths = useCallback(
+		(next: React.SetStateAction<Record<string, number | string>>) => {
+			if (controlledColumnWidths === undefined) setInternalColumnWidths(next);
+		},
+		[controlledColumnWidths],
+	);
+	const setColumnOrder = useCallback(
+		(next: React.SetStateAction<string[] | null>) => {
+			if (controlledColumnOrder === undefined) setInternalColumnOrder(next);
+		},
+		[controlledColumnOrder],
+	);
 	const [draggedColId, setDraggedColId] = useState<string | null>(null);
 	const wrapperRef = React.useRef<HTMLDivElement>(null);
+	const headerRef = React.useRef<HTMLTableSectionElement>(null);
+	const headerSize = useObserveResize(headerRef, { ignore: 'width' });
 	const resizeBarRef = React.useRef<HTMLDivElement>(null);
 	const colRefs = React.useRef<Record<string, HTMLTableColElement | null>>({});
 	// stable identity across renders (resizeBarRef/wrapperRef never change) - an inline
@@ -103,20 +131,24 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	const cssVars = useMemo(() => {
 		return {
 			'--table-width': setStyle(width),
-			'--table-max-width': maxWidth ? setStyle(maxWidth) : 'unset',
+			'--table-max-width': setStyle(maxWidth),
 			'--table-height': setStyle(height),
-			'--table-margin': margin ? setStyle(margin) : '0',
+			'--table-margin': setStyle(margin, 0),
 			'--table-background-color': backgroundColor,
+			'--table-hover-background': backgroundColorHoverRow,
+			'--table-row-height': `${rowHeight}px`,
 			'--table-column-box-shadow': columnBoxShadow,
 			'--table-header-box-shadow': headerBoxShadow,
 			'--table-corner-box-shadow': cornerBoxShadow,
 			'--table-header-background-color': headerBackgroundColor,
+			'--table-header-background-color-hover': headerBackgroundColorHover,
 			'--table-candy-stripe-background-color': candyStripeBackgroundColor,
 			'--table-freeze-column-position': freezeColumn ? 'sticky' : 'relative',
 			'--table-header-sticky-position': headerSticky ? 'sticky' : 'relative',
 			'--table-border-color': borderColor,
 			'--table-corner-position': freezeColumn || headerSticky ? 'sticky' : 'relative',
 			'--table-corner-left': freezeColumn ? '0px' : 'unset',
+			'--table-corner-top': headerSticky ? '0px' : 'auto',
 			'--table-border-width': borderStyle === 'none' ? '0' : '1px',
 			'--table-border-sides': borderStyle === 'box' ? '1px' : '0',
 			'--table-handle-hover-color': handleHoverColor,
@@ -124,7 +156,10 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 		} as React.CSSProperties;
 	}, [
 		backgroundColor,
+		backgroundColorHoverRow,
+		rowHeight,
 		headerBackgroundColor,
+		headerBackgroundColorHover,
 		candyStripeBackgroundColor,
 		cornerBoxShadow,
 		columnBoxShadow,
@@ -157,11 +192,22 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	}, [columnDefinitions, columnOrder]);
 
 	// resize column logic and handlers
-	const { dragResize, hoverResize } = useResizeColumn(elements, colResize, setColumnWidths, onColumnResize);
+	const finishResize = useCallback(
+		(id: string, width: number) => {
+			const element = colRefs.current[id];
+			if (controlledColumnWidths !== undefined && element) {
+				const column = orderedColumns.find((column) => column.id === id);
+				element.style.width = setStyle(controlledColumnWidths[id] ?? column?.width);
+			}
+			onColumnResize?.(id, width);
+		},
+		[controlledColumnWidths, orderedColumns, onColumnResize],
+	);
+	const { dragResize, hoverResize } = useResizeColumn(elements, colResize, setColumnWidths, finishResize);
 
 	// reorder column logic and handlers
 	const { dragStart, dragOver, dragDrop } = useReorderColumns<T>(
-		columnDefinitions,
+		orderedColumns,
 		setColumnOrder,
 		setDraggedColId,
 		onColumnReorder,
@@ -171,31 +217,33 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	// memo data based on any active filters and sorts
 	const rows = useMemo(() => {
 		const sortFunction = (a: T, b: T) => {
-			if (!sortKey?.key) return 0;
+			if (sortKey?.key === undefined) return 0;
+			const compare = orderedColumns.find((column) => column.sort === sortKey.key)?.compare;
+			if (compare) return compare(a, b) * (sortKey.dir === 'desc' ? -1 : 1);
 			const { key, dir } = sortKey;
-			if (a[key] === b[key]) return 0;
-			const isGreater = a[key] > b[key];
-			return (isGreater ? 1 : -1) * (dir === 'desc' ? -1 : 1);
+			return compareValues(a[key], b[key], dir);
 		};
 		const filtered = filter ? tableData.filter((row, index, array) => filter(row, index, array)) : tableData;
-		return [...filtered].sort(sortFunction);
-	}, [tableData, filter, sortKey]);
+		return sortKey?.key === undefined ? filtered : [...filtered].sort(sortFunction);
+	}, [tableData, filter, sortKey, orderedColumns]);
 
 	// virtualizeRows left unset auto-enables once rows.length passes virtualizeRowThreshold - an
 	// explicit true/false always overrides that regardless of row count
-	const shouldVirtualize = resolveVirtualizeRows(virtualizeRows, rows.length, virtualizeRowThreshold);
+	const requestedVirtualization = resolveVirtualizeRows(virtualizeRows, rows.length, virtualizeRowThreshold);
+	const shouldVirtualize = requestedVirtualization && height !== 'auto';
 
 	// compute which rows should actually mount, given shouldVirtualize/rowHeight/overscanRows
 	const rowWindow = useRowWindow(wrapperRef, rows.length, {
 		enabled: shouldVirtualize,
 		rowHeight,
+		headerHeight: headerSize.height,
 		overscan: overscanRows,
 	});
 
 	// dev-time guardrails - both are silent no-ops in production builds
 	useEffect(() => {
 		if (process.env.NODE_ENV === 'production') return;
-		if (shouldVirtualize && height === 'auto') {
+		if (requestedVirtualization && height === 'auto') {
 			console.warn(
 				'[DataTable] `virtualizeRows` needs a bounded `height` (e.g. a fixed px or vh value) to create a ' +
 					'scrollable viewport smaller than the full row count - with height="auto" the wrapper grows to fit every row ' +
@@ -208,7 +256,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 					'can misattach hover/focus state to the wrong row as the window scrolls - pass `getRowId` for stable identity.',
 			);
 		}
-	}, [shouldVirtualize, height, getRowId]);
+	}, [shouldVirtualize, requestedVirtualization, height, getRowId]);
 
 	// scrolling state is used to set drop shadow and border styles for sticky cells, and (when
 	// virtualizeRows is on) to recompute which rows should be mounted
@@ -220,57 +268,29 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 		rowWindow.handleScroll(vScrollAmount);
 	}, [rowWindow.handleScroll]);
 
-	// set and emit hover states
-	const handleCellHover = useCallback(
-		(col: ColumnDefinition<T>, colId: number, row: T, rowId: number, over: boolean) => {
-			if (over) {
-				setHoveredRow(rowId);
-				if (onMouseOver) onMouseOver(col, colId, row, rowId);
-			} else {
-				setHoveredRow((prev) => {
-					return prev === rowId ? null : prev;
-				});
-				if (onMouseOut) onMouseOut(col, colId, row, rowId);
-			}
-		},
-		[onMouseOut, onMouseOver],
-	);
-
 	// emit click or dbl click
 	const handleClick = useCallback(
 		(col: ColumnDefinition<T>, colId: number, row: T, rowId: number, dbl?: boolean) => {
 			if (dbl && onDoubleClick) onDoubleClick(col, colId, row, rowId);
-			else if (onClick) onClick(col, colId, row, rowId);
+			else if (!dbl && onClick) onClick(col, colId, row, rowId);
 		},
 		[onDoubleClick, onClick],
-	);
-
-	// resolve bg to hover, cany stripe or default cell bg
-	const resolveCellBG = useCallback(
-		(rowId: number) => {
-			const isHovered = backgroundColorHoverRow && hoveredRow === rowId;
-			const isStripped = !!candyStripeBackgroundColor && rowId % 2 !== 0;
-			if (isHovered) return backgroundColorHoverRow;
-			if (isStripped) return candyStripeBackgroundColor;
-			return backgroundColor;
-		},
-		[hoveredRow, backgroundColorHoverRow, candyStripeBackgroundColor, backgroundColor],
 	);
 
 	// update sort state
 	const handleSort = useCallback(
 		(key?: keyof T) => {
-			if (!key) return;
+			if (key === undefined) return;
 			const next: SortKey<T> =
 				sortKey?.key === key ? { key, dir: sortKey?.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' };
 			let didChange = true;
 			if (sortKey?.key === next?.key && sortKey?.dir === next?.dir) didChange = false;
 			if (didChange) {
-				setSortKey(next);
+				if (!sortControlled) setInternalSort(next);
 				onSortChange?.(next);
 			}
 		},
-		[sortKey, onSortChange],
+		[sortKey, onSortChange, sortControlled],
 	);
 
 	// resolve Aria sort
@@ -292,6 +312,27 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 			return (
 				<div
 					className={styles.colResizeHandle}
+					role="separator"
+					aria-label={`Resize ${col.title}`}
+					aria-orientation="vertical"
+					aria-valuenow={
+						typeof (columnWidths[col.id] ?? col.width) === 'number' ? Number(columnWidths[col.id] ?? col.width) : 40
+					}
+					aria-valuemin={40}
+					tabIndex={0}
+					onClick={(event) => event.stopPropagation()}
+					onKeyDown={(event) => {
+						if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+						event.preventDefault();
+						event.stopPropagation();
+						const element = colRefs.current[col.id];
+						if (!element) return;
+						const current = element.getBoundingClientRect().width;
+						const width = Math.max(40, current + (event.key === 'ArrowRight' ? 10 : -10));
+						setColumnWidths((previous) => ({ ...previous, [col.id]: width }));
+						onColumnResize?.(col.id, width);
+					}}
+					onTouchStart={(e) => dragResize(col.id, e, colRefs)}
 					onMouseDown={(e) => dragResize(col.id, e, colRefs)}
 					onMouseOver={(e) => hoverResize(true, e)}
 					onFocus={(e) => hoverResize(true, e)}
@@ -300,7 +341,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 				/>
 			);
 		},
-		[colResize, dragResize, hoverResize],
+		[colResize, dragResize, hoverResize, columnWidths, setColumnWidths, onColumnResize],
 	);
 
 	// render header
@@ -322,14 +363,6 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 		return <DefaultCellRenderer<T> value={value} />;
 	}, []);
 
-	// update sort state on prop change
-	useEffect(() => {
-		setSortKey((prev) => {
-			if (prev?.key === sort?.key && prev?.dir === sort?.dir) return prev;
-			return sort;
-		});
-	}, [sort]);
-
 	return (
 		<div ref={wrapperRef} className={`${styles.tableWrapper} ${styles.scroll}`} style={cssVars} onScroll={handleScroll}>
 			<table className={styles.table} aria-rowcount={rowWindow.enabled ? rows.length + 1 : undefined}>
@@ -345,7 +378,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 						);
 					})}
 				</colgroup>
-				<thead>
+				<thead ref={headerRef}>
 					<tr>
 						{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
 							const padding = setStyle(col.padding, 'var(--spacing-m)');
@@ -357,21 +390,45 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 								<th
 									key={col.id}
 									data-column-id={col.id}
+									aria-label={col.title}
 									className={`${styles.baseCell} ${styles.headerCell} ${styles.m}`}
-									onClick={() => handleSort(col.sort)}
-									onKeyDown={(e) => accessibleKeyDown(e, () => handleSort(col.sort))}
-									style={{ cursor, background }}
-									tabIndex={sortable ? 0 : undefined}
+									onClick={(event) => {
+										if (!isInteractiveTarget(event.target, event.currentTarget)) handleSort(col.sort);
+									}}
+									onKeyDown={(event) => {
+										if (event.target !== event.currentTarget) return;
+										if (colReorder && event.altKey && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+											event.preventDefault();
+											const next = orderedColumns.map((column) => column.id);
+											const target = colIndex + (event.key === 'ArrowRight' ? 1 : -1);
+											if (target < 0 || target >= next.length || (freezeColumn && (colIndex === 0 || target === 0)))
+												return;
+											[next[colIndex], next[target]] = [next[target], next[colIndex]];
+											setColumnOrder(next);
+											onColumnReorder?.(next);
+											return;
+										}
+										accessibleKeyDown(event, () => handleSort(col.sort));
+									}}
+									style={{ cursor, '--table-header-cell-background': background } as React.CSSProperties}
+									tabIndex={sortable || colReorder ? 0 : undefined}
 									role={sortable ? 'columnheader' : undefined}
 									aria-sort={resolveAriaSort(col)}
-									draggable={!(freezeColumn && colIndex === 0)}
-									onDragStart={(e) => dragStart(col, e)}
-									onDragOver={(e) => dragOver(col, colIndex, e)}
+									draggable={colReorder && !(freezeColumn && colIndex === 0)}
+									onDragStart={(e) => {
+										if (colReorder) dragStart(col, e);
+									}}
+									onDragOver={(e) => {
+										if (colReorder) dragOver(col, colIndex, e);
+									}}
 									onDrop={(e) => dragDrop(e)}
 									onDragEnd={(e) => dragDrop(e, true)}
 								>
 									{renderCellResizeHandle(last, col)}
-									<div className={styles.headerCellWrapper} style={{ padding }}>
+									<div
+										className={styles.headerCellWrapper}
+										style={{ padding, justifyContent: resolveAlignValue(col.justifyHeader ?? col.justify ?? 'start') }}
+									>
 										{renderHeader(col, sortKey)}
 									</div>
 								</th>
@@ -381,9 +438,11 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 				</thead>
 				<tbody>
 					{rowWindow.enabled && rowWindow.topSpacerHeight > 0 && (
-						<tr>
+						/* biome-ignore lint/a11y/noAriaHiddenOnFocusable: Spacer rows have no focusable content or tabIndex. */
+						<tr aria-hidden="true" data-spacer="true">
 							<td
-								colSpan={orderedColumns.length}
+								role="presentation"
+								colSpan={Math.max(1, orderedColumns.length)}
 								style={{ height: rowWindow.topSpacerHeight, padding: 0, border: 0, background: backgroundColor }}
 							/>
 						</tr>
@@ -396,14 +455,22 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 								<tr
 									key={getRowId ? getRowId(row, rowIndex) : rowIndex}
 									aria-rowindex={rowWindow.enabled ? rowIndex + 2 : undefined}
+									tabIndex={onRowClick ? 0 : undefined}
+									onClick={(event) => {
+										if (!isInteractiveTarget(event.target, event.currentTarget)) onRowClick?.(row, rowIndex);
+									}}
+									onKeyDown={(event) => {
+										if (event.target !== event.currentTarget || !onRowClick) return;
+										accessibleKeyDown(event, () => onRowClick(row, rowIndex));
+									}}
 								>
 									{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
-										const justifyContent = resolveAlignValue(col.justify);
+										const justifyContent = resolveAlignValue(col.justify ?? 'start');
 										const alignItems = resolveAlignValue(col.align);
 										const padding = setStyle(col.padding, 'var(--spacing-m)');
 										const whiteSpace = col.nowrap ? 'nowrap' : '';
-										const background = resolveCellBG(rowIndex);
-										const last = colIndex === orderedColumns.length - 1;
+										const background =
+											candyStripeBackgroundColor && rowIndex % 2 !== 0 ? candyStripeBackgroundColor : backgroundColor;
 										const opacity = draggedColId === col.id ? 0.2 : 1;
 										// once a bottom spacer row exists, the true last row is no longer the DOM's
 										// `:last-child`, so the CSS rule dropping its bottom border no longer matches it -
@@ -414,22 +481,42 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 											<td
 												key={col.id}
 												data-column-id={`${colIndex}.${rowIndex}`}
-												className={`${styles.baseCell} ${styles.m}`}
-												onClick={() => handleClick(col, colIndex, row, rowIndex, false)}
-												onDoubleClick={() => handleClick(col, colIndex, row, rowIndex, true)}
-												onKeyDown={(e) => accessibleKeyDown(e, () => handleClick(col, colIndex, row, rowIndex, false))}
-												onMouseOver={() => handleCellHover(col, colIndex, row, rowIndex, true)}
-												onFocus={() => handleCellHover(col, colIndex, row, rowIndex, true)}
-												onMouseOut={() => handleCellHover(col, colIndex, row, rowIndex, false)}
-												onBlur={() => handleCellHover(col, colIndex, row, rowIndex, false)}
-												style={{ background, opacity, borderBottom }}
+												className={`${styles.baseCell} ${styles.m}${rowWindow.enabled ? ` ${styles.fixedCell}` : ''}`}
+												onClick={(event) => {
+													if (!isInteractiveTarget(event.target, event.currentTarget))
+														handleClick(col, colIndex, row, rowIndex, false);
+												}}
+												onDoubleClick={(event) => {
+													if (!isInteractiveTarget(event.target, event.currentTarget))
+														handleClick(col, colIndex, row, rowIndex, true);
+												}}
+												tabIndex={onClick && !onRowClick ? 0 : undefined}
+												onKeyDown={(e) => {
+													if (e.target === e.currentTarget && onClick) {
+														e.stopPropagation();
+														accessibleKeyDown(e, () => handleClick(col, colIndex, row, rowIndex, false));
+													}
+												}}
+												onMouseEnter={() => onMouseOver?.(col, colIndex, row, rowIndex)}
+												onFocus={() => onMouseOver?.(col, colIndex, row, rowIndex)}
+												onMouseLeave={() => onMouseOut?.(col, colIndex, row, rowIndex)}
+												onBlur={() => onMouseOut?.(col, colIndex, row, rowIndex)}
+												style={
+													{
+														'--table-cell-background':
+															freezeColumn && colIndex === 0 ? (freezeColumnBackgroundColor ?? background) : background,
+														opacity,
+														borderBottom,
+													} as React.CSSProperties
+												}
 											>
-												{renderCellResizeHandle(last, col)}
-												<div
-													className={styles.baseCellWrapper}
-													style={{ justifyContent, alignItems, padding, whiteSpace }}
-												>
-													{renderBodyCell(col, row, rowIndex)}
+												<div className={styles.cellViewport}>
+													<div
+														className={styles.baseCellWrapper}
+														style={{ justifyContent, alignItems, padding, whiteSpace }}
+													>
+														{renderBodyCell(col, row, rowIndex)}
+													</div>
 												</div>
 											</td>
 										);
@@ -439,9 +526,11 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 						},
 					)}
 					{rowWindow.enabled && rowWindow.bottomSpacerHeight > 0 && (
-						<tr>
+						/* biome-ignore lint/a11y/noAriaHiddenOnFocusable: Spacer rows have no focusable content or tabIndex. */
+						<tr aria-hidden="true" data-spacer="true">
 							<td
-								colSpan={orderedColumns.length}
+								role="presentation"
+								colSpan={Math.max(1, orderedColumns.length)}
 								style={{ height: rowWindow.bottomSpacerHeight, padding: 0, border: 0, background: backgroundColor }}
 							/>
 						</tr>
@@ -459,16 +548,21 @@ interface DefaultHeaderRendererProps<T> {
 }
 export function DefaultHeaderRenderer<T>(props: Readonly<DefaultHeaderRendererProps<T>>) {
 	const { col, sortKey } = props;
-	const sortable = !!col.sort;
-	const sorted = !!(sortKey?.key && sortKey.key === col.sort);
+	const sortable = col.sort !== undefined;
+	const sorted = sortKey?.key !== undefined && sortKey.key === col.sort;
 	const sortIcon = sortKey?.dir === 'asc' ? 'arrows.arrow-top' : 'arrows.arrow-bottom';
+	const justify = col.justifyHeader ?? col.justify ?? 'start';
+	const showSortIcon = sortable && (col.showSortIcon ?? true);
+	const indicator = showSortIcon ? (
+		<Icon name={sorted ? sortIcon : 'system.blank'} pointerEvents={'none'} size={16} />
+	) : null;
 	return (
-		<div className={styles.header}>
-			<div className={styles.headerLeft} />
-			<div className={styles.headerTitle}>{col.title}</div>
-			<div className={styles.headerRight}>
-				{sortable && <Icon name={sorted ? sortIcon : 'system.blank'} pointerEvents={'none'} size={16} />}
+		<div className={styles.header} style={{ justifyContent: resolveAlignValue(justify) }}>
+			{justify === 'end' && indicator}
+			<div className={styles.headerTitle} style={{ flex: '0 1 auto' }}>
+				{col.title}
 			</div>
+			{justify !== 'end' && indicator}
 		</div>
 	);
 }
@@ -479,4 +573,16 @@ interface DefaultCellRendererProps<T> {
 export function DefaultCellRenderer<T>(props: Readonly<DefaultCellRendererProps<T>>) {
 	const { value } = props;
 	return value?.toString() ?? '';
+}
+
+function isInteractiveTarget(target: EventTarget, row: HTMLElement) {
+	return (
+		target instanceof Element &&
+		Boolean(
+			target.closest(
+				'button, a, input, select, textarea, summary, [contenteditable]:not([contenteditable="false"]), [role="button"], [role="checkbox"], [role="switch"], [role="link"], [role="slider"], [role="combobox"], [role="textbox"], [role="radio"]',
+			),
+		) &&
+		target !== row
+	);
 }

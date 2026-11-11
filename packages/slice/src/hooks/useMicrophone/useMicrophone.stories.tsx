@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
-import { Label } from '../../components/Label';
+import { Chip } from '../../components/Chip';
+import { FlexBox } from '../../components/FlexBox';
 import { ProgressIndicator } from '../../components/Progress';
 import { Slider } from '../../components/Slider';
 import { useMicrophone } from './useMicrophone';
@@ -86,52 +86,52 @@ function UseMicrophoneDemo(props: Readonly<UseMicrophoneDemoProps>) {
 	}, [microphones, selectedDeviceId]);
 
 	return (
-		<FlexDiv width={'fill'} height={'fill'} padding={32} gap={24}>
-			<FlexDiv direction={'row'} width={'fill'} gap={24} align={'start'}>
-				<FlexDiv width={460} padding={16} gap={12}>
+		<FlexBox width={'fill'} height={'fill'} padding={32} gap={24}>
+			<FlexBox direction={'row'} width={'fill'} gap={24} align={'start'}>
+				<FlexBox width={460} padding={16} gap={12}>
 					<div>NOTE: This demo uses the hook refs to inspect the live microphone stream and track.</div>
 					<div>
-						Mic Device Supported: <Label>{String(isSupported)}</Label>
+						Mic Device Supported: <Chip>{String(isSupported)}</Chip>
 					</div>
 					<div>
 						Requesting mic access: <ProgressIndicator show={isRequesting} inline />
-						{!isRequesting && <Label>false</Label>}
+						{!isRequesting && <Chip>false</Chip>}
 					</div>
 					<div>
-						Auto Request: <Label>{String(autoRequest)}</Label>
+						Auto Request: <Chip>{String(autoRequest)}</Chip>
 					</div>
 					<div>
-						Muted: <Label>{String(muted)}</Label>
+						Muted: <Chip>{String(muted)}</Chip>
 					</div>
 					<div>
-						Input Volume: <Label>{inputVolume.toFixed(2)}</Label>
+						Input Volume: <Chip>{inputVolume.toFixed(2)}</Chip>
 					</div>
 					<div>
-						Mic Stream ID: <Label>{micInfo.streamId ?? 'none'}</Label>
+						Mic Stream ID: <Chip>{micInfo.streamId ?? 'none'}</Chip>
 					</div>
 					<div>
-						Processed Stream ID: <Label>{micInfo.processedStreamId ?? 'none'}</Label>
+						Processed Stream ID: <Chip>{micInfo.processedStreamId ?? 'none'}</Chip>
 					</div>
 					<div>
-						Mic Track ID: <Label>{micInfo.trackId ?? 'none'}</Label>
+						Mic Track ID: <Chip>{micInfo.trackId ?? 'none'}</Chip>
 					</div>
 					<div>
-						Mic Device ID: <Label>{micInfo.deviceId ?? 'none'}</Label>
+						Mic Device ID: <Chip>{micInfo.deviceId ?? 'none'}</Chip>
 					</div>
 					<div>
-						Mic Device Label: <Label>{micDeviceLabel ?? 'none'}</Label>
+						Mic Device Label: <Chip>{micDeviceLabel ?? 'none'}</Chip>
 					</div>
 					<div>
-						Track Enabled: <Label>{String(micInfo.enabled ?? false)}</Label>
+						Track Enabled: <Chip>{String(micInfo.enabled ?? false)}</Chip>
 					</div>
 					<div>
-						Track State: <Label>{micInfo.readyState ?? 'none'}</Label>
+						Track State: <Chip>{micInfo.readyState ?? 'none'}</Chip>
 					</div>
 					<div>
-						Error: <Label>{error?.message ?? 'none'}</Label>
+						Error: <Chip>{error?.message ?? 'none'}</Chip>
 					</div>
-				</FlexDiv>
-				<FlexDiv width={360} padding={16} gap={12}>
+				</FlexBox>
+				<FlexBox width={360} padding={16} gap={12}>
 					<label htmlFor={'microphone-device-select'}>Microphone device</label>
 					<select
 						id={'microphone-device-select'}
@@ -178,9 +178,9 @@ function UseMicrophoneDemo(props: Readonly<UseMicrophoneDemoProps>) {
 							onChange={(value) => setInputVolume(value)}
 						/>
 					</div>
-				</FlexDiv>
-			</FlexDiv>
-			<FlexDiv direction={'row'} wrap gap={8}>
+				</FlexBox>
+			</FlexBox>
+			<FlexBox direction={'row'} wrap gap={8}>
 				<Button label={'Refresh Ref Info'} onClick={() => refreshMicInfo()} />
 				<Button
 					label={'Request Mic'}
@@ -217,8 +217,8 @@ function UseMicrophoneDemo(props: Readonly<UseMicrophoneDemoProps>) {
 						refreshMicInfo();
 					}}
 				/>
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { TextArea } from '../../components/TextArea';
 import { TextField } from '../../components/Textfield';
 import { useMDStreamBuffer } from './useMdStreamBuffer';
@@ -110,9 +110,9 @@ function MDStreamBufferHookRunner(props: Readonly<MDStreamBufferHookRunnerProps>
 	};
 
 	return (
-		<FlexDiv width={'fill'} height={'fit'} gap={16}>
+		<FlexBox width={'fill'} height={'fit'} gap={16}>
 			{simulateStream && (
-				<FlexDiv
+				<FlexBox
 					width={'fill'}
 					height={'fit'}
 					direction={'row'}
@@ -128,11 +128,11 @@ function MDStreamBufferHookRunner(props: Readonly<MDStreamBufferHookRunnerProps>
 					/>
 					<Button label={'Stop'} onClick={stopStream} state={playing ? 'normal' : 'disabled'} />
 					<Button label={'Reset'} onClick={resetStream} />
-				</FlexDiv>
+				</FlexBox>
 			)}
-			<FlexDiv width={'fill'} height={'fit'} direction={'row'} gap={12}>
+			<FlexBox width={'fill'} height={'fit'} direction={'row'} gap={12}>
 				{simulateStream && (
-					<FlexDiv
+					<FlexBox
 						width={'fill'}
 						height={'fit'}
 						padding={16}
@@ -154,9 +154,9 @@ function MDStreamBufferHookRunner(props: Readonly<MDStreamBufferHookRunnerProps>
 						>
 							{streamRaw}
 						</pre>
-					</FlexDiv>
+					</FlexBox>
 				)}
-				<FlexDiv
+				<FlexBox
 					width={'fill'}
 					height={'fill'}
 					padding={16}
@@ -180,9 +180,9 @@ function MDStreamBufferHookRunner(props: Readonly<MDStreamBufferHookRunnerProps>
 					>
 						{healthy}
 					</pre>
-				</FlexDiv>
-			</FlexDiv>
-		</FlexDiv>
+				</FlexBox>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 
@@ -218,12 +218,12 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 	}, [healthyEndMarker]);
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} padding={64} gap={16}>
+		<FlexBox absolute width={'fill'} height={'fill'} padding={64} gap={16}>
 			This hook wraps `MdBuffer` for React apps and exposes raw plus healthy stream state without manually instantiating
 			the underlying class. Inline selects using `$$Option 1$$Option 2$$Option 3$$ ` close only when the last `$$` is
 			followed by whitespace. `healthyEndMarker` is appended only to healthy output and is inserted before optimistic
 			newline closures.
-			<FlexDiv
+			<FlexBox
 				width={'fill'}
 				height={'fit'}
 				padding={16}
@@ -243,9 +243,9 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 					resizable={true}
 					backgroundColor={'var(--core-surface-primary)'}
 				/>
-			</FlexDiv>
+			</FlexBox>
 			{simulateStream && (
-				<FlexDiv
+				<FlexBox
 					width={'fill'}
 					height={'fit'}
 					direction={'row'}
@@ -278,7 +278,7 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 						width={'auto'}
 						clearButton={null}
 					/>
-				</FlexDiv>
+				</FlexBox>
 			)}
 			<MDStreamBufferHookRunner
 				key={`${includeLinksAndImages}-${htmlHandling}-${endMarker}`}
@@ -290,7 +290,7 @@ function MDStreamBufferHookDemo(props: Readonly<MDStreamBufferHookDemoProps>) {
 				htmlHandling={htmlHandling}
 				simulateStream={simulateStream}
 			/>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

@@ -1,91 +1,36 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../../FlexDiv';
-import * as DoneCheckStories from './DoneCheck.stories';
-import {RenderSource} from '../../../../documentation/_components/RenderSource/RenderSource';
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './DoneCheck.stories';
 
-<Meta of={DoneCheckStories} />
+<Meta of={Stories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # DoneCheck
-        Renders an animated completion checkmark for success and done states.
+# DoneCheck
 
-        ## Base element
-        `SVGSVGElement`
+Show a completion checkmark with an optional scale animation.
 
-        ## Interface
-        `DoneCheckProps`
+## Behavior
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>bounce</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `bounce`.</td></tr>
-            <tr><td><code>color</code></td><td><code>string</code></td><td><code>-</code></td><td>Color token/value for `color`.</td></tr>
-            <tr><td><code>delay</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `delay`.</td></tr>
-            <tr><td><code>didEnd</code></td><td><code>{`() => void`}</code></td><td><code>-</code></td><td>Controls `didEnd`.</td></tr>
-            <tr><td><code>didStart</code></td><td><code>{`() => void`}</code></td><td><code>-</code></td><td>Controls `didStart`.</td></tr>
-            <tr><td><code>duration</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `duration`.</td></tr>
-            <tr><td><code>play</code></td><td><code>boolean</code></td><td><code>-</code></td><td>Boolean flag controlling `play`.</td></tr>
-            <tr><td><code>size</code></td><td><code>number</code></td><td><code>-</code></td><td>Sizing/layout setting for `size`.</td></tr>
-            <tr><td><code>stroke</code></td><td><code>number</code></td><td><code>-</code></td><td>Controls `stroke`.</td></tr>
-            <tr><td><code>...svgAttributes</code></td><td><code>{`SVGAttributes<SVGSVGElement>`}</code></td><td><code>-</code></td><td>Native `svg` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
+The check animates on mount by default, with no delay. Setting play to false shows the completed check immediately; it does not hide or pause it. Changing play from false to true replays the entrance. Timing values are in seconds.
 
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>-</code></td><td><code>-</code></td></tr>
-          </tbody>
-        </table>
+## Accessibility
 
-        ## Code Examples
-        </Unstyled>
+The root is a polite status named by statusLabel, falling back to “Completed” for an empty label. Set decorative when nearby text already conveys completion. The inner icon is hidden from assistive technology. Reduced motion shows the check immediately, ignoring animation delay. Applications should announce changing operation results in their own live text; the visual animation alone does not guarantee an announcement.
 
-        <RenderSource language={"tsx"}>
-```
-import { DoneCheck } from '@apple-pie/slice';
+## Props
 
-export function DoneCheckExample() {
-    return (
-        <DoneCheck
-            play={true}
-            size={28}
-            color="var(--core-icon-special)"
-            didEnd={() => console.log('done')}
-            id="donecheck-example"
-            data-testid="donecheck-example"
-            className="custom-wrapper"
-            style={{ display: 'block', marginTop: 8 }}
-        />
-    );
-}
-```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+- `color` (`ColorValue`, default `feedback-positive`): Checkmark color, accepting a Slice theme token or CSS color.
+- `decorative` (`boolean`, default `false`): Hides the entire check from assistive technology.
+- `delay` (`number`, default `0`): Delay before the entrance, in seconds.
+- `duration` (`number`, default `1`): Entrance duration in seconds. Zero or negative values show the check immediately.
+- `play` (`boolean`, default `true`): Enables the entrance animation.
+- `size` (`number`, default `88`): Reserved square dimensions in pixels.
+- `statusLabel` (`string`, default `Completed`): Accessible status name.
+- `stroke` (`number`, default `1.5`): Stroke width in the icon’s 20-unit SVG coordinate system.
+
+Native div attributes apply to the root. Component dimensions take priority over style.
+
+## Events
+
+- `didEnd: () => void`: Runs when the scale transition finishes. It does not run for skipped or cancelled transitions.
+- `didStart: () => void`: Runs when the scale transition starts, after its delay. It does not run when animation is skipped.
+
+Native div event handlers apply to the root.

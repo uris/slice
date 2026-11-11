@@ -3,9 +3,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
 import { addOpacity } from '../../utils';
-import { accessibleKeyDown } from '../../utils/functions/misc';
+import { setStyle } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Avatar } from '../Avatar';
 import { Icon } from '../Icon';
+import { ToggleButton } from '../ToggleButton';
 import css from './Camera.module.css';
 import type {
 	CameraElement,
@@ -14,17 +16,27 @@ import type {
 	DefaultNoVideoPosterProps,
 	ToolbarButtonProps,
 } from './_types';
+import { type CameraMediaState, CameraSession, type CameraSessionOptions } from './cameraSession';
 
 export const Camera = React.memo(
-	React.forwardRef<CameraElement, CameraProps>((props, ref) => {
+	React.forwardRef<CameraElement, CameraProps>((rawProps, ref) => {
+		const props = resolveColorProps(rawProps);
 		const videoElement = useRef<HTMLVideoElement>(null);
 		const containerElement = useRef<HTMLDivElement>(null);
-		const controlsTimer = useRef<NodeJS.Timeout | null>(null);
+		const controlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+		const controlsElement = useRef<HTMLDivElement>(null);
 		const {
 			noVideoPoster,
+			backgroundColor = 'var(--core-surface-secondary)',
+			borderColor = 'var(--core-fill-primary)',
+			borderWidth = 1,
+			borderRadius = 'var(--corner-xxl)',
+			audio = true,
 			width,
 			height,
 			showControlBar = true,
+			showProfileButton = false,
+			showSettingsButton = false,
 			autoHideControlBar = true,
 			startCameraOff = false,
 			startAudioMuted = false,
@@ -38,81 +50,81 @@ export const Camera = React.memo(
 			onVideoStream,
 			onNoVideo,
 			onNoAudio,
+			className,
+			style,
+			onMouseEnter,
+			onMouseLeave,
+			onMouseMove,
+			onClick,
+			onFocusCapture,
+			onBlurCapture,
+			...divAttributes
 		} = props;
 		const theme = useTheme();
-		const [cameraSupport, setCameraSupport] = useState<boolean | undefined>(undefined);
-		const [cameraError, setCameraError] = useState<string | undefined>(undefined);
-		const [hovered, setHovered] = useState<boolean>(false);
-		const [cameraOn, setCameraOn] = useState<boolean>(false);
-		const [micMuted, setMicMuted] = useState<boolean>(startAudioMuted);
-		const [snapshot, setSnapshot] = useState<string | undefined>(undefined);
-		const [settings, setSettings] = useState<boolean>(false);
-		const [profile, setProfile] = useState<boolean>(false);
-		const [deviceList, setDeviceList] = useState<MediaDeviceInfo[] | Error>([]);
-
-		// resolve camera and microphone constraints from the current session settings
-		const constraints = useMemo<MediaStreamConstraints>(() => {
-			const videoDeviceId = sessionSettings?.videoDeviceId;
-			const micDeviceId = sessionSettings?.micDeviceId;
-			return {
-				video: videoDeviceId ? { deviceId: { exact: videoDeviceId } } : true,
-				audio: micDeviceId ? { deviceId: { exact: micDeviceId } } : true,
+		const [hovered, setHovered] = useState(false);
+		const [focused, setFocused] = useState(false);
+		const [snapshot, setSnapshot] = useState<string>();
+		const snapshotURL = useRef<string | undefined>(undefined);
+		const updateSnapshot = useCallback((url?: string) => {
+			if (snapshotURL.current) URL.revokeObjectURL(snapshotURL.current);
+			snapshotURL.current = url;
+			setSnapshot(url);
+		}, []);
+		const [settings, setSettings] = useState(false);
+		const [profile, setProfile] = useState(false);
+		const [media, setMedia] = useState<CameraMediaState>({
+			cameraOn: false,
+			micMuted: startAudioMuted,
+			audioAvailable: false,
+			supported: true,
+			devices: [],
+		});
+		const callbacks = useRef<CameraSessionOptions>({
+			audio,
+			startAudioMuted,
+			playLocalAudio,
+			sessionSettings,
+			onVideoStream,
+			onNoAudio,
+			onNoVideo,
+		});
+		useEffect(() => {
+			callbacks.current = {
+				audio,
+				startAudioMuted,
+				playLocalAudio,
+				sessionSettings,
+				onVideoStream,
+				onNoAudio,
+				onNoVideo,
 			};
-		}, [sessionSettings?.micDeviceId, sessionSettings?.videoDeviceId]);
-
-		// read the current media stream from the video element when available
-		const getStream = useCallback(() => {
-			const srcObject = videoElement.current?.srcObject;
-			if (!srcObject) return undefined;
-			if (typeof MediaStream !== 'undefined' && srcObject instanceof MediaStream) {
-				return srcObject;
-			}
-			const possibleStream = srcObject as Partial<MediaStream>;
-			if (
-				typeof possibleStream.getTracks === 'function' &&
-				typeof possibleStream.getVideoTracks === 'function' &&
-				typeof possibleStream.getAudioTracks === 'function'
-			) {
-				return possibleStream as MediaStream;
-			}
-			return undefined;
-		}, []);
-
-		// read the active video or audio track from the current stream
-		const getTrack = useCallback(
-			(type: 'video' | 'audio') => {
-				const stream = getStream();
-				if (!stream) return undefined;
-				if (type === 'video') return stream.getVideoTracks()[0] ?? undefined;
-				return stream.getAudioTracks()[0] ?? undefined;
-			},
-			[getStream],
+		});
+		const [session] = useState(
+			() =>
+				new CameraSession(
+					() => videoElement.current,
+					() => callbacks.current,
+					setMedia,
+				),
 		);
-
-		// enumerate available media devices with a safe error fallback
-		const getMediaDevices = useCallback(async () => {
-			if (typeof navigator === 'undefined' || !navigator.mediaDevices?.enumerateDevices)
-				return new Error('Media devices not supported');
-			return await navigator.mediaDevices.enumerateDevices().catch((error) => {
-				const defaultError = new Error('Unknown error enumerating devices. Please try again.');
-				return error instanceof Error ? error : defaultError;
+		const { cameraOn, micMuted, devices: deviceList, error: cameraError, supported: cameraSupport } = media;
+		useEffect(() => {
+			session.activate();
+			return () => session.dispose();
+		}, [session]);
+		useEffect(() => {
+			if (startCameraOff) void session.stop();
+			else void session.start();
+		}, [session, startCameraOff]);
+		useEffect(() => {
+			session.reconfigure({
+				audio,
+				sessionSettings: {
+					videoDeviceId: sessionSettings?.videoDeviceId,
+					micDeviceId: sessionSettings?.micDeviceId,
+				},
 			});
-		}, []);
-
-		// determine whether the browser can access camera APIs at all
-		const hasMediaSupport = useMemo(() => {
-			if (typeof navigator === 'undefined') return false;
-			return Boolean(navigator.mediaDevices?.getUserMedia);
-		}, []);
-
-		// sync camera and microphone UI state from the active stream tracks
-		const syncMediaState = useCallback(() => {
-			const stream = getStream();
-			const videoTrack = stream?.getVideoTracks()[0];
-			const audioTrack = stream?.getAudioTracks()[0];
-			setCameraOn(Boolean(videoTrack?.readyState === 'live' && videoTrack.enabled));
-			setMicMuted(audioTrack ? !audioTrack.enabled : startAudioMuted);
-		}, [getStream, startAudioMuted]);
+		}, [session, audio, sessionSettings?.videoDeviceId, sessionSettings?.micDeviceId]);
 
 		// capture the current video frame into a PNG blob
 		const takeSnapshot = useCallback((options?: CameraSnapshotOptions) => {
@@ -141,189 +153,17 @@ export const Camera = React.memo(
 		// capture a snapshot, update local preview state, and notify consumers
 		const handleSnapshot = useCallback(
 			(options?: CameraSnapshotOptions) => {
-				if (options?.toggle && !!snapshot) {
-					setSnapshot(undefined);
+				if (options?.toggle && snapshotURL.current) {
+					updateSnapshot();
 					return undefined;
 				}
 				const photo = takeSnapshot(options);
 				onSnapshot?.(photo);
-				setSnapshot((previousSnapshot) => {
-					if (previousSnapshot) URL.revokeObjectURL(previousSnapshot);
-					return photo ? URL.createObjectURL(photo) : undefined;
-				});
+				updateSnapshot(photo ? URL.createObjectURL(photo) : undefined);
 				return photo;
 			},
-			[onSnapshot, takeSnapshot, snapshot],
+			[onSnapshot, takeSnapshot, updateSnapshot],
 		);
-
-		// disable the live microphone track
-		const muteMic = useCallback(() => {
-			const audioTrack = getTrack('audio');
-			if (!audioTrack) return new Error('No audio track found');
-			audioTrack.enabled = false;
-			setMicMuted(true);
-			return true;
-		}, [getTrack]);
-
-		// enable the live microphone track
-		const unmuteMic = useCallback(() => {
-			const audioTrack = getTrack('audio');
-			if (!audioTrack) return new Error('No audio track found');
-			audioTrack.enabled = true;
-			setMicMuted(false);
-			return true;
-		}, [getTrack]);
-
-		// toggle the microphone between muted and unmuted states
-		const toggleMic = useCallback(() => {
-			const audioTrack = getTrack('audio');
-			if (!audioTrack) return new Error('No audio track found');
-			return audioTrack.enabled ? muteMic() : unmuteMic();
-		}, [getTrack, muteMic, unmuteMic]);
-
-		// disable video while keeping the existing stream alive
-		const disableVideo = useCallback(() => {
-			const videoTrack = getTrack('video');
-			if (!videoTrack) return new Error('No video track found');
-			videoTrack.enabled = false;
-			setCameraOn(false);
-			return true;
-		}, [getTrack]);
-
-		// re-enable the current video track without requesting a new stream
-		const enableVideo = useCallback(() => {
-			const stream = getStream();
-			if (!stream) return new Error('No media stream found');
-			const videoTrack = getTrack('video');
-			if (!videoTrack) return new Error('No video track found');
-			if (videoTrack.readyState !== 'live') return new Error('Video track is no longer live');
-			videoTrack.enabled = true;
-			setCameraOn(true);
-			return stream;
-		}, [getStream, getTrack]);
-
-		// mark the camera as ready after a usable stream is attached
-		const markCameraReady = useCallback(() => {
-			setCameraSupport(true);
-			setCameraError(undefined);
-			syncMediaState();
-		}, [syncMediaState]);
-
-		// reuse an existing live stream instead of requesting a new one
-		const reuseExistingStream = useCallback(() => {
-			const existingStream = getStream();
-			const existingVideoTrack = existingStream?.getVideoTracks()[0];
-			if (existingVideoTrack?.readyState === 'live' && !existingVideoTrack.enabled) {
-				const enabledStream = enableVideo();
-				if (enabledStream instanceof Error) return enabledStream;
-				onVideoStream?.(enabledStream);
-				markCameraReady();
-				return enabledStream;
-			}
-			if (existingStream?.active && existingVideoTrack?.readyState === 'live') {
-				markCameraReady();
-				return existingStream;
-			}
-			return undefined;
-		}, [enableVideo, getStream, markCameraReady, onVideoStream]);
-
-		// request a media stream and fall back to generic constraints if needed
-		const requestMediaStream = useCallback(async () => {
-			try {
-				return await navigator.mediaDevices.getUserMedia(constraints);
-			} catch (error) {
-				const shouldRetry =
-					(error instanceof DOMException && error.name === 'OverconstrainedError') ||
-					(error instanceof DOMException && error.name === 'NotFoundError');
-				if (!shouldRetry) throw error;
-				return await navigator.mediaDevices.getUserMedia({
-					video: true,
-					audio: true,
-				});
-			}
-		}, [constraints]);
-
-		// attach a stream to the video element and sync device metadata
-		const attachStreamToVideo = useCallback(
-			async (stream: MediaStream) => {
-				const audioTrack = stream.getAudioTracks()[0];
-				const videoTrack = stream.getVideoTracks()[0];
-				const devices = await getMediaDevices();
-				if (!videoTrack) {
-					onNoVideo?.('No video track available');
-					for (const track of stream.getTracks()) {
-						track.stop();
-					}
-					return new Error('No video track available');
-				}
-				if (!audioTrack) onNoAudio?.('No audio track available');
-				if (audioTrack) audioTrack.enabled = !startAudioMuted;
-				if (!videoElement.current) return new Error('Video element not found');
-				videoElement.current.muted = !playLocalAudio;
-				videoElement.current.srcObject = stream;
-				await videoElement.current.play();
-				onVideoStream?.(stream);
-				setDeviceList(devices);
-				markCameraReady();
-				return stream;
-			},
-			[getMediaDevices, markCameraReady, onNoAudio, onNoVideo, onVideoStream, playLocalAudio, startAudioMuted],
-		);
-
-		// start camera access, reusing an existing stream when possible
-		const startCamera = useCallback(async () => {
-			if (!videoElement.current) return new Error('Video element not found');
-			if (!hasMediaSupport) {
-				setCameraSupport(false);
-				setCameraError('Camera not supported');
-				return new Error('Camera not supported');
-			}
-			const existingStream = reuseExistingStream();
-			if (existingStream) return existingStream;
-			try {
-				const stream = await requestMediaStream();
-				return await attachStreamToVideo(stream);
-			} catch (error) {
-				const defaultError = new Error('Could not access the camera. Ensure permissions are correct');
-				const resolvedError = error instanceof Error ? error : defaultError;
-				onNoVideo?.(resolvedError);
-				onNoAudio?.(resolvedError);
-				setCameraSupport(true);
-				setCameraError(resolvedError.message);
-				setCameraOn(false);
-				return resolvedError;
-			}
-		}, [attachStreamToVideo, hasMediaSupport, onNoAudio, onNoVideo, requestMediaStream, reuseExistingStream]);
-
-		// toggle video between enabled and disabled states
-		const toggleVideo = useCallback(async () => {
-			const stream = getStream();
-			if (!stream) return await startCamera();
-			const videoTrack = stream.getVideoTracks()[0];
-			if (!videoTrack) return new Error('No video track found');
-			return videoTrack.enabled ? disableVideo() : enableVideo();
-		}, [disableVideo, enableVideo, getStream, startCamera]);
-
-		// stop the active camera stream and clear local media state
-		const stopCamera = useCallback(async () => {
-			if (!videoElement.current) return new Error('Video element not found');
-			try {
-				const stream = getStream();
-				if (!stream) return new Error('No media stream to stop');
-				for (const track of stream.getTracks()) {
-					track.stop();
-				}
-				videoElement.current.srcObject = null;
-				setCameraOn(false);
-				setMicMuted(startAudioMuted);
-				setCameraError(undefined);
-				setDeviceList([]);
-				return true;
-			} catch (error) {
-				const defaultError = new Error('Unknown error stopping the camera. Please try again.');
-				return error instanceof Error ? error : defaultError;
-			}
-		}, [getStream, startAudioMuted]);
 
 		// expose the live media elements and controls through the forwarded ref
 		React.useImperativeHandle(
@@ -336,39 +176,26 @@ export const Camera = React.memo(
 					return containerElement.current ?? undefined;
 				},
 				get stream() {
-					return getStream();
+					return session.stream;
 				},
 				get videoTrack() {
-					return getTrack('video');
+					return session.videoTrack;
 				},
 				get audioTrack() {
-					return getTrack('audio');
+					return session.audioTrack;
 				},
 				snapshot: (options?: CameraSnapshotOptions) => handleSnapshot(options),
-				startCamera: () => startCamera(),
-				stopCamera: () => stopCamera(),
-				enableVideo: () => enableVideo(),
-				disableVideo: () => disableVideo(),
-				muteMic: () => muteMic(),
-				unmuteMic: () => unmuteMic(),
-				toggleMic: () => toggleMic(),
-				devices: () => getMediaDevices(),
-				toggleVideo: () => toggleVideo(),
+				startCamera: () => session.start(),
+				stopCamera: () => session.stop(),
+				enableVideo: () => session.enableVideo(),
+				disableVideo: () => session.disableVideo(),
+				muteMic: () => session.muteMic(),
+				unmuteMic: () => session.unmuteMic(),
+				toggleMic: () => session.toggleMic(),
+				devices: () => session.devicesList(),
+				toggleVideo: () => session.toggleVideo(),
 			}),
-			[
-				disableVideo,
-				enableVideo,
-				getMediaDevices,
-				getStream,
-				getTrack,
-				handleSnapshot,
-				muteMic,
-				startCamera,
-				stopCamera,
-				toggleMic,
-				toggleVideo,
-				unmuteMic,
-			],
+			[session, handleSnapshot],
 		);
 
 		// determine whether the poster should be shown instead of live video
@@ -385,86 +212,59 @@ export const Camera = React.memo(
 
 		// resolve the translucent controls background from the active theme
 		const controlsBg = useMemo(() => {
-			const bgColor = theme.current.colors['core-surface-primary'];
-			return addOpacity(bgColor, 0.75);
-		}, [theme.current]);
+			if (!media.cameraOn) return backgroundColor;
+			const bgColor = theme.current.colors['core-surface-secondary'];
+			return addOpacity(bgColor, 0.5);
+		}, [media.cameraOn, backgroundColor, theme.current]);
 
 		// resolve the control bar transform from hover and auto-hide state
 		const setControlBarVisible = useMemo(() => {
-			if (!autoHideControlBar) return 'translateY(0%)';
 			if (!showControlBar) return 'translateY(100%)';
+			if (!autoHideControlBar || focused) return 'translateY(0%)';
 			if (hovered) return 'translateY(0%)';
 			return 'translateY(100%)';
-		}, [autoHideControlBar, hovered, showControlBar]);
+		}, [autoHideControlBar, hovered, showControlBar, focused]);
 
 		// compose CSS custom properties for frame sizing and control visibility
 		const cssVars = useMemo(
 			() =>
 				({
-					'--camera-width': width,
-					'--camera-height': height,
+					'--camera-width': setStyle(width),
+					'--camera-background-color': backgroundColor,
+					'--camera-border-color': borderColor,
+					'--camera-border-width': setStyle(borderWidth),
+					'--camera-border-radius': setStyle(borderRadius),
+					'--camera-height': setStyle(height),
 					'--camera-controls-bg': controlsBg,
 					'--camera-controls-transform': setControlBarVisible,
 				}) as React.CSSProperties,
-			[controlsBg, height, setControlBarVisible, width],
+			[controlsBg, height, setControlBarVisible, width, backgroundColor, borderColor, borderWidth, borderRadius],
 		);
 
-		// surface the controls bar when the user moves within the preview
-		const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-			if (hovered) return;
+		const canAutoHide = showControlBar && autoHideControlBar;
+		const revealControls = () => {
+			if (!canAutoHide) return;
 			setHovered(true);
 			if (controlsTimer.current) clearTimeout(controlsTimer.current);
-			controlsTimer.current = setTimeout(() => setHovered(false), 3000);
+			controlsTimer.current = setTimeout(() => {
+				if (controlsElement.current?.contains(document.activeElement) || controlsElement.current?.matches(':hover'))
+					return;
+				setHovered(false);
+			}, 3000);
 		};
-
-		// show the controls while the pointer is inside the camera frame
-		const handleMouseEnter = () => {
-			if (controlsTimer.current) clearTimeout(controlsTimer.current);
-			setHovered(true);
-			controlsTimer.current = setTimeout(() => setHovered(false), 3000);
-		};
-
-		// hide the controls when the pointer leaves the camera frame
-		const handleMouseLeave = () => {
+		const leaveControls = () => {
+			if (!canAutoHide) return;
 			if (controlsTimer.current) clearTimeout(controlsTimer.current);
 			setHovered(false);
 		};
 
-		// handle click to remove controls bar from view
-		const handleMouseClick = useCallback(() => {
-			setHovered(false);
-		}, []);
-
-		// keep the controls visible while the controls surface is active
-		const handleControlsMouseEnter = (e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
-			e.stopPropagation();
-			if (controlsTimer.current) clearTimeout(controlsTimer.current);
-			setHovered(true);
-		};
-
-		// restart the controls hide timer after leaving the controls surface
-		const handleControlsMouseLeave = (e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
-			e.stopPropagation();
-			if (controlsTimer.current) clearTimeout(controlsTimer.current);
-			controlsTimer.current = setTimeout(() => setHovered(false), 3000);
-		};
-
-		// handle click on controls wrapper to prevent event bubbling to parent
-		const handleControlsClick = useCallback(
-			(e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
-				e.stopPropagation();
-			},
-			[],
-		);
-
-		// start or stop the camera automatically from the startCameraOff prop
 		useEffect(() => {
-			if (startCameraOff) {
-				stopCamera().then(() => null);
-				return;
-			}
-			startCamera().then(() => null);
-		}, [startCamera, startCameraOff, stopCamera]);
+			if (controlsTimer.current) clearTimeout(controlsTimer.current);
+			if (!canAutoHide) {
+				setHovered(false);
+				setFocused(false);
+			} else setFocused(Boolean(containerElement.current?.contains(document.activeElement)));
+		}, [canAutoHide]);
 
 		// keep local preview audio output aligned with the current prop
 		useEffect(() => {
@@ -472,36 +272,54 @@ export const Camera = React.memo(
 			videoElement.current.muted = !playLocalAudio;
 		}, [playLocalAudio]);
 
-		// clean up timers and active media tracks on unmount
-		useEffect(() => {
-			return () => {
+		useEffect(
+			() => () => {
 				if (controlsTimer.current) clearTimeout(controlsTimer.current);
-				const stream = getStream();
-				if (stream) {
-					for (const track of stream.getTracks()) {
-						track.stop();
-					}
-				}
-			};
-		}, [getStream]);
+			},
+			[],
+		);
 
-		// release the snapshot object URL when the preview changes or unmounts
+		// release the remaining snapshot object URL on unmount
 		useEffect(() => {
 			return () => {
-				if (snapshot) URL.revokeObjectURL(snapshot);
+				if (snapshotURL.current) URL.revokeObjectURL(snapshotURL.current);
+				snapshotURL.current = undefined;
 			};
-		}, [snapshot]);
+		}, []);
 
 		return (
 			<div
+				{...divAttributes}
 				ref={containerElement}
-				className={css.wrapper}
-				style={cssVars}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				onMouseMove={handleMouseMove}
-				onClick={handleMouseClick}
-				onKeyDown={(e) => accessibleKeyDown(e, handleMouseClick)}
+				className={[css.wrapper, className].filter(Boolean).join(' ')}
+				style={{ ...cssVars, ...style }}
+				onMouseEnter={(event) => {
+					onMouseEnter?.(event);
+					revealControls();
+				}}
+				onMouseMove={(event) => {
+					onMouseMove?.(event);
+					revealControls();
+				}}
+				onMouseLeave={(event) => {
+					onMouseLeave?.(event);
+					leaveControls();
+				}}
+				onClick={onClick}
+				onFocusCapture={(event) => {
+					onFocusCapture?.(event);
+					if (!canAutoHide) return;
+					setFocused(true);
+					revealControls();
+				}}
+				onBlurCapture={(event) => {
+					onBlurCapture?.(event);
+					if (!canAutoHide) return;
+					if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+						setFocused(false);
+						leaveControls();
+					}
+				}}
 			>
 				{pipSnapshot && snapshot && (
 					<div className={css.snapshotFrame}>
@@ -509,135 +327,128 @@ export const Camera = React.memo(
 							<Icon
 								name={'basic.cross'}
 								pointer={true}
-								role={'button'}
-								aria-label={'Clear snapshot'}
-								onClick={() =>
-									setSnapshot((previousSnapshot) => {
-										if (previousSnapshot) URL.revokeObjectURL(previousSnapshot);
-										return undefined;
-									})
-								}
+								actionName={'Clear snapshot'}
+								onClick={() => updateSnapshot()}
 							/>
 						</div>
 						<img className={css.snapshot} src={snapshot} alt={'Snapshot'} />
 					</div>
 				)}
 				{cameraSupport !== false && (
-					<video ref={videoElement} className={css.video} autoPlay playsInline muted={!playLocalAudio}>
+					<video
+						ref={videoElement}
+						className={css.video}
+						style={{ visibility: cameraOn ? 'visible' : 'hidden' }}
+						autoPlay
+						playsInline
+						muted={!playLocalAudio}
+					>
 						<track kind={'captions'} src={undefined} />
 					</video>
 				)}
 				{showPoster && <div className={css.poster}>{noVideoPoster ?? <DefaultNoVideoPoster user={userProfile} />}</div>}
 				{showError && <div className={css.error}>{cameraError}</div>}
-				<div
-					className={css.controls}
-					onMouseEnter={handleControlsMouseEnter}
-					onMouseLeave={handleControlsMouseLeave}
-					onClick={handleControlsClick}
-					onKeyDown={(e) => accessibleKeyDown(e, () => handleControlsClick(e))}
-				>
-					<div className={css.controlsLeft}>
-						<ToolbarButton
-							icon={'users.user'}
-							iconActive={'users.user'}
-							active={profile}
-							label={'User Info'}
-							disabled={false}
-							onClick={() => {
-								setProfile(!profile);
-								onChangeProfile?.(userProfile);
-							}}
-						/>
+				{showControlBar && (
+					<div
+						ref={controlsElement}
+						className={css.controls}
+						onMouseEnter={() => {
+							if (!canAutoHide) return;
+							if (controlsTimer.current) clearTimeout(controlsTimer.current);
+							setHovered(true);
+						}}
+						onMouseLeave={revealControls}
+					>
+						<div className={css.controlsLeft}>
+							{showProfileButton && (
+								<ToolbarButton
+									borderWidth={media.cameraOn ? 0 : 1}
+									icon={'users.user'}
+									iconActive={'users.user'}
+									active={profile}
+									label={'User Info'}
+									disabled={false}
+									onClick={() => {
+										setProfile(!profile);
+										onChangeProfile?.(userProfile);
+									}}
+								/>
+							)}
+						</div>
+						<div className={css.controlsCenter}>
+							<ToolbarButton
+								borderWidth={media.cameraOn ? 0 : 1}
+								icon={'media.video-camera'}
+								iconActive={'media.video-camera-slash'}
+								active={!cameraOn}
+								label={cameraOn ? 'Video' : 'Off'}
+								onClick={() => void session.toggleVideo()}
+							/>
+							{audio && (
+								<ToolbarButton
+									borderWidth={media.cameraOn ? 0 : 1}
+									icon={'media.mic'}
+									iconActive={'media.mic-slash'}
+									active={micMuted}
+									label={micMuted ? 'Muted' : 'Mic'}
+									disabled={!media.audioAvailable}
+									onClick={() => session.toggleMic()}
+								/>
+							)}
+							<ToolbarButton
+								borderWidth={media.cameraOn ? 0 : 1}
+								icon={'images.camera'}
+								iconActive={'images.camera'}
+								active={!!snapshot}
+								label={'Photo'}
+								disabled={!cameraOn}
+								onClick={() => cameraOn && handleSnapshot({ toggle: true })}
+							/>
+						</div>
+						<div className={css.controlsRight}>
+							{showSettingsButton && (
+								<ToolbarButton
+									borderWidth={media.cameraOn ? 0 : 1}
+									icon={'basic.more-horiz-fill'}
+									iconActive={'basic.more-horiz-fill'}
+									active={settings}
+									label={'Settings'}
+									disabled={false}
+									onClick={() => {
+										setSettings(!settings);
+										onChangeSettings?.(sessionSettings, deviceList);
+									}}
+								/>
+							)}
+						</div>
 					</div>
-					<div className={css.controlsCenter}>
-						<ToolbarButton
-							icon={'media.video-camera'}
-							iconActive={'media.video-camera-slash'}
-							active={!cameraOn}
-							label={cameraOn ? 'Video' : 'Off'}
-							onClick={() => void toggleVideo()}
-						/>
-						<ToolbarButton
-							icon={'media.mic'}
-							iconActive={'media.mic-slash'}
-							active={micMuted}
-							label={micMuted ? 'Muted' : 'Mic'}
-							onClick={() => toggleMic()}
-						/>
-						<ToolbarButton
-							icon={'images.camera'}
-							iconActive={'images.camera'}
-							active={!!snapshot}
-							label={'Photo'}
-							disabled={!cameraOn}
-							onClick={() => cameraOn && handleSnapshot({ toggle: true })}
-						/>
-					</div>
-					<div className={css.controlsRight}>
-						<ToolbarButton
-							icon={'basic.more-horiz'}
-							iconActive={'basic.more-horiz'}
-							active={settings}
-							label={'Settings'}
-							disabled={false}
-							onClick={() => {
-								setSettings(!settings);
-								onChangeSettings?.(sessionSettings, deviceList);
-							}}
-						/>
-					</div>
-				</div>
+				)}
 			</div>
 		);
 	}),
 );
 
-/**
- * Custom toolbar button with labels for controlling video / audio / etc.
- */
+/** Shared Slice control with the Camera action's controlled state. */
 export function ToolbarButton(props: Readonly<ToolbarButtonProps>) {
-	const { icon, iconActive, active, label, disabled, onClick, onMouseOver } = props;
-
-	const iconColor = useMemo(() => {
-		if (active) return 'var(--core-surface-primary)';
-		return 'var(--core-text-special)';
-	}, [active]);
-
-	const labelColor = useMemo(() => {
-		if (active) return 'var(--core-text-primary)';
-		return disabled ? 'var(--core-text-disabled)' : 'var(--core-text-special)';
-	}, [active, disabled]);
-
-	const cssVars = useMemo(() => {
-		return {
-			'--toolbar-button-size': '56px',
-			'--toolbar-button-border': 'none',
-			'--toolbar-button-bg-color': active ? 'var(--core-text-primary)' : 'var(--core-surface-primary)',
-			'--toolbar-button-label-color': labelColor,
-			'--toolbar-button-opacity': disabled ? '0.25' : '1',
-		} as React.CSSProperties;
-	}, [active, labelColor, disabled]);
+	const { borderWidth = 1, icon, iconActive, active, label, disabled, onClick, onMouseOver } = props;
 	return (
-		<div
-			className={css.toolbarButton}
-			style={cssVars}
-			role="button"
-			aria-label={label}
-			aria-disabled={disabled}
+		<ToggleButton
+			icon={icon}
+			iconSize={20}
+			iconStrokeWidth={1.5}
+			iconSelected={iconActive}
+			selected={active}
+			label={label}
+			labelOutside
+			labelPosition="bottom"
+			disabled={disabled}
 			onFocus={onMouseOver}
 			onMouseOver={onMouseOver}
-			onKeyDown={(e) => {
-				if (disabled) return;
-				accessibleKeyDown(e, () => onClick());
-			}}
-			onClick={disabled ? undefined : onClick}
-			tabIndex={disabled ? -1 : 0}
-		>
-			<div className={css.buttonIcon}>
-				<Icon size={26} name={active ? iconActive : icon} strokeColor={iconColor} />
-			</div>
-			<div className={css.buttonLabel}>{label}</div>
-		</div>
+			onClick={onClick}
+			borderRadius={100}
+			textSize={'xs'}
+			borderWidth={active ? 0 : borderWidth}
+		/>
 	);
 }
 
@@ -645,8 +456,13 @@ export function ToolbarButton(props: Readonly<ToolbarButtonProps>) {
  * the default poster image when no video is available
  */
 export function DefaultNoVideoPoster(props: Readonly<DefaultNoVideoPosterProps>) {
-	const { size = 0.75, user, message = 'Video is off' } = props;
+	const { user, message = 'Video is off' } = props;
 	if (user)
-		return <Avatar image={user?.avatar} name={`${user?.name}`} email={`${user?.email}`} size={'50%'} textSize={'xl'} />;
-	return message;
+		return <Avatar image={user?.avatar} name={user.name} email={`${user?.email}`} size={'50%'} textSize={'xl'} />;
+	return (
+		<span className={css.offMessage}>
+			<Icon name="media.video-camera-slash" size={20} strokeColor="currentColor" decorative />
+			{message}
+		</span>
+	);
 }

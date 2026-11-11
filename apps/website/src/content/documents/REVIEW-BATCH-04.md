@@ -70,7 +70,7 @@ Approved changes:
 
 Previews: a short confirmation and a constrained scrolling panel.
 
-## ModalController — ready for review
+## ModalController — done
 
 Route: `/docs/react/modal-controller/`. Sources:
 [implementation](../../../../../packages/slice/src/components/ModalController/ModalController.tsx),
@@ -78,35 +78,30 @@ Route: `/docs/react/modal-controller/`. Sources:
 [styles](../../../../../packages/slice/src/components/ModalController/ModalController.module.css),
 [store](../../../../../packages/slice/src/stores/modal/modalStore.ts).
 
-Findings:
+Completed the approved lifecycle and motion changes:
 
-- The store supports one active modal, not a stack. Replacing/dismissing an active
-  promise rejects it; docs/examples must handle that rejection.
-- Backdrop hit testing is fixed: the positioning container passes pointers through,
-  while the panel remains interactive. Browser story coverage checks actual hit targets.
-- Dialog naming belongs to DialogBox. Focus containment/restoration, initial focus,
-  Escape, background inertness, and scroll locking are implemented by the host.
-  Portal ownership remains application-controlled.
-- Panel and backdrop transitions now share Water-merged timing and respect live
-  reduced-motion preferences.
-- Variants/initial/animate/exit are an intentional native Motion API. Keep that API
-  coherent rather than introducing an alias when reviewing motion configuration.
-- The presence wrapper is not keyed by modal identity, so replacements can inherit
-  previous drag/animation state. Review replacement and exit/re-entry behavior.
-- Native pointer QA moved the dialog in Chromium, but title-bar dragging did not
-  move it in WebKit. Investigate event initiation, constraints, and engine behavior.
-- `onDragPointerDown` calls drag controls even when dragging is disabled. Guard
-  initiation and avoid accidentally dragging from action/close controls.
-- Descriptor callbacks run after store settlement, so a throwing callback cannot
-  strand the active modal. Further dismissal-reason design can follow the host review.
-- Decide whether stacking is needed before adding it; first make single-dialog
-  presentation and promise lifecycle predictable.
+- Kept one active modal without stacking. Replacement/dismissal reject pending
+  responses; documentation examples handle rejection.
+- Presentation keys track stored instances, including reused or omitted descriptor
+  IDs. Drag controls, constraint refs, and animation state belong to each instance.
+- Exiting hosts become inert, stop focus/Escape handling, and release background
+  and scroll locks. Replacements receive initial focus; dismissal restores focus.
+- Retained close/resolve/reject callbacks cannot affect a replacement. Settlement
+  precedes descriptor callbacks, and subscriber-created replacements are preserved.
+- Simplified motion to `motionValues={{ initial, animate, exit }}` plus `transition`,
+  matching PopMenu. Partial values merge with defaults; removed separate variant
+  label props. Water timing applies to panel and backdrop.
+- Live reduced motion cancels panel animation and variant-level delays, including
+  during exit. Backdrop reduced motion continues to be handled by Overlay.
+- Verified native title-bar dragging in Chromium and WebKit with frame-paced pointer
+  input. Close controls did not initiate dragging. The earlier fast-input WebKit
+  failure was not reproduced with realistic pacing; no engine-specific fix added.
 
-Preview: one local controller, an open button, and an actual stored DialogBox. The
-preview owns a descriptor ID and only clears its own modal on unmount. Transformed
-canvas containment keeps fixed layers from covering website navigation.
+Website previews now use the existing layout controller. Updated component/store
+references, focused lifecycle stories, hook/store unit tests, and replacement benchmarks.
+Implementation, validation, and documentation were reviewed and approved; this review is closed.
 
-## Tip — ready for review
+## Tip — done
 
 Route: `/docs/react/tip/`. Sources:
 [implementation](../../../../../packages/slice/src/components/Tip/Tip.tsx),
@@ -114,29 +109,32 @@ Route: `/docs/react/tip/`. Sources:
 [styles](../../../../../packages/slice/src/components/Tip/Tip.module.css),
 [positioning hook](../../../../../packages/slice/src/hooks/useToolTip/useToolTip.ts).
 
-Findings:
+Completed the approved review with the agreed singleton and timing behavior:
 
-- Positive coordinates, rather than content/explicit visibility, control display.
-  Valid coordinates at zero or outside the viewport are treated as hidden.
-- Changing coordinates restarts both timers. Hide expiry occurs even while the
-  trigger is active; decide whether the component or trigger owns visibility.
-- `textColor`/`color` populate a CSS variable the stylesheet never reads. Fix the
-  color application, remove `color`, and remove the `radius` fallback when approved.
-- `payload.duration` is ignored; the actual lifetime comes from `hideDelay`.
-  Clarify metadata versus configuration instead of silently supporting two APIs.
-- The first reveal fades, but later reveals can retain opacity 1. Hiding is an
-  immediate visibility change; implement proper presence/exit and Water timing.
-- There is no reduced-motion handling, tooltip role/association, Escape behavior,
-  or built-in keyboard activation. Keep accessibility configuration intent-based.
-- Positioning is external through `useToolTip`; that helper measures on metadata
-  changes, not all scrolling/resizing/anchor layout changes. Decide ownership and
-  collision/anchor behavior before broadening the API.
-- The wrapper is always mounted, uses `!important`, and forwards incidental Motion
-  props. Give it a deliberate, typed configuration surface and native events.
+- Kept the wrapper permanently mounted for the single application-wide instance.
+  New request data resets visibility and timers; coordinate updates do not restart
+  either timer. Content plus finite coordinates control display, including zero.
+- Default reveal is 150ms with Water easing; removal is always immediate. Kept
+  the 500ms show delay and 2500ms lifetime. Per-request `payload.duration` overrides
+  the lifetime; expiry still applies while a trigger remains active.
+- Clicks and Escape dismiss visible and pending requests, cancel timers, and do
+  not move focus. Clearing data/coordinates or unmounting also cleans up.
+- Added tooltip semantics and trigger description association, preserving existing
+  description IDs. Triggers own hover/focus activation and leave/blur/click cleanup.
+- Added intentional `motionValues` and `transition` props with live reduced-motion
+  overrides. Every reveal resets animation; custom animation delays never delay hiding.
+- Applied text color, removed `color`/`radius` aliases and `!important`, constrained
+  long text, and narrowed native attributes/events to a deliberate public surface.
+- Positioning follows anchor/content geometry and viewport/layout movement while
+  a request exists. It flips above when needed, clamps both axes, returns undefined
+  for missing/removed anchors, and avoids rendering unchanged coordinates.
 
-Previews: a static hint and application-owned hover/focus activation.
+Updated website, local component/hook references, examples, tests, and benchmarks.
+The website examples use the existing layout Tip through `tipActions.push`,
+with focused built-in control and Avatar profile-trigger examples. Documentation
+and examples were reviewed and approved; Tip is checked off.
 
-## Toast — ready for review
+## Toast — done
 
 Route: `/docs/react/toast/`. Sources:
 [implementation](../../../../../packages/slice/src/components/Toast/Toast.tsx),
@@ -144,33 +142,32 @@ Route: `/docs/react/toast/`. Sources:
 [styles](../../../../../packages/slice/src/components/Toast/Toast.module.css),
 [store](../../../../../packages/slice/src/stores/toast/toastStore.ts).
 
-Findings:
+Completed the approved review:
 
-- `onShow` is declared but never called. It falls through to the wrapper rather
-  than acting as a lifecycle callback. Normalize and implement lifecycle events.
-- `radius`, `notifId`, `didHide`, and the capitalized `Infinite` sentinel need a
-  naming/behavior review. Native `id` already has separate DOM semantics.
-- Updating only notification ID does not restart visibility. Closing/timing out
-  leaves content state behind, making repeated identical messages unreliable.
-  A fresh React key works around this today; define identity and replacement rules.
-- Hover/focus clears the timer; leaving either state restarts the entire duration,
-  even if the other interaction is still active. Track both states and remaining
-  time. Define behavior for live duration/message changes and long-running tasks.
-- Infinite duration forces both close visibility and the default progress indicator.
-  Separate persistence, dismissibility, and working status so each prop is honest.
-- The dismiss control is a div with button semantics. Use a native button, meaningful
-  intent-based naming, and robust keyboard/focus handling.
-- A polite status exists, but mounting it with the message may miss initial
-  announcements. Review persistent announcement semantics and urgency controls.
-- Entry/exit timing is fixed in internal variants. Add intentional transition and
-  variant integration with Water and live reduced-motion handling.
-- Constrain width and wrapping, verify small screens/long messages, and remove
-  `!important`. Define consistent timer callbacks with dismissal reasons.
-- The toast store holds one notification. Treat queuing/stacking as a separate
-  design choice rather than implying it already exists.
+- Implemented `onShow(ToastInfo)` and `onHide(ToastHideInfo)` with original identity
+  and timeout/dismiss/cleared/replaced reasons. Exit callbacks run once after exit;
+  unmount cancels timers without callbacks.
+- Normalized `radius` → `borderRadius`, `notifId` → `notificationId`, `didHide` →
+  `onHide`, and `'Infinite'` → `'infinite'`; migrated internal consumers and examples.
+- New IDs replay identical text without remounting. Pending shows cancel on
+  replacement; changing duration restarts its lifetime and preserves active pauses.
+- Hover/focus independently pause remaining time until both end. Persistence,
+  progress, and dismissibility are independent.
+- Added a native dismiss button, configurable intent label, keyboard focus style,
+  prior-focus restoration, and persistent polite/assertive announcements.
+- Added `motionValues` and `transition`, Water integration, live reduced-motion
+  overrides, and a static working indicator under reduced motion.
+- Constrained width/height, wrapped long text, removed `!important`, and retained
+  native wrapper events alongside timer behavior.
+- Added generic `data` and `onClick(event, data)` action support with native
+  keyboard activation and independent dismissal. Store pushes infer payload types.
+- Store values compose directly with component props. Generated IDs and guarded
+  clear callbacks protect replacements. The store remains a single slot;
+  queuing/stacking is separate future work.
 
-Previews: info, success, timed, and working notifications, each replayable without
-sharing the application's toast store. Parent positioning contains them in canvas.
+Website and local reference docs describe the current API. Previews replay through
+notification identity without sharing the application store. Lifecycle unit tests,
+store tests, and focused interaction stories cover the new behavior.
 
 ## Website integration notes
 

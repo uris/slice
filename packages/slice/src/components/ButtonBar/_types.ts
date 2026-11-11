@@ -1,7 +1,7 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { SliceIcon } from '../Icon/_types';
-import type { ToolTip } from '../sharedTypes';
+import type { ButtonSize, ToolTip } from '../sharedTypes';
 
 export type BarButton = {
 	icon?: SliceIcon;
@@ -15,7 +15,7 @@ type ButtonBarBaseProps = {
 	buttonGap?: number;
 	padding?: number;
 	selectionRadius?: number | string;
-	buttonSize?: 's' | 'm' | 'l' | 'xl' | number;
+	buttonSize?: Exclude<ButtonSize, 'auto'>;
 	iconSize?: number;
 	toggle?: boolean;
 	selectedIndex?: number | null;

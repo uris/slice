@@ -1,35 +1,42 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTheme } from '../../hooks';
-import { corners } from '../../theme/corners/corners';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import { Button } from '../Button';
 import { type FileItem, FileList } from '../FileList';
+import { IconButton } from '../IconButton';
+import { TextArea } from '../TextArea';
+import { allTypes } from '../UploadArea';
+import { useFileSelection } from '../UploadArea/useFileSelection';
 import css from './PromptInput.module.css';
-import type { PromptProps } from './_types';
+import type { PromptActions, PromptProps } from './_types';
+import { insertPromptText, pasteBecomesAttachment } from './promptText';
 
 const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps, ref) => {
-	const props = resolveColorProps(rawProps);
 	const {
 		children,
-		attachments = [],
-		value = '',
+		attachments: controlledAttachments,
+		defaultAttachments = [],
+		value,
+		defaultValue = '',
 		width = '100%',
 		maxWidth,
 		minWidth,
 		working = false,
-		maxHeight,
+		disabled = false,
+		readOnly = false,
+		maxHeight = 400,
 		attachmentsDisabled = false,
 		submitWorking = false,
-		borderStyle = 'gradient',
-		borderColor,
-		borderColorOn,
+		borderStyle = 'solid',
+		borderColor = 'var(--core-outline-secondary)',
+		borderColorFocused = 'var(--core-outline-secondary)',
 		borderAnimate = true,
 		borderWidth = 1,
-		borderRadius = corners['corner-m'],
-		focused = false,
+		borderRadius = 16,
+		focused,
 		placeholder = 'Ask me anything ...',
 		placeholderWorking = 'Working ...',
 		submitClears = true,
@@ -40,270 +47,347 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps,
 		textSize = 'm',
 		maxLength,
 		toolbarGap = 8,
+		inputName = 'Message',
+		textAreaProps,
+		fileListProps,
+		acceptedTypes = allTypes,
+		multiple = true,
+		pasteAttachmentThreshold,
+		attachActionName = 'Attach files',
+		sendActionName = 'Send message',
+		stopActionName = 'Stop generating',
 		onChange,
 		onBlur,
 		onFocus,
 		onSubmit,
 		onStop,
 		onAttachmentsChange,
-	} = props;
-	const { isDark } = useTheme();
-	const [isFocused, setIsFocused] = useState<boolean>(focused ?? false);
-	const [textValue, setTextValue] = useState<string | undefined>(value);
-	const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-	// focus the textarea and report the current prompt state
-	const handleFocus = useCallback(() => {
-		setIsFocused(true);
-		textAreaRef?.current?.focus();
-		onFocus?.(textAreaRef.current?.value, attachments);
-	}, [onFocus, attachments]);
-
-	// blur the textarea and report the current prompt state
-	const handleBlur = useCallback(
-		(valueOverride?: string) => {
-			setIsFocused(false);
-			textAreaRef.current?.blur();
-			onBlur?.(valueOverride ?? textAreaRef.current?.value, attachments);
-		},
-		[onBlur, attachments],
-	);
-
-	// bridge the native blur event to the internal blur reporter
-	const handleTextAreaBlur = useCallback(() => {
-		handleBlur();
-	}, [handleBlur]);
-
-	// forward attachment updates and keep the parent prompt state in sync
-	const handleAttachmentsChange = useCallback(
-		(newFiles: FileItem[]) => {
-			onAttachmentsChange?.(newFiles);
-			onChange?.(textAreaRef.current?.value, newFiles);
-		},
-		[onAttachmentsChange, onChange],
-	);
-
-	// update local prompt text and notify the consumer
-	const handleChange = useCallback(
-		(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-			const newValue = e.target.value;
-			setTextValue(newValue);
-			onChange?.(newValue, attachments);
-		},
-		[onChange, attachments],
-	);
-
-	// submit the current prompt when not already working or stopping
-	const handleSubmit = useCallback(() => {
-		if (stopEnabled) return;
-		if (working && submitWorking) return;
-		const currentValue = textAreaRef.current?.value;
-		if (currentValue) {
-			onSubmit?.(currentValue, attachments);
-			if (submitClears) {
-				setTextValue('');
-				onChange?.('', attachments);
-				if (textAreaRef.current) textAreaRef.current.value = '';
-			}
-			handleBlur(submitClears ? '' : currentValue);
-		}
-	}, [stopEnabled, submitClears, onChange, onSubmit, handleBlur, attachments, working, submitWorking]);
-
-	// emit stop event keeping focus on the textarea
-	const handleStop = useCallback(() => {
-		onStop?.();
-		handleFocus();
-	}, [onStop, handleFocus]);
-
-	// optionally submit on enter from the textarea
-	const handleKeyDown = useCallback(
-		(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-			if (e.key === 'Enter' && enterSubmits) {
-				e.preventDefault();
-				handleSubmit();
-			}
-		},
-		[handleSubmit, enterSubmits],
-	);
-
-	// route the send button to submit or stop based on the current state
-	const handleClickSend = useCallback(
-		(e: React.MouseEvent<HTMLButtonElement>) => {
-			e.preventDefault();
-			e.stopPropagation();
-			stopEnabled ? handleStop() : handleSubmit();
-		},
-		[handleSubmit, handleStop, stopEnabled],
-	);
-
-	// keep the attach button from stealing wrapper click behavior
-	const handleClickAttach = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
-		e.stopPropagation();
+		onReject,
+		onToolTip,
+		onPaste,
+		onKeyDown,
+		onClick,
+		onDragEnter,
+		onDragOver,
+		onDragLeave,
+		onDrop,
+		...attributes
+	} = resolveColorProps(rawProps);
+	const [localText, setLocalText] = useState(defaultValue);
+	const [localAttachments, setLocalAttachments] = useState<FileItem[]>(defaultAttachments);
+	const text = value === undefined ? localText : value;
+	const attachments = controlledAttachments ?? localAttachments;
+	const editor = useRef<HTMLTextAreaElement>(null);
+	const pendingCaret = useRef<{ value: string; caret: number } | undefined>(undefined);
+	const reducedMotion = usePrefersReducedMotion();
+	const canEdit = !disabled && !readOnly;
+	const textLimit = textAreaProps?.maxLength ?? maxLength;
+	const canAttach =
+		canEdit && !attachmentsDisabled && (controlledAttachments === undefined || Boolean(onAttachmentsChange));
+	const waiting = attachments.some((item) => item.uploading || Boolean(item.error?.trim()));
+	const hasContent = Boolean(text.trim()) || attachments.length > 0;
+	const blocked = disabled || readOnly || stopEnabled || (working && submitWorking) || waiting;
+	const canSubmit = !blocked && hasContent && Boolean(onSubmit);
+	const focus = () => editor.current?.focus();
+	const changeText = (next: string) => {
+		if (!canEdit) return;
+		if (value === undefined) setLocalText(next);
+		onChange?.(next, attachments);
+	};
+	const changeAttachments = (next: FileItem[]) => {
+		if (!canAttach) return;
+		if (controlledAttachments === undefined) setLocalAttachments(next);
+		onAttachmentsChange?.(next);
+		onChange?.(text, next);
+	};
+	const selection = useFileSelection({
+		files: attachments,
+		acceptedTypes,
+		multiple,
+		disabled: !canAttach,
+		onFilesChange: changeAttachments,
+		onReject,
+	});
+	const [fileDragging, setFileDragging] = useState(false);
+	const dragDepth = useRef(0);
+	const resetFileDrag = useCallback(() => {
+		dragDepth.current = 0;
+		setFileDragging(false);
 	}, []);
-
-	// return focus to the textarea when the toolbar is clicked
-	const handleClickButtonBar = useCallback(
-		(e: React.MouseEvent<HTMLDivElement>) => {
-			e.preventDefault();
-			handleFocus();
-		},
-		[handleFocus],
-	);
-
-	// resolve the outer border treatment from style, focus, and working state
-	const setBorderColor = useMemo(() => {
-		if (borderStyle === 'gradient') {
-			const radial = isDark ? 'var(--conic-gradient-dark)' : 'var(--conic-gradient-light)';
-			if (working && borderAnimate) return radial;
-			if (isFocused) return borderColorOn ?? radial;
-			return borderColor ?? radial;
-		}
-		if (borderStyle === 'solid') {
-			if (working) return borderColorOn ?? 'var(--core-outline-special)';
-			if (isFocused) return borderColorOn ?? 'var(--core-outline-special)';
-			return borderColor ?? 'transparent';
-		}
-		return 'transparent';
-	}, [borderStyle, isFocused, borderColorOn, borderColor, working, borderAnimate, isDark]);
-
-	// resolve the placeholder text from the current working state
-	const setPlaceholder = useMemo(() => {
-		if (working && placeholderWorking) return placeholderWorking;
-		return placeholder;
-	}, [working, placeholder, placeholderWorking]);
-
-	// resolve the send button icon color from working and content state
-	const setSendIconColor = useMemo(() => {
-		if (stopEnabled) return 'var(--core-text-primary)';
-		if (textValue !== '') return 'var(--core-text-light)';
-		return 'var(--core-text-disabled)';
-	}, [textValue, stopEnabled]);
-
-	// resolve the send button state from content and stop mode
-	const sendButtonState = useMemo(() => {
-		if (working && submitWorking) return 'normal';
-		if (stopEnabled) return 'normal';
-		return textValue === '' ? 'disabled' : 'normal';
-	}, [textValue, stopEnabled, working, submitWorking]);
-
-	// resolve the attach button state while work is in progress
-	const attachState = useMemo(() => {
-		if (!attachmentsDisabled) return 'normal';
-		return 'disabled';
-	}, [attachmentsDisabled]);
-
-	// sync focus requests from the controlled prop
+	// Track nested enters/leaves, but clear the highlight when a drag ends outside the composer too.
 	useEffect(() => {
-		if (focused) textAreaRef.current?.focus();
-		else textAreaRef.current?.blur();
-	}, [focused]);
+		if (!canAttach) resetFileDrag();
+		if (!fileDragging || !canAttach) return;
+		const view = editor.current?.ownerDocument.defaultView;
+		if (!view) return;
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') resetFileDrag();
+		};
+		view.addEventListener('dragend', resetFileDrag);
+		view.addEventListener('drop', resetFileDrag);
+		view.addEventListener('blur', resetFileDrag);
+		view.addEventListener('keydown', handleKeyDown);
+		return () => {
+			view.removeEventListener('dragend', resetFileDrag);
+			view.removeEventListener('drop', resetFileDrag);
+			view.removeEventListener('blur', resetFileDrag);
+			view.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [canAttach, fileDragging, resetFileDrag]);
+	const isFileDrag = (event: React.DragEvent<HTMLDivElement>) => {
+		// Ignore React events bubbling from portaled menus; leave ordinary text dragging to the editor.
+		return (
+			event.target instanceof Node &&
+			event.currentTarget.contains(event.target) &&
+			(Array.from(event.dataTransfer.types).includes('Files') || event.dataTransfer.files.length > 0)
+		);
+	};
+	const submit = () => {
+		if (!canSubmit) return;
+		onSubmit?.(text, attachments);
+		if (submitClears) changeText('');
+		focus();
+	};
+	const stop = () => {
+		if (disabled || !stopEnabled) return;
+		onStop?.();
+		focus();
+	};
+	const makeTextAttachment = (content: string) => {
+		if (!canAttach || !pasteBecomesAttachment(content, pasteAttachmentThreshold)) return false;
+		selection.selectFiles([new File([content], 'Pasted-text.txt', { type: 'text/plain' })]);
+		// Rejected oversized text remains reported as a file rejection, never silently truncated into the editor.
+		return true;
+	};
+	const pasteText = (content: string) => {
+		if (!canEdit || !content) return;
+		if (makeTextAttachment(content)) {
+			focus();
+			return;
+		}
+		const element = editor.current;
+		const next = insertPromptText(
+			text,
+			content,
+			element?.selectionStart ?? text.length,
+			element?.selectionEnd ?? text.length,
+			textLimit,
+		);
+		pendingCaret.current = next;
+		changeText(next.value);
+		focus();
+	};
+	// Only restore a caret once the owning controlled value has committed the requested edit.
+	useLayoutEffect(() => {
+		const pending = pendingCaret.current;
+		if (!pending || pending.value !== text) return;
+		pendingCaret.current = undefined;
+		editor.current?.setSelectionRange(pending.caret, pending.caret);
+	}, [text]);
+	const actions: PromptActions = {
+		value: text,
+		attachments,
+		canSubmit,
+		canAttach,
+		disabled: !canEdit,
+		focus,
+		submit,
+		stop,
+		openFilePicker: selection.openPicker,
+		addFiles: selection.selectFiles,
+		pasteText,
+	};
+	const latestActions = useRef<PromptActions | undefined>(undefined);
+	useLayoutEffect(() => {
+		latestActions.current = actions;
+		return () => {
+			latestActions.current = undefined;
+		};
+	});
+	const exposedActions: PromptActions = {
+		...actions,
+		pasteText: (content) => latestActions.current?.pasteText(content),
+		addFiles: (files) => latestActions.current?.addFiles(files) ?? false,
+		submit: () => latestActions.current?.submit(),
+		stop: () => latestActions.current?.stop(),
+		openFilePicker: () => latestActions.current?.openFilePicker(),
+	};
 
-	// sync the textarea value from the controlled prop
-	useEffect(() => {
-		setTextValue(value);
-	}, [value]);
+	const customActions = typeof children === 'function' ? children(exposedActions) : children;
+	const hasActions = React.Children.count(customActions) > 0 || attachButton || sendButton;
 
-	// keep the inner radius 1px smaller than the outer radius so the border animation lines up
-	const innerBorderRadius = useMemo(() => {
-		if (typeof borderRadius === 'number') return `${Math.max(borderRadius - 1, 0)}px`;
-		return `calc(${setStyle(borderRadius)} - 1px)`;
-	}, [borderRadius]);
-
-	// compose CSS custom properties for border treatment and sizing
-	const cssVars = useMemo(() => {
-		return {
-			'--prompt-width': setStyle(width),
-			'--prompt-min-width': setStyle(minWidth, 'unset'),
-			'--prompt-max-width': setStyle(maxWidth, 'unset'),
-			'--prompt-border-color': setBorderColor,
-			'--prompt-max-height': maxHeight ? `${maxHeight}px` : 'unset',
-			'--prompt-border-width': borderWidth ? `${borderWidth}px` : '0',
-			'--prompt-state': working && borderAnimate ? 'running' : 'paused',
-			'--prompt-border-radius': setStyle(borderRadius),
-			'--prompt-inner-border-radius': innerBorderRadius,
-		} as React.CSSProperties;
-	}, [
-		working,
-		borderAnimate,
-		setBorderColor,
-		borderWidth,
-		borderRadius,
-		innerBorderRadius,
-		maxHeight,
-		width,
-		maxWidth,
-		minWidth,
-	]);
-
+	const getBorder = () => {
+		if (borderStyle === 'none') return 'transparent';
+		if (borderStyle === 'gradient') return borderColor ?? 'var(--prompt-gradient)';
+		if (working) return borderColorFocused ?? 'var(--core-outline-special)';
+		return borderColor ?? 'var(--core-outline-primary)';
+	};
+	const size = Number.isFinite(borderWidth) ? Math.max(0, borderWidth) : 1;
+	const innerRadius =
+		typeof borderRadius === 'number'
+			? `${Math.max(0, borderRadius - size)}px`
+			: `max(0px, calc(${borderRadius} - ${size}px))`;
+	const variables = {
+		'--prompt-width': setStyle(width),
+		'--prompt-max-width': setStyle(maxWidth, 'none'),
+		'--prompt-min-width': setStyle(minWidth, '0px'),
+		'--prompt-border-color': getBorder(),
+		'--prompt-focused-border': borderColorFocused ?? getBorder(),
+		'--prompt-border-width': `${size}px`,
+		'--prompt-border-radius': setStyle(borderRadius),
+		'--prompt-inner-border-radius': innerRadius,
+		'--prompt-state': working && borderAnimate && !reducedMotion ? 'running' : 'paused',
+		'--prompt-toolbar-gap': setStyle(toolbarGap),
+	} as React.CSSProperties;
 	return (
-		<div className={css.wrapperBg} ref={ref} style={cssVars}>
-			<div className={css.textareaWrapper}>
+		<div
+			{...attributes}
+			ref={ref}
+			data-file-dragging={(canAttach && fileDragging) || undefined}
+			onDragEnter={(event) => {
+				onDragEnter?.(event);
+				if (event.defaultPrevented || !canAttach || !isFileDrag(event)) return;
+				event.preventDefault();
+				dragDepth.current += 1;
+				setFileDragging(true);
+			}}
+			onDragOver={(event) => {
+				onDragOver?.(event);
+				if (event.defaultPrevented || !isFileDrag(event)) return;
+				event.preventDefault();
+				event.dataTransfer.dropEffect = canAttach ? 'copy' : 'none';
+			}}
+			onDragLeave={(event) => {
+				onDragLeave?.(event);
+				if (!isFileDrag(event)) return;
+				dragDepth.current = Math.max(0, dragDepth.current - 1);
+				if (!dragDepth.current) setFileDragging(false);
+			}}
+			onDrop={(event) => {
+				onDrop?.(event);
+				if (!isFileDrag(event)) return;
+				const cancelled = event.defaultPrevented;
+				event.preventDefault();
+				resetFileDrag();
+				if (!cancelled) selection.selectFiles(Array.from(event.dataTransfer.files));
+			}}
+			onClick={(event) => {
+				onClick?.(event);
+				if (event.defaultPrevented || disabled) return;
+				const target = event.target;
+				// Portaled actions bubble through React; only the composer's own empty surface focuses the editor.
+				if (!(target instanceof Element) || !event.currentTarget.contains(target)) return;
+				if (
+					target.closest(
+						'button, a, input, textarea, select, label, [contenteditable]:not([contenteditable="false"]), [tabindex], [role="button"], [role="menuitem"], [role="checkbox"], [role="combobox"], [role="switch"], [role="link"]',
+					)
+				)
+					return;
+				if (event.currentTarget.ownerDocument.getSelection()?.isCollapsed === false) return;
+				focus();
+			}}
+			className={`${css.wrapper} ${attributes.className ?? ''}`}
+			style={{ ...attributes.style, ...variables }}
+		>
+			<div className={css.surface}>
 				{attachments.length > 0 && (
 					<div className={css.attachments}>
 						<FileList
-							files={attachments}
-							onChange={handleAttachmentsChange}
-							backgroundColor={'var(--core-surface-primary)'}
-							textSize={'s'}
-							direction={'row'}
+							direction="row"
 							gap={8}
-							iconSize={24}
+							{...fileListProps}
+							files={attachments}
+							canRemove={canAttach}
+							onChange={changeAttachments}
+							onToolTip={onToolTip}
 						/>
 					</div>
 				)}
-				<textarea
-					id={'promptInput'}
-					name={'promptInput'}
-					className={`${css.textarea} ${css[textSize]}`}
-					ref={textAreaRef}
-					value={textValue ?? ''}
-					onChange={handleChange}
-					placeholder={setPlaceholder}
-					onFocus={handleFocus}
-					onBlur={handleTextAreaBlur}
-					onKeyDown={handleKeyDown}
-					maxLength={maxLength}
+				<TextArea
 					rows={1}
+					autoGrow
+					resizable={false}
+					borderStyle="none"
+					backgroundColor="transparent"
+					padding="var(--spacing-m)"
+					maxHeight={maxHeight}
+					textSize={textSize}
+					inputName={inputName}
+					placeholder={working ? placeholderWorking : placeholder}
+					{...textAreaProps}
+					maxLength={textLimit}
+					inputRef={editor}
+					value={text}
+					disabled={disabled}
+					readOnly={readOnly}
+					focused={focused}
+					showSendButton={false}
+					submitClears={false}
+					returnSubmits={enterSubmits && !blocked}
+					allowEmptySubmit={attachments.length > 0 && !waiting}
+					onChange={changeText}
+					onSubmit={submit}
+					onFocus={(next) => onFocus?.(next, attachments)}
+					onBlur={(next) => onBlur?.(next, attachments)}
+					onKeyDown={(event) => {
+						onKeyDown?.(event);
+						if (event.defaultPrevented) return;
+						if (event.repeat && event.key === 'Enter') event.preventDefault();
+					}}
+					onPaste={(event) => {
+						onPaste?.(event);
+						if (event.defaultPrevented || !canEdit) return;
+						const content = event.clipboardData.getData('text/plain');
+						if (makeTextAttachment(content)) event.preventDefault();
+					}}
 				/>
-				{(children || attachButton || sendButton) && (
-					<div className={css.buttonBar} onMouseDown={handleClickButtonBar}>
-						<div className={css.toolBar} style={{ gap: toolbarGap }}>
+				{hasActions && (
+					<div className={css.buttonBar}>
+						<div className={css.actions}>
 							{attachButton && (
-								<Button
-									round
-									label={undefined}
-									variant={'outline'}
-									iconLeft={'basic.plus'}
-									iconSize={20}
-									state={attachState}
-									onMouseDown={handleClickAttach}
+								<IconButton
+									actionName={attachActionName}
+									icon="basic.plus"
+									buttonSize="m"
+									disabled={!canAttach}
+									onClick={(event) => {
+										if (!event.defaultPrevented) selection.openPicker();
+									}}
+									tooltip={attachActionName}
+									onToolTip={onToolTip}
+									backgroundColor={'core-fill-primary'}
 								/>
 							)}
-							{children}
+							{customActions}
 						</div>
 						{sendButton && (
 							<Button
 								round
-								label={undefined}
+								aria-label={stopEnabled ? stopActionName : sendActionName}
 								variant={stopEnabled ? 'outline' : 'solid'}
 								iconLeft={stopEnabled ? 'media.stop' : 'arrows.arrow-top'}
 								iconSize={stopEnabled ? 16 : 20}
-								state={sendButtonState}
-								backgroundColorDisabled={'var(--core-outline-primary)'}
+								disabled={stopEnabled ? disabled : !canSubmit}
 								progress={!stopEnabled}
-								working={submitWorking && working}
-								onMouseDown={handleClickSend}
-								iconColor={setSendIconColor}
+								working={!stopEnabled && working && submitWorking}
+								onClick={(event) => {
+									if (event?.defaultPrevented) return;
+									if (stopEnabled) stop();
+									else submit();
+								}}
+								tooltip={stopEnabled ? stopActionName : sendActionName}
+								onToolTip={onToolTip}
 							/>
 						)}
 					</div>
 				)}
+				<span className={css.rejection} role="alert">
+					{selection.rejection}
+				</span>
+				<input {...selection.inputProps} />
 			</div>
 		</div>
 	);
 });
-
 PromptInputBase.displayName = 'PromptInput';
-
 export const PromptInput = React.memo(PromptInputBase);

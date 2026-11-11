@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlexDiv, Label, Slider, TabBar, type TabOption, TextField } from 'src';
+import { FlexBox, Slider, TabBar, type TabOption, TextField } from 'src';
 import css from './FunnelSans.module.css';
 
 const tabs: TabOption[] = [
@@ -22,13 +22,13 @@ export function FunnelSans() {
 	};
 
 	return (
-		<FlexDiv width={'fill'} height={'fit'} align={'start'} justify={'start'}>
+		<FlexBox width={'fill'} height={'fit'} align={'start'} justify={'start'}>
 			<TabBar tabBarName="Font style" options={tabs} value={style} onChange={setStyle} />
 			<div className={css.glyphs} style={{ fontWeight: weight, fontStyle: style }}>
 				{`ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖabcdefghijklmnopqrstuvwxyzåäö1234567890!"#€%&/()=?*@£<~+>`}
 			</div>
-			<FlexDiv width={'fill'} height={'fit'} direction={'row'} justify={'between'} align={'center'} gap={16}>
-				<Label borderSize={0}>Adjust Font Weight</Label>
+			<FlexBox width={'fill'} height={'fit'} direction={'row'} justify={'between'} align={'center'} gap={16}>
+				<span>Adjust Font Weight</span>
 				<Slider
 					aria-label="Font weight"
 					value={weight}
@@ -48,7 +48,7 @@ export function FunnelSans() {
 					width={75}
 					textAlign={'center'}
 				/>
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }

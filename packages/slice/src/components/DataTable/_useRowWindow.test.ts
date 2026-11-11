@@ -128,3 +128,21 @@ describe('useRowWindow', () => {
 		expect(wrapper.current?.scrollTop).toBe(0);
 	});
 });
+
+describe('window geometry', () => {
+    it('subtracts header height from the body scroll offset', () => {
+        const wrapper = makeWrapper(400);
+        const { result } = renderHook(() => useRowWindow(wrapper, 1000, { enabled: true, rowHeight: 40, headerHeight: 80, overscan: 0 }));
+        act(() => result.current.handleScroll(480));
+        act(() => vi.runAllTimers());
+        expect(result.current.startIndex).toBe(10);
+    });
+    it('normalizes negative overscan and disables non-finite row heights', () => {
+        const wrapper = makeWrapper(400);
+        const { result, rerender } = renderHook(({ rowHeight }) => useRowWindow(wrapper, 1000, { enabled: true, rowHeight, overscan: -10 }), { initialProps: { rowHeight: 40 } });
+        expect(result.current.startIndex).toBe(0);
+        expect(result.current.endIndex).toBe(10);
+        rerender({ rowHeight: NaN });
+        expect(result.current.enabled).toBe(false);
+    });
+});

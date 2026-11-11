@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CheckBox } from 'src/components/CheckBox/CheckBox';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { runCheckBoxPlay } from 'src/components/playHelpers';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
@@ -58,9 +58,9 @@ export default meta;
 export const Default: StoryObj<typeof CheckBox> = {
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<CheckBox {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -69,9 +69,9 @@ export const DefaultCheckBox: StoryObj<typeof CheckBox> = {
 	tags: ['tests'],
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<CheckBox {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 	play: async ({ canvasElement, args }) => {
@@ -87,9 +87,9 @@ export const Partial: StoryObj<typeof CheckBox> = {
 	},
 	render: (args) => {
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64}>
 				<CheckBox {...args} />
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };
@@ -291,9 +291,9 @@ export const MixedIconColor: StoryObj<typeof CheckBox> = {
 const longLabel =
 	'I accept the terms and conditions and confirm that I have read the privacy policy before continuing.';
 const multilineRender: StoryObj<typeof CheckBox>['render'] = (args) => (
-	<FlexDiv absolute justify="center" align="center" padding={64}>
+	<FlexBox absolute justify="center" align="center" padding={64}>
 		<CheckBox {...args} style={{ width: 240 }} />
-	</FlexDiv>
+	</FlexBox>
 );
 const multilinePlay: StoryObj<typeof CheckBox>['play'] = async ({ canvasElement, args }) => {
 	const checkbox = within(canvasElement).getByRole('checkbox', { name: longLabel });
@@ -355,10 +355,10 @@ const offsetPlay: StoryObj<typeof CheckBox>['play'] = async ({ canvasElement, ar
 	});
 };
 const offsetRender: StoryObj<typeof CheckBox>['render'] = (args) => (
-	<FlexDiv direction="column" align="center" gap={24} padding={64}>
+	<FlexBox direction="column" align="center" gap={24} padding={64}>
 		<CheckBox {...args} label={longLabel} textTopOffset={0} style={{ width: 240 }} />
 		<CheckBox {...args} label={longLabel} style={{ width: 240 }} />
-	</FlexDiv>
+	</FlexBox>
 );
 export const TextOffsetTopPositive: StoryObj<typeof CheckBox> = {
 	tags: ['tests'],

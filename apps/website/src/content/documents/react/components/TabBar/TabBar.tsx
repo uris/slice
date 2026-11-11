@@ -3,39 +3,65 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
-import { TabBarPreview } from './TabBarPreview';
-import { controlledCode, motionCode, optionsCode, usageCode } from './code';
+import { FlexBox, Preset } from '@apple-pie/slice';
+import { TabBarColorExample } from './UsagePreviews';
+import { TabBarDisabledExample, TabBarExtrasExample, TabBarFillExample, TabBarUsageExample } from './UsagePreviews';
+import { colorsCode } from './code';
+import { controlledCode, disabledCode, extrasCode, fillCode, motionCode, optionsCode, usageCode } from './code';
 export function TabBarDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">TabBar component</H1>
 			<P clipWidth>
 				Keep related views within reach. Compose a row of tabs with optional icons, counts, and an indicator that
 				follows the selected view.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
-				components={[
-					{ label: 'Standard tabs', component: <TabBarPreview /> },
-					{ label: 'Icons and counts', component: <TabBarPreview variant="extras" /> },
-					{ label: 'Equal-width tabs', component: <TabBarPreview variant="fill" /> },
-					{ label: 'Disabled', component: <TabBarPreview variant="disabled" /> },
-				]}
-			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				Place <Code openURL="/docs/react/tab/">Tab</Code> choices inside TabBar. Each value identifies a view;
 				defaultValue sets the initial selection.
 			</P>
-			<CodeBlock filename="TabBarExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <TabBarUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'TabBarExample.tsx',
+					},
+				]}
+			/>
 			<H3>Use options</H3>
 			<P>Pass options to create the same tabs from data.</P>
 			<CodeBlock filename="TabBarOptions.tsx" language="tsx" code={optionsCode.trim()} />
 			<H3>Control selection</H3>
 			<P>Use value and onChange to keep the active view in application state.</P>
 			<CodeBlock filename="TabBarSelection.tsx" language="tsx" code={controlledCode.trim()} />
+			<H3>Add icons and counts</H3>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
+				components={[{ label: 'Icons and counts', component: <TabBarExtrasExample />, code: extrasCode.trim() }]}
+			/>
+			<H3>Fill the available width</H3>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
+				components={[{ label: 'Equal-width tabs', component: <TabBarFillExample />, code: fillCode.trim() }]}
+			/>
+			<H3>Disable the group</H3>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
+				components={[{ label: 'Disabled tabs', component: <TabBarDisabledExample />, code: disabledCode.trim() }]}
+			/>
+			<H3>Set an accent</H3>
+			<P>
+				Set <Code>accentColor</Code> to give selected text, icons, and the underline one shared color.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
+				components={[{ label: 'Set an accent', component: <TabBarColorExample />, code: colorsCode.trim() }]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				Selection follows a value rather than a position, so reordering tabs preserves the selected view. Values must be
@@ -71,6 +97,15 @@ export function TabBarDoc() {
 				All group props are optional. Tab choices each require a value. Color props accept Slice theme tokens or CSS
 				colors.
 			</P>
+			<Definition id={'accentColor'}>
+				<Prop>accentColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Fallback color for selected text, icons, and the moving underline. Explicit selected-color props take
+				precedence.
+			</P>
 			<Definition id={'border'}>
 				<Prop>border</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -82,7 +117,9 @@ export function TabBarDoc() {
 				<TypeDef>{'ColorValue'}</TypeDef>
 				<DefaultVal>{'core-outline-secondary'}</DefaultVal>
 			</Definition>
-			<P>{'Baseline color. Accepts Slice color tokens or CSS colors.'}</P>
+			<P>
+				Baseline color. <Code>underlineColor</Code> takes precedence when supplied.
+			</P>
 			<Definition id={'children'}>
 				<Prop>children</Prop>
 				<TypeDef>{'React.ReactNode'}</TypeDef>
@@ -119,6 +156,21 @@ export function TabBarDoc() {
 				<DefaultVal>{'auto'}</DefaultVal>
 			</Definition>
 			<P>{'Height of the bar. Numbers are pixels; strings accept CSS dimensions.'}</P>
+			<Definition id={'iconColor'}>
+				<Prop>iconColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>Icon color for unselected tabs. Defaults to the tab’s text color.</P>
+			<Definition id={'iconColorSelected'}>
+				<Prop>iconColorSelected</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Selected icon color. Takes precedence over <Code>accentColor</Code>; without either, icons follow the selected
+				text color.
+			</P>
 			<Definition id={'iconFill'}>
 				<Prop>iconFill</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -136,7 +188,7 @@ export function TabBarDoc() {
 				<TypeDef>{'number'}</TypeDef>
 				<DefaultVal>{'20'}</DefaultVal>
 			</Definition>
-			<P>{'Size of tab icons in pixels.'}</P>
+			<P>{'Default size of tab icons in pixels. A Tab or TabOption iconSize overrides it.'}</P>
 			<Definition id={'justify'}>
 				<Prop>justify</Prop>
 				<TypeDef>{"'start' | 'center' | 'end'"}</TypeDef>
@@ -185,6 +237,23 @@ export function TabBarDoc() {
 					'Use compact for natural content widths that shrink when space is limited, fill for equal shares of the available space, or a number for a fixed pixel width.'
 				}
 			</P>
+			<Definition id={'textColor'}>
+				<Prop>textColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Text color for unselected tabs. Defaults to <Code>core-text-primary</Code>.
+			</P>
+			<Definition id={'textColorSelected'}>
+				<Prop>textColorSelected</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Selected text color. Takes precedence over <Code>accentColor</Code>; without either, uses{' '}
+				<Code>core-text-special</Code>.
+			</P>
 			<Definition id={'textSize'}>
 				<Prop>textSize</Prop>
 				<TypeDef>{"'xs' | 's' | 'm' | 'l' | 'xl'"}</TypeDef>
@@ -197,6 +266,24 @@ export function TabBarDoc() {
 				<DefaultVal>{'true'}</DefaultVal>
 			</Definition>
 			<P>{'Shows the moving selection indicator. It slides and resizes to the selected enabled tab.'}</P>
+			<Definition id={'underlineColor'}>
+				<Prop>underlineColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Baseline color beneath the tabs. Overrides TabBar’s <Code>borderColor</Code>. A Tab override applies while that
+				tab is selected.
+			</P>
+			<Definition id={'underlineSelectedColor'}>
+				<Prop>underlineSelectedColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Moving selected-underline color. Takes precedence over <Code>accentColor</Code>; without either, uses{' '}
+				<Code>core-text-special</Code>.
+			</P>
 			<Definition id={'value'}>
 				<Prop>value</Prop>
 				<TypeDef>{'T | null'}</TypeDef>
@@ -264,7 +351,7 @@ export function TabBarDoc() {
 					'Native group handlers apply to the tablist. Individual Tab children accept button handlers; there are no incidental drag or animation lifecycle callbacks.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [
@@ -276,6 +363,7 @@ export const trackedItems: TrackedItem[] = [
 		id: 'props',
 		title: 'Props',
 		items: [
+			{ id: 'accentColor', title: 'accentColor', code: true },
 			{ id: 'border', title: 'border', code: true },
 			{ id: 'borderColor', title: 'borderColor', code: true },
 			{ id: 'children', title: 'children', code: true },
@@ -284,6 +372,8 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'disabled', title: 'disabled', code: true },
 			{ id: 'hasClose', title: 'hasClose', code: true },
 			{ id: 'height', title: 'height', code: true },
+			{ id: 'iconColor', title: 'iconColor', code: true },
+			{ id: 'iconColorSelected', title: 'iconColorSelected', code: true },
 			{ id: 'iconFill', title: 'iconFill', code: true },
 			{ id: 'iconGap', title: 'iconGap', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
@@ -293,8 +383,12 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'tabBarName', title: 'tabBarName', code: true },
 			{ id: 'tabGap', title: 'tabGap', code: true },
 			{ id: 'tabWidth', title: 'tabWidth', code: true },
+			{ id: 'textColor', title: 'textColor', code: true },
+			{ id: 'textColorSelected', title: 'textColorSelected', code: true },
 			{ id: 'textSize', title: 'textSize', code: true },
 			{ id: 'underline', title: 'underline', code: true },
+			{ id: 'underlineColor', title: 'underlineColor', code: true },
+			{ id: 'underlineSelectedColor', title: 'underlineSelectedColor', code: true },
 			{ id: 'value', title: 'value', code: true },
 			{ id: 'width', title: 'width', code: true },
 			{ id: 'divAttributes', title: '...divAttributes', code: true },

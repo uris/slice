@@ -1,7 +1,9 @@
 export const usageCode = `
 import { Pager } from '@apple-pie/slice';
 
-<Pager pages={5} />
+export function PagerUsageExample() {
+	return <Pager pages={5} />;
+}
 `;
 
 export const controlledCode = `
@@ -13,18 +15,19 @@ const [page, setPage] = useState(0);
 `;
 
 export const scalingCode = `
-<Pager
-    pages={7}
-    defaultSelectedIndex={3}
-    size={12}
-    scale={1.5}
-    scaleFactor={0.7}
-    minScale={0.4}
-/>
+import { Pager } from '@apple-pie/slice';
+
+export function PagerScalingExample() {
+	return <Pager pages={7} defaultSelectedIndex={3} size={12} scale={1.5} scaleFactor={0.7} minScale={0.4} />;
+}
 `;
 
 export const windowCode = `
-<Pager pages={20} maxVisiblePages={5} showMoreOn={4} />
+import { Pager } from '@apple-pie/slice';
+
+export function PagerWindowExample() {
+	return <Pager pages={20} maxVisiblePages={5} showMoreOn={4} />;
+}
 `;
 
 export const transitionCode = `
@@ -32,5 +35,9 @@ export const transitionCode = `
 `;
 
 export const opacityCode = `
-<Pager pages={7} defaultSelectedIndex={3} opacityScales />
+import { Pager } from '@apple-pie/slice';
+
+export function PagerOpacityExample() {
+	return <Pager pages={7} defaultSelectedIndex={3} opacityScales />;
+}
 `;

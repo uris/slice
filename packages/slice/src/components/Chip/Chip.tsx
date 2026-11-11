@@ -9,7 +9,7 @@ import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import { Icon } from '../Icon';
-import { type ToolTip, ToolTipType } from '../sharedTypes';
+import { ToolTipType } from '../sharedTypes';
 import css from './Chip.module.css';
 import type { ChipProps } from './_types';
 
@@ -19,6 +19,7 @@ function ChipPresence({ children }: { children: (isPresent: boolean) => React.Re
 
 export const Chip = React.memo((rawProps: ChipProps) => {
 	const props = resolveColorProps(rawProps);
+	const interactive = Boolean(props.onClick || props.onRemove);
 	const {
 		onClick,
 		onRemove,
@@ -27,28 +28,28 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 		textColorSelected = 'var(--core-text-special)',
 		iconColorSelected = 'var(--core-text-special)',
 		backgroundColorSelected = 'var(--core-surface-secondary)',
-		borderColorSelected = 'var(--core-text-special)',
+		borderColorSelected = 'transparent',
 		layout = selected !== undefined,
 		transition,
 		children,
 		label,
 		icon,
 		tooltip,
-		iconSize = 20,
+		iconSize = 16,
 		disabled = false,
 		iconPosition = 'left',
 		textSize = 'm',
 		textColor = 'var(--core-text-primary)',
-		textColorHover = !onClick ? textColor : 'var(--core-text-special)',
+		textColorHover = !interactive ? textColor : 'var(--core-text-special)',
 		iconColor = 'var(--core-text-primary)',
-		iconColorHover = !onClick ? iconColor : 'var(--core-text-special)',
-		backgroundColor = 'transparent',
-		backgroundColorHover = !onClick ? backgroundColor : 'var(--core-surface-secondary)',
-		borderWidth = 1,
-		borderColor = 'var(--core-text-primary)',
-		borderColorHover = !onClick ? borderColor : 'var(--core-text-special)',
-		borderColorDisabled = 'var(--core-text-disabled)',
-		borderRadius = corners['corner-m'],
+		iconColorHover = !interactive ? iconColor : 'var(--core-text-special)',
+		backgroundColor = 'var(--core-fill-primary)',
+		backgroundColorHover = !interactive ? backgroundColor : 'var(--core-fill-primary)',
+		borderWidth = 0,
+		borderColor = 'var(--core-outline-primary)',
+		borderColorHover = !interactive ? borderColor : 'var(--core-text-special)',
+		borderColorDisabled = 'var(--core-fill-primary)',
+		borderRadius = corners['corner-l'],
 		padding,
 		paddingTop,
 		paddingRight,
@@ -60,7 +61,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 		style,
 		...nativeAttributes
 	} = props;
-	const rootRef = useRef<HTMLDivElement | null>(null);
+	const rootRef = useRef<HTMLSpanElement | null>(null);
 	const reduceMotion = usePrefersReducedMotion();
 	const [removed, setRemoved] = useState(false);
 	const pendingRemoval = useRef<(() => void) | null>(null);
@@ -92,36 +93,37 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 	const iconOnly = Boolean(icon) && !hasContent;
 	const hasLeadingIcon = Boolean(icon) && (iconPosition === 'left' || iconOnly);
 	const hasTrailingIcon = Boolean(onRemove) || (Boolean(icon) && (iconPosition === 'right' || iconOnly));
-	const side = (specific: number | undefined, fallback: string) => {
-		const value = specific ?? padding;
-		return value === undefined ? fallback : `${value}px`;
+	const paddingSides = {
+		paddingTop: paddingTop === undefined ? undefined : setStyle(paddingTop),
+		paddingRight: paddingRight === undefined ? undefined : setStyle(paddingRight),
+		paddingBottom: paddingBottom === undefined ? undefined : setStyle(paddingBottom),
+		paddingLeft: paddingLeft === undefined ? undefined : setStyle(paddingLeft),
+	};
+	// Disabled and selected palettes take precedence over both normal and hover colors.
+	const stateColor = (normal: string, selectedColor: string, disabledColor = normal) => {
+		if (disabled) return disabledColor;
+		if (selected) return selectedColor;
+		return normal;
 	};
 	const cssVars = {
-		'--ui-chip-padding-top': side(paddingTop, vertical),
-		'--ui-chip-padding-right': side(paddingRight, hasTrailingIcon ? iconSide : horizontal),
-		'--ui-chip-padding-bottom': side(paddingBottom, vertical),
-		'--ui-chip-padding-left': side(paddingLeft, hasLeadingIcon ? iconSide : horizontal),
+		'--ui-chip-padding': padding === undefined ? undefined : setStyle(padding),
+		'--ui-chip-padding-top': vertical,
+		'--ui-chip-padding-right': hasTrailingIcon ? iconSide : horizontal,
+		'--ui-chip-padding-bottom': vertical,
+		'--ui-chip-padding-left': hasLeadingIcon ? iconSide : horizontal,
 		'--ui-chip-gap': `${gap}px`,
 		'--ui-chip-icon-size': `${iconSize}px`,
 		'--ui-chip-border-radius': setStyle(borderRadius),
 		'--ui-chip-border-width': `${borderWidth}px`,
-		'--ui-chip-border-color': disabled ? borderColorDisabled : selected ? borderColorSelected : borderColor,
-		'--ui-chip-border-color-hover': disabled ? borderColorDisabled : selected ? borderColorSelected : borderColorHover,
-		'--ui-chip-bg-color': selected && !disabled ? backgroundColorSelected : backgroundColor,
-		'--ui-chip-bg-color-hover': disabled ? backgroundColor : selected ? backgroundColorSelected : backgroundColorHover,
-		'--ui-chip-text-color': disabled ? 'var(--core-text-disabled)' : selected ? textColorSelected : textColor,
-		'--ui-chip-text-color-hover': disabled
-			? 'var(--core-text-disabled)'
-			: selected
-				? textColorSelected
-				: textColorHover,
-		'--ui-chip-icon-color': disabled ? 'var(--core-text-disabled)' : selected ? iconColorSelected : iconColor,
-		'--ui-chip-icon-color-hover': disabled
-			? 'var(--core-text-disabled)'
-			: selected
-				? iconColorSelected
-				: iconColorHover,
-		'--ui-chip-cursor': disabled || !onClick ? 'default' : 'pointer',
+		'--ui-chip-border-color': stateColor(borderColor, borderColorSelected, borderColorDisabled),
+		'--ui-chip-border-color-hover': stateColor(borderColorHover, borderColorSelected, borderColorDisabled),
+		'--ui-chip-bg-color': stateColor(backgroundColor, backgroundColorSelected),
+		'--ui-chip-bg-color-hover': stateColor(backgroundColorHover, backgroundColorSelected, backgroundColor),
+		'--ui-chip-text-color': stateColor(textColor, textColorSelected, 'var(--core-text-disabled)'),
+		'--ui-chip-text-color-hover': stateColor(textColorHover, textColorSelected, 'var(--core-text-disabled)'),
+		'--ui-chip-icon-color': stateColor(iconColor, iconColorSelected, 'var(--core-text-disabled)'),
+		'--ui-chip-icon-color-hover': stateColor(iconColorHover, iconColorSelected, 'var(--core-text-disabled)'),
+		'--ui-chip-cursor': disabled || !interactive ? 'default' : 'pointer',
 	} as React.CSSProperties;
 	const iconContent = icon ? (
 		<span className={css.icon} aria-hidden="true">
@@ -139,7 +141,11 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 			{iconPosition === 'right' && iconContent}
 		</motion.span>
 	);
-	const actionShared = { className: css.action, 'aria-disabled': disabled ? true : nativeAttributes['aria-disabled'] };
+	const actionShared = {
+		className: css.action,
+		'aria-disabled': disabled ? true : nativeAttributes['aria-disabled'],
+		style: { ...paddingSides, paddingRight: onRemove ? undefined : paddingSides.paddingRight },
+	};
 
 	function handlers<E extends HTMLElement>(attributes: React.DOMAttributes<E>) {
 		const showTooltip = (event?: React.MouseEvent<E>) => {
@@ -200,11 +206,11 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 				);
 			})()
 		: (() => {
-				const attributes = nativeAttributes as React.HTMLAttributes<HTMLDivElement>;
+				const attributes = nativeAttributes as React.HTMLAttributes<HTMLSpanElement>;
 				return (
-					<div {...attributes} {...actionShared} {...handlers(attributes)}>
+					<span {...attributes} {...actionShared} {...handlers(attributes)}>
 						{contentNodes}
-					</div>
+					</span>
 				);
 			})();
 	const readableLabel =
@@ -223,7 +229,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 			{!removed && (
 				<ChipPresence key="chip">
 					{(isPresent) => (
-						<motion.div
+						<motion.span
 							ref={rootRef}
 							className={`${css.chip}${className ? ` ${className}` : ''}`}
 							style={{ ...cssVars, ...style }}
@@ -241,6 +247,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 							{onRemove && (
 								<button
 									className={css.remove}
+									style={{ ...paddingSides, paddingLeft: 0 }}
 									type="button"
 									aria-label={removalName}
 									disabled={disabled}
@@ -263,7 +270,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 									</motion.span>
 								</button>
 							)}
-						</motion.div>
+						</motion.span>
 					)}
 				</ChipPresence>
 			)}

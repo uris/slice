@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../components/FlexDiv';
+import {FlexBox} from '../components/FlexBox';
 import {Spacer} from '../components/Spacer';
 import {RenderSource} from '../../documentation/_components/RenderSource/RenderSource';
 
 <Meta title="Providers/ThemeServer (SSR)" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # ThemeServer
         Server-safe helpers for SSR-enabled environments such as Next.js. These helpers resolve a startup theme before hydration and provide the root HTML attributes needed for first-paint theming.
@@ -114,5 +114,5 @@ import {RenderSource} from '../../documentation/_components/RenderSource/RenderS
         - If you only set the theme in a client effect, the first paint may occur before the theme attribute is applied and you get a UI flicker.
         </Unstyled>
         <Spacer size="xxl" />
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

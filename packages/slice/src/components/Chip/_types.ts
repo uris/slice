@@ -34,16 +34,16 @@ type ChipBaseProps = {
 	borderColorDisabled?: ColorValue;
 	borderRadius?: number | string;
 	gap?: number;
-	padding?: number;
-	paddingTop?: number;
-	paddingRight?: number;
-	paddingBottom?: number;
-	paddingLeft?: number;
+	padding?: number | string;
+	paddingTop?: number | string;
+	paddingRight?: number | string;
+	paddingBottom?: number | string;
+	paddingLeft?: number | string;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 
 type StaticChipProps = ChipBaseProps & { onClick?: undefined } & Omit<
-		React.HTMLAttributes<HTMLDivElement>,
+		React.HTMLAttributes<HTMLSpanElement>,
 		keyof ChipBaseProps | 'color' | 'onClick'
 	>;
 type ActionChipProps = ChipBaseProps & { onClick: React.MouseEventHandler<HTMLButtonElement> } & Omit<

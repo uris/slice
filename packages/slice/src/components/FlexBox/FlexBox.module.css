@@ -1,0 +1,25 @@
+.flexDiv {
+	composes: body-m-regular from "../../utils/styling/type.module.css";
+	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
+	/* --flex-div-bg was never actually set anywhere (FlexBox.tsx sets
+       --flex-div-scroll-border for this purpose) -- bind to the real one. */
+	--scrollbar-bg: var(--flex-div-scroll-border);
+	--scrollbar-thumb: var(--flex-div-scroll-handle);
+	--scrollbar-thumb-hover: var(--flex-div-scroll-handle-hover);
+}
+
+.flexDiv[data-shrink-children="false"] > * {
+	flex-shrink: 0;
+}
+
+.flexDiv[data-shrink-children="true"] > * {
+	flex-shrink: 1;
+}
+
+.flexDiv[data-grow-children="false"] > * {
+	flex-grow: 0;
+}
+
+.flexDiv[data-grow-children="true"] > * {
+	flex-grow: 1;
+}

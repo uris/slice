@@ -1,0 +1,100 @@
+import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
+import {FlexBox} from '../FlexBox';
+import * as AudioLevelStories from './AudioLevel.stories';
+import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+
+<Meta of={AudioLevelStories} />
+
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
+        <Unstyled>
+        # AudioLevel
+        Renders a horizontal audio level meter driven by the `AudioVisualizer` utility.
+        It maps normalized microphone or stream intensity into a row of bars, then lights up bars from left to right as the signal gets stronger.
+
+        ## Base element
+        `HTMLDivElement`
+
+        ## Interface
+        `AudioLevelProps`
+
+        ## Props
+        <table style={{width: '100%'}}>
+          <colgroup>
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '1%'}} />
+            <col style={{width: '97%'}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className={"left"}>Prop</th>
+              <th className={"left"}>Type</th>
+              <th className={"left"}>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>audioStream</code></td><td><code>{`MediaStream | MediaStreamTrack | null`}</code></td><td><code>undefined</code></td><td>The live audio source to watch. Pass a stream or a single track.</td></tr>
+            <tr><td><code>levelName</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Accessible meter name. Omit or leave blank for a decorative visualization.</td></tr>
+            <tr><td><code>playing</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Starts or stops the analyser loop.</td></tr>
+            <tr><td><code>width</code></td><td><code>number | string</code></td><td><code>100</code></td><td>Total width of the meter.</td></tr>
+            <tr><td><code>height</code></td><td><code>number</code></td><td><code>4</code></td><td>Height of each level bar.</td></tr>
+            <tr><td><code>gap</code></td><td><code>number</code></td><td><code>0</code></td><td>Gap between bars.</td></tr>
+            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>var(--core-surface-primary-tint)</code></td><td>Background color for inactive bars.</td></tr>
+            <tr><td><code>backgroundColorActive</code></td><td><code>ColorValue</code></td><td><code>var(--feedback-positive)</code></td><td>Color for active bars.</td></tr>
+            <tr><td><code>borderRadius</code></td><td><code>number | string</code></td><td><code>corner-xs</code></td><td>Border radius of the meter.</td></tr>
+            <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>transparent</code></td><td>Border color applied to each bar.</td></tr>
+            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>0</code></td><td>Border width applied to each bar.</td></tr>
+            <tr><td><code>minActiveBars</code></td><td><code>number</code></td><td><code>0</code></td><td>Minimum lit bars at silence, clamped to 0–barCount. Non-finite values use 0.</td></tr>
+            <tr><td><code>barCount</code></td><td><code>number</code></td><td><code>5</code></td><td>Total bars, floored and clamped to 1–1000. Non-finite values use 5.</td></tr>
+            <tr><td><code>intensity</code></td><td><code>number</code></td><td><code>3.5</code></td><td>Sensitivity multiplier for the incoming audio signal.</td></tr>
+            <tr><td><code>peakIntensity</code></td><td><code>number</code></td><td><code>0.5</code></td><td>The audio level treated as full intensity.</td></tr>
+            <tr><td><code>risePerSeconds</code></td><td><code>number</code></td><td><code>4</code></td><td>How quickly bars rise when audio gets louder.</td></tr>
+            <tr><td><code>releasePerSeconds</code></td><td><code>number</code></td><td><code>1.5</code></td><td>How quickly bars fall when audio gets quieter.</td></tr>
+            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through, including `className`, `style`, `id`, and `data-*` attributes.</td></tr>
+          </tbody>
+        </table>
+
+        ## Accessibility
+        Decorative by default. Set `levelName` to expose a named meter whose value is the number of lit bars.
+        Updates are not live announcements. Discrete audio feedback remains visible with reduced motion; decorative CSS transitions are disabled.
+
+        ## Behavior
+        - `barCount` controls the total number of bars.
+        - `minActiveBars` controls the resting number of active bars.
+        - Live audio intensity is normalized to `0..1`, then mapped into an active bar count between `minActiveBars` and `barCount`.
+
+        Pausing resets to `minActiveBars` and suspends analysis; it does not stop the input tracks.
+        Missing or ended audio and startup failures leave the meter at rest. Replacing the source releases the old analyser.
+        Positive finite sensitivity, peak, and response settings are required; invalid values use analyser defaults.
+
+        ## Code Example
+        </Unstyled>
+
+        <RenderSource>
+```
+import { AudioLevel } from '@apple-pie/slice';
+import { useMicrophone } from '@apple-pie/slice/hooks';
+
+export function AudioLevelExample() {
+    const { micStream } = useMicrophone(false);
+
+    return (
+        <AudioLevel
+            audioStream={micStream.current}
+            playing={true}
+            width={160}
+            height={6}
+            gap={4}
+            barCount={8}
+            minActiveBars={0}
+            backgroundColorActive="var(--feedback-positive)"
+            backgroundColor="var(--core-surface-primary-tint)"
+        />
+    );
+}
+```
+        </RenderSource>
+    </FlexBox>
+</FlexBox>

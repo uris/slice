@@ -3,23 +3,16 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
+import { FlexBox, Preset } from '@apple-pie/slice';
 import { DialogBoxPreview } from './DialogBoxPreview';
 import { actionCode, scrollingCode, sharedActionsCode, shorthandCode, usageCode } from './code';
 export function DialogBoxDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id="title">DialogBox component</H1>
 			<P clipWidth>{'Bring a decision, its context, and the next action into one compact panel.'}</P>
 			{/* Published Storybook still uses Modal; update the URL after the DialogBox story is deployed. */}
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modal--default"
-				components={[
-					{ label: 'Confirm an action', component: <DialogBoxPreview /> },
-					{ label: 'Scrolling content', component: <DialogBoxPreview scroll /> },
-				]}
-			/>
 			<H2 id="usage">Usage</H2>
 			<P>
 				{'Render the panel when your app needs it, then close it from the action callbacks. '}
@@ -35,7 +28,17 @@ export function DialogBoxDoc() {
 				<Code openURL="/docs/react/modal-controller/">ModalController</Code>
 				{'.'}
 			</P>
-			<CodeBlock filename="DialogBoxExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modal--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <DialogBoxPreview />,
+						code: usageCode.trim(),
+						codeFilename: 'DialogBoxExample.tsx',
+					},
+				]}
+			/>
 			<H3>Use props instead</H3>
 			<P>
 				For a concise alternative, provide <Code>title</Code> and <Code>actions</Code> and use ordinary children for the
@@ -55,7 +58,17 @@ export function DialogBoxDoc() {
 				<Code>{'maxHeight'}</Code>
 				{' to limit the panel. Its content area scrolls while the title and actions remain in place.'}
 			</P>
-			<CodeBlock filename="scrollingCode.tsx" language="tsx" code={scrollingCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-modal--default"
+				components={[
+					{
+						label: 'Make room for longer content',
+						component: <DialogBoxPreview scroll />,
+						code: scrollingCode.trim(),
+						codeFilename: 'scrollingCode.tsx',
+					},
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				{'The actions array calls '}
@@ -75,8 +88,10 @@ export function DialogBoxDoc() {
 				<Code>promise="none"</Code> when it should call only <Code>onAction</Code>.
 			</P>
 			<P>
-				The content area responds to content and container size changes. <Code>autoBorderBottom</Code> adds a footer
-				divider while the body scrolls.
+				The content area responds to content and container size changes. Overflow adds a 1px solid{' '}
+				<Code>core-fill-primary</Code> bottom border to the header and top border to the footer by default.{' '}
+				<Code>autoBorderBottom</Code> controls the automatic footer divider. The header and footer keep{' '}
+				<Code>backgroundColor</Code> while scrolling, matching the content unless their colors are explicitly set.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
@@ -154,17 +169,16 @@ export function DialogBoxDoc() {
 			<Definition id="actionsBackgroundColor">
 				<Prop>actionsBackgroundColor</Prop>
 				<TypeDef>ColorValue</TypeDef>
-				<DefaultVal>backgroundColor mixed with 6% black</DefaultVal>
+				<DefaultVal>backgroundColor</DefaultVal>
 			</Definition>
 			<P>
-				Footer background for composed controls and the actions array. Accepts Slice tokens or CSS colors. By default,
-				it follows <Code>backgroundColor</Code> with a subtle darker tint. Set <Code>transparent</Code> for no footer
-				fill.
+				Footer background. Defaults to <Code>backgroundColor</Code>, including while scrolling. Explicit colors apply in
+				both states.
 			</P>
 			<Definition id="actionsBorderColor">
 				<Prop>actionsBorderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-outline-primary'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>{'Divider color above the footer.'}</P>
 			<Definition id="actionsBorderWidth">
@@ -253,7 +267,10 @@ export function DialogBoxDoc() {
 				<TypeDef>{'number | string'}</TypeDef>
 				<DefaultVal>{'300'}</DefaultVal>
 			</Definition>
-			<P>{'Minimum panel width. Lower it for narrower layouts.'}</P>
+			<P>
+				An explicit minimum width is honored even when it exceeds the parent or viewport. When omitted, the 300px
+				default is capped to the available parent width.
+			</P>
 			<Definition id="padding">
 				<Prop>padding</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
@@ -261,7 +278,8 @@ export function DialogBoxDoc() {
 			</Definition>
 			<P>
 				Padding shared by the header, body, and footer. Numbers become pixels; CSS shorthand and expressions are
-				preserved.
+				preserved. When omitted, header bottom padding is 4px while the body scrolls and zero otherwise. Explicit
+				padding, including zero, takes precedence.
 			</P>
 			<Definition id="scrollHandleColor">
 				<Prop>scrollHandleColor</Prop>
@@ -285,18 +303,32 @@ export function DialogBoxDoc() {
 				<Code>{'close'}</Code>
 				{' is enabled.'}
 			</P>
+			<Definition id="titleBackgroundColor">
+				<Prop>titleBackgroundColor</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>backgroundColor</DefaultVal>
+			</Definition>
+			<P>
+				Header background. Defaults to <Code>backgroundColor</Code>, including while scrolling. Explicit colors apply in
+				both states.
+			</P>
 			<Definition id="titleBorderColor">
 				<Prop>titleBorderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-outline-primary'}</DefaultVal>
+				<DefaultVal>{'core-fill-primary'}</DefaultVal>
 			</Definition>
 			<P>{'Divider color beneath the title area.'}</P>
 			<Definition id="titleBorderWidth">
 				<Prop>titleBorderWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'0'}</DefaultVal>
+				<DefaultVal>{'1 while scrolling; otherwise 0'}</DefaultVal>
 			</Definition>
-			<P>{'Title divider width in pixels.'}</P>
+			<P>
+				<>
+					Bottom divider width in pixels. Defaults to 1 when the body overflows, otherwise 0. Set{' '}
+					<Code>{'titleBorderWidth={0}'}</Code> to disable the automatic header divider.
+				</>
+			</P>
 			<Definition id="titleIcon">
 				<Prop>titleIcon</Prop>
 				<TypeDef>{'SliceIcon'}</TypeDef>
@@ -422,7 +454,7 @@ export function DialogBoxDoc() {
 				Calls <Code>onResolve</Code> with the supplied value. A modal host resolves the pending response and dismisses
 				the panel.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [
@@ -464,6 +496,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'scrollHandleColor', title: 'scrollHandleColor', code: true },
 			{ id: 'scrollHandleColorHover', title: 'scrollHandleColorHover', code: true },
 			{ id: 'prop-title', title: 'title', code: true },
+			{ id: 'titleBackgroundColor', title: 'titleBackgroundColor', code: true },
 			{ id: 'titleBorderColor', title: 'titleBorderColor', code: true },
 			{ id: 'titleBorderWidth', title: 'titleBorderWidth', code: true },
 			{ id: 'titleIcon', title: 'titleIcon', code: true },

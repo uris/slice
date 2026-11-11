@@ -1,117 +1,79 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as UploadAreaStories from './UploadArea.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
 
 <Meta of={UploadAreaStories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # UploadArea
-        Renders a drag-and-drop file upload surface with click-to-select fallback. It also supports optional rendering of a file list beneath the drop zone so users can see files currently uploading or already selected.
+# UploadArea
 
-        ## Base element
-        `HTMLDivElement`
+Select or drop files with shared validation and controlled attachment state. The application owns uploading.
 
-        ## Interface
-        `UploadAreaProps`
+```tsx
+import { UploadArea, type FileItem } from '@apple-pie/slice';
+import { useState } from 'react';
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>icon</code></td><td><code>SliceIcon</code></td><td><code>'arrows.export'</code></td><td>Icon name used in the upload header.</td></tr>
-            <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>24</code></td><td>Sizing/layout setting for the icon.</td></tr>
-            <tr><td><code>iconColor</code></td><td><code>string</code></td><td><code>'var(--core-text-primary)'</code></td><td>Default icon color.</td></tr>
-            <tr><td><code>iconColorHover</code></td><td><code>string</code></td><td><code>'var(--core-text-special)'</code></td><td>Icon color while drag-hovering.</td></tr>
-            <tr><td><code>width</code></td><td><code>{`number | string`}</code></td><td><code>'100%'</code></td><td>Outer width of the upload area.</td></tr>
-            <tr><td><code>height</code></td><td><code>{`number | string`}</code></td><td><code>'auto'</code></td><td>Outer height of the upload area.</td></tr>
-            <tr><td><code>title</code></td><td><code>string</code></td><td><code>'Upload Files'</code></td><td>Title text shown in the upload surface.</td></tr>
-            <tr><td><code>message</code></td><td><code>string</code></td><td><code>'Drag and drop files here or click to upload'</code></td><td>Helper message shown under the title.</td></tr>
-            <tr><td><code>busyMessage</code></td><td><code>string</code></td><td><code>'Uploading in progress'</code></td><td>Message shown while <code>busy</code> is <code>true</code>.</td></tr>
-            <tr><td><code>textSize</code></td><td><code>{`'xs' | 's' | 'm' | 'l' | 'xl'`}</code></td><td><code>'m'</code></td><td>Typography size preset for the message line.</td></tr>
-            <tr><td><code>borderWidth</code></td><td><code>number</code></td><td><code>1</code></td><td>Border width in pixels.</td></tr>
-            <tr><td><code>borderStyle</code></td><td><code>string</code></td><td><code>'dashed'</code></td><td>CSS border style for the drop area.</td></tr>
-            <tr><td><code>borderColor</code></td><td><code>string</code></td><td><code>'var(--core-outline-primary)'</code></td><td>Border color in idle state.</td></tr>
-            <tr><td><code>borderColorHover</code></td><td><code>string</code></td><td><code>'var(--core-outline-special)'</code></td><td>Border color during drag hover.</td></tr>
-            <tr><td><code>borderRadius</code></td><td><code>{`number | string`}</code></td><td><code>8</code></td><td>Border radius of the upload surface.</td></tr>
-            <tr><td><code>padding</code></td><td><code>{`number | string`}</code></td><td><code>32</code></td><td>Inner spacing of the upload surface.</td></tr>
-            <tr><td><code>backgroundColor</code></td><td><code>string</code></td><td><code>'var(--core-surface-secondary)'</code></td><td>Background color in idle state.</td></tr>
-            <tr><td><code>backgroundColorHover</code></td><td><code>string</code></td><td><code>'var(--core-surface-special)'</code></td><td>Background color during drag hover.</td></tr>
-            <tr><td><code>acceptedTypes</code></td><td><code>string[]</code></td><td><code>allTypes</code></td><td>File extensions passed to the hidden file input <code>accept</code> attribute.</td></tr>
-            <tr><td><code>multiple</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Allows selecting/dropping multiple files.</td></tr>
-            <tr><td><code>busy</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables interactions and switches the component into uploading state.</td></tr>
-            <tr><td><code>showProgress</code></td><td><code>boolean</code></td><td><code>true</code></td><td>When busy, shows the inline progress spinner beside the busy message.</td></tr>
-            <tr><td><code>files</code></td><td><code>FileItem[]</code></td><td><code>[]</code></td><td>Optional files displayed below the drop area using <code>FileList</code>.</td></tr>
-            <tr><td><code>canRemove</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Controls whether remove affordances are shown for rendered file items.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native <code>div</code> props pass through (for example <code>id</code>, <code>data-testid</code>, <code>className</code>, <code>style</code>, <code>aria-*</code>).</td></tr>
-          </tbody>
-        </table>
-
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>onUpload</code></td><td><code>{`(files: File[]) => void`}</code></td><td>Fires after user selects files via picker or drops files onto the area.</td></tr>
-          </tbody>
-        </table>
-
-        ## Code Examples
-        </Unstyled>
-
-        <RenderSource>
-```
-import { UploadArea } from '@apple-pie/slice';
-
-export function UploadAreaExample() {
-    return (
-        <UploadArea
-            title="Upload files"
-            message="Drag files here or click to browse"
-            acceptedTypes={['pdf', 'png', 'jpg']}
-            multiple
-            busy={false}
-            showProgress
-            files={[
-                { file: 'proposal.pdf', uploading: true, progress: 0.45 },
-                { file: 'brief.clipboard' },
-            ]}
-            canRemove
-            onUpload={(files) => {
-                console.log('Selected files:', files);
-            }}
-            id="upload-area"
-            data-testid="upload-area"
-            style={{ maxWidth: 520 }}
-        />
-    );
+export function Attachments() {
+  const [files, setFiles] = useState<FileItem[]>([]);
+  return <UploadArea files={files} onFilesChange={setFiles} acceptedTypes={['pdf', 'png']} />;
 }
 ```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| acceptedTypes | string[] | allTypes | Extensions or explicit MIME tokens, normalized and validated for picker and drop. Empty accepts all. |
+| actionName | string | title or Upload files | Accessible picker-button name. |
+| backgroundColor | ColorValue | core-surface-secondary | Idle background. |
+| backgroundColorHover | ColorValue | core-surface-special | Active file-drag background. |
+| borderColor | ColorValue or null | core-outline-primary | Idle border color. |
+| borderColorHover | ColorValue or null | core-outline-special | Drag/busy border color. |
+| borderRadius | number or string | corner-m (8px) | Corner radius. |
+| borderStyle | string | dashed | CSS border style. |
+| borderWidth | number | 1 | Border width in pixels. |
+| busy | boolean | false | Blocks interaction and announces busyMessage. |
+| busyMessage | string | Uploading in progress | Visible busy text and status announcement. |
+| canRemove | boolean | true | Enables removal when idle, onFilesChange is supplied, and the item is not uploading. |
+| disabled | boolean | false | Blocks interaction without showing an upload state. |
+| fileListProps | Omit of FileListProps | undefined | Embedded list presentation, including variant and attachmentSize; data/removal/tooltip callbacks remain managed by UploadArea. |
+| files | FileItem[] | [] | Controlled attachments; shares FileList/PromptInput data, IDs, and percentage progress. |
+| height | number or string | auto | Area height. |
+| icon | SliceIcon | documents.file-upload | Decorative leading icon. |
+| iconColor | ColorValue | core-text-primary | Idle icon stroke. |
+| iconColorHover | ColorValue | core-text-special | Drag icon stroke. |
+| iconSize | number | 24 | Leading icon size in pixels. |
+| message | string | Drag and drop files here or click to upload | Idle description. |
+| multiple | boolean | true | Append accepted files; false replaces the selection with the first match and rejects excess matches. |
+| padding | number or string | spacing-xl (32px) | Exact area padding, including zero. |
+| showProgress | boolean | true | Decorative busy spinner. |
+| textSize | xs, s, m, l, or xl | m | Message text size. |
+| title | string | Upload Files | Visible title and default accessible name. |
+| width | number or string | 100% | Area width. |
+| ...divAttributes | HTMLAttributes | — | Wrapper attributes, className, style, and DOM events. Children and managed semantic attributes are excluded. |
+
+Numbers for dimensions and padding use pixels. Colors accept Slice tokens or CSS colors. Use borderWidth/borderRadius; the border/radius aliases have been removed. A forwarded ref targets the wrapper HTMLDivElement.
+
+## Selection and events
+
+- `onFilesChange?: (files: FileItem[]) => void`: complete next array after selection or removal; pass a state setter directly.
+- `onUpload?: (files: File[]) => void`: only newly accepted files, after onFilesChange. Start upload work here; do not append the same files again.
+- `onReject?: (files: UploadFileRejection[]) => void`: each entry contains a File and reason `type` or `multiple`. Visible rejection feedback is automatic.
+- `onToolTip?: (tip: ToolTip | null) => void`: forwards FileList remove-action tooltips.
+
+Extension rules compare File.name case-insensitively, independently of MIME type. Explicit MIME types and image/*, audio/*, video/* rules use File.type. Presets imageTypes, videoTypes, documentTypes, audioTypes, textTypes, and allTypes contain extensions normalized internally. All-invalid configuration rejects all files rather than allowing every type. Empty selections emit no callbacks; fully rejected selections preserve existing files.
+
+Multiple selection appends to existing objects. Single mode replaces with the first accepted file. New attachments receive stable IDs. The component does not upload files or store the controlled array.
+
+Native wrapper events are forwarded. Drag handlers run before internal logic; preventDefault in onDragEnter or onDrop cancels that event's internal handling. onClickCapture can cancel picker activation. Drag cleanup still runs after cancellation.
+
+## Accessibility
+
+A native button supports Enter/Space and keyboard-only focus outlines. Existing files do not disable picker access. Busy/disabled states affect the trigger and removal actions without disabling the list's ancestor. Busy activity is a polite status announcement; rejected files use an alert. Artwork and spinners are decorative. FileList supplies accessible progress/errors and named removal controls. Removing the final attachment returns focus to the picker. The spinner respects reduced motion; drag highlighting resets on availability changes, drag end, Escape, and window blur.
+
+## Attachment cards
+
+Pass FileList presentation options directly. Attachment cards wrap in a row by default; compact file rows use a column.
+
+```tsx
+<UploadArea files={files} onFilesChange={setFiles}
+  fileListProps={{variant: 'attachments', attachmentSize: 's'}} />
+```

@@ -3,6 +3,13 @@ import type { Metadata } from 'next';
 
 // all doc slugs (pages)
 export const reactDocSlugs = [
+	'data-table',
+	'camera',
+	'video-controller',
+	'video',
+	'spacer',
+	'done-check',
+	'draggable-panel',
 	'textfield',
 	'text-area',
 	'drop-down',
@@ -13,13 +20,22 @@ export const reactDocSlugs = [
 	'modal-controller',
 	'tip',
 	'toast',
-
+	'progress-indicator',
+	'file-icon',
+	'attachment',
+	'file-list',
+	'upload-area',
+	'prompt-input',
 	'icon-button',
 	'toggle-button',
 	'radio-button',
 	'radio-button-list',
 	'tab',
 	'tab-bar',
+	'icon',
+	'flex-box',
+	'flex-div',
+	'audio-level',
 	'audio-bubble',
 	'avatar',
 	'avatar-group',
@@ -30,9 +46,12 @@ export const reactDocSlugs = [
 	'chip',
 	'dot',
 	'pager',
+	'pop-menu',
+	'pop-menu-group',
+	'pop-menu-item',
+	'pop-menu-controller',
 	'slider',
 	'switch',
-
 	'use-active-tab',
 	'use-last-updated',
 	'placeholder',
@@ -47,6 +66,78 @@ export type ReactDocSlug = (typeof reactDocSlugs)[number];
 
 // meta for all slugs including shared
 export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
+	'data-table': {
+		title: 'DataTable | Slice UIKit',
+		description: 'Build sortable tables with custom cells, row actions, and automatic virtualization.',
+	},
+	camera: {
+		title: 'Camera | Slice UIKit',
+		description: 'Preview camera video, control microphone capture, and take still snapshots with Camera for React.',
+	},
+	icon: {
+		title: 'Icon | Slice UIKit',
+		description: 'Render theme-aware SVG icons with optional direct keyboard and pointer interaction.',
+	},
+	'flex-box': {
+		title: 'FlexBox | Slice UIKit',
+		description: 'Build flex layouts with spacing, scrolling, presets, and Motion support.',
+	},
+	'flex-div': {
+		title: 'FlexDiv (deprecated) | Slice UIKit',
+		description: 'Deprecated alias of FlexBox. Existing props, defaults, and forwarded refs remain supported.',
+	},
+	'audio-level': {
+		title: 'AudioLevel | Slice UIKit',
+		description: 'Display live microphone and audio stream volume with a configurable bar meter for React.',
+	},
+	'video-controller': {
+		title: 'VideoController | Slice UIKit',
+		description: 'Open a movable modal video player from application actions with VideoController for React.',
+	},
+	video: {
+		title: 'Video | Slice UIKit',
+		description:
+			'Play video with Slice controls, native browser controls, captions, and a typed playback ref in React.',
+	},
+	spacer: {
+		title: 'Spacer | Slice UIKit',
+		description: 'Reserve a fixed square of empty space using the theme spacing grid.',
+	},
+	'done-check': {
+		title: 'DoneCheck | Slice UIKit',
+		description: 'Show a completion checkmark with an optional scale animation.',
+	},
+
+	'draggable-panel': {
+		title: 'DraggablePanel | Slice UIKit',
+		description: 'Build accessible split workspaces with resizable sidebars using DraggablePanel for React.',
+	},
+	attachment: {
+		title: 'Attachment | Slice UIKit',
+		description:
+			'Preview images, clipboard text, files, and upload progress with the Slice Attachment component for React.',
+	},
+	'prompt-input': {
+		title: 'PromptInput | Slice UIKit',
+		description:
+			'Build AI messaging experiences with PromptInput for React: prompts, attachments, model selection, and send/stop controls.',
+	},
+	'upload-area': {
+		title: 'UploadArea | Slice UIKit',
+		description: 'Choose files, receive drops, and display upload feedback with UploadArea for React.',
+	},
+	'file-list': {
+		title: 'FileList | Slice UIKit',
+		description: 'Display compact file rows or attachment cards with upload feedback and controlled removal in React.',
+	},
+	'file-icon': {
+		title: 'FileIcon | Slice UIKit',
+		description: 'Display themed document and media artwork with the Slice FileIcon component for React.',
+	},
+	'progress-indicator': {
+		title: 'ProgressIndicator | Slice UIKit',
+		description: 'Show indeterminate loading feedback with the Slice ProgressIndicator component for React.',
+	},
 	overlay: {
 		title: 'Overlay | Slice UIKit',
 		description: 'Dim the background for focused tasks with the Slice Overlay component for React.',
@@ -153,6 +244,25 @@ export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
 		title: 'Slider | Slice UIKit',
 		description:
 			'Choose numeric values with continuous dragging and keyboard increments using the Slice Slider component for React.',
+	},
+	'pop-menu': {
+		title: 'PopMenu | Slice UIKit',
+		description:
+			'Build contextual actions with grouped items, toggles, and nested menus using Slice PopMenu for React.',
+	},
+	'pop-menu-group': {
+		title: 'PopMenuGroup | Slice UIKit',
+		description: 'Organize menu actions into titled and untitled groups with Slice PopMenuGroup for React.',
+	},
+	'pop-menu-item': {
+		title: 'PopMenuItem | Slice UIKit',
+		description:
+			'Compose actions, controlled toggles, custom rows, and submenu openers with Slice PopMenuItem for React.',
+	},
+	'pop-menu-controller': {
+		title: 'PopMenuController | Slice UIKit',
+		description:
+			'Open a single store-driven contextual menu from props or composed controls with Slice PopMenuController for React.',
 	},
 	pager: {
 		title: 'Pager | Slice UIKit',

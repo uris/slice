@@ -1,11 +1,27 @@
 import { create } from 'zustand';
 import type { Toast, ToastStore } from './_types';
 
+let notificationSequence = 0;
+
 export const useToastStore = create<ToastStore>((set) => ({
 	toast: null,
 	actions: {
-		push: (toast: Toast | null) => set({ toast }),
-		clear: () => set({ toast: null }),
+		push: <T>(toast: Toast<T> | null) =>
+			set({
+				toast: toast
+					? {
+							...toast,
+							notificationId: toast.notificationId ?? `slice-toast-${++notificationSequence}`,
+							// Bind the typed payload before placing heterogeneous notifications in the shared store.
+							onClick: toast.onClick ? (event) => toast.onClick?.(event, toast.data) : undefined,
+						}
+					: null,
+			}),
+		clear: (notification) =>
+			set((state) => {
+				if (notification && state.toast?.notificationId !== notification.notificationId) return state;
+				return { toast: null };
+			}),
 	},
 }));
 

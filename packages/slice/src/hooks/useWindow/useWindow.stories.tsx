@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { useWindow } from './useWindow';
 
 function UseWindowDemo() {
 	const win = useWindow();
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
-			<FlexDiv
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
+			<FlexBox
 				width={420}
 				height={'auto'}
 				direction={'column'}
@@ -41,8 +41,8 @@ function UseWindowDemo() {
 					working={win.gettingLocation}
 					progress={true}
 				/>
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

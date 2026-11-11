@@ -1,30 +1,55 @@
 export const usageCode = `
 import { AvatarGroup } from '@apple-pie/slice';
 
-const participants = [
-    { id: 'john', first: 'John', last: 'Wick', image: '/images/jw-profile.png' },
-    { id: 'jane', first: 'Jane', last: 'Smith' },
-    { id: 'morgan', email: 'morgan@example.com' },
-];
+export function AvatarGroupUsageExample() {
+	const participants = [
+		{ id: 'john', first: 'John', last: 'Wick', image: '/images/jw-profile.png' },
+		{ id: 'jane', first: 'Jane', last: 'Smith' },
+		{ id: 'morgan', email: 'morgan@example.com' },
+	];
 
-<AvatarGroup avatars={participants} />
+	return <AvatarGroup avatars={participants} />;
+}
 `;
 
 export const spacingCode = `
-<AvatarGroup avatars={participants} size={40} overlap={0} gap={8} />
+import { AvatarGroup } from '@apple-pie/slice';
+
+export function AvatarGroupSpacingExample() {
+	const participants = [
+		{ id: 'john', first: 'John', last: 'Wick', image: '/images/jw-profile.png' },
+		{ id: 'jane', first: 'Jane', last: 'Smith' },
+		{ id: 'morgan', email: 'morgan@example.com' },
+	];
+
+	return (
+        <AvatarGroup
+            avatars={participants}
+            size={44}
+            overlap={24}
+            gap={0}
+        />
+    );
+}
 `;
 
 export const colorsCode = `
-<AvatarGroup
-    avatars={[
-        { id: 'jane', first: 'Jane', last: 'Smith', backgroundColor: 'array-sky-label' },
-        { id: 'morgan', first: 'Morgan', last: 'Chen', textColor: '#ffffff', backgroundColor: '#2563eb' },
-    ]}
-    backgroundColor="core-surface-secondary"
-    borderWidth={1}
-    borderColor="transparent"
-    outerBorderColor="core-surface-primary"
-/>
+import { AvatarGroup } from '@apple-pie/slice';
+
+export function AvatarGroupColorsExample() {
+	return (
+		<AvatarGroup
+			avatars={[
+				{ id: 'jane', first: 'Jane', last: 'Smith', backgroundColor: 'array-sky-label' },
+				{ id: 'morgan', first: 'Morgan', last: 'Chen', textColor: '#ffffff', backgroundColor: '#2563eb' },
+			]}
+			backgroundColor="core-surface-secondary"
+			borderWidth={1}
+			borderColor="transparent"
+			outerBorderColor="core-surface-primary"
+		/>
+	);
+}
 `;
 
 export const tooltipCode = `
@@ -34,8 +59,7 @@ export const tooltipCode = `
 export const accessibilityCode = `
 <AvatarGroup
     avatars={participants}
-    role="group"
-    aria-label="Project collaborators"
+    groupName="Project collaborators"
 />
 `;
 
@@ -58,22 +82,33 @@ export const lazyLoadCode = `
 `;
 
 export const typographyCode = `
-<AvatarGroup avatars={participants} size={48} textSize="l" />
+import { AvatarGroup } from '@apple-pie/slice';
+
+export function AvatarGroupTypographyExample() {
+	const participants = [
+		{ id: 'john', first: 'John', last: 'Wick', image: '/images/jw-profile.png' },
+		{ id: 'jane', first: 'Jane', last: 'Smith' },
+		{ id: 'morgan', email: 'morgan@example.com' },
+	];
+
+	return <AvatarGroup avatars={participants} size={48} textSize="l" />;
+}
 `;
 
 export const moreCode = `
-import { AvatarGroup, type AvatarGroupMore, type AvatarInfo } from '@apple-pie/slice';
+import { modalActions } from '@apple-pie/slice/stores/modal';
 
-export function TeamAvatars({ people }: { people: AvatarInfo[] }) {
-    function handleMore(details: AvatarGroupMore) {
-        const {source, more, all} = details
-        console.log({source, more, all})
-    }
-
-    return (
-       <AvatarGroup avatars={people} limit={5} onMore={handleMore} />
-    );
-}
+<AvatarGroup
+    avatars={participants}
+    limit={5}
+    onMore={({ source, all }) => {
+        if (source !== 'avatars') return;
+        modalActions.show({
+            component: CollaboratorsDialog,
+            props: { people: all },
+        });
+    }}
+/>
 `;
 
 export const childrenCode = `

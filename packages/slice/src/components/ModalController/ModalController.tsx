@@ -1,10 +1,18 @@
 'use client';
 
-import { AnimatePresence, motion, useDragControls } from 'motion/react';
+import {
+	AnimatePresence,
+	type Variants,
+	motion,
+	useAnimationControls,
+	useDragControls,
+	usePresence,
+} from 'motion/react';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
-import { useModal, useModalActions } from '../../stores';
+import { type ActiveModal, getModal, useModal, useModalActions } from '../../stores/modal';
+import { mergedPresenceMotionValues } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -14,23 +22,137 @@ import { ModalHostContext } from './ModalHostContext';
 import type { ModalControllerProps } from './_types';
 import { useModalHost } from './useModalHost';
 
-const defaultVariants = {
+const defaultVariants: Variants = {
 	initial: { opacity: 0, y: 20 },
 	animate: { opacity: 1, y: 0 },
 	exit: { opacity: 0, y: 20 },
 };
+const reducedTarget = {
+	opacity: 1,
+	x: 0,
+	y: 0,
+	z: 0,
+	scale: 1,
+	scaleX: 1,
+	scaleY: 1,
+	rotate: 0,
+	rotateX: 0,
+	rotateY: 0,
+	skewX: 0,
+	skewY: 0,
+};
+const instanceKeys = new WeakMap<ActiveModal, number>();
+let sequence = 0;
+function instanceKey(modal: ActiveModal) {
+	let key = instanceKeys.get(modal);
+	if (key === undefined) {
+		key = ++sequence;
+		instanceKeys.set(modal, key);
+	}
+	return key;
+}
 
-function ModalHost({
-	children,
-	dismiss,
+/** Bind settlement to the stored instance, including callbacks retained by asynchronous content. */
+function useModalCallbacks(modal: ActiveModal | null) {
+	const { hide, resolve, reject } = useModalActions();
+	const dismiss = useCallback(() => {
+		if (!modal || getModal() !== modal) return;
+		hide();
+		if (typeof modal.props?.onClose === 'function') modal.props.onClose();
+	}, [modal, hide]);
+	const onResolve = useCallback(
+		(value?: unknown) => {
+			if (!modal || getModal() !== modal) return;
+			resolve(value);
+			if (typeof modal.props?.onResolve === 'function') modal.props.onResolve(value);
+		},
+		[modal, resolve],
+	);
+	const onReject = useCallback(
+		(error?: Error) => {
+			if (!modal || getModal() !== modal) return;
+			reject(error);
+			if (typeof modal.props?.onReject === 'function') modal.props.onReject(error);
+		},
+		[modal, reject],
+	);
+	return { dismiss, onResolve, onReject };
+}
+
+function ModalPresentation({
+	modal,
 	opener,
-}: { children: React.ReactNode; dismiss: () => void; opener: React.RefObject<HTMLElement | null> }) {
-	const ref = useRef<HTMLDivElement>(null);
-	useModalHost(ref, dismiss, opener);
+	...props
+}: ModalControllerProps & {
+	modal: ActiveModal;
+	opener: React.RefObject<HTMLElement | null>;
+}) {
+	const { dragConstraintsRef, transition, motionValues, draggable = true } = props;
+	const variants = useMemo(() => mergedPresenceMotionValues(defaultVariants, motionValues), [motionValues]);
+	const [present, safeToRemove] = usePresence();
+	const reduced = usePrefersReducedMotion();
+	const { current } = useTheme();
+	const timing = useMemo(() => getWaterTransition(current.motion, transition), [current.motion, transition]);
+	const controls = useAnimationControls();
+	const dragControls = useDragControls();
+	const host = useRef<HTMLDivElement>(null);
+	const constraints = useRef<HTMLDivElement>(null);
+	const { dismiss, onResolve, onReject } = useModalCallbacks(modal);
+	useModalHost(host, dismiss, opener, present);
+
+	// Exiting instances observe preference changes too; variant-level delays cannot block reduced-motion removal.
+	useEffect(() => {
+		controls.stop();
+		if (reduced) {
+			controls.set(reducedTarget);
+			if (!present) safeToRemove?.();
+			return;
+		}
+		let active = true;
+		const state = present ? 'animate' : 'exit';
+		const target = variants[state];
+		const definition = typeof target === 'function' ? state : { ...target, transition: target?.transition ?? timing };
+		void controls.start(definition).then(() => {
+			if (active && !present) safeToRemove?.();
+		});
+		return () => {
+			active = false;
+			controls.stop();
+		};
+	}, [reduced, present, controls, safeToRemove, variants, timing]);
+	const Component = modal.component;
 	return (
 		<ModalHostContext.Provider value={true}>
-			<div ref={ref} className={css.host} tabIndex={-1}>
-				{children}
+			<div ref={host} className={css.host} tabIndex={-1} inert={!present} aria-hidden={!present || undefined}>
+				<div className={css.container} ref={constraints}>
+					<div className={css.box}>
+						<motion.div
+							className={css.wrapper}
+							variants={reduced ? undefined : variants}
+							initial={reduced ? false : 'initial'}
+							animate={controls}
+							transition={reduced ? { duration: 0, delay: 0 } : timing}
+							drag={present && draggable}
+							dragListener={draggable ? false : undefined}
+							dragControls={draggable ? dragControls : undefined}
+							dragConstraints={draggable ? (dragConstraintsRef ?? constraints) : undefined}
+							dragElastic={draggable ? 0 : undefined}
+							dragMomentum={draggable ? false : undefined}
+						>
+							<Component
+								{...modal.props}
+								onResolve={onResolve}
+								onReject={onReject}
+								onClose={dismiss}
+								onDragPointerDown={(event) => {
+									if (!present || getModal() !== modal) return;
+									if (typeof modal.props?.onDragPointerDown === 'function') modal.props.onDragPointerDown(event);
+									if (draggable && !event.defaultPrevented) dragControls.start(event);
+								}}
+							/>
+						</motion.div>
+					</div>
+				</div>
 			</div>
 		</ModalHostContext.Provider>
 	);
@@ -38,48 +160,22 @@ function ModalHost({
 
 export function ModalController(rawProps: Readonly<ModalControllerProps>) {
 	const props = resolveColorProps(rawProps);
-	const {
-		dragConstraintsRef,
-		transition,
-		variants = defaultVariants,
-		initial = 'initial',
-		animate = 'animate',
-		exit = 'exit',
-		draggable = true,
-		overlayOpacity = 0.7,
-		overlayColor = 'rgb(0,0,0)',
-	} = props;
-	const controls = useDragControls();
+	const { overlayOpacity = 0.7, overlayColor = 'rgb(0,0,0)', transition } = props;
 	const { current } = useTheme();
-	const reducedMotion = usePrefersReducedMotion();
 	const timing = useMemo(() => getWaterTransition(current.motion, transition), [current.motion, transition]);
-	const reducedTarget = { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 };
 	const modal = useModal();
-	const resolve = useModalActions().resolve;
-	const reject = useModalActions().reject;
-	const hide = useModalActions().hide;
-	const ModalComponent = modal?.component;
-	const modalProps = modal?.props;
-	const ref = useRef<HTMLDivElement>(null);
-	const constraints = dragConstraintsRef ?? ref;
+	const { dismiss } = useModalCallbacks(modal);
 	const opener = useRef<HTMLElement | null>(null);
 	// Safari may not focus a clicked button. Remember a pointer opener as a fallback.
 	useEffect(() => {
 		if (modal) return;
-		const rememberOpener = (event: PointerEvent) => {
-			opener.current = (event.target as Element).closest<HTMLElement>(
-				'button, a[href], input, select, textarea, [tabindex]',
-			);
+		const remember = (event: PointerEvent) => {
+			if (event.target instanceof Element)
+				opener.current = event.target.closest<HTMLElement>('button, a[href], input, select, textarea, [tabindex]');
 		};
-		document.addEventListener('pointerdown', rememberOpener, true);
-		return () => document.removeEventListener('pointerdown', rememberOpener, true);
+		document.addEventListener('pointerdown', remember, true);
+		return () => document.removeEventListener('pointerdown', remember, true);
 	}, [modal]);
-
-	const dismiss = useCallback(() => {
-		hide();
-		if (typeof modalProps?.onClose === 'function') modalProps.onClose();
-	}, [hide, modalProps]);
-
 	return (
 		<>
 			<Overlay
@@ -90,51 +186,7 @@ export function ModalController(rawProps: Readonly<ModalControllerProps>) {
 				onClick={dismiss}
 			/>
 			<AnimatePresence>
-				{modal && ModalComponent && (
-					<ModalHost key={modal.id} dismiss={dismiss} opener={opener}>
-						<div className={css.container} ref={ref}>
-							<div className={css.box}>
-								<motion.div
-									className={css.wrapper}
-									variants={variants}
-									initial={reducedMotion ? false : initial}
-									animate={reducedMotion ? reducedTarget : animate}
-									exit={reducedMotion ? reducedTarget : exit}
-									transition={reducedMotion ? { duration: 0 } : timing}
-									drag={draggable}
-									dragListener={draggable ? false : undefined}
-									dragControls={draggable ? controls : undefined}
-									dragConstraints={draggable ? constraints : undefined}
-									dragElastic={draggable ? 0 : undefined}
-									dragMomentum={draggable ? false : undefined}
-								>
-									<ModalComponent
-										{...modalProps}
-										onResolve={(value) => {
-											resolve(value);
-											if (typeof modalProps?.onResolve === 'function') {
-												modalProps.onResolve(value);
-											}
-										}}
-										onReject={(error) => {
-											reject(error);
-											if (typeof modalProps?.onReject === 'function') {
-												modalProps.onReject(error);
-											}
-										}}
-										onClose={dismiss}
-										onDragPointerDown={(e) => {
-											if (typeof modalProps?.onDragPointerDown === 'function') {
-												modalProps?.onDragPointerDown(e);
-											}
-											if (draggable && !e.defaultPrevented) controls.start(e);
-										}}
-									/>
-								</motion.div>
-							</div>
-						</div>
-					</ModalHost>
-				)}
+				{modal?.component && <ModalPresentation key={instanceKey(modal)} {...props} modal={modal} opener={opener} />}
 			</AnimatePresence>
 		</>
 	);

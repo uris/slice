@@ -1,5 +1,5 @@
 export { UploadArea } from './UploadArea';
-export type { UploadAreaProps } from './_types';
+export type { UploadAreaProps, UploadFileRejection } from './_types';
 export {
 	imageTypes,
 	videoTypes,

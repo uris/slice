@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 import { Button } from '../../components/Button';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { TextField } from '../../components/Textfield';
 import { useClipboard } from './useClipboard';
 
@@ -17,8 +17,8 @@ function UseClipboardDemo() {
 		});
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
-			<FlexDiv
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
+			<FlexBox
 				width={480}
 				height={'auto'}
 				direction={'column'}
@@ -32,17 +32,17 @@ function UseClipboardDemo() {
 				<span>Read permission: {readPermission}</span>
 				<span>Write permission: {writePermission}</span>
 
-				<FlexDiv width={'fill'} height={'auto'} direction={'row'} gap={8} background={'none'} align={'center'}>
+				<FlexBox width={'fill'} height={'auto'} direction={'row'} gap={8} background={'none'} align={'center'}>
 					<TextField label={'Text to copy'} name={'draft'} value={draft} onChange={(value) => setDraft(value)} />
 					<Button label={isCopied ? 'Copied!' : 'Copy'} variant={'outline'} onClick={() => copy(draft)} />
-				</FlexDiv>
+				</FlexBox>
 
-				<FlexDiv width={'fill'} height={'auto'} direction={'row'} gap={8} background={'none'} align={'center'}>
+				<FlexBox width={'fill'} height={'auto'} direction={'row'} gap={8} background={'none'} align={'center'}>
 					<Button label={'Read clipboard'} variant={'outline'} disabled={isRequesting} onClick={() => read()} />
 					<span>Last read: {text ?? '—'}</span>
-				</FlexDiv>
+				</FlexBox>
 
-				<FlexDiv
+				<FlexBox
 					ref={pasteTargetRef}
 					contentEditable
 					suppressContentEditableWarning
@@ -56,11 +56,11 @@ function UseClipboardDemo() {
 					style={{ outline: 'none', cursor: 'text' }}
 				>
 					Click here and paste (⌘V / Ctrl+V)
-				</FlexDiv>
+				</FlexBox>
 				<span>Last paste: {lastPaste ?? '—'}</span>
 				{error ? <span style={{ color: 'var(--core-error)' }}>{error.message}</span> : null}
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

@@ -1,80 +1,27 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv} from '../FlexDiv';
-import * as SpacerStories from './Spacer.stories';
-import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './Spacer.stories';
 
-<Meta of={SpacerStories} />
+<Meta of={Stories} />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-        # Spacer
-        Renders a fixed square of empty space using the theme spacing grid.
+# Spacer
 
-        ## Base element
-        `HTMLDivElement`
+Reserve a fixed square of empty space using the theme spacing grid.
 
-        ## Interface
-        `SpacerProps`
+## Behavior
 
-        ## Props
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '1%'}} />
-            <col style={{width: '97%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Prop</th>
-              <th className={"left"}>Type</th>
-              <th className={"left"}>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>size</code></td><td><code>xxs | xs | s | m | l | xl | xxl | h</code></td><td><code>s</code></td><td>Theme spacing token for both width and height (2, 4, 8, 16, 24, 32, 64, 128px by default). Numeric sizes are no longer supported.</td></tr>
-            <tr><td><code>...divAttributes</code></td><td><code>{`HTMLAttributes<HTMLDivElement>`}</code></td><td><code>-</code></td><td>Native `div` props pass through (for example `id`, `data-testid`, `className`, `style`, `aria-*`).</td></tr>
-          </tbody>
-        </table>
+The default square is 8px on each side. It does not shrink in flex layouts, and its dimensions take priority over conflicting style values. Use a parent’s gap for regular spacing between repeated items.
 
-        ## Events
-        <table style={{width: '100%'}}>
-          <colgroup>
-            <col style={{width: '1%'}} />
-            <col style={{width: '99%'}} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th className={"left"}>Event</th>
-              <th className={"left"}>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>-</code></td><td><code>-</code></td></tr>
-          </tbody>
-        </table>
+## Accessibility
 
-        ## Code Examples
-        </Unstyled>
+Spacer has no status or interactive semantics. Keep it empty and avoid adding focus or click behavior.
 
-        <RenderSource language={"tsx"}>
-```
-import { Spacer } from '@apple-pie/slice';
+## Props
 
-export function SpacerExample() {
-    return (
-        <Spacer
-            size="l"
-            id="spacer-example"
-            data-testid="spacer-example"
-            className="custom-wrapper"
-            style={{ marginTop: 8, maxWidth: 480 }}
-        />
-    );
-}
-```
-        </RenderSource>
-    </FlexDiv>
-</FlexDiv>
+- `size` (`'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'h'`, default `s`): Spacing token for both dimensions: 2, 4, 8, 16, 24, 32, 64, or 128px by default. Custom theme spacing tokens are respected.
+
+Native div attributes apply to the root. Component dimensions take priority over style.
+
+## Events
+
+
+Native div event handlers apply to the root.

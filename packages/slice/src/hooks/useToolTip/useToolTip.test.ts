@@ -1,122 +1,76 @@
-import { renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, cleanup, renderHook } from '@testing-library/react';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import type { ToolTip } from '../../components/sharedTypes';
-import { ToolTipType } from '../../components/sharedTypes';
 import { useToolTip } from './useToolTip';
-
-function rect(overrides: Partial<DOMRect> = {}): DOMRect {
-	return {
-		x: 0,
-		y: 0,
-		width: 0,
-		height: 0,
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		toJSON() {
-			return {};
-		},
-		...overrides,
-	} as DOMRect;
-}
-
-function makeToolTip(targetRect: DOMRect): ToolTip {
-	const target = document.createElement('div');
-	vi.spyOn(target, 'getBoundingClientRect').mockReturnValue(targetRect);
-	return { type: ToolTipType.general, ref: { current: target } };
-}
-
-function stubTip(widthPx: number, heightPx: number, initialWidth: number) {
-	const tip = document.createElement('div');
-	vi.spyOn(tip, 'getBoundingClientRect').mockReturnValue(
-		rect({ width: initialWidth }),
-	);
-	vi.spyOn(globalThis, 'getComputedStyle').mockReturnValue({
-		width: `${widthPx}px`,
-		height: `${heightPx}px`,
-	} as CSSStyleDeclaration);
-	return { current: tip };
-}
-
+let anchor: HTMLButtonElement, element: HTMLDivElement, frame: FrameRequestCallback;
+let anchorRect: DOMRect, tipRect: DOMRect;
+const rect = (left: number, top: number, width: number, height: number) =>
+	({ left, top, width, height, right: left + width, bottom: top + height, x: left, y: top, toJSON() {} }) as DOMRect;
 beforeEach(() => {
+	anchor = document.createElement('button');
+	element = document.createElement('div');
+	document.body.append(anchor, element);
+	anchorRect = rect(200, 100, 80, 30);
+	tipRect = rect(0, 0, 100, 40);
+	vi.spyOn(anchor, 'getBoundingClientRect').mockImplementation(() => anchorRect);
+	vi.spyOn(element, 'getBoundingClientRect').mockImplementation(() => tipRect);
 	vi.stubGlobal('innerWidth', 1000);
 	vi.stubGlobal('innerHeight', 800);
+	vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+		frame = callback;
+		return 1;
+	});
+	vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => {});
 });
-
 afterEach(() => {
+	cleanup();
+	document.body.replaceChildren();
 	vi.unstubAllGlobals();
 	vi.restoreAllMocks();
 });
-
-describe('useToolTip', () => {
-	it('returns hidden coords when there is no tooltip', () => {
-		const tipElement = { current: document.createElement('div') };
-		const { result } = renderHook(() => useToolTip(null, tipElement));
-		expect(result.current).toEqual({ x: 0, y: 0 });
-	});
-
-	it('returns hidden coords when the target ref has no current element', () => {
-		const tipElement = { current: document.createElement('div') };
-		const toolTip: ToolTip = { ref: { current: null } };
-		const { result } = renderHook(() => useToolTip(toolTip, tipElement));
-		expect(result.current).toEqual({ x: 0, y: 0 });
-	});
-
-	it('positions the tooltip centered beneath the target', () => {
-		const tipElement = stubTip(100, 40, 100);
-		const toolTip = makeToolTip(
-			rect({ x: 200, y: 100, width: 80, height: 30 }),
-		);
-
-		const { result } = renderHook(() => useToolTip(toolTip, tipElement));
-
-		// x = 200 + 80/2 - 100/2 = 190, y = 100 + 30 + 10 = 140
-		expect(result.current).toEqual({ x: 190, y: 140 });
-	});
-
-	it('clamps x to the left edge of the viewport', () => {
-		const tipElement = stubTip(50, 20, 50);
-		const toolTip = makeToolTip(rect({ x: 0, y: 100, width: 10, height: 10 }));
-
-		const { result } = renderHook(() => useToolTip(toolTip, tipElement));
-
-		expect(result.current?.x).toBe(10);
-	});
-
-	it('clamps y to the top edge of the viewport when the target sits above it', () => {
-		// parentY is negative enough that y = parentY + parentHeight + 10 < 10,
-		// exercising adjustY's `if (y < 10) return 10` branch before it ever
-		// reaches the tipElement/getComputedStyle-dependent logic below it
-		const tipElement = stubTip(40, 20, 40);
-		const toolTip = makeToolTip(rect({ x: 100, y: -50, width: 20, height: 10 }));
-
-		const { result } = renderHook(() => useToolTip(toolTip, tipElement));
-
-		expect(result.current?.y).toBe(10);
-	});
-
-	it('shifts the tooltip left when it would overflow the right edge', () => {
-		const tipElement = stubTip(200, 20, 200);
-		const toolTip = makeToolTip(
-			rect({ x: 950, y: 100, width: 20, height: 10 }),
-		);
-
-		const { result } = renderHook(() => useToolTip(toolTip, tipElement));
-
-		// x = 950 + 10 - 100 = 860, endX = 1060 > maxWidth(990) -> shift left by 70
-		expect(result.current?.x).toBe(790);
-	});
-
-	it('flips the tooltip above the target when it would overflow the bottom edge', () => {
-		const tipElement = stubTip(40, 600, 40);
-		const toolTip = makeToolTip(
-			rect({ x: 100, y: 500, width: 20, height: 10 }),
-		);
-
-		const { result } = renderHook(() => useToolTip(toolTip, tipElement));
-
-		// y = 500 + 10 + 10 = 520, endY = 1120 > maxHeight(790) -> parentY - tipHeight - 10
-		expect(result.current?.y).toBe(-110);
-	});
+function setup(tip: ToolTip | null = { ref: { current: anchor } }) {
+	const ref = { current: element };
+	return renderHook(() => useToolTip(tip, ref));
+}
+it('uses undefined for missing requests and missing targets', () => {
+	expect(setup(null).result.current).toBeUndefined();
+	expect(setup({ ref: { current: null } }).result.current).toBeUndefined();
+});
+it('centers below the anchor', () => {
+	expect(setup().result.current).toEqual({ x: 190, y: 140 });
+});
+it('clamps both viewport edges and flips above', () => {
+	anchorRect = rect(950, 760, 20, 30);
+	expect(setup().result.current).toEqual({ x: 890, y: 710 });
+});
+it('clamps oversized content and offscreen anchor positions', () => {
+	anchorRect = rect(-100, -50, 20, 10);
+	tipRect = rect(0, 0, 1200, 900);
+	expect(setup().result.current).toEqual({ x: 10, y: 10 });
+});
+it('tracks layout movement without a new request and keeps equal coordinate identity', () => {
+	const { result } = setup();
+	const original = result.current;
+	act(() => frame(0));
+	expect(result.current).toBe(original);
+	anchorRect = rect(300, 200, 80, 30);
+	act(() => frame(1));
+	expect(result.current).toEqual({ x: 290, y: 240 });
+});
+it('updates scrolling and resizing and stops after unmount', () => {
+	const { result, unmount } = setup();
+	anchorRect = rect(50, 60, 80, 30);
+	act(() => window.dispatchEvent(new Event('scroll')));
+	expect(result.current).toEqual({ x: 40, y: 100 });
+	tipRect = rect(0, 0, 200, 40);
+	act(() => window.dispatchEvent(new Event('resize')));
+	expect(result.current?.x).toBe(10);
+	unmount();
+	expect(window.cancelAnimationFrame).toHaveBeenCalled();
+});
+it('hides when the anchor is removed', () => {
+	const { result } = setup();
+	anchor.remove();
+	act(() => frame(0));
+	expect(result.current).toBeUndefined();
 });

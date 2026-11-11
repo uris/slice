@@ -6,6 +6,7 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 	packageType: null,
 	slug: null,
 	section: null,
+	trackedItems: [],
 	scrollBox: createRef<HTMLDivElement>(),
 	scrollBoxSize: undefined,
 	visibleItems: new Set<string>(),
@@ -17,6 +18,9 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 				if (state.slug === slug && state.packageType === packageType && state.section === section) return state;
 				return { slug, packageType, section, visibleItems: new Set<string>(), scrollAmount: 0 };
 			});
+		},
+		setTrackedItems: (trackedItems) => {
+			set({ trackedItems: trackedItems ?? [] });
 		},
 		updateVisibleItems: (item, visible) => {
 			if (!item) return;
@@ -45,6 +49,7 @@ export const useDocsActions = () => useDocsStore((state) => state.actions);
 export const usePackageType = () => useDocsStore((state) => state.packageType);
 export const useSlug = () => useDocsStore((state) => state.slug);
 export const useSection = () => useDocsStore((state) => state.section);
+export const useTrackedItems = () => useDocsStore((state) => state.trackedItems);
 export const useVisibleItems = () => useDocsStore((state) => state.visibleItems);
 export const useOldestVisibleItem = () => useDocsStore((state) => state.visibleItems.values().next().value ?? null);
 export const useNewestVisibleItem = () => useDocsStore((state) => [...state.visibleItems].at(-1) ?? null);

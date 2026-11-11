@@ -7,7 +7,10 @@ type IconBaseProps = {
 	size?: number;
 	stroke?: number;
 	strokeColor?: ColorValue;
-	fillColor?: number;
+	fillOpacity?: number;
+	iconName?: string;
+	actionName?: string;
+	decorative?: boolean;
 	coverUp?: ColorValue;
 	toggle?: boolean;
 	pointer?: boolean;
@@ -16,7 +19,11 @@ type IconBaseProps = {
 	onClick?: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
 };
 
-export type IconProps = Omit<React.SVGAttributes<SVGSVGElement>, keyof IconBaseProps> & IconBaseProps;
+export type IconProps = Omit<
+	React.SVGAttributes<SVGSVGElement>,
+	keyof IconBaseProps | keyof React.AriaAttributes | 'role'
+> &
+	IconBaseProps;
 
 export const SliceIcons = {
 	alerts: {
@@ -267,8 +274,10 @@ export const SliceIcons = {
 		modules: 'basic.modules',
 		moreHorizRec: 'basic.more-horiz-rec',
 		moreHoriz: 'basic.more-horiz',
+		moreHorizFill: 'basic.more-horiz-fill',
 		moreVertRec: 'basic.more-vert-rec',
 		moreVert: 'basic.more-vert',
+		moreVertFill: 'basic.more-vert-fill',
 		newspaper: 'basic.newspaper',
 		nut: 'basic.nut',
 		planet: 'basic.planet',
@@ -823,6 +832,8 @@ export const SliceIcons = {
 		volumeSlash: 'media.volume-slash',
 		webcamSlash: 'media.webcam-slash',
 		webcam: 'media.webcam',
+		playFilled: 'media.play-filled',
+		pauseFilled: 'media.pause-filled',
 	},
 	security: {
 		bug: 'security.bug',

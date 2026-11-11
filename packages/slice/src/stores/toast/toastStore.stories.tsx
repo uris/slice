@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { useToast, useToastActions } from 'src/stores/toast';
 import { IconButton } from '../../components/IconButton';
 import { Toast, ToastType } from '../../components/Toast';
@@ -19,7 +19,7 @@ const meta: Meta<typeof Toast> = {
 	args: {
 		message: undefined,
 		border: undefined,
-		radius: undefined,
+		borderRadius: undefined,
 		padding: undefined,
 		offset: undefined,
 		position: 'bottom',
@@ -46,7 +46,7 @@ export const Demo: StoryObj<typeof Toast> = {
 		};
 
 		return (
-			<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
+			<FlexBox absolute justify={'center'} align={'center'} padding={64} gap={16}>
 				Click me!
 				<IconButton
 					actionName={'Go Home'}
@@ -58,14 +58,15 @@ export const Demo: StoryObj<typeof Toast> = {
 				/>
 				<Toast
 					{...args}
+					{...toast}
 					message={toast?.message ?? null}
 					type={toast?.type ?? args.type}
 					close={toast?.close ?? args.close}
 					duration={toast?.duration ?? args.duration}
-					didHide={toastActions.clear}
+					onHide={toastActions.clear}
 					container={'window'}
 				/>
-			</FlexDiv>
+			</FlexBox>
 		);
 	},
 };

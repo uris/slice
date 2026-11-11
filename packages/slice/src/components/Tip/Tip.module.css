@@ -1,11 +1,18 @@
 .wrapper {
 	composes: rowStart from "../../utils/styling/flexBox.module.css";
-	padding: var(--tooltip-padding) !important;
+	padding: var(--tooltip-padding);
 	position: fixed;
+	color: var(--tooltip-color);
+	box-sizing: border-box;
+	max-width: calc(100vw - 20px);
+	max-height: calc(100vh - 20px);
+	overflow: hidden;
+	overflow-wrap: anywhere;
+	pointer-events: none;
 	border: var(--tooltip-border);
 	border-radius: var(--tooltip-border-radius);
 	background: var(--tooltip-background);
-	white-space: nowrap;
+	white-space: pre-wrap;
 	z-index: var(--elevation-describe);
 }
 

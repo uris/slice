@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clipboardTextToFile, fileIconName, nameAndExtension } from './files';
+import { clipboardTextToFile, resolveFileIconType, nameAndExtension } from './files';
 
 describe('nameAndExtension', () => {
 	it('splits a normal file name into name and extension', () => {
@@ -24,7 +24,7 @@ describe('nameAndExtension', () => {
 	});
 });
 
-describe('fileIconName', () => {
+describe('resolveFileIconType', () => {
 	it.each([
 		['png', 'image'],
 		['jpeg', 'image'],
@@ -36,10 +36,32 @@ describe('fileIconName', () => {
 		['pdf', 'pdf'],
 		['mp3', 'audio'],
 		['mp4', 'video'],
-		['clipboard', 'clipboard'],
+		['clipboard', 'text'],
 		['xyz', 'other'],
 	])('maps .%s to %s', (extension, expected) => {
-		expect(fileIconName(extension)).toBe(expected);
+		expect(resolveFileIconType(extension)).toBe(expected);
+	});
+});
+
+describe('filename resolution', () => {
+	it.each([
+		'report.PDF',
+		'.PDF',
+		'https://example.com/report.PDF?download=1',
+		'/files/report.PDF#preview',
+		'C:\\files\\report.PDF',
+	])('resolves %s case-insensitively', (name) => {
+		expect(resolveFileIconType(name)).toBe('pdf');
+	});
+	it.each([undefined, '', 'README', 'archive.zip', 'constructor', '__proto__'])(
+		'uses a safe fallback for %s',
+		(name) => {
+			expect(resolveFileIconType(name)).toBe('other');
+		},
+	);
+	it('uses File.name and ignores a conflicting MIME type', () => {
+		expect(resolveFileIconType(new File([''], 'report#2.PDF', { type: 'image/png' }))).toBe('pdf');
+		expect(resolveFileIconType(new File([''], 'unknown.bin', { type: 'application/pdf' }))).toBe('other');
 	});
 });
 

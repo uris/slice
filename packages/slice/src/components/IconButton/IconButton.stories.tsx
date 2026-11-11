@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { spring } from 'motion/react';
 import { useState } from 'react';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
-import { FlexDiv } from '../FlexDiv';
+import { FlexBox } from '../FlexBox';
 import { SliceIcons } from '../Icon/_types';
+import { ToggleButton } from '../ToggleButton';
 import { installReducedMotionPreference } from '../playHelpers';
 import { IconButton } from './IconButton';
 import type { IconButtonProps } from './_types';
@@ -11,9 +13,9 @@ const meta = {
 	title: 'Components/IconButton',
 	component: IconButton,
 	render: (args) => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<IconButton {...args} />
-		</FlexDiv>
+		</FlexBox>
 	),
 	argTypes: {
 		icon: { control: 'select', options: Object.values(SliceIcons).flatMap(Object.values) },
@@ -95,9 +97,9 @@ function ControlledExample() {
 }
 export const ControlledSelection: Story = {
 	render: () => (
-		<FlexDiv padding={64}>
+		<FlexBox padding={64}>
 			<ControlledExample />
-		</FlexDiv>
+		</FlexBox>
 	),
 };
 export const Cancelled: Story = {
@@ -330,5 +332,118 @@ export const TrimmedActionName: Story = {
 		const button = within(canvasElement).getByRole('button', { name: 'Open profile' });
 		await expect(button).toHaveAttribute('aria-label', 'Open profile');
 		await expect(button).not.toHaveAttribute('aria-labelledby');
+	},
+};
+
+export const TranslucentHover: Story = {
+	args: {
+		backgroundColor: 'core-fill-primary',
+		backgroundColorHover: 'core-surface-secondary',
+		transition: { duration: 0.6, ease: 'linear' },
+	},
+};
+
+export const TranslucentTransitions: Story = {
+	tags: ['tests'],
+	render: () => (
+		<div style={{ background: '#181818', padding: 32, display: 'flex', gap: 16 }}>
+			<IconButton
+				actionName="Translucent icon"
+				backgroundColor="color-mix(in srgb, white 8%, transparent)"
+				backgroundColorHover="#303030"
+				transition={{ duration: 0.18, ease: 'linear' }}
+			/>
+			<ToggleButton
+				actionName="Translucent toggle"
+				icon="media.mic"
+				backgroundColor="color-mix(in srgb, white 8%, transparent)"
+				backgroundColorHover="#303030"
+				transition={{ duration: 0.18, ease: 'linear' }}
+			/>
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const name of ['Translucent icon', 'Translucent toggle']) {
+			const button = canvas.getByRole('button', { name });
+			const background = button.querySelector<HTMLElement>('[class*="background"]');
+			if (!background) throw Error('Missing background');
+			const sampleFrames = () =>
+				new Promise<number[]>((resolve) => {
+					const context = document.createElement('canvas').getContext('2d');
+					if (!context) throw Error('Missing color sampler');
+					const deadline = performance.now() + 240;
+					const frames: number[] = [];
+					const sample = () => {
+						context.clearRect(0, 0, 1, 1);
+						context.fillStyle = getComputedStyle(background).backgroundColor;
+						context.fillRect(0, 0, 1, 1);
+						const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
+						const alpha = a / 255;
+						frames.push(Math.max(r, g, b) * alpha + 24 * (1 - alpha));
+						if (performance.now() < deadline) requestAnimationFrame(sample);
+						else resolve(frames);
+					};
+					requestAnimationFrame(sample);
+				});
+			const entering = sampleFrames();
+			await userEvent.hover(button);
+			const enterFrames = await entering;
+			await expect(enterFrames.length).toBeGreaterThan(2);
+			await expect(Math.max(...enterFrames)).toBeLessThanOrEqual(50);
+			await expect(getComputedStyle(background).backgroundColor).toBe('rgb(48, 48, 48)');
+			const leaving = sampleFrames();
+			await userEvent.unhover(button);
+			await expect(Math.max(...(await leaving))).toBeLessThanOrEqual(50);
+		}
+	},
+};
+
+export const SpringBackground: Story = {
+	tags: ['tests'],
+	args: {
+		backgroundColor: '#ffffff',
+		backgroundColorHover: '#123456',
+		transition: { backgroundColor: { type: 'spring', stiffness: 400, damping: 30 } },
+	},
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button');
+		await userEvent.hover(button);
+		await waitFor(() =>
+			expect(getComputedStyle(button.querySelector('[class*="background"]') as HTMLElement).backgroundColor).toBe(
+				'rgb(18, 52, 86)',
+			),
+		);
+	},
+};
+export const CustomGeneratorBackground: Story = {
+	...SpringBackground,
+	args: { ...SpringBackground.args, transition: { type: (options) => spring(options), duration: 0.1, bounce: 0 } },
+};
+
+export const IconStrokeWidth: Story = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<IconButton actionName="Default stroke" icon="media.play" toggle />
+			<IconButton actionName="Stroke 0" icon="media.play" toggle iconStrokeWidth={0} />
+			<IconButton actionName="Stroke 2.5" icon="media.play" toggle iconStrokeWidth={2.5} />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, width] of [
+			['Default stroke', '1.25'],
+			['Stroke 0', '0'],
+			['Stroke 2.5', '2.5'],
+		]) {
+			const button = canvas.getByRole('button', { name });
+			const path = button.querySelector('svg path');
+			if (!path) throw new Error('Expected stroked icon');
+			await expect(path).toHaveAttribute('stroke-width', width);
+			await expect(button).not.toHaveAttribute('iconStrokeWidth');
+			await userEvent.click(button);
+			await expect(button.querySelector('svg path')).toHaveAttribute('stroke-width', width);
+		}
 	},
 };

@@ -1,13 +1,13 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
 import {RenderSource} from '../../../documentation/_components/RenderSource/RenderSource';
-import {FlexDiv} from '../../components/FlexDiv';
+import {FlexBox} from '../../components/FlexBox';
 import {Spacer} from '../../components/Spacer';
 import Notice from '../../../documentation/_components/Notice/Notice';
 
 <Meta title="Hooks/useActiveTab" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
         # useActiveTab
 
@@ -74,5 +74,5 @@ import Notice from '../../../documentation/_components/Notice/Notice';
             <Notice><span>Slice also provides an optional [ActiveTabStore](/docs/stores-activetab--docs) backed by Zustand for shared state throughout your application. Each standalone hook instance manages its own listeners.</span></Notice>
         </Unstyled>
     <Spacer size="xxl" />
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

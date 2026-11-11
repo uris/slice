@@ -8,7 +8,7 @@ import {RenderSource} from '../../../documentation/_components/RenderSource/Rend
 
 # Button
 
-Labels, icons, and busy states for actions. The default is a medium outline button with type="button".
+Labels, icons, and busy states for actions. The default is an m-size outline button with type="button".
 
 ## Usage
 
@@ -24,7 +24,7 @@ import { Button } from '@apple-pie/slice';
 
 ## Behavior
 
-- Children override label. Decorative icons do not add tab stops.
+- Children override label and form a vertically centered flex row using gap. Use buttonSize="auto" for natural height with 6px vertical padding. Decorative icons do not add tab stops.
 - Use working for an application-controlled busy state. It blocks repeated activation and does not emit a completion click.
 - progress with a positive finite duration delays onClick and supplies undefined when it completes. It does not submit forms or follow links on completion.
 - disabled, state="disabled", and busy state block pointer, keyboard, ref, and trigger activation.
@@ -44,7 +44,10 @@ ColorValue accepts Slice color tokens and CSS colors. Native button attributes a
 | `animate` | `string` | `undefined` | Named Motion variant to animate toward. Define the values in variants. |
 | `backgroundColor` | `ColorValue` | `variant background` | Background color in normal and hover states. Overrides the preset for every variant; fill takes priority while enabled. |
 | `backgroundColorDisabled` | `ColorValue` | `variant disabled background` | Background color when disabled. Independent of backgroundColor. |
+| `borderColor` | `ColorValue` | `undefined` | Overrides the variant border color for every size and state, including hover and disabled. Omitted values keep variant defaults. |
 | `borderRadius` | `number \| string` | `corner-round` | Corner radius. Numbers use pixels; strings accept CSS lengths. |
+| `borderWidth` | `number \| string` | `undefined` | Overrides the variant border width for every size and state. Numbers use pixels; CSS lengths are preserved. Zero removes the border. Omitted values keep variant defaults. |
+| `buttonSize` | `'auto' \| 's' \| 'm' \| 'l' \| 'xl' \| number` | `m` | Shared frame heights: 24, 36, 44, 56px. Auto fits content plus padding; a positive number sets a pixel height. |
 | `children` | `React.ReactNode` | `undefined` | Custom label content. Takes priority over label; use non-interactive content inside the button. |
 | `count` | `number` | `undefined` | Optional count badge. Zero and invalid numbers are hidden; numbers above 99 show 99+. Hidden while busy. |
 | `destructive` | `boolean` | `false` | Uses the warning color preset for destructive actions. Explicit color overrides still apply. |
@@ -52,6 +55,7 @@ ColorValue accepts Slice color tokens and CSS colors. Native button attributes a
 | `duration` | `number` | `undefined` | Timed progress delay in seconds. Requires progress and a positive, finite value. Has no effect on controlled working state. |
 | `exit` | `string` | `undefined` | Named Motion variant for exit animation. Requires an AnimatePresence parent to animate removal. |
 | `fill` | `boolean` | `false` | Uses core-surface-primary for the enabled background, ahead of variant and backgroundColor. This controls the fill color, not width. |
+| `gap` | `number` | `4` | Pixel gap between icons and content, and between children. Use 0 to remove it. |
 | `iconColor` | `ColorValue` | `variant icon color` | Color of both icons. Overrides the preset in all states. |
 | `iconFill` | `boolean` | `false` | Fills icon shapes that support a filled appearance. |
 | `iconLeft` | `string` | `undefined` | Registered icon name displayed before the label. |
@@ -60,12 +64,14 @@ ColorValue accepts Slice color tokens and CSS colors. Native button attributes a
 | `initial` | `string` | `undefined` | Named Motion variant used for the initial appearance. |
 | `label` | `string` | `undefined` | Visible action label when children is not supplied. |
 | `link` | `string` | `undefined` | URL opened after a normal activation with window.open. onClick can cancel navigation with event.preventDefault(). Timed progress does not navigate on completion. |
-| `paddingLeft` | `number` | `automatic` | Left padding in pixels, overriding the size, variant, and round defaults. |
-| `paddingRight` | `number` | `automatic` | Right padding in pixels, overriding the size, variant, and round defaults. |
+| `padding` | `number \| string` | `automatic` | Shorthand padding. Children and auto sizing use 6px vertically. Shared horizontal padding is 12px with a 4px reduction on icon edges; text buttons use 4px. Explicit padding disables optical adjustment. |
+| `paddingBottom` | `number \| string` | `automatic` | Bottom padding; overrides padding. |
+| `paddingLeft` | `number \| string` | `automatic` | Left padding overrides padding and shared optical defaults. Numbers are pixels. |
+| `paddingRight` | `number \| string` | `automatic` | Right padding overrides padding and shared optical defaults. Numbers are pixels. |
+| `paddingTop` | `number \| string` | `automatic` | Top padding; overrides padding. |
 | `progress` | `boolean` | `false` | Enables delayed activation when duration is positive and finite. The spinner runs first, then onClick receives undefined once. Without a valid duration, activation is immediate. |
 | `round` | `boolean` | `false` | Makes the default-width button circular. Intended for icon-only actions with an accessible label. |
 | `showDot` | `boolean` | `false` | Shows a status dot. Hidden while busy. |
-| `size` | `'large' \| 'medium' \| 'small'` | `medium` | Layout size: large is 48px high, medium is 36px, and small fits the content with compact padding. Typography is controlled separately by textSize. |
 | `state` | `'normal' \| 'hover' \| 'disabled'` | `normal` | Forces the hover or disabled presentation. Use disabled for ordinary application disabling; either disabled mechanism blocks activation. |
 | `target` | `'_blank' \| '_self' \| '_parent' \| '_top'` | `_self` | Window target used with link. |
 | `textColor` | `ColorValue` | `variant text color` | Text color in normal and hover states. Disabled text retains the disabled preset. |

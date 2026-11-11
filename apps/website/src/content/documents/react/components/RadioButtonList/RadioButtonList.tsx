@@ -3,32 +3,38 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { FlexDiv, Preset } from '@apple-pie/slice';
-import { RadioButtonListPreview } from './RadioButtonListPreview';
-import { customCode, exampleCode, optionsCode, usageCode } from './code';
+import { FlexBox, Preset } from '@apple-pie/slice';
+import {
+	RadioButtonListCustomExample,
+	RadioButtonListDisabledExample,
+	RadioButtonListUsageExample,
+} from './UsagePreviews';
+import { customCode, disabledCode, exampleCode, optionsCode, usageCode } from './code';
 export function RadioButtonListDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>RadioButtonList component</H1>
 			<P clipWidth>
 				Compose related choices when someone needs to pick one. Use your own labels, content, and layout, with shared
 				selection and styling defaults.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-radiobuttonlist--default"
-				components={[
-					{ label: 'Composed choices', component: <RadioButtonListPreview /> },
-					{ label: 'Custom content', component: <RadioButtonListPreview variant="custom" /> },
-					{ label: 'Disabled', component: <RadioButtonListPreview variant="disabled" /> },
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Place <Code openURL="/docs/react/radio-button/">RadioButton</Code> choices inside the list. Each choice’s{' '}
 				<Code>value</Code> identifies it; <Code>defaultValue</Code> sets the initial selection.
 			</P>
-			<CodeBlock filename="RadioButtonListExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-radiobuttonlist--default"
+				components={[
+					{
+						label: 'Basic usage',
+						component: <RadioButtonListUsageExample />,
+						code: usageCode.trim(),
+						codeFilename: 'RadioButtonListExample.tsx',
+					},
+				]}
+			/>
 			<H3>Use options</H3>
 			<P>
 				<Code>options</Code> creates the same radio choices from data. It shares the composed group’s selection and
@@ -46,7 +52,24 @@ export function RadioButtonListDoc() {
 				Children can include layout wrappers or custom components. Group styles provide defaults; individual RadioButton
 				props override them.
 			</P>
-			<CodeBlock filename="RadioButtonListCustom.tsx" language="tsx" code={customCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-radiobuttonlist--default"
+				components={[
+					{
+						label: 'Compose custom content',
+						component: <RadioButtonListCustomExample />,
+						code: customCode.trim(),
+						codeFilename: 'RadioButtonListCustom.tsx',
+					},
+				]}
+			/>
+			<H3>Disable the group</H3>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-radiobuttonlist--default"
+				components={[
+					{ label: 'Disabled choices', component: <RadioButtonListDisabledExample />, code: disabledCode.trim() },
+				]}
+			/>
 			<H2 id={'behavior'}>Behavior</H2>
 			<P>
 				The group owns one selected value and the shared input name. Children inherit its selection and disabled state;
@@ -324,7 +347,7 @@ export function RadioButtonListDoc() {
 					'Other native handlers apply to the outer group. Keyboard selection remains native to the radio inputs; there are no drag or animation lifecycle callbacks.'
 				}
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 export const trackedItems: TrackedItem[] = [

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef } from 'react';
-import { FlexDiv } from 'src/components/FlexDiv/FlexDiv';
+import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { useTip, useTipActions } from 'src/stores/tip';
 import { IconButton } from '../../components/IconButton';
 import { Tip } from '../../components/Tip';
@@ -17,10 +17,8 @@ const meta: Meta<typeof Tip> = {
 		tip: undefined,
 		border: true,
 		borderColor: 'var(--core-outline-primary)',
-		radius: undefined,
 		backgroundColor: 'var(--core-surface-secondary)',
 		textColor: 'var(--core-text-primary)',
-		color: 'var(--core-text-primary)',
 		coords: { x: 0, y: 0 },
 		padding: undefined,
 		textSize: 'm',
@@ -36,7 +34,7 @@ function TipDemo(props: Readonly<TipProps>) {
 	const coords = useToolTip(tip, tipRef);
 
 	return (
-		<FlexDiv absolute justify={'center'} align={'center'} padding={64} gap={16}>
+		<FlexBox absolute justify={'center'} align={'center'} padding={64} gap={16}>
 			Hover me!
 			<IconButton
 				actionName={'Home Button'}
@@ -47,7 +45,7 @@ function TipDemo(props: Readonly<TipProps>) {
 				hover={true}
 			/>
 			<Tip {...props} coords={coords} tip={tip} ref={tipRef} />
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

@@ -1,6 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
-import { FlexDiv, Tip, Toast, type ToolTip, useToolTip } from 'src';
+import { FlexBox, Tip, Toast, type ToolTip, useToolTip } from 'src';
 import { coreColors, dark, light } from '../../../src/theme/colors/colors';
+import { coreGreyRecipes } from '../../../src/theme/colors/palette';
+import { neutralThemeRecipes } from '../../../src/theme/colors/recipes';
 import { ColorTile } from '../ColorTile/ColorTile';
 
 type ColorMap = Record<string, string>;
@@ -14,8 +16,8 @@ function groupColors(colors: ColorMap): ColorGroup[] {
 	const grouped = new Map<string, Array<{ key: string; value: string }>>();
 
 	for (const [key, value] of Object.entries(colors)) {
-		const match = key.match(/^(brand|product)-[a-z]+-/i);
-		const bucket = match ? match[0].slice(0, -1) : 'Special';
+		const match = key.match(/^(?:core|brand)-[a-z]+-\d+$/i);
+		const bucket = match ? key.replace(/-\d+$/, '') : 'Special';
 		if (!grouped.has(bucket)) grouped.set(bucket, []);
 		grouped.get(bucket)?.push({ key, value });
 	}
@@ -26,39 +28,42 @@ function groupColors(colors: ColorMap): ColorGroup[] {
 	}));
 }
 
-function getReferencedBrandColors(themeColors: ColorMap): ColorMap {
+function getReferencedCoreColors(themeColors: ColorMap, mode: 'light' | 'dark'): ColorMap {
 	// Build lookup from core value -> core token keys.
-	const valueToBrandKeys = new Map<string, string[]>();
+	const valueToCoreKeys = new Map<string, string[]>();
 	for (const [key, value] of Object.entries(coreColors)) {
-		const current = valueToBrandKeys.get(value) ?? [];
+		const current = valueToCoreKeys.get(value) ?? [];
 		current.push(key);
-		valueToBrandKeys.set(value, current);
+		valueToCoreKeys.set(value, current);
 	}
 
-	const referencedBrandKeys = new Set<string>();
+	const referencedCoreKeys = new Set<string>();
+	for (const [token, recipe] of Object.entries(neutralThemeRecipes)) {
+		if (token in themeColors) referencedCoreKeys.add(coreGreyRecipes[recipe][mode].token);
+	}
 	for (const value of Object.values(themeColors)) {
-		const keys = valueToBrandKeys.get(value);
+		const keys = valueToCoreKeys.get(value);
 		if (!keys) continue;
-		for (const key of keys) referencedBrandKeys.add(key);
+		for (const key of keys) referencedCoreKeys.add(key);
 	}
 
 	// Keep coreColors declaration order for stable display.
 	const filtered: ColorMap = {};
 	for (const [key, value] of Object.entries(coreColors)) {
-		if (!referencedBrandKeys.has(key)) continue;
+		if (!referencedCoreKeys.has(key)) continue;
 		filtered[key] = value;
 	}
 	return filtered;
 }
 
-function ReferencedBrandColors(props: Readonly<{ mode: 'light' | 'dark' }>) {
+function ReferencedCoreColors(props: Readonly<{ mode: 'light' | 'dark' }>) {
 	const [tip, setTip] = useState<ToolTip | null>(null);
 	const [message, setMessage] = useState<string | null>(null);
 	const tipRef = useRef<HTMLDivElement>(null);
 	const coords = useToolTip(tip, tipRef);
 	const { mode } = props;
 	const modeColors = mode === 'light' ? light : dark;
-	const groupedColors = groupColors(getReferencedBrandColors(modeColors));
+	const groupedColors = groupColors(getReferencedCoreColors(modeColors, mode));
 
 	const handleCopy = useCallback((token: string, hex: string) => {
 		setMessage('Copied to clipboard');
@@ -69,11 +74,11 @@ function ReferencedBrandColors(props: Readonly<{ mode: 'light' | 'dark' }>) {
 	}, []);
 
 	return (
-		<FlexDiv width={'fill'} height={'fit'} gap={16} justify={'start'} align={'start'} scrollY padding={'0 0 32px 0'}>
+		<FlexBox width={'fill'} height={'fit'} gap={16} justify={'start'} align={'start'} scrollY padding={'0 0 32px 0'}>
 			{groupedColors.map((group) => (
-				<FlexDiv width={'fill'} height={'fit'} direction={'column'} key={group.key}>
+				<FlexBox width={'fill'} height={'fit'} direction={'column'} key={group.key}>
 					<h3 style={{ textTransform: 'capitalize' }}>{group.key}</h3>
-					<FlexDiv width={'fill'} height={'fit'} direction={'row'} wrap={true} gap={16}>
+					<FlexBox width={'fill'} height={'fit'} direction={'row'} wrap={true} gap={16}>
 						{group.values.map((color) => (
 							<ColorTile
 								token={color.key}
@@ -83,19 +88,19 @@ function ReferencedBrandColors(props: Readonly<{ mode: 'light' | 'dark' }>) {
 								onTooltip={handleToolTip}
 							/>
 						))}
-					</FlexDiv>
-				</FlexDiv>
+					</FlexBox>
+				</FlexBox>
 			))}
 			<Tip ref={tipRef} coords={coords} tip={tip} />
-			<Toast message={message} didHide={() => setMessage(null)} close={false} />
-		</FlexDiv>
+			<Toast message={message} onHide={() => setMessage(null)} close={false} />
+		</FlexBox>
 	);
 }
 
-export function LightModeBrandColors() {
-	return <ReferencedBrandColors mode={'light'} />;
+export function LightModeCoreColors() {
+	return <ReferencedCoreColors mode={'light'} />;
 }
 
-export function DarkModeBrandColors() {
-	return <ReferencedBrandColors mode={'dark'} />;
+export function DarkModeCoreColors() {
+	return <ReferencedCoreColors mode={'dark'} />;
 }

@@ -3,54 +3,51 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
-import { Avatar, FlexDiv, Preset } from '@apple-pie/slice';
+import { Avatar, FlexBox, Preset } from '@apple-pie/slice';
 import { infoCode, initialsCode, interactiveCode, lazyLoadCode, usageCode } from './code';
 
 export function AvatarDoc() {
 	return (
-		<FlexDiv preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
+		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
 			<Path />
 			<H1 id={'title'}>Avatar component</H1>
 			<P clipWidth>
 				Put people at the center of your interface. Avatar brings a recognizable face or clear initials to profiles,
 				conversation lists, and team spaces, with colors that fit your theme.
 			</P>
-			<ComponentCanvas
-				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatar--demo"
-				components={[
-					{
-						label: 'Photo avatar',
-						component: (
-							<Avatar
-								name={'John Wick'}
-								size={40}
-								borderWidth={1}
-								borderColor={'transparent'}
-								borderColorHover={'core-link-primary'}
-								backgroundColor={'array-sky-label'}
-								image={'/images/jw-profile.png'}
-								onClick={() => null}
-							/>
-						),
-					},
-					{
-						label: 'Initials avatar',
-						component: <Avatar name="John Wick" size={40} borderWidth={0} backgroundColor="array-sky-label" />,
-					},
-				]}
-			/>
 			<H2 id={'usage'}>Usage</H2>
 			<P>
 				Import <Code>Avatar</Code> and give it a name and an image URL. The image fills the circular shape and stays
 				centered. Use <Code>size</Code> to set its width and height.
 			</P>
-			<CodeBlock filename="AvatarExample.tsx" language="tsx" code={usageCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatar--demo"
+				components={[
+					{
+						label: 'Photo avatar',
+						component: <Avatar name={'John Wick'} size={40} image={'/images/jw-profile.png'} />,
+						code: usageCode.trim(),
+					},
+				]}
+			/>
+
 			<H3>Initials and theme colors</H3>
 			<P>
-				No photo yet? Leave out <Code>image</Code> to show initials. Theme color tokens keep the result consistent
-				across light and dark themes. Choose a <Code>textSize</Code> token to set the size of the initials.
+				No photo yet? <Code>Avatar</Code> falls back to show initials if no image is provided or resolved. Theme color
+				tokens keep the result consistent across light and dark themes. Choose a <Code>textSize</Code> token to set the
+				size of the initials.
 			</P>
-			<CodeBlock filename="InitialsExample.tsx" language="tsx" code={initialsCode.trim()} />
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatar--demo"
+				components={[
+					{
+						label: 'Initials fallback',
+						component: <Avatar name={'John Wick'} size={40} backgroundColor="array-sky-label" />,
+						code: initialsCode.trim(),
+					},
+				]}
+			/>
+
 			<H3>Open a profile</H3>
 			<P>
 				Add <Code>onClick</Code> to make the avatar an action. It becomes focusable and supports Enter and Space. Give
@@ -258,7 +255,7 @@ export function AvatarDoc() {
 				such as <Code>onClickCapture</Code>. Custom hover and focus handlers run alongside the internal tooltip
 				handlers.
 			</P>
-		</FlexDiv>
+		</FlexBox>
 	);
 }
 

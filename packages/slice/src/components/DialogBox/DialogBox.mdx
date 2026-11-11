@@ -85,6 +85,10 @@ Set `maxHeight` to limit the panel. Its body scrolls while the heading and actio
 
 ## Behavior
 
+Overflow adds a default 1px solid `core-fill-primary` bottom border to the header
+and top border to the footer. Set `titleBorderWidth={0}` to disable the automatic
+header border, or `autoBorderBottom={false}` to disable the automatic footer border.
+
 Composed buttons retain their own handlers. The actions array calls `onAction`, then `onResolve` by default or `onReject` when `promise="reject"`. Rejection errors carry the action value in `cause`. Set `promise="none"` for an action-only callback. Disabled and working array actions do not run callbacks.
 
 The close control calls only `onClose`; your state or a controller removes the panel. Footer separation updates as content or container dimensions change, using Slice's resize observer hook.
@@ -112,8 +116,8 @@ When any section is present, direct content must use these sections. Unsupported
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | `actions` | `DialogBoxAction<T>[]` | `undefined` | Action buttons shown in the footer. Actions default to the right; `position` can move them left. `primary` selects the solid button treatment. `promise` chooses the resolve, reject, or action-only path. Disabled and working actions do not run callbacks. |
-| `actionsBackgroundColor` | `ColorValue` | `backgroundColor mixed with 6% black` | Footer background for composed controls and the actions array. Accepts Slice tokens or CSS colors; defaults to a subtly darker panel background. Use `transparent` for no footer fill. |
-| `actionsBorderColor` | `ColorValue` | `core-outline-primary` | Divider color above the footer. |
+| `actionsBackgroundColor` | `ColorValue` | `backgroundColor` | Footer background. Matches the content background even when scrolling. Explicit colors, including `transparent`, apply in both states. |
+| `actionsBorderColor` | `ColorValue` | `core-fill-primary` | Divider color above the footer. |
 | `actionsBorderWidth` | `number` | `0` | Footer divider width in pixels. Automatic scrolling treatment can add a 1px divider when this is zero. |
 | `autoBorderBottom` | `boolean` | `true` | Adds a footer divider when scrolling is detected and the explicit divider width is zero. |
 | `backgroundColor` | `ColorValue` | `core-surface-secondary` | Panel background. |
@@ -127,13 +131,14 @@ When any section is present, direct content must use these sections. Unsupported
 | `maxHeight` | `number &#124; string` | `400` | Maximum panel height in pixels or CSS units. |
 | `maxWidth` | `number &#124; string` | `400` | Maximum panel width. |
 | `minHeight` | `number &#124; string` | `200` | Minimum panel height. |
-| `minWidth` | `number &#124; string` | `300` | Minimum panel width. Lower it for narrower layouts. |
-| `padding` | `number &#124; string` | `16px 24px` | Padding shared by the header, body, and footer. Numbers become pixels; CSS shorthand and expressions are preserved. |
+| `minWidth` | `number &#124; string` | `300` | An explicit minimum width is honored even when it exceeds the parent or viewport. When omitted, the 300px default is capped to the available parent width. |
+| `padding` | `number &#124; string` | `16px 24px` | Padding shared by the header, body, and footer. Numbers become pixels; CSS shorthand and expressions are preserved. Without an explicit value, the header has 4px bottom padding while scrolling and zero otherwise. |
 | `scrollHandleColor` | `ColorValue` | `core-text-disabled` | Content scrollbar thumb color. |
 | `scrollHandleColorHover` | `ColorValue` | `core-text-disabled` | Scrollbar thumb color on hover. |
 | `title` | `string` | `undefined` | Title-area text. The title area also appears when `close` is enabled. |
-| `titleBorderColor` | `ColorValue` | `core-outline-primary` | Divider color beneath the title area. |
-| `titleBorderWidth` | `number` | `0` | Title divider width in pixels. |
+| `titleBackgroundColor` | `ColorValue` | `backgroundColor` | Header background. Matches the content background even when scrolling. An explicit color applies in both states. |
+| `titleBorderColor` | `ColorValue` | `core-fill-primary` | Divider color beneath the title area. |
+| `titleBorderWidth` | `number` | `1 while scrolling; otherwise 0` | Header bottom divider width. Explicit zero disables it. |
 | `titleIcon` | `string` | `undefined` | Icon before the title. |
 | `titleIconFill` | `boolean` | `true` | Requests the filled title icon treatment. |
 | `titleTextColor` | `ColorValue` | `core-text-special` | Title text color. |

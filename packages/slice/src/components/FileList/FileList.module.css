@@ -1,10 +1,12 @@
 .wrapper {
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
+	display: flex;
+	box-sizing: border-box;
+	justify-content: flex-start;
 	width: 100%;
 	overflow: hidden;
 	flex-wrap: var(--file-wrap);
-	flex-direction: var(--file-direction) !important;
-	align-items: flex-start !important;
+	flex-direction: var(--file-direction);
+	align-items: flex-start;
 	gap: var(--file-gap);
 	user-select: none;
 	-webkit-user-select: none;
@@ -12,18 +14,21 @@
 
 .file {
 	position: relative;
-	composes: rowStart from "../../utils/styling/flexBox.module.css";
+	align-items: center;
+	display: flex;
+	box-sizing: border-box;
+	justify-content: flex-start;
 	padding: var(
 		--file-padding,
 		var(--file-row-vertical, var(--spacing-xs)) var(--file-row-right) var(--file-row-vertical, var(--spacing-xs))
 			calc(var(--file-row-horizontal, var(--spacing-xs)) - var(--file-row-adjustment, var(--spacing-xxs)))
-	) !important;
+	);
 	border: 1px solid var(--file-border-color);
-	border-radius: var(--corner-xs);
+	border-radius: var(--corner-s);
 	overflow: hidden;
 	min-height: max-content;
-	max-width: var(--file-max-width);
-	min-width: var(--file-min-width);
+	max-width: var(--file-max-width, 100%);
+	min-width: var(--file-min-width, 0);
 	color: var(--core-text-primary);
 	background: transparent;
 	gap: 4px;
@@ -43,15 +48,11 @@
 }
 
 .fileName {
-	composes: row from "../../utils/styling/flexBox.module.css";
+	display: block;
 	width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	word-break: break-all;
-	display: -webkit-box !important;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
 	z-index: 2;
 }
 
@@ -82,15 +83,38 @@
 	z-index: 2;
 }
 
-.icon {
-	composes: row from "../../utils/styling/flexBox.module.css";
-	margin-left: var(--spacing-xs) !important;
-	min-width: 20px;
-	min-height: 20px;
-	max-width: 20px;
-	max-height: 20px;
-	cursor: pointer;
+.progress,
+.remove {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 20px;
+	margin-left: var(--spacing-xs);
+	width: 20px;
+	height: 20px;
 	z-index: 2;
+}
+.remove {
+	appearance: none;
+	padding: 0;
+	border: 0;
+	border-radius: var(--corner-xxs);
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+}
+.remove:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
+}
+.wrapper:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
+}
+@media (prefers-reduced-motion: reduce) {
+	.file::before {
+		transition: none;
+	}
 }
 
 .xs {
@@ -111,4 +135,14 @@
 
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
+}
+
+.attachment {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	min-width: var(--file-min-width, 0);
+	max-width: var(--file-max-width, 100%);
+	width: max-content;
+	gap: var(--spacing-xs);
 }

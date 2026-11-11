@@ -18,13 +18,14 @@ export type RowWindow = {
 	handleScroll: (scrollTop: number) => void;
 };
 
-const DEFAULT_OVERSCAN = 25;
+const DEFAULT_OVERSCAN = 6;
 
 export type UseRowWindowOptions = {
 	/* master switch - when false this hook is a complete no-op (no ResizeObserver, full range returned) */
 	enabled: boolean;
 	/* fixed px height every rendered row is expected to have. Must be > 0 for windowing to activate. */
 	rowHeight: number;
+	headerHeight?: number;
 	/* extra rows kept mounted past each edge of the viewport. Defaults to 6. */
 	overscan?: number;
 };
@@ -52,8 +53,9 @@ export function useRowWindow(
 	rowCount: number,
 	options: UseRowWindowOptions,
 ): RowWindow {
-	const { enabled, rowHeight, overscan = DEFAULT_OVERSCAN } = options;
+	const { enabled, rowHeight, overscan: rawOverscan = DEFAULT_OVERSCAN, headerHeight = 0 } = options;
 
+	const overscan = Number.isFinite(rawOverscan) ? Math.max(0, Math.floor(rawOverscan)) : DEFAULT_OVERSCAN;
 	// only observes while enabled - useObserveResize no-ops on an undefined ref
 	const viewport = useObserveResize(enabled ? wrapperRef : undefined, { ignore: 'width' });
 	const [scrollTop, setScrollTop] = useState(0);
@@ -76,16 +78,16 @@ export function useRowWindow(
 	// (a filter/sort change) out from under the current scrollTop
 	useEffect(() => {
 		if (!enabled) return;
-		const maxScrollTop = Math.max(0, rowCount * rowHeight - (viewport.height || 0));
+		const maxScrollTop = Math.max(0, headerHeight + rowCount * rowHeight - (viewport.height || 0));
 		setScrollTop((prev) => {
 			if (prev <= maxScrollTop) return prev;
 			if (wrapperRef.current) wrapperRef.current.scrollTop = 0;
 			return 0;
 		});
-	}, [enabled, rowCount, rowHeight, viewport.height, wrapperRef]);
+	}, [enabled, rowCount, rowHeight, viewport.height, wrapperRef, headerHeight]);
 
 	return useMemo<RowWindow>(() => {
-		if (!enabled || rowHeight <= 0) {
+		if (!enabled || !Number.isFinite(rowHeight) || rowHeight <= 0) {
 			return {
 				enabled: false,
 				startIndex: 0,
@@ -98,7 +100,7 @@ export function useRowWindow(
 
 		const viewportHeight = viewport.height || 0;
 		const visibleCount = Math.ceil(viewportHeight / rowHeight);
-		const firstVisible = Math.floor(scrollTop / rowHeight);
+		const firstVisible = Math.floor(Math.max(0, scrollTop - headerHeight) / rowHeight);
 
 		const startIndex = Math.max(0, firstVisible - overscan);
 		const endIndex = Math.min(rowCount, firstVisible + visibleCount + overscan);
@@ -111,5 +113,5 @@ export function useRowWindow(
 			bottomSpacerHeight: Math.max(0, rowCount - endIndex) * rowHeight,
 			handleScroll,
 		};
-	}, [enabled, rowHeight, overscan, rowCount, viewport.height, scrollTop, handleScroll]);
+	}, [enabled, rowHeight, overscan, rowCount, viewport.height, scrollTop, handleScroll, headerHeight]);
 }

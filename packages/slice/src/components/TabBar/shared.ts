@@ -2,12 +2,14 @@
 import { createContext, useEffect, useLayoutEffect } from 'react';
 import type React from 'react';
 import type { TabOption } from '../Tab';
+import type { TabColorProps } from '../Tab/_types';
 import type { TabBarProps } from './_types';
 
 type TabBarContextValue = {
 	value: unknown;
 	firstValue: unknown;
 	iconFill: boolean;
+	colors: TabColorProps;
 	disabled: boolean;
 	register: (element: HTMLButtonElement, option: TabOption<unknown>) => () => void;
 	select: (option: TabOption<unknown>) => void;

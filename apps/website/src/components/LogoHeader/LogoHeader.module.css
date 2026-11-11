@@ -1,0 +1,27 @@
+.wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 0;
+	gap: 0;
+	flex: 0;
+
+	&::after {
+		content: "|";
+		display: inline-flex;
+		padding-left: 24px;
+		color: var(--core-fill-secondary);
+	}
+}
+
+.identity {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+	box-sizing: border-box;
+	gap: 16px;
+	padding: 0 8px 0 0;
+}

@@ -71,7 +71,7 @@ export function resolveSortFromViewState<T>(
 ): SortKey<T> {
 	if (!state?.sort) return undefined;
 	const column = columns.find((c) => c.id === state.sort?.columnId);
-	if (!column?.sort) return undefined;
+	if (column?.sort === undefined) return undefined;
 	return { key: column.sort, dir: state.sort.dir };
 }
 
@@ -84,7 +84,7 @@ export function captureSortToViewState<T>(
 	columns: ColumnDefinition<T, any>[],
 	sort: SortKey<T>,
 ): DataTableViewState['sort'] {
-	if (!sort?.key) return undefined;
+	if (sort?.key === undefined) return undefined;
 	const column = columns.find((c) => c.sort === sort.key);
 	if (!column) return undefined;
 	return { columnId: column.id, dir: sort.dir };

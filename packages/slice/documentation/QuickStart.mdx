@@ -1,12 +1,12 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import {FlexDiv} from "../src/components/FlexDiv";
+import {FlexBox} from "../src/components/FlexBox";
 import {Spacer} from "../src/components/Spacer";
 import {RenderSource} from "./_components/RenderSource/RenderSource";
 
 <Meta title="Welcome/Quick Start" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
             # Quick Start
             Slice ships with a light and dark theme. To get set up, install Slice, import the packaged stylesheet at your app root, wrap your app with the theme provider and use the included components.
@@ -121,6 +121,6 @@ const theme = useTheme();
             <Spacer size="l" />
             <p className={"note"}>Note: Slice uses css modules for styling and should play nice with other tools your project uses to manage styles. It also makes Slice compatible with mixed or server side architectures like [Next.js](https://nextjs.org) and [Remix](https://remix.run).</p>
         </Unstyled>
-    </FlexDiv>
+    </FlexBox>
 
-</FlexDiv>
+</FlexBox>

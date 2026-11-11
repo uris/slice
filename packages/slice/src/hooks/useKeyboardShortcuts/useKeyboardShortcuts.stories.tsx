@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { FlexDiv } from '../../components/FlexDiv';
+import { FlexBox } from '../../components/FlexBox';
 import { useWindow } from '../useWindow/useWindow';
 import { type KeyboardShortcut, type KeyboardShortcuts, useKeyboardShortcuts } from './useKeyboardShortcuts';
 
@@ -23,8 +23,8 @@ function UseKeyboardShortcutsDemo() {
 	useKeyboardShortcuts(shortcuts, handleShortcut, isAppleDevice);
 
 	return (
-		<FlexDiv absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
-			<FlexDiv
+		<FlexBox absolute width={'fill'} height={'fill'} align={'center'} justify={'center'} padding={24}>
+			<FlexBox
 				width={520}
 				height={'auto'}
 				direction={'column'}
@@ -49,8 +49,8 @@ function UseKeyboardShortcutsDemo() {
 						borderRadius: 6,
 					}}
 				/>
-			</FlexDiv>
-		</FlexDiv>
+			</FlexBox>
+		</FlexBox>
 	);
 }
 

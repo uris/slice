@@ -1,11 +1,11 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv, Spacer} from "../src";
+import {FlexBox, Spacer} from "../src";
 import {TypeTableHeadings, TypeTableBody} from "./_components/TypeTable/TypeTable";
 
 <Meta title="Typography/Slice Type Styles" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
             # Type Styles
             The Slice theme uses a concise range of type sizes that can be applied across form factors.
@@ -30,5 +30,5 @@ import {TypeTableHeadings, TypeTableBody} from "./_components/TypeTable/TypeTabl
             In most situations, the default `textSize` prop value for these components, is set as `body-l-medium`.
         </Unstyled>
         <Spacer size="xxl"/>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

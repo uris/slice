@@ -1,12 +1,12 @@
 import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexDiv, Spacer} from "../src";
+import {FlexBox, Spacer} from "../src";
 import {TypeTokenTable} from "./_components/TypeTokenTable/TypeTokenTable";
 import {fontWeightTokens, fontSizeTokens, lineHeightTokens, letterSpacingTokens} from "./_data/typeTokenData";
 
 <Meta title="Typography/Slice Type Sizes" />
 
-<FlexDiv width={"fill"} height={"fill"} align={"center"}>
-    <FlexDiv width={"fill"} maxWidth={760} height={"auto"}>
+<FlexBox width={"fill"} height={"fill"} align={"center"}>
+    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
         <Unstyled>
             # Type Sizes
             Every ready-made style on the [Type Styles](/docs/typography-slice-type-styles--docs) page is built from a small set of granular tokens - font weight, font size, line height, and letter spacing. Each one is exposed as its own CSS custom property, so you can mix and match them to compose a custom type style without starting from scratch.
@@ -24,5 +24,5 @@ import {fontWeightTokens, fontSizeTokens, lineHeightTokens, letterSpacingTokens}
             <TypeTokenTable tokens={letterSpacingTokens} />
         </Unstyled>
         <Spacer size="xxl"/>
-    </FlexDiv>
-</FlexDiv>
+    </FlexBox>
+</FlexBox>

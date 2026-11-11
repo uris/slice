@@ -4,7 +4,11 @@ import type { ColorValue } from '../../theme/colors/resolveColor';
 
 type DotBaseProps = {
 	size?: number;
+	/** Shared top/right distance in pixels. Positive values move outward. Defaults to 2. */
+	offSet?: number;
+	/** Overrides offSet for the top edge. Positive values move upward. */
 	topOffset?: number;
+	/** Overrides offSet for the right edge. Positive values move rightward. */
 	rightOffset?: number;
 	border?: number;
 	position?: 'inline' | 'corner';

@@ -21,7 +21,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		id,
 		className,
 		style,
-		minWidth = 300,
+		minWidth,
 		minHeight = 'unset',
 		maxHeight = 400,
 		maxWidth = 400,
@@ -29,15 +29,16 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		close = true,
 		title,
 		dialogName,
+		titleBackgroundColor,
 		titleTextSize = 'l',
 		contentTextSize = 'm',
 		actions,
 		actionsBackgroundColor,
 		titleIcon,
 		titleIconFill = true,
-		titleBorderColor = 'var(--core-outline-primary)',
-		titleBorderWidth = 0,
-		actionsBorderColor = 'var(--core-outline-secondary)',
+		titleBorderColor = 'var(--core-fill-primary)',
+		titleBorderWidth,
+		actionsBorderColor = 'var(--core-fill-primary)',
 		actionsBorderWidth = 0,
 		autoBorderBottom = true,
 		onAction,
@@ -77,6 +78,8 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 	const contentSize = useObserveResize(contentRef);
 	const viewportSize = useObserveResize(contentWrapperRef);
 	const scrolls = contentSize.height > viewportSize.height;
+	const resolvedTitleBorderWidth = titleBorderWidth ?? (scrolls ? 1 : 0);
+	const titlePaddingBottom = scrolls ? 'var(--spacing-xs)' : '0px';
 
 	const setActionBorderWidth = useMemo(() => {
 		if (scrolls && actionsBorderWidth === 0 && autoBorderBottom) return '1px';
@@ -95,7 +98,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 	// memo dynamic css vars
 	const cssVars = useMemo(() => {
 		return {
-			'--modal-min-width': setStyle(minWidth),
+			'--modal-min-width': setStyle(minWidth, 'min(300px, 100%)'),
 			'--modal-min-height': setStyle(minHeight),
 			'--modal-max-height': setStyle(maxHeight),
 			'--modal-max-width': setStyle(maxWidth),
@@ -104,11 +107,14 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 			'--modal-border-radius': setStyle(borderRadius),
 			'--modal-border-width': setStyle(borderWidth),
 			'--modal-padding': setStyle(padding, 'var(--spacing-m) var(--spacing-m)'),
+			'--modal-title-padding': setStyle(padding, `var(--spacing-m) var(--spacing-m) ${titlePaddingBottom}`),
 			'--modal-padding-adjust': setPaddingAdjustment,
+			'--modal-content-margin-top': scrolls ? 'var(--spacing-xxs)' : '0px',
 			'--modal-background-color': backgroundColor,
 			'--modal-title-border-color': titleBorderColor,
-			'--modal-title-border-width': setStyle(titleBorderWidth),
-			'--modal-actions-background-color': actionsBackgroundColor,
+			'--modal-title-border-width': setStyle(resolvedTitleBorderWidth),
+			'--modal-title-background-color': titleBackgroundColor ?? backgroundColor,
+			'--modal-actions-background-color': actionsBackgroundColor ?? backgroundColor,
 			'--modal-actions-border-color': actionsBorderColor,
 			'--modal-scroll-handle': setStyle(scrollHandleColor),
 			'--modal-scroll-handle-hover': setStyle(scrollHandleColorHover),
@@ -125,10 +131,13 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		borderWidth,
 		padding,
 		setPaddingAdjustment,
-		titleBorderWidth,
+		scrolls,
+		titlePaddingBottom,
+		resolvedTitleBorderWidth,
 		titleBorderColor,
 		actionsBorderColor,
 		actionsBackgroundColor,
+		titleBackgroundColor,
 		backgroundColor,
 		scrollHandleColor,
 		scrollHandleColorHover,

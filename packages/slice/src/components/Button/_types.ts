@@ -2,11 +2,10 @@ import type { HTMLMotionProps, Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { SliceIcon } from '../Icon/_types';
-import type { ToolTip } from '../sharedTypes';
+import type { ButtonStyleProps, FixedSize, ToolTip } from '../sharedTypes';
 
-type ButtonBaseProps = {
+type ButtonBaseProps = ButtonStyleProps & {
 	children?: React.ReactNode;
-	size?: 'large' | 'medium' | 'small';
 	variant?: 'solid' | 'outline' | 'text';
 	state?: 'normal' | 'hover' | 'disabled';
 	width?: string;
@@ -21,11 +20,15 @@ type ButtonBaseProps = {
 	tooltip?: string;
 	iconSize?: number;
 	borderRadius?: number | string;
+	/** Overrides the variant border width in every state. Numbers use pixels. */
+	borderWidth?: number | string;
+	/** Overrides the variant border color in every state. */
+	borderColor?: ColorValue;
 	iconColor?: ColorValue;
 	backgroundColor?: ColorValue;
 	backgroundColorDisabled?: ColorValue;
 	textColor?: ColorValue;
-	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
+	textSize?: FixedSize;
 	transition?: Transition;
 	variants?: Variants;
 	initial?: string;
@@ -37,8 +40,6 @@ type ButtonBaseProps = {
 	duration?: number;
 	trigger?: boolean;
 	destructive?: boolean;
-	paddingRight?: number;
-	paddingLeft?: number;
 	link?: string;
 	target?: '_blank' | '_self' | '_parent' | '_top';
 	onToolTip?: (tip: ToolTip | null) => void;

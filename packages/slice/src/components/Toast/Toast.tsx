@@ -1,230 +1,244 @@
 'use client';
 
-import { AnimatePresence, type Transition, type Variants, motion } from 'motion/react';
-import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
-import { useTheme } from '../../hooks';
+import {
+	AnimatePresence,
+	type Transition,
+	type Variants,
+	motion,
+	useAnimationControls,
+	usePresence,
+} from 'motion/react';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { accessibleKeyDown, filterClasses, setStyle } from '../../utils/functions/misc';
+import { classNames, setStyle } from '../../utils/functions/misc';
+import { mergedPresenceMotionValues } from '../../utils/functions/misc';
+import { getWaterTransition } from '../../utils/styling/getWaterTransition';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import { Icon } from '../Icon';
 import { ProgressIndicator } from '../Progress';
 import css from './Toast.module.css';
-import { type ToastProps, ToastType } from './_types';
+import type { ToastProps } from './_types';
+import { useToastLifecycle } from './useToastLifecycle';
 
-const ToastBase = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
+const staticState = { opacity: 1, x: 0, y: 0, scale: 1, scaleX: 1, scaleY: 1, rotate: 0, rotateX: 0, rotateY: 0 };
+function ToastSurface({
+	children,
+	reduced,
+	variants,
+	transition,
+	forwardedRef,
+	...attributes
+}: Omit<React.HTMLAttributes<HTMLDivElement>, 'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart'> & {
+	reduced: boolean;
+	variants: Variants;
+	transition: Transition;
+	forwardedRef: React.ForwardedRef<HTMLDivElement>;
+}) {
+	const [present, safeToRemove] = usePresence();
+	const controls = useAnimationControls();
+	useEffect(() => {
+		if (reduced) {
+			controls.stop();
+			controls.set(staticState);
+			if (!present) safeToRemove?.();
+		} else if (present && variants.animate) void controls.start('animate');
+	}, [reduced, present, controls, variants, safeToRemove]);
+	return (
+		<motion.div
+			{...attributes}
+			ref={forwardedRef}
+			inert={!present}
+			aria-hidden={!present || undefined}
+			initial={reduced ? false : 'initial'}
+			animate={controls}
+			exit="exit"
+			variants={variants}
+			transition={transition}
+			onAnimationComplete={(definition) => {
+				if (definition === 'exit') safeToRemove?.();
+			}}
+		>
+			{children}
+		</motion.div>
+	);
+}
+
+function ToastComponent<T>(props: ToastProps<T>, forwardedRef: React.ForwardedRef<HTMLDivElement>) {
 	const {
-		notifId,
+		notificationId,
+		data,
+		onClick,
 		message = null,
 		textSize = 'm',
 		border = true,
 		padding,
-		radius = corners['corner-m'],
+		borderRadius = corners['corner-m'],
 		container = 'window',
 		showDelay = 0,
 		duration = 5000,
 		position = 'bottom',
 		offset = 24,
 		close = true,
-		progress = undefined,
-		type = ToastType.Info,
-		didHide = () => null,
-		...divAttributes
+		closeLabel = 'Dismiss notification',
+		progress = false,
+		type = 'info',
+		urgency = 'polite',
+		motionValues,
+		transition,
+		onShow,
+		onHide,
+		className,
+		style,
+		onMouseEnter,
+		onMouseLeave,
+		onFocus,
+		onBlur,
+		...attributes
 	} = props;
-	const theme = useTheme();
-
-	const { id: divId, className, style, ...rest } = divAttributes;
-	const divStyle = style ?? ({} as React.CSSProperties);
-	const divClass = className ? `${className}` : '';
-
-	const [ready, setReady] = useState<boolean>(false);
-	const [content, setContent] = useState<string | null>(null);
-	const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-	// schedule toast visibility from the incoming message and duration
+	const { notification, dismiss, interaction, finishExits } = useToastLifecycle({
+		notificationId,
+		message,
+		showDelay,
+		duration,
+		onShow,
+		onHide,
+	});
+	const theme = useTheme().current;
+	const reduced = usePrefersReducedMotion();
+	const root = useRef<HTMLDivElement | null>(null);
+	const previousFocus = useRef<HTMLElement | null>(null);
 	useEffect(() => {
-		if (timer.current) clearTimeout(timer.current);
-		const show = message && message.length > 0;
-		if (show) {
-			timer.current = setTimeout(() => {
-				setContent(message);
-				if (timer.current) clearTimeout(timer.current);
-				if (duration !== 'Infinite') {
-					timer.current = setTimeout(() => {
-						setReady(false);
-					}, duration);
-				}
-			}, showDelay);
-		} else {
-			setContent(null);
-		}
-		// clean up timers
-		return () => {
-			if (timer.current) clearTimeout(timer.current);
-		};
-	}, [message, showDelay, duration]);
-
-	// enable animation once content has been set
-	useEffect(() => setReady(content !== null), [content]);
-
-	// resolve the default padding based on whether the close affordance is shown
-	const defaultPadding = useMemo(() => {
-		return close
-			? 'var(--spacing-s) calc(var(--spacing-m) - var(--spacing-xs)) var(--spacing-s) var(--spacing-m)'
-			: 'var(--spacing-s) var(--spacing-m)';
-	}, [close]);
-
-	// resolve toast colors from the selected toast type
+		if (notification)
+			previousFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+	}, [notification]);
+	const rootToken = useRef<number | undefined>(undefined);
+	const setRef = (element: HTMLDivElement | null) => {
+		if (!element && rootToken.current !== notification?.token) return;
+		root.current = element;
+		rootToken.current = notification?.token;
+		if (typeof forwardedRef === 'function') forwardedRef(element);
+		else if (forwardedRef) forwardedRef.current = element;
+	};
 	const colorScheme = useMemo(() => {
-		switch (type) {
-			case 'success':
-				return {
-					border: 'var(--array-land-label)',
-					bg: 'var(--array-land)',
-					text: 'var(--array-land-label)',
-				};
-			case 'warning':
-				return {
-					border: 'var(--array-orange-label)',
-					bg: 'var(--array-orange)',
-					text: 'var(--array-orange-label)',
-				};
-			case 'error':
-				return {
-					border: 'var(--feedback-warning)',
-					bg: 'var(--array-magenta)',
-					text: 'var(--feedback-warning)',
-				};
-			default:
-				return {
-					border: 'var(--core-outline-primary)',
-					bg: 'var(--core-surface-secondary)',
-					text: 'var(--core-text-primary)',
-				};
-		}
+		if (type === 'success')
+			return { border: 'var(--array-land-label)', bg: 'var(--array-land)', text: 'var(--array-land-label)' };
+		if (type === 'warning')
+			return { border: 'var(--array-orange-label)', bg: 'var(--array-orange)', text: 'var(--array-orange-label)' };
+		if (type === 'error')
+			return { border: 'var(--feedback-warning)', bg: 'var(--array-magenta)', text: 'var(--feedback-warning)' };
+		return {
+			border: 'var(--core-outline-primary)',
+			bg: 'var(--core-surface-secondary)',
+			text: 'var(--core-text-primary)',
+		};
 	}, [type]);
-
-	// compose CSS custom properties for spacing and color treatment
-	const cssVars = useMemo(() => {
-		return {
-			'--toast-padding': padding === 0 ? '0px' : setStyle(padding, defaultPadding),
-			'--toast-background': colorScheme.bg,
-			'--toast-color': colorScheme.text,
-			'--toast-border': border ? `1px solid ${colorScheme.border}` : 'unset',
-			'--toast-border-radius': setStyle(radius, corners['corner-xs']),
-			'--toast-position': container === 'window' ? 'fixed' : 'absolute',
-		} as React.CSSProperties;
-	}, [padding, border, colorScheme, radius, defaultPadding, container]);
-
-	// resolve entry and exit variants from the toast position
 	const variants = useMemo(() => {
-		const positionShow = position === 'bottom' ? { bottom: offset } : { top: offset };
-		const positionHide = position === 'bottom' ? { bottom: -offset } : { top: -offset };
-		const transition: Transition = { ease: 'easeInOut', duration: 0.25 };
-		return {
-			initial: { opacity: 0, ...positionHide },
-			animate: { opacity: 1, ...positionShow, transition },
-			exit: { opacity: 0, ...positionHide, transition },
-		} as Variants;
-	}, [position, offset]);
-
-	// compose wrapper class names from size and caller overrides
-	const classNames = useMemo(() => {
-		return filterClasses([css.wrapper, css[textSize], divClass]);
-	}, [textSize, divClass]);
-
-	// dismiss the toast immediately when the close affordance is used
-	const handleClose = useCallback(() => {
-		setReady(false);
-	}, []);
-
-	// pause the auto-hide timer while the toast is hovered or focused
-	const handleMouseOver = useCallback(() => {
-		if (timer.current) clearTimeout(timer.current);
-	}, []);
-
-	// restart the auto-hide timer after hover or focus ends
-	const handleMouseOut = useCallback(() => {
-		if (timer.current) clearTimeout(timer.current);
-		if (duration !== 'Infinite') {
-			timer.current = setTimeout(() => {
-				setContent(null);
-			}, duration);
-		}
-	}, [duration]);
-
-	// memo show progress
-	const showProgress = useMemo(() => {
-		if (progress !== undefined) return progress;
-		return duration === 'Infinite';
-	}, [progress, duration]);
-
-	// resolve the close icon color from the selected toast type
-	const iconColor = useMemo(() => {
-		switch (type) {
-			case ToastType.Error:
-				return theme.current.colors['feedback-warning'];
-			case ToastType.Success:
-				return theme.current.colors['array-land-label'];
-			case ToastType.Warning:
-				return theme.current.colors['array-orange-label'];
-			default:
-				return theme.current.colors['core-text-primary'];
-		}
-	}, [type, theme]);
-
+		if (reduced) return { initial: staticState, animate: staticState, exit: staticState };
+		const movement = position === 'bottom' ? 8 : -8;
+		return mergedPresenceMotionValues(
+			{ initial: { opacity: 0, y: movement }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: movement } },
+			motionValues,
+		);
+	}, [reduced, position, motionValues]);
+	const resolvedTransition = useMemo(() => {
+		if (reduced) return { type: 'tween' as const, duration: 0, delay: 0 };
+		return getWaterTransition(theme.motion, transition);
+	}, [reduced, theme.motion, transition]);
+	const cssVars = {
+		'--toast-padding': setStyle(
+			padding,
+			close
+				? 'var(--spacing-s) calc(var(--spacing-m) - var(--spacing-xs)) var(--spacing-s) var(--spacing-m)'
+				: 'var(--spacing-s) var(--spacing-m)',
+		),
+		'--toast-background': colorScheme.bg,
+		'--toast-color': colorScheme.text,
+		'--toast-border': border ? `1px solid ${colorScheme.border}` : '0px solid transparent',
+		'--toast-border-radius': setStyle(borderRadius),
+		'--toast-position': container === 'window' ? 'fixed' : 'absolute',
+		'--toast-offset': setStyle(offset),
+	} as React.CSSProperties;
+	const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.stopPropagation();
+		if (root.current?.contains(document.activeElement) && previousFocus.current?.isConnected)
+			previousFocus.current.focus({ preventScroll: true });
+		dismiss('dismiss');
+	};
 	/* START.DEBUG */
 	useTrackRenders(props, 'Toast');
 	/* END.DEBUG */
-
 	return (
-		<AnimatePresence onExitComplete={() => didHide()} initial={false}>
-			{ready && (
-				<motion.div
-					key={notifId}
-					ref={ref}
-					id={divId}
-					className={classNames}
-					{...rest}
-					onMouseEnter={handleMouseOver}
-					onMouseLeave={handleMouseOut}
-					onFocus={handleMouseOver}
-					onBlur={handleMouseOut}
-					style={{
-						...divStyle,
-						...cssVars,
-						visibility: ready ? 'visible' : 'hidden',
-					}}
-					variants={variants}
-					initial={'initial'}
-					animate={'animate'}
-					exit={'exit'}
-				>
-					<div role={'status'} aria-live={'polite'} className={css.message}>
-						{showProgress && (
-							<div className={css.progress}>
-								<ProgressIndicator show inline color={iconColor} />
-							</div>
-						)}
-						{content}
-					</div>
-					{(duration === 'Infinite' || close) && (
-						<div
-							className={css.close}
-							tabIndex={0}
-							role={'button'}
-							aria-label={'dismiss message'}
-							onKeyDown={(e) => accessibleKeyDown(e, handleClose)}
-							onClick={handleClose}
-						>
-							<Icon name={'basic.cross'} size={20} strokeColor={iconColor} />
+		<>
+			<div
+				className={css.announcement}
+				role={urgency === 'assertive' ? 'alert' : 'status'}
+				aria-live={urgency}
+				aria-atomic="true"
+			>
+				{notification?.info.message ?? ''}
+			</div>
+			<AnimatePresence initial={false} onExitComplete={finishExits}>
+				{notification && (
+					<ToastSurface
+						key={notification.token}
+						{...attributes}
+						forwardedRef={setRef}
+						reduced={reduced}
+						variants={variants}
+						transition={resolvedTransition}
+						className={classNames(css.wrapper, css[textSize], className ?? '')}
+						style={{ ...style, ...cssVars, [position]: offset }}
+						onClick={onClick ? (event) => onClick(event, data) : undefined}
+						onMouseEnter={(event) => {
+							onMouseEnter?.(event);
+							interaction('hover', true);
+						}}
+						onMouseLeave={(event) => {
+							onMouseLeave?.(event);
+							interaction('hover', false);
+						}}
+						onFocus={(event) => {
+							onFocus?.(event);
+							interaction('focus', true);
+						}}
+						onBlur={(event) => {
+							onBlur?.(event);
+							if (!event.currentTarget.contains(event.relatedTarget as Node | null)) interaction('focus', false);
+						}}
+					>
+						{onClick && <button type="button" className={css.action} aria-label={notification.info.message} />}
+						<div aria-hidden="true" className={css.message}>
+							{progress && (
+								<div className={css.progress}>
+									{reduced ? (
+										<Icon name="arrows.refresh-cw" size={20} strokeColor={colorScheme.text} />
+									) : (
+										<ProgressIndicator decorative show inline color={colorScheme.text} />
+									)}
+								</div>
+							)}
+							{notification.info.message}
 						</div>
-					)}
-				</motion.div>
-			)}
-		</AnimatePresence>
+						{close && (
+							<button
+								type="button"
+								className={css.close}
+								aria-label={closeLabel.trim() || 'Dismiss notification'}
+								onClick={handleClose}
+							>
+								<Icon name="basic.cross" size={20} strokeColor={colorScheme.text} pointer={false} />
+							</button>
+						)}
+					</ToastSurface>
+				)}
+			</AnimatePresence>
+		</>
 	);
-});
-
+}
+const ToastBase = React.forwardRef(ToastComponent);
 ToastBase.displayName = 'Toast';
-
-export const Toast = React.memo(ToastBase);
+export const Toast = React.memo(ToastBase) as <T = unknown>(
+	props: ToastProps<T> & React.RefAttributes<HTMLDivElement>,
+) => React.JSX.Element;

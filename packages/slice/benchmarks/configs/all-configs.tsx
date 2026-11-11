@@ -1,3 +1,4 @@
+import { Attachment } from '../../src/components/Attachment';
 /**
  * Centralized benchmark configurations
  * Import configs directly without executing bench() calls
@@ -12,18 +13,20 @@ import {
 	Camera,
 	CheckBox,
 	ContentEditable,
+	DoneCheck,
 	Dot,
 	DraggablePanel,
 	DropDown,
 	ErrorSummary,
 	FileIcon,
-	FlexDiv,
-	Grouper,
+	FlexBox,
 	Icon,
 	IconButton,
-	Level,
+	AudioLevel,
 	DialogBox,
 	ModalController,
+	PopMenuController,
+	PopMenuGroup,
 	Overlay,
 	Pager,
 	ProgressIndicator,
@@ -41,13 +44,15 @@ import {
 	ToggleButton,
 	UploadArea,
 	Video,
+	VideoController,
 	Button,
 	ButtonBar,
 	Chip,
-	Label,
 	DataTable,
 	createColumnHelper,
 } from '../../src';
+import { videoActions } from '../../src/stores/video';
+import { modalActions } from '../../src/stores/modal';
 import { FileList } from '../../src/components/FileList';
 import { PromptInput } from '../../src/components/PromptInput/PromptInput';
 import { fireEvent } from '@testing-library/react';
@@ -292,18 +297,18 @@ export const checkBoxConfig: ComponentBenchmarkConfig = {
 	],
 };
 
-export const flexDivConfig: ComponentBenchmarkConfig = {
-	componentName: 'FlexDiv',
+export const flexBoxConfig: ComponentBenchmarkConfig = {
+	componentName: 'FlexBox',
 	tests: [
 		{
 			name: 'Mount Time',
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<FlexDiv>
+					<FlexBox>
 						<div>Child 1</div>
 						<div>Child 2</div>
-					</FlexDiv>,
+					</FlexBox>,
 					50,
 				),
 		},
@@ -312,16 +317,16 @@ export const flexDivConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<FlexDiv direction="column">
+					<FlexBox direction="column">
 						<div>Child 1</div>
 						<div>Child 2</div>
-					</FlexDiv>,
+					</FlexBox>,
 					(container) => {
 						container.rerender(
-							<FlexDiv direction="row">
+							<FlexBox direction="row">
 								<div>Child 1</div>
 								<div>Child 2</div>
-							</FlexDiv>,
+							</FlexBox>,
 						);
 					},
 					50,
@@ -330,23 +335,23 @@ export const flexDivConfig: ComponentBenchmarkConfig = {
 	],
 };
 
-export const levelConfig: ComponentBenchmarkConfig = {
-	componentName: 'Level',
+export const audioLevelConfig: ComponentBenchmarkConfig = {
+	componentName: 'AudioLevel',
 	tests: [
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<Level width={120} height={6} playing={false} />, 50),
+			fn: () => measureMountTime(<AudioLevel width={120} height={6} playing={false} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<Level width={120} height={6} playing={false} />,
+					<AudioLevel width={120} height={6} playing={false} />,
 					(container) => {
 						container.rerender(
-							<Level width={140} height={8} playing={false} maxIntensity={8} />,
+							<AudioLevel width={140} height={8} playing={false} barCount={8} />,
 						);
 					},
 					50,
@@ -355,7 +360,7 @@ export const levelConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<Level width={120} height={6} />, 10),
+			fn: () => measureMemoryDelta(<AudioLevel width={120} height={6} />, 10),
 		},
 	],
 };
@@ -417,6 +422,79 @@ export const dialogBoxConfig: ComponentBenchmarkConfig = {
 	],
 };
 
+export const popMenuGroupConfig: ComponentBenchmarkConfig = {
+	componentName: 'PopMenuGroup',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(<PopMenuGroup title="Actions" items={[{ label: 'Edit' }]} />, 50),
+		},
+		{
+			name: 'Typed item action',
+			type: 'event',
+			fn: () =>
+				measureEventResponseTime(
+					<PopMenuGroup
+						title="Documents"
+						items={[
+							{
+								id: 'open',
+								label: 'Open document',
+								data: { documentId: 'doc-42' },
+								onClick: (_event, item) => {
+									void item.data?.documentId;
+								},
+							},
+						]}
+						onClickItem={(_event, item) => {
+							void item.data?.documentId;
+						}}
+					/>,
+					(container) => fireEvent.click(container.getByRole('menuitem', { name: 'Open document' })),
+					50,
+				),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(<PopMenuGroup title="Actions" items={[{ label: 'Edit' }]} />, 10),
+		},
+	],
+};
+
+export const popMenuControllerConfig: ComponentBenchmarkConfig = {
+	componentName: 'PopMenuController',
+	tests: [
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<PopMenuController />, 50) },
+		{ name: 'Memory', type: 'memory', fn: () => measureMemoryDelta(<PopMenuController />, 10) },
+	],
+};
+
+function ModalReplacementBenchmark() {
+	React.useEffect(() => {
+		modalActions.show({
+			component: DialogBox,
+			id: 'benchmark',
+			props: {
+				title: 'First dialog',
+				children: (
+					<button
+						type="button"
+						onClick={() =>
+							modalActions.show({ component: DialogBox, id: 'benchmark', props: { title: 'Next dialog' } })
+						}
+					>
+						Replace benchmark dialog
+					</button>
+				),
+			},
+		});
+		return () => modalActions.clear();
+	}, []);
+	return <ModalController draggable={false} transition={{ duration: 0 }} />;
+}
+
 export const modalControllerConfig: ComponentBenchmarkConfig = {
 	componentName: 'ModalController',
 	tests: [
@@ -432,10 +510,18 @@ export const modalControllerConfig: ComponentBenchmarkConfig = {
 				measureRerenderTime(
 					<ModalController draggable={false} overlayOpacity={0.5} />,
 					(container) => {
-						container.rerender(
-							<ModalController draggable={true} overlayOpacity={0.8} />,
-						);
+						container.rerender(<ModalController draggable={true} overlayOpacity={0.8} />);
 					},
+					50,
+				),
+		},
+		{
+			name: 'Replace active dialog',
+			type: 'event',
+			fn: () =>
+				measureEventResponseTime(
+					<ModalReplacementBenchmark />,
+					(container) => fireEvent.click(container.getByRole('button', { name: 'Replace benchmark dialog' })),
 					50,
 				),
 		},
@@ -509,6 +595,7 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 					<UploadArea
 						title="Upload Files"
 						message="Drop files here"
+						acceptedTypes={['pdf', 'image/*']}
 						showProgress={false}
 					/>,
 					50,
@@ -522,13 +609,17 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 					<UploadArea
 						title="Upload Files"
 						message="Drop files here"
+						acceptedTypes={['pdf', 'image/*']}
 						showProgress={false}
 					/>,
 					(container) => {
 						container.rerender(
 							<UploadArea
 								title="Upload Images"
+								fileListProps={{ variant: 'attachments', attachmentSize: 's' }}
 								message="Click to upload"
+								busy
+								files={[{ id: 'report', file: 'report.pdf', uploading: true, progress: 45 }]}
 								multiple={false}
 								showProgress={false}
 							/>,
@@ -542,7 +633,32 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<UploadArea title="Upload Files" message="Drop files here" />,
+					<UploadArea title="Upload Files" message="Drop files here" acceptedTypes={['pdf', 'image/*']} />,
+					10,
+				),
+		},
+	],
+};
+function VideoControllerBenchmark({ padding = 64 }: { padding?: number }) {
+	React.useEffect(() => {
+		videoActions.show({ component: Video, props: { width: 320, height: 180, playing: false } });
+		return () => videoActions.clear();
+	}, []);
+	return <VideoController draggable={false} padding={padding} transition={{ duration: 0 }} />;
+}
+export const videoControllerConfig: ComponentBenchmarkConfig = {
+	componentName: 'VideoController',
+	tests: [
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<VideoControllerBenchmark />, 10) },
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<VideoControllerBenchmark />,
+					(container) => {
+						container.rerender(<VideoControllerBenchmark padding={32} />);
+					},
 					10,
 				),
 		},
@@ -552,6 +668,16 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 export const videoConfig: ComponentBenchmarkConfig = {
 	componentName: 'Video',
 	tests: [
+		{
+			name: 'Render Function Controls',
+			type: 'mount',
+			fn: () => measureMountTime(<Video controls="custom" showProgressIndicator={false}>{({playing, toggleMute}) => <Button onClick={toggleMute}>{playing ? 'Playing' : 'Paused'}</Button>}</Video>, 25),
+		},
+		{
+			name: 'Explicit Play Only',
+			type: 'mount',
+			fn: () => measureMountTime(<Video width={320} height={180} controls="default" customControls={{ play: true }} showProgressIndicator={false} />, 25),
+		},
 		{
 			name: 'Mount Time',
 			type: 'mount',
@@ -648,16 +774,16 @@ export const fileIconConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<FileIcon name="pdf" size={24} />, 50),
+			fn: () => measureMountTime(<FileIcon filename="report.PDF" size={24} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<FileIcon name="pdf" size={24} />,
+					<FileIcon filename="report.PDF" size={24} />,
 					(container) => {
-						container.rerender(<FileIcon name="sheet" size={24} />);
+						container.rerender(<FileIcon filename="report.XLSX" size={24} />);
 					},
 					50,
 				),
@@ -665,7 +791,47 @@ export const fileIconConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<FileIcon name="image" size={24} />, 10),
+			fn: () => measureMemoryDelta(<FileIcon filename="photo.webp" size={24} />, 10),
+		},
+	],
+};
+
+export const attachmentConfig: ComponentBenchmarkConfig = {
+	componentName: 'Attachment',
+	tests: [
+		{
+			name: 'Upload Error',
+			type: 'mount',
+			fn: () => measureMountTime(<Attachment content={{file: 'report.pdf', error: 'Upload failed. Please try again.'}} />, 50),
+		},
+		{
+			name: 'Text Preview Setup',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<Attachment content={{file: new File(['Preview text for an uploaded document.'], 'notes.txt', {type: 'text/plain'})}} />,
+				50,
+			),
+		},
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(<Attachment content="Clipboard preview" />, 50),
+		},
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () => measureRerenderTime(
+				<Attachment content={{file: 'report.pdf', uploading: true, progress: 25}} />,
+				(container) => {
+					container.rerender(<Attachment content={{file: 'report.pdf', uploading: true, progress: 75}} />);
+				},
+				50,
+			),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(<Attachment content="Clipboard preview" />, 10),
 		},
 	],
 };
@@ -673,12 +839,25 @@ export const fileIconConfig: ComponentBenchmarkConfig = {
 export const fileListConfig: ComponentBenchmarkConfig = {
 	componentName: 'FileList',
 	tests: [
+        {
+            name: 'Raw Files',
+            type: 'mount',
+            fn: () => measureMountTime(<FileList files={[new File(['pdf'], 'report.pdf')]} />, 50),
+        },
+		{
+			name: 'Attachment Cards',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<FileList variant="attachments" files={[{id: 'report', file: 'report.pdf'}, {id: 'upload', file: 'notes.md', uploading: true, progress: 45}]} />,
+				50,
+			),
+		},
 		{
 			name: 'Mount Time',
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<FileList files={[{ file: 'document.pdf' }, { file: 'notes.txt' }]} />,
+					<FileList files={[{ id: 'document', file: 'document.pdf' }, { id: 'notes', file: 'notes.txt' }]} />,
 					50,
 				),
 		},
@@ -687,13 +866,13 @@ export const fileListConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<FileList files={[{ file: 'document.pdf' }, { file: 'notes.txt' }]} />,
+					<FileList files={[{ id: 'document', file: 'document.pdf' }, { id: 'notes', file: 'notes.txt' }]} />,
 					(container) => {
 						container.rerender(
 							<FileList
 								files={[
-									{ file: 'document.pdf', uploading: true, progress: 0.5 },
-									{ file: 'notes.txt', error: 'Upload failed' },
+									{ id: 'document', file: 'document.pdf', uploading: true, progress: 50 },
+									{ id: 'notes', file: 'notes.txt', error: 'Upload failed' },
 								]}
 							/>,
 						);
@@ -706,7 +885,7 @@ export const fileListConfig: ComponentBenchmarkConfig = {
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<FileList files={[{ file: 'document.pdf' }, { file: 'notes.txt' }]} />,
+					<FileList files={[{ id: 'document', file: 'document.pdf' }, { id: 'notes', file: 'notes.txt' }]} />,
 					10,
 				),
 		},
@@ -926,34 +1105,6 @@ export const chipConfig: ComponentBenchmarkConfig = {
 	],
 };
 
-export const labelConfig: ComponentBenchmarkConfig = {
-	componentName: 'Label',
-	tests: [
-		{
-			name: 'Mount Time',
-			type: 'mount',
-			fn: () => measureMountTime(<Label label="Label" />, 50),
-		},
-		{
-			name: 'Re-render',
-			type: 'rerender',
-			fn: () =>
-				measureRerenderTime(
-					<Label label="Initial" />,
-					(container) => {
-						container.rerender(<Label label="Updated Label Text" />);
-					},
-					50,
-				),
-		},
-		{
-			name: 'Memory',
-			type: 'memory',
-			fn: () => measureMemoryDelta(<Label label="Test Label" />, 10),
-		},
-	],
-};
-
 export const contentEditableConfig: ComponentBenchmarkConfig = {
 	componentName: 'ContentEditable',
 	tests: [
@@ -1037,7 +1188,7 @@ export const draggablePanelConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<DraggablePanel dragsRight={true} isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
+					<DraggablePanel drags="right" isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
 						<div>Panel Content</div>
 					</DraggablePanel>,
 					50,
@@ -1048,12 +1199,12 @@ export const draggablePanelConfig: ComponentBenchmarkConfig = {
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<DraggablePanel dragsRight={true} isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
+					<DraggablePanel drags="right" isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
 						<div>Content</div>
 					</DraggablePanel>,
 					(container) => {
 						container.rerender(
-							<DraggablePanel dragsRight={true} isClosed={true} sizeConstraints={{min:100, max:0.9, initial:250}}>
+							<DraggablePanel drags="right" isClosed={true} sizeConstraints={{min:100, max:0.9, initial:250}}>
 								<div>Content</div>
 							</DraggablePanel>,
 						);
@@ -1061,12 +1212,24 @@ export const draggablePanelConfig: ComponentBenchmarkConfig = {
 					50,
 				),
 		},
+        {
+            name: 'Event Response',
+            type: 'event',
+            fn: () => measureEventResponseTime(
+                <DraggablePanel isClosed={false} sizeConstraints={{initial:250,min:100,max:500}} />,
+                (container) => {
+                    const rail = container.container.querySelector('[role="separator"]');
+                    if (rail) fireEvent.keyDown(rail, {key:'ArrowRight'});
+                },
+                50,
+            ),
+        },
 		{
 			name: 'Memory',
 			type: 'memory',
 			fn: () =>
 				measureMemoryDelta(
-					<DraggablePanel dragsRight={true} isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
+					<DraggablePanel drags="right" isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
 						<div>Panel Content</div>
 					</DraggablePanel>,
 					10,
@@ -1190,6 +1353,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 						columnDefinitions={mockDataTableColumns}
 						tableData={mockDataTableRows}
 						getRowId={(row) => row.id}
+                        onRowClick={() => {}}
 					/>,
 					50,
 				),
@@ -1203,6 +1367,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 						columnDefinitions={mockDataTableColumns}
 						tableData={mockDataTableRows}
 						getRowId={(row) => row.id}
+                        onRowClick={() => {}}
 					/>,
 					(container) => {
 						container.rerender(
@@ -1210,6 +1375,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 								columnDefinitions={mockDataTableColumns}
 								tableData={[...mockDataTableRows].reverse()}
 								getRowId={(row) => row.id}
+                        onRowClick={() => {}}
 							/>,
 						);
 					},
@@ -1225,6 +1391,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 						columnDefinitions={mockDataTableColumns}
 						tableData={mockDataTableRows}
 						getRowId={(row) => row.id}
+                        onRowClick={() => {}}
 					/>,
 					10,
 				),
@@ -1261,44 +1428,6 @@ export const errorSummaryConfig: ComponentBenchmarkConfig = {
 			name: 'Memory',
 			type: 'memory',
 			fn: () => measureMemoryDelta(<ErrorSummary entries={mockErrors} />, 10),
-		},
-	],
-};
-
-export const grouperConfig: ComponentBenchmarkConfig = {
-	componentName: 'Grouper',
-	tests: [
-		{
-			name: 'Mount Time',
-			type: 'mount',
-			fn: () =>
-				measureMountTime(
-					<Grouper title={"title1"} open={false}/>,
-					50,
-				),
-		},
-		{
-			name: 'Re-render',
-			type: 'rerender',
-			fn: () =>
-				measureRerenderTime(
-					<Grouper title={"title1"} open={false} />,
-					(container) => {
-						container.rerender(
-							<Grouper title={"title1"} open={true} />,
-						);
-					},
-					50,
-				),
-		},
-		{
-			name: 'Memory',
-			type: 'memory',
-			fn: () =>
-				measureMemoryDelta(
-					<Grouper title={"title1"} open={false} />,
-					10,
-				),
 		},
 	],
 };
@@ -1350,17 +1479,25 @@ export const promptInputConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<PromptInput value="Test prompt" />, 50),
+			fn: () =>
+				measureMountTime(<PromptInput value="Test prompt" onSubmit={() => {}} pasteAttachmentThreshold={1000} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<PromptInput value="Initial prompt" />,
+					<PromptInput value="Initial prompt" onSubmit={() => {}} />,
 					(container) => {
 						container.rerender(
-							<PromptInput value="Updated prompt" working={true} />,
+							<PromptInput
+								value="Updated prompt"
+								working
+								stopEnabled
+								pasteAttachmentThreshold={1000}
+								attachments={[{ id: 'report', file: 'report.pdf' }]}
+								fileListProps={{ variant: 'attachments', attachmentSize: 's' }}
+							/>,
 						);
 					},
 					50,
@@ -1369,15 +1506,10 @@ export const promptInputConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () =>
-				measureMemoryDelta(
-					<PromptInput value="Memory benchmark prompt" />,
-					10,
-				),
+			fn: () => measureMemoryDelta(<PromptInput value="Memory benchmark prompt" />, 10),
 		},
 	],
 };
-
 export const overlayConfig: ComponentBenchmarkConfig = {
 	componentName: 'Overlay',
 	tests: [
@@ -1457,22 +1589,59 @@ export const pagerConfig: ComponentBenchmarkConfig = {
 	],
 };
 
+export const doneCheckConfig: ComponentBenchmarkConfig = {
+	componentName: 'DoneCheck',
+	tests: [
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<DoneCheck play={false} />, 50) },
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<DoneCheck play={false} size={24} />,
+					(container) => {
+						container.rerender(<DoneCheck play={false} size={48} statusLabel="Saved" />);
+					},
+					50,
+				),
+		},
+	],
+};
+
 export const progressConfig: ComponentBenchmarkConfig = {
-	componentName: 'Progress',
+	componentName: 'ProgressIndicator',
 	tests: [
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<ProgressIndicator size={20} />, 50),
+			fn: () => measureMountTime(<ProgressIndicator show inline decorative size={20} />, 50),
 		},
 		{
 			name: 'Re-render',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
-					<ProgressIndicator size={20} />,
+					<ProgressIndicator
+						show
+						inline
+						decorative
+						displayLabel
+						label="Loading files"
+						labelPosition="left"
+						size={20}
+					/>,
 					(container) => {
-						container.rerender(<ProgressIndicator size={64} />);
+						container.rerender(
+							<ProgressIndicator
+								show
+								inline
+								decorative
+								displayLabel
+								label="Loading files"
+								labelPosition="right"
+								size={64}
+							/>,
+						);
 					},
 					50,
 				),
@@ -1480,7 +1649,7 @@ export const progressConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Memory',
 			type: 'memory',
-			fn: () => measureMemoryDelta(<ProgressIndicator size={20} />, 10),
+			fn: () => measureMemoryDelta(<ProgressIndicator show inline decorative size={20} />, 10),
 		},
 	],
 };
@@ -1775,7 +1944,7 @@ export const tipConfig: ComponentBenchmarkConfig = {
 				),
 		},
 		{
-			name: 'Re-render',
+			name: 'Replace pending request',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
@@ -1795,6 +1964,16 @@ export const tipConfig: ComponentBenchmarkConfig = {
 							/>,
 						);
 					},
+					50,
+				),
+		},
+		{
+			name: 'Cancel pending tip on click',
+			type: 'event',
+			fn: () =>
+				measureEventResponseTime(
+					<Tip tip={{ payload: { label: 'Pending tip' } }} coords={{ x: 0, y: 0 }} showDelay={60000} />,
+					() => fireEvent.click(document.body),
 					50,
 				),
 		},
@@ -1833,12 +2012,15 @@ export const toastConfig: ComponentBenchmarkConfig = {
 				),
 		},
 		{
-			name: 'Re-render',
+			name: 'Repeat notification identity',
 			type: 'rerender',
 			fn: () =>
 				measureRerenderTime(
 					<Toast
-						message="Saving..."
+						message="Saved"
+						notificationId="first"
+						data={{ documentId: 'first' }}
+						onClick={() => {}}
 						type="info"
 						showDelay={60000}
 						duration={5000}
@@ -1846,7 +2028,10 @@ export const toastConfig: ComponentBenchmarkConfig = {
 					(container) => {
 						container.rerender(
 							<Toast
-								message="Save failed"
+								message="Saved"
+								notificationId="second"
+								data={{ documentId: 'second' }}
+								onClick={() => {}}
 								type="error"
 								showDelay={60000}
 								duration={5000}
@@ -1889,16 +2074,19 @@ export const allBenchmarkConfigs = [
 	errorSummaryConfig,
 	fileIconConfig,
 	fileListConfig,
-	flexDivConfig,
-	grouperConfig,
+	attachmentConfig,
+	flexBoxConfig,
 	iconConfig,
 	iconButtonConfig,
-	levelConfig,
+	audioLevelConfig,
 	dialogBoxConfig,
 	modalControllerConfig,
+	popMenuControllerConfig,
+	popMenuGroupConfig,
 	promptInputConfig,
 	overlayConfig,
 	pagerConfig,
+	doneCheckConfig,
 	progressConfig,
 	radioButtonConfig,
 	radioButtonListConfig,
@@ -1914,8 +2102,8 @@ export const allBenchmarkConfigs = [
 	buttonConfig,
 	buttonBarConfig,
 	chipConfig,
-	labelConfig,
 	toggleButtonConfig,
 	uploadAreaConfig,
 	videoConfig,
+	videoControllerConfig,
 ];
