@@ -89,6 +89,7 @@ const valueColumn: ColumnDefinition<StyleTokenRow> = {
 
 const usageColumn: ColumnDefinition<StyleTokenRow> = {
 	id: 'col-usage',
+	sort: false,
 	title: 'Example Usage',
 	justify: 'center',
 	renderCell: ({ row }: CellContext<StyleTokenRow, unknown>) => (
@@ -109,6 +110,7 @@ export const spacingColumnDefinitions: ColumnDefinition<StyleTokenRow>[] = [
 	valueColumn,
 	{
 		id: 'col-preview',
+		sort: false,
 		title: 'Preview',
 		justify: 'start',
 		width: 160,
@@ -134,6 +136,7 @@ export const cornerColumnDefinitions: ColumnDefinition<StyleTokenRow>[] = [
 	valueColumn,
 	{
 		id: 'col-preview',
+		sort: false,
 		title: 'Preview',
 		justify: 'center',
 		width: 110,
@@ -162,6 +165,7 @@ export const elevationColumnDefinitions: ColumnDefinition<StyleTokenRow>[] = [
 	{ ...valueColumn, width: 90 },
 	{
 		id: 'col-description',
+		sort: false,
 		title: 'Use For',
 		justify: 'start',
 		width: 260,

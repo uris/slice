@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, expectTypeOf, it, vi } from 'vitest';
 import type { ColumnDefinition } from './_types';
-import { createColumnHelper, resolveAlignValue, resolveColumnValue, resolveDragHandleXPos } from './columnHelper';
+import { createColumnHelper, resolveAlignValue, resolveColumnValue, resolveColumnSortKey, resolveDragHandleXPos } from './columnHelper';
 
-type Row = { name: string; age: number };
+type Row = { name: string; age: number; nickname?: string };
 
 function rect(overrides: Partial<DOMRect> = {}): DOMRect {
 	return {
@@ -46,7 +46,7 @@ describe('resolveColumnValue', () => {
 	});
 
 	it('returns undefined for a purely presentational column with neither key nor accessor', () => {
-		const col: ColumnDefinition<Row> = { id: 'actions', title: 'Actions' };
+		const col: ColumnDefinition<Row> = { id: 'actions', title: 'Actions', sort: false };
 		expect(resolveColumnValue(col, row)).toBeUndefined();
 	});
 });
@@ -109,5 +109,41 @@ describe('resolveDragHandleXPos', () => {
 
 		// x = 150 - 100 - 0 + 0 = 50; left-edge position => just x
 		expect(handle.style.left).toBe('50px');
+	});
+});
+
+
+describe('column defaults', () => {
+	it('reads id fields and preserves explicit keys and accessors', () => {
+		const row = { name: 'Ada', age: 30 };
+		expect(resolveColumnValue({ id: 'name', title: 'Name' }, row)).toBe('Ada');
+		expect(resolveColumnValue({ id: 'name', key: 'age', title: 'Age' }, row)).toBe(30);
+		expect(resolveColumnValue({ id: 'name', accessor: () => 'computed', title: 'Name' }, row)).toBe('computed');
+	});
+	it('resolves default, enabled, disabled and overridden sort fields', () => {
+		const column: ColumnDefinition<Row> = { id: 'name', title: 'Name' };
+		expect(resolveColumnSortKey(column)).toBe('name');
+		expect(resolveColumnSortKey({ ...column, sort: true })).toBe('name');
+		expect(resolveColumnSortKey<Row>({ id: 'alias', key: 'age' })).toBe('age');
+		expect(resolveColumnSortKey({ ...column, sort: 'age' })).toBe('age');
+		expect(resolveColumnSortKey({ ...column, sort: false })).toBeUndefined();
+	});
+	it('infers cell values from the id', () => {
+		const column: ColumnDefinition<Row> = {
+			id: 'age', title: 'Age',
+			renderCell: ({ value }) => {
+				expectTypeOf(value).toEqualTypeOf<number>();
+				return value.toFixed(0);
+			},
+		};
+		expect(column.id).toBe('age');
+		const optional: ColumnDefinition<Row> = {
+			id: 'nickname', title: 'Nickname',
+			renderCell: ({ value }) => {
+				expectTypeOf(value).toEqualTypeOf<string | undefined>();
+				return value ?? 'Anonymous';
+			},
+		};
+		expect(optional.id).toBe('nickname');
 	});
 });

@@ -63,6 +63,7 @@ export const typeTokenColumnDefinitions: ColumnDefinition<TypeTokenRow>[] = [
 	},
 	{
 		id: 'col-3',
+		sort: false,
 		title: 'Example Usage',
 		justify: 'center',
 		renderCell: ({ row }) => (

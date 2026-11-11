@@ -13,7 +13,7 @@ import type { CellContext, ColumnDefinition, DataTableProps, HeaderContext, Sort
 import { useReorderColumns } from './_useReorderColumns';
 import { useResizeColumn } from './_useResizeColumn';
 import { useRowWindow } from './_useRowWindow';
-import { resolveAlignValue, resolveColumnValue } from './columnHelper';
+import { resolveAlignValue, resolveColumnDefinition, resolveColumnSortKey, resolveColumnValue } from './columnHelper';
 import { compareValues } from './compareValues';
 
 export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
@@ -218,7 +218,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	const rows = useMemo(() => {
 		const sortFunction = (a: T, b: T) => {
 			if (sortKey?.key === undefined) return 0;
-			const compare = orderedColumns.find((column) => column.sort === sortKey.key)?.compare;
+			const compare = orderedColumns.find((column) => resolveColumnSortKey(column) === sortKey.key)?.compare;
 			if (compare) return compare(a, b) * (sortKey.dir === 'desc' ? -1 : 1);
 			const { key, dir } = sortKey;
 			return compareValues(a[key], b[key], dir);
@@ -296,8 +296,9 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	// resolve Aria sort
 	const resolveAriaSort = useCallback(
 		(column: ColumnDefinition<T>) => {
-			const sortable = column.sort !== undefined;
-			const isSortedColumn = sortable && sortKey?.key === column.sort;
+			const field = resolveColumnSortKey(column);
+			const sortable = field !== undefined;
+			const isSortedColumn = sortable && sortKey?.key === field;
 			if (!sortable) return undefined;
 			if (isSortedColumn) return sortKey?.dir === 'asc' ? 'ascending' : 'descending';
 			return undefined;
@@ -348,9 +349,13 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	const renderHeader = useCallback((col: ColumnDefinition<T, unknown>, sortKey: SortKey<T>) => {
 		if (col.renderHeader) {
 			const renderFn = col.renderHeader as (ctx: HeaderContext<T, unknown>) => ReactNode;
-			return renderFn({ column: col, sortKey });
+			const column = resolveColumnDefinition(col);
+			const sorted = column.sort !== undefined && sortKey?.key === column.sort;
+			let ascending: boolean | undefined;
+			if (sorted) ascending = sortKey?.dir === 'asc';
+			return renderFn({ column, sortKey, sorted, ascending });
 		}
-		return <DefaultHeaderRenderer<T> col={col} sortKey={sortKey} />;
+		return <DefaultHeaderRenderer<T> col={resolveColumnDefinition(col)} sortKey={sortKey} />;
 	}, []);
 
 	// render body cells. Same reasoning as renderHeader above for the cast.
@@ -382,7 +387,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 					<tr>
 						{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
 							const padding = setStyle(col.padding, 'var(--spacing-m)');
-							const sortable = col.sort !== undefined;
+							const sortable = resolveColumnSortKey(col) !== undefined;
 							const cursor = sortable ? 'pointer' : 'default';
 							const last = colIndex === orderedColumns.length - 1;
 							const background = draggedColId === col.id ? backgroundColor : headerBackgroundColor;
@@ -393,7 +398,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 									aria-label={col.title}
 									className={`${styles.baseCell} ${styles.headerCell} ${styles.m}`}
 									onClick={(event) => {
-										if (!isInteractiveTarget(event.target, event.currentTarget)) handleSort(col.sort);
+										if (!isInteractiveTarget(event.target, event.currentTarget)) handleSort(resolveColumnSortKey(col));
 									}}
 									onKeyDown={(event) => {
 										if (event.target !== event.currentTarget) return;
@@ -408,7 +413,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 											onColumnReorder?.(next);
 											return;
 										}
-										accessibleKeyDown(event, () => handleSort(col.sort));
+										accessibleKeyDown(event, () => handleSort(resolveColumnSortKey(col)));
 									}}
 									style={{ cursor, '--table-header-cell-background': background } as React.CSSProperties}
 									tabIndex={sortable || colReorder ? 0 : undefined}
@@ -543,7 +548,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 }
 
 interface DefaultHeaderRendererProps<T> {
-	col: ColumnDefinition<T, unknown>;
+	col: HeaderContext<T, unknown>['column'];
 	sortKey: SortKey<T>;
 }
 export function DefaultHeaderRenderer<T>(props: Readonly<DefaultHeaderRendererProps<T>>) {

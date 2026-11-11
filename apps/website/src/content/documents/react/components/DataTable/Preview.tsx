@@ -9,7 +9,6 @@ import {
 	type HeaderContext,
 	Icon,
 	Preset,
-	type SliceIcon,
 } from '@apple-pie/slice';
 import { useToastActions } from '@apple-pie/slice/stores';
 
@@ -23,28 +22,19 @@ const people: Person[] = [
 	{ id: 6, name: 'Jordan Patel', team: 'Product', salary: 106000, photo: '/images/profile-male-2.jpg' },
 ];
 const columns: ColumnDefinition<Person>[] = [
-	{ id: 'name', key: 'name', title: 'Name', sort: 'name' },
-	{ id: 'team', key: 'team', title: 'Team', sort: 'team' },
-	{ id: 'salary', key: 'salary', title: 'Salary', sort: 'salary' },
+	{ id: 'name', title: 'Name' },
+	{ id: 'team', title: 'Team' },
+	{ id: 'salary', title: 'Salary' },
 ];
 const customColumns: ColumnDefinition<Person>[] = [
 	{
 		id: 'name',
-		key: 'name',
 		title: 'Name',
-		sort: 'name',
-		width: 220,
 		renderHeader: CustomHeader,
 		renderCell: ({ row }) => {
 			return (
 				<FlexBox preset={Preset.Row} gap={8}>
-					<Avatar
-						name={row.name}
-						image={row.photo}
-						borderWidth={1}
-						borderColor={'core-text-primary'}
-						lazyLoad={false}
-					/>
+					<Avatar name={row.name} image={row.photo} borderWidth={1} borderColor={'core-text-primary'} />
 					{row.name}
 				</FlexBox>
 			);
@@ -52,21 +42,14 @@ const customColumns: ColumnDefinition<Person>[] = [
 	},
 	{
 		id: 'team',
-		key: 'team',
 		title: 'Team',
-		width: 180,
-		justify: 'start',
 		renderHeader: CustomHeader,
 		renderCell: ({ value }) => <Chip label={value} />,
 	},
 	{
-		key: 'salary',
 		id: 'salary',
 		title: 'Salary',
-		sort: 'salary',
-		width: 160,
 		justify: 'end',
-		justifyHeader: 'end',
 		renderHeader: CustomHeader,
 		renderCell: ({ value }) => (
 			<span style={{ color: 'var(--core-text-primary)' }}>${value.toLocaleString('en-US')}</span>
@@ -75,14 +58,12 @@ const customColumns: ColumnDefinition<Person>[] = [
 ];
 
 function CustomHeader<V>(context: HeaderContext<Person, V>) {
-	const { column, sortKey } = context;
+	const { column, sorted, ascending: asc } = context;
 	if (!column) return null;
-	const sorted = column.sort !== undefined && sortKey?.key === column.sort;
-	const sortIcon: SliceIcon = sortKey?.dir === 'asc' ? 'arrows.chevron-down' : 'arrows.chevron-up';
 	return (
 		<FlexBox preset={Preset.Row} justify={column.justifyHeader ?? column.justify ?? 'start'} gap={4}>
 			<Title>{column.title}</Title>
-			{sorted && <Icon name={sortIcon} size={16} decorative />}
+			{sorted && <Icon name={asc ? 'arrows.chevron-down' : 'arrows.chevron-up'} size={16} />}
 		</FlexBox>
 	);
 }

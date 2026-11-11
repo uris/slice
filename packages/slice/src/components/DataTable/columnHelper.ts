@@ -1,4 +1,4 @@
-import type { AccessorColumn, ColumnDefinition } from './_types';
+import type { AccessorColumn, ColumnDefinition, ResolvedColumnDefinition } from './_types';
 
 /*
  * createColumnHelper<T>() gives you back a single builder, `accessor`, that
@@ -12,12 +12,24 @@ export function createColumnHelper<T>() {
 	};
 }
 
-/* resolve a column's cell value for a given row: via `key` when present,
- * via `accessor` when present, or undefined for a purely presentational column. */
+/* Accessors take precedence; field lookup defaults to the column id. */
 export function resolveColumnValue<T>(col: ColumnDefinition<T, any>, row: T): any {
 	if (col.accessor) return col.accessor(row);
-	if (col.key !== undefined) return row[col.key];
-	return undefined;
+	return row[(col.key ?? col.id) as keyof T];
+}
+
+/** Resolve the row field used by headers, comparators, and persisted sorts. */
+export function resolveColumnSortKey<T>(col: { id: string; key?: keyof T; sort?: boolean | keyof T }):
+	| keyof T
+	| undefined {
+	if (col.sort === false) return undefined;
+	if (col.sort === undefined || col.sort === true) return (col.key ?? col.id) as keyof T;
+	return col.sort;
+}
+
+/** Keep input shorthand out of renderer contexts. */
+export function resolveColumnDefinition<T, V>(col: ColumnDefinition<T, V>): ResolvedColumnDefinition<T, V> {
+	return { ...col, sort: resolveColumnSortKey<T>(col) } as ResolvedColumnDefinition<T, V>;
 }
 
 /* resolve column alignment values to flex box values */

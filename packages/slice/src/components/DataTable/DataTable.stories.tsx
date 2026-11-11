@@ -14,7 +14,7 @@ import { corners } from '../../theme/corners/corners';
 import { DataTable } from './DataTable';
 import { manyRows, sampleTableColumnDefinitions, sampleTableData } from './_data';
 import type { SampleTableData } from './_data';
-import type { ColumnDefinition } from './_types';
+import type { ColumnDefinition, HeaderContext } from './_types';
 import { type DataTableViewState, applyDataTableViewState } from './viewState';
 
 // storybook needs the typed table to render properly
@@ -88,14 +88,15 @@ export const ColumnResizeAndReorder: StoryObj<typeof TypedDataTable> = {
 	},
 };
 
-// a purely presentational column (no key/accessor/sort) and a column with a
+// a purely presentational column (no key/accessor, sorting disabled) and a column with a
 // custom renderHeader - neither exists in the shared sample columns, so
-// resolveColumnValue's "neither" branch, DefaultCellRenderer's undefined-value
+// resolveColumnValue's missing-field lookup, DefaultCellRenderer's undefined-value
 // fallback, the non-sortable header branch, and the renderHeader escape hatch
 // are all otherwise unreachable.
 const plainAndCustomHeaderColumns: ColumnDefinition<SampleTableData>[] = [
 	{
 		id: 'plain',
+		sort: false,
 		title: 'Actions',
 	},
 	{
@@ -258,7 +259,7 @@ const reviewRows: ReviewRow[] = [
 const reviewColumns: ColumnDefinition<ReviewRow>[] = [
 	{ id: 'name', key: 'name', title: 'Name', sort: 'name', width: 180 },
 	{ id: 'age', key: 'age', title: 'Age', sort: 'age', width: 120 },
-	{ id: 'action', title: 'Action', renderCell: () => <button type="button">Inspect</button> },
+	{ id: 'action', sort: false, title: 'Action', renderCell: () => <button type="button">Inspect</button> },
 ];
 export const RowActivation: StoryObj<typeof DataTable<ReviewRow>> = {
 	tags: ['tests'],
@@ -416,7 +417,13 @@ export const HeaderAppearance: StoryObj = {
 			columnDefinitions={[
 				{ id: 'name', key: 'name', title: 'Name', sort: 'name', justify: 'end', showSortIcon: false },
 				{ id: 'age', key: 'age', title: 'Age', sort: 'age', justify: 'end', justifyHeader: 'start' },
-				{ id: 'custom', title: 'Custom', showSortIcon: true, renderHeader: () => <span>Custom header</span> },
+				{
+					id: 'custom',
+					sort: false,
+					title: 'Custom',
+					showSortIcon: true,
+					renderHeader: () => <span>Custom header</span>,
+				},
 			]}
 		/>
 	),
@@ -437,5 +444,77 @@ export const HeaderAppearance: StoryObj = {
 		}
 		await userEvent.click(name);
 		expect(name).toHaveAttribute('aria-sort', 'ascending');
+	},
+};
+
+function ShorthandHeader<V>({ column, sortKey, sorted, ascending }: HeaderContext<ReviewRow, V>) {
+	const originalSorted = column.sort !== undefined && sortKey?.key === column.sort;
+	return (
+		<span
+			data-sorted={sorted}
+			data-original-sorted={originalSorted}
+			data-ascending={ascending}
+			data-sort-field={column.sort}
+		>
+			{column.title}
+		</span>
+	);
+}
+
+export const ShorthandColumns: StoryObj = {
+	tags: ['tests'],
+	render: () => (
+		<DataTable<ReviewRow>
+			caption="Shorthand columns"
+			tableData={reviewRows}
+			colReorder={false}
+			colResize={false}
+			columnDefinitions={[
+				{ id: 'name', title: 'Name', renderHeader: ShorthandHeader },
+				{ id: 'years', key: 'age', title: 'Years', sort: true, renderHeader: ShorthandHeader },
+				{ id: 'by-age', key: 'name', title: 'Name by age', sort: 'age', renderHeader: ShorthandHeader },
+				{ id: 'disabled', title: 'Action', sort: false, renderHeader: ShorthandHeader, renderCell: () => 'Inspect' },
+			]}
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const name = canvas.getByRole('columnheader', { name: 'Name' });
+		const years = canvas.getByRole('columnheader', { name: 'Years' });
+		const override = canvas.getByRole('columnheader', { name: 'Name by age' });
+		const disabled = canvas.getByRole('columnheader', { name: 'Action' });
+		const firstRow = () => canvas.getAllByRole('row')[1];
+		await expect(within(name).getByText('Name')).toHaveAttribute('data-sort-field', 'name');
+		await expect(within(years).getByText('Years')).toHaveAttribute('data-sort-field', 'age');
+		await expect(within(override).getByText('Name by age')).toHaveAttribute('data-sort-field', 'age');
+		await expect(within(disabled).getByText('Action')).not.toHaveAttribute('data-sort-field');
+		await expect(disabled).not.toHaveAttribute('tabindex');
+		await expect(within(name).getByText('Name')).toHaveAttribute('data-sorted', 'false');
+		await expect(within(name).getByText('Name')).not.toHaveAttribute('data-ascending');
+		await expect(within(disabled).getByText('Action')).not.toHaveAttribute('data-ascending');
+		await expect(firstRow()).toHaveTextContent('Beta');
+		await userEvent.click(name);
+		await expect(firstRow()).toHaveTextContent('Alpha');
+		await expect(name).toHaveAttribute('aria-sort', 'ascending');
+		await expect(within(name).getByText('Name')).toHaveAttribute('data-sorted', 'true');
+		await expect(within(name).getByText('Name')).toHaveAttribute('data-original-sorted', 'true');
+		await expect(within(name).getByText('Name')).toHaveAttribute('data-ascending', 'true');
+		await userEvent.click(name);
+		await expect(firstRow()).toHaveTextContent('Beta');
+		await expect(within(name).getByText('Name')).toHaveAttribute('data-ascending', 'false');
+		years.focus();
+		await userEvent.keyboard('{Enter}');
+		await expect(firstRow()).toHaveTextContent('Alpha');
+		await expect(years).toHaveAttribute('aria-sort', 'ascending');
+		await expect(within(years).getByText('Years')).toHaveAttribute('data-sorted', 'true');
+		await expect(within(years).getByText('Years')).toHaveAttribute('data-ascending', 'true');
+		await expect(within(name).getByText('Name')).toHaveAttribute('data-sorted', 'false');
+		await expect(within(name).getByText('Name')).not.toHaveAttribute('data-ascending');
+		await userEvent.click(override);
+		await expect(firstRow()).toHaveTextContent('Beta');
+		await expect(override).toHaveAttribute('aria-sort', 'descending');
+		await userEvent.click(disabled);
+		await expect(firstRow()).toHaveTextContent('Beta');
+		await expect(disabled).not.toHaveAttribute('aria-sort');
 	},
 };

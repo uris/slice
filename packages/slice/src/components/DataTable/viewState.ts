@@ -1,4 +1,5 @@
 import type { ColumnDefinition, SortKey } from './_types';
+import { resolveColumnSortKey } from './columnHelper';
 
 /*
  * DataTableViewState is the part of a table's configuration that's safe to
@@ -71,8 +72,10 @@ export function resolveSortFromViewState<T>(
 ): SortKey<T> {
 	if (!state?.sort) return undefined;
 	const column = columns.find((c) => c.id === state.sort?.columnId);
-	if (column?.sort === undefined) return undefined;
-	return { key: column.sort, dir: state.sort.dir };
+	if (!column) return undefined;
+	const key = resolveColumnSortKey(column);
+	if (key === undefined) return undefined;
+	return { key, dir: state.sort.dir };
 }
 
 /*
@@ -85,7 +88,7 @@ export function captureSortToViewState<T>(
 	sort: SortKey<T>,
 ): DataTableViewState['sort'] {
 	if (sort?.key === undefined) return undefined;
-	const column = columns.find((c) => c.sort === sort.key);
+	const column = columns.find((c) => resolveColumnSortKey(c) === sort.key);
 	if (!column) return undefined;
 	return { columnId: column.id, dir: sort.dir };
 }

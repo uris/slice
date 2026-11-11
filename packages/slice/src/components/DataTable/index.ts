@@ -2,6 +2,7 @@ export { DataTable } from './DataTable';
 export type {
 	DataTableProps,
 	ColumnDefinition,
+	ResolvedColumnDefinition,
 	CellContext,
 	HeaderContext,
 	SortKey,

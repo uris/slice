@@ -12,9 +12,9 @@ const people: Person[] = [
     {id: 6, name: 'Jordan Patel', team: 'Product', salary: 106000, photo: '/images/profile-male-2.jpg'},
 ];
 const columns: ColumnDefinition<Person>[] = [
-    {id: 'name', key: 'name', title: 'Name', sort: 'name'},
-    {id: 'team', key: 'team', title: 'Team', sort: 'team'},
-    {id: 'salary', key: 'salary', title: 'Salary', sort: 'salary'},
+    {id: 'name', title: 'Name'},
+    {id: 'team', title: 'Team'},
+    {id: 'salary', title: 'Salary'},
 ];
 
 export default function TeamTable() {
@@ -51,9 +51,7 @@ const people: Person[] = [
 const customColumns: ColumnDefinition<Person>[] = [
     {
         id: 'name',
-        key: 'name',
         title: 'Name',
-        sort: 'name',
         width: 220,
         renderHeader: CustomHeader,
         renderCell: ({row}) => {
@@ -67,7 +65,6 @@ const customColumns: ColumnDefinition<Person>[] = [
     },
     {
         id: 'team',
-        key: 'team',
         title: 'Team',
         width: 180,
         justify: 'start',
@@ -75,13 +72,10 @@ const customColumns: ColumnDefinition<Person>[] = [
         renderCell: ({value}) => <Chip label={value}/>,
     },
     {
-        key: 'salary',
         id: 'salary',
         title: 'Salary',
-        sort: 'salary',
         width: 160,
         justify: 'end',
-        justifyHeader: 'end',
         renderHeader: CustomHeader,
         renderCell: ({value}) => (
             <span style={{ color: 'var(--core-text-primary)' }}>\${value.toLocaleString('en-US')}</span>
@@ -91,14 +85,12 @@ const customColumns: ColumnDefinition<Person>[] = [
 
 // one customer header renderer for all headers
 function CustomHeader<V>(context: HeaderContext<Person, V>) {
-    const {column, sortKey} = context;
+    const {column, sorted, ascending: asc} = context;
     if (!column) return null;
-    const sorted = column.sort !== undefined && sortKey?.key === column.sort;
-    const sortIcon: SliceIcon = sortKey?.dir === 'asc' ? 'arrows.chevron-down' : 'arrows.chevron-up';
     return (
         <FlexBox preset={Preset.Row} justify={column.justifyHeader ?? column.justify ?? 'start'} gap={4}>
-            <strong>{column.title}</strong>
-            {sorted && <Icon name={sortIcon} size={16} decorative/>}
+            <Title>{column.title}</Title>
+            {sorted && <Icon name={asc ? 'arrows.chevron-down' : 'arrows.chevron-up'} size={16}/>}
         </FlexBox>
     );
 }
@@ -140,9 +132,7 @@ const people: Person[] = [
 const customColumns: ColumnDefinition<Person>[] = [
     {
         id: 'name',
-        key: 'name',
         title: 'Name',
-        sort: 'name',
         width: 220,
         renderHeader: CustomHeader,
         renderCell: ({row}) => {
@@ -156,7 +146,6 @@ const customColumns: ColumnDefinition<Person>[] = [
     },
     {
         id: 'team',
-        key: 'team',
         title: 'Team',
         width: 180,
         justify: 'start',
@@ -164,13 +153,10 @@ const customColumns: ColumnDefinition<Person>[] = [
         renderCell: ({value}) => <Chip label={value}/>,
     },
     {
-        key: 'salary',
         id: 'salary',
         title: 'Salary',
-        sort: 'salary',
         width: 160,
         justify: 'end',
-        justifyHeader: 'end',
         renderHeader: CustomHeader,
         renderCell: ({value}) => (
             <span style={{ color: 'var(--core-text-primary)' }}>\${value.toLocaleString('en-US')}</span>
@@ -180,14 +166,12 @@ const customColumns: ColumnDefinition<Person>[] = [
 
 // one customer header renderer for all headers
 function CustomHeader<V>(context: HeaderContext<Person, V>) {
-    const {column, sortKey} = context;
+    const {column, sorted, ascending: asc} = context;
     if (!column) return null;
-    const sorted = column.sort !== undefined && sortKey?.key === column.sort;
-    const sortIcon: SliceIcon = sortKey?.dir === 'asc' ? 'arrows.chevron-down' : 'arrows.chevron-up';
     return (
         <FlexBox preset={Preset.Row} justify={column.justifyHeader ?? column.justify ?? 'start'} gap={4}>
-            <strong>{column.title}</strong>
-            {sorted && <Icon name={sortIcon} size={16} decorative/>}
+            <Title>{column.title}</Title>
+            {sorted && <Icon name={asc ? 'arrows.chevron-down' : 'arrows.chevron-up'} size={16}/>}
         </FlexBox>
     );
 }

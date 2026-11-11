@@ -222,6 +222,7 @@ export { DataTable } from './components/DataTable';
 export type {
 	DataTableProps,
 	ColumnDefinition,
+	ResolvedColumnDefinition,
 	CellContext,
 	HeaderContext,
 	SortKey,
