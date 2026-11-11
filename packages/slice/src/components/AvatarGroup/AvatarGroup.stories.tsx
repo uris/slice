@@ -186,10 +186,17 @@ export const NormalizedBordersAndColors: StoryObj<typeof AvatarGroup> = {
 	play: async ({ canvasElement }) => {
 		const avatar = within(canvasElement).getByRole('img', { name: 'User Avatar - Jane Smith' });
 		const frame = avatar.firstElementChild as HTMLElement;
+		// Check the resting border after moving the browser pointer off the avatar.
+		const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+		if (MODE === 'test') {
+			const { userEvent: pointer } = await import('vitest/browser');
+			const container = within(canvasElement).getByTestId('avatar-group').parentElement as HTMLElement;
+			await pointer.hover(container, { position: { x: 1, y: 1 } });
+		}
 		await expect(getComputedStyle(avatar).borderTopWidth).toBe('4px');
 		await expect(getComputedStyle(avatar).borderTopColor).toBe('rgb(0, 255, 0)');
 		await expect(getComputedStyle(frame).borderTopWidth).toBe('2px');
-		await expect(getComputedStyle(frame).borderTopColor).toBe('rgb(255, 0, 0)');
+		await waitFor(() => expect(getComputedStyle(frame).borderTopColor).toBe('rgb(255, 0, 0)'));
 		await expect(getComputedStyle(frame).color).toBe('rgb(255, 255, 255)');
 		await expect(getComputedStyle(frame).backgroundColor).toBe('rgb(37, 99, 235)');
 		await expect(avatar.getBoundingClientRect().width).toBe(48);
