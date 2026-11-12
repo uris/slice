@@ -42,7 +42,7 @@ export function AvatarDoc() {
 				components={[
 					{
 						label: 'Initials fallback',
-						component: <Avatar name={'John Wick'} size={40} backgroundColor="array-sky-label" />,
+						component: <Avatar name={'John Wick'} size={40} backgroundColor="array-cyan-accent" />,
 						code: initialsCode.trim(),
 					},
 				]}

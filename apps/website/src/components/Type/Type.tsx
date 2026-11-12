@@ -3,6 +3,7 @@
 import { useDocsActions } from '@/docs/stores/store';
 import { surfaceGreen, surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
+import { FlexBox, type FlexBoxProps } from '@apple-pie/slice';
 import { useIntersecting } from '@apple-pie/slice/hooks';
 import { addOpacity } from '@apple-pie/slice/utils';
 import type React from 'react';
@@ -19,7 +20,11 @@ export interface TextProps {
 	target?: '_blank' | '_top';
 }
 
-function useTextVisibility<T extends HTMLElement>(props: Readonly<TextProps>, trackVisibility = false) {
+export function useTextVisibility<T extends HTMLElement>(
+	props: Readonly<TextProps>,
+	trackVisibility = false,
+	threshold = 1,
+) {
 	const { id, onVisibilityChange } = props;
 	const { updateVisibleItems } = useDocsActions();
 	const track = trackVisibility && Boolean(id?.trim());
@@ -33,13 +38,13 @@ function useTextVisibility<T extends HTMLElement>(props: Readonly<TextProps>, tr
 	const { results } = useIntersecting({
 		container: null,
 		entries: track ? ref : [],
-		thresholds: 1,
+		thresholds: threshold,
 		margin: '-112px 0px 0px 0px',
 	});
 
 	const entry = track ? results[0]?.entry : undefined;
 
-	const visible = entry ? entry.isIntersecting && entry.intersectionRatio >= 1 : undefined;
+	const visible = entry ? entry.isIntersecting && entry.intersectionRatio >= threshold : undefined;
 
 	// Publish after commit so subscribers are never updated during render.
 	useEffect(() => {
@@ -57,6 +62,14 @@ function useTextVisibility<T extends HTMLElement>(props: Readonly<TextProps>, tr
 	}, [entry, visible]);
 
 	return { ref, id: props.id, 'data-visible': visible };
+}
+
+export type TrackedFlexBoxProps = FlexBoxProps & Pick<TextProps, 'onVisibilityChange'>;
+
+/** Document section tracking, including blocks taller than the viewport. */
+export function TrackedFlexBox({ onVisibilityChange, ...props }: Readonly<TrackedFlexBoxProps>) {
+	const visibility = useTextVisibility<HTMLDivElement>({ id: props.id, onVisibilityChange }, true, 0);
+	return <FlexBox {...props} {...visibility} data-track-block={Boolean(props.id?.trim()) || undefined} />;
 }
 
 export function H1(props: Readonly<TextProps>) {

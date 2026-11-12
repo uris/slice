@@ -40,7 +40,7 @@ export function AvatarGroupColorsExample() {
 	return (
 		<AvatarGroup
 			avatars={[
-				{ id: 'jane', first: 'Jane', last: 'Smith', backgroundColor: 'array-sky-label' },
+				{ id: 'jane', first: 'Jane', last: 'Smith', backgroundColor: 'array-cyan-accent' },
 				{ id: 'morgan', first: 'Morgan', last: 'Chen', textColor: '#ffffff', backgroundColor: '#2563eb' },
 			]}
 			backgroundColor="core-surface-secondary"
@@ -118,7 +118,7 @@ export function TeamAvatars({ onOpenProfile }: { onOpenProfile: (id: string) => 
     return (
         <AvatarGroup size={40} borderWidth={1}>
             <Avatar name="Jane Smith" onClick={() => onOpenProfile('jane')} />
-            <Avatar name="Morgan Chen" backgroundColor="array-yellow-label" />
+            <Avatar name="Morgan Chen" backgroundColor="array-yellow-accent" />
             <Avatar name="Alex Kim" size={48} borderWidth={0} />
         </AvatarGroup>
     );

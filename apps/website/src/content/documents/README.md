@@ -386,7 +386,7 @@ examples may include the supporting text or controls they are teaching.
 
 ## Tracking and document registration
 
-Only **H1, H2, and Definition** elements opt into visibility tracking. Give their
+**H1, H2, Definition, and TrackedFlexBox** elements opt into visibility tracking. Give their
 anchors stable, unique IDs. **H3 content must remain untracked**: do not add IDs or
 tracked navigation entries for usage subsections. Paragraphs, inline code, tips,
 and preview content do not belong in the tracked list either.
@@ -397,6 +397,14 @@ Named exports can stay:
 ```
 export { AudioBubbleDoc as default, audioBubbleTrackedItems as trackedItems };
 ```
+
+For a composed section without a separate heading, import `TrackedFlexBox` from
+`@/components/Type/Type`, give it an `id`, and add that ID to `trackedItems`.
+It accepts the regular `FlexBox` props and optional `onVisibilityChange` callback.
+Blocks track partial visibility so sections taller than the viewport participate;
+clicking their navigation entries scrolls to the start of the section. Existing
+text tracking and untracked `H3` behavior are unchanged. Keep this wrapper in the
+website layer; the Slice layout component does not depend on documentation state.
 
 The tracked list must match the rendered anchor order and labels. Nest prop and
 event definitions under their respective H2 entries; use `code: true` for API entries.

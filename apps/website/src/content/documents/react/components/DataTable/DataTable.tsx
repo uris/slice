@@ -149,6 +149,15 @@ export default function DataTableDoc() {
 				<DefaultVal>{'Data Table'}</DefaultVal>
 			</Definition>
 			<P>Accessible table name, visually hidden.</P>
+			<Definition id="cellPadding">
+				<Prop>cellPadding</Prop>
+				<TypeDef>number | string</TypeDef>
+				<DefaultVal>spacing-m (16px)</DefaultVal>
+			</Definition>
+			<P>
+				Default header and body cell padding. Set <Code>{'cellPadding={0}'}</Code> to remove it. A column’s own{' '}
+				<Code>padding</Code> takes precedence, including zero.
+			</P>
 			<Definition id="colReorder">
 				<Prop>colReorder</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -257,6 +266,21 @@ export default function DataTableDoc() {
 				<DefaultVal>{'6'}</DefaultVal>
 			</Definition>
 			<P>Extra rows mounted beyond each visible edge while virtualized.</P>
+			<Definition id="name">
+				<Prop>name</Prop>
+				<TypeDef>string</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Optional identifier exposed to custom header renderers as <Code>ctx.tableName</Code>. It remains undefined when
+				omitted. The accessible name still comes from <Code>caption</Code>.
+			</P>
+			<Definition id="noTopBorder">
+				<Prop>noTopBorder</Prop>
+				<TypeDef>boolean</TypeDef>
+				<DefaultVal>false</DefaultVal>
+			</Definition>
+			<P>Removes the top edge above the header. Header bottom borders and the remaining grid borders are preserved.</P>
 			<Definition id="rowHeight">
 				<Prop>rowHeight</Prop>
 				<TypeDef>{'number'}</TypeDef>
@@ -507,6 +531,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'borderStyle', title: 'borderStyle', code: true },
 			{ id: 'candyStripeBackgroundColor', title: 'candyStripeBackgroundColor', code: true },
 			{ id: 'caption', title: 'caption', code: true },
+			{ id: 'cellPadding', title: 'cellPadding', code: true },
 			{ id: 'colReorder', title: 'colReorder', code: true },
 			{ id: 'colResize', title: 'colResize', code: true },
 			{ id: 'columnDefinitions', title: 'columnDefinitions', code: true },
@@ -525,6 +550,8 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'margin', title: 'margin', code: true },
 			{ id: 'maxWidth', title: 'maxWidth', code: true },
 			{ id: 'overscanRows', title: 'overscanRows', code: true },
+			{ id: 'name', title: 'name', code: true },
+			{ id: 'noTopBorder', title: 'noTopBorder', code: true },
 			{ id: 'rowHeight', title: 'rowHeight', code: true },
 			{ id: 'sort', title: 'sort', code: true },
 			{ id: 'tableData', title: 'tableData', code: true },

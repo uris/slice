@@ -47,13 +47,22 @@ export function OnThisPage() {
 			if (container && target) {
 				const bottomGap = 125;
 
-				const top =
-					container.scrollTop +
-					target.getBoundingClientRect().bottom -
-					container.getBoundingClientRect().top -
-					container.clientTop -
-					container.clientHeight +
-					bottomGap;
+				const getDestination = () => {
+					const targetBounds = target.getBoundingClientRect();
+					const containerBounds = container.getBoundingClientRect();
+					if (target.dataset.trackBlock === 'true') {
+						return container.scrollTop + targetBounds.top - containerBounds.top - container.clientTop - 112;
+					}
+					return (
+						container.scrollTop +
+						targetBounds.bottom -
+						containerBounds.top -
+						container.clientTop -
+						container.clientHeight +
+						bottomGap
+					);
+				};
+				const top = getDestination();
 
 				// Browsers clamp scrollTo to the available range.
 				const destination = Math.max(0, Math.min(top, container.scrollHeight - container.clientHeight));
