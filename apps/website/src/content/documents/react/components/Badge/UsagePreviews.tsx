@@ -6,7 +6,7 @@ export function BadgeZeroExample() {
 }
 
 export function BadgeColorsExample() {
-	return <Badge count={12} backgroundColor="array-sky-label" textColor="#111111" />;
+	return <Badge count={12} backgroundColor="array-cyan-accent" textColor="#111111" />;
 }
 
 export function BadgeLabelExample() {

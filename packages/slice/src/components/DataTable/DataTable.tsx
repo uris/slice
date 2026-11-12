@@ -19,6 +19,7 @@ import { compareValues } from './compareValues';
 export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	const props = resolveColorProps(rawProps);
 	const {
+		name,
 		backgroundColor = 'var(--core-surface-primary)',
 		headerBackgroundColor = 'var(--core-surface-secondary)',
 		headerBackgroundColorHover = 'var(--core-surface-primary-tint)',
@@ -39,6 +40,8 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 		freezeColumnBackgroundColor,
 		borderColor = 'var(--core-outline-primary)',
 		borderStyle = 'box',
+		noTopBorder = false,
+		cellPadding,
 		columnDefinitions = [],
 		tableData = [],
 		getRowId,
@@ -150,6 +153,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 			'--table-corner-left': freezeColumn ? '0px' : 'unset',
 			'--table-corner-top': headerSticky ? '0px' : 'auto',
 			'--table-border-width': borderStyle === 'none' ? '0' : '1px',
+			'--table-border-top-width': noTopBorder || borderStyle === 'none' ? '0' : '1px',
 			'--table-border-sides': borderStyle === 'box' ? '1px' : '0',
 			'--table-handle-hover-color': handleHoverColor,
 			'--table-border-radius': borderStyle === 'box' ? setStyle(borderRadius) : corners['corner-none'],
@@ -170,6 +174,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 		height,
 		borderColor,
 		borderStyle,
+		noTopBorder,
 		handleHoverColor,
 		borderRadius,
 		maxWidth,
@@ -346,17 +351,20 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	);
 
 	// render header
-	const renderHeader = useCallback((col: ColumnDefinition<T, unknown>, sortKey: SortKey<T>) => {
-		if (col.renderHeader) {
-			const renderFn = col.renderHeader as (ctx: HeaderContext<T, unknown>) => ReactNode;
-			const column = resolveColumnDefinition(col);
-			const sorted = column.sort !== undefined && sortKey?.key === column.sort;
-			let ascending: boolean | undefined;
-			if (sorted) ascending = sortKey?.dir === 'asc';
-			return renderFn({ column, sortKey, sorted, ascending });
-		}
-		return <DefaultHeaderRenderer<T> col={resolveColumnDefinition(col)} sortKey={sortKey} />;
-	}, []);
+	const renderHeader = useCallback(
+		(col: ColumnDefinition<T, unknown>, sortKey: SortKey<T>) => {
+			if (col.renderHeader) {
+				const renderFn = col.renderHeader as (ctx: HeaderContext<T, unknown>) => ReactNode;
+				const column = resolveColumnDefinition(col);
+				const sorted = column.sort !== undefined && sortKey?.key === column.sort;
+				let ascending: boolean | undefined;
+				if (sorted) ascending = sortKey?.dir === 'asc';
+				return renderFn({ tableName: name, column, sortKey, sorted, ascending });
+			}
+			return <DefaultHeaderRenderer<T> col={resolveColumnDefinition(col)} sortKey={sortKey} />;
+		},
+		[name],
+	);
 
 	// render body cells. Same reasoning as renderHeader above for the cast.
 	const renderBodyCell = useCallback((col: ColumnDefinition<T>, row: T, rowIndex: number) => {
@@ -386,7 +394,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 				<thead ref={headerRef}>
 					<tr>
 						{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
-							const padding = setStyle(col.padding, 'var(--spacing-m)');
+							const padding = setStyle(col.padding ?? cellPadding, 'var(--spacing-m)');
 							const sortable = resolveColumnSortKey(col) !== undefined;
 							const cursor = sortable ? 'pointer' : 'default';
 							const last = colIndex === orderedColumns.length - 1;
@@ -472,7 +480,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 									{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
 										const justifyContent = resolveAlignValue(col.justify ?? 'start');
 										const alignItems = resolveAlignValue(col.align);
-										const padding = setStyle(col.padding, 'var(--spacing-m)');
+										const padding = setStyle(col.padding ?? cellPadding, 'var(--spacing-m)');
 										const whiteSpace = col.nowrap ? 'nowrap' : '';
 										const background =
 											candyStripeBackgroundColor && rowIndex % 2 !== 0 ? candyStripeBackgroundColor : backgroundColor;

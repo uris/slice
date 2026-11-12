@@ -13,6 +13,8 @@ export type DocumentLoader = () => Promise<DocumentModule>;
 // Use explicit imports so Next can split documents into chunks and unknown slugs cannot resolve arbitrary files.
 const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 	[Package.React]: new Map<string, DocumentLoader>([
+		['colors', () => import('@/documents/react/design-system/colors/ColorsDoc')],
+
 		['data-table', () => import('@/documents/react/components/DataTable/DataTable')],
 		['camera', () => import('@/documents/react/components/Camera/Camera')],
 		['video-controller', () => import('@/documents/react/components/VideoController/VideoController')],

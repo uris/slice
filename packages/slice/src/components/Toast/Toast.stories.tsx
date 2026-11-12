@@ -240,3 +240,33 @@ export const ClickAction: Story = {
 		await expect(canvas.getByLabelText('Action count')).toHaveTextContent('3');
 	},
 };
+
+export const TranslucentBackgroundSurface: Story = {
+	tags: ['tests'],
+	args: { message: 'Saved successfully', type: ToastType.Success, onClick: fn() },
+	decorators: [
+		(Story) => (
+			<div style={{ background: '#ff00ff', minHeight: 160 }}>
+				<Story />
+			</div>
+		),
+	],
+	play: async ({ canvasElement, args }) => {
+		const canvas = within(canvasElement);
+		const toast = await canvas.findByTestId('toast');
+		const reference = document.createElement('div');
+		reference.style.backgroundColor = 'var(--core-surface-primary)';
+		toast.append(reference);
+		await expect(getComputedStyle(toast).backgroundColor).toBe(getComputedStyle(reference).backgroundColor);
+		reference.remove();
+		const tint = getComputedStyle(toast, '::after');
+		await expect(tint.content).not.toBe('none');
+		await expect(tint.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+		await expect(tint.pointerEvents).toBe('none');
+		await expect(tint.zIndex).toBe('-1');
+		await userEvent.click(canvas.getByRole('button', { name: 'Saved successfully' }));
+		await expect(args.onClick).toHaveBeenCalledTimes(1);
+		await userEvent.click(canvas.getByRole('button', { name: 'Dismiss notification' }));
+		await waitFor(() => expect(canvas.queryByTestId('toast')).not.toBeInTheDocument());
+	},
+};

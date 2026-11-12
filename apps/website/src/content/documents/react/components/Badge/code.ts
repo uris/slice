@@ -34,7 +34,7 @@ export const colorsCode = `
 import { Badge } from '@apple-pie/slice';
 
 export function BadgeColorsExample() {
-	return <Badge count={12} backgroundColor="array-sky-label" textColor="#111111" />;
+	return <Badge count={12} backgroundColor="array-cyan-accent" textColor="#111111" />;
 }
 `;
 

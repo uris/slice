@@ -16,7 +16,7 @@ export const initialsCode = `
 <Avatar
     name="Jane Smith"
     textSize="l"
-    backgroundColor="array-sky-label"
+    backgroundColor="array-cyan-accent"
 />
 `;
 

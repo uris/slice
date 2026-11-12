@@ -1,4 +1,5 @@
 import type { corePalette } from './palette';
+import type { BaseColorToken } from './recipes';
 
 export type CoreColors = Record<keyof typeof corePalette, string> & {
 	'core-drop-shadow-light': string;
@@ -19,27 +20,27 @@ export type CoreColors = Record<keyof typeof corePalette, string> & {
 	'surface-shadow-strong-dark': string;
 };
 
-export type Colors = {
+export type Colors = Record<BaseColorToken, string> & {
 	'core-text-quaternary': string;
 	'core-fill-primary': string;
 	'core-fill-secondary': string;
 	'core-fill-tertiary': string;
 	'core-surface-elevated': string;
 	'core-surface-liquid-glass': string;
-	'array-land': string;
-	'array-land-label': string;
-	'array-magenta': string;
-	'array-magenta-label': string;
+	'array-lime': string;
+	'array-lime-accent': string;
+	'array-pink': string;
+	'array-pink-accent': string;
 	'array-orange': string;
-	'array-orange-label': string;
+	'array-orange-accent': string;
 	'array-purple': string;
-	'array-purple-label': string;
-	'array-sea': string;
-	'array-sea-label': string;
-	'array-sky': string;
-	'array-sky-label': string;
+	'array-purple-accent': string;
+	'array-blue': string;
+	'array-blue-accent': string;
+	'array-cyan': string;
+	'array-cyan-accent': string;
 	'array-yellow': string;
-	'array-yellow-label': string;
+	'array-yellow-accent': string;
 	'core-badge-primary': string;
 	'core-badge-secondary': string;
 	'core-button-disabled': string;

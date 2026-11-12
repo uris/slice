@@ -3,8 +3,8 @@
 	--prompt-gradient: conic-gradient(
 		from var(--border-angle),
 		var(--core-text-special),
-		var(--array-magenta-label),
-		var(--array-land-label),
+		var(--array-pink-accent),
+		var(--array-lime-accent),
 		var(--core-text-special)
 	);
 	box-sizing: border-box;

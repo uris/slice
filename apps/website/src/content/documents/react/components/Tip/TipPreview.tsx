@@ -36,7 +36,7 @@ function ProfileTrigger({ onToolTip }: { onToolTip: (tip: ToolTip | null) => voi
 			onClick={() => onToolTip(null)}
 		>
 			<span aria-hidden="true">
-				<Avatar name="Maya Chen" size={40} backgroundColor="array-sky" textColor="array-sky-label" />
+				<Avatar name="Maya Chen" size={40} backgroundColor="array-cyan" textColor="array-cyan-accent" />
 			</span>
 			<span style={{ lineHeight: 1.4 }}>
 				<strong style={{ display: 'block' }}>Maya Chen</strong>

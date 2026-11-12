@@ -123,11 +123,11 @@ function ToastComponent<T>(props: ToastProps<T>, forwardedRef: React.ForwardedRe
 	};
 	const colorScheme = useMemo(() => {
 		if (type === 'success')
-			return { border: 'var(--array-land-label)', bg: 'var(--array-land)', text: 'var(--array-land-label)' };
+			return { border: 'var(--array-lime-accent)', bg: 'var(--array-lime)', text: 'var(--array-lime-accent)' };
 		if (type === 'warning')
-			return { border: 'var(--array-orange-label)', bg: 'var(--array-orange)', text: 'var(--array-orange-label)' };
+			return { border: 'var(--array-orange-accent)', bg: 'var(--array-orange)', text: 'var(--array-orange-accent)' };
 		if (type === 'error')
-			return { border: 'var(--feedback-warning)', bg: 'var(--array-magenta)', text: 'var(--feedback-warning)' };
+			return { border: 'var(--feedback-warning)', bg: 'var(--array-pink)', text: 'var(--feedback-warning)' };
 		return {
 			border: 'var(--core-outline-primary)',
 			bg: 'var(--core-surface-secondary)',

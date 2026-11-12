@@ -518,3 +518,72 @@ export const ShorthandColumns: StoryObj = {
 		await expect(disabled).not.toHaveAttribute('aria-sort');
 	},
 };
+
+export const CellPadding: StoryObj<typeof TypedDataTable> = {
+	args: {
+		cellPadding: 0,
+		columnDefinitions: [
+			{ id: 'name', title: 'Name' },
+			{ id: 'age', title: 'Age', padding: 8 },
+		],
+		tableData: sampleTableData,
+	},
+	play: async ({ canvasElement }) => {
+		const table = within(canvasElement).getByRole('table');
+		for (const row of Array.from(table.querySelectorAll('tr'))) {
+			const cells = row.querySelectorAll('th, td');
+			await expect(cells[0]?.querySelector('[style*="padding"]')).toHaveStyle({ padding: '0px' });
+			await expect(cells[1]?.querySelector('[style*="padding"]')).toHaveStyle({ padding: '8px' });
+		}
+	},
+};
+
+export const NoTopBorder: StoryObj<typeof TypedDataTable> = {
+	args: { noTopBorder: true, borderStyle: 'box', borderRadius: 0 },
+	play: async ({ canvasElement }) => {
+		const table = within(canvasElement).getByRole('table');
+		await expect(table.parentElement).toHaveStyle({
+			borderTopWidth: '0px',
+			borderBottomWidth: '1px',
+			borderLeftWidth: '1px',
+			borderRightWidth: '1px',
+		});
+		await expect(within(table).getAllByRole('columnheader')[0]).toHaveStyle({ borderBottomWidth: '1px' });
+	},
+};
+
+export const NamedHeaderContext: StoryObj<typeof TypedDataTable> = {
+	render: function NamedHeaderStory(args) {
+		const [name, setName] = useState<string>();
+		return (
+			<>
+				<button type="button" onClick={() => setName(name ? undefined : 'Backgrounds')}>
+					Toggle table name
+				</button>
+				<TypedDataTable
+					{...args}
+					name={name}
+					columnDefinitions={[
+						{
+							id: 'name',
+							title: 'Name',
+							renderHeader: ({ tableName, column }) => (
+								<span>
+									{tableName ?? 'Unnamed'} / {column.title}
+								</span>
+							),
+						},
+					]}
+				/>
+			</>
+		);
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByRole('columnheader')).toHaveTextContent('Unnamed / Name');
+		await userEvent.click(canvas.getByRole('button', { name: 'Toggle table name' }));
+		await expect(canvas.getByRole('columnheader')).toHaveTextContent('Backgrounds / Name');
+		await userEvent.click(canvas.getByRole('button', { name: 'Toggle table name' }));
+		await expect(canvas.getByRole('columnheader')).toHaveTextContent('Unnamed / Name');
+	},
+};

@@ -45,20 +45,40 @@
 	--core-surface-elevated: var(--core-grey-0);
 	--core-surface-liquid-glass: color-mix(in srgb, var(--core-grey-0) 80%, transparent);
 	--core-surface-overlay-translucent: color-mix(in srgb, var(--core-grey-0) 80%, transparent);
-	--array-land: var(--core-lime-100);
-	--array-land-label: var(--core-lime-600);
-	--array-magenta: var(--core-pink-100);
-	--array-magenta-label: var(--core-pink-600);
-	--array-orange: var(--core-orange-100);
-	--array-orange-label: var(--core-orange-600);
-	--array-purple: var(--core-purple-100);
-	--array-purple-label: var(--core-purple-600);
-	--array-sea: var(--core-blue-100);
-	--array-sea-label: var(--core-blue-600);
-	--array-sky: var(--core-cyan-100);
-	--array-sky-label: var(--core-cyan-600);
-	--array-yellow: var(--core-yellow-100);
-	--array-yellow-label: var(--core-yellow-600);
+	--array-blue: color-mix(in srgb, var(--core-blue-500) 10%, transparent);
+	--array-blue-accent: var(--core-blue-700);
+	--array-cyan: color-mix(in srgb, var(--core-cyan-500) 10%, transparent);
+	--array-cyan-accent: var(--core-cyan-800);
+	--array-lime: color-mix(in srgb, var(--core-lime-500) 10%, transparent);
+	--array-lime-accent: var(--core-lime-700);
+	--array-pink: color-mix(in srgb, var(--core-pink-500) 10%, transparent);
+	--array-pink-accent: var(--core-pink-700);
+	--array-orange: color-mix(in srgb, var(--core-orange-500) 10%, transparent);
+	--array-orange-accent: var(--core-orange-700);
+	--array-purple: color-mix(in srgb, var(--core-purple-500) 10%, transparent);
+	--array-purple-accent: var(--core-purple-600);
+	--array-yellow: color-mix(in srgb, var(--core-yellow-500) 10%, transparent);
+	--array-yellow-accent: var(--core-yellow-700);
+	--core-red: var(--core-red-500);
+	--core-orange: var(--core-orange-500);
+	--core-yellow: var(--core-yellow-500);
+	--core-lime: var(--core-lime-500);
+	--core-green: var(--core-green-500);
+	--core-mint: var(--core-mint-500);
+	--core-teal: var(--core-teal-500);
+	--core-cyan: var(--core-cyan-500);
+	--core-blue: var(--core-blue-500);
+	--core-indigo: var(--core-indigo-500);
+	--core-purple: var(--core-purple-500);
+	--core-pink: var(--core-pink-500);
+	--core-brown: var(--core-brown-500);
+	--core-grey: var(--core-grey-500);
+	--core-grey-1: var(--core-grey-500);
+	--core-grey-2: var(--core-grey-350);
+	--core-grey-3: var(--core-grey-230);
+	--core-grey-4: var(--core-grey-185);
+	--core-grey-5: var(--core-grey-95);
+	--core-grey-6: var(--core-grey-40);
 	--core-badge-primary: var(--core-blue-600);
 	--core-button-primary: var(--core-blue-600);
 	--core-drop-shadow: var(--core-drop-shadow-light);
@@ -127,20 +147,40 @@
 	--core-surface-elevated: var(--core-grey-949);
 	--core-surface-liquid-glass: color-mix(in srgb, var(--core-grey-949) 80%, transparent);
 	--core-surface-overlay-translucent: color-mix(in srgb, var(--core-grey-949) 80%, transparent);
-	--array-land: var(--core-lime-100);
-	--array-land-label: var(--core-lime-600);
-	--array-magenta: var(--core-pink-100);
-	--array-magenta-label: var(--core-pink-600);
-	--array-orange: var(--core-orange-100);
-	--array-orange-label: var(--core-orange-600);
-	--array-purple: var(--core-purple-100);
-	--array-purple-label: var(--core-purple-600);
-	--array-sea: var(--core-blue-100);
-	--array-sea-label: var(--core-blue-600);
-	--array-sky: var(--core-cyan-100);
-	--array-sky-label: var(--core-cyan-600);
-	--array-yellow: var(--core-yellow-100);
-	--array-yellow-label: var(--core-yellow-600);
+	--array-blue: color-mix(in srgb, var(--core-blue-500) 16%, transparent);
+	--array-blue-accent: var(--core-blue-400);
+	--array-cyan: color-mix(in srgb, var(--core-cyan-500) 16%, transparent);
+	--array-cyan-accent: var(--core-cyan-400);
+	--array-lime: color-mix(in srgb, var(--core-lime-500) 16%, transparent);
+	--array-lime-accent: var(--core-lime-400);
+	--array-pink: color-mix(in srgb, var(--core-pink-500) 16%, transparent);
+	--array-pink-accent: var(--core-pink-400);
+	--array-orange: color-mix(in srgb, var(--core-orange-500) 16%, transparent);
+	--array-orange-accent: var(--core-orange-400);
+	--array-purple: color-mix(in srgb, var(--core-purple-500) 16%, transparent);
+	--array-purple-accent: var(--core-purple-400);
+	--array-yellow: color-mix(in srgb, var(--core-yellow-500) 16%, transparent);
+	--array-yellow-accent: var(--core-yellow-400);
+	--core-red: var(--core-red-450);
+	--core-orange: var(--core-orange-450);
+	--core-yellow: var(--core-yellow-400);
+	--core-lime: var(--core-lime-450);
+	--core-green: var(--core-green-450);
+	--core-mint: var(--core-mint-400);
+	--core-teal: var(--core-teal-400);
+	--core-cyan: var(--core-cyan-400);
+	--core-blue: var(--core-blue-450);
+	--core-indigo: var(--core-indigo-450);
+	--core-purple: var(--core-purple-450);
+	--core-pink: var(--core-pink-450);
+	--core-brown: var(--core-brown-450);
+	--core-grey: var(--core-grey-501);
+	--core-grey-1: var(--core-grey-501);
+	--core-grey-2: var(--core-grey-660);
+	--core-grey-3: var(--core-grey-770);
+	--core-grey-4: var(--core-grey-821);
+	--core-grey-5: var(--core-grey-880);
+	--core-grey-6: var(--core-grey-950);
 	--core-badge-primary: var(--core-blue-600);
 	--core-button-primary: var(--core-blue-600);
 	--core-drop-shadow: var(--core-drop-shadow-dark);
@@ -185,47 +225,47 @@
 }
 
 /* Theme token text-color utility classes */
-[data-slice-theme-scope] .array-land {
-	background: var(--array-land);
+[data-slice-theme-scope] .array-lime {
+	background: var(--array-lime);
 }
-[data-slice-theme-scope] .array-land-label {
-	color: var(--array-land-label);
+[data-slice-theme-scope] .array-lime-accent {
+	color: var(--array-lime-accent);
 }
-[data-slice-theme-scope] .array-magenta {
-	background: var(--array-magenta);
+[data-slice-theme-scope] .array-pink {
+	background: var(--array-pink);
 }
-[data-slice-theme-scope] .array-magenta-label {
-	color: var(--array-magenta-label);
+[data-slice-theme-scope] .array-pink-accent {
+	color: var(--array-pink-accent);
 }
 [data-slice-theme-scope] .array-orange {
 	background: var(--array-orange);
 }
-[data-slice-theme-scope] .array-orange-label {
-	color: var(--array-orange-label);
+[data-slice-theme-scope] .array-orange-accent {
+	color: var(--array-orange-accent);
 }
 [data-slice-theme-scope] .array-purple {
 	background: var(--array-purple);
 }
-[data-slice-theme-scope] .array-purple-label {
-	color: var(--array-purple-label);
+[data-slice-theme-scope] .array-purple-accent {
+	color: var(--array-purple-accent);
 }
-[data-slice-theme-scope] .array-sea {
-	background: var(--array-sea);
+[data-slice-theme-scope] .array-blue {
+	background: var(--array-blue);
 }
-[data-slice-theme-scope] .array-sea-label {
-	color: var(--array-sea-label);
+[data-slice-theme-scope] .array-blue-accent {
+	color: var(--array-blue-accent);
 }
-[data-slice-theme-scope] .array-sky {
-	background: var(--array-sky);
+[data-slice-theme-scope] .array-cyan {
+	background: var(--array-cyan);
 }
-[data-slice-theme-scope] .array-sky-label {
-	color: var(--array-sky-label);
+[data-slice-theme-scope] .array-cyan-accent {
+	color: var(--array-cyan-accent);
 }
 [data-slice-theme-scope] .array-yellow {
 	background: var(--array-yellow);
 }
-[data-slice-theme-scope] .array-yellow-label {
-	color: var(--array-yellow-label);
+[data-slice-theme-scope] .array-yellow-accent {
+	color: var(--array-yellow-accent);
 }
 [data-slice-theme-scope] .core-badge-primary {
 	background: var(--core-badge-primary);

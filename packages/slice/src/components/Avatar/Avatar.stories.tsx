@@ -17,7 +17,7 @@ export default meta;
 type Story = StoryObj<typeof Avatar>;
 
 export const Demo: Story = {
-	args: { size: 48, textSize: 'l', backgroundColor: 'array-sky-label', borderWidth: 1 },
+	args: { size: 48, textSize: 'l', backgroundColor: 'array-cyan-accent', borderWidth: 1 },
 	play: async ({ canvasElement }) => {
 		const avatar = within(canvasElement).getByRole('img', { name: 'User Avatar - Jane Smith' });
 		await expect(avatar).toHaveTextContent('JS');

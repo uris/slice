@@ -10,13 +10,24 @@
 	position: var(--toast-position);
 	border: var(--toast-border);
 	border-radius: var(--toast-border-radius);
-	background: var(--toast-background);
+	background: var(--core-surface-primary);
 	z-index: var(--elevation-status);
 	gap: 16px;
 	box-shadow: var(--surface-shadow-soft);
 	left: var(--toast-offset);
 	right: var(--toast-offset);
 	margin-inline: auto;
+}
+
+/* Composite translucent status colors over an opaque surface, behind all content. */
+.wrapper::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: var(--toast-background);
+	pointer-events: none;
+	z-index: -1;
 }
 
 .close {

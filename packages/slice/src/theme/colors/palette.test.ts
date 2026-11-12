@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import seeds from '../../../scripts/core-palette.json';
 import greySource from '../../../scripts/grey-palette.json';
-import { neutralThemeCss } from './recipes';
+import { themeCss } from './recipes';
 import { corePalette, corePaletteAnchors, coreGreyAnchors, coreGreyLayers } from './palette';
 
 const colors: Record<string, string> = corePalette;
@@ -49,7 +49,7 @@ it('keeps semantic CSS references aligned with both theme maps', async () => {
  for (const [mode, theme] of Object.entries({ light, dark })) {
   const block = css.split(`:root[data-slice-theme="${mode}Mode"] [data-slice-theme-scope] {`)[1].split('}')[0];
   const references = [...block.matchAll(/--([\w-]+): ([^;]+);/g)];
-  const neutral: Record<string,string> = neutralThemeCss(mode as 'light' | 'dark');
+  const neutral: Record<string,string> = themeCss(mode as 'light' | 'dark');
   expect(references).toHaveLength(Object.keys(theme).length);
   for (const [, token, value] of references) {
    if (token in neutral) expect(value).toBe(neutral[token]);
@@ -118,4 +118,21 @@ it('places the custom primary surface between black and the secondary surface', 
  expect(dark['core-surface-primary']).toBe(colors['core-grey-975']);
  expect(luminance(dark['core-surface-primary'])).toBeGreaterThan(luminance('#000000'));
  expect(luminance(dark['core-surface-primary'])).toBeLessThan(luminance(dark['core-surface-secondary']));
+});
+
+it('resolves base family aliases to each appearance anchor while keeping fixed ramps unchanged', async () => {
+ const { light, dark, colorCssVars } = await import('./colors');
+ const { resolveColor } = await import('./resolveColor');
+ for (const family of Object.keys(corePaletteAnchors) as (keyof typeof corePaletteAnchors)[]) {
+  const token = `core-${family}` as const;
+  for (const [mode, theme] of [['light', light], ['dark', dark]] as const) {
+   const stop = corePaletteAnchors[family][mode];
+   expect(theme[token]).toBe(colors[`core-${family}-${stop}`]);
+  }
+  expect(resolveColor(token)).toBe(`var(--${token})`);
+  expect(colorCssVars[token]).toBe(`var(--${token})`);
+ }
+ expect(light['core-blue']).toBe('#0088ff');
+ expect(dark['core-blue']).toBe('#0091ff');
+ expect(colors['core-blue-500']).toBe('#0088ff');
 });

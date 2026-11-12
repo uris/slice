@@ -10,7 +10,7 @@ export type SharedDocSlug = (typeof sharedDocSlugs)[number];
 export const sharedDocsMetadata: Record<SharedDocSlug, Metadata> = {
 	colors: {
 		title: 'Colors | Slice UIKit',
-		description: 'Get started with Slice UIKit.',
+		description: 'Explore Slice color ramps and compare light and dark theme tokens, base hex values, and opacity.',
 	},
 	motion: {
 		title: 'Motion | Slice UIKit',

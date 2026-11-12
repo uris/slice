@@ -23,30 +23,41 @@ public enum SliceColors {
         return color
     }
 
-    public static var arrayLand: Color { Color("array-land", bundle: bundle) }
-    public static var arrayLandLabel: Color { Color("array-land-label", bundle: bundle) }
-    public static var arrayMagenta: Color { Color("array-magenta", bundle: bundle) }
-    public static var arrayMagentaLabel: Color { Color("array-magenta-label", bundle: bundle) }
+    public static var arrayBlue: Color { Color("array-blue", bundle: bundle) }
+    public static var arrayBlueAccent: Color { Color("array-blue-accent", bundle: bundle) }
+    public static var arrayCyan: Color { Color("array-cyan", bundle: bundle) }
+    public static var arrayCyanAccent: Color { Color("array-cyan-accent", bundle: bundle) }
+    public static var arrayLime: Color { Color("array-lime", bundle: bundle) }
+    public static var arrayLimeAccent: Color { Color("array-lime-accent", bundle: bundle) }
     public static var arrayOrange: Color { Color("array-orange", bundle: bundle) }
-    public static var arrayOrangeLabel: Color { Color("array-orange-label", bundle: bundle) }
+    public static var arrayOrangeAccent: Color { Color("array-orange-accent", bundle: bundle) }
+    public static var arrayPink: Color { Color("array-pink", bundle: bundle) }
+    public static var arrayPinkAccent: Color { Color("array-pink-accent", bundle: bundle) }
     public static var arrayPurple: Color { Color("array-purple", bundle: bundle) }
-    public static var arrayPurpleLabel: Color { Color("array-purple-label", bundle: bundle) }
-    public static var arraySea: Color { Color("array-sea", bundle: bundle) }
-    public static var arraySeaLabel: Color { Color("array-sea-label", bundle: bundle) }
-    public static var arraySky: Color { Color("array-sky", bundle: bundle) }
-    public static var arraySkyLabel: Color { Color("array-sky-label", bundle: bundle) }
+    public static var arrayPurpleAccent: Color { Color("array-purple-accent", bundle: bundle) }
     public static var arrayYellow: Color { Color("array-yellow", bundle: bundle) }
-    public static var arrayYellowLabel: Color { Color("array-yellow-label", bundle: bundle) }
+    public static var arrayYellowAccent: Color { Color("array-yellow-accent", bundle: bundle) }
     public static var coreBadgePrimary: Color { Color("core-badge-primary", bundle: bundle) }
     public static var coreBadgeSecondary: Color { Color("core-badge-secondary", bundle: bundle) }
+    public static var coreBlue: Color { Color("core-blue", bundle: bundle) }
+    public static var coreBrown: Color { Color("core-brown", bundle: bundle) }
     public static var coreButtonDisabled: Color { Color("core-button-disabled", bundle: bundle) }
     public static var coreButtonPrimary: Color { Color("core-button-primary", bundle: bundle) }
+    public static var coreCyan: Color { Color("core-cyan", bundle: bundle) }
     public static var coreDropShadow: Color { Color("core-drop-shadow", bundle: bundle) }
     public static var coreFillPrimary: Color { Color("core-fill-primary", bundle: bundle) }
     public static var coreFillSecondary: Color { Color("core-fill-secondary", bundle: bundle) }
     public static var coreFillTertiary: Color { Color("core-fill-tertiary", bundle: bundle) }
     public static var coreGpLogoPrimary: Color { Color("core-gp-logo-primary", bundle: bundle) }
     public static var coreGpLogoSecondary: Color { Color("core-gp-logo-secondary", bundle: bundle) }
+    public static var coreGreen: Color { Color("core-green", bundle: bundle) }
+    public static var coreGrey: Color { Color("core-grey", bundle: bundle) }
+    public static var coreGrey1: Color { Color("core-grey-1", bundle: bundle) }
+    public static var coreGrey2: Color { Color("core-grey-2", bundle: bundle) }
+    public static var coreGrey3: Color { Color("core-grey-3", bundle: bundle) }
+    public static var coreGrey4: Color { Color("core-grey-4", bundle: bundle) }
+    public static var coreGrey5: Color { Color("core-grey-5", bundle: bundle) }
+    public static var coreGrey6: Color { Color("core-grey-6", bundle: bundle) }
     public static var coreIconDark: Color { Color("core-icon-dark", bundle: bundle) }
     public static var coreIconDisabled: Color { Color("core-icon-disabled", bundle: bundle) }
     public static var coreIconError: Color { Color("core-icon-error", bundle: bundle) }
@@ -54,11 +65,18 @@ public enum SliceColors {
     public static var coreIconPrimary: Color { Color("core-icon-primary", bundle: bundle) }
     public static var coreIconSecondary: Color { Color("core-icon-secondary", bundle: bundle) }
     public static var coreIconTertiary: Color { Color("core-icon-tertiary", bundle: bundle) }
+    public static var coreIndigo: Color { Color("core-indigo", bundle: bundle) }
+    public static var coreLime: Color { Color("core-lime", bundle: bundle) }
     public static var coreLinkPrimary: Color { Color("core-link-primary", bundle: bundle) }
+    public static var coreMint: Color { Color("core-mint", bundle: bundle) }
+    public static var coreOrange: Color { Color("core-orange", bundle: bundle) }
     public static var coreOutlinePrimary: Color { Color("core-outline-primary", bundle: bundle) }
     public static var coreOutlineSecondary: Color { Color("core-outline-secondary", bundle: bundle) }
     public static var coreOutlineSpecial: Color { Color("core-outline-special", bundle: bundle) }
     public static var coreOutlineTertiary: Color { Color("core-outline-tertiary", bundle: bundle) }
+    public static var corePink: Color { Color("core-pink", bundle: bundle) }
+    public static var corePurple: Color { Color("core-purple", bundle: bundle) }
+    public static var coreRed: Color { Color("core-red", bundle: bundle) }
     public static var coreSurfaceCoverupTranslucent: Color { Color("core-surface-coverup-translucent", bundle: bundle) }
     public static var coreSurfaceElevated: Color { Color("core-surface-elevated", bundle: bundle) }
     public static var coreSurfaceLiquidGlass: Color { Color("core-surface-liquid-glass", bundle: bundle) }
@@ -67,6 +85,7 @@ public enum SliceColors {
     public static var coreSurfacePrimaryTint: Color { Color("core-surface-primary-tint", bundle: bundle) }
     public static var coreSurfaceSecondary: Color { Color("core-surface-secondary", bundle: bundle) }
     public static var coreSurfaceSpecial: Color { Color("core-surface-special", bundle: bundle) }
+    public static var coreTeal: Color { Color("core-teal", bundle: bundle) }
     public static var coreTextAccent: Color { Color("core-text-accent", bundle: bundle) }
     public static var coreTextDark: Color { Color("core-text-dark", bundle: bundle) }
     public static var coreTextDisabled: Color { Color("core-text-disabled", bundle: bundle) }
@@ -77,6 +96,7 @@ public enum SliceColors {
     public static var coreTextSecondary: Color { Color("core-text-secondary", bundle: bundle) }
     public static var coreTextSpecial: Color { Color("core-text-special", bundle: bundle) }
     public static var coreTextTertiary: Color { Color("core-text-tertiary", bundle: bundle) }
+    public static var coreYellow: Color { Color("core-yellow", bundle: bundle) }
     public static var eorTagEmployee: Color { Color("eor-tag-employee", bundle: bundle) }
     public static var eorTagOverdue: Color { Color("eor-tag-overdue", bundle: bundle) }
     public static var eorTagPaid: Color { Color("eor-tag-paid", bundle: bundle) }
@@ -98,30 +118,41 @@ public enum SliceColors {
 
 /// UIKit equivalents of the SwiftUI SliceColors accessors.
 public enum SliceUIColors {
-    public static var arrayLand: UIColor { SliceColors.uiColor(named: "array-land") }
-    public static var arrayLandLabel: UIColor { SliceColors.uiColor(named: "array-land-label") }
-    public static var arrayMagenta: UIColor { SliceColors.uiColor(named: "array-magenta") }
-    public static var arrayMagentaLabel: UIColor { SliceColors.uiColor(named: "array-magenta-label") }
+    public static var arrayBlue: UIColor { SliceColors.uiColor(named: "array-blue") }
+    public static var arrayBlueAccent: UIColor { SliceColors.uiColor(named: "array-blue-accent") }
+    public static var arrayCyan: UIColor { SliceColors.uiColor(named: "array-cyan") }
+    public static var arrayCyanAccent: UIColor { SliceColors.uiColor(named: "array-cyan-accent") }
+    public static var arrayLime: UIColor { SliceColors.uiColor(named: "array-lime") }
+    public static var arrayLimeAccent: UIColor { SliceColors.uiColor(named: "array-lime-accent") }
     public static var arrayOrange: UIColor { SliceColors.uiColor(named: "array-orange") }
-    public static var arrayOrangeLabel: UIColor { SliceColors.uiColor(named: "array-orange-label") }
+    public static var arrayOrangeAccent: UIColor { SliceColors.uiColor(named: "array-orange-accent") }
+    public static var arrayPink: UIColor { SliceColors.uiColor(named: "array-pink") }
+    public static var arrayPinkAccent: UIColor { SliceColors.uiColor(named: "array-pink-accent") }
     public static var arrayPurple: UIColor { SliceColors.uiColor(named: "array-purple") }
-    public static var arrayPurpleLabel: UIColor { SliceColors.uiColor(named: "array-purple-label") }
-    public static var arraySea: UIColor { SliceColors.uiColor(named: "array-sea") }
-    public static var arraySeaLabel: UIColor { SliceColors.uiColor(named: "array-sea-label") }
-    public static var arraySky: UIColor { SliceColors.uiColor(named: "array-sky") }
-    public static var arraySkyLabel: UIColor { SliceColors.uiColor(named: "array-sky-label") }
+    public static var arrayPurpleAccent: UIColor { SliceColors.uiColor(named: "array-purple-accent") }
     public static var arrayYellow: UIColor { SliceColors.uiColor(named: "array-yellow") }
-    public static var arrayYellowLabel: UIColor { SliceColors.uiColor(named: "array-yellow-label") }
+    public static var arrayYellowAccent: UIColor { SliceColors.uiColor(named: "array-yellow-accent") }
     public static var coreBadgePrimary: UIColor { SliceColors.uiColor(named: "core-badge-primary") }
     public static var coreBadgeSecondary: UIColor { SliceColors.uiColor(named: "core-badge-secondary") }
+    public static var coreBlue: UIColor { SliceColors.uiColor(named: "core-blue") }
+    public static var coreBrown: UIColor { SliceColors.uiColor(named: "core-brown") }
     public static var coreButtonDisabled: UIColor { SliceColors.uiColor(named: "core-button-disabled") }
     public static var coreButtonPrimary: UIColor { SliceColors.uiColor(named: "core-button-primary") }
+    public static var coreCyan: UIColor { SliceColors.uiColor(named: "core-cyan") }
     public static var coreDropShadow: UIColor { SliceColors.uiColor(named: "core-drop-shadow") }
     public static var coreFillPrimary: UIColor { SliceColors.uiColor(named: "core-fill-primary") }
     public static var coreFillSecondary: UIColor { SliceColors.uiColor(named: "core-fill-secondary") }
     public static var coreFillTertiary: UIColor { SliceColors.uiColor(named: "core-fill-tertiary") }
     public static var coreGpLogoPrimary: UIColor { SliceColors.uiColor(named: "core-gp-logo-primary") }
     public static var coreGpLogoSecondary: UIColor { SliceColors.uiColor(named: "core-gp-logo-secondary") }
+    public static var coreGreen: UIColor { SliceColors.uiColor(named: "core-green") }
+    public static var coreGrey: UIColor { SliceColors.uiColor(named: "core-grey") }
+    public static var coreGrey1: UIColor { SliceColors.uiColor(named: "core-grey-1") }
+    public static var coreGrey2: UIColor { SliceColors.uiColor(named: "core-grey-2") }
+    public static var coreGrey3: UIColor { SliceColors.uiColor(named: "core-grey-3") }
+    public static var coreGrey4: UIColor { SliceColors.uiColor(named: "core-grey-4") }
+    public static var coreGrey5: UIColor { SliceColors.uiColor(named: "core-grey-5") }
+    public static var coreGrey6: UIColor { SliceColors.uiColor(named: "core-grey-6") }
     public static var coreIconDark: UIColor { SliceColors.uiColor(named: "core-icon-dark") }
     public static var coreIconDisabled: UIColor { SliceColors.uiColor(named: "core-icon-disabled") }
     public static var coreIconError: UIColor { SliceColors.uiColor(named: "core-icon-error") }
@@ -129,11 +160,18 @@ public enum SliceUIColors {
     public static var coreIconPrimary: UIColor { SliceColors.uiColor(named: "core-icon-primary") }
     public static var coreIconSecondary: UIColor { SliceColors.uiColor(named: "core-icon-secondary") }
     public static var coreIconTertiary: UIColor { SliceColors.uiColor(named: "core-icon-tertiary") }
+    public static var coreIndigo: UIColor { SliceColors.uiColor(named: "core-indigo") }
+    public static var coreLime: UIColor { SliceColors.uiColor(named: "core-lime") }
     public static var coreLinkPrimary: UIColor { SliceColors.uiColor(named: "core-link-primary") }
+    public static var coreMint: UIColor { SliceColors.uiColor(named: "core-mint") }
+    public static var coreOrange: UIColor { SliceColors.uiColor(named: "core-orange") }
     public static var coreOutlinePrimary: UIColor { SliceColors.uiColor(named: "core-outline-primary") }
     public static var coreOutlineSecondary: UIColor { SliceColors.uiColor(named: "core-outline-secondary") }
     public static var coreOutlineSpecial: UIColor { SliceColors.uiColor(named: "core-outline-special") }
     public static var coreOutlineTertiary: UIColor { SliceColors.uiColor(named: "core-outline-tertiary") }
+    public static var corePink: UIColor { SliceColors.uiColor(named: "core-pink") }
+    public static var corePurple: UIColor { SliceColors.uiColor(named: "core-purple") }
+    public static var coreRed: UIColor { SliceColors.uiColor(named: "core-red") }
     public static var coreSurfaceCoverupTranslucent: UIColor { SliceColors.uiColor(named: "core-surface-coverup-translucent") }
     public static var coreSurfaceElevated: UIColor { SliceColors.uiColor(named: "core-surface-elevated") }
     public static var coreSurfaceLiquidGlass: UIColor { SliceColors.uiColor(named: "core-surface-liquid-glass") }
@@ -142,6 +180,7 @@ public enum SliceUIColors {
     public static var coreSurfacePrimaryTint: UIColor { SliceColors.uiColor(named: "core-surface-primary-tint") }
     public static var coreSurfaceSecondary: UIColor { SliceColors.uiColor(named: "core-surface-secondary") }
     public static var coreSurfaceSpecial: UIColor { SliceColors.uiColor(named: "core-surface-special") }
+    public static var coreTeal: UIColor { SliceColors.uiColor(named: "core-teal") }
     public static var coreTextAccent: UIColor { SliceColors.uiColor(named: "core-text-accent") }
     public static var coreTextDark: UIColor { SliceColors.uiColor(named: "core-text-dark") }
     public static var coreTextDisabled: UIColor { SliceColors.uiColor(named: "core-text-disabled") }
@@ -152,6 +191,7 @@ public enum SliceUIColors {
     public static var coreTextSecondary: UIColor { SliceColors.uiColor(named: "core-text-secondary") }
     public static var coreTextSpecial: UIColor { SliceColors.uiColor(named: "core-text-special") }
     public static var coreTextTertiary: UIColor { SliceColors.uiColor(named: "core-text-tertiary") }
+    public static var coreYellow: UIColor { SliceColors.uiColor(named: "core-yellow") }
     public static var eorTagEmployee: UIColor { SliceColors.uiColor(named: "eor-tag-employee") }
     public static var eorTagOverdue: UIColor { SliceColors.uiColor(named: "eor-tag-overdue") }
     public static var eorTagPaid: UIColor { SliceColors.uiColor(named: "eor-tag-paid") }

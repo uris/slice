@@ -17,6 +17,6 @@ export async function loadThemeColors() {
 			.replace(/from ['"]\.\/recipes['"]/g, `from '${recipesUrl}'`),
 	);
 	const colors = await import(colorsUrl);
-	const { neutralThemeCss } = await import(recipesUrl);
-	return { ...colors, neutralThemeCss };
+	const { themeCss } = await import(recipesUrl);
+	return { ...colors, themeCss };
 }

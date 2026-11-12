@@ -12,6 +12,7 @@
 	padding: 0;
 	margin: var(--table-margin);
 	border: var(--table-border-width) solid var(--table-border-color);
+	border-top-width: var(--table-border-top-width);
 	border-left-width: var(--table-border-sides);
 	border-right-width: var(--table-border-sides);
 	border-radius: var(--table-border-radius);
