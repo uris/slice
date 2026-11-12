@@ -24,8 +24,9 @@ Regenerate with `npm run generate:palette` from this workspace.
 `coreColors` combines these ramps with a shared gray ramp, the existing theme
 neutrals, and effects. Neutral theme mappings now reference these ramps and shared opacity recipes. Chromatic families use `core-<color>`
 instead of the former brand names: sea becomes blue, sky becomes cyan, land
-becomes lime, and magenta becomes pink. Existing semantic theme token names stay
-unchanged, including the older `array-*` names. Their values reference new ramps.
+becomes lime, and magenta becomes pink. Array tokens use the same family names: `array-blue`, `array-cyan`,
+`array-lime`, and `array-pink` (and their `-accent` counterparts) reference those ramps.
+The legacy sea, sky, land, and magenta array names have been removed.
 
 Theme roles need not use 500. In particular, light-theme blue text, primary-button
 fills, and destructive red fills use deeper shades for contrast with white.
@@ -82,3 +83,38 @@ black and the secondary surface (`#1f1e1e`). The dark `core-surface-primary` rol
 uses this custom stop; light primary stays white. Original screenshot anchors and
 recipes remain unchanged. The override is explicit in `neutralRecipe` in
 `recipes.ts`, so both CSS and native resolve the same color.
+
+
+## Array backgrounds and accents
+
+`array-<family>` uses the family's 500 color at 10% in light appearance and 16%
+in dark appearance. Alpha remains in the color, so backgrounds blend with the
+receiving surface. `array-<family>-accent` replaces the former `-label` token and
+is opaque: light uses 700 (cyan 800, purple 600), while dark uses 400.
+Light lime and yellow deliberately use 700 to preserve their hue; these visual
+choices do not guarantee 4.5:1 contrast for normal text on every tinted surface.
+
+
+## Appearance-aware base aliases
+
+Use `core-red`, `core-blue`, and the other `core-<family>` aliases for the base
+accent that follows the current appearance. They resolve to the exact light/dark
+anchors recorded in `corePaletteAnchors`; `core-grey` uses 500 / 501.
+Numbered ramp tokens remain fixed and unchanged for explicit shade selection.
+These base aliases are palette accents, not contrast-adjusted text roles.
+
+
+### Grey level aliases
+
+`core-grey-1` through `core-grey-6` follow the original light/dark grey pairs.
+`core-grey-1` is equivalent to `core-grey`. These aliases do not change any
+numbered ramp stop, including `core-grey-40` and the 50–1000 range.
+
+| Alias | Light stop | Dark stop |
+| --- | --- | --- |
+| `core-grey-1` | 500 | 501 |
+| `core-grey-2` | 350 | 660 |
+| `core-grey-3` | 230 | 770 |
+| `core-grey-4` | 185 | 821 |
+| `core-grey-5` | 95 | 880 |
+| `core-grey-6` | 40 | 950 |

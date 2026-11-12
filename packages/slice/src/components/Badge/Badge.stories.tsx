@@ -159,10 +159,10 @@ export const CustomColors: Story = {
 
 export const ThemeColorOverrides: Story = {
 	tags: ['tests'],
-	args: { backgroundColor: 'array-sky-label', textColor: 'core-text-dark' },
+	args: { backgroundColor: 'array-cyan-accent', textColor: 'core-text-dark' },
 	play: async ({ canvasElement }) => {
 		const badge = within(canvasElement).getByRole('status');
-		await expect(badge.style.getPropertyValue('--badge-bg')).toBe('var(--array-sky-label)');
+		await expect(badge.style.getPropertyValue('--badge-bg')).toBe('var(--array-cyan-accent)');
 		await expect(badge.style.getPropertyValue('--badge-color')).toBe('var(--core-text-dark)');
 	},
 };

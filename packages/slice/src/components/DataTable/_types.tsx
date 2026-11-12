@@ -14,6 +14,8 @@ export type CellContext<T, V> = {
 
 // the context data for rendering a table header
 export type HeaderContext<T, V> = {
+	/** Optional name supplied to the containing DataTable. */
+	tableName?: string;
 	column: ResolvedColumnDefinition<T, V>;
 	sortKey?: SortKey<T>;
 	/** Whether this column matches the active sort. */
@@ -71,10 +73,14 @@ type ResolveColumn<T, C> = C extends unknown ? Omit<C, 'sort'> & { sort?: keyof 
 export type ResolvedColumnDefinition<T, V = unknown> = ResolveColumn<T, ColumnDefinition<T, V>>;
 
 export interface DataTableProps<T> {
+	/** Optional table identifier exposed to custom header renderers as tableName. */
+	name?: string;
 	height?: number | string;
 	width?: number | string;
 	maxWidth?: number | string;
 	margin?: number | string;
+	/** Default header/body cell padding. Column padding takes precedence. Numbers use pixels. */
+	cellPadding?: number | string;
 	headerSticky?: boolean;
 	freezeColumn?: boolean;
 	backgroundColor?: ColorValue;
@@ -85,6 +91,8 @@ export interface DataTableProps<T> {
 	candyStripeBackgroundColor?: ColorValue;
 	handleHoverColor?: ColorValue;
 	borderStyle?: 'box' | 'row' | 'none';
+	/** Removes the top edge above the header, retaining other configured borders. */
+	noTopBorder?: boolean;
 	borderRadius?: number | string;
 	borderColor?: ColorValue;
 	tableData?: T[];

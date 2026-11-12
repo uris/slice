@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { loadThemeColors } from './load-theme-colors.mjs';
 
-const { coreColors, light, dark, neutralThemeCss } = await loadThemeColors();
+const { coreColors, light, dark, themeCss } = await loadThemeColors();
 const path = new URL('../src/theme/colors/colors.css', import.meta.url);
 let css = await readFile(path, 'utf8');
 // The generated palette has its own imported stylesheet; serialize shared effects here.
@@ -11,7 +11,7 @@ css = css.replace(
 	(_, start, end) => `${start}\n${extras.map(([key, value]) => `\t--${key}: ${value};`).join('\n')}${end}`,
 );
 for (const [mode, colors] of Object.entries({ light, dark })) {
-	const neutral = neutralThemeCss(mode);
+	const neutral = themeCss(mode);
 	const pattern = new RegExp(
 		`(:root\\[data-slice-theme="${mode}Mode"\\] \\[data-slice-theme-scope\\] \\{)[\\s\\S]*?(\\n\\})`,
 	);
