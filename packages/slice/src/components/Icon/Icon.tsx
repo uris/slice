@@ -18,7 +18,7 @@ export const Icon = React.memo((rawProps: IconProps) => {
 		stroke = 1.25,
 		strokeColor = theme.current.colors['core-icon-primary'],
 		fillOpacity = undefined,
-		fill = false,
+		dualTone = false,
 		coverUp = theme.current.colors['core-surface-primary'],
 		toggle = false,
 		pointer = false,
@@ -48,11 +48,11 @@ export const Icon = React.memo((rawProps: IconProps) => {
 
 	// memo fill opacity value
 	const setFillColor = useMemo(() => {
-		if (!fill) return 0;
+		if (!dualTone) return 0;
 		if (fillOpacity !== undefined && Number.isFinite(fillOpacity)) return Math.min(1, Math.max(0, fillOpacity));
 		if (theme.current.name.includes('dark')) return 0.2;
 		return 0.125;
-	}, [fillOpacity, fill, theme.current.name]);
+	}, [fillOpacity, dualTone, theme.current.name]);
 
 	// compose CSS custom properties for the icon wrapper
 	const iconStyle = useMemo(() => {

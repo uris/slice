@@ -61,7 +61,7 @@ export function IconSampler(props: Readonly<IconSamplerProps>) {
 				<IconButton
 					actionName="Show filled icons"
 					icon={'weather.moon'}
-					iconFill={showFill}
+					iconDualTone={showFill}
 					toggle
 					selected={showFill}
 					onClick={() => setShowFill(!showFill)}
@@ -94,7 +94,7 @@ export function IconSampler(props: Readonly<IconSamplerProps>) {
 										return (
 											<div className={`${css.wrapper} slice_icon`} key={`slice_icon_${icon}`}>
 												<div className={css.icon}>
-													<Icon name={icon} stroke={strokeWidth} size={iconSize} fill={showFill} />
+													<Icon name={icon} stroke={strokeWidth} size={iconSize} dualTone={showFill} />
 												</div>
 												<div className={css.label}>{icon}</div>
 											</div>

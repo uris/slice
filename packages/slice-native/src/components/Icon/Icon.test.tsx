@@ -75,7 +75,7 @@ describe('Icon', () => {
 	it('uses the toggled variant and falls back when none exists', () => {
 		for (const name of ['system.view', 'basic.home']) {
 			const definition = STATIC_ICON_REGISTRY.get(name)!;
-			expect(render({ name, toggle: true, stroke: shapeProps.stroke, iconColor: shapeProps.strokeColor, fillColor: shapeProps.fillColor, coverUp: shapeProps.coverUp, fill: true })?.props.children).toEqual(
+			expect(render({ name, toggle: true, stroke: shapeProps.stroke, iconColor: shapeProps.strokeColor, fillColor: shapeProps.fillColor, coverUp: shapeProps.coverUp, dualTone: true })?.props.children).toEqual(
 				(definition.lineOn ?? definition.line)(shapeProps),
 			);
 		}
@@ -84,11 +84,11 @@ describe('Icon', () => {
 	it('uses scheme defaults and preserves an explicit zero fill opacity', () => {
 		const line = vi.spyOn(STATIC_ICON_REGISTRY.get('basic.home')!, 'line');
 		state.scheme = 'dark';
-		render({ fill: true });
+		render({ dualTone: true });
 		expect(line).toHaveBeenLastCalledWith({ stroke: 1.5, strokeColor: '#ffffff', fillColor: 0.2, coverUp: '#000000' });
-		render({ fill: true, fillColor: 0 });
+		render({ dualTone: true, fillColor: 0 });
 		expect(line.mock.lastCall?.[0].fillColor).toBe(0);
-		render({ fill: false, fillColor: 0.7 });
+		render({ dualTone: false, fillColor: 0.7 });
 		expect(line.mock.lastCall?.[0].fillColor).toBe(0);
 		line.mockRestore();
 	});
@@ -108,11 +108,11 @@ it('uses the provider appearance for palette tokens, cover-ups and default fill 
     const line = vi.spyOn(STATIC_ICON_REGISTRY.get('basic.home')!, 'line');
     state.scheme = 'light';
     state.theme = darkTheme;
-    render({ fill: true, iconColor: 'core-icon-secondary' });
+    render({ dualTone: true, iconColor: 'core-icon-secondary' });
     expect(line).toHaveBeenLastCalledWith({ stroke: 1.5, strokeColor: darkTheme.colors['core-icon-secondary'], fillColor: 0.2, coverUp: '#000000' });
     state.scheme = 'dark';
     state.theme = lightTheme;
-    render({ fill: true });
+    render({ dualTone: true });
     expect(line).toHaveBeenLastCalledWith({ stroke: 1.5, strokeColor: '#000000', fillColor: 0.125, coverUp: '#ffffff' });
     line.mockRestore();
 });

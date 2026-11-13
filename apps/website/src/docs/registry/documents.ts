@@ -14,6 +14,10 @@ export type DocumentLoader = () => Promise<DocumentModule>;
 const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 	[Package.React]: new Map<string, DocumentLoader>([
 		['colors', () => import('@/documents/react/design-system/colors/ColorsDoc')],
+		['corners', () => import('@/documents/react/design-system/corners/CornersDoc')],
+		['type-face', () => import('@/documents/react/design-system/typography/TypefaceDoc')],
+		['type-styles', () => import('@/documents/react/design-system/typography/TypeStylesDoc')],
+		['icons', () => import('@/documents/react/design-system/icons/IconsDoc')],
 
 		['data-table', () => import('@/documents/react/components/DataTable/DataTable')],
 		['camera', () => import('@/documents/react/components/Camera/Camera')],

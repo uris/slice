@@ -13,7 +13,8 @@ type IconBaseProps = {
 	iconColor?: SliceColorValue;
 	/** Fill opacity (0–1), matching the web Icon API. */
 	fillColor?: number;
-	fill?: boolean;
+	/** Enable the optional translucent layer where the artwork supports it. */
+	dualTone?: boolean;
 	coverUp?: string;
 	toggle?: boolean;
 	disabled?: boolean;

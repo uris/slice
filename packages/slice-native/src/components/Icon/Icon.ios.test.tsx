@@ -34,7 +34,7 @@ describe('Icon in glass', () => {
 		view.rerender(icon({}, false));
 		expect(screen.getByTestId('svg')).toBeTruthy();
 	});
-	it.each([{ stroke: 2 }, { fill: true }, { fill: true, fillColor: 0.2 }, { coverUp: 'white' }, { viewBox: '0 0 24 24' }, { width: 40 }])(
+	it.each([{ stroke: 2 }, { dualTone: true }, { dualTone: true, fillColor: 0.2 }, { coverUp: 'white' }, { viewBox: '0 0 24 24' }, { width: 40 }])(
 		'keeps unsupported SVG appearance intact: %j', (props) => {
 			render(icon(props));
 			expect(screen.getByTestId('svg')).toBeTruthy();
@@ -42,7 +42,7 @@ describe('Icon in glass', () => {
 		},
 	);
 	it('updates template variants, explicit foregrounds, geometry and accessibility', () => {
-		const view = render(icon({ name: 'basic.thumbs-up', size: 32, toggle: true, fill: true, fillColor: 1, iconColor: '#ff0000', accessibilityLabel: 'Favorite' }));
+		const view = render(icon({ name: 'basic.thumbs-up', size: 32, toggle: true, dualTone: true, fillColor: 1, iconColor: '#ff0000', accessibilityLabel: 'Favorite' }));
 		expect(state.native).toMatchObject({ iconName: 'basic.thumbs-up', toggled: true, filled: true, tintToken: 'core-icon-primary' });
 		expect(state.wrapper.style[0]).toMatchObject({ width: 32, height: 32 });
 		expect(state.wrapper.accessibilityLabel).toBe('Favorite');

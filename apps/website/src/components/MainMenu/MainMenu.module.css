@@ -41,7 +41,7 @@
 	width: 100%;
 	margin: 0;
 	background: var(--core-grey-1000);
-	border-radius: 4px;
+	border-radius: 16px;
 	border: 1px solid var(--core-surface-secondary);
 }
 

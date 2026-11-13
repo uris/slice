@@ -44,8 +44,12 @@ it.each(['regular', 'medium', 'bold'] as const)('computes shared body-xxl-%s typ
  const weights = { regular: 360, medium: 420, bold: 500 };
  for (const theme of [lightTheme, darkTheme]) {
   expect(theme.type[key]).toMatchObject({ fontSize: 18, fontWeight: weights[weight] });
-  expect(theme.type[key].lineHeight).toBeCloseTo(23.9994, 6);
-  expect(theme.type[key].letterSpacing).toBeCloseTo(0.16875, 6);
+  expect(theme.type[key].lineHeight).toBeCloseTo(29.25, 6);
+  const xl = theme.type[`body-xl-${weight}`];
+  expect(theme.type[key]).toMatchObject({ fontFamily: xl.fontFamily, fontWeight: xl.fontWeight, textDecorationLine: xl.textDecorationLine });
+  expect(theme.type[key].lineHeight! / 18).toBeCloseTo(xl.lineHeight! / 17);
+  expect(theme.type[key].letterSpacing! / 18).toBeCloseTo(xl.letterSpacing! / 17);
+  expect(theme.type[key].letterSpacing).toBeCloseTo(weight === 'bold' ? 0.16875 : 0.1125, 6);
  }
  expect(createTypography('AppFont')[key].fontFamily).toBe('AppFont');
 });

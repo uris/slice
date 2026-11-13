@@ -36,7 +36,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		closeWidth = 'auto',
 		padding = 'var(--spacing-s)',
 		iconSize = 20,
-		iconFill = false,
+		iconDualTone = false,
 		iconGap = 8,
 		tabGap = 8,
 		disabled = false,
@@ -200,8 +200,8 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		selectedOption?.underlineSelectedColor ?? underlineSelectedColor ?? selectedAccent ?? 'var(--core-text-special)';
 	const baselineColor = selectedOption?.underlineColor ?? underlineColor ?? borderColor;
 	const context = useMemo(
-		() => ({ value: active, firstValue, iconFill, disabled, register, select, navigate, onToolTip, colors }),
-		[active, firstValue, iconFill, disabled, register, select, navigate, onToolTip, colors],
+		() => ({ value: active, firstValue, iconDualTone, disabled, register, select, navigate, onToolTip, colors }),
+		[active, firstValue, iconDualTone, disabled, register, select, navigate, onToolTip, colors],
 	);
 	const vars = {
 		'--tab-bar-height': setStyle(height),
@@ -229,7 +229,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 					aria-orientation="horizontal"
 					aria-disabled={disabled || undefined}
 					className={`${css.list} ${css[textSize]}`}
-					data-icon-fill={iconFill || undefined}
+					data-icon-dual-tone={iconDualTone || undefined}
 				>
 					{children !== undefined
 						? children
@@ -263,7 +263,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 							buttonSize={iconSize}
 							disabled={disabled}
 							onClick={onClose}
-							iconFill={iconFill}
+							iconDualTone={iconDualTone}
 						/>
 					</div>
 				)}

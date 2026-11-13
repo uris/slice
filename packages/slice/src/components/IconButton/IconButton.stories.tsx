@@ -48,7 +48,7 @@ const meta = {
 		defaultSelected: false,
 		selected: undefined,
 		hover: true,
-		iconFill: false,
+		iconDualTone: false,
 		toggleIcon: false,
 		disabled: false,
 		count: 0,

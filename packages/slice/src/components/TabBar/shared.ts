@@ -8,7 +8,7 @@ import type { TabBarProps } from './_types';
 type TabBarContextValue = {
 	value: unknown;
 	firstValue: unknown;
-	iconFill: boolean;
+	iconDualTone: boolean;
 	colors: TabColorProps;
 	disabled: boolean;
 	register: (element: HTMLButtonElement, option: TabOption<unknown>) => () => void;

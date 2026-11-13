@@ -75,7 +75,8 @@ for their wrapper.
 `Button`, `TextInput`, and `Text` use `SliceThemeProvider`. Give
 inputs and icon-only buttons an accessible name. Icons inside these components
 are decorative; standalone icons can use `accessibilityLabel` and `onPress`.
-For `Icon`, `fillColor` means fill opacity, not a color value.
+For `Icon`, `dualTone` enables the optional translucent layer where the artwork supports it.
+`fillColor` sets that layer’s opacity, not its color. Select solid variants by name.
 
 ### Built-in Liquid Glass and blur
 

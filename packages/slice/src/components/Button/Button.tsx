@@ -33,7 +33,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		textSize = 'm',
 		iconRight = undefined,
 		iconLeft = undefined,
-		iconFill = false,
+		iconDualTone = false,
 		count = props.count === undefined ? undefined : Number(props.count),
 		showDot = undefined,
 		tooltip = undefined,
@@ -461,7 +461,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 						}
 						pointer={false}
 						tabIndex={-1}
-						fill={iconFill}
+						dualTone={iconDualTone}
 					/>
 				</div>
 			)}
@@ -500,7 +500,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 						}
 						pointer={false}
 						tabIndex={-1}
-						fill={iconFill}
+						dualTone={iconDualTone}
 					/>
 				</div>
 			)}

@@ -35,7 +35,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		actions,
 		actionsBackgroundColor,
 		titleIcon,
-		titleIconFill = true,
+		titleIconDualTone = true,
 		titleBorderColor = 'var(--core-fill-primary)',
 		titleBorderWidth,
 		actionsBorderColor = 'var(--core-fill-primary)',
@@ -209,7 +209,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 						<div className={css.titleBlock}>
 							{titleIcon && (
 								<div className={css.titleIcon} aria-hidden="true">
-									<Icon name={titleIcon} fill={titleIconFill} size={20} />
+									<Icon name={titleIcon} dualTone={titleIconDualTone} size={20} />
 								</div>
 							)}
 							{hasTitle && (

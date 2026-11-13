@@ -303,8 +303,8 @@ export default function ButtonBarDoc() {
 				<DefaultVal>{'core-text-primary'}</DefaultVal>
 			</Definition>
 			<P>Shared hover icon color.</P>
-			<Definition id="iconFill">
-				<Prop>iconFill</Prop>
+			<Definition id="iconDualTone">
+				<Prop>iconDualTone</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
 				<DefaultVal>{'false'}</DefaultVal>
 			</Definition>
@@ -552,7 +552,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'hoverTint', title: 'hoverTint', code: true },
 			{ id: 'iconColor', title: 'iconColor', code: true },
 			{ id: 'iconColorHover', title: 'iconColorHover', code: true },
-			{ id: 'iconFill', title: 'iconFill', code: true },
+			{ id: 'iconDualTone', title: 'iconDualTone', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
 			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'initial', title: 'initial', code: true },

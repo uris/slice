@@ -54,7 +54,7 @@ export const Sizes: Story = {
 						<Button label="Edit" iconLeft="editor.edit" />
 						<Button>composed</Button>
 						<Button label="Options" iconRight="arrows.chevron-down" />
-						<Button iconLeft="basic.more-horiz-fill" iconFill aria-label="More actions" />
+						<Button iconLeft="basic.more-horiz-fill" iconDualTone aria-label="More actions" />
 					</ButtonBar>
 					<ButtonBar {...args} buttonSize={size} aria-label={`${size} increase or decrease`}>
 						<Button iconLeft="basic.plus" aria-label="Increase" />
@@ -89,7 +89,7 @@ export const ButtonDefaults: Story = {
 						}}
 					/>
 					<Button label="Working" working />
-					<Button round iconLeft="basic.more-horiz-fill" iconFill aria-label="More actions" />
+					<Button round iconLeft="basic.more-horiz-fill" iconDualTone aria-label="More actions" />
 				</ButtonBar>
 				<ButtonBar {...args} buttonSize={24} iconSize={14} aria-label="Increase or decrease">
 					<Button iconLeft="basic.plus" aria-label="Increase" />

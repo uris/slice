@@ -132,7 +132,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 						name={icon}
 						size={20}
 						style={{ width: '100%', height: '100%' }}
-						fill={group.iconFill}
+						dualTone={group.iconDualTone}
 						strokeColor="currentColor"
 					/>
 				</span>

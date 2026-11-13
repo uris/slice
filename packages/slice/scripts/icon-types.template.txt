@@ -14,7 +14,8 @@ type IconBaseProps = {
 	toggle?: boolean;
 	pointer?: boolean;
 	disabled?: boolean;
-	fill?: boolean;
+	/** Enable the optional translucent fill layer where the artwork supports it. */
+	dualTone?: boolean;
 	onClick?: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
 };
 
