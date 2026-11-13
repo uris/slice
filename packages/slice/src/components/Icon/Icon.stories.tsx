@@ -117,7 +117,7 @@ export const StaticAndDecorative: StoryObj<typeof Icon> = {
 };
 export const ZeroFillOpacity: StoryObj<typeof Icon> = {
 	tags: ['tests'],
-	render: () => <Icon name="ai.sparkle" fill fillOpacity={0} />,
+	render: () => <Icon name="ai.sparkle" dualTone fillOpacity={0} />,
 	play: async ({ canvasElement }) => {
 		const icon = within(canvasElement).getByRole('img');
 		expect(icon.querySelector('[fill-opacity]')).toHaveAttribute('fill-opacity', '0');
@@ -132,5 +132,24 @@ export const CancelledKeyboardActivation: StoryObj<typeof Icon> = {
 		icon.focus();
 		await userEvent.keyboard('{Enter} ');
 		expect(args.onClick).not.toHaveBeenCalled();
+	},
+};
+
+export const DualTone: StoryObj<typeof Icon> = {
+	tags: ['tests'],
+	args: { name: 'ai.sparkle', dualTone: true, fillOpacity: 0.4, onClick: undefined },
+	play: async ({ canvasElement }) => {
+		const icon = within(canvasElement).getByRole('img');
+		expect(icon.querySelector('[fill-opacity]')).toHaveAttribute('fill-opacity', '0.4');
+		expect(icon).not.toHaveAttribute('dualTone');
+	},
+};
+
+export const DualToneDisabled: StoryObj<typeof Icon> = {
+	tags: ['tests'],
+	args: { name: 'ai.sparkle', dualTone: false, fillOpacity: 0.4, onClick: undefined },
+	play: async ({ canvasElement }) => {
+		const icon = within(canvasElement).getByRole('img');
+		expect(icon.querySelector('[fill-opacity]')).toHaveAttribute('fill-opacity', '0');
 	},
 };

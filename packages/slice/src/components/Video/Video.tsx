@@ -546,7 +546,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 										<IconButton
 											actionName={isMuted ? 'Unmute' : 'Mute'}
 											icon={speakerIcon}
-											iconFill={true}
+											iconDualTone={true}
 											{...buttonProps}
 											onClick={() => handleMute()}
 										/>

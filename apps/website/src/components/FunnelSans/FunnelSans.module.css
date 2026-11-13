@@ -1,0 +1,33 @@
+.family {
+	font-family: "Funnel Sans", sans-serif;
+	font-size: 28px;
+	line-height: 1em;
+	margin-bottom: 8px;
+	font-weight: 500;
+}
+
+.glyphs {
+	font-family: "Funnel Sans", sans-serif;
+	font-size: 88px;
+	letter-spacing: 0.1em;
+	line-height: 1em;
+	font-weight: 400;
+	color: var(--core-text-special);
+	word-break: break-all;
+}
+
+.number {
+	font-family: "Funnel Sans", sans-serif;
+	font-size: 32px;
+	letter-spacing: 0.2em;
+	line-height: 1em;
+	font-weight: 300;
+	color: var(--core-text-special);
+	width: 100%;
+	border-bottom: 1px solid var(--core-surface-secondary);
+	padding-bottom: 24px;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}

@@ -2,7 +2,16 @@ import type { Package } from '@/src/consts/consts';
 import type { Metadata } from 'next';
 
 // all doc slugs (pages)
-export const sharedDocSlugs = ['colors', 'motion', 'typography', 'corners', 'elevations', 'icons', 'spacing'] as const;
+export const sharedDocSlugs = [
+	'colors',
+	'motion',
+	'type-face',
+	'type-styles',
+	'corners',
+	'elevations',
+	'icons',
+	'spacing',
+] as const;
 
 // doc slug type
 export type SharedDocSlug = (typeof sharedDocSlugs)[number];
@@ -16,17 +25,21 @@ export const sharedDocsMetadata: Record<SharedDocSlug, Metadata> = {
 		title: 'Motion | Slice UIKit',
 		description: 'Install Slice UIKit in your project.',
 	},
-	typography: {
-		title: 'Typography | Slice UIKit',
-		description: 'Explore Slice UIKit resources.',
+	'type-face': {
+		title: 'Typography | Typeface | Slice UIKit',
+		description: 'Explore Funnel Sans, preview its weights and styles, and use your own font with Slice.',
+	},
+	'type-styles': {
+		title: 'Typography | Type Styles | Slice UIKit',
+		description: 'Explore Slice heading and body text styles, compare sizes and weights, and apply typography presets.',
 	},
 	elevations: {
 		title: 'Elevations | Slice UIKit',
 		description: 'Explore Slice UIKit resources.',
 	},
 	corners: {
-		title: 'Icons | Slice UIKit',
-		description: 'Explore Slice UIKit resources.',
+		title: 'Corners & Shapes | Slice UIKit',
+		description: 'Explore Slice corner tokens, rounded corners, pill shapes, and square corners.',
 	},
 	icons: {
 		title: 'Icons | Slice UIKit',

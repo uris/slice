@@ -11,30 +11,51 @@ import styles from './CodeBlock.module.css';
 export interface CodeBlockProps {
 	code: string;
 	/** Use tsx for TypeScript examples containing React JSX. */
-	language?: 'typescript' | 'tsx';
+	language?: 'typescript' | 'tsx' | 'css';
 	filename?: string;
 	showFilename?: boolean;
-	/** Wrap long lines instead of scrolling horizontally. */
+	/** Wrap long lines, preserving their indentation on continuation lines. */
 	wrap?: boolean;
 	className?: string;
 	teased?: boolean;
 	canvas?: boolean;
 }
 
-// All snippets share one lazily loaded, TypeScript-only highlighter.
+// All snippets share one lazily loaded highlighter for TypeScript, TSX, and CSS.
 async function createCodeHighlighter() {
-	const [{ createHighlighterCore }, { createJavaScriptRegexEngine }, typescript, tsx, theme] = await Promise.all([
+	const [{ createHighlighterCore }, { createJavaScriptRegexEngine }, typescript, tsx, theme, css] = await Promise.all([
 		import('shiki/core'),
 		import('shiki/engine/javascript'),
 		import('shiki/langs/typescript.mjs'),
 		import('shiki/langs/tsx.mjs'),
 		import('shiki/themes/github-dark.mjs'),
+		import('shiki/langs/css.mjs'),
 	]);
 	return createHighlighterCore({
-		langs: [typescript.default, tsx.default],
+		langs: [typescript.default, tsx.default, css.default],
 		themes: [theme.default],
 		engine: createJavaScriptRegexEngine(),
 	});
+}
+
+// Match the two-column tab stops used by the code block stylesheet.
+function getLineIndent(content: string): number {
+	let columns = 0;
+	for (const character of content) {
+		if (character === ' ') {
+			columns += 1;
+		} else if (character === '\t') {
+			columns += 2 - (columns % 2);
+		} else {
+			break;
+		}
+	}
+	return columns;
+}
+
+function getWrappedLineStyle(content: string): React.CSSProperties {
+	const indent = `${getLineIndent(content)}ch`;
+	return { paddingLeft: indent, textIndent: `-${indent}` };
 }
 
 let highlighter: ReturnType<typeof createCodeHighlighter> | undefined;
@@ -125,7 +146,7 @@ export function CodeBlock({
 				<pre
 					className={styles.scrollArea}
 					role="region"
-					aria-label={filename ?? 'TypeScript code'}
+					aria-label={filename ?? (language === 'css' ? 'CSS code' : 'TypeScript code')}
 					style={{ color: fg, paddingBottom: teased ? 64 : 24 }}
 				>
 					<code>
@@ -133,19 +154,24 @@ export function CodeBlock({
 							? tokens.map((line, lineIndex) => (
 									// biome-ignore lint/suspicious/noArrayIndexKey: Token positions are stable within this static render.
 									<span key={lineIndex} className={styles.line}>
-										{line.map((token) => (
-											<span
-												key={token.offset}
-												style={{
-													color: token.color,
-													fontStyle: (token.fontStyle ?? 0) & 1 ? 'italic' : undefined,
-													fontWeight: (token.fontStyle ?? 0) & 2 ? 'bold' : undefined,
-													textDecoration: (token.fontStyle ?? 0) & 4 ? 'underline' : undefined,
-												}}
-											>
-												{token.content}
-											</span>
-										))}
+										<span
+											className={styles.lineContent}
+											style={wrap ? getWrappedLineStyle(line.map((token) => token.content).join('')) : undefined}
+										>
+											{line.map((token) => (
+												<span
+													key={token.offset}
+													style={{
+														color: token.color,
+														fontStyle: (token.fontStyle ?? 0) & 1 ? 'italic' : undefined,
+														fontWeight: (token.fontStyle ?? 0) & 2 ? 'bold' : undefined,
+														textDecoration: (token.fontStyle ?? 0) & 4 ? 'underline' : undefined,
+													}}
+												>
+													{token.content}
+												</span>
+											))}
+										</span>
 										{lineIndex < tokens.length - 1 ? '\n' : ''}
 									</span>
 								))

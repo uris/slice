@@ -19,7 +19,7 @@ type TabBarBaseProps<T> = TabColorProps & {
 	closeWidth?: number | string;
 	padding?: number | string;
 	iconSize?: number;
-	iconFill?: boolean;
+	iconDualTone?: boolean;
 	iconGap?: number;
 	tabGap?: number;
 	disabled?: boolean;

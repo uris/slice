@@ -14,7 +14,7 @@ const templateProps = new Set([
 	'size',
 	'stroke',
 	'iconColor',
-	'fill',
+	'dualTone',
 	'fillColor',
 	'toggle',
 	'disabled',
@@ -48,7 +48,7 @@ export const Icon = memo(function Icon(props: IconProps) {
 		if (value !== undefined && !templateProps.has(key)) supported = false;
 	}
 	if (props.stroke !== undefined && props.stroke !== 1.5) supported = false;
-	if (props.fill && props.fillColor !== 1) supported = false;
+	if (props.dualTone && props.fillColor !== 1) supported = false;
 	if (!Number.isFinite(Number(props.opacity ?? 1))) supported = false;
 	if (!inGlass || !supported) return <SvgIcon {...props} />;
 	return <TemplateIcon {...props} />;
@@ -60,7 +60,7 @@ function TemplateIcon(props: IconProps) {
 		size = 20,
 		stroke: _stroke,
 		iconColor,
-		fill = false,
+		dualTone = false,
 		fillColor: _fillColor,
 		toggle = false,
 		disabled = false,
@@ -90,7 +90,7 @@ function TemplateIcon(props: IconProps) {
 			iconName={name}
 			tintToken={resolveGlassColorToken(iconColor, 'core-icon-primary')}
 			toggled={toggle}
-			filled={fill}
+			filled={dualTone}
 			accessible={false}
 			pointerEvents="none"
 			style={StyleSheet.absoluteFill}

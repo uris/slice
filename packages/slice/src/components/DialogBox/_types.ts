@@ -39,7 +39,7 @@ type DialogBoxBaseProps<T = string> = {
 	/** Header bottom divider: defaults to 1px when content overflows, otherwise 0. Explicit 0 disables it. */
 	titleBorderWidth?: number;
 	titleIcon?: SliceIcon;
-	titleIconFill?: boolean;
+	titleIconDualTone?: boolean;
 	titleTextSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	contentTextSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	close?: boolean;

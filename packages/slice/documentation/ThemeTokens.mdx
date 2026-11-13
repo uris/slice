@@ -27,7 +27,7 @@ export function ThemeTokensPreview() {
                     { name: 'Dark Theme', value: 'darkMode', icon: 'weather.moon' },
                 ]}
                 iconSize={16}
-                iconFill={true}
+                iconDualTone={true}
                 selectedValue={theme.name.includes("dark") ? 'darkMode' : 'lightMode'}
                 onTabChange={(option) => {
                     manageTheme.set(option.value==="darkMode"? darkTheme : lightTheme)

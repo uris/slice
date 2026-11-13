@@ -16,5 +16,5 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
-export const Filled: Story = { args: { fill: true } };
+export const DualTone: Story = { args: { name: 'ai.sparkle', dualTone: true } };
 export const Toggled: Story = { args: { name: 'system.view', toggle: true } };

@@ -11,7 +11,7 @@ type IconButtonBaseProps = {
 	/** Icon stroke width in the 20-unit viewBox. Omit to use Icon’s default. */
 	iconStrokeWidth?: number;
 	icon?: SliceIcon;
-	iconFill?: boolean;
+	iconDualTone?: boolean;
 	iconColor?: ColorValue;
 	iconColorHover?: ColorValue;
 	iconColorSelected?: ColorValue;

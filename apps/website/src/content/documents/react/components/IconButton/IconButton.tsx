@@ -228,16 +228,12 @@ export function IconButtonDoc() {
 				<Code>hover</Code>
 				{'.'}
 			</P>
-			<Definition id={'iconFill'}>
-				<Prop>iconFill</Prop>
+			<Definition id={'iconDualTone'}>
+				<Prop>iconDualTone</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
 				<DefaultVal>{'false'}</DefaultVal>
 			</Definition>
-			<P>
-				{'Uses the '}
-				<Code>icon</Code>
-				{'’s filled appearance.'}
-			</P>
+			<P>Enables the optional translucent layer on icons that support dual tone.</P>
 			<Definition id={'iconSize'}>
 				<Prop>iconSize</Prop>
 				<TypeDef>{'number'}</TypeDef>
@@ -435,7 +431,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'iconColor', title: 'iconColor', code: true },
 			{ id: 'iconColorHover', title: 'iconColorHover', code: true },
 			{ id: 'iconColorSelected', title: 'iconColorSelected', code: true },
-			{ id: 'iconFill', title: 'iconFill', code: true },
+			{ id: 'iconDualTone', title: 'iconDualTone', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
 			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'selected', title: 'selected', code: true },

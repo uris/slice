@@ -20,7 +20,7 @@ const sharedStyleKeys = new Set<keyof ButtonProps>([
 	'variant',
 	'state',
 	'disabled',
-	'iconFill',
+	'iconDualTone',
 	'fill',
 	'iconSize',
 	'iconStrokeWidth',

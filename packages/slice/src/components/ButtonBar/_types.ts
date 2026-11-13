@@ -11,7 +11,7 @@ type ButtonBarStyleProps = ButtonStyleProps &
 		| 'state'
 		| 'disabled'
 		| 'width'
-		| 'iconFill'
+		| 'iconDualTone'
 		| 'fill'
 		| 'iconSize'
 		| 'iconStrokeWidth'

@@ -77,7 +77,9 @@ export function SidebarListItem(props: Readonly<SidebarListItemProps>) {
 				{deprecated && <span className={classNames(styles.tag, styles.deprecated)}>deprecated</span>}
 				{isNew && <span className={classNames(styles.tag, styles.new)}>new</span>}
 				{beta && <span className={classNames(styles.tag, styles.deprecated)}>beta</span>}
-				{childDocs && childDocs.length > 0 && <span className={styles.counter}>{childDocs.length}</span>}
+				{childDocs && childDocs.length > 0 && (
+					<span className={classNames(styles.tag, styles.counter)}>{childDocs.length}</span>
+				)}
 			</div>
 			{selected &&
 				childDocs?.map((doc) => {

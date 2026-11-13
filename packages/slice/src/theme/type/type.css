@@ -172,39 +172,43 @@
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-regular);
 	font-size: var(--font-size-xxl);
-	line-height: var(--line-height-m);
-	text-decoration: none;
-	letter-spacing: var(--letter-spacing-s);
+	line-height: var(--line-height-xxl);
+	letter-spacing: var(--letter-spacing-xs);
 }
 
 [data-slice-theme-scope] .body-xxl-medium {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-medium);
 	font-size: var(--font-size-xxl);
-	line-height: var(--line-height-m);
-	text-decoration: none;
-	letter-spacing: var(--letter-spacing-s);
+	line-height: var(--line-height-xxl);
+	letter-spacing: var(--letter-spacing-xs);
 }
 
 [data-slice-theme-scope] .body-xxl-bold {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-bold);
 	font-size: var(--font-size-xxl);
-	line-height: var(--line-height-m);
-	text-decoration: none;
+	line-height: var(--line-height-xxl);
 	letter-spacing: var(--letter-spacing-s);
 }
 
 [data-slice-theme-scope] h1,
+[data-slice-theme-scope] .h1,
 [data-slice-theme-scope] h2,
+[data-slice-theme-scope] .h2,
 [data-slice-theme-scope] h3,
+[data-slice-theme-scope] .h3,
 [data-slice-theme-scope] h4,
+[data-slice-theme-scope] .h4,
 [data-slice-theme-scope] h5,
-[data-slice-theme-scope] h6 {
+[data-slice-theme-scope] .h5,
+[data-slice-theme-scope] h6,
+[data-slice-theme-scope] .h6 {
 	margin: 1.5em 0 0.6em 0;
 }
 
-[data-slice-theme-scope] h1 {
+[data-slice-theme-scope] h1,
+[data-slice-theme-scope] .h1 {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h1);
@@ -213,7 +217,8 @@
 	margin-top: 0;
 }
 
-[data-slice-theme-scope] h2 {
+[data-slice-theme-scope] h2,
+[data-slice-theme-scope] .h2 {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h2);
@@ -221,7 +226,8 @@
 	letter-spacing: var(--letter-spacing-m);
 }
 
-[data-slice-theme-scope] h3 {
+[data-slice-theme-scope] h3,
+[data-slice-theme-scope] .h3 {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h3);
@@ -229,7 +235,8 @@
 	letter-spacing: var(--letter-spacing-m);
 }
 
-[data-slice-theme-scope] h4 {
+[data-slice-theme-scope] h4,
+[data-slice-theme-scope] .h4 {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h4);
@@ -237,7 +244,8 @@
 	letter-spacing: var(--letter-spacing-m);
 }
 
-[data-slice-theme-scope] h5 {
+[data-slice-theme-scope] h5,
+[data-slice-theme-scope] .h5 {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h5);
@@ -245,7 +253,8 @@
 	letter-spacing: var(--letter-spacing-m);
 }
 
-[data-slice-theme-scope] h6 {
+[data-slice-theme-scope] h6,
+[data-slice-theme-scope] .h6 {
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-extra);
 	font-size: var(--font-size-h6);

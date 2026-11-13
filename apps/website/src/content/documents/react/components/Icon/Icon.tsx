@@ -105,14 +105,14 @@ export default function IconDoc() {
 				<DefaultVal>{'false'}</DefaultVal>
 			</Definition>
 			<P>Dims the icon, removes it from the tab order, and blocks activation.</P>
-			<Definition id="fill">
-				<Prop>fill</Prop>
+			<Definition id="dualTone">
+				<Prop>dualTone</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
 				<DefaultVal>{'false'}</DefaultVal>
 			</Definition>
 			<P>
 				Enables optional translucent fill where the artwork supports it. Solid artwork uses <Code>strokeColor</Code>{' '}
-				directly and does not require fill.
+				directly and does not require <Code>dualTone</Code>.
 			</P>
 			<Definition id="fillOpacity">
 				<Prop>fillOpacity</Prop>
@@ -212,7 +212,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'coverUp', title: 'coverUp', code: true },
 			{ id: 'decorative', title: 'decorative', code: true },
 			{ id: 'disabled', title: 'disabled', code: true },
-			{ id: 'fill', title: 'fill', code: true },
+			{ id: 'dualTone', title: 'dualTone', code: true },
 			{ id: 'fillOpacity', title: 'fillOpacity', code: true },
 			{ id: 'iconName', title: 'iconName', code: true },
 			{ id: 'name', title: 'name', code: true },

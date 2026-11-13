@@ -1,7 +1,10 @@
+import { CodeBlock } from '@/components/CodeBlock';
+import { GradientCanvas } from '@/components/GradientCanvas/GradientCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
-import { H1, H2, P } from '@/components/Type/Type';
+import { Code, H1, H2, P } from '@/components/Type/Type';
+import { colorValueType } from '@/documents/react/design-system/colors/code';
 import { FlexBox, Preset } from '@apple-pie/slice';
 import Image from 'next/image';
 import colorWheel from '../../../../../assets/colors/color-wheel-all.svg';
@@ -16,15 +19,15 @@ export function ColorsDoc() {
 				Colors guide the way users interpret information. They help connect to the brand expression, create hierarchy,
 				and convey meaning.
 			</P>
-			<H2 id="core-color-groups">Core color groups</H2>
+			<H2 id="core-color-groups">Core colors</H2>
 			<P>
-				Slice includes 14 core color ramps. The light and dark themes map these ramps to semantic tokens for surfaces,
-				text, controls, and feedback. Use the ramps for custom accents and theme tokens for colors that follow the
-				current appearance.
+				Slice includes 14 core color groups with ramps for each one. Light and dark themes map values from these ramps
+				to semantic tokens for surfaces, text, controls, and feedback. While you can always use individual vales from
+				the ramps for custom accents, theme tokens are preferred and provide built in theme support.
 			</P>
-			<FlexBox preset={Preset.FillCenterMiddle} width={'fill'} height={'auto'} padding={64}>
-				<Image src={colorWheel} alt={'core color groups'} />
-			</FlexBox>
+			<GradientCanvas opacity={1} caption={'Core Colors'}>
+				<Image src={colorWheel} height={400} alt={'core color groups'} />
+			</GradientCanvas>
 			<TipBox inline noMargin>
 				Click on each color to copy it's definition to the clipboard.
 			</TipBox>
@@ -42,7 +45,7 @@ export function ColorsDoc() {
 				columns={colorColumns}
 				caption="Core grey light and dark values"
 			/>
-			<H2 id="theme">Light & dark theme</H2>
+			<H2 id="theme">Theme tokens and values</H2>
 			<P>
 				Compare each theme token in light and dark appearances. Swatches show the base hex color and its opacity on a
 				light or dark background. Select a swatch to copy its token, hex value, and opacity when below 100%, separated
@@ -111,6 +114,15 @@ export function ColorsDoc() {
 				columns={colorColumns}
 				caption="Array theme tokens"
 			/>
+			<H2 id="color-value">
+				Using the <Code style={{ fontSize: 28 }}>ColorValue</Code> type
+			</H2>
+			<P>
+				Slice components that expose color props, like <Code>backgroundColor</Code> or <Code>textColor</Code> implement
+				the <Code>ColorValue</Code> type. This means that you can use slice color tokens directly as well as other
+				string color values.
+			</P>
+			<CodeBlock filename="Colors.tsx" language="typescript" code={colorValueType.trim()} />
 		</FlexBox>
 	);
 }
@@ -127,7 +139,7 @@ export const trackedItems: TrackedItem[] = [
 	},
 	{
 		id: 'theme',
-		title: 'Light & Dark theme',
+		title: 'Theme tokens and values',
 		items: [
 			{ id: 'theme-backgrounds', title: 'Backgrounds', code: true },
 			{ id: 'theme-fills', title: 'Fills', code: true },
@@ -140,5 +152,6 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'theme-array', title: 'Special Array Colors', code: true },
 		],
 	},
+	{ id: 'color-value', title: 'Using the ColorValue Type' },
 ];
 export default ColorsDoc;

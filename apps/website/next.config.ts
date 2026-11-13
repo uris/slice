@@ -11,6 +11,7 @@ const config: NextConfig = {
 	// keep local slice package source edits visible without a separate library build.
 	webpack(config, { dev, webpack }) {
 		config.resolve.alias['@apple-pie/slice/styles.css'] = join(sliceSource, 'theme.css');
+		config.resolve.alias['@apple-pie/slice/theme/type$'] = join(sliceSource, 'theme/type/type.ts');
 		if (dev) {
 			config.plugins.push(
 				new webpack.NormalModuleReplacementPlugin(

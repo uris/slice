@@ -17,7 +17,7 @@ export const Icon = memo((props: IconProps) => {
 		stroke = 1.5,
 		iconColor,
 		fillColor,
-		fill = false,
+		dualTone = false,
 		coverUp = dark ? '#000000' : '#ffffff',
 		toggle = false,
 		disabled = false,
@@ -62,7 +62,7 @@ export const Icon = memo((props: IconProps) => {
 			{shape({
 				stroke,
 				strokeColor: resolvedStrokeColor,
-				fillColor: fill ? (fillColor ?? (dark ? 0.2 : 0.125)) : 0,
+				fillColor: dualTone ? (fillColor ?? (dark ? 0.2 : 0.125)) : 0,
 				coverUp,
 			})}
 		</Svg>

@@ -12,7 +12,7 @@ type ButtonBaseProps = ButtonStyleProps & {
 	label?: string;
 	iconRight?: SliceIcon;
 	iconLeft?: SliceIcon;
-	iconFill?: boolean;
+	iconDualTone?: boolean;
 	fill?: boolean;
 	count?: number;
 	showDot?: boolean;

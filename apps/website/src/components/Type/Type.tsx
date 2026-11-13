@@ -94,9 +94,9 @@ export function H2(props: Readonly<TextProps>) {
 
 export function H3(props: Readonly<TextProps>) {
 	const visibility = useTextVisibility<HTMLDivElement>(props);
-	const { children } = props;
+	const { children, style } = props;
 	return (
-		<div {...visibility} className={styles.wrapper}>
+		<div {...visibility} className={styles.wrapper} style={style}>
 			<span className={styles.h3}>{children}</span>
 		</div>
 	);

@@ -158,21 +158,21 @@ export const type: Type = {
       font-family: ${fontFamily};
       font-weight: ${fontWeights.regular};
       font-size: ${fontSizes.xxl};
-      line-height: ${lineHeights.m};
+      line-height: ${lineHeights.xxl};
       text-decoration: none;
-      letter-spacing: ${letterSpacings.s}`,
+      letter-spacing: ${letterSpacings.xs}`,
 	'body-xxl-medium': `
       font-family: ${fontFamily};
       font-weight: ${fontWeights.medium};
       font-size: ${fontSizes.xxl};
-      line-height: ${lineHeights.m};
+      line-height: ${lineHeights.xxl};
       text-decoration: none;
-      letter-spacing: ${letterSpacings.s}`,
+      letter-spacing: ${letterSpacings.xs}`,
 	'body-xxl-bold': `
       font-family: ${fontFamily};
       font-weight: ${fontWeights.bold};
       font-size: ${fontSizes.xxl};
-      line-height: ${lineHeights.m};
+      line-height: ${lineHeights.xxl};
       text-decoration: none;
       letter-spacing: ${letterSpacings.s}`,
 	h1: `
@@ -365,23 +365,23 @@ export const typeStyles: Record<keyof Type, React.CSSProperties> = {
 		fontFamily: `${fontFamily}`,
 		fontWeight: `${fontWeights.regular}`,
 		fontSize: `${fontSizes.xxl}`,
-		lineHeight: `${lineHeights.m}`,
+		lineHeight: `${lineHeights.xxl}`,
 		textDecoration: 'none',
-		letterSpacing: `${letterSpacings.s}`,
+		letterSpacing: `${letterSpacings.xs}`,
 	},
 	'body-xxl-medium': {
 		fontFamily: `${fontFamily}`,
 		fontWeight: `${fontWeights.medium}`,
 		fontSize: `${fontSizes.xxl}`,
-		lineHeight: `${lineHeights.m}`,
+		lineHeight: `${lineHeights.xxl}`,
 		textDecoration: 'none',
-		letterSpacing: `${letterSpacings.s}`,
+		letterSpacing: `${letterSpacings.xs}`,
 	},
 	'body-xxl-bold': {
 		fontFamily: `${fontFamily}`,
 		fontWeight: `${fontWeights.bold}`,
 		fontSize: `${fontSizes.xxl}`,
-		lineHeight: `${lineHeights.m}`,
+		lineHeight: `${lineHeights.xxl}`,
 		textDecoration: 'none',
 		letterSpacing: `${letterSpacings.s}`,
 	},

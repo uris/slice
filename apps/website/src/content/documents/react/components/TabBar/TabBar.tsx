@@ -171,12 +171,12 @@ export function TabBarDoc() {
 				Selected icon color. Takes precedence over <Code>accentColor</Code>; without either, icons follow the selected
 				text color.
 			</P>
-			<Definition id={'iconFill'}>
-				<Prop>iconFill</Prop>
+			<Definition id={'iconDualTone'}>
+				<Prop>iconDualTone</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
 				<DefaultVal>{'false'}</DefaultVal>
 			</Definition>
-			<P>{'Uses the filled treatment for tab icons and the close icon.'}</P>
+			<P>{'Enables the optional dual-tone layer for tab icons and the close icon.'}</P>
 			<Definition id={'iconGap'}>
 				<Prop>iconGap</Prop>
 				<TypeDef>{'number'}</TypeDef>
@@ -374,7 +374,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'height', title: 'height', code: true },
 			{ id: 'iconColor', title: 'iconColor', code: true },
 			{ id: 'iconColorSelected', title: 'iconColorSelected', code: true },
-			{ id: 'iconFill', title: 'iconFill', code: true },
+			{ id: 'iconDualTone', title: 'iconDualTone', code: true },
 			{ id: 'iconGap', title: 'iconGap', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
 			{ id: 'justify', title: 'justify', code: true },

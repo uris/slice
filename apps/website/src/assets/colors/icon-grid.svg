@@ -1,0 +1,28 @@
+<svg width="523" height="523" viewBox="0 0 523 523" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="263" cy="263" r="202" stroke-width="2" stroke="white" stroke-opacity="0.2"/>
+    <circle cx="263" cy="263" r="122" stroke-width="2" stroke="white" stroke-opacity="0.2"/>
+    <circle cx="263" cy="263" r="42" stroke-width="2" stroke="white" stroke-opacity="0.2"/>
+    <line x1="505.354" y1="21.3536" x2="21.3536" y2="505.354" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21.3517" y1="25.6446" x2="505.352" y2="504.645" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21.5" y1="21" x2="21.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="82.5" y1="21" x2="82.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="142.5" y1="21" x2="142.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="203.5" y1="21" x2="203.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="263.5" y1="21" x2="263.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="324.5" y1="21" x2="324.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="384.5" y1="21" x2="384.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="445.5" y1="21" x2="445.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="505.5" y1="21" x2="505.5" y2="505" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="504.5" x2="505" y2="504.5" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="443.5" x2="505" y2="443.5" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="383.5" x2="505" y2="383.5" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="322.5" x2="505" y2="322.5" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="262.5" x2="505" y2="262.5" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="201.5" x2="505" y2="201.5" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="141.5" x2="505" y2="141.5" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="80.5" x2="505" y2="80.5" stroke="white" stroke-opacity="0.1"/>
+    <line x1="21" y1="20.5" x2="505" y2="20.5" stroke="white" stroke-opacity="0.1"/>
+    <path d="M505 505H21V21H505V505ZM48.5117 50V476H474.432V50H48.5117Z" fill="white" fill-opacity="0.03"/>
+    <path d="M380.694 119.194C387.077 112.812 397.423 112.812 403.806 119.194C410.188 125.577 410.188 135.923 403.806 142.306L284.611 261.5L403.806 380.694C410.188 387.077 410.188 397.423 403.806 403.806C397.423 410.188 387.077 410.188 380.694 403.806L261.5 284.611L142.306 403.806C135.923 410.188 125.577 410.188 119.194 403.806C112.812 397.423 112.812 387.077 119.194 380.694L238.389 261.5L119.194 142.306C112.812 135.923 112.812 125.577 119.194 119.194C125.577 112.812 135.923 112.812 142.306 119.194L261.5 238.389L380.694 119.194Z"
+          fill="#0091ff"/>
+</svg>

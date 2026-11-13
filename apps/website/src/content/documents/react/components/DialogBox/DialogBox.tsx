@@ -335,12 +335,12 @@ export function DialogBoxDoc() {
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>{'Icon before the title.'}</P>
-			<Definition id="titleIconFill">
-				<Prop>titleIconFill</Prop>
+			<Definition id="titleIconDualTone">
+				<Prop>titleIconDualTone</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
 				<DefaultVal>{'true'}</DefaultVal>
 			</Definition>
-			<P>{'Requests the filled title icon treatment.'}</P>
+			<P>{'Requests the optional dual-tone title icon treatment.'}</P>
 			<Definition id="titleTextColor">
 				<Prop>titleTextColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
@@ -500,7 +500,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'titleBorderColor', title: 'titleBorderColor', code: true },
 			{ id: 'titleBorderWidth', title: 'titleBorderWidth', code: true },
 			{ id: 'titleIcon', title: 'titleIcon', code: true },
-			{ id: 'titleIconFill', title: 'titleIconFill', code: true },
+			{ id: 'titleIconDualTone', title: 'titleIconDualTone', code: true },
 			{ id: 'titleTextColor', title: 'titleTextColor', code: true },
 			{ id: 'titleTextSize', title: 'titleTextSize', code: true },
 			{ id: 'divAttributes', title: '...divAttributes', code: true },

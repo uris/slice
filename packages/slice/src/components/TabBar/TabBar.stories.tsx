@@ -30,7 +30,7 @@ const meta = {
 		closeWidth: 'auto',
 		padding: 'var(--spacing-s)',
 		iconSize: 20,
-		iconFill: false,
+		iconDualTone: false,
 		iconGap: 8,
 		tabGap: 8,
 		justify: 'start',
@@ -162,7 +162,7 @@ function ChangingTabs() {
 				width={400}
 				value={value}
 				onChange={setValue}
-				iconFill={changed}
+				iconDualTone={changed}
 				options={
 					changed
 						? [...options].reverse().map((o) => ({

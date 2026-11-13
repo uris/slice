@@ -326,12 +326,12 @@ export function ButtonDoc() {
 				<DefaultVal>{'variant icon color'}</DefaultVal>
 			</Definition>
 			<P>Color of both icons. Overrides the preset in all states.</P>
-			<Definition id={'iconFill'}>
-				<Prop>iconFill</Prop>
+			<Definition id={'iconDualTone'}>
+				<Prop>iconDualTone</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
 				<DefaultVal>{'false'}</DefaultVal>
 			</Definition>
-			<P>Fills icon shapes that support a filled appearance.</P>
+			<P>Enables the optional translucent layer on icons that support dual tone.</P>
 			<Definition id={'iconLeft'}>
 				<Prop>iconLeft</Prop>
 				<TypeDef>{'SliceIcon'}</TypeDef>
@@ -633,7 +633,7 @@ export const buttonTrackedItems: TrackedItem[] = [
 			{ id: 'fill', title: 'fill', code: true },
 			{ id: 'gap', title: 'gap', code: true },
 			{ id: 'iconColor', title: 'iconColor', code: true },
-			{ id: 'iconFill', title: 'iconFill', code: true },
+			{ id: 'iconDualTone', title: 'iconDualTone', code: true },
 			{ id: 'iconLeft', title: 'iconLeft', code: true },
 			{ id: 'iconRight', title: 'iconRight', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },

@@ -15,12 +15,13 @@ describe('body-xxl typography', () => {
  });
  it.each(['regular', 'medium', 'bold'] as const)('exposes the %s variant across web theme and CSS APIs', (weight) => {
   const key = `body-xxl-${weight}` as const;
-  expect(typeStyles[key]).toMatchObject({ fontSize: '1.125rem', fontWeight: String(fontWeights[weight]), lineHeight: '133.33%', letterSpacing: '0.009375em', textDecoration: 'none' });
+  expect(typeStyles[key]).toMatchObject({ fontSize: '1.125rem', fontWeight: String(fontWeights[weight]), lineHeight: '162.5%', letterSpacing: weight === 'bold' ? '0.009375em' : '0.00625em', textDecoration: 'none' });
   for (const theme of [lightTheme, darkTheme]) {
    expect(theme.type[key]).toBe(type[key]);
    expect(theme.type[key]).toContain('font-size: 1.125rem;');
-   expect(theme.type[key]).toContain('line-height: 133.33%;');
-   expect(theme.type[key]).toContain('letter-spacing: 0.009375em');
+   expect(theme.type[key]).toContain('line-height: 162.5%;');
+   expect(theme.type[key]).toBe(theme.type[`body-xl-${weight}`].replace('1.0625rem', '1.125rem'));
+   expect(typeStyles[key]).toEqual({ ...typeStyles[`body-xl-${weight}`], fontSize: '1.125rem' });
   }
   expect(typeCssClasses[key]).toBe(key);
   for (const css of [themeCss, moduleCss]) {
@@ -28,8 +29,8 @@ describe('body-xxl typography', () => {
    expect(declarations).toBeDefined();
    expect(declarations).toContain(`font-weight: var(--font-weight-${weight});`);
    expect(declarations).toContain('font-size: var(--font-size-xxl);');
-   expect(declarations).toContain('line-height: var(--line-height-m);');
-   expect(declarations).toContain('letter-spacing: var(--letter-spacing-s);');
+   expect(declarations).toContain('line-height: var(--line-height-xxl);');
+   expect(declarations).toContain(`letter-spacing: var(--letter-spacing-${weight === 'bold' ? 's' : 'xs'});`);
   }
  });
 });

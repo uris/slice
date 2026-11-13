@@ -5,12 +5,19 @@ import { Package } from '@/src/consts/consts';
 const designSystemSection: ListSection = [
 	{ type: SidebarListItemType.SectionTitle, title: 'Design System' },
 	{ title: 'Colors', slug: 'colors' },
+	{
+		title: 'Typography',
+		slug: 'type-face',
+		childDocs: [
+			{ title: 'Typeface', slug: 'type-face', code: true },
+			{ title: 'Type Styles', slug: 'type-styles', code: true },
+		],
+	},
 	{ title: 'Corners', slug: 'corners' },
 	{ title: 'Elevations', slug: 'elevations' },
 	{ title: 'Icons', slug: 'icons' },
 	{ title: 'Motion', slug: 'motion' },
 	{ title: 'Spacing', slug: 'spacing' },
-	{ title: 'Typography', slug: 'typography' },
 ];
 
 const gettingStartedSection: ListSection = [
