@@ -4,12 +4,10 @@ import { GradientCanvas } from '@/components/GradientCanvas/GradientCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, H1, H2, H3, P } from '@/components/Type/Type';
-import css from '@/documents/react/design-system/corners/Corners.module.css';
 import { iconStylesCode } from '@/documents/react/design-system/icons/code';
 import { AllIcons, PreviewSizes, trackedIconGGroupItems } from '@/documents/react/design-system/icons/previews';
-import iconGrid from '@/src/assets/colors/trash-icon-grid.svg';
+import iconGrid from '@/src/assets/colors/icon-grid-trash.svg';
 import { FlexBox, Preset } from '@apple-pie/slice';
-import Image from 'next/image';
 
 export function IconsDoc() {
 	return (
@@ -27,14 +25,12 @@ export function IconsDoc() {
 				area. Components such as Button and Chip account for the artwork’s inset when calculating their default padding,
 				helping icons align visually with nearby text.
 			</P>
-			<GradientCanvas caption={'24px Grid | 1.5 stroke'} height={450}>
-				<Image
-					src={iconGrid}
-					className={css.image}
-					style={{ width: '40%', height: 'auto' }}
-					alt={'Trash icon overlaid on its construction grid and alignment guides'}
-				/>
-			</GradientCanvas>
+			<GradientCanvas
+				caption={'24px Grid | 1.5 stroke'}
+				height={400}
+				imageSrc={iconGrid}
+				imageDescription={'Trash icon overlaid on its construction grid and alignment guides'}
+			/>
 			<H3>Sizes and strokes</H3>
 			<P>
 				Use <Code>size</Code> to set the icon’s width and height in pixels, and <Code>stroke</Code> to control its

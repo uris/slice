@@ -23,7 +23,6 @@ export function PreviewSizes() {
 					key={`icon.${stroke}.${sizes[index]}`}
 					name="basic.heart"
 					size={sizes[index]}
-					stroke={stroke}
 					strokeColor={colors[index]}
 					iconName={`Heart, ${sizes[index]}px, stroke ${stroke}`}
 				/>
@@ -72,7 +71,9 @@ export function AllIcons() {
 								<IconButton
 									key={name}
 									icon={name}
-									iconSize={20}
+									iconSize={24}
+									iconStrokeWidth={1.5}
+									buttonSize={40}
 									actionName={`Copy ${name}`}
 									tooltip={name}
 									onToolTip={tipActions.push}

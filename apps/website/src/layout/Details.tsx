@@ -22,6 +22,8 @@ export function Details() {
 					underlineSelectedColor={'core-fill-primary'}
 					underlineColor={'core-fill-primary'}
 					textColorSelected={'core-text-primary'}
+					height={70}
+					padding={'4px 0 0 0'}
 				>
 					<Tab icon={'editor.wrap-text'} iconSize={16} value={'on-this-page'}>
 						On this page

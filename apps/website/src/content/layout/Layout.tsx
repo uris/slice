@@ -79,7 +79,7 @@ export function ContentLayout() {
 			justify={'center'}
 			direction={'row'}
 			gap={64}
-			padding={`8px 48px ${paddingBottom}px 48px`}
+			padding={`32px 48px ${paddingBottom}px 48px`}
 			shrinkChildren={true}
 		>
 			{loader ? <LoadedDocument key={`${packageType}/${slug}`} loader={loader} /> : <DocumentNotFound />}
