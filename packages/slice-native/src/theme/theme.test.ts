@@ -35,7 +35,10 @@ describe('native themes', () => {
 			expect(Number.isFinite(motion[key](0.5))).toBe(true);
 		}
 		expect(motion['motion-water'](0.5)).toBeCloseTo(0.5);
-		expect(motion['motion-spring'](0.2)).toBeCloseTo(1.15);
+		// The shared spring peaks early, then undershoots on its first rebound.
+		expect(motion['motion-spring'](0.112)).toBeCloseTo(1.378, 6);
+		// At 20%, interpolate between 0.9 at 19.8% and 0.878 at 20.5%.
+		expect(motion['motion-spring'](0.2)).toBeCloseTo(0.9 + (0.878 - 0.9) * (0.2 / 0.7), 6);
 	});
 });
 
