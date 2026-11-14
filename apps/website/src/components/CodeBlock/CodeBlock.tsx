@@ -1,11 +1,10 @@
 'use client';
 
-import { Button, IconButton, useTheme } from '@apple-pie/slice';
+import { IconButton } from '@apple-pie/slice';
 import { useClipboard } from '@apple-pie/slice/hooks';
-import { useTipActions } from '@apple-pie/slice/stores';
-import { addOpacity } from '@apple-pie/slice/utils';
+import { useTipActions, useToastActions } from '@apple-pie/slice/stores';
 import type React from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './CodeBlock.module.css';
 
 export interface CodeBlockProps {
@@ -19,6 +18,9 @@ export interface CodeBlockProps {
 	className?: string;
 	teased?: boolean;
 	canvas?: boolean;
+	showCopy?: boolean;
+	last?: boolean;
+	first?: boolean;
 }
 
 // All snippets share one lazily loaded highlighter for TypeScript, TSX, and CSS.
@@ -68,20 +70,15 @@ export function CodeBlock({
 	wrap = false,
 	className,
 	teased = false,
+	last = true,
+	first = true,
 	canvas = false,
+	showCopy = true,
 }: Readonly<CodeBlockProps>) {
 	const { copy, isCopied, isRequesting, error } = useClipboard({ watchPermissions: false });
 	const [instance, setInstance] = useState<Awaited<ReturnType<typeof createCodeHighlighter>>>();
-	const [hidden, setHidden] = useState<boolean>(teased);
-	const [height, setHeight] = useState(100);
-	const { current } = useTheme();
-	const codeBlockRef = useRef<HTMLDivElement>(null);
-	const { push } = useTipActions();
-
-	// set height of code element
-	useEffect(() => {
-		if (code) setHeight((codeBlockRef.current?.offsetHeight ?? 100) + 48);
-	}, [code]);
+	const pushTip = useTipActions().push;
+	const pushToast = useToastActions().push;
 
 	useEffect(() => {
 		let active = true;
@@ -105,44 +102,40 @@ export function CodeBlock({
 	);
 	const { tokens, fg = '#e1e4e8' } = highlighted ?? {};
 
-	const maskStyles = useMemo(() => {
-		if (!teased) return {};
-		const color = current.colors['core-surface-secondary'];
-		const colorFrom = addOpacity(color, 1);
-		const colorTo = addOpacity(color, 0.5);
-		return {
-			background: `linear-gradient(to top, ${colorFrom} 0%, ${colorTo} 80%)`,
-		} as React.CSSProperties;
-	}, [current.colors['core-surface-secondary'], teased]);
-
-	const buttonStyles = useMemo(() => {
-		if (!teased) return {};
-		const translateY = hidden ? '50%' : '0';
-		return {
-			bottom: hidden ? '50%' : '24px',
-			left: '50%',
-			transform: `translateY(${translateY}) translateX(-50%)`,
-		} as React.CSSProperties;
-	}, [teased, hidden]);
-
+	// adjust display based on integration into canvas or displayed solo
 	const containerStyles = useMemo(() => {
-		const radius = canvas ? 0 : 24;
+		const topRadius = canvas ? 0 : 24;
+		const bottomRadius = canvas && !last ? 0 : 24;
 		return {
-			maxHeight: !teased ? 'unset' : hidden ? 100 : height,
-			borderTopLeftRadius: radius,
-			borderTopRightRadius: radius,
-			marginBottom: teased ? 0 : 24,
-			marginTop: teased ? 0 : 24,
+			borderTopLeftRadius: topRadius,
+			borderTopRightRadius: topRadius,
+			borderBottomLeftRadius: bottomRadius,
+			borderBottomRightRadius: bottomRadius,
+			marginBottom: canvas || teased ? 0 : 24,
+			marginTop: canvas || teased ? 0 : 24,
+			borderWidth: canvas ? 0 : 1,
+			background: canvas ? 'transparent' : 'var(--core-surface-secondary)',
+			overflow: canvas ? 'visible' : 'hidden',
 		} as React.CSSProperties;
-	}, [teased, height, hidden, canvas]);
+	}, [canvas, teased, last]);
+
+	const getCopyIcon = () => {
+		if (isCopied) return 'basic.check';
+		if (error) return 'basic.cross';
+		return 'basic.copy';
+	};
 
 	return (
 		<figure
 			className={[styles.codeBlock, wrap && styles.wrap, className].filter(Boolean).join(' ')}
 			style={containerStyles}
 		>
-			{showFilename && filename && <figcaption className={styles.filename}>{filename}</figcaption>}
-			<div className={styles.highlight} ref={codeBlockRef}>
+			{showFilename && filename && (
+				<figcaption className={styles.filename} style={{ borderTopWidth: canvas && first ? 0 : undefined }}>
+					{filename}
+				</figcaption>
+			)}
+			<div className={styles.highlight}>
 				<pre
 					className={styles.scrollArea}
 					role="region"
@@ -179,38 +172,28 @@ export function CodeBlock({
 					</code>
 				</pre>
 			</div>
-			<div className={styles.mask} style={{ ...maskStyles, opacity: hidden ? 1 : 0 }} />
-			{teased && (
-				<div className={styles.show} style={buttonStyles}>
-					<Button
-						label={hidden ? 'Show code' : 'Hide code'}
-						buttonSize="s"
-						textSize={'s'}
-						variant={'solid'}
-						backgroundColor={'core-surface-primary'}
-						textColor={'core-text-primary'}
-						padding={16}
-						onClick={() => setHidden(!hidden)}
+			{showCopy && (
+				<div className={styles.copyButton}>
+					<IconButton
+						icon={getCopyIcon()}
+						actionName={filename ? `Copy ${filename}` : 'Copy code'}
+						iconSize={18}
+						toggle={false}
+						tooltip={'Copy code'}
+						backgroundColorHover={isCopied ? 'feedback-positive' : 'core-surface-primary'}
+						backgroundColor={isCopied ? 'feedback-positive' : 'core-surface-primary'}
+						borderColor={isCopied ? 'feedback-positive' : 'core-fill-primary'}
+						borderWidth={0}
+						disabled={isRequesting}
+						onClick={async () => {
+							const result = await copy(code);
+							if (result) pushToast({ message: 'Code copied to clipboard', type: 'success', duration: 1500 });
+							else pushToast({ message: 'Unable to copy to clipboard', type: 'error', duration: 1500 });
+						}}
+						onToolTip={pushTip}
 					/>
 				</div>
 			)}
-			<div className={styles.copyButton} style={{ opacity: hidden ? 0 : 1 }}>
-				<IconButton
-					icon={isCopied ? 'basic.check' : error ? 'basic.cross' : 'basic.copy'}
-					iconSize={18}
-					toggle={false}
-					tooltip={'Copy code'}
-					backgroundColorHover={isCopied ? 'feedback-positive' : 'core-surface-primary'}
-					backgroundColor={isCopied ? 'feedback-positive' : 'core-surface-primary'}
-					borderColor={isCopied ? 'feedback-positive' : 'core-fill-primary'}
-					borderWidth={0}
-					disabled={isRequesting}
-					onClick={() => {
-						void copy(code);
-					}}
-					onToolTip={push}
-				/>
-			</div>
 			<span className={styles.status} role="status">
 				{isCopied ? 'Code copied to clipboard.' : error ? 'Unable to copy code. Please try again.' : ''}
 			</span>

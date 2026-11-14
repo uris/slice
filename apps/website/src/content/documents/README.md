@@ -154,11 +154,17 @@ when Usage already demonstrates the component.
 
 For the paired preview-and-code presentation used by ToggleButton and Button,
 place each focused usage example in `ComponentCanvas` and pass its snippet as the
-item's `code` (and optional `codeFilename`). The canvas owns the collapsible code
+item's `code` object: `{ code: exampleCode.trim(), filename: 'Example.tsx' }`.
+Use an array of these objects when the preview needs several files, such as TSX
+and CSS. Each object accepts `language`, `showFilename`, and `wrap`; set
+`showFilename: true` for multi-file examples so readers can distinguish the files.
+There is no separate `codeFilename` property. The canvas owns the collapsible code
 display; do not repeat the same snippet in a separate `CodeBlock`. A page may start
 its previews under Usage rather than duplicating a lead preview above Usage.
 For paged examples, give each item a distinct caption and code matching that
-specific preview. Keep hooks and interactive wiring in the colocated preview file.
+specific preview. Keep hooks and interactive wiring in the colocated preview file. The shared
+canvas owns code expansion, copying visibility, and multi-file grouping; do not
+add a separate `CodeBlock` for a stylesheet belonging to the same example.
 Every item in the first preview array must have a complete, independently copyable
 example, including imports and an exported component. Later snippets can focus on
 the relevant props without repeating the initial setup; retain any wiring needed
@@ -304,6 +310,11 @@ example—for example, linking `useMicrophone(false)` to the microphone hook doc
   to signal navigation, with hover and keyboard-focus feedback.
 - Keep these links in explanatory content, outside copyable code snippets. Plain
   `Code` without `openURL` stays non-interactive.
+
+For the Motion foundation page, keep copyable effect examples focused on the
+shape, state change, and timing values. Keyboard activation, accessible labels,
+and other preview-only interaction wiring stay in the live preview rather than
+obscuring those teaching snippets.
 
 ## Props and events
 

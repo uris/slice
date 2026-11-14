@@ -8,13 +8,6 @@ import { type CSSProperties, useMemo } from 'react';
 import { setSizeStyle } from '../../../../../packages/slice/src/utils/functions/misc';
 import css from './GradientCanvas.module.css';
 
-export type ComponentCanvasItem = {
-	label: string;
-	codeFilename?: string;
-	component: React.ReactNode;
-	hasRefresh?: boolean;
-};
-
 export interface GradientCanvasProps {
 	children?: React.ReactNode;
 	height?: number;
@@ -38,13 +31,15 @@ export interface GradientCanvasProps {
 	imageSrc?: string | StaticImport;
 	imageDescription?: string;
 	imageWidth?: number | string;
+	padding?: number | string;
 }
 
 export function GradientCanvas(props: Readonly<GradientCanvasProps>) {
 	const {
 		caption,
 		children,
-		height = 500,
+		height,
+		padding = 24,
 		gradient,
 		mask,
 		opacity = 1,
@@ -61,8 +56,9 @@ export function GradientCanvas(props: Readonly<GradientCanvasProps>) {
 			'--gc-opacity': opacity,
 			'--gc-background': backgroundColor,
 			'--gc-image-width': setSizeStyle(imageWidth),
+			'--gc-padding': setSizeStyle(padding),
 		} as CSSProperties;
-	}, [height, backgroundColor, opacity, imageWidth]);
+	}, [height, backgroundColor, opacity, imageWidth, padding]);
 
 	const gradientStyle = useMemo((): CSSProperties => {
 		const { fromColor, toColor, type, angle, opacity } = gradient ?? {};

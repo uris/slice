@@ -34,8 +34,7 @@ export function DialogBoxDoc() {
 					{
 						label: 'Basic usage',
 						component: <DialogBoxPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'DialogBoxExample.tsx',
+						code: { code: usageCode.trim(), filename: 'DialogBoxExample.tsx' },
 					},
 				]}
 			/>
@@ -64,8 +63,7 @@ export function DialogBoxDoc() {
 					{
 						label: 'Make room for longer content',
 						component: <DialogBoxPreview scroll />,
-						code: scrollingCode.trim(),
-						codeFilename: 'scrollingCode.tsx',
+						code: { code: scrollingCode.trim(), filename: 'scrollingCode.tsx' },
 					},
 				]}
 			/>

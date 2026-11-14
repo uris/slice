@@ -45,7 +45,6 @@ export function IconsDoc() {
 					{
 						label: 'Sizes and stroke weights',
 						component: <PreviewSizes />,
-						code: undefined,
 					},
 				]}
 			/>

@@ -32,8 +32,7 @@ export function ContentEditableDoc() {
 					{
 						label: 'Basic usage',
 						component: <ContentEditableUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'ProjectTitle.tsx',
+						code: { code: usageCode.trim(), filename: 'ProjectTitle.tsx' },
 					},
 				]}
 			/>
@@ -51,8 +50,7 @@ export function ContentEditableDoc() {
 					{
 						label: 'One-line overflow',
 						component: <ContentEditableClampExample />,
-						code: clampCode.trim(),
-						codeFilename: 'ClampedTitle.tsx',
+						code: { code: clampCode.trim(), filename: 'ClampedTitle.tsx' },
 					},
 				]}
 			/>

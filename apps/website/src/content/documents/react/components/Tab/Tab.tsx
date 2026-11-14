@@ -28,8 +28,7 @@ export function TabDoc() {
 					{
 						label: 'Basic usage',
 						component: <TabUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'TabExample.tsx',
+						code: { code: usageCode.trim(), filename: 'TabExample.tsx' },
 					},
 				]}
 			/>
@@ -40,8 +39,7 @@ export function TabDoc() {
 					{
 						label: 'Add an icon and count',
 						component: <TabExtrasExample />,
-						code: extrasCode.trim(),
-						codeFilename: 'TabDetails.tsx',
+						code: { code: extrasCode.trim(), filename: 'TabDetails.tsx' },
 					},
 				]}
 			/>
@@ -53,8 +51,7 @@ export function TabDoc() {
 					{
 						label: 'Use custom content',
 						component: <TabCustomExample />,
-						code: customCode.trim(),
-						codeFilename: 'TabContent.tsx',
+						code: { code: customCode.trim(), filename: 'TabContent.tsx' },
 					},
 				]}
 			/>
@@ -71,7 +68,9 @@ export function TabDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tab--default"
-				components={[{ label: 'Override selected colors', component: <TabColorExample />, code: colorsCode.trim() }]}
+				components={[
+					{ label: 'Override selected colors', component: <TabColorExample />, code: { code: colorsCode.trim() } },
+				]}
 			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>

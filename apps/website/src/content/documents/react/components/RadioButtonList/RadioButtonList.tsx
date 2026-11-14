@@ -30,8 +30,7 @@ export function RadioButtonListDoc() {
 					{
 						label: 'Basic usage',
 						component: <RadioButtonListUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'RadioButtonListExample.tsx',
+						code: { code: usageCode.trim(), filename: 'RadioButtonListExample.tsx' },
 					},
 				]}
 			/>
@@ -58,8 +57,7 @@ export function RadioButtonListDoc() {
 					{
 						label: 'Compose custom content',
 						component: <RadioButtonListCustomExample />,
-						code: customCode.trim(),
-						codeFilename: 'RadioButtonListCustom.tsx',
+						code: { code: customCode.trim(), filename: 'RadioButtonListCustom.tsx' },
 					},
 				]}
 			/>
@@ -67,7 +65,11 @@ export function RadioButtonListDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-radiobuttonlist--default"
 				components={[
-					{ label: 'Disabled choices', component: <RadioButtonListDisabledExample />, code: disabledCode.trim() },
+					{
+						label: 'Disabled choices',
+						component: <RadioButtonListDisabledExample />,
+						code: { code: disabledCode.trim() },
+					},
 				]}
 			/>
 			<H2 id={'behavior'}>Behavior</H2>

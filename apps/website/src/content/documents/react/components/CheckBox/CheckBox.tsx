@@ -32,8 +32,7 @@ export function CheckBoxDoc() {
 					{
 						label: 'Basic usage',
 						component: <CheckBoxUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'CheckBoxExample.tsx',
+						code: { code: usageCode.trim(), filename: 'CheckBoxExample.tsx' },
 					},
 				]}
 			/>
@@ -47,8 +46,7 @@ export function CheckBoxDoc() {
 					{
 						label: 'Show a mixed selection',
 						component: <CheckBoxMixedExample />,
-						code: mixedCode.trim(),
-						codeFilename: 'MixedCheckBox.tsx',
+						code: { code: mixedCode.trim(), filename: 'MixedCheckBox.tsx' },
 					},
 				]}
 			/>
@@ -63,8 +61,7 @@ export function CheckBoxDoc() {
 					{
 						label: 'Adjust icons and text',
 						component: <CheckBoxCustomExample />,
-						code: customCode.trim(),
-						codeFilename: 'CustomCheckBox.tsx',
+						code: { code: customCode.trim(), filename: 'CustomCheckBox.tsx' },
 					},
 				]}
 			/>
@@ -81,8 +78,7 @@ export function CheckBoxDoc() {
 					{
 						label: 'Align a multiline label',
 						component: <CheckBoxMultilineExample />,
-						code: multilineCode.trim(),
-						codeFilename: 'TermsCheckBox.tsx',
+						code: { code: multilineCode.trim(), filename: 'TermsCheckBox.tsx' },
 					},
 				]}
 			/>
@@ -93,8 +89,7 @@ export function CheckBoxDoc() {
 					{
 						label: 'Disable an option',
 						component: <CheckBoxDisabledExample />,
-						code: disabledCode.trim(),
-						codeFilename: 'DisabledCheckBox.tsx',
+						code: { code: disabledCode.trim(), filename: 'DisabledCheckBox.tsx' },
 					},
 				]}
 			/>

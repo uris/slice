@@ -147,8 +147,7 @@ export function ToastDoc() {
 					{
 						label: 'Basic usage',
 						component: <ToastPreview type={ToastType.Success} timed />,
-						code: usageCode.trim(),
-						codeFilename: 'ToastExample.tsx',
+						code: { code: usageCode.trim(), filename: 'ToastExample.tsx' },
 					},
 				]}
 			/>
@@ -166,8 +165,7 @@ export function ToastDoc() {
 					{
 						label: 'Keep a notification visible',
 						component: <ToastPreview progress />,
-						code: persistentCode.trim(),
-						codeFilename: 'persistentCode.tsx',
+						code: { code: persistentCode.trim(), filename: 'persistentCode.tsx' },
 					},
 				]}
 			/>
@@ -183,8 +181,7 @@ export function ToastDoc() {
 					{
 						label: 'Position inside a container',
 						component: <ToastPreview timed position="top" />,
-						code: parentCode.trim(),
-						codeFilename: 'parentCode.tsx',
+						code: { code: parentCode.trim(), filename: 'parentCode.tsx' },
 					},
 				]}
 			/>
@@ -195,9 +192,17 @@ export function ToastDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-toast--demo"
 				components={[
-					{ label: 'Success', component: <ToastPreview type={ToastType.Success} />, code: successCode.trim() },
-					{ label: 'Warning', component: <ToastPreview type={ToastType.Warning} />, code: warningCode.trim() },
-					{ label: 'Error', component: <ToastPreview type={ToastType.Error} />, code: errorCode.trim() },
+					{
+						label: 'Success',
+						component: <ToastPreview type={ToastType.Success} />,
+						code: { code: successCode.trim() },
+					},
+					{
+						label: 'Warning',
+						component: <ToastPreview type={ToastType.Warning} />,
+						code: { code: warningCode.trim() },
+					},
+					{ label: 'Error', component: <ToastPreview type={ToastType.Error} />, code: { code: errorCode.trim() } },
 				]}
 			/>
 			<H2 id="behavior">Behavior</H2>

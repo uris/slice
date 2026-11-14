@@ -45,8 +45,7 @@ export function AvatarGroupDoc() {
 					{
 						label: 'Basic usage',
 						component: <AvatarGroupUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'AvatarGroupExample.tsx',
+						code: { code: usageCode.trim(), filename: 'AvatarGroupExample.tsx' },
 					},
 				]}
 			/>
@@ -67,7 +66,7 @@ export function AvatarGroupDoc() {
 			</TipBox>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
-				components={[{ label: 'Overflow avatars', component: <MoreAvatarsPreview />, code: moreCode.trim() }]}
+				components={[{ label: 'Overflow avatars', component: <MoreAvatarsPreview />, code: { code: moreCode.trim() } }]}
 			/>
 			<H3>Adjust the spacing</H3>
 			<P>
@@ -80,8 +79,7 @@ export function AvatarGroupDoc() {
 					{
 						label: 'Adjust the spacing',
 						component: <AvatarGroupSpacingExample />,
-						code: spacingCode.trim(),
-						codeFilename: 'AvatarGroupSpacing.tsx',
+						code: { code: spacingCode.trim(), filename: 'AvatarGroupSpacing.tsx' },
 					},
 				]}
 			/>
@@ -97,8 +95,7 @@ export function AvatarGroupDoc() {
 					{
 						label: 'Style individual people',
 						component: <AvatarGroupColorsExample />,
-						code: colorsCode.trim(),
-						codeFilename: 'AvatarGroupColors.tsx',
+						code: { code: colorsCode.trim(), filename: 'AvatarGroupColors.tsx' },
 					},
 				]}
 			/>
@@ -118,8 +115,7 @@ export function AvatarGroupDoc() {
 					{
 						label: 'Size the initials',
 						component: <AvatarGroupTypographyExample />,
-						code: typographyCode.trim(),
-						codeFilename: 'AvatarGroupTypography.tsx',
+						code: { code: typographyCode.trim(), filename: 'AvatarGroupTypography.tsx' },
 					},
 				]}
 			/>

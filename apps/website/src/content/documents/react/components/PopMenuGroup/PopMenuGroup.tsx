@@ -152,8 +152,7 @@ export default function PopMenuGroupDoc() {
 					{
 						label: 'Titled and untitled groups',
 						component: <PopMenuGroupPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'GroupedActions.tsx',
+						code: { code: usageCode.trim(), filename: 'GroupedActions.tsx' },
 					},
 				]}
 			/>

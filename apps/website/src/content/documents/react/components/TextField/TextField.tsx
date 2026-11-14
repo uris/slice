@@ -47,14 +47,12 @@ export function TextFieldDoc() {
 					{
 						label: 'Basic usage',
 						component: <TextFieldUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'TextFieldExample.tsx',
+						code: { code: usageCode.trim(), filename: 'TextFieldExample.tsx' },
 					},
 					{
 						label: 'With Icon',
 						component: <TextFieldIconUsageExample />,
-						code: usageCodeIcon.trim(),
-						codeFilename: 'TextFieldExample.tsx',
+						code: { code: usageCodeIcon.trim(), filename: 'TextFieldExample.tsx' },
 					},
 				]}
 			/>
@@ -72,8 +70,7 @@ export function TextFieldDoc() {
 					{
 						label: 'Position the label',
 						component: <TextFieldLabelsExample />,
-						code: labelsCode.trim(),
-						codeFilename: 'TextFieldLabels.tsx',
+						code: { code: labelsCode.trim(), filename: 'TextFieldLabels.tsx' },
 					},
 				]}
 			/>
@@ -91,8 +88,7 @@ export function TextFieldDoc() {
 					{
 						label: 'Underline border style',
 						component: <TextFieldUnderlineExample />,
-						code: underlineCode.trim(),
-						codeFilename: 'TextFieldLabels.tsx',
+						code: { code: underlineCode.trim(), filename: 'TextFieldLabels.tsx' },
 					},
 				]}
 			/>
@@ -110,8 +106,7 @@ export function TextFieldDoc() {
 					{
 						label: 'Password input',
 						component: <TextFieldPasswordExample />,
-						code: passwordCode.trim(),
-						codeFilename: 'TextFieldExample2.tsx',
+						code: { code: passwordCode.trim(), filename: 'TextFieldExample2.tsx' },
 					},
 				]}
 			/>
@@ -138,15 +133,16 @@ export function TextFieldDoc() {
 					{
 						label: 'Add an action',
 						component: <TextFieldActionExample />,
-						code: actionCode.trim(),
-						codeFilename: 'TextFieldExample2.tsx',
+						code: { code: actionCode.trim(), filename: 'TextFieldExample2.tsx' },
 					},
 				]}
 			/>
 			<H3>Show validation feedback</H3>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
-				components={[{ label: 'Invalid field', component: <TextFieldErrorExample />, code: errorCode.trim() }]}
+				components={[
+					{ label: 'Invalid field', component: <TextFieldErrorExample />, code: { code: errorCode.trim() } },
+				]}
 			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>

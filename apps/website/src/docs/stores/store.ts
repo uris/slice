@@ -1,8 +1,10 @@
-import type { DocsStoreType } from '@/docs/stores/types';
+import { type DocsStoreType, LoadState } from '@/docs/stores/types';
 import { createRef } from 'react';
 import { create } from 'zustand';
 
 export const useDocsStore = create<DocsStoreType>((set, get) => ({
+	initialized: false,
+	loadState: LoadState.Loading,
 	packageType: null,
 	slug: null,
 	section: null,
@@ -16,7 +18,14 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 		setDocContext: (slug, packageType, section) => {
 			set((state) => {
 				if (state.slug === slug && state.packageType === packageType && state.section === section) return state;
-				return { slug, packageType, section, visibleItems: new Set<string>(), scrollAmount: 0 };
+				return {
+					slug,
+					packageType,
+					section,
+					visibleItems: new Set<string>(),
+					scrollAmount: 0,
+					initialized: true,
+				};
 			});
 		},
 		setTrackedItems: (trackedItems) => {
@@ -42,6 +51,10 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 			const scrollDirection = scrollDiff > 0 ? 'down' : scrollDiff < 0 ? 'up' : null;
 			set({ scrollAmount, scrollDirection });
 		},
+		setLoadState: (loadState: LoadState) => {
+			if (loadState === get().loadState) return;
+			set({ loadState });
+		},
 	},
 }));
 
@@ -59,3 +72,5 @@ export const useScrollboxSize = () => useDocsStore((state) => state.scrollBoxSiz
 export const useScrollBox = () => useDocsStore((state) => state.scrollBox);
 export const useScrollAmount = () => useDocsStore((state) => state.scrollAmount);
 export const useScrollDirection = () => useDocsStore((state) => state.scrollDirection);
+export const useInitialized = () => useDocsStore((state) => state.initialized);
+export const useLoadState = () => useDocsStore((state) => state.loadState);

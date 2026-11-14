@@ -19,6 +19,7 @@ const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 		['type-styles', () => import('@/documents/react/design-system/typography/TypeStylesDoc')],
 		['icons', () => import('@/documents/react/design-system/icons/IconsDoc')],
 		['motion', () => import('@/documents/react/design-system/motion/MotionDoc')],
+		['spacing', () => import('@/documents/react/design-system/spacing/SpacingDoc')],
 
 		['data-table', () => import('@/documents/react/components/DataTable/DataTable')],
 		['camera', () => import('@/documents/react/components/Camera/Camera')],

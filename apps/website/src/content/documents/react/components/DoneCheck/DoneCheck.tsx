@@ -19,8 +19,7 @@ export default function DoneCheckDoc() {
 					{
 						label: 'Basic usage',
 						component: <DoneCheckExample />,
-						code: usageCode,
-						codeFilename: 'DoneCheckExample.tsx',
+						code: { code: usageCode, filename: 'DoneCheckExample.tsx' },
 						hasRefresh: true,
 					},
 				]}

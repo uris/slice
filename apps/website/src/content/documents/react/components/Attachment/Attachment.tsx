@@ -188,20 +188,17 @@ export function AttachmentDoc() {
 					{
 						label: 'Image file',
 						component: <ImageAttachmentPreview />,
-						code: imageCode.trim(),
-						codeFilename: 'ImageAttachment.tsx',
+						code: { code: imageCode.trim(), filename: 'ImageAttachment.tsx' },
 					},
 					{
 						label: 'Clipboard text',
 						component: <TextAttachmentPreview />,
-						code: textCode.trim(),
-						codeFilename: 'TextAttachment.tsx',
+						code: { code: textCode.trim(), filename: 'TextAttachment.tsx' },
 					},
 					{
 						label: 'PDF file',
 						component: <PdfAttachmentPreview />,
-						code: pdfCode.trim(),
-						codeFilename: 'PdfAttachment.tsx',
+						code: { code: pdfCode.trim(), filename: 'PdfAttachment.tsx' },
 					},
 				]}
 			/>
@@ -212,7 +209,7 @@ export function AttachmentDoc() {
 					(['xs', 's', 'm', 'l', 'xl'] as const).map((size) => ({
 						label: uploading ? `${size} · Uploading` : size,
 						component: <AttachmentSizePreview size={size} uploading={uploading} />,
-						code: sizesCode.trim(),
+						code: { code: sizesCode.trim() },
 					})),
 				)}
 			/>
@@ -225,12 +222,12 @@ export function AttachmentDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-attachment--uploading"
 				components={[
-					{ label: 'Known progress', component: <UploadAttachmentPreview />, code: uploadCode.trim() },
-					{ label: 'Upload failed', component: <UploadErrorPreview />, code: errorCode.trim() },
+					{ label: 'Known progress', component: <UploadAttachmentPreview />, code: { code: uploadCode.trim() } },
+					{ label: 'Upload failed', component: <UploadErrorPreview />, code: { code: errorCode.trim() } },
 					{
 						label: 'Unknown progress',
 						component: <UploadAttachmentPreview indeterminate />,
-						code: indeterminateCode.trim(),
+						code: { code: indeterminateCode.trim() },
 					},
 				]}
 			/>
@@ -248,8 +245,7 @@ export function AttachmentDoc() {
 					{
 						label: 'Controlled removal',
 						component: <RemovableAttachmentPreview />,
-						code: removalCode.trim(),
-						codeFilename: 'RemovableAttachment.tsx',
+						code: { code: removalCode.trim(), filename: 'RemovableAttachment.tsx' },
 					},
 				]}
 			/>

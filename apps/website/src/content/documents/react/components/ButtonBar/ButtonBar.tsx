@@ -30,8 +30,7 @@ export default function ButtonBarDoc() {
 					{
 						label: 'Basic Button Bar',
 						component: <ButtonBarUsageExample />,
-						code: usageCode,
-						codeFilename: 'DocumentActions.tsx',
+						code: { code: usageCode, filename: 'DocumentActions.tsx' },
 					},
 				]}
 			/>
@@ -50,7 +49,7 @@ export default function ButtonBarDoc() {
 					{
 						label: 'Multiple Button Bars',
 						component: <GroupedButtonBarUsageExample />,
-						code: flexBoxCode.trim(),
+						code: { code: flexBoxCode.trim() },
 					},
 				]}
 			/>
@@ -64,7 +63,7 @@ export default function ButtonBarDoc() {
 					{
 						label: 'Vertical layout',
 						component: <ButtonBarVerticalExample />,
-						code: verticalOrientation.trim(),
+						code: { code: verticalOrientation.trim() },
 					},
 				]}
 			/>
@@ -79,7 +78,7 @@ export default function ButtonBarDoc() {
 					{
 						label: 'Combined with TextField',
 						component: <InputFieldExample />,
-						code: inputField.trim(),
+						code: { code: inputField.trim() },
 					},
 				]}
 			/>

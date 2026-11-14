@@ -32,8 +32,7 @@ export function SwitchDoc() {
 					{
 						label: 'Basic usage',
 						component: <SwitchUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'SwitchExample.tsx',
+						code: { code: usageCode.trim(), filename: 'SwitchExample.tsx' },
 					},
 				]}
 			/>
@@ -50,8 +49,7 @@ export function SwitchDoc() {
 					{
 						label: 'Start on',
 						component: <SwitchUncontrolledExample />,
-						code: uncontrolledCode.trim(),
-						codeFilename: 'SwitchUncontrolled.tsx',
+						code: { code: uncontrolledCode.trim(), filename: 'SwitchUncontrolled.tsx' },
 					},
 				]}
 			/>
@@ -62,8 +60,7 @@ export function SwitchDoc() {
 					{
 						label: 'Disable a setting',
 						component: <SwitchDisabledExample />,
-						code: example2Code.trim(),
-						codeFilename: 'SwitchExample2.tsx',
+						code: { code: example2Code.trim(), filename: 'SwitchExample2.tsx' },
 					},
 				]}
 			/>
@@ -79,8 +76,7 @@ export function SwitchDoc() {
 					{
 						label: 'Customize the knob and track',
 						component: <SwitchShapeExample />,
-						code: shapeCode.trim(),
-						codeFilename: 'SwitchShape.tsx',
+						code: { code: shapeCode.trim(), filename: 'SwitchShape.tsx' },
 					},
 				]}
 			/>

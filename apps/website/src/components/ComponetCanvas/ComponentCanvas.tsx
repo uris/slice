@@ -1,10 +1,11 @@
 'use client';
 
-import { CodeBlock } from '@/components/CodeBlock';
+import { CodeBlock, type CodeBlockProps } from '@/components/CodeBlock';
 import { Caption } from '@/components/Type/Type';
 import { classNames } from '@/src/utils/misc';
-import { IconButton, Pager, Slider } from '@apple-pie/slice';
+import { Button, IconButton, Pager, Slider } from '@apple-pie/slice';
 import { useTheme } from '@apple-pie/slice/hooks';
+import { addOpacity } from '@apple-pie/slice/utils';
 import {
 	AnimatePresence,
 	type Transition,
@@ -26,10 +27,11 @@ export type Zoom = {
 	initial: number;
 };
 
+export type CanvasCodeBlock = Omit<CodeBlockProps, 'canvas' | 'className' | 'teased' | 'showCopy' | 'first' | 'last'>;
+
 export type ComponentCanvasItem = {
 	label: string;
-	code?: string;
-	codeFilename?: string;
+	code?: CanvasCodeBlock | CanvasCodeBlock[];
 	component: React.ReactNode;
 	hasRefresh?: boolean;
 };
@@ -109,6 +111,10 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 	const slideSettings = { direction, reduceMotion, transition, contentKey };
 	const controls = useAnimationControls();
 	const rotation = useRef(0);
+	const [hidden, setHidden] = useState(true);
+	const [height, setHeight] = useState(100);
+	const codeBlockRef = useRef<HTMLDivElement>(null);
+	const { current } = useTheme();
 
 	/*
     const patternStyles = useMemo(() => {
@@ -129,6 +135,14 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 	// resolve the component to show
 	const selectedIndex = selected >= 0 && selected < (components?.length ?? 0) ? selected : 0;
 	const resolvedComponent = components?.[selectedIndex];
+	const getCodeBlocks = (): CanvasCodeBlock[] => {
+		const code = resolvedComponent?.code;
+		if (!code) return [];
+		if (Array.isArray(code)) return code;
+		return [code];
+	};
+	const resolvedCode = getCodeBlocks();
+	const hasCode = showCode && resolvedCode.length > 0;
 	const cycleIndex = useCallback(
 		(next: number, navigationDirection?: number) => {
 			const count = components?.length ?? 0;
@@ -149,18 +163,47 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 	// apply canvas styles based on weather it shows controls above amnd/or code below
 	const canvasStyles = useMemo(() => {
 		const topRadius = showControls ? 0 : 24;
-		const bottomRadius = resolvedComponent?.code ? 0 : 24;
+		const bottomRadius = hasCode ? 0 : 24;
 		return {
 			borderTopRightRadius: topRadius,
 			borderTopLeftRadius: topRadius,
 			borderBottomRightRadius: bottomRadius,
 			borderBottomLeftRadius: bottomRadius,
 			borderTopWidth: showControls ? 0 : 1,
-			borderBottomWidth: resolvedComponent?.code ? 0 : 1,
+			borderBottomWidth: hasCode ? 0 : 1,
 		} as React.CSSProperties;
-	}, [showControls, resolvedComponent?.code]);
+	}, [showControls, hasCode]);
 
 	const page = (components?.length ?? 0) > 1;
+
+	const buttonStyles = useMemo(() => {
+		const translateY = hidden ? '50%' : '0';
+		return {
+			bottom: hidden ? '50%' : '24px',
+			left: '50%',
+			transform: `translateY(${translateY}) translateX(-50%)`,
+		} as React.CSSProperties;
+	}, [hidden]);
+
+	const codeMaskStyles = useMemo(() => {
+		const color = current.colors['core-surface-secondary'];
+		const colorFrom = addOpacity(color, 1);
+		const colorTo = addOpacity(color, 0.5);
+		return {
+			background: `linear-gradient(to top, ${colorFrom} 0%, ${colorTo} 80%)`,
+		} as React.CSSProperties;
+	}, [current.colors['core-surface-secondary']]);
+
+	// Re-measure after page changes, highlighting, wrapping, and container resizes.
+	useEffect(() => {
+		const element = codeBlockRef.current;
+		if (!hasCode || !element) return;
+		const measure = () => setHeight(element.scrollHeight);
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(element);
+		return () => observer.disconnect();
+	}, [hasCode]);
 
 	return (
 		<div className={styles.container} style={{ marginBottom: offsetBottom ? 24 : 0 }}>
@@ -274,14 +317,39 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 					)}
 				</div>
 			</div>
-			{resolvedComponent?.code && (
-				<CodeBlock
-					canvas={true}
-					teased={true}
-					filename={resolvedComponent?.codeFilename}
-					language="tsx"
-					code={resolvedComponent?.code}
-				/>
+			{hasCode && (
+				<div className={styles.code} style={{ maxHeight: hidden ? 100 : height }}>
+					<div className={styles.codePage} ref={codeBlockRef} inert={hidden || undefined}>
+						{resolvedCode.map((codeBlock, index) => {
+							return (
+								<CodeBlock
+									key={`${selectedIndex}:${codeBlock.filename ?? 'code'}:${index}`}
+									{...codeBlock}
+									canvas
+									teased={index === resolvedCode.length - 1}
+									language={codeBlock.language ?? 'tsx'}
+									showCopy={!hidden}
+									first={index === 0}
+									last={index === resolvedCode.length - 1}
+								/>
+							);
+						})}
+					</div>
+					<div className={styles.codeMask} style={{ ...codeMaskStyles, opacity: hidden ? 1 : 0 }} />
+					<div className={styles.show} style={buttonStyles}>
+						<Button
+							label={hidden ? 'Show code' : 'Hide code'}
+							aria-expanded={!hidden}
+							buttonSize="s"
+							textSize={'s'}
+							variant={'solid'}
+							backgroundColor={'core-surface-primary'}
+							textColor={'core-text-primary'}
+							padding={16}
+							onClick={() => setHidden(!hidden)}
+						/>
+					</div>
+				</div>
 			)}
 		</div>
 	);

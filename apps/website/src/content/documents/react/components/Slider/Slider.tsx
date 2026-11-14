@@ -31,8 +31,7 @@ export function SliderDoc() {
 					{
 						label: 'Basic usage',
 						component: <SliderUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'SliderExample.tsx',
+						code: { code: usageCode.trim(), filename: 'SliderExample.tsx' },
 					},
 				]}
 			/>
@@ -53,8 +52,7 @@ export function SliderDoc() {
 					{
 						label: 'Set keyboard increments',
 						component: <SliderStepExample />,
-						code: stepCode.trim(),
-						codeFilename: 'SliderKeyboard.tsx',
+						code: { code: stepCode.trim(), filename: 'SliderKeyboard.tsx' },
 					},
 				]}
 			/>
@@ -68,8 +66,7 @@ export function SliderDoc() {
 					{
 						label: 'Reveal the head on hover',
 						component: <SliderHoverExample />,
-						code: hoverCode.trim(),
-						codeFilename: 'SliderHover.tsx',
+						code: { code: hoverCode.trim(), filename: 'SliderHover.tsx' },
 					},
 				]}
 			/>
@@ -86,7 +83,7 @@ export function SliderDoc() {
 					{
 						label: 'Disabled slider',
 						component: <SliderDisabledExample />,
-						code: disabledCode.trim(),
+						code: { code: disabledCode.trim() },
 					},
 				]}
 			/>

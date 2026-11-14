@@ -31,8 +31,7 @@ export function OverlayDoc() {
 					{
 						label: 'Basic usage',
 						component: <OverlayPreview opacity={0.75} />,
-						code: usageCode.trim(),
-						codeFilename: 'OverlayExample.tsx',
+						code: { code: usageCode.trim(), filename: 'OverlayExample.tsx' },
 					},
 				]}
 			/>

@@ -19,8 +19,7 @@ export default function SpacerDoc() {
 					{
 						label: 'Spacing sizes',
 						component: <SpacerExample />,
-						code: usageCode,
-						codeFilename: 'SpacerExample.tsx',
+						code: { code: usageCode, filename: 'SpacerExample.tsx' },
 					},
 				]}
 			/>

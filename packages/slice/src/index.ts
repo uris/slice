@@ -17,6 +17,7 @@ export {
 	lightTheme,
 	darkTheme,
 	motion,
+	motionValues,
 	elevations,
 	Elevation,
 	resolveColor,
@@ -31,6 +32,8 @@ export type {
 	Type,
 	Corners,
 	Elevations,
+	SliceMotion,
+	SliceMotionValues,
 } from './theme';
 export {
 	type KeyboardShortcut,

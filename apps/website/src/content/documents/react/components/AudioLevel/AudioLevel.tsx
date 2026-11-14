@@ -24,7 +24,7 @@ export default function AudioLevelDoc() {
 			</TipBox>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-audiolevel--demo"
-				components={[{ label: 'Live microphone', component: <AudioLevelPreview />, code: usageCode.trim() }]}
+				components={[{ label: 'Live microphone', component: <AudioLevelPreview />, code: { code: usageCode.trim() } }]}
 			/>
 
 			<H2 id="behavior">Behavior</H2>

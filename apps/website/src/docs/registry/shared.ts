@@ -23,7 +23,7 @@ export const sharedDocsMetadata: Record<SharedDocSlug, Metadata> = {
 	},
 	motion: {
 		title: 'Motion | Slice UIKit',
-		description: 'Install Slice UIKit in your project.',
+		description: 'Explore Water, Magnet, and Spring easing curves, preview their timing, and use Slice motion tokens.',
 	},
 	'type-face': {
 		title: 'Typography | Typeface | Slice UIKit',

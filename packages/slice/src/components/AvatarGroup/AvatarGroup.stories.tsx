@@ -339,7 +339,8 @@ export const LazyLoadingPhotos: StoryObj<typeof AvatarGroup> = {
 		await expect(image).toHaveAttribute('loading', 'lazy');
 		await expect(avatar).toHaveTextContent('J');
 		avatar.scrollIntoView();
-		await waitFor(() => expect(image).toHaveAttribute('data-loaded', 'true'));
+		// Native lazy loading schedules the fetch after scrolling; allow for browser contention in the full suite.
+		await waitFor(() => expect(image).toHaveAttribute('data-loaded', 'true'), { timeout: 10000 });
 		await expect(avatar).not.toHaveTextContent('J');
 	},
 };

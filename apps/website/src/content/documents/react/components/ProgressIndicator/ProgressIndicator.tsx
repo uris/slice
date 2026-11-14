@@ -123,8 +123,7 @@ export function ProgressIndicatorDoc() {
 					{
 						label: 'Spinner only',
 						component: <LoadingPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'FileLoading.tsx',
+						code: { code: usageCode.trim(), filename: 'FileLoading.tsx' },
 					},
 				]}
 			/>
@@ -139,8 +138,7 @@ export function ProgressIndicatorDoc() {
 					{
 						label: 'Visible label positions',
 						component: <LabelPreview />,
-						code: labelCode.trim(),
-						codeFilename: 'LabeledProgress.tsx',
+						code: { code: labelCode.trim(), filename: 'LabeledProgress.tsx' },
 					},
 				]}
 			/>
@@ -154,8 +152,7 @@ export function ProgressIndicatorDoc() {
 					{
 						label: 'Positioned region',
 						component: <OverlayPreview />,
-						code: overlayCode.trim(),
-						codeFilename: 'LoadingRegion.tsx',
+						code: { code: overlayCode.trim(), filename: 'LoadingRegion.tsx' },
 					},
 				]}
 			/>
@@ -170,8 +167,7 @@ export function ProgressIndicatorDoc() {
 					{
 						label: 'Larger, faster spinner',
 						component: <AppearancePreview />,
-						code: appearanceCode.trim(),
-						codeFilename: 'SpinnerAppearance.tsx',
+						code: { code: appearanceCode.trim(), filename: 'SpinnerAppearance.tsx' },
 					},
 				]}
 			/>

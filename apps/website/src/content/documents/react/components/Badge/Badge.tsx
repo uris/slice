@@ -31,8 +31,7 @@ export function BadgeDoc() {
 					{
 						label: 'Basic usage',
 						component: <BadgeUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'BadgeExample.tsx',
+						code: { code: usageCode.trim(), filename: 'BadgeExample.tsx' },
 					},
 				]}
 			/>
@@ -46,8 +45,7 @@ export function BadgeDoc() {
 					{
 						label: 'Count above 99',
 						component: <BadgeOverflowExample />,
-						code: overflowCode.trim(),
-						codeFilename: 'BadgeOverflow.tsx',
+						code: { code: overflowCode.trim(), filename: 'BadgeOverflow.tsx' },
 					},
 				]}
 			/>
@@ -61,8 +59,7 @@ export function BadgeDoc() {
 					{
 						label: 'Keep zero visible',
 						component: <BadgeZeroExample />,
-						code: zeroCode.trim(),
-						codeFilename: 'BadgeZero.tsx',
+						code: { code: zeroCode.trim(), filename: 'BadgeZero.tsx' },
 					},
 				]}
 			/>
@@ -76,8 +73,7 @@ export function BadgeDoc() {
 					{
 						label: 'Show a label',
 						component: <BadgeLabelExample />,
-						code: labelCode.trim(),
-						codeFilename: 'BadgeLabel.tsx',
+						code: { code: labelCode.trim(), filename: 'BadgeLabel.tsx' },
 					},
 				]}
 			/>
@@ -92,8 +88,7 @@ export function BadgeDoc() {
 					{
 						label: 'Choose your colors',
 						component: <BadgeColorsExample />,
-						code: colorsCode.trim(),
-						codeFilename: 'BadgeColors.tsx',
+						code: { code: colorsCode.trim(), filename: 'BadgeColors.tsx' },
 					},
 				]}
 			/>

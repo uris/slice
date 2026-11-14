@@ -81,8 +81,7 @@ export function FileIconDoc() {
 					{
 						label: 'File with an icon',
 						component: <FilePreview />,
-						code: usageCode.trim(),
-						codeFilename: 'ReportFile.tsx',
+						code: { code: usageCode.trim(), filename: 'ReportFile.tsx' },
 					},
 				]}
 			/>
@@ -97,8 +96,7 @@ export function FileIconDoc() {
 					{
 						label: 'File categories',
 						component: <CategoriesPreview />,
-						code: categoriesCode.trim(),
-						codeFilename: 'FileCategories.tsx',
+						code: { code: categoriesCode.trim(), filename: 'FileCategories.tsx' },
 					},
 				]}
 			/>
@@ -113,8 +111,7 @@ export function FileIconDoc() {
 					{
 						label: 'Icon sizes',
 						component: <SizesPreview />,
-						code: sizesCode.trim(),
-						codeFilename: 'FileSizes.tsx',
+						code: { code: sizesCode.trim(), filename: 'FileSizes.tsx' },
 					},
 				]}
 			/>
