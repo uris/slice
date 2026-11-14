@@ -25,8 +25,7 @@ export default function PopMenuControllerDoc() {
 					{
 						label: 'Props and composed menus',
 						component: <PopMenuControllerPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'AppActions.tsx',
+						code: { code: usageCode.trim(), filename: 'AppActions.tsx' },
 					},
 				]}
 			/>

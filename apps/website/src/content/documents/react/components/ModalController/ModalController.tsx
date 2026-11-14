@@ -29,8 +29,7 @@ export function ModalControllerDoc() {
 					{
 						label: 'Basic usage',
 						component: <ModalControllerPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'ModalControllerExample.tsx',
+						code: { code: usageCode.trim(), filename: 'ModalControllerExample.tsx' },
 					},
 				]}
 			/>

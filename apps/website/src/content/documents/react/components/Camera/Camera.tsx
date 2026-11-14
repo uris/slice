@@ -29,7 +29,7 @@ export default function CameraDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-camera--demo"
 				components={[
-					{ label: 'Camera preview', component: <CameraPreview />, code: usageCode.trim(), hasRefresh: true },
+					{ label: 'Camera preview', component: <CameraPreview />, code: { code: usageCode.trim() }, hasRefresh: true },
 				]}
 			/>
 
@@ -44,7 +44,7 @@ export default function CameraDoc() {
 					{
 						label: 'Automatic capture',
 						component: <CameraWithVideoPreview />,
-						code: showOnStart.trim(),
+						code: { code: showOnStart.trim() },
 						hasRefresh: true,
 					},
 				]}
@@ -61,7 +61,7 @@ export default function CameraDoc() {
 					{
 						label: 'Optional actions',
 						component: <CameraActionsPreview />,
-						code: optionalActionsCode.trim(),
+						code: { code: optionalActionsCode.trim() },
 						hasRefresh: true,
 					},
 				]}
@@ -78,7 +78,7 @@ export default function CameraDoc() {
 					{
 						label: 'Ref controls',
 						component: <CameraControlsPreview />,
-						code: controlsCode.trim(),
+						code: { code: controlsCode.trim() },
 						hasRefresh: true,
 					},
 				]}

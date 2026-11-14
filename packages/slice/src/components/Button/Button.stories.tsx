@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { AnimatePresence } from 'motion/react';
 import { StrictMode, useRef, useState } from 'react';
 import { Button } from 'src/components/Button/Button';
 import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { SliceIcons } from 'src/components/Icon/_types';
 import {
+	installReducedMotionPreference,
 	runButtonDisabledInteractionsPlay,
 	runButtonFillAndCustomWidthPlay,
 	runButtonLinkOpensWindowPlay,
@@ -659,4 +661,191 @@ export const BodyTextSizes: StoryObj<typeof Button> = {
 			))}
 		</FlexBox>
 	),
+};
+
+let buttonMotionPreference: ReturnType<typeof installReducedMotionPreference>;
+
+export const ReducedMotionCustomVariants: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	beforeEach: () => {
+		buttonMotionPreference = installReducedMotionPreference(true);
+		return () => buttonMotionPreference.restore();
+	},
+	args: {
+		label: 'Immediate target',
+		initial: 'hidden',
+		animate: 'visible',
+		variants: {
+			hidden: { opacity: 0, x: -100 },
+			visible: () => ({
+				opacity: [0.2, 1],
+				x: [0, 24],
+				transition: { delay: 10, duration: 10, repeat: Number.POSITIVE_INFINITY, opacity: { duration: 20 } },
+			}),
+		},
+		transition: { delay: 5, duration: 5, repeat: Number.POSITIVE_INFINITY },
+	},
+	play: async ({ canvasElement, args }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Immediate target' });
+		await waitFor(() => {
+			expect(getComputedStyle(button).opacity).toBe('1');
+			expect(new DOMMatrix(getComputedStyle(button).transform).m41).toBe(24);
+		});
+		expect(getComputedStyle(button).transitionDuration).toBe('0s');
+		await userEvent.click(button);
+		expect(args.onClick).toHaveBeenCalledTimes(1);
+	},
+};
+
+function LiveMotionButton() {
+	const [expanded, setExpanded] = useState(false);
+	return (
+		<Button
+			label="Toggle motion target"
+			initial="rest"
+			animate={expanded ? 'expanded' : 'rest'}
+			variants={{
+				rest: { x: 0, opacity: 1 },
+				expanded: { x: 24, opacity: 0.7, transition: { delay: 5, duration: 10, repeat: Number.POSITIVE_INFINITY } },
+			}}
+			transition={{ duration: 10 }}
+			onClick={() => setExpanded((value) => !value)}
+		/>
+	);
+}
+
+export const LiveReducedMotion: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	beforeEach: () => {
+		buttonMotionPreference = installReducedMotionPreference(false);
+		return () => buttonMotionPreference.restore();
+	},
+	render: () => <LiveMotionButton />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button', { name: 'Toggle motion target' });
+		await userEvent.click(button);
+		button.focus();
+		buttonMotionPreference.set(true);
+		await waitFor(() => {
+			expect(new DOMMatrix(getComputedStyle(button).transform).m41).toBe(24);
+			expect(getComputedStyle(button).opacity).toBe('0.7');
+		});
+		expect(button).toHaveFocus();
+		expect(canvas.getByRole('button', { name: 'Toggle motion target' })).toBe(button);
+		buttonMotionPreference.set(false);
+		await waitFor(() => expect(getComputedStyle(button).transitionDuration.split(',')[0].trim()).toBe('0.25s'));
+		await userEvent.click(button);
+		buttonMotionPreference.set(true);
+		await waitFor(() => expect(new DOMMatrix(getComputedStyle(button).transform).m41).toBe(0));
+		expect(button).toHaveFocus();
+	},
+};
+
+function ExitingMotionButton({ exitDuration = 10 }: { exitDuration?: number }) {
+	const [show, setShow] = useState(true);
+	return (
+		<>
+			<Button label="Remove animated button" onClick={() => setShow(false)} />
+			<AnimatePresence>
+				{show && (
+					<Button
+						label="Animated exit"
+						initial="visible"
+						animate="visible"
+						exit="hidden"
+						variants={{
+							visible: { opacity: 1 },
+							hidden: { opacity: 0, transition: { delay: exitDuration, duration: exitDuration } },
+						}}
+					/>
+				)}
+			</AnimatePresence>
+		</>
+	);
+}
+
+export const ReducedMotionExit: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	beforeEach: () => {
+		buttonMotionPreference = installReducedMotionPreference(true);
+		return () => buttonMotionPreference.restore();
+	},
+	render: () => <ExitingMotionButton />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Remove animated button' }));
+		await waitFor(() => expect(canvas.queryByRole('button', { name: 'Animated exit' })).not.toBeInTheDocument());
+	},
+};
+
+export const LiveReducedMotionExit: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	beforeEach: () => {
+		buttonMotionPreference = installReducedMotionPreference(false);
+		return () => buttonMotionPreference.restore();
+	},
+	render: () => <ExitingMotionButton />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Remove animated button' }));
+		expect(canvas.getByRole('button', { name: 'Animated exit' })).toBeInTheDocument();
+		buttonMotionPreference.set(true);
+		await waitFor(() => expect(canvas.queryByRole('button', { name: 'Animated exit' })).not.toBeInTheDocument());
+	},
+};
+
+export const NormalMotionExit: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	beforeEach: () => {
+		buttonMotionPreference = installReducedMotionPreference(false);
+		return () => buttonMotionPreference.restore();
+	},
+	render: () => <ExitingMotionButton exitDuration={0.15} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Remove animated button' }));
+		expect(canvas.getByRole('button', { name: 'Animated exit' })).toBeInTheDocument();
+		await waitFor(() => expect(canvas.queryByRole('button', { name: 'Animated exit' })).not.toBeInTheDocument());
+	},
+};
+
+function SpringTransformButton() {
+	const [expanded, setExpanded] = useState(false);
+	return (
+		<Button
+			label="Spring transform"
+			initial="rest"
+			animate={expanded ? 'expanded' : 'rest'}
+			variants={{ rest: { scale: 1 }, expanded: { scale: 1.2 } }}
+			transition={{ type: 'spring', stiffness: 300, damping: 14 }}
+			onClick={() => setExpanded((value) => !value)}
+		/>
+	);
+}
+
+export const SpringTransformIsNotSmoothedByCss: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	beforeEach: () => {
+		buttonMotionPreference = installReducedMotionPreference(false);
+		return () => buttonMotionPreference.restore();
+	},
+	render: () => <SpringTransformButton />,
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Spring transform' });
+		const properties = getComputedStyle(button)
+			.transitionProperty.split(',')
+			.map((value) => value.trim());
+		expect(properties).not.toContain('all');
+		expect(properties).not.toContain('transform');
+		await userEvent.click(button);
+		let peak = 1;
+		const started = performance.now();
+		while (performance.now() - started < 700) {
+			await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+			peak = Math.max(peak, new DOMMatrix(getComputedStyle(button).transform).a);
+		}
+		expect(peak).toBeGreaterThan(1.21);
+		await waitFor(() => expect(new DOMMatrix(getComputedStyle(button).transform).a).toBeCloseTo(1.2, 2));
+	},
 };

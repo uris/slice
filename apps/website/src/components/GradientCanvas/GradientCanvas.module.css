@@ -37,20 +37,26 @@
 .content {
 	position: relative;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
 	flex: 1;
 	width: 100%;
 	z-index: 3;
-	padding: 24px;
+	padding: var(--gc-padding);
 	opacity: var(--gc-opacity);
+	gap: 16px;
 }
 
 .caption {
 	position: absolute;
-	bottom: 40px;
+	top: 40px;
 	left: 40px;
 	z-index: 4;
+}
+
+.image {
+	width: var(--gc-image-width);
+	height: auto;
 }

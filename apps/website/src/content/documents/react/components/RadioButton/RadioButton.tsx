@@ -25,8 +25,7 @@ export function RadioButtonDoc() {
 					{
 						label: 'Basic usage',
 						component: <RadioButtonUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'RadioButtonExample.tsx',
+						code: { code: usageCode.trim(), filename: 'RadioButtonExample.tsx' },
 					},
 				]}
 			/>
@@ -40,8 +39,7 @@ export function RadioButtonDoc() {
 					{
 						label: 'Control selection',
 						component: <RadioButtonSelectionExample />,
-						code: exampleCode.trim(),
-						codeFilename: 'RadioButtonSelection.tsx',
+						code: { code: exampleCode.trim(), filename: 'RadioButtonSelection.tsx' },
 					},
 				]}
 			/>

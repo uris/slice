@@ -314,8 +314,7 @@ export default function PopMenuItemDoc() {
 					{
 						label: 'Labels only',
 						component: <LabelsPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'MenuItems.tsx',
+						code: { code: usageCode.trim(), filename: 'MenuItems.tsx' },
 					},
 				]}
 			/>
@@ -326,8 +325,7 @@ export default function PopMenuItemDoc() {
 					{
 						label: 'With icons',
 						component: <IconsPreview />,
-						code: iconsCode.trim(),
-						codeFilename: 'MenuItems.tsx',
+						code: { code: iconsCode.trim(), filename: 'MenuItems.tsx' },
 					},
 				]}
 			/>
@@ -345,8 +343,7 @@ export default function PopMenuItemDoc() {
 					{
 						label: 'Using toggles',
 						component: <TogglesPreview />,
-						code: toggleCode.trim(),
-						codeFilename: 'MenuItems.tsx',
+						code: { code: toggleCode.trim(), filename: 'MenuItems.tsx' },
 					},
 				]}
 			/>
@@ -362,8 +359,7 @@ export default function PopMenuItemDoc() {
 					{
 						label: 'With subitems',
 						component: <SubmenusPreview />,
-						code: submenuCode.trim(),
-						codeFilename: 'MenuItems.tsx',
+						code: { code: submenuCode.trim(), filename: 'MenuItems.tsx' },
 					},
 				]}
 			/>
@@ -380,8 +376,7 @@ export default function PopMenuItemDoc() {
 					{
 						label: 'Custom color items',
 						component: <CustomContentPreview />,
-						code: customCode.trim(),
-						codeFilename: 'ColorItems.tsx',
+						code: { code: customCode.trim(), filename: 'ColorItems.tsx' },
 					},
 				]}
 			/>
@@ -395,8 +390,7 @@ export default function PopMenuItemDoc() {
 					{
 						label: 'Disabled action',
 						component: <DisabledPreview />,
-						code: disabledCode.trim(),
-						codeFilename: 'DisabledAction.tsx',
+						code: { code: disabledCode.trim(), filename: 'DisabledAction.tsx' },
 					},
 				]}
 			/>

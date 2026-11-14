@@ -30,8 +30,7 @@ export default function VideoDoc() {
 					{
 						label: 'Default',
 						component: <DefaultVideoPreview />,
-						code: defaultUsageCode.trim(),
-						codeFilename: 'VideoExample.tsx',
+						code: { code: defaultUsageCode.trim(), filename: 'VideoExample.tsx' },
 						hasRefresh: true,
 					},
 				]}
@@ -49,8 +48,7 @@ export default function VideoDoc() {
 					{
 						label: 'Play only',
 						component: <SimpleVideoPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'VideoExample.tsx',
+						code: { code: usageCode.trim(), filename: 'VideoExample.tsx' },
 						hasRefresh: true,
 					},
 				]}
@@ -66,8 +64,7 @@ export default function VideoDoc() {
 					{
 						label: 'Browser controls',
 						component: <NativeVideoPreview />,
-						code: nativeCode.trim(),
-						codeFilename: 'NativeControls.tsx',
+						code: { code: nativeCode.trim(), filename: 'NativeControls.tsx' },
 						hasRefresh: true,
 					},
 				]}
@@ -86,8 +83,7 @@ export default function VideoDoc() {
 					{
 						label: 'Custom controls',
 						component: <CustomVideoPreview />,
-						code: customCode.trim(),
-						codeFilename: 'CustomPlayer.tsx',
+						code: { code: customCode.trim(), filename: 'CustomPlayer.tsx' },
 						hasRefresh: true,
 					},
 				]}

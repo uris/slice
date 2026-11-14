@@ -4,28 +4,20 @@
 	box-sizing: border-box;
 	min-width: 0;
 	max-width: 100%;
-	overflow: hidden;
 	border-radius: 24px;
-	background: var(--core-fill-primary);
 	margin: 0;
 	border-color: var(--core-fill-primary);
 	border-style: solid;
 	border-width: 1px;
-	transition: height, max-height 0.25s ease-in-out 0s;
-}
-
-.mask {
-	pointer-events: none;
-	position: absolute;
-	inset: 0;
-	transition: opacity 0.25s ease-in-out 0s;
+	flex-shrink: 0;
 }
 
 .filename {
 	padding: 10px 16px;
-	border-bottom: 1px solid var(--core-outline-tertiary, #3d444d);
-	color: var(--core-text-primary, #e1e4e8);
+	border-bottom: 1px solid var(--core-fill-primary, #3d444d);
+	border-top: 1px solid var(--core-fill-primary, #3d444d);
 	font-family: var(--font-mono), monospace;
+	color: var(--core-text-tertiary, #e1e4e8);
 	font-size: 12px;
 }
 
@@ -119,4 +111,10 @@
 	flex: 1;
 	min-width: 0;
 	min-height: 1.75em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.copyButton {
+		transition: none;
+	}
 }

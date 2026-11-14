@@ -36,8 +36,7 @@ export function TextAreaDoc() {
 					{
 						label: 'Basic usage',
 						component: <TextAreaUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'TextAreaExample1.tsx',
+						code: { code: usageCode.trim(), filename: 'TextAreaExample1.tsx' },
 					},
 				]}
 			/>
@@ -68,8 +67,7 @@ export function TextAreaDoc() {
 					{
 						label: 'Choose a height',
 						component: <TextAreaSizingExample />,
-						code: sizingCode.trim(),
-						codeFilename: 'TextAreaExample3.tsx',
+						code: { code: sizingCode.trim(), filename: 'TextAreaExample3.tsx' },
 					},
 				]}
 			/>
@@ -87,8 +85,7 @@ export function TextAreaDoc() {
 					{
 						label: 'Send a message',
 						component: <TextAreaSubmitExample />,
-						code: submitCode.trim(),
-						codeFilename: 'TextAreaExample4.tsx',
+						code: { code: submitCode.trim(), filename: 'TextAreaExample4.tsx' },
 					},
 				]}
 			/>
@@ -106,8 +103,7 @@ export function TextAreaDoc() {
 					{
 						label: 'Add field guidance',
 						component: <TextAreaGuidanceExample />,
-						code: guidanceCode.trim(),
-						codeFilename: 'TextAreaExample5.tsx',
+						code: { code: guidanceCode.trim(), filename: 'TextAreaExample5.tsx' },
 					},
 				]}
 			/>

@@ -117,8 +117,7 @@ export function FileListDoc() {
 					{
 						label: 'Compact file rows',
 						component: <AttachmentsPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'Attachments.tsx',
+						code: { code: usageCode.trim(), filename: 'Attachments.tsx' },
 					},
 				]}
 			/>
@@ -134,8 +133,7 @@ export function FileListDoc() {
 					{
 						label: 'Attachment cards',
 						component: <AttachmentCardsPreview />,
-						code: cardsCode.trim(),
-						codeFilename: 'AttachmentCards.tsx',
+						code: { code: cardsCode.trim(), filename: 'AttachmentCards.tsx' },
 					},
 				]}
 			/>
@@ -150,8 +148,7 @@ export function FileListDoc() {
 					{
 						label: 'Upload states',
 						component: <UploadStatesPreview />,
-						code: statesCode.trim(),
-						codeFilename: 'UploadStates.tsx',
+						code: { code: statesCode.trim(), filename: 'UploadStates.tsx' },
 					},
 				]}
 			/>

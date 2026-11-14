@@ -29,8 +29,7 @@ export default function VideoControllerDoc() {
 					{
 						label: 'Overlay video player',
 						component: <VideoControllerPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'VideoExample.tsx',
+						code: { code: usageCode.trim(), filename: 'VideoExample.tsx' },
 						hasRefresh: true,
 					},
 				]}

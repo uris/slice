@@ -28,8 +28,7 @@ export function TabBarDoc() {
 					{
 						label: 'Basic usage',
 						component: <TabBarUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'TabBarExample.tsx',
+						code: { code: usageCode.trim(), filename: 'TabBarExample.tsx' },
 					},
 				]}
 			/>
@@ -42,17 +41,21 @@ export function TabBarDoc() {
 			<H3>Add icons and counts</H3>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
-				components={[{ label: 'Icons and counts', component: <TabBarExtrasExample />, code: extrasCode.trim() }]}
+				components={[
+					{ label: 'Icons and counts', component: <TabBarExtrasExample />, code: { code: extrasCode.trim() } },
+				]}
 			/>
 			<H3>Fill the available width</H3>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
-				components={[{ label: 'Equal-width tabs', component: <TabBarFillExample />, code: fillCode.trim() }]}
+				components={[{ label: 'Equal-width tabs', component: <TabBarFillExample />, code: { code: fillCode.trim() } }]}
 			/>
 			<H3>Disable the group</H3>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
-				components={[{ label: 'Disabled tabs', component: <TabBarDisabledExample />, code: disabledCode.trim() }]}
+				components={[
+					{ label: 'Disabled tabs', component: <TabBarDisabledExample />, code: { code: disabledCode.trim() } },
+				]}
 			/>
 			<H3>Set an accent</H3>
 			<P>
@@ -60,7 +63,7 @@ export function TabBarDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
-				components={[{ label: 'Set an accent', component: <TabBarColorExample />, code: colorsCode.trim() }]}
+				components={[{ label: 'Set an accent', component: <TabBarColorExample />, code: { code: colorsCode.trim() } }]}
 			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>

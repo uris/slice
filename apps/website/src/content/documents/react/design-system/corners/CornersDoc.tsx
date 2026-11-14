@@ -4,12 +4,10 @@ import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, H1, H2, P, SpacerM } from '@/components/Type/Type';
 import { FlexBox, Preset } from '@apple-pie/slice';
-import Image from 'next/image';
 import roundedCornersShape from '../../../../../assets/colors/corners_btn_test.svg';
 import pillShape from '../../../../../assets/colors/pill-shape.svg';
 import squareShape from '../../../../../assets/colors/square-shape.svg';
 import { CornerTokensTable, cornerRows, pill, square } from './CornerTokensTable';
-import css from './Corners.module.css';
 
 export function CornersDoc() {
 	return (
@@ -26,13 +24,12 @@ export function CornersDoc() {
 				nested shapes, reduce the inner radius by the gap between the edges to keep the curves concentric. Using the
 				same radius on both shapes can make that gap look uneven.
 			</P>
-			<GradientCanvas caption={'Concentric rounded corners'} height={350}>
-				<Image
-					src={roundedCornersShape}
-					className={css.image}
-					alt={'Concentric rounded corners with a consistent gap between inner and outer shapes'}
-				/>
-			</GradientCanvas>
+			<GradientCanvas
+				caption={'Concentric rounded corners'}
+				height={350}
+				imageSrc={roundedCornersShape}
+				imageDescription={'Concentric rounded corners with a consistent gap between inner and outer shapes'}
+			/>
 			<P>
 				In CSS, apply a token with <Code>border-radius: var(--corner-m)</Code> within your theme scope. The table below
 				lists the available rounded values.
@@ -52,9 +49,12 @@ export function CornersDoc() {
 				Use <Code>corner-round</Code> for fully rounded ends. Its 1000px radius is clamped by the browser to fit the
 				element: a wide button becomes a pill, while an element with equal width and height becomes a circle.
 			</P>
-			<GradientCanvas caption={'Pill shape'} height={350}>
-				<Image src={pillShape} className={css.image} alt={'Pill shapes with fully rounded ends'} />
-			</GradientCanvas>
+			<GradientCanvas
+				caption={'Pill shape'}
+				height={350}
+				imageSrc={pillShape}
+				imageDescription={'Pill shapes with fully rounded ends'}
+			/>
 			<CornerTokensTable
 				id={'pill-corners'}
 				name={'Pill shape corners'}
@@ -66,9 +66,12 @@ export function CornersDoc() {
 				Use <Code>corner-none</Code> to remove rounding and create crisp, square corners. This sets the radius to zero
 				without changing the element’s width or height, so it works for both squares and rectangles.
 			</P>
-			<GradientCanvas caption={'Sharp edge'} height={350}>
-				<Image src={squareShape} className={css.image} alt={'Square and rectangle shapes'} />
-			</GradientCanvas>
+			<GradientCanvas
+				caption={'Sharp edge'}
+				height={350}
+				imageSrc={squareShape}
+				imageDescription={'Square and rectangle shapes'}
+			/>
 			<CornerTokensTable id={'square-corners'} name={'Square corners'} tableData={square} caption={'Square corners'} />
 		</FlexBox>
 	);

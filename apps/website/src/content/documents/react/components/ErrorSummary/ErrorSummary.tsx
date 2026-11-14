@@ -32,8 +32,7 @@ export function ErrorSummaryDoc() {
 					{
 						label: 'Basic usage',
 						component: <ErrorSummaryUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'ErrorSummaryExample.tsx',
+						code: { code: usageCode.trim(), filename: 'ErrorSummaryExample.tsx' },
 					},
 				]}
 			/>
@@ -65,8 +64,7 @@ export function ErrorSummaryDoc() {
 					{
 						label: 'Connect errors to fields',
 						component: <ErrorSummaryFieldsExample />,
-						code: fieldsCode.trim(),
-						codeFilename: 'ContactForm.tsx',
+						code: { code: fieldsCode.trim(), filename: 'ContactForm.tsx' },
 					},
 				]}
 			/>
@@ -74,7 +72,9 @@ export function ErrorSummaryDoc() {
 			<P>This example treats every entered value as invalid. Your app supplies its own validation rules.</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-errorsummary--default"
-				components={[{ label: 'Live validation', component: <ErrorSummaryLiveExample />, code: liveCode.trim() }]}
+				components={[
+					{ label: 'Live validation', component: <ErrorSummaryLiveExample />, code: { code: liveCode.trim() } },
+				]}
 			/>
 			<H3>Choose announcement urgency</H3>
 			<P>

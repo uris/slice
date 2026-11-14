@@ -30,8 +30,8 @@ export function AudioBubbleDoc() {
 				<ComponentCanvas
 					storybookUrl="https://react.slice-uikit.com/?path=/story/components-audiobubble--demo"
 					components={[
-						{ label: 'Live microphone', component: <AudioBubblePreview />, code: usageCode.trim() },
-						{ label: 'Paused', component: <AudioBubblePreview variant="paused" />, code: pausedCode.trim() },
+						{ label: 'Live microphone', component: <AudioBubblePreview />, code: { code: usageCode.trim() } },
+						{ label: 'Paused', component: <AudioBubblePreview variant="paused" />, code: { code: pausedCode.trim() } },
 					]}
 				/>
 
@@ -46,7 +46,7 @@ export function AudioBubbleDoc() {
 						{
 							label: 'Response',
 							component: <AudioBubblePreview variant="response" />,
-							code: responseCode.trim(),
+							code: { code: responseCode.trim() },
 						},
 					]}
 				/>
@@ -61,7 +61,7 @@ export function AudioBubbleDoc() {
 						{
 							label: 'Glow',
 							component: <AudioBubblePreview variant="glow" />,
-							code: glowCode.trim(),
+							code: { code: glowCode.trim() },
 						},
 					]}
 				/>
@@ -94,7 +94,7 @@ export function AudioBubbleDoc() {
 						{
 							label: 'Accessible status',
 							component: <AudioBubblePreview variant="status" />,
-							code: statusCode.trim(),
+							code: { code: statusCode.trim() },
 						},
 					]}
 				/>

@@ -4,6 +4,8 @@ import type { Package } from '@/src/consts/consts';
 import type { RefObject } from 'react';
 
 export type DocsStoreType = {
+	initialized: boolean;
+	loadState: LoadState | null;
 	packageType: Package | null;
 	slug: DocsSlug | null;
 	section: SiteSection | null;
@@ -19,5 +21,13 @@ export type DocsStoreType = {
 		updateVisibleItems: (itemId: string | null | undefined, visible: boolean) => void;
 		setScrollBoxSize: (size: { height: number | undefined; width: number | undefined }) => void;
 		setScrollAmount: (amount: number | undefined) => void;
+		setLoadState: (loadState: LoadState) => void;
 	};
 };
+
+export enum LoadState {
+	Loading = 'loading',
+	Error = 'error',
+	NotFound = 'not-found',
+	Loaded = 'loaded',
+}

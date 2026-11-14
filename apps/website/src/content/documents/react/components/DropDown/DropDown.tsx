@@ -38,8 +38,7 @@ export function DropDownDoc() {
 					{
 						label: 'Basic usage',
 						component: <DropDownUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'DropDownExample1.tsx',
+						code: { code: usageCode.trim(), filename: 'DropDownExample1.tsx' },
 					},
 				]}
 			/>
@@ -64,8 +63,7 @@ export function DropDownDoc() {
 					{
 						label: 'Position the label',
 						component: <DropDownLabelsExample />,
-						code: labelsCode.trim(),
-						codeFilename: 'DropDownExample3.tsx',
+						code: { code: labelsCode.trim(), filename: 'DropDownExample3.tsx' },
 					},
 				]}
 			/>
@@ -81,8 +79,7 @@ export function DropDownDoc() {
 					{
 						label: 'Border style underline',
 						component: <DropDownUnderlineExample />,
-						code: underlineCode.trim(),
-						codeFilename: 'DropDownExample.tsx',
+						code: { code: underlineCode.trim(), filename: 'DropDownExample.tsx' },
 					},
 				]}
 			/>
@@ -118,8 +115,7 @@ export function DropDownDoc() {
 					{
 						label: 'Add field guidance',
 						component: <DropDownGuidanceExample />,
-						code: guidanceCode.trim(),
-						codeFilename: 'DropDownExample6.tsx',
+						code: { code: guidanceCode.trim(), filename: 'DropDownExample6.tsx' },
 					},
 				]}
 			/>

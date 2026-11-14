@@ -1,4 +1,4 @@
-import type { SliceMotion } from './_types';
+import type { SliceMotion, SliceMotionValues } from './_types';
 
 /**
  * Motion for Slice UI
@@ -7,8 +7,35 @@ export const motion: SliceMotion = {
 	'motion-magnet': 'cubic-bezier(0.352, 0.003, 0.993, -0.052)',
 	'motion-water': 'cubic-bezier(0.36, 0, 0.64, 1)',
 	'motion-spring':
-		'linear(0, 0.001 0.3%, 0.008 0.7%, 0.034 1.5%, 0.076 2.3%, 0.138 3.2%, 0.275 4.8%, 0.713 9.4%, 0.836 10.9%, 0.933 12.3%, 1.011 13.7%, 1.074 15.2%, 1.096 15.9%, 1.116 16.7%, 1.132 17.5%, 1.142 18.3%, 1.148 19.1%, 1.15 20%, 1.148 21%, 1.142 22%, 1.133 22.9%, 1.12 24%, 1.048 29.1%, 1.015 31.8%, 1.002 33.3%, 0.991 34.9%, 0.983 36.5%, 0.979 38.1%, 0.977 39.9%, 0.979 42%, 0.997 51.7%, 1.003 57.7%, 1 77%, 1)',
+		'linear( 0, 0.002 0.2%, 0.011 0.5%, 0.041 1%, 0.1 1.6%, 0.18 2.2%, 0.365 3.3%, 0.925 6.2%, 1.058 7%, 1.17 7.8%, 1.26 8.6%, 1.318 9.3%, 1.342 9.7%, 1.36 10.1%, 1.372 10.5%, 1.378 10.9%, 1.378 11.4%, 1.374 11.7%, 1.368 12%, 1.348 12.6%, 1.314 13.3%, 1.237 14.5%, 1.026 17.4%, 0.975 18.2%, 0.933 19%, 0.9 19.8%, 0.878 20.5%, 0.864 21.2%, 0.859 21.6%, 0.857 22%, 0.856 22.5%, 0.86 23.1%, 0.867 23.7%, 0.88 24.4%, 0.909 25.6%, 0.991 28.6%, 1.01 29.4%, 1.026 30.2%, 1.037 30.9%, 1.046 31.6%, 1.051 32.3%, 1.054 33.1%, 1.053 34.2%, 1.046 35.5%, 1.035 36.7%, 1.003 39.8%, 0.99 41.4%, 0.983 42.8%, 0.979 44.2%, 0.982 46.3%, 1.002 52%, 1.006 53.6%, 1.008 55.2%, 1.007 57.5%, 0.999 63.1%, 0.997 66.3%, 1.001 77.2%, 1 88.2%, 1 )',
 	'motion-magnet-duration': '0.5s',
 	'motion-water-duration': '0.25s',
 	'motion-spring-duration': '1s',
+};
+
+// Keep each primitive value in one place so ready-made transitions cannot drift.
+const values: Omit<SliceMotionValues, 'transition-water' | 'transition-magnet' | 'transition-spring'> = {
+	'motion-magnet': [0.352, 0.003, 0.993, -0.052],
+	'motion-water': [0.36, 0, 0.64, 1],
+	// Approximately 38% overshoot with an initial peak near 112ms, matching the CSS curve.
+	'motion-spring': { type: 'spring', mass: 1, stiffness: 870, damping: 17.4 },
+	'motion-magnet-duration': 0.5,
+	'motion-water-duration': 0.25,
+	'motion-spring-duration': 1,
+};
+
+/** Motion-ready defaults and transitions. Durations are in seconds; the physics spring settles naturally. */
+export const motionValues: SliceMotionValues = {
+	...values,
+	'transition-water': {
+		type: 'tween',
+		ease: values['motion-water'],
+		duration: values['motion-water-duration'],
+	},
+	'transition-magnet': {
+		type: 'tween',
+		ease: values['motion-magnet'],
+		duration: values['motion-magnet-duration'],
+	},
+	'transition-spring': { ...values['motion-spring'] },
 };

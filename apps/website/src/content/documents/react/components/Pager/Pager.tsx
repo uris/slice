@@ -31,8 +31,7 @@ export function PagerDoc() {
 					{
 						label: 'Basic usage',
 						component: <PagerUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'PagerExample.tsx',
+						code: { code: usageCode.trim(), filename: 'PagerExample.tsx' },
 					},
 				]}
 			/>
@@ -53,8 +52,7 @@ export function PagerDoc() {
 					{
 						label: 'Scale dots by distance',
 						component: <PagerScalingExample />,
-						code: scalingCode.trim(),
-						codeFilename: 'ScaledPager.tsx',
+						code: { code: scalingCode.trim(), filename: 'ScaledPager.tsx' },
 					},
 				]}
 			/>
@@ -69,8 +67,7 @@ export function PagerDoc() {
 					{
 						label: 'Fade dots by distance',
 						component: <PagerOpacityExample />,
-						code: opacityCode.trim(),
-						codeFilename: 'FadingPager.tsx',
+						code: { code: opacityCode.trim(), filename: 'FadingPager.tsx' },
 					},
 				]}
 			/>
@@ -88,8 +85,7 @@ export function PagerDoc() {
 					{
 						label: 'Reveal more pages',
 						component: <PagerWindowExample />,
-						code: windowCode.trim(),
-						codeFilename: 'SlidingPager.tsx',
+						code: { code: windowCode.trim(), filename: 'SlidingPager.tsx' },
 					},
 				]}
 			/>

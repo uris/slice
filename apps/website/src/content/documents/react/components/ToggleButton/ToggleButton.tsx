@@ -22,7 +22,7 @@ export function ToggleButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
-				components={[{ label: 'Basic usage', component: <ToggleButtonPreview />, code: exampleCode.trim() }]}
+				components={[{ label: 'Basic usage', component: <ToggleButtonPreview />, code: { code: exampleCode.trim() } }]}
 			/>
 
 			<H3>Disabled</H3>
@@ -36,7 +36,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Disabled',
 						component: <ToggleButtonPreview variant="disabled" />,
-						code: disabledCode.trim(),
+						code: { code: disabledCode.trim() },
 					},
 				]}
 			/>
@@ -51,7 +51,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Label outside',
 						component: <ToggleButtonPreview variant="outside" />,
-						code: outsideCode.trim(),
+						code: { code: outsideCode.trim() },
 					},
 				]}
 			/>
@@ -67,7 +67,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Animated',
 						component: <ToggleButtonPreview variant="animated" />,
-						code: motionCode.trim(),
+						code: { code: motionCode.trim() },
 					},
 				]}
 			/>
@@ -82,7 +82,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Text only',
 						component: <ToggleButtonPreview variant="text" />,
-						code: textOnly.trim(),
+						code: { code: textOnly.trim() },
 					},
 				]}
 			/>
@@ -99,7 +99,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Custom content',
 						component: <ToggleButtonPreview variant="children" />,
-						code: childrenCode.trim(),
+						code: { code: childrenCode.trim() },
 					},
 				]}
 			/>

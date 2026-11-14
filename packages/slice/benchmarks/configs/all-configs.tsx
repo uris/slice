@@ -983,6 +983,21 @@ export const buttonConfig: ComponentBenchmarkConfig = {
 			fn: () => measureMountTime(<Button label="Click Me" />, 50),
 		},
 		{
+			name: 'Motion Variants Mount Time',
+			type: 'mount',
+			fn: () =>
+				measureMountTime(
+					<Button
+						label="Motion"
+						initial="rest"
+						animate="rest"
+						variants={{ rest: { scale: 1 }, expanded: { scale: 1.2 } }}
+						transition={{ type: 'spring' }}
+					/>,
+					50,
+				),
+		},
+		{
 			name: 'State Change Re-render',
 			type: 'rerender',
 			fn: () =>

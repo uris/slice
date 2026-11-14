@@ -48,16 +48,20 @@ export function ButtonDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
 				components={[
-					{ label: 'Solid', component: <ButtonPreview label="Solid" variant="solid" />, code: solidCode.trim() },
+					{
+						label: 'Solid',
+						component: <ButtonPreview label="Solid" variant="solid" />,
+						code: { code: solidCode.trim() },
+					},
 					{
 						label: 'Outline',
 						component: <ButtonPreview label="Outline" variant="outline" />,
-						code: outlineCode.trim(),
+						code: { code: outlineCode.trim() },
 					},
 					{
 						label: 'Text',
 						component: <ButtonPreview label="Text Button" variant="text" />,
-						code: textCode.trim(),
+						code: { code: textCode.trim() },
 					},
 				]}
 			/>
@@ -67,7 +71,7 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Handle actions', component: <ButtonActionPreview />, code: usageCode.trim() }]}
+				components={[{ label: 'Handle actions', component: <ButtonActionPreview />, code: { code: usageCode.trim() } }]}
 			/>
 
 			<H3>Add icons</H3>
@@ -80,12 +84,12 @@ export function ButtonDoc() {
 					{
 						label: 'Icon beside a label',
 						component: <ButtonPreview label="Continue" iconRight="arrows.arrow-right" />,
-						code: iconsCode.trim(),
+						code: { code: iconsCode.trim() },
 					},
 					{
 						label: 'Icon only',
 						component: <ButtonPreview iconLeft="basic.cross" round aria-label="Quit" />,
-						code: iconOnlyCode.trim(),
+						code: { code: iconOnlyCode.trim() },
 					},
 				]}
 			/>
@@ -98,7 +102,9 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--auto-children"
-				components={[{ label: 'Custom content', component: <ButtonChildrenPreview />, code: childrenCode.trim() }]}
+				components={[
+					{ label: 'Custom content', component: <ButtonChildrenPreview />, code: { code: childrenCode.trim() } },
+				]}
 			/>
 			<H3>Disable an action</H3>
 			<P>
@@ -111,7 +117,7 @@ export function ButtonDoc() {
 					{
 						label: 'Disabled',
 						component: <ButtonPreview label="Continue" disabled />,
-						code: disabledCode.trim(),
+						code: { code: disabledCode.trim() },
 					},
 				]}
 			/>
@@ -138,7 +144,7 @@ export function ButtonDoc() {
 								/>
 							</div>
 						),
-						code: stylingCode.trim(),
+						code: { code: stylingCode.trim() },
 					},
 				]}
 			/>
@@ -150,7 +156,7 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Working', component: <ButtonWorkingPreview />, code: workingCode.trim() }]}
+				components={[{ label: 'Working', component: <ButtonWorkingPreview />, code: { code: workingCode.trim() } }]}
 			/>
 
 			<H3>Delay an action</H3>
@@ -160,7 +166,9 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Delayed action', component: <ButtonProgressPreview />, code: progressCode.trim() }]}
+				components={[
+					{ label: 'Delayed action', component: <ButtonProgressPreview />, code: { code: progressCode.trim() } },
+				]}
 			/>
 
 			<H3>Submit a form</H3>
@@ -169,7 +177,7 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Form submission', component: <ButtonFormPreview />, code: formCode.trim() }]}
+				components={[{ label: 'Form submission', component: <ButtonFormPreview />, code: { code: formCode.trim() } }]}
 			/>
 
 			<H3>Connect a tooltip</H3>
@@ -178,7 +186,7 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Tooltip', component: <ButtonTooltipPreview />, code: tooltipCode.trim() }]}
+				components={[{ label: 'Tooltip', component: <ButtonTooltipPreview />, code: { code: tooltipCode.trim() } }]}
 			/>
 
 			<H2 id={'behavior'}>Behavior</H2>
@@ -212,6 +220,11 @@ export function ButtonDoc() {
 				Busy state sets aria-busy and disables activation. The action label stays available to assistive technology even
 				when a centered spinner replaces it visually. Provide separate status or error feedback for the result of an
 				operation.
+			</P>
+			<P>
+				Button respects <Code>prefers-reduced-motion: reduce</Code> automatically, including live preference changes.
+				Custom variants resolve to their target state immediately, without delays or repeats; entrance, exit, and hover
+				transitions are skipped. The button stays mounted so keyboard focus is preserved.
 			</P>
 			<H2 id={'props'}>Props</H2>
 			<P>
@@ -514,7 +527,7 @@ export function ButtonDoc() {
 			<H2 id={'motion'}>Motion</H2>
 			<P>
 				Button uses <Code openURL="https://motion.dev/">Motion</Code>’s <Code>motion.button</Code>. The animation props
-				below pass directly through to that element.
+				below configure that element. Reduced-motion preferences take priority over custom animation timing.
 			</P>
 			<P>
 				Define named <Code>variants</Code> and select them with <Code>initial</Code> and <Code>animate</Code>. Exit
@@ -522,7 +535,7 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Animation', component: <ButtonMotionPreview />, code: motionCode.trim() }]}
+				components={[{ label: 'Animation', component: <ButtonMotionPreview />, code: { code: motionCode.trim() } }]}
 			/>
 			<Definition id={'animate'}>
 				<Prop>animate</Prop>
@@ -596,7 +609,9 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Activate through a ref', component: <ButtonRefPreview />, code: refCode.trim() }]}
+				components={[
+					{ label: 'Activate through a ref', component: <ButtonRefPreview />, code: { code: refCode.trim() } },
+				]}
 			/>
 			<Definition id={'triggerClick'}>
 				<Method>triggerClick</Method>

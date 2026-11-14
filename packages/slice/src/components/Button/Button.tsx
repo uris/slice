@@ -1,11 +1,13 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { motion, useAnimationControls, usePresence } from 'motion/react';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { setStyle as resolveStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
+import { reduceMotionVariants } from '../../utils/styling/reduceMotionTargets';
+import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import { Badge } from '../Badge';
 import { Dot } from '../Dot';
 import { Icon } from '../Icon';
@@ -16,6 +18,9 @@ import type { ButtonHandle, ButtonProps } from './_types';
 
 const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonRef: React.Ref<ButtonHandle>) => {
 	const props = resolveColorProps(rawProps);
+	const reduceMotion = usePrefersReducedMotion();
+	const motionControls = useAnimationControls();
+	const [isPresent, safeToRemove] = usePresence();
 	const {
 		children,
 		disabled = false,
@@ -391,7 +396,11 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		borderStyle: 'solid' as const,
 		borderColor: resolvedBorderColor,
 		cursor: isDisabled || playing ? ('default' as const) : ('pointer' as const),
-		transition: 'all var(--motion-water-duration) var(--motion-water) 0s',
+		transition: reduceMotion
+			? 'none'
+			: ['background-color', 'border-color', 'color', 'box-shadow']
+					.map((property) => `${property} var(--motion-water-duration) var(--motion-water)`)
+					.join(', '),
 	};
 
 	// resolve the progress indicator color from variant and destructive state
@@ -426,6 +435,36 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	useTrackRenders(props, 'Button');
 	/* END.DEBUG */
 
+	const motionVariants = useMemo(
+		() => (reduceMotion ? reduceMotionVariants(variants) : variants),
+		[reduceMotion, variants],
+	);
+
+	useEffect(() => {
+		let active = true;
+		if (!isPresent) {
+			if (reduceMotion || !exit) {
+				motionControls.stop();
+				safeToRemove?.();
+			} else {
+				void motionControls.start(exit).then(() => {
+					if (active) safeToRemove?.();
+				});
+			}
+		} else if (reduceMotion) {
+			// Stop animations already in flight when the system preference changes.
+			motionControls.stop();
+			if (animate) {
+				const target = motionVariants?.[animate];
+				motionControls.set(typeof target === 'object' ? target : animate);
+			}
+		}
+		return () => {
+			active = false;
+			if (!isPresent || reduceMotion) motionControls.stop();
+		};
+	}, [reduceMotion, animate, exit, motionVariants, motionControls, isPresent, safeToRemove]);
+
 	return (
 		<motion.button
 			id={divId}
@@ -437,11 +476,10 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 			onFocus={handleFocus}
 			onBlur={handleBlur}
 			style={{ ...divStyle, ...buttonStyle, ...cssVars }}
-			transition={transition}
-			variants={variants}
-			initial={initial}
-			animate={animate}
-			exit={exit}
+			transition={reduceMotion ? { type: 'tween', duration: 0, delay: 0, repeat: 0 } : transition}
+			variants={motionVariants}
+			initial={reduceMotion ? false : initial}
+			animate={reduceMotion || !isPresent ? motionControls : animate}
 			onClick={(e) => handleClick(e)}
 			{...rest}
 			disabled={isDisabled || playing}

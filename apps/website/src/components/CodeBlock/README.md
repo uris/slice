@@ -21,3 +21,21 @@ the GitHub Dark theme. Whitespace is preserved and long lines scroll horizontall
 Set `wrap` to wrap long lines. Continuations align with the source line’s first
 non-whitespace character, keeping its indentation and the line-number gutter.
 Tabs use two-column stops. Copying still uses the original code string.
+
+For a `ComponentCanvas` example, pass code files on its preview item rather than
+rendering separate blocks:
+
+```tsx
+components={[{
+    label: 'CSS example',
+    component: <ExamplePreview />,
+    code: [
+        { code: tsxCode, filename: 'Example.tsx', language: 'tsx', showFilename: true },
+        { code: cssCode, filename: 'example.css', language: 'css', showFilename: true },
+    ],
+}]}
+```
+
+A single file may use `code: { code: exampleCode, filename: 'Example.tsx' }`.
+The canvas controls expansion and copy controls, and forwards options such as
+`wrap` to each block. `showCode={false}` hides the code section entirely.

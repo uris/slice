@@ -1,19 +1,15 @@
 import { Caption } from '@/components/Type/Type';
 import { type ColorValue, type Colors, useTheme } from '@apple-pie/slice';
 import { classNames, setStyle } from '@apple-pie/slice/utils';
+import type { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import Image from 'next/image';
 import type React from 'react';
 import { type CSSProperties, useMemo } from 'react';
+import { setSizeStyle } from '../../../../../packages/slice/src/utils/functions/misc';
 import css from './GradientCanvas.module.css';
 
-export type ComponentCanvasItem = {
-	label: string;
-	codeFilename?: string;
-	component: React.ReactNode;
-	hasRefresh?: boolean;
-};
-
 export interface GradientCanvasProps {
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	height?: number;
 	gradient?: {
 		type?: 'radial' | 'linear';
@@ -32,10 +28,26 @@ export interface GradientCanvasProps {
 	opacity?: number;
 	backgroundColor?: ColorValue;
 	caption?: string;
+	imageSrc?: string | StaticImport;
+	imageDescription?: string;
+	imageWidth?: number | string;
+	padding?: number | string;
 }
 
 export function GradientCanvas(props: Readonly<GradientCanvasProps>) {
-	const { caption, children, height = 500, gradient, mask, opacity = 1, backgroundColor = 'transparent' } = props;
+	const {
+		caption,
+		children,
+		height,
+		padding = 24,
+		gradient,
+		mask,
+		opacity = 1,
+		backgroundColor = 'transparent',
+		imageSrc,
+		imageDescription,
+		imageWidth = '40%',
+	} = props;
 	const { current } = useTheme();
 
 	const cssVars = useMemo(() => {
@@ -43,8 +55,10 @@ export function GradientCanvas(props: Readonly<GradientCanvasProps>) {
 			'--gc-height': setStyle(height),
 			'--gc-opacity': opacity,
 			'--gc-background': backgroundColor,
+			'--gc-image-width': setSizeStyle(imageWidth),
+			'--gc-padding': setSizeStyle(padding),
 		} as CSSProperties;
-	}, [height, backgroundColor, opacity]);
+	}, [height, backgroundColor, opacity, imageWidth, padding]);
 
 	const gradientStyle = useMemo((): CSSProperties => {
 		const { fromColor, toColor, type, angle, opacity } = gradient ?? {};
@@ -71,6 +85,22 @@ export function GradientCanvas(props: Readonly<GradientCanvasProps>) {
 		} as CSSProperties;
 	}, [mask]);
 
+	const renderImage = () => {
+		if (!imageSrc) return null;
+		return (
+			<Image
+				src={imageSrc}
+				alt={imageDescription ?? 'Feature image'}
+				quality={80}
+				fill={false}
+				sizes={'100vw'}
+				loading={'eager'}
+				preload={true}
+				className={css.image}
+			/>
+		);
+	};
+
 	return (
 		<div className={css.wrapper} style={cssVars}>
 			<div className={classNames(css.container, css.gradient)} style={{ ...gradientStyle, ...maskStyle }} />
@@ -80,7 +110,7 @@ export function GradientCanvas(props: Readonly<GradientCanvasProps>) {
 					<Caption style={{ paddingLeft: 0 }}>{caption}</Caption>
 				</div>
 			)}
-			<div className={classNames(css.content)}>{children}</div>
+			<div className={classNames(css.content)}>{imageSrc ? renderImage() : children}</div>
 		</div>
 	);
 }

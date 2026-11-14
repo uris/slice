@@ -25,8 +25,7 @@ export function IconButtonDoc() {
 					{
 						label: 'Basic usage',
 						component: <IconButtonUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'IconButtonExample.tsx',
+						code: { code: usageCode.trim(), filename: 'IconButtonExample.tsx' },
 					},
 				]}
 			/>
@@ -41,8 +40,7 @@ export function IconButtonDoc() {
 					{
 						label: 'Control selection',
 						component: <IconButtonExampleExample />,
-						code: exampleCode.trim(),
-						codeFilename: 'IconButtonToggle.tsx',
+						code: { code: exampleCode.trim(), filename: 'IconButtonToggle.tsx' },
 					},
 				]}
 			/>
@@ -57,8 +55,7 @@ export function IconButtonDoc() {
 					{
 						label: 'Animate an icon on toggle',
 						component: <IconButtonMotionExample />,
-						code: motionCode.trim(),
-						codeFilename: 'IconButtonMotion.tsx',
+						code: { code: motionCode.trim(), filename: 'IconButtonMotion.tsx' },
 					},
 				]}
 			/>

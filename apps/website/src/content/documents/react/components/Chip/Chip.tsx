@@ -25,8 +25,7 @@ export function ChipDoc() {
 					{
 						label: 'Basic usage',
 						component: <ChipUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'ChipExample.tsx',
+						code: { code: usageCode.trim(), filename: 'ChipExample.tsx' },
 					},
 				]}
 			/>
@@ -46,8 +45,7 @@ export function ChipDoc() {
 					{
 						label: 'Select a chip',
 						component: <ChipSelectionExample />,
-						code: selectionCode.trim(),
-						codeFilename: 'SelectableChip.tsx',
+						code: { code: selectionCode.trim(), filename: 'SelectableChip.tsx' },
 					},
 				]}
 			/>
@@ -62,8 +60,7 @@ export function ChipDoc() {
 					{
 						label: 'Allow removal',
 						component: <ChipRemoveExample />,
-						code: removeCode.trim(),
-						codeFilename: 'RemovableChip.tsx',
+						code: { code: removeCode.trim(), filename: 'RemovableChip.tsx' },
 						hasRefresh: true,
 					},
 				]}
@@ -79,8 +76,7 @@ export function ChipDoc() {
 					{
 						label: 'Adjust appearance and spacing',
 						component: <ChipStylingExample />,
-						code: stylingCode.trim(),
-						codeFilename: 'StyledChip.tsx',
+						code: { code: stylingCode.trim(), filename: 'StyledChip.tsx' },
 					},
 				]}
 			/>

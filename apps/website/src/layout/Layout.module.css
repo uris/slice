@@ -17,7 +17,7 @@
 	box-sizing: border-box;
 	gap: 40px;
 	width: 100%;
-	padding: 24px 24px 24px 24px;
+	padding: 0 24px 24px 24px;
 	flex: 1;
 	overflow: hidden;
 }

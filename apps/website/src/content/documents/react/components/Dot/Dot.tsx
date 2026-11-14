@@ -27,8 +27,7 @@ export function DotDoc() {
 					{
 						label: 'Basic usage',
 						component: <DotUsageExample />,
-						code: usageCode.trim(),
-						codeFilename: 'DotExample.tsx',
+						code: { code: usageCode.trim(), filename: 'DotExample.tsx' },
 					},
 				]}
 			/>
@@ -44,8 +43,7 @@ export function DotDoc() {
 					{
 						label: 'Attach to a corner',
 						component: <DotExample1Example />,
-						code: example1Code.trim(),
-						codeFilename: 'DotExample1.tsx',
+						code: { code: example1Code.trim(), filename: 'DotExample1.tsx' },
 					},
 				]}
 			/>

@@ -120,8 +120,7 @@ export default function DraggablePanelDoc() {
 					{
 						label: 'Left panel',
 						component: <DraggablePanelPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'ProjectWorkspace.tsx',
+						code: { code: usageCode.trim(), filename: 'ProjectWorkspace.tsx' },
 					},
 				]}
 			/>
@@ -135,8 +134,10 @@ export default function DraggablePanelDoc() {
 					{
 						label: 'Right panel',
 						component: <DraggablePanelPreview edge="left" />,
-						code: usageCode.replace("edge = 'right'", "edge = 'left'").trim(),
-						codeFilename: 'ProjectWorkspace.tsx',
+						code: {
+							code: usageCode.replace("edge = 'right'", "edge = 'left'").trim(),
+							filename: 'ProjectWorkspace.tsx',
+						},
 					},
 				]}
 			/>
@@ -175,8 +176,7 @@ export default function DraggablePanelDoc() {
 					{
 						label: 'Pixels versus percentages',
 						component: <ConstraintsPreview />,
-						code: constraintsExampleCode.trim(),
-						codeFilename: 'ConstraintComparison.tsx',
+						code: { code: constraintsExampleCode.trim(), filename: 'ConstraintComparison.tsx' },
 					},
 				]}
 			/>

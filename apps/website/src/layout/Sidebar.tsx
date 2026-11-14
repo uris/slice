@@ -36,7 +36,14 @@ export function Sidebar() {
 			}}
 		>
 			<SidebarDocuments>
-				<TabBar<Package> tabWidth="fill" accentColor={surfaceYellow} value={packageType} onChange={handleChangeTab}>
+				<TabBar<Package>
+					height={70}
+					tabWidth="fill"
+					accentColor={surfaceYellow}
+					value={packageType}
+					onChange={handleChangeTab}
+					padding={'4px 0 0 0'}
+				>
 					<Tab value={Package.React}>React</Tab>
 					<Tab value={Package.ReactNative}>React Native</Tab>
 				</TabBar>

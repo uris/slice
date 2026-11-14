@@ -97,8 +97,7 @@ export function TipDoc() {
 					{
 						label: 'Button tooltip',
 						component: <TipPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'ProjectButton.tsx',
+						code: { code: usageCode.trim(), filename: 'ProjectButton.tsx' },
 					},
 				]}
 			/>
@@ -123,8 +122,7 @@ export function TipDoc() {
 					{
 						label: 'Profile button tooltip',
 						component: <TipPreview custom />,
-						code: customCode.trim(),
-						codeFilename: 'ProfileTrigger.tsx',
+						code: { code: customCode.trim(), filename: 'ProfileTrigger.tsx' },
 					},
 				]}
 			/>

@@ -16,7 +16,7 @@ const getPresets = () => {
 		const preview = {
 			label: `Preset: ${label}`,
 			component: <PresetPreview preset={value} />,
-			code: presetCode(value).trim(),
+			code: { code: presetCode(value).trim() },
 		};
 		options.push(preview);
 	}

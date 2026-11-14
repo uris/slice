@@ -11,6 +11,7 @@
 	letter-spacing: 0.94%;
 	padding: var(--chip-padding);
 	margin: 0;
+	border-radius: 4px;
 	border-style: solid;
 	text-transform: uppercase;
 	outline: none;

@@ -1,0 +1,42 @@
+.wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex-direction: column;
+	box-sizing: border-box;
+	padding: 6px;
+	border-radius: 16px;
+	margin: 0;
+	background-color: var(--core-surface-secondary);
+	border: 1px solid var(--core-fill-primary);
+	transition: border var(--motion-water-duration) var(--motion-water) 0s;
+}
+
+.curve {
+	background-color: var(--core-surface-primary);
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: row;
+	box-sizing: border-box;
+	border-radius: 12px;
+	padding: 16px;
+}
+
+.caption {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: column;
+	box-sizing: border-box;
+	color: var(--core-text-primary);
+	width: 100%;
+	padding: 8px 8px;
+}
+
+.token {
+	color: var(--core-text-tertiary);
+}

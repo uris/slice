@@ -1,0 +1,16 @@
+.curves {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--spacing-l);
+	width: 100%;
+}
+
+.springSquare {
+	transform: scale(1) rotate(0deg);
+	transition: transform var(--motion-spring-duration) var(--motion-spring);
+}
+
+.expanded {
+	transform: scale(1.2) rotate(90deg);
+}

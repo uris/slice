@@ -212,8 +212,7 @@ export default function PopMenuDoc() {
 					{
 						label: 'Grouped actions and submenus',
 						component: <PopMenuPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'ProjectActions.tsx',
+						code: { code: usageCode.trim(), filename: 'ProjectActions.tsx' },
 					},
 				]}
 			/>

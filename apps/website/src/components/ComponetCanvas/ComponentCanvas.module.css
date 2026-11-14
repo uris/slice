@@ -95,6 +95,49 @@
 	max-width: 250px;
 }
 
+.code {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	box-sizing: border-box;
+	width: 100%;
+	overflow: hidden;
+	background-color: var(--core-surface-secondary);
+	border-bottom-left-radius: 24px;
+	border-bottom-right-radius: 24px;
+	border: 1px solid var(--core-fill-primary);
+	border-top: 0;
+	transition: height, max-height 0.25s ease-in-out 0s;
+}
+
+.codePage {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	box-sizing: border-box;
+	width: 100%;
+	visibility: visible;
+	padding: 0;
+	margin: 0;
+}
+
+.codeMask {
+	pointer-events: none;
+	position: absolute;
+	inset: 0;
+	transition: opacity 0.25s ease-in-out 0s;
+}
+
+.show {
+	position: absolute;
+	z-index: 5;
+	transition: all 0.25s ease-in-out 0s;
+}
+
 .caption {
 	position: absolute;
 	top: 24px;
@@ -159,4 +202,11 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.codeMask,
+	.show {
+		transition: none;
+	}
 }

@@ -338,8 +338,7 @@ export function PromptInputDoc() {
 					{
 						label: 'Message composer',
 						component: <PromptPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'MessageComposer.tsx',
+						code: { code: usageCode.trim(), filename: 'MessageComposer.tsx' },
 					},
 				]}
 			/>
@@ -359,8 +358,7 @@ export function PromptInputDoc() {
 					{
 						label: 'Paste and attachments',
 						component: <PastePromptPreview />,
-						code: actionsCode.trim(),
-						codeFilename: 'PasteComposer.tsx',
+						code: { code: actionsCode.trim(), filename: 'PasteComposer.tsx' },
 					},
 				]}
 			/>
@@ -374,8 +372,7 @@ export function PromptInputDoc() {
 					{
 						label: 'Models menu',
 						component: <ModelsPromptPreview />,
-						code: modelsCode.trim(),
-						codeFilename: 'ModelsComposer.tsx',
+						code: { code: modelsCode.trim(), filename: 'ModelsComposer.tsx' },
 					},
 				]}
 			/>
@@ -390,8 +387,7 @@ export function PromptInputDoc() {
 					{
 						label: 'Working composer',
 						component: <WorkingPreview />,
-						code: workingCode.trim(),
-						codeFilename: 'WorkingPrompt.tsx',
+						code: { code: workingCode.trim(), filename: 'WorkingPrompt.tsx' },
 					},
 				]}
 			/>

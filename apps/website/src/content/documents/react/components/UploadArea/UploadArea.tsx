@@ -176,8 +176,7 @@ export function UploadAreaDoc() {
 					{
 						label: 'Choose files',
 						component: <UploadPreview />,
-						code: usageCode.trim(),
-						codeFilename: 'Attachments.tsx',
+						code: { code: usageCode.trim(), filename: 'Attachments.tsx' },
 					},
 				]}
 			/>
@@ -192,8 +191,7 @@ export function UploadAreaDoc() {
 					{
 						label: 'Attachment cards',
 						component: <AttachmentFilesPreview />,
-						code: attachmentsCode.trim(),
-						codeFilename: 'UploadAttachments.tsx',
+						code: { code: attachmentsCode.trim(), filename: 'UploadAttachments.tsx' },
 					},
 				]}
 			/>
@@ -206,7 +204,11 @@ export function UploadAreaDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-uploadarea--busy"
 				components={[
-					{ label: 'Uploading', component: <BusyPreview />, code: busyCode.trim(), codeFilename: 'UploadFeedback.tsx' },
+					{
+						label: 'Uploading',
+						component: <BusyPreview />,
+						code: { code: busyCode.trim(), filename: 'UploadFeedback.tsx' },
+					},
 				]}
 			/>
 			<H2 id="behavior">Behavior</H2>

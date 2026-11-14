@@ -6,7 +6,6 @@ import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, H1, H2, P } from '@/components/Type/Type';
 import { colorValueType } from '@/documents/react/design-system/colors/code';
 import { FlexBox, Preset } from '@apple-pie/slice';
-import Image from 'next/image';
 import colorWheel from '../../../../../assets/colors/color-wheel-all.svg';
 import { ColorTableTemplate, colorColumns, colorTables } from './color-data';
 
@@ -25,9 +24,14 @@ export function ColorsDoc() {
 				to semantic tokens for surfaces, text, controls, and feedback. While you can always use individual vales from
 				the ramps for custom accents, theme tokens are preferred and provide built in theme support.
 			</P>
-			<GradientCanvas opacity={1} caption={'Core Colors'}>
-				<Image src={colorWheel} height={400} alt={'core color groups'} />
-			</GradientCanvas>
+			<GradientCanvas
+				height={400}
+				opacity={1}
+				caption={'Core Colors'}
+				imageSrc={colorWheel}
+				imageDescription={'core color groups'}
+				imageWidth={'50%'}
+			/>
 			<TipBox inline noMargin>
 				Click on each color to copy it's definition to the clipboard.
 			</TipBox>
