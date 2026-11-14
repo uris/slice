@@ -1,6 +1,7 @@
 import { GradientCanvas } from '@/components/GradientCanvas/GradientCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
+import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, H1, H2, H3, P } from '@/components/Type/Type';
 import { FlexBox, Preset } from '@apple-pie/slice';
 import spacingGrid from '../../../../../assets/colors/spacing-grid-test4.svg';
@@ -54,6 +55,9 @@ export function SpacingDoc() {
 				Use these tokens in CSS, for example <Code>gap: var(--spacing-m)</Code>. The table lists their default values in
 				pixels. Click a row to copy its token name.
 			</P>
+			<TipBox inline noBorder>
+				Select a row in any table to copy its token name and pixel value to the clipboard.
+			</TipBox>
 			<SpacingTokensTable />
 		</FlexBox>
 	);

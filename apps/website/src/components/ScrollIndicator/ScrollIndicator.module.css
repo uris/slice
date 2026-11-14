@@ -1,0 +1,10 @@
+.wrapper {
+	position: absolute;
+	display: block;
+	top: 0;
+	left: 0;
+	width: 1px;
+	min-width: 1px;
+	background-color: yellow;
+	transition: height, top 0.2s ease-in-out;
+}

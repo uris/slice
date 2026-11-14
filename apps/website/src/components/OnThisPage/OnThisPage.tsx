@@ -1,5 +1,7 @@
 import {
+	useDocsActions,
 	useNewestVisibleItem,
+	useOnThisPageItem,
 	useScrollAmount,
 	useScrollBox,
 	useScrollDirection,
@@ -19,25 +21,16 @@ export type TrackedItem = {
 };
 
 export function OnThisPage() {
+	const { setOnThisPageId } = useDocsActions();
 	const items = useTrackedItems();
 	const selectedId = useNewestVisibleItem();
+	const onThisPageItem = useOnThisPageItem();
 	const scrollBox = useScrollBox();
 	const scrollAmount = useScrollAmount();
 	const scrollDirection = useScrollDirection();
 	const [selected, setSelected] = useState<string | null>(null);
 	const [amount, setAmount] = useState<number | null>(null);
 	const [lastActive, setLastActive] = useState<string | null>(null);
-
-	const isSelected = useCallback(
-		(itemId: string) => {
-			if (scrollAmount === 0 && !selected) return items[0]?.id === itemId;
-			if (amount !== null && scrollAmount !== undefined && Math.abs(amount - scrollAmount) <= 1 && selected)
-				return selected === itemId;
-			if (selectedId) return selectedId === itemId;
-			return lastActive === itemId;
-		},
-		[selectedId, amount, scrollAmount, selected, items, lastActive],
-	);
 
 	const handleScrollToItem = useCallback(
 		(itemId?: string) => {
@@ -93,17 +86,36 @@ export function OnThisPage() {
 		}
 	}, [selectedId, lastActive, scrollDirection, items]);
 
+	// update state of the item that is selected in the on this page sidebar
+	// this will enable showing scroll location on the sidebar
+	useEffect(() => {
+		// determine item selected
+		let selectedItemId = null;
+		if (scrollAmount === 0 && !selected) selectedItemId = items[0]?.id;
+		else if (amount !== null && scrollAmount !== undefined && Math.abs(amount - scrollAmount) <= 1 && selected)
+			selectedItemId = selected;
+		else if (selectedId) selectedItemId = selectedId;
+		else selectedItemId = lastActive;
+		// if no change, no need to update state
+		if (onThisPageItem?.id === selectedItemId) return;
+		// update state with new item selected and its rect
+		const element = document.getElementById(`tracked-item.${selectedItemId}`);
+		const rect = element?.getBoundingClientRect();
+		setOnThisPageId(selectedItemId, rect);
+	}, [selectedId, amount, scrollAmount, selected, items, lastActive, onThisPageItem, setOnThisPageId]);
+
 	// render sub items
 	function renderSubItems(items: Omit<TrackedItem[], 'items'> = []) {
 		if (items.length === 0) return null;
 		return items.map((item) => {
 			const { id, title, code } = item;
-			const selected = isSelected(id);
+			const selected = onThisPageItem?.id === id;
 			const className = classNames(styles.button, code ? styles.code : styles.section);
 			const baseColor = code ? 'var(--core-text-secondary)' : 'var(--core-text-primary)';
 			const color = selected ? surfaceYellow : baseColor;
 			return (
 				<input
+					id={`tracked-item.${id}`}
 					type={'button'}
 					className={className}
 					style={{ color }}
@@ -127,13 +139,14 @@ export function OnThisPage() {
 			{items.map((item) => {
 				const { items: _items, title, code, id } = item;
 				const hasItems = Boolean(_items?.length);
-				const selected = isSelected(id);
+				const selected = onThisPageItem?.id === id;
 				const className = classNames(styles.button, code ? styles.code : styles.section);
 				const baseColor = code ? 'var(--core-text-secondary)' : 'var(--core-text-primary)';
 				const color = selected ? surfaceYellow : baseColor;
 				return (
 					<div className={styles.groupWrapper} key={`group_${id}`}>
 						<input
+							id={`tracked-item.${id}`}
 							type={'button'}
 							className={className}
 							style={{ color }}
