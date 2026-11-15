@@ -10,7 +10,7 @@ import {
 import { surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
 import { motion } from 'motion/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './OnThisPage.module.css';
 
 export type TrackedItem = {
@@ -21,7 +21,7 @@ export type TrackedItem = {
 };
 
 export function OnThisPage() {
-	const { setOnThisPageId } = useDocsActions();
+	const { setOnThisPageId, setMinTop } = useDocsActions();
 	const items = useTrackedItems();
 	const selectedId = useNewestVisibleItem();
 	const onThisPageItem = useOnThisPageItem();
@@ -31,6 +31,8 @@ export function OnThisPage() {
 	const [selected, setSelected] = useState<string | null>(null);
 	const [amount, setAmount] = useState<number | null>(null);
 	const [lastActive, setLastActive] = useState<string | null>(null);
+	const [scroll, setScroll] = useState<number>(0);
+	const ref = useRef<HTMLDivElement>(null);
 
 	const handleScrollToItem = useCallback(
 		(itemId?: string) => {
@@ -70,6 +72,16 @@ export function OnThisPage() {
 		[scrollBox],
 	);
 
+	// when this element is scrolled or the window is resized, the position updates
+	const handleUpdateOnThisPageItemId = useCallback(() => {
+		// update state with new item selected and its rect
+		const id = onThisPageItem?.id;
+		if (!id) return;
+		const element = document.getElementById(`tracked-item.${id}`);
+		const rect = element?.getBoundingClientRect();
+		setOnThisPageId(id, rect);
+	}, [onThisPageItem, setOnThisPageId]);
+
 	// save the last active id for situation where a section spans more than the scroll box height
 	// where the visibility of the tracked item becomes null since it's target is off-screen
 	// scrolling upwards sets lastActive as the previous item in the list
@@ -104,6 +116,14 @@ export function OnThisPage() {
 		setOnThisPageId(selectedItemId, rect);
 	}, [selectedId, amount, scrollAmount, selected, items, lastActive, onThisPageItem, setOnThisPageId]);
 
+	// listen to window resize
+	useEffect(() => {
+		window.addEventListener('resize', handleUpdateOnThisPageItemId);
+		return () => {
+			window.removeEventListener('resize', handleUpdateOnThisPageItemId);
+		};
+	}, [handleUpdateOnThisPageItemId]);
+
 	// render sub items
 	function renderSubItems(items: Omit<TrackedItem[], 'items'> = []) {
 		if (items.length === 0) return null;
@@ -127,14 +147,23 @@ export function OnThisPage() {
 		});
 	}
 
+	// register top so we can hide scroll indicator scrolls above viewable area
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only need to set this once
+	useEffect(() => {
+		const top = ref.current?.getBoundingClientRect().top;
+		setMinTop(top);
+	}, []);
+
 	if (items.length === 0) return null;
 	return (
 		<motion.div
+			ref={ref}
 			className={classNames(styles.wrapper, 'slice-scrollbars')}
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
 			exit={{ opacity: 0 }}
 			transition={{ ease: 'easeInOut', duration: 0.25 }}
+			onScroll={handleUpdateOnThisPageItemId}
 		>
 			{items.map((item) => {
 				const { items: _items, title, code, id } = item;

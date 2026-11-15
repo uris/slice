@@ -25,6 +25,7 @@ export function Details() {
 					textColorSelected={'core-text-primary'}
 					height={70}
 					padding={'4px 0 0 0'}
+					style={{ flexShrink: 0 }}
 				>
 					<Tab icon={'editor.wrap-text'} iconSize={16} value={'on-this-page'}>
 						On this page

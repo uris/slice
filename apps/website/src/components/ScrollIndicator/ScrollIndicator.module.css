@@ -6,5 +6,5 @@
 	width: 1px;
 	min-width: 1px;
 	background-color: yellow;
-	transition: height, top 0.2s ease-in-out;
+	transition: height, top 0.1s linear;
 }

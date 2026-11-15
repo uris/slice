@@ -10,6 +10,7 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 	section: null,
 	trackedItems: [],
 	onThisPageItem: null,
+	minTop: null,
 	scrollBox: createRef<HTMLDivElement>(),
 	scrollBoxSize: undefined,
 	visibleItems: new Set<string>(),
@@ -57,8 +58,12 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 			set({ loadState });
 		},
 		setOnThisPageId: (id: string | null, rect: DOMRect | undefined) => {
-			if (id === get().onThisPageItem?.id) return;
+			if (id === get().onThisPageItem?.id && rect?.top === get().onThisPageItem?.rect?.top) return;
 			set({ onThisPageItem: { id, rect } });
+		},
+		setMinTop: (minTop: number | undefined) => {
+			if (minTop === get().minTop) return;
+			set({ minTop });
 		},
 	},
 }));
@@ -80,3 +85,4 @@ export const useScrollDirection = () => useDocsStore((state) => state.scrollDire
 export const useInitialized = () => useDocsStore((state) => state.initialized);
 export const useLoadState = () => useDocsStore((state) => state.loadState);
 export const useOnThisPageItem = () => useDocsStore((state) => state.onThisPageItem);
+export const useMinTop = () => useDocsStore((state) => state.minTop);

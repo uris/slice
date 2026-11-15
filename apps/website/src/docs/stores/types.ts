@@ -10,7 +10,8 @@ export type DocsStoreType = {
 	slug: DocsSlug | null;
 	section: SiteSection | null;
 	trackedItems: TrackedItem[];
-	onThisPageItem: SelectedTrackedItem | null;
+	onThisPageItem: TrackedItemInfo | null;
+	minTop: number | null;
 	scrollBox: RefObject<HTMLDivElement | null>;
 	scrollBoxSize: { height: number | undefined; width: number | undefined } | undefined;
 	scrollAmount: number | undefined;
@@ -24,6 +25,7 @@ export type DocsStoreType = {
 		setScrollAmount: (amount: number | undefined) => void;
 		setLoadState: (loadState: LoadState) => void;
 		setOnThisPageId: (id: string | null, rect: DOMRect | undefined) => void;
+		setMinTop: (minTop: number | undefined) => void;
 	};
 };
 
@@ -34,7 +36,7 @@ export enum LoadState {
 	Loaded = 'loaded',
 }
 
-export type SelectedTrackedItem = {
+export type TrackedItemInfo = {
 	id: string | null | undefined;
 	rect: DOMRect | undefined | null;
 };
