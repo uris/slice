@@ -4,8 +4,10 @@ import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { runFlexBoxPlay } from 'src/components/playHelpers';
 import { expect, spyOn, waitFor, within } from 'storybook/test';
 import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import compositionCss from '../../../documentation/_components/LayoutComposition.module.css';
 import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { DraggablePanel } from '../DraggablePanel';
+import { loadLayoutStylesLast } from '../playHelpers';
 import { Preset } from './_types';
 
 const loremIpsum =
@@ -403,5 +405,27 @@ export const IndependentChildElevation: StoryObj<typeof meta> = {
 		await expect(canvas.getByTestId('raised-panel').style.boxShadow).toBe('var(--elevation-4)');
 		await expect(getComputedStyle(canvas.getByRole('button', { name: 'Flat child' })).boxShadow).toBe('none');
 		await expect(canvas.getByRole('button', { name: 'Raised child' }).style.boxShadow).toBe('var(--elevation-1)');
+	},
+};
+
+export const ComposedLayoutOverrides: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	beforeEach: loadLayoutStylesLast,
+	render: () => (
+		<div role="group" aria-label="Composed layout overrides" className={compositionCss.surface}>
+			<span>First item</span>
+			<span>Second item</span>
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const surface = within(canvasElement).getByRole('group', { name: 'Composed layout overrides' });
+		const style = getComputedStyle(surface);
+		await expect(style.display).toBe('grid');
+		await expect(style.flexDirection).toBe('row');
+		await expect(style.justifyContent).toBe('space-between');
+		await expect(style.alignItems).toBe('stretch');
+		await expect(style.boxSizing).toBe('content-box');
+		await expect(style.padding).toBe('12px');
+		await expect(style.margin).toBe('8px');
 	},
 };

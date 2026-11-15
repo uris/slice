@@ -1,0 +1,12 @@
+/* Test a consumer overriding every shared layout default in its own module. */
+.surface {
+	composes: columnStart from "../../src/utils/styling/flexBox.module.css";
+	display: grid;
+	grid-template-columns: repeat(2, max-content);
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: stretch;
+	box-sizing: content-box;
+	padding: 12px;
+	margin: 8px;
+}
