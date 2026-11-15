@@ -1,4 +1,5 @@
 import { expect, fireEvent, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import layoutClasses from '../utils/styling/flexBox.module.css';
 
 type PlayContext<TArgs = unknown> = {
 	args: TArgs;
@@ -1830,4 +1831,29 @@ export function installReducedMotionPreference(initial = true) {
 			window.matchMedia = original;
 		},
 	};
+}
+
+/** Reproduce production chunks that place composed layout utilities after component CSS. */
+export function loadLayoutStylesLast() {
+	const selectors = Object.values(layoutClasses).map((name) => `.${CSS.escape(name)}`);
+	const rules: string[] = [];
+	for (const sheet of Array.from(document.styleSheets)) {
+		let sheetRules: CSSRuleList;
+		try {
+			sheetRules = sheet.cssRules;
+		} catch {
+			// Cross-origin font stylesheets cannot be inspected and contain no layout utilities.
+			continue;
+		}
+		for (const rule of Array.from(sheetRules)) {
+			if (rule instanceof CSSStyleRule && selectors.some((selector) => rule.selectorText.includes(selector))) {
+				rules.push(rule.cssText);
+			}
+		}
+	}
+	if (!rules.length) throw new Error('Expected composed layout styles to be loaded');
+	const style = document.createElement('style');
+	style.textContent = rules.join('\n');
+	document.head.append(style);
+	return () => style.remove();
 }

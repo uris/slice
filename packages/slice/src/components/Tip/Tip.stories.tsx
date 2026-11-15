@@ -5,6 +5,7 @@ import { ElevationFixture } from '../../../documentation/_components/ElevationFi
 import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { useToolTip } from '../../hooks/useToolTip/useToolTip';
 import { Button } from '../Button';
+import { loadLayoutStylesLast } from '../playHelpers';
 import type { ToolTip } from '../sharedTypes';
 import { Tip } from './Tip';
 
@@ -235,4 +236,18 @@ export const Elevation: StoryObj<typeof meta> = {
 		</ElevationFixture>
 	),
 	play: async (context) => runElevationPlay(context, 2),
+};
+
+export const LayoutStylesLoadLast: Story = {
+	tags: ['tests'],
+	beforeEach: loadLayoutStylesLast,
+	play: async ({ canvasElement }) => {
+		const tip = await within(canvasElement).findByRole('tooltip');
+		const style = getComputedStyle(tip);
+		await expect(style.paddingTop).toBe('4px');
+		await expect(style.paddingBottom).toBe('4px');
+		await expect(style.paddingLeft).toBe('8px');
+		await expect(style.paddingRight).toBe('8px');
+		await expect(style.fontSize).toBe('14px');
+	},
 };

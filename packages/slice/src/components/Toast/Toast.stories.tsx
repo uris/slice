@@ -5,6 +5,7 @@ import { ElevationFixture } from '../../../documentation/_components/ElevationFi
 import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { toastActions, useToast } from '../../stores/toast';
 import { Button } from '../Button';
+import { loadLayoutStylesLast } from '../playHelpers';
 import { Toast } from './Toast';
 import { type ToastProps, ToastType } from './_types';
 
@@ -289,4 +290,21 @@ export const Elevation: StoryObj<typeof meta> = {
 		</ElevationFixture>
 	),
 	play: async (context) => runElevationPlay(context, 3),
+};
+
+export const LayoutStylesLoadLast: Story = {
+	tags: ['tests'],
+	args: { message: 'Changes saved', container: 'window' },
+	beforeEach: loadLayoutStylesLast,
+	play: async ({ canvasElement }) => {
+		const toast = await within(canvasElement).findByTestId('toast');
+		const style = getComputedStyle(toast);
+		await expect(style.paddingTop).toBe('8px');
+		await expect(style.paddingRight).toBe('12px');
+		await expect(style.paddingBottom).toBe('8px');
+		await expect(style.paddingLeft).toBe('16px');
+		await expect(style.fontSize).toBe('15px');
+		const bounds = toast.getBoundingClientRect();
+		await expect(Math.abs(bounds.left + bounds.width / 2 - window.innerWidth / 2)).toBeLessThan(1);
+	},
 };

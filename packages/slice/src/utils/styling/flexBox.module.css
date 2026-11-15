@@ -1,85 +1,73 @@
-.row {
+/* All composed layout defaults have zero specificity so component rules win in any CSS chunk order. */
+:where(.row, .rowBetween, .rowStart, .rowEnd, .column, .columnStart, .columnStartCenter, .columnBetween, .columnEnd) {
+	padding: 0;
+	margin: 0;
+}
+
+:where(.row) {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
-.rowBetween {
+:where(.rowBetween) {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
-.rowStart {
+:where(.rowStart) {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
-.rowEnd {
+:where(.rowEnd) {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
-.column {
+:where(.column) {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
-.columnStart {
+:where(.columnStart) {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
-.columnStartCenter {
+:where(.columnStartCenter) {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
-.columnBetween {
+:where(.columnBetween) {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
-.columnEnd {
+:where(.columnEnd) {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 	align-items: flex-end;
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
