@@ -49,6 +49,7 @@ Reduced-motion preferences use the persistent stacked layout even when `behavior
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `elevation` | `ElevationLevel` | `0` | Shadow level of the surface. Omitted uses the default; 0 removes its shadow. Independent of stacking order. |
 | `actionButton` | `boolean` | `false` | Shows an optional action button using `actionLabel`. Handle activation through `onAction`. |
 | `actionLabel` | `string` | `Action` | Visible action text. Omitted or blank labels use `Action`. |
 | `backgroundColorBlurred` | `ColorValue` | style-dependent | Background when not focused. Underline borders default to `transparent`; other styles use `core-surface-secondary`. An explicit color overrides the default. `inline` removes the background. |

@@ -111,6 +111,10 @@ When any section is present, direct content must use these sections. Unsupported
 | `DialogBox.Content` | `DialogBoxSectionProps` | `undefined` | Accepts `children?: React.ReactNode`. Places content in the scrolling body while the title and actions stay in place. Body text defaults to `core-text-primary`. |
 | `DialogBox.Title` | `DialogBoxSectionProps` | `undefined` | Accepts `children?: React.ReactNode`. Places text or inline content in the panel’s heading and supplies its naming association. Use `dialogName` to override the accessible name. |
 
+## Elevation
+
+`elevation?: ElevationLevel` accepts 0–5. Shadow level of the surface. Omitted uses the default; 0 removes its shadow. Independent of stacking order. Defaults to 5.
+
 ## Props
 
 | Name | Type | Default | Description |

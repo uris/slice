@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { TextArea } from './TextArea';
 
 const meta = {
@@ -756,4 +758,12 @@ export const ClippedContainerBorder: Story = {
 		expect(frame.backgroundClip).toBe('border-box');
 		expect(frame.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>{(elevation) => <TextArea elevation={elevation} label="Description" />}</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

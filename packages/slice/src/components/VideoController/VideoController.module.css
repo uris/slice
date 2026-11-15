@@ -2,7 +2,7 @@
 	position: fixed;
 	inset: 0;
 	overflow: hidden;
-	z-index: var(--elevation-confirm);
+	z-index: var(--layer-confirm);
 	pointer-events: none;
 }
 
@@ -16,7 +16,7 @@
 	width: 100%;
 	height: 100%;
 	overflow: visible;
-	z-index: var(--elevation-confirm);
+	z-index: var(--layer-confirm);
 	pointer-events: none;
 }
 
@@ -30,7 +30,7 @@
 	align-items: center;
 	justify-content: center;
 	gap: var(--spacing-l);
-	z-index: var(--elevation-confirm);
+	z-index: var(--layer-confirm);
 	pointer-events: all;
 	border-radius: var(--video-border-radius, var(--corner-xl));
 	overflow: visible;
@@ -43,7 +43,6 @@
 	align-items: center;
 	box-sizing: border-box;
 	overflow: visible;
-	box-shadow: var(--surface-shadow-soft);
 	border-radius: var(--video-border-radius, var(--corner-xl));
 	padding: 0;
 }

@@ -3,6 +3,7 @@ import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import { GradientCanvas } from '@/components/GradientCanvas/GradientCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
+import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, H1, H2, H3, P } from '@/components/Type/Type';
 import { iconStylesCode } from '@/documents/react/design-system/icons/code';
 import { AllIcons, PreviewSizes, trackedIconGGroupItems } from '@/documents/react/design-system/icons/previews';
@@ -72,6 +73,9 @@ export function IconsDoc() {
 				Browse icons by category. Hover over an icon to see its name, or select it to copy the name for use with the{' '}
 				<Code>name</Code> prop.
 			</P>
+			<TipBox inline noBorder>
+				Select an icon ito copy its <Code>SliceIcon</Code> name to the clipboard.
+			</TipBox>
 			<AllIcons />
 		</FlexBox>
 	);

@@ -1,8 +1,9 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { ElevationProps } from '../sharedTypes';
 
-type DotBaseProps = {
+type DotBaseProps = ElevationProps & {
 	size?: number;
 	/** Shared top/right distance in pixels. Positive values move outward. Defaults to 2. */
 	offSet?: number;

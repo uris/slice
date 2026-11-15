@@ -10,6 +10,8 @@ import {
 	runDataTableVirtualizedScrollPlay,
 } from 'src/components/playHelpers';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { corners } from '../../theme/corners/corners';
 import { DataTable } from './DataTable';
 import { manyRows, sampleTableColumnDefinitions, sampleTableData } from './_data';
@@ -586,4 +588,14 @@ export const NamedHeaderContext: StoryObj<typeof TypedDataTable> = {
 		await userEvent.click(canvas.getByRole('button', { name: 'Toggle table name' }));
 		await expect(canvas.getByRole('columnheader')).toHaveTextContent('Unnamed / Name');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => <DataTable elevation={elevation} caption="Projects" columnDefinitions={[]} tableData={[]} />}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

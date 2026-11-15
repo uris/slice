@@ -1,10 +1,20 @@
-[data-slice-theme-scope] {
-	--elevation-below-surface: -100;
-	--elevation-surface: 0;
-	--elevation-float: 100;
-	--elevation-describe: 200;
-	--elevation-status: 300;
-	--elevation-notify: 400;
-	--elevation-overlay: 500;
-	--elevation-confirm: 600;
+/* Keep in sync with createElevationShadows; elevations.test.ts verifies parity. */
+:where(:root[data-slice-theme="lightMode"]) [data-slice-theme-scope],
+[data-slice-theme-scope][data-slice-elevation-theme="light"] {
+	--elevation-0: none;
+	--elevation-1: 0px 1px 3px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.24);
+	--elevation-2: 0px 3px 6px 0px rgba(0, 0, 0, 0.12), 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+	--elevation-3: 0px 10px 20px 0px rgba(0, 0, 0, 0.19), 0px 6px 6px 0px rgba(0, 0, 0, 0.1);
+	--elevation-4: 0px 14px 28px 0px rgba(0, 0, 0, 0.16), 0px 10px 10px 0px rgba(0, 0, 0, 0.1);
+	--elevation-5: 0px 19px 38px 0px rgba(0, 0, 0, 0.18), 0px 15px 12px 0px rgba(0, 0, 0, 0.1);
+}
+
+:where(:root[data-slice-theme="darkMode"]) [data-slice-theme-scope],
+[data-slice-theme-scope][data-slice-elevation-theme="dark"] {
+	--elevation-0: none;
+	--elevation-1: 0px 1px 3px 0px rgba(0, 0, 0, 0.24), 0px 1px 2px 0px rgba(0, 0, 0, 0.48);
+	--elevation-2: 0px 3px 6px 0px rgba(0, 0, 0, 0.24), 0px 3px 6px 0px rgba(0, 0, 0, 0.32);
+	--elevation-3: 0px 10px 20px 0px rgba(0, 0, 0, 0.38), 0px 6px 6px 0px rgba(0, 0, 0, 0.2);
+	--elevation-4: 0px 14px 28px 0px rgba(0, 0, 0, 0.32), 0px 10px 10px 0px rgba(0, 0, 0, 0.2);
+	--elevation-5: 0px 19px 38px 0px rgba(0, 0, 0, 0.36), 0px 15px 12px 0px rgba(0, 0, 0, 0.2);
 }

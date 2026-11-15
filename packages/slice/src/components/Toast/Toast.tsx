@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import {
 	AnimatePresence,
@@ -67,6 +68,7 @@ function ToastSurface({
 
 function ToastComponent<T>(props: ToastProps<T>, forwardedRef: React.ForwardedRef<HTMLDivElement>) {
 	const {
+		elevation = 3,
 		notificationId,
 		data,
 		onClick,
@@ -189,7 +191,7 @@ function ToastComponent<T>(props: ToastProps<T>, forwardedRef: React.ForwardedRe
 						variants={variants}
 						transition={resolvedTransition}
 						className={classNames(css.wrapper, css[textSize], className ?? '')}
-						style={{ ...style, ...cssVars, [position]: offset }}
+						style={{ ...getElevationStyle(elevation), ...style, ...cssVars, [position]: offset }}
 						onClick={onClick ? (event) => onClick(event, data) : undefined}
 						onMouseEnter={(event) => {
 							onMouseEnter?.(event);

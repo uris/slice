@@ -1,5 +1,6 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
+import type { ElevationProps } from '../sharedTypes';
 
 export enum ToastType {
 	Success = 'success',
@@ -15,7 +16,7 @@ export interface ToastInfo {
 export interface ToastHideInfo extends ToastInfo {
 	reason: ToastHideReason;
 }
-export interface ToastBaseProps<T = unknown> {
+export interface ToastBaseProps<T = unknown> extends ElevationProps {
 	data?: T;
 	onClick?: (event: React.MouseEvent<HTMLDivElement>, data: T | undefined) => void;
 	notificationId?: string;

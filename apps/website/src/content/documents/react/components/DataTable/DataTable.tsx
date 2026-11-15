@@ -194,6 +194,14 @@ export default function DataTableDoc() {
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>Initial sort when sort is omitted.</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id="filter">
 				<Prop>filter</Prop>
 				<TypeDef>{'(row: T, index: number, array: T[]) => boolean'}</TypeDef>
@@ -538,6 +546,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'columnOrder', title: 'columnOrder', code: true },
 			{ id: 'columnWidths', title: 'columnWidths', code: true },
 			{ id: 'defaultSort', title: 'defaultSort', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'filter', title: 'filter', code: true },
 			{ id: 'freezeColumn', title: 'freezeColumn', code: true },
 			{ id: 'freezeColumnBackgroundColor', title: 'freezeColumnBackgroundColor', code: true },

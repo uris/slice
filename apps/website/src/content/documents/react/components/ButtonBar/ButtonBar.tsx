@@ -256,6 +256,14 @@ export default function ButtonBarDoc() {
 				<DefaultVal>{'1'}</DefaultVal>
 			</Definition>
 			<P>Separator thickness. Numbers use pixels.</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the whole bar. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id="exit">
 				<Prop>exit</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -545,6 +553,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'dividerOpacity', title: 'dividerOpacity', code: true },
 			{ id: 'dividerStyle', title: 'dividerStyle', code: true },
 			{ id: 'dividerWidth', title: 'dividerWidth', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'exit', title: 'exit', code: true },
 			{ id: 'fill', title: 'fill', code: true },
 			{ id: 'gap', title: 'gap', code: true },

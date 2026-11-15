@@ -50,6 +50,12 @@ const panelProps = [
 		'Resize edge: right for a left sidebar, left for a right sidebar. False fills available width without a resize rail; isClosed still collapses it.',
 	],
 	[
+		'elevation',
+		'0 | 1 | 2 | 3 | 4 | 5',
+		'0',
+		'Chooses shadow depth, from flat to raised, without changing stacking order.',
+	],
+	[
 		'isClosed',
 		'boolean',
 		'true',

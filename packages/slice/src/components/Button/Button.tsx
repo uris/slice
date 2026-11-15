@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { motion, useAnimationControls, usePresence } from 'motion/react';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
@@ -22,6 +23,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	const motionControls = useAnimationControls();
 	const [isPresent, safeToRemove] = usePresence();
 	const {
+		elevation = 0,
 		children,
 		disabled = false,
 		onMouseEnter,
@@ -475,7 +477,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 			onMouseLeave={handleMouseLeave}
 			onFocus={handleFocus}
 			onBlur={handleBlur}
-			style={{ ...divStyle, ...buttonStyle, ...cssVars }}
+			style={{ ...getElevationStyle(elevation), ...divStyle, ...buttonStyle, ...cssVars }}
 			transition={reduceMotion ? { type: 'tween', duration: 0, delay: 0, repeat: 0 } : transition}
 			variants={motionVariants}
 			initial={reduceMotion ? false : initial}

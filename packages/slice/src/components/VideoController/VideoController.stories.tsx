@@ -432,3 +432,40 @@ export const LoadingHidesNativeControls: StoryObj<typeof VideoController> = {
 		}
 	},
 };
+
+const playVideoElevation: NonNullable<StoryObj<typeof VideoController>['play']> = async ({ canvasElement, args }) => {
+	videoActions.clear();
+	const canvas = within(canvasElement);
+	try {
+		videoActions.show({ component: Video, props: { playing: false, elevation: 4, width: 320, height: 180 } });
+		await canvas.findByRole('dialog');
+		await waitFor(() => expect(canvasElement.querySelector('video')).toBeInTheDocument());
+		const video = canvasElement.querySelector('video');
+		if (!video) throw new Error('Expected video content');
+		fireEvent.canPlay(video);
+		const frame = video.parentElement;
+		const surface = frame?.parentElement;
+		if (!frame || !surface) throw new Error('Expected a framed video surface');
+		await waitFor(() => expect(surface.style.boxShadow).toBe(`var(--elevation-${args.elevation ?? 5})`));
+		await expect(frame.style.boxShadow).toBe('var(--elevation-0)');
+		await expect(getComputedStyle(frame).boxShadow).toBe('none');
+		if (args.elevation === 0) await expect(getComputedStyle(surface).boxShadow).toBe('none');
+		else await expect(getComputedStyle(surface).boxShadow).toContain('rgba(');
+	} finally {
+		videoActions.clear();
+		await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+	}
+};
+export const DefaultElevation: StoryObj<typeof VideoController> = {
+	tags: ['tests'],
+	render: (args) => <VideoController {...args} transition={{ duration: 0 }} />,
+	play: playVideoElevation,
+};
+export const RaisedElevation: StoryObj<typeof VideoController> = {
+	...DefaultElevation,
+	args: { elevation: 3 },
+};
+export const FlatElevation: StoryObj<typeof VideoController> = {
+	...DefaultElevation,
+	args: { elevation: 0 },
+};

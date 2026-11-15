@@ -229,6 +229,14 @@ export default function VideoDoc() {
 				captions adds a captions toggle when <Code>captionsSrc</Code> is supplied. quit adds a close action inside the
 				progress bar, requires progress, and calls <Code>onQuit</Code> without removing the video.
 			</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id="height">
 				<Prop>height</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
@@ -561,6 +569,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'controls', title: 'controls', code: true },
 			{ id: 'customControls', title: 'customControls', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'height', title: 'height', code: true },
 			{ id: 'loop', title: 'loop', code: true },
 			{ id: 'muted', title: 'muted', code: true },

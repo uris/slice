@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { corners } from '../../theme/corners/corners';
@@ -13,6 +14,7 @@ import { useFileSelection } from './useFileSelection';
 
 const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawProps, ref) => {
 	const {
+		elevation = 0,
 		icon = 'documents.file-upload',
 		iconColor = 'var(--core-text-primary)',
 		iconColorHover = 'var(--core-text-special)',
@@ -124,7 +126,7 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawPro
 		<div
 			{...wrapperAttributes}
 			className={`${css.wrapper} ${className ?? ''}`}
-			style={{ ...style, ...cssVars }}
+			style={{ ...getElevationStyle(elevation), ...style, ...cssVars }}
 			ref={ref}
 			onDragEnter={(event) => {
 				onDragEnter?.(event);

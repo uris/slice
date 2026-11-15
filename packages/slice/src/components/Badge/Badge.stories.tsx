@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Badge, type BadgeProps } from 'src/components/Badge';
 import { expect, fn, userEvent, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 
 const meta: Meta<typeof Badge> = {
 	title: 'Components/Badge',
@@ -214,4 +216,10 @@ export const UpdatedColorOverrides: Story = {
 		await userEvent.click(canvas.getByRole('button', { name: 'Use preset' }));
 		await expect(badge.style.getPropertyValue('--badge-bg')).toBe('var(--core-badge-primary)');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => <ElevationFixture>{(elevation) => <Badge elevation={elevation} count={5} />}</ElevationFixture>,
+	play: async (context) => runElevationPlay(context, 0),
 };

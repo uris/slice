@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createRef, useCallback, useEffect, useRef, useState } from 'react';
 import { expect, fireEvent, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Button } from '../Button';
 import { Chip } from '../Chip';
 import { FlexBox } from '../FlexBox';
@@ -562,4 +564,14 @@ export const OffBackgroundRemainsConsistent: StoryObj<typeof Camera> = {
 			request.mockRestore();
 		}
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => <Camera elevation={elevation} startCameraOff showControlBar={false} width={320} height={180} />}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

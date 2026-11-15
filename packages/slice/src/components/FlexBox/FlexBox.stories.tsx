@@ -3,6 +3,8 @@ import { Button } from 'src/components/Button/Button';
 import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { runFlexBoxPlay } from 'src/components/playHelpers';
 import { expect, spyOn, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { DraggablePanel } from '../DraggablePanel';
 import { Preset } from './_types';
 
@@ -371,5 +373,35 @@ export const FillWrapPacksRowsAtTop: StoryObj<typeof FlexBox> = {
 		expect(canvas.getByTestId('first-item').getBoundingClientRect().top - top).toBe(0);
 		expect(canvas.getByTestId('second-item').getBoundingClientRect().top - top).toBe(0);
 		expect(canvas.getByTestId('third-item').getBoundingClientRect().top - top).toBe(50);
+	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => (
+				<FlexBox elevation={elevation} padding={24} background="core-surface-secondary">
+					Panel content
+				</FlexBox>
+			)}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
+};
+
+export const IndependentChildElevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox elevation={4} padding={32} gap={16} background="core-surface-secondary" data-testid="raised-panel">
+			<Button label="Flat child" />
+			<Button label="Raised child" elevation={1} />
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await expect(canvas.getByTestId('raised-panel').style.boxShadow).toBe('var(--elevation-4)');
+		await expect(getComputedStyle(canvas.getByRole('button', { name: 'Flat child' })).boxShadow).toBe('none');
+		await expect(canvas.getByRole('button', { name: 'Raised child' }).style.boxShadow).toBe('var(--elevation-1)');
 	},
 };

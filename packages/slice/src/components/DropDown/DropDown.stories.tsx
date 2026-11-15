@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { installReducedMotionPreference } from '../playHelpers';
 import { DropDown } from './DropDown';
 import type { DropDownOption, DropDownProps } from './_types';
@@ -1076,4 +1078,16 @@ export const FirstChildOptionTextColor: Story = {
 		expect(canvas.getByRole('combobox')).toHaveValue('active');
 		expect(getComputedStyle(canvas.getByText('In progress', { selector: 'span' })).color).toBe('rgb(18, 52, 86)');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => (
+				<DropDown elevation={elevation} label="Category" options={[{ label: 'General', value: 'general' }]} />
+			)}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

@@ -1,6 +1,7 @@
 import type { HTMLMotionProps, TargetAndTransition, VariantLabels } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { ElevationProps } from '../sharedTypes';
 
 export enum Size {
 	Grow = 'grow',
@@ -200,7 +201,7 @@ export const layoutSets: Record<Preset, FlexBoxLayout> = {
 	},
 };
 
-type FlexBoxBaseProps = {
+type FlexBoxBaseProps = ElevationProps & {
 	className?: string;
 	children?: React.ReactNode;
 	preset?: Preset;

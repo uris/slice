@@ -90,6 +90,16 @@ const attachmentProps = [
 		description: 'Disables the open and remove actions. The card remains visible.',
 	},
 	{
+		name: 'elevation',
+		type: '0 | 1 | 2 | 3 | 4 | 5',
+		defaultValue: '0',
+		description: (
+			<>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</>
+		),
+	},
+	{
 		name: 'height',
 		type: 'number | string',
 		defaultValue: 'derived from size',

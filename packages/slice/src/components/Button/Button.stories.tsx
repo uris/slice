@@ -17,6 +17,8 @@ import {
 	runButtonTextVariantChildrenPlay,
 } from 'src/components/playHelpers';
 import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Avatar } from '../Avatar';
 import type { ButtonHandle } from './_types';
 
@@ -848,4 +850,12 @@ export const SpringTransformIsNotSmoothedByCss: StoryObj<typeof Button> = {
 		expect(peak).toBeGreaterThan(1.21);
 		await waitFor(() => expect(new DOMMatrix(getComputedStyle(button).transform).a).toBeCloseTo(1.2, 2));
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>{(elevation) => <Button elevation={elevation} label="Save changes" />}</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

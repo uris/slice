@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { animate as animateBackground } from 'motion/mini';
 import {
@@ -127,6 +128,7 @@ function AnimatedBackground({
 export const ActionButton = React.memo(function ActionButton(rawProps: ActionButtonProps) {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 0,
 		actionName = 'Action',
 		labelContent,
 		contentClassName,
@@ -265,7 +267,12 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 			type={type}
 			disabled={disabled}
 			className={`${css.button}${className ? ` ${className}` : ''}`}
-			style={{ ...style, ...cssVars, ...(iconFrame ? { borderWidth: 0 } : {}) }}
+			style={{
+				...getElevationStyle(iconFrame ? 0 : elevation),
+				...style,
+				...cssVars,
+				...(iconFrame ? { borderWidth: 0 } : {}),
+			}}
 			aria-label={typeof actionName === 'string' && actionName.trim() ? actionName.trim() : 'Action'}
 			aria-labelledby={undefined}
 			aria-disabled={disabled}
@@ -310,7 +317,11 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 				<AnimatedBackground color={background} transition={motionTransition} reduceMotion={reduceMotion} />
 			)}
 			{icon && (
-				<span className={`${css.slot}${iconFrame ? ` ${css.frame}` : ''}`} aria-hidden="true">
+				<span
+					className={`${css.slot}${iconFrame ? ` ${css.frame}` : ''}`}
+					style={iconFrame ? getElevationStyle(elevation) : undefined}
+					aria-hidden="true"
+				>
 					{iconFrame && (
 						<AnimatedBackground color={background} transition={motionTransition} reduceMotion={reduceMotion} />
 					)}

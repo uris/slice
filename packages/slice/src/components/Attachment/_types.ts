@@ -2,7 +2,7 @@ import type React from 'react';
 import type { ColorValue } from '../../theme';
 import type { FileIconTypes } from '../FileIcon';
 import type { FileItem } from '../FileList';
-import type { FixedSize, ToolTip } from '../sharedTypes';
+import type { ElevationProps, FixedSize, ToolTip } from '../sharedTypes';
 
 export enum ContentType {
 	Text = 'text',
@@ -13,7 +13,7 @@ export type ContentFormat = FileIconTypes;
 
 export type Content = File | FileItem | string;
 
-export type AttachmentBaseProps = {
+export type AttachmentBaseProps = ElevationProps & {
 	/** Accepts a raw File, clipboard text, or FileItem. FileItem.uploading and FileItem.progress drive upload status; FileItem.error replaces the preview. */
 	content?: Content;
 	textColor?: ColorValue;

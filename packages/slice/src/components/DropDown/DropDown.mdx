@@ -118,6 +118,7 @@ Reduced-motion preferences disable border, background, and label transitions. Wi
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `elevation` | `ElevationLevel` | `0` | Shadow level of the surface. Omitted uses the default; 0 removes its shadow. Independent of stacking order. |
 | `backgroundColor` | `ColorValue` | `transparent for underline; core-surface-secondary otherwise` | Field background. An explicit color overrides the border-style default. |
 | `behavior` | `'persistent'  /  'appear'` | `persistent` | Label behavior for the stacked variant. `appear` uses the label in the empty selection position, then animates it above a selected answer. Simple and outlined labels stay persistent. Reduced-motion preferences use the persistent layout. |
 | `borderColor` | `ColorValue` | `core-outline-primary` | Border color while not focused, disabled, or in an error state. |

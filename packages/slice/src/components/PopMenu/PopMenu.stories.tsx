@@ -1219,3 +1219,18 @@ export const ComposedCallbacksWithData: Story = {
 		);
 	},
 };
+
+const playMenuElevation: NonNullable<Story['play']> = async ({ canvasElement, args }) => {
+	const canvas = within(canvasElement);
+	await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+	const menu = await canvas.findByRole('menu');
+	const level = args.elevation ?? 3;
+	await expect(menu.style.boxShadow).toBe(`var(--elevation-${level})`);
+	await expect(menu).not.toHaveAttribute('elevation');
+	if (level === 0) await expect(getComputedStyle(menu).boxShadow).toBe('none');
+	else await expect(getComputedStyle(menu).boxShadow).toContain('rgba(');
+	await userEvent.keyboard('{Escape}');
+};
+export const DefaultElevation: Story = { tags: ['tests'], play: playMenuElevation };
+export const RaisedElevation: Story = { tags: ['tests'], args: { elevation: 5 }, play: playMenuElevation };
+export const FlatElevation: Story = { tags: ['tests'], args: { elevation: 0 }, play: playMenuElevation };

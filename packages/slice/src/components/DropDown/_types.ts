@@ -1,6 +1,7 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { Type } from '../../theme/type/types';
+import type { ElevationProps } from '../sharedTypes';
 
 export type DropDownOption<T = string> = {
 	label?: string;
@@ -25,7 +26,7 @@ type NativeInputAttributes = Omit<
 	| 'size'
 	| 'onChange'
 >;
-type DropDownBaseProps<T = string> = {
+type DropDownBaseProps<T = string> = ElevationProps & {
 	name?: string;
 	inputName?: string;
 	inputId?: string;

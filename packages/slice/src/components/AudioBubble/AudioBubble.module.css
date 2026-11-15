@@ -5,7 +5,7 @@
 	height: var(--ab-size);
 	width: var(--ab-size);
 	overflow: visible;
-	z-index: var(--elevation-status);
+	z-index: var(--layer-status);
 }
 
 .bubble {

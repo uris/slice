@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { corners } from '../../theme/corners/corners';
@@ -17,6 +18,7 @@ import { getVideoControls } from './getVideoControls';
 const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 0,
 		children,
 		src,
 		playing,
@@ -491,7 +493,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 			id={divId}
 			ref={containerRef}
 			className={`${css.wrapper}${divClass}`}
-			style={{ ...cssVars, ...divStyle }}
+			style={{ ...getElevationStyle(elevation), ...cssVars, ...divStyle }}
 			onMouseEnter={(event) => {
 				handleMouseOver();
 				onMouseEnter?.(event);

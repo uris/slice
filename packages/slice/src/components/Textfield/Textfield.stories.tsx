@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { installReducedMotionPreference } from '../playHelpers';
 import { TextField } from './TextField';
 
@@ -1089,4 +1091,12 @@ export const LongPlaceholder: Story = {
 		width: 240,
 		placeholder: 'Search documents, projects, and conversations',
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>{(elevation) => <TextField elevation={elevation} label="Project name" />}</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

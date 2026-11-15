@@ -81,6 +81,16 @@ const menuProps = [
 		),
 	},
 	{
+		name: 'elevation',
+		type: '0 | 1 | 2 | 3 | 4 | 5',
+		defaultValue: '3',
+		description: (
+			<>
+				Shadow depth of the menu panel. <Code>0</Code> removes the shadow without changing stacking order.
+			</>
+		),
+	},
+	{
 		name: 'gap',
 		type: 'number',
 		defaultValue: '2; -24 for level > 0',

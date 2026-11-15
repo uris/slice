@@ -1,14 +1,15 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import { dark, light, coreColors as webCore } from '../../../slice/src/theme/colors/colors';
 import { corners } from '../../../slice/src/theme/corners/corners';
-// Import token modules directly: web barrel exports can initialize browser stores.
 import { elevations } from '../../../slice/src/theme/elevations/elevations';
+// Import token modules directly: web barrel exports can initialize browser stores.
+import { layers } from '../../../slice/src/theme/layers/layers';
 import { motion as webMotion } from '../../../slice/src/theme/motion/motion';
 import { spacing } from '../../../slice/src/theme/spacing/spacing';
 import { type as webType } from '../../../slice/src/theme/type/type';
 import { easing } from './motion';
 
-export { corners, spacing, elevations };
+export { corners, spacing, elevations, layers };
 export type NativeTypography = Record<keyof typeof webType, TextStyle>;
 type ShadowKey = 'surface-shadow-soft' | 'surface-shadow-strong';
 type CoreShadowKey = `${ShadowKey}-${'light' | 'dark'}`;
@@ -76,6 +77,7 @@ function createTheme(name: string, palette: typeof light) {
 		corners,
 		spacing,
 		elevations,
+		layers,
 		type,
 		motion,
 		shadows: { 'surface-shadow-soft': shadow(soft), 'surface-shadow-strong': shadow(strong) },

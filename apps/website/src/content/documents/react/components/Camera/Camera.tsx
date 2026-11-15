@@ -150,6 +150,14 @@ export default function CameraDoc() {
 				<DefaultVal>{'1'}</DefaultVal>
 			</Definition>
 			<P>Solid frame border width. Numbers are pixels; strings are CSS lengths.</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id="height">
 				<Prop>height</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
@@ -429,6 +437,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'borderColor', title: 'borderColor', code: true },
 			{ id: 'borderRadius', title: 'borderRadius', code: true },
 			{ id: 'borderWidth', title: 'borderWidth', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'height', title: 'height', code: true },
 			{ id: 'noVideoPoster', title: 'noVideoPoster', code: true },
 			{ id: 'pipSnapshot', title: 'pipSnapshot', code: true },

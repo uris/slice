@@ -3,6 +3,7 @@ import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { Type } from '../../theme/type/types';
 import type { SliceIcon } from '../Icon/_types';
+import type { ElevationProps } from '../sharedTypes';
 
 type NativeInputAttributes = Omit<
 	React.InputHTMLAttributes<HTMLInputElement>,
@@ -28,7 +29,7 @@ type NativeInputAttributes = Omit<
 	| 'onPaste'
 	| 'onSubmit'
 >;
-type TextFieldBaseProps = {
+type TextFieldBaseProps = ElevationProps & {
 	value?: string;
 	defaultValue?: string;
 	name?: string;

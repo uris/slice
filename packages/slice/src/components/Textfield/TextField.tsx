@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import {
 	AnimatePresence,
@@ -66,6 +67,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 	const theme = useTheme();
 	const reduced = usePrefersReducedMotion();
 	const {
+		elevation = 0,
 		name,
 		inputName,
 		inputId,
@@ -342,7 +344,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 				data-appear={appearing || undefined}
 				data-collapsed-label={collapsedLabel || undefined}
 				className={`${css.wrapper}${className ? ` ${className}` : ''}`}
-				style={{ ...style, ...cssVars, '--tf-width': '100%' } as React.CSSProperties}
+				style={{ ...getElevationStyle(elevation), ...style, ...cssVars, '--tf-width': '100%' } as React.CSSProperties}
 			>
 				{variant === 'simple' && leadingIcon}
 				{hasLabel && variant === 'simple' && (

@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
@@ -47,6 +48,7 @@ function optionLabel<T>(option: DropDownOption<T>) {
 function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 0,
 		name,
 		inputName,
 		inputId,
@@ -282,7 +284,7 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 				data-appear={appearing || undefined}
 				data-collapsed-label={collapsedLabel || undefined}
 				className={`${css.wrapper}${className ? ` ${className}` : ''}`}
-				style={{ ...style, ...cssVars, ...sidePadding }}
+				style={{ ...getElevationStyle(elevation), ...style, ...cssVars, ...sidePadding }}
 			>
 				{hasLabel && variant === 'simple' && (
 					<label className={`${css.label} ${css[labelSize]}`} htmlFor={id}>

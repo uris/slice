@@ -6,6 +6,10 @@ const sliceSource = resolve(__dirname, '../../packages/slice/src');
 
 const config: NextConfig = {
 	allowedDevOrigins: ['127.0.0.1'],
+	images: {
+		qualities: [50, 60, 70, 80, 90, 100],
+		minimumCacheTTL: 1400,
+	},
 	trailingSlash: true,
 	transpilePackages: ['@apple-pie/slice'],
 	// keep local slice package source edits visible without a separate library build.

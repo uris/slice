@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useObserveResize } from '../../hooks';
@@ -25,6 +26,7 @@ type Gesture = {
 export const DraggablePanel = React.memo(function DraggablePanel(rawProps: DraggablePanelProps) {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 0,
 		children,
 		sizeConstraints = defaultConstraints,
 		isClosed = true,
@@ -276,6 +278,7 @@ export const DraggablePanel = React.memo(function DraggablePanel(rawProps: Dragg
 				if (disableOnContext) event.preventDefault();
 			}}
 			style={{
+				...getElevationStyle(closed ? 0 : elevation),
 				...style,
 				...variables,
 				overflow: 'visible',

@@ -5,7 +5,7 @@
 	justify-content: center;
 	position: var(--pi-position);
 	inset: var(--pi-inset);
-	z-index: var(--elevation-status);
+	z-index: var(--layer-status);
 }
 .spinning {
 	animation: spin var(--pi-spin-duration) linear infinite;

@@ -78,6 +78,9 @@ export const Default: StoryObj<typeof ModalController> = {
 	play: async ({ canvasElement, args }) => {
 		modalActionsImperative.clear();
 		await runModalControllerPlay({ canvasElement, args });
+		const dialog = within(canvasElement).getByRole('dialog', { name: 'Continue?' });
+		await expect(dialog.style.boxShadow).toBe('var(--elevation-5)');
+		await expect(getComputedStyle(dialog).boxShadow).toContain('rgba(');
 	},
 };
 

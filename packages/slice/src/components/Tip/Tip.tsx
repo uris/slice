@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { motion, useAnimationControls } from 'motion/react';
 import React, { useEffect, useId, useMemo } from 'react';
@@ -17,6 +18,7 @@ const staticState = { opacity: 1, x: 0, y: 0, scale: 1, scaleX: 1, scaleY: 1, ro
 const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((rawProps, ref) => {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 2,
 		tip,
 		textSize = 's',
 		backgroundColor,
@@ -112,6 +114,7 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((rawProps, ref) =
 			aria-hidden={!visible}
 			className={classNames(css.wrapper, css[textSize], className ?? '')}
 			style={{
+				...getElevationStyle(elevation),
 				...style,
 				...cssVars,
 				left: coords?.x ?? 0,

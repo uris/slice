@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
@@ -26,6 +27,7 @@ export const Camera = React.memo(
 		const controlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 		const controlsElement = useRef<HTMLDivElement>(null);
 		const {
+			elevation = 0,
 			noVideoPoster,
 			backgroundColor = 'var(--core-surface-secondary)',
 			borderColor = 'var(--core-fill-primary)',
@@ -292,7 +294,7 @@ export const Camera = React.memo(
 				{...divAttributes}
 				ref={containerElement}
 				className={[css.wrapper, className].filter(Boolean).join(' ')}
-				style={{ ...cssVars, ...style }}
+				style={{ ...getElevationStyle(elevation), ...cssVars, ...style }}
 				onMouseEnter={(event) => {
 					onMouseEnter?.(event);
 					revealControls();

@@ -242,6 +242,14 @@ export function DialogBoxDoc() {
 				Accessible name for the dialog. Overrides the visible title’s naming association; without either, the name is{' '}
 				<Code>Dialog</Code>.
 			</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'5'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the dialog surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id="maxHeight">
 				<Prop>maxHeight</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
@@ -486,6 +494,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'close', title: 'close', code: true },
 			{ id: 'contentTextSize', title: 'contentTextSize', code: true },
 			{ id: 'dialogName', title: 'dialogName', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'maxHeight', title: 'maxHeight', code: true },
 			{ id: 'maxWidth', title: 'maxWidth', code: true },
 			{ id: 'minHeight', title: 'minHeight', code: true },

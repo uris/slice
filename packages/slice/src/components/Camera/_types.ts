@@ -1,6 +1,7 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { SliceIcon } from '../Icon/_types';
+import type { ElevationProps } from '../sharedTypes';
 
 export interface DefaultNoVideoPosterProps {
 	user?: UserProfile;
@@ -53,7 +54,7 @@ export interface Settings {
 	videoDeviceId?: string;
 }
 
-export interface BaseCameraProps {
+export interface BaseCameraProps extends ElevationProps {
 	backgroundColor?: ColorValue;
 	borderColor?: ColorValue;
 	borderWidth?: number | string;

@@ -89,6 +89,14 @@ export function DotDoc() {
 			<P>
 				Explicit dot <Code>color</Code>. Takes priority over <Code>state</Code>.
 			</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id={'offSet'}>
 				<Prop>offSet</Prop>
 				<TypeDef>number</TypeDef>
@@ -202,6 +210,7 @@ export const trackedItems: TrackedItem[] = [
 		items: [
 			{ id: 'border', title: 'border', code: true },
 			{ id: 'color', title: 'color', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'offSet', title: 'offSet', code: true },
 			{ id: 'position', title: 'position', code: true },
 			{ id: 'rightOffset', title: 'rightOffset', code: true },

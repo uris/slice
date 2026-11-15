@@ -4,6 +4,8 @@ import { Dot } from 'src/components/Dot/Dot';
 import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { runDotPlay, runDotVariantsPlay } from 'src/components/playHelpers';
 import { expect, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 
 const meta: Meta<typeof Dot> = {
 	title: 'Components/Dot',
@@ -112,4 +114,12 @@ export const CornerOffsets: StoryObj<typeof Dot> = {
 		await expect(inline.style.getPropertyValue('--dot-top')).toBe('unset');
 		await expect(inline.style.getPropertyValue('--dot-right')).toBe('unset');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>{(elevation) => <Dot elevation={elevation} show position="inline" />}</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

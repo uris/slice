@@ -3,7 +3,7 @@ import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { FileItem } from '../FileList';
 import type { TextAreaProps } from '../TextArea';
 import type { UploadAreaProps, UploadFileRejection } from '../UploadArea';
-import type { ToolTip } from '../sharedTypes';
+import type { ElevationProps, ToolTip } from '../sharedTypes';
 
 /** Commands available to custom actions without reaching into the editor DOM. */
 export type PromptActions = {
@@ -39,7 +39,7 @@ export type PromptTextAreaProps = Omit<
 	| 'focused'
 >;
 
-type BasePromptProps = {
+type BasePromptProps = ElevationProps & {
 	attachments?: FileItem[];
 	defaultAttachments?: FileItem[];
 	children?: React.ReactNode | ((actions: PromptActions) => React.ReactNode);

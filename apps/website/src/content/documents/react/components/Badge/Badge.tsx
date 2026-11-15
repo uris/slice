@@ -129,6 +129,14 @@ export function BadgeDoc() {
 				<DefaultVal>undefined</DefaultVal>
 			</Definition>
 			<P>Number or short label to display. Null, undefined, blank strings, NaN, and infinite numbers render nothing.</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id={'hideZero'}>
 				<Prop>hideZero</Prop>
 				<TypeDef>boolean</TypeDef>
@@ -185,6 +193,7 @@ export const badgeTrackedItems: TrackedItem[] = [
 		items: [
 			{ id: 'backgroundColor', title: 'backgroundColor', code: true },
 			{ id: 'count', title: 'count', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'hideZero', title: 'hideZero', code: true },
 			{ id: 'textColor', title: 'textColor', code: true },
 			{ id: 'variant', title: 'variant', code: true },

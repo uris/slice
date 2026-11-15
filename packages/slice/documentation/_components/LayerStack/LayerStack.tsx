@@ -1,19 +1,19 @@
-import { elevationTokens } from '../../_data/otherStyleData';
+import { layerTokens } from '../../_data/otherStyleData';
 
 const CARD_WIDTH = 220;
 const CARD_HEIGHT = 84;
 const STEP_X = 44;
 const STEP_Y = 38;
 
-// A staggered pile of cards, each one using the real elevation token as its z-index,
+// A staggered pile of cards, each one using the real layer token as its z-index,
 // so you can see which level sits above which. Isolated so negative z-index still paints
 // inside the demo instead of vanishing behind the page.
-export function ElevationStack() {
-	const count = elevationTokens.length;
+export function LayerStack() {
+	const count = layerTokens.length;
 	return (
 		<div
 			role="img"
-			aria-label="Elevation levels stacked from below-surface at the back to confirm at the front"
+			aria-label="Layers stacked from below-surface at the back to confirm at the front"
 			style={{
 				position: 'relative',
 				isolation: 'isolate',
@@ -23,7 +23,7 @@ export function ElevationStack() {
 				margin: '24px 0',
 			}}
 		>
-			{elevationTokens.map((token, i) => (
+			{layerTokens.map((token, i) => (
 				<div
 					key={token.name}
 					style={{
