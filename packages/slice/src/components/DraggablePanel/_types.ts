@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { ElevationProps } from '../sharedTypes';
 
 export type Constraint = { initial: number; max: number; min: number };
 export type DraggablePanelResizeInfo = {
@@ -23,7 +24,7 @@ export type ResizeHandle = {
 	/** Retained for compatibility; the resize rail remains centered on the panel edge. */
 	offsetX?: boolean;
 };
-type BaseProps = {
+type BaseProps = ElevationProps & {
 	children?: React.ReactNode;
 	onResize?: (info: DraggablePanelResizeInfo) => void;
 	onResizeEnd?: (info: DraggablePanelResizeInfo) => void;

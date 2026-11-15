@@ -2,9 +2,10 @@ import type React from 'react';
 import type { ColorValue } from '../../theme';
 import type { ButtonProps } from '../Button';
 import type { TextFieldProps } from '../Textfield';
-import type { ButtonStyleProps } from '../sharedTypes';
+import type { ButtonStyleProps, ElevationProps } from '../sharedTypes';
 
-type ButtonBarStyleProps = ButtonStyleProps &
+type ButtonBarStyleProps = ElevationProps &
+	ButtonStyleProps &
 	Pick<
 		ButtonProps,
 		| 'variant'

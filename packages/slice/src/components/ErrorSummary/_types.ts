@@ -1,6 +1,7 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme';
+import type { ElevationProps } from '../sharedTypes';
 
 export type ErrorMessage = {
 	id?: string;
@@ -9,7 +10,7 @@ export type ErrorMessage = {
 	fieldName?: string;
 };
 
-type ErrorSummaryBaseProps = {
+type ErrorSummaryBaseProps = ElevationProps & {
 	entries?: ErrorMessage[];
 	announcement?: 'polite' | 'assertive' | 'off';
 	summaryName?: string;

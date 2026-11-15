@@ -131,6 +131,14 @@ export default function VideoControllerDoc() {
 			<P>
 				Icon displayed in the drag handle once the player is ready. Its accessible name remains <Code>Move video</Code>.
 			</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'5'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the floating video frame. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id="exit">
 				<Prop>exit</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -250,6 +258,7 @@ export const trackedItems: TrackedItem[] = [
 	{ id: 'dragConstraintsRef', title: 'dragConstraintsRef', code: true },
 	{ id: 'draggable', title: 'draggable', code: true },
 	{ id: 'dragIcon', title: 'dragIcon', code: true },
+	{ id: 'elevation', title: 'elevation', code: true },
 	{ id: 'exit', title: 'exit', code: true },
 	{ id: 'initial', title: 'initial', code: true },
 	{ id: 'overlayColor', title: 'overlayColor', code: true },

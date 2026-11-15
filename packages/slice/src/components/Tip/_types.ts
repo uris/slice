@@ -1,9 +1,9 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
-import type { ToolTip } from '../sharedTypes';
+import type { ElevationProps, ToolTip } from '../sharedTypes';
 
-export interface ToolTipBaseProps {
+export interface ToolTipBaseProps extends ElevationProps {
 	tip?: ToolTip | null;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	backgroundColor?: ColorValue;

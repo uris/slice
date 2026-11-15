@@ -10,7 +10,6 @@
 	background: var(--modal-background-color);
 	border: var(--modal-border-width) solid var(--modal-border-color);
 	border-radius: var(--modal-border-radius);
-	box-shadow: var(--surface-shadow-soft);
 	overflow: hidden;
 }
 

@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useContext, useId, useMemo, useRef } from 'react';
 import { useObserveResize } from '../../hooks/useObserveResize/useObserveResize';
@@ -17,6 +18,7 @@ import { DialogBoxContext } from './useDialogBox';
 const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 5,
 		children,
 		id,
 		className,
@@ -190,7 +192,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 				{...Object.fromEntries(Object.entries(rest).filter(([key]) => !key.startsWith('aria-') && key !== 'role'))}
 				id={id}
 				className={`${css.wrapper}${modalClass}`}
-				style={{ ...modalStyle, ...cssVars }}
+				style={{ ...getElevationStyle(elevation), ...modalStyle, ...cssVars }}
 				role="dialog"
 				aria-modal={modalHost || undefined}
 				aria-labelledby={!accessibleName && hasTitle ? titleId : undefined}

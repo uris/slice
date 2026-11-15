@@ -99,6 +99,16 @@ const promptProps = [
 		description: 'Disables editing, file mutations, submit, and stop.',
 	},
 	{
+		name: 'elevation',
+		type: '0 | 1 | 2 | 3 | 4 | 5',
+		defaultValue: '0',
+		description: (
+			<>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</>
+		),
+	},
+	{
 		name: 'enterSubmits',
 		type: 'boolean',
 		defaultValue: 'true',

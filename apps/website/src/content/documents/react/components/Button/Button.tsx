@@ -318,6 +318,14 @@ export function ButtonDoc() {
 				Timed progress delay in seconds. Requires progress and a positive, finite value. Has no effect on controlled
 				working state.
 			</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id={'fill'}>
 				<Prop>fill</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -645,6 +653,7 @@ export const buttonTrackedItems: TrackedItem[] = [
 			{ id: 'destructive', title: 'destructive', code: true },
 			{ id: 'disabled', title: 'disabled', code: true },
 			{ id: 'duration', title: 'duration', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'fill', title: 'fill', code: true },
 			{ id: 'gap', title: 'gap', code: true },
 			{ id: 'iconColor', title: 'iconColor', code: true },

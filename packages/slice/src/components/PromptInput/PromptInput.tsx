@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { setStyle } from '../../utils/functions/misc';
@@ -16,6 +17,7 @@ import { insertPromptText, pasteBecomesAttachment } from './promptText';
 
 const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps, ref) => {
 	const {
+		elevation = 0,
 		children,
 		attachments: controlledAttachments,
 		defaultAttachments = [],
@@ -287,7 +289,7 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps,
 				focus();
 			}}
 			className={`${css.wrapper} ${attributes.className ?? ''}`}
-			style={{ ...attributes.style, ...variables }}
+			style={{ ...getElevationStyle(elevation), ...attributes.style, ...variables }}
 		>
 			<div className={css.surface}>
 				{attachments.length > 0 && (

@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { ElevationProps } from '../sharedTypes';
 
 type NativeInputAttributes = Omit<
 	React.TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -24,7 +25,7 @@ type NativeInputAttributes = Omit<
 	| 'onPaste'
 	| 'onSubmit'
 >;
-type TextAreaBaseProps = {
+type TextAreaBaseProps = ElevationProps & {
 	/** Native editor ref for composed controls and imperative focus. */
 	inputRef?: React.Ref<HTMLTextAreaElement>;
 	value?: string;

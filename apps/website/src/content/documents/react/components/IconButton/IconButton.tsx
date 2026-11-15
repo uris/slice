@@ -175,6 +175,14 @@ export function IconButtonDoc() {
 				<Code>tooltip</Code>
 				{'.'}
 			</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id={'hover'}>
 				<Prop>hover</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -423,6 +431,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'count', title: 'count', code: true },
 			{ id: 'defaultSelected', title: 'defaultSelected', code: true },
 			{ id: 'disabled', title: 'disabled', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'hover', title: 'hover', code: true },
 			{ id: 'icon', title: 'icon', code: true },
 			{ id: 'iconColor', title: 'iconColor', code: true },

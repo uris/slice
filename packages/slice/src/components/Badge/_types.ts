@@ -1,7 +1,8 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { ElevationProps } from '../sharedTypes';
 
-type BadgeBaseProps = {
+type BadgeBaseProps = ElevationProps & {
 	/** Override the variant's background with a theme token or CSS color. */
 	backgroundColor?: ColorValue;
 	/** Override the variant's text with a theme token or CSS color. */

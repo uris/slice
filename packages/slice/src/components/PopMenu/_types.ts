@@ -3,7 +3,7 @@ import type React from 'react';
 import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts/useKeyboardShortcuts';
 import type { ColorValue } from '../../theme';
 import type { SliceIcon } from '../Icon';
-import type { FixedSize } from '../sharedTypes';
+import type { ElevationProps, FixedSize } from '../sharedTypes';
 
 export type PopCoords = {
 	x: number;
@@ -30,7 +30,7 @@ export type PopMenuItemClickInfo<T = unknown> = Pick<
 	dismissAll: () => void;
 };
 
-export interface PopMenuBase<T = unknown> {
+export interface PopMenuBase<T = unknown> extends ElevationProps {
 	/** Defaults to auto; submenus inherit their parent's resolved host. */
 	portalContainer?: 'auto' | HTMLElement | false;
 	/** Nesting level used to stack submenus above their parent. */

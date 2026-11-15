@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
@@ -9,6 +10,7 @@ import type { BadgeProps } from './_types';
 export const Badge = React.memo((rawProps: BadgeProps) => {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 0,
 		count,
 		variant = 'dark',
 		hideZero = true,
@@ -37,7 +39,7 @@ export const Badge = React.memo((rawProps: BadgeProps) => {
 	return (
 		<div
 			className={`${css.badge}${className ? ` ${className}` : ''}`}
-			style={{ ...style, ...cssVars }}
+			style={{ ...getElevationStyle(elevation), ...style, ...cssVars }}
 			role="status"
 			aria-live="polite"
 			aria-atomic="true"

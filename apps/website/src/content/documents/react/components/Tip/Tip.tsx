@@ -31,6 +31,16 @@ const tipProps = [
 		description: 'Viewport position returned by useToolTip. Undefined hides the tip and cancels timers.',
 	},
 	{
+		name: 'elevation',
+		type: '0 | 1 | 2 | 3 | 4 | 5',
+		defaultValue: '2',
+		description: (
+			<>
+				Shadow depth of the tooltip bubble. <Code>0</Code> removes the shadow without changing stacking order.
+			</>
+		),
+	},
+	{
 		name: 'hideDelay',
 		type: 'number',
 		defaultValue: '2500',

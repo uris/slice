@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import {
 	AnimatePresence,
@@ -50,6 +51,7 @@ function VideoLayer({
 	opener: React.RefObject<HTMLElement | null>;
 }) {
 	const {
+		elevation = 5,
 		dragConstraintsRef,
 		transition,
 		variants = defaultVariants,
@@ -186,9 +188,13 @@ function VideoLayer({
 							<Icon name={dragIcon} size={24} />
 						</button>
 					)}
-					<div className={classNames(css.video, ready ? '' : css.loading)}>
+					<div
+						className={classNames(css.video, ready ? '' : css.loading)}
+						style={ready ? getElevationStyle(elevation) : undefined}
+					>
 						<VideoComponent
 							{...videoProps}
+							elevation={0}
 							showProgressIndicator={showProgressIndicator}
 							borderRadius={radius}
 							onCanPlay={() => {

@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { spring } from 'motion/react';
 import { useState } from 'react';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { FlexBox } from '../FlexBox';
 import { SliceIcons } from '../Icon/_types';
 import { ToggleButton } from '../ToggleButton';
@@ -446,4 +448,14 @@ export const IconStrokeWidth: Story = {
 			await expect(button.querySelector('svg path')).toHaveAttribute('stroke-width', width);
 		}
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => <IconButton elevation={elevation} icon="basic.plus" actionName="Add item" />}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

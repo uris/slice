@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Button } from '../Button';
 import { FlexBox, Preset } from '../FlexBox';
 import { PopMenu } from '../PopMenu';
@@ -739,4 +741,14 @@ export const InputSizesAndOrientation: Story = {
 			}
 		}
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => <ButtonBar elevation={elevation} buttons={[{ label: 'Save' }, { label: 'Cancel' }]} />}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

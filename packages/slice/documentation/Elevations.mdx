@@ -1,28 +1,53 @@
-import {Meta, Unstyled} from '@storybook/addon-docs/blocks';
-import {FlexBox, Spacer} from "../src";
-import {StyleTokenTable} from "./_components/StyleTokenTable/StyleTokenTable";
-import {ElevationStack} from "./_components/ElevationStack/ElevationStack";
-import {elevationTokens, elevationColumnDefinitions} from "./_data/otherStyleData";
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { ElevationComparison } from './_components/ElevationComparison';
 
 <Meta title="Other Styles/Elevations" />
 
-<FlexBox width={"fill"} height={"fill"} align={"center"}>
-    <FlexBox width={"fill"} maxWidth={760} height={"auto"}>
-        <Unstyled>
-            # Elevations
-            Elevation tokens are named `z-index` layers. Instead of picking arbitrary numbers, choose the level that matches what the element is - a toast sits at `status`, a tooltip at `describe` - and stacking stays predictable across components. Each level is exposed as a CSS custom property (`--elevation-*`) and as a value on the `elevations` token object.
+<Unstyled>
 
-            #### Levels
-            <StyleTokenTable tokens={elevationTokens} columnDefinitions={elevationColumnDefinitions} />
+# Elevations
 
-            #### Stacking Order
-            Each card below uses its own elevation token as its `z-index`. The higher the level, the closer to the front.
-            <ElevationStack />
+Elevation describes how raised a surface looks. Slice provides six levels, from flat (`0`) to prominent (`5`). Levels are independent of stacking order: use `--layer-*` for `z-index`.
 
-            #### Notes
-            - Levels are spaced `100` apart, leaving room to slot in a custom level between two tokens if you ever need one.
-            - Elevation only orders elements within the same stacking context. If a positioned ancestor creates its own context, a token inside it cannot escape above elements outside of it.
-        </Unstyled>
-        <Spacer size="xxl"/>
-    </FlexBox>
-</FlexBox>
+<ElevationComparison />
+
+## Web usage
+
+```css
+.panel {
+  box-shadow: var(--elevation-3);
+  z-index: var(--layer-float);
+}
+```
+
+Import `@apple-pie/slice/styles.css` and use the existing theme scope. Shadows resolve for the active light or dark theme. In JavaScript, use `lightTheme.elevationShadows['elevation-3']` or the dark theme equivalent.
+
+## Shared definitions
+
+`elevations[3]` contains platform-neutral shadow layers and an `androidElevation` value in dp. Slice levels are ordinal: level 3 maps to 6dp, rather than 3dp. The Android mapping is 0, 1, 3, 6, 8, and 12dp.
+
+Slice web components that own a surface accept `elevation?: ElevationLevel` (0–5). Omitted values use the component default; an explicit `0` removes the elevation shadow. Children keep their own defaults. Elevation does not affect focus rings or stacking order. Explicit `style.boxShadow` remains a low-level override.
+
+| Default | Components |
+| --- | --- |
+| 0 | Button, IconButton, ToggleButton, FlexBox (and FlexDiv), ButtonBar, TextField, TextArea, DropDown, PromptInput, UploadArea, Attachment, ErrorSummary, DataTable, Camera, Video, Badge, Dot, DraggablePanel |
+| 2 | Tip |
+| 3 | PopMenu, Toast |
+| 5 | DialogBox, VideoController |
+
+ModalController and PopMenuController host content; their DialogBox or PopMenu owns elevation. VideoController owns the floating video frame shadow and keeps its nested Video flat. Input labels and helper messages sit outside input surface shadows. ToggleButton keeps an outside label flat and elevates only its icon frame. Closed draggable panels and empty error summaries cast no shadow.
+
+Icons, spacers, tabs, switches, checkboxes, radio controls, sliders, chips, avatars, navigation/status indicators, AudioBubble, ContentEditable, FileList, backdrops, and parent-owned sections do not expose elevation. Wrap content in an elevated FlexBox when it needs its own surface.
+
+Allow room around elevated surfaces: ancestors with hidden overflow can clip their shadows.
+
+```
+<Button elevation={1} label="Save changes" />
+<DialogBox elevation={0} title="Flat dialog">Content</DialogBox>
+```
+
+Web uses two shadow layers at each raised level. Dark mode keeps the geometry and doubles opacity. Surface colors and borders remain separate choices; shadows alone may not provide sufficient separation on dark backgrounds.
+
+The shared definitions contain no browser or React Native dependencies. Native can consume these recipes through a platform adapter; existing component shadow defaults have not yet migrated.
+
+</Unstyled>

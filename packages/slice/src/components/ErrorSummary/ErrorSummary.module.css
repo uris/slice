@@ -1,4 +1,5 @@
 .wrapper {
+	border-radius: var(--error-border-radius);
 	box-sizing: border-box;
 	width: 100%;
 	min-width: 0;

@@ -16,6 +16,7 @@ import { createPortal } from 'react-dom';
 import { useTheme } from '../../hooks';
 import { classNames, setStyle } from '../../utils';
 import { mergedPresenceMotionValues } from '../../utils/functions/misc';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import styles from './PopMenu.module.css';
@@ -58,6 +59,7 @@ const defaultMotionValues = {
 
 export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 	const {
+		elevation = 3,
 		level = 0,
 		children,
 		id,
@@ -319,7 +321,7 @@ export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 							exit={'exit'}
 							transition={resolvedTransition}
 							className={classNames(divClass, styles.popMenu)}
-							style={{ ...divStyle, ...appearanceStyles, ...posStyles }}
+							style={{ ...getElevationStyle(elevation), ...divStyle, ...appearanceStyles, ...posStyles }}
 							onScroll={(e) => e.stopPropagation()}
 							inert={!resolved}
 							onAnimationComplete={handleAnimationComplete}

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Attachment } from './Attachment';
 import css from './Attachment.module.css';
 import type { AttachmentProps } from './_types';
@@ -575,4 +577,12 @@ export const RawFile: Story = {
 		await userEvent.click(remove);
 		await expect(args.onRemove).toHaveBeenCalledOnce();
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>{(elevation) => <Attachment elevation={elevation} content="Project notes" />}</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

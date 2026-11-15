@@ -11,9 +11,8 @@
 	border: var(--toast-border);
 	border-radius: var(--toast-border-radius);
 	background: var(--core-surface-primary);
-	z-index: var(--elevation-status);
+	z-index: var(--layer-status);
 	gap: 16px;
-	box-shadow: var(--surface-shadow-soft);
 	left: var(--toast-offset);
 	right: var(--toast-offset);
 	margin-inline: auto;

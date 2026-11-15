@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { type CSSProperties, useId } from 'react';
 import { setStyle } from '../../utils/functions/misc';
@@ -14,6 +15,7 @@ import { useContentThumbnail } from './useContentThumbnail';
 
 export function Attachment(props: Readonly<AttachmentProps>) {
 	const {
+		elevation = 0,
 		content,
 		textColor = 'var(--core-text-primary)',
 		textColorLight = 'var(--core-text-secondary)',
@@ -85,6 +87,7 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 
 	const sizes = { xs: 100, s: 125, m: 140, l: 160, xl: 180 };
 	const cssVars = {
+		...getElevationStyle(elevation),
 		'--text-color': textColor,
 		'--text-color-light': textColorLight,
 		'--background-color': backgroundColor,

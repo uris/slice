@@ -7,6 +7,7 @@ describe('native themes', () => {
 		for (const [native, web] of [[lightTheme, webLight], [darkTheme, webDark]] as const) {
 			expect(native.spacing).toEqual(web.spacing);
 			expect(native.corners).toEqual(web.corners);
+			expect(native.layers).toEqual(web.layers);
 			expect(native.elevations).toEqual(web.elevations);
 			for (const [key, value] of Object.entries(native.colors)) {
 				expect(value).toBe(web.colors[key as keyof typeof web.colors]);

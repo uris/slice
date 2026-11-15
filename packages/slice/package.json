@@ -58,6 +58,11 @@
 			"import": "./dist/esm/theme/corners.mjs",
 			"require": "./dist/cjs/theme/corners.js"
 		},
+		"./theme/layers": {
+			"types": "./dist/types/theme/layers/layers.d.ts",
+			"import": "./dist/esm/theme/layers.mjs",
+			"require": "./dist/cjs/theme/layers.js"
+		},
 		"./theme/elevations": {
 			"types": "./dist/types/theme/elevations/elevations.d.ts",
 			"import": "./dist/esm/theme/elevations.mjs",

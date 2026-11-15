@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React from 'react';
 import { tintFromColor } from '../../utils/functions/colors';
@@ -49,6 +50,7 @@ function isTextField(element: BarChild): element is React.ReactElement<TextField
 
 export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<ButtonBarProps>) {
 	const {
+		elevation = 0,
 		buttons = [],
 		children,
 		onChange,
@@ -232,6 +234,7 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 			className={`${css.wrapper} ${vertical ? css.vertical : css.horizontal}${className ? ` ${className}` : ''}`}
 			style={
 				{
+					...getElevationStyle(elevation),
 					...style,
 					flexDirection: vertical ? 'column' : 'row',
 					width: width === 'fill' ? '100%' : (width ?? 'max-content'),

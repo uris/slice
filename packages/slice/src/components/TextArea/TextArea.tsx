@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
@@ -17,6 +18,7 @@ const defaultSendOffset = { bottom: 10, right: 10 };
 function TextAreaComponent(rawProps: TextAreaProps) {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 0,
 		value,
 		inputRef,
 		defaultValue = '',
@@ -267,7 +269,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 				{...withoutAria(divAttributes)}
 				ref={wrapperRef}
 				className={`${css.wrapper}${className ? ` ${className}` : ''}`}
-				style={{ ...style, ...cssVars }}
+				style={{ ...getElevationStyle(elevation), ...style, ...cssVars }}
 			>
 				<textarea
 					{...withoutAria(inputAttributes)}

@@ -3,6 +3,8 @@ import { Component, type ReactNode, useState } from 'react';
 import { DialogBox } from 'src/components/DialogBox/DialogBox';
 import { FlexBox } from 'src/components/FlexBox';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Button } from '../Button';
 import { useDialogBox } from './useDialogBox';
 
@@ -559,4 +561,18 @@ export const DisabledAutomaticDividers: StoryObj<typeof DialogBox> = {
 		await expect(getComputedStyle(header).borderBottomWidth).toBe('0px');
 		await expect(getComputedStyle(footer).borderTopWidth).toBe('0px');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => (
+				<DialogBox elevation={elevation} title="Project settings">
+					Review your changes.
+				</DialogBox>
+			)}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 5),
 };

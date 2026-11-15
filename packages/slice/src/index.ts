@@ -1,6 +1,7 @@
 import './theme.css';
 
 export type {
+	ElevationProps,
 	ComponentSize,
 	FixedSize,
 	ButtonSize,
@@ -19,7 +20,8 @@ export {
 	motion,
 	motionValues,
 	elevations,
-	Elevation,
+	layers,
+	createElevationShadows,
 	resolveColor,
 	breakpoints,
 	FormFactor,
@@ -32,6 +34,11 @@ export type {
 	Type,
 	Corners,
 	Elevations,
+	Layers,
+	ElevationLevel,
+	ElevationDefinition,
+	ShadowLayer,
+	ElevationShadows,
 	SliceMotion,
 	SliceMotionValues,
 } from './theme';

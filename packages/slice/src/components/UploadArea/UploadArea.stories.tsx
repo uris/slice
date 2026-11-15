@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createRef, useState } from 'react';
 import { expect, fireEvent, fn, spyOn, userEvent, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Button } from '../Button';
 import type { FileItem } from '../FileList';
 import { UploadArea } from './UploadArea';
@@ -268,4 +270,10 @@ export const AttachmentCards: Story = {
 		await expect(canvas.getAllByRole('listitem')).toHaveLength(1);
 		await expect(canvas.getByRole('button', { name: 'Upload Files' })).toBeEnabled();
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => <ElevationFixture>{(elevation) => <UploadArea elevation={elevation} />}</ElevationFixture>,
+	play: async (context) => runElevationPlay(context, 0),
 };

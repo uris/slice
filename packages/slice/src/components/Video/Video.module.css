@@ -31,7 +31,7 @@
 	inset: 0;
 	pointer-events: var(--video-controls-pointer-events, none);
 	opacity: var(--video-controls-opacity, 0);
-	z-index: var(--elevation-float);
+	z-index: var(--layer-float);
 	transition: var(--video-controls-transition, opacity 0.25s ease-in-out);
 }
 

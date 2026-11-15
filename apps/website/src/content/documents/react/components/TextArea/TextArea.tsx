@@ -256,6 +256,14 @@ export function TextAreaDoc() {
 			</Definition>
 			<P>{'Disables the textarea and send button.'}</P>
 
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the input surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id={'error'}>
 				<Prop>error</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -715,6 +723,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'borderStyle', title: 'borderStyle', code: true },
 			{ id: 'defaultValue', title: 'defaultValue', code: true },
 			{ id: 'disabled', title: 'disabled', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'error', title: 'error', code: true },
 			{ id: 'errorMessage', title: 'errorMessage', code: true },
 			{ id: 'focused', title: 'focused', code: true },

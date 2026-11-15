@@ -7,7 +7,7 @@
 	position: fixed;
 	inset: 0;
 	overflow: hidden;
-	z-index: var(--elevation-confirm);
+	z-index: var(--layer-confirm);
 }
 
 .box {
@@ -19,12 +19,12 @@
 	width: 100%;
 	height: 100%;
 	overflow: visible;
-	z-index: var(--elevation-confirm);
+	z-index: var(--layer-confirm);
 }
 
 .wrapper {
 	pointer-events: auto;
 	position: absolute;
 	composes: row from "../../utils/styling/flexBox.module.css";
-	z-index: var(--elevation-confirm);
+	z-index: var(--layer-confirm);
 }

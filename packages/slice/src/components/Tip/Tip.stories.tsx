@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { useToolTip } from '../../hooks/useToolTip/useToolTip';
 import { Button } from '../Button';
 import type { ToolTip } from '../sharedTypes';
@@ -215,4 +217,22 @@ export const LongMessage: Story = {
 		const tip = await within(canvasElement).findByRole('tooltip');
 		await expect(tip.scrollWidth).toBeLessThanOrEqual(tip.clientWidth);
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => (
+				<Tip
+					elevation={elevation}
+					tip={{ payload: { label: 'Saved automatically' } }}
+					coords={{ x: 32, y: 180 }}
+					showDelay={0}
+					hideDelay={60000}
+				/>
+			)}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 2),
 };

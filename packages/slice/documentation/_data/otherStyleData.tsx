@@ -1,11 +1,11 @@
 import type React from 'react';
 import type { CellContext, ColumnDefinition } from 'src';
 import { corners } from '../../src/theme/corners/corners';
-import { elevations } from '../../src/theme/elevations/elevations';
+import { layers } from '../../src/theme/layers/layers';
 import { spacing } from '../../src/theme/spacing/spacing';
 import { typeStyles } from '../../src/theme/type/type';
 
-// one row per raw design token - shared by the Spacing, Corners and Elevations pages
+// one row per raw design token - shared by the Spacing, Corners and Layers pages
 export type StyleTokenRow = {
 	name: string;
 	value: string;
@@ -19,7 +19,7 @@ export type StyleTokenRow = {
 
 // Pull the data straight from the theme's token objects so these tables can never
 // drift out of sync with the real tokens. `cssPrefix` is empty for tokens whose object
-// key is already the full CSS name (corners / elevations: 'corner-m' -> --corner-m).
+// key is already the full CSS name (corners / layers: 'corner-m' -> --corner-m).
 function toRows(
 	cssPrefix: string,
 	objectName: string,
@@ -43,17 +43,17 @@ function toRows(
 export const spacingTokens = toRows('spacing', 'spacing', spacing, 'px');
 export const cornerTokens = toRows('', 'corners', corners, 'px');
 
-// The elevation values live in a comment in elevations.ts - keep the plain-language
+// The layer values live in a comment in layers.ts - keep the plain-language
 // "use it for" hints here so the docs page can show them
-export const elevationTokens = toRows('', 'elevations', elevations, '', {
-	'elevation-below-surface': 'Items hidden from view',
-	'elevation-surface': 'Default level for regular content',
-	'elevation-float': 'Toolbars, floating action buttons',
-	'elevation-describe': 'Tooltips and info',
-	'elevation-status': 'Status bars and toasts',
-	'elevation-notify': 'Alerts and other critical status',
-	'elevation-overlay': 'Overlay covers',
-	'elevation-confirm': 'Confirmation dialogs that require an action to dismiss',
+export const layerTokens = toRows('', 'layers', layers, '', {
+	'layer-below-surface': 'Items hidden from view',
+	'layer-surface': 'Default level for regular content',
+	'layer-float': 'Toolbars, floating action buttons',
+	'layer-describe': 'Tooltips and info',
+	'layer-status': 'Status bars and toasts',
+	'layer-notify': 'Alerts and other critical status',
+	'layer-overlay': 'Overlay covers',
+	'layer-confirm': 'Confirmation dialogs that require an action to dismiss',
 });
 
 // custom styles for the "Example Usage" cell - two stacked, monospaced lines
@@ -159,8 +159,8 @@ export const cornerColumnDefinitions: ColumnDefinition<StyleTokenRow>[] = [
 	usageColumn,
 ];
 
-// Elevations: the number is a z-index, so surface the "use it for" hint instead of a swatch
-export const elevationColumnDefinitions: ColumnDefinition<StyleTokenRow>[] = [
+// Layers: the number is a z-index, so surface the "use it for" hint instead of a swatch
+export const layerColumnDefinitions: ColumnDefinition<StyleTokenRow>[] = [
 	{ ...nameColumn, width: 280 },
 	{ ...valueColumn, width: 90 },
 	{

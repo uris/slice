@@ -166,6 +166,14 @@ export function ErrorSummaryDoc() {
 				<DefaultVal>{'1'}</DefaultVal>
 			</Definition>
 			<P>{'Border width in pixels or CSS units. Zero removes the border.'}</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id="entries">
 				<Prop>entries</Prop>
 				<TypeDef>{'ErrorMessage[]'}</TypeDef>
@@ -309,6 +317,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'borderColor', title: 'borderColor', code: true },
 			{ id: 'borderRadius', title: 'borderRadius', code: true },
 			{ id: 'borderWidth', title: 'borderWidth', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'entries', title: 'entries', code: true },
 			{ id: 'gap', title: 'gap', code: true },
 			{ id: 'padding', title: 'padding', code: true },

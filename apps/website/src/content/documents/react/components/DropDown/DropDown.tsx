@@ -289,6 +289,14 @@ export function DropDownDoc() {
 			<P>
 				{'Disables the native select, blocking pointer and keyboard changes and excluding it from native form data.'}
 			</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the input surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id={'error'}>
 				<Prop>error</Prop>
 				<TypeDef>{'boolean'}</TypeDef>
@@ -708,6 +716,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'defaultValue', title: 'defaultValue', code: true },
 			{ id: 'disabled', title: 'disabled', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'error', title: 'error', code: true },
 			{ id: 'errorMessage', title: 'errorMessage', code: true },
 			{ id: 'gap', title: 'gap', code: true },

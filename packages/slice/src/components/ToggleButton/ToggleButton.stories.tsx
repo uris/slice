@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Avatar } from '../Avatar';
 import { FlexBox } from '../FlexBox';
 import { SliceIcons } from '../Icon/_types';
@@ -530,5 +532,28 @@ export const LabelBelow: Story = {
 		await expect(label.getBoundingClientRect().top).toBeGreaterThanOrEqual(icon.getBoundingClientRect().bottom);
 		await userEvent.click(label);
 		await expect(button).toHaveAttribute('aria-pressed', 'true');
+	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>{(elevation) => <ToggleButton elevation={elevation} label="Pin item" />}</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
+};
+
+export const OutsideLabelElevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	args: { label: 'Pin project', icon: 'basic.plus', labelOutside: true, elevation: 3 },
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Pin project' });
+		await expect(getComputedStyle(button).boxShadow).toBe('none');
+		const frame = Array.from(button.querySelectorAll<HTMLElement>('[style]')).find(
+			(element) => element.style.boxShadow,
+		);
+		if (!frame) throw new Error('Expected an elevated icon frame');
+		await expect(frame.style.boxShadow).toBe('var(--elevation-3)');
+		await expect(getComputedStyle(frame).boxShadow).toContain('rgba(');
 	},
 };

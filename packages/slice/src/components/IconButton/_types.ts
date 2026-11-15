@@ -2,9 +2,9 @@ import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { SliceIcon } from '../Icon/_types';
-import type { ButtonSize, ToolTip } from '../sharedTypes';
+import type { ButtonSize, ElevationProps, ToolTip } from '../sharedTypes';
 
-type IconButtonBaseProps = {
+type IconButtonBaseProps = ElevationProps & {
 	actionName?: string;
 	buttonSize?: Exclude<ButtonSize, 'auto'>;
 	iconSize?: number;

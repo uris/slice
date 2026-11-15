@@ -1,4 +1,11 @@
 import type React from 'react';
+import type { ElevationLevel } from '../theme/elevations/_types';
+
+/** Shadow depth of a component's own surface, independent of stacking order. */
+export type ElevationProps = {
+	/** Omitted uses the component default; 0 removes the elevation shadow. */
+	elevation?: ElevationLevel;
+};
 
 /** Shared named sizes. Components exclude tiers they do not support. */
 export type ComponentSize = 'xs' | 's' | 'm' | 'l' | 'xl' | 'auto';

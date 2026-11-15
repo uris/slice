@@ -13,7 +13,7 @@
 	border: var(--dot-border) solid var(--core-surface-primary);
 	background: var(--dot-bg);
 	border-radius: 100%;
-	z-index: var(--elevation-status);
+	z-index: var(--layer-status);
 }
 
 @media (prefers-reduced-motion: reduce) {

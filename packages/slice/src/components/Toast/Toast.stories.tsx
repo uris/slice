@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { toastActions, useToast } from '../../stores/toast';
 import { Button } from '../Button';
 import { Toast } from './Toast';
@@ -269,4 +271,22 @@ export const TranslucentBackgroundSurface: Story = {
 		await userEvent.click(canvas.getByRole('button', { name: 'Dismiss notification' }));
 		await waitFor(() => expect(canvas.queryByTestId('toast')).not.toBeInTheDocument());
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => (
+				<Toast
+					elevation={elevation}
+					message="Changes saved"
+					container="parent"
+					duration="infinite"
+					transition={{ duration: 0 }}
+				/>
+			)}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 3),
 };

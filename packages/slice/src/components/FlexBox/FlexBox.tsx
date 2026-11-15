@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { motion } from 'motion/react';
 import React, { useCallback, useMemo } from 'react';
@@ -42,6 +43,7 @@ export const FlexBox = React.memo(
 		const { current } = useTheme();
 		const reducedMotion = usePrefersReducedMotion();
 		const {
+			elevation = 0,
 			children,
 			preset = 'default',
 			scrollY = undefined,
@@ -185,7 +187,7 @@ export const FlexBox = React.memo(
 				id={divId}
 				ref={ref}
 				className={`${css.flexDiv} ${className ?? ''}`}
-				style={getFinalStyle()}
+				style={{ ...getElevationStyle(elevation), ...getFinalStyle() }}
 				transition={
 					reducedMotion ? { duration: 0, delay: 0, repeat: 0 } : getWaterTransition(current.motion, transition)
 				}

@@ -146,6 +146,14 @@ export default function FlexBoxDoc() {
 				<DefaultVal>{'column'}</DefaultVal>
 			</Definition>
 			<P>Main-axis direction. Row, row-between, and window presets default to row.</P>
+			<Definition id="elevation">
+				<Prop>elevation</Prop>
+				<TypeDef>{'0 | 1 | 2 | 3 | 4 | 5'}</TypeDef>
+				<DefaultVal>{'0'}</DefaultVal>
+			</Definition>
+			<P>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</P>
 			<Definition id="flex">
 				<Prop>flex</Prop>
 				<TypeDef>{'number'}</TypeDef>
@@ -377,6 +385,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'centerSelf', title: 'centerSelf', code: true },
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'direction', title: 'direction', code: true },
+			{ id: 'elevation', title: 'elevation', code: true },
 			{ id: 'flex', title: 'flex', code: true },
 			{ id: 'gap', title: 'gap', code: true },
 			{ id: 'growChildren', title: 'growChildren', code: true },

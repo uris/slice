@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { ElevationProps } from '../sharedTypes';
 
 /* Note: T is the shape of a single row of data the table is bound to. */
 /* Note: V is the type of the value resolved for the column's cell - either */
@@ -72,7 +73,7 @@ type ResolveColumn<T, C> = C extends unknown ? Omit<C, 'sort'> & { sort?: keyof 
 /** Column received by renderHeader, with sorting defaults resolved. */
 export type ResolvedColumnDefinition<T, V = unknown> = ResolveColumn<T, ColumnDefinition<T, V>>;
 
-export interface DataTableProps<T> {
+export interface DataTableProps<T> extends ElevationProps {
 	/** Optional table identifier exposed to custom header renderers as tableName. */
 	name?: string;
 	height?: number | string;

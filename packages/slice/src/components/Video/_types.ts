@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { ElevationProps } from '../sharedTypes';
 
 export type CustomVideoControls = {
 	play?: boolean;
@@ -46,7 +47,7 @@ export type VideoControlsContext = {
 	toggleFullscreen: () => Promise<void>;
 };
 
-type VideoBaseProps = {
+type VideoBaseProps = ElevationProps & {
 	children?: React.ReactNode | ((controls: VideoControlsContext) => React.ReactNode);
 	src?: string;
 	playing?: boolean;

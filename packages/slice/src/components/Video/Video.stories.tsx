@@ -14,6 +14,8 @@ import {
 	runVideoUndefinedControlledPropsPlay,
 } from 'src/components/playHelpers';
 import { expect, fireEvent, fn, spyOn, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Button } from '../Button';
 import { Preset } from '../FlexBox';
 import { Slider } from '../Slider';
@@ -802,4 +804,14 @@ export const BlockedAutoplayKeepsPlayControl: StoryObj<typeof Video> = {
 		await waitFor(() => expect(HTMLMediaElement.prototype.play).toHaveBeenCalled());
 		await expect(within(canvasElement).getByRole('button', { name: 'Play' })).toHaveAttribute('aria-pressed', 'false');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => <Video elevation={elevation} controls="none" playing={false} width={320} height={180} />}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

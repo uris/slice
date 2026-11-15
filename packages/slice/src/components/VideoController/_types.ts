@@ -3,8 +3,9 @@ import type React from 'react';
 import type { ColorValue } from '../../theme';
 import type { SliceIcon } from '../Icon';
 import type { CustomVideoControls } from '../Video';
+import type { ElevationProps } from '../sharedTypes';
 
-export type VideoControllerProps = {
+export type VideoControllerProps = ElevationProps & {
 	dialogName?: string;
 	dragConstraintsRef?: React.RefObject<HTMLElement | null>;
 	overlayColor?: ColorValue;

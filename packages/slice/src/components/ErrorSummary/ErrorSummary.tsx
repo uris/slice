@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import {
 	AnimatePresence,
@@ -89,6 +90,7 @@ const ErrorSummaryComponent = React.forwardRef<HTMLDivElement, ErrorSummaryProps
 	const reducedMotion = usePrefersReducedMotion();
 	const warning = current.colors['feedback-warning'];
 	const {
+		elevation = 0,
 		entries,
 		announcement = 'polite',
 		summaryName = 'Errors to review',
@@ -183,7 +185,7 @@ const ErrorSummaryComponent = React.forwardRef<HTMLDivElement, ErrorSummaryProps
 			{...withoutAria(attributes)}
 			ref={ref}
 			className={`${css.wrapper}${className ? ` ${className}` : ''}`}
-			style={{ ...style, ...cssVars }}
+			style={{ ...getElevationStyle(hasEntries ? elevation : 0), ...style, ...cssVars }}
 			data-error-summary=""
 			role={getRole()}
 			aria-label={summaryName.trim() || 'Errors to review'}

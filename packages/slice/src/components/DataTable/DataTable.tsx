@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import type { ReactNode } from 'react';
@@ -19,6 +20,7 @@ import { compareValues } from './compareValues';
 export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	const props = resolveColorProps(rawProps);
 	const {
+		elevation = 0,
 		name,
 		backgroundColor = 'var(--core-surface-primary)',
 		headerBackgroundColor = 'var(--core-surface-secondary)',
@@ -377,7 +379,12 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 	}, []);
 
 	return (
-		<div ref={wrapperRef} className={`${styles.tableWrapper} ${styles.scroll}`} style={cssVars} onScroll={handleScroll}>
+		<div
+			ref={wrapperRef}
+			className={`${styles.tableWrapper} ${styles.scroll}`}
+			style={{ ...getElevationStyle(elevation), ...cssVars }}
+			onScroll={handleScroll}
+		>
 			<table className={styles.table} aria-rowcount={rowWindow.enabled ? rows.length + 1 : undefined}>
 				<caption>{caption}</caption>
 				<colgroup>

@@ -60,6 +60,16 @@ const toastProps = [
 			'Visible duration in milliseconds. Infinite disables automatic dismissal. Changing this value restarts the lifetime while preserving an interaction pause.',
 	},
 	{
+		name: 'elevation',
+		type: '0 | 1 | 2 | 3 | 4 | 5',
+		defaultValue: '3',
+		description: (
+			<>
+				Shadow depth of the notification surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</>
+		),
+	},
+	{
 		name: 'message',
 		type: 'string | null',
 		defaultValue: 'null',

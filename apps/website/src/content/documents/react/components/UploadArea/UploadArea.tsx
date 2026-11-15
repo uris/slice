@@ -78,6 +78,16 @@ const areaProps = [
 		description: 'Blocks picker, drop, input selection, and removal without showing an upload status.',
 	},
 	{
+		name: 'elevation',
+		type: '0 | 1 | 2 | 3 | 4 | 5',
+		defaultValue: '0',
+		description: (
+			<>
+				Shadow depth of the surface. <Code>0</Code> removes the shadow without changing stacking order.
+			</>
+		),
+	},
+	{
 		name: 'fileListProps',
 		type: "Omit<FileListProps, 'files' | 'onChange' | 'canRemove' | 'onToolTip'>",
 		defaultValue: 'undefined',

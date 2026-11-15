@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createRef, useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { TextField } from '../Textfield';
 import { installReducedMotionPreference } from '../playHelpers';
 import { ErrorSummary } from './ErrorSummary';
@@ -345,4 +347,20 @@ export const LiveReducedMotion: Story = {
 		motionPreference.set(true);
 		await waitFor(() => expect(region.textContent).toBe(''));
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => (
+				<ErrorSummary
+					elevation={elevation}
+					entries={[{ title: 'Review your project name' }]}
+					transition={{ duration: 0 }}
+				/>
+			)}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

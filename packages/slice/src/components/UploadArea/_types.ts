@@ -2,7 +2,7 @@ import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { FileItem, FileListProps } from '../FileList';
 import type { SliceIcon } from '../Icon/_types';
-import type { ToolTip } from '../sharedTypes';
+import type { ElevationProps, ToolTip } from '../sharedTypes';
 
 export const imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'heic', 'heif'];
 export const videoTypes = ['mp4', 'avi', 'mov', 'wmv', 'flv'];
@@ -16,7 +16,7 @@ export type UploadFileRejection = {
 	reason: 'type' | 'multiple';
 };
 
-type UploadAreaBaseProps = {
+type UploadAreaBaseProps = ElevationProps & {
 	icon?: SliceIcon;
 	iconSize?: number;
 	iconColor?: ColorValue;

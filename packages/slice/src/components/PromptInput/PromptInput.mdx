@@ -60,6 +60,7 @@ type PromptActions = {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `elevation` | `ElevationLevel` | `0` | Shadow level of the surface. Omitted uses the default; 0 removes its shadow. Independent of stacking order. |
 | `acceptedTypes` | `string[]` | `allTypes` | Allowed file extensions or MIME tokens, using the same normalization and validation as UploadArea. Converted text pastes must also match these rules. |
 | `attachActionName` | `string` | `Attach files` | Accessible name and tooltip for the attach action. |
 | `attachButton` | `boolean` | `true` | Shows the native file-picker action. |

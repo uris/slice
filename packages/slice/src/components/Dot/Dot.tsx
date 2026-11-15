@@ -1,4 +1,5 @@
 'use client';
+import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { AnimatePresence, motion } from 'motion/react';
 import React, { useMemo } from 'react';
@@ -14,6 +15,7 @@ export const Dot = React.memo((rawProps: DotProps) => {
 	const reduceMotion = usePrefersReducedMotion();
 	const themeMotion = useTheme().current.motion;
 	const {
+		elevation = 0,
 		size = 8,
 		offSet = 2,
 		topOffset = offSet,
@@ -106,7 +108,7 @@ export const Dot = React.memo((rawProps: DotProps) => {
 			<div
 				id={divId}
 				className={`${css.dot}${divClass}`}
-				style={{ ...divStyle, ...cssVars }}
+				style={{ ...getElevationStyle(elevation), ...divStyle, ...cssVars }}
 				role="status"
 				aria-live="polite"
 				aria-label="Blue dot indicating active or new"
@@ -123,7 +125,7 @@ export const Dot = React.memo((rawProps: DotProps) => {
 				<motion.div
 					id={divId}
 					className={`${css.dot}${divClass}`}
-					style={{ ...divStyle, ...cssVars }}
+					style={{ ...getElevationStyle(elevation), ...divStyle, ...cssVars }}
 					initial={'initial'}
 					animate={'animate'}
 					exit={'exit'}

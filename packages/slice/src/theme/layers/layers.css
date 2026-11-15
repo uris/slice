@@ -1,0 +1,10 @@
+[data-slice-theme-scope] {
+	--layer-below-surface: -100;
+	--layer-surface: 0;
+	--layer-float: 100;
+	--layer-describe: 200;
+	--layer-status: 300;
+	--layer-notify: 400;
+	--layer-overlay: 500;
+	--layer-confirm: 600;
+}

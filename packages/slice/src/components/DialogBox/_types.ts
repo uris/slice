@@ -1,7 +1,7 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
 import type { SliceIcon } from '../Icon/_types';
-import type { ToolTip } from '../sharedTypes';
+import type { ElevationProps, ToolTip } from '../sharedTypes';
 
 export type DialogBoxAction<T = string> = {
 	id: string;
@@ -18,7 +18,7 @@ export type DialogBoxAction<T = string> = {
 	working?: boolean;
 };
 
-type DialogBoxBaseProps<T = string> = {
+type DialogBoxBaseProps<T = string> = ElevationProps & {
 	children?: React.ReactNode;
 	minHeight?: number | string;
 	/** Explicit values are hard minimums, even when wider than the parent or viewport. */

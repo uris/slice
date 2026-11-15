@@ -26,6 +26,7 @@ import {
 	DialogBox,
 	ModalController,
 	PopMenuController,
+	PopMenu,
 	PopMenuGroup,
 	Overlay,
 	Pager,
@@ -152,7 +153,7 @@ export const badgeConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<Badge count={5} />, 50),
+			fn: () => measureMountTime(<Badge elevation={3} count={5} />, 50),
 		},
 		{
 			name: 'Re-render',
@@ -210,7 +211,7 @@ export const cameraConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<Camera
+					<Camera elevation={3}
 						width={320}
 						height={240}
 						startCameraOff
@@ -305,7 +306,7 @@ export const flexBoxConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<FlexBox>
+					<FlexBox elevation={3}>
 						<div>Child 1</div>
 						<div>Child 2</div>
 					</FlexBox>,
@@ -373,7 +374,7 @@ export const dialogBoxConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-                    <DialogBox>
+                    <DialogBox elevation={3}>
                         <DialogBox.Title>Benchmark DialogBox</DialogBox.Title>
                         <DialogBox.Content><div>DialogBox body content</div></DialogBox.Content>
                         <DialogBox.Actions><Button label="Confirm" /></DialogBox.Actions>
@@ -463,6 +464,11 @@ export const popMenuGroupConfig: ComponentBenchmarkConfig = {
 	],
 };
 
+export const popMenuConfig: ComponentBenchmarkConfig = {
+ componentName: 'PopMenu',
+ tests: [{ name: 'Elevated Surface Mount Time', type: 'mount', fn: () => measureMountTime(<PopMenu portalContainer={false} elevation={3} options={[{ label: 'Edit' }, { label: 'Archive' }]} />, 25) }],
+};
+
 export const popMenuControllerConfig: ComponentBenchmarkConfig = {
 	componentName: 'PopMenuController',
 	tests: [
@@ -541,7 +547,7 @@ export const toggleButtonConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<ToggleButton label="Toggle" icon="basic.check" selected={false} />,
+					<ToggleButton elevation={3} label="Toggle" icon="basic.check" selected={false} />,
 					50,
 				),
 		},
@@ -592,7 +598,7 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<UploadArea
+					<UploadArea elevation={3}
 						title="Upload Files"
 						message="Drop files here"
 						acceptedTypes={['pdf', 'image/*']}
@@ -639,17 +645,17 @@ export const uploadAreaConfig: ComponentBenchmarkConfig = {
 		},
 	],
 };
-function VideoControllerBenchmark({ padding = 64 }: { padding?: number }) {
+function VideoControllerBenchmark({ padding = 64, elevation }: Pick<React.ComponentProps<typeof VideoController>, 'padding' | 'elevation'>) {
 	React.useEffect(() => {
 		videoActions.show({ component: Video, props: { width: 320, height: 180, playing: false } });
 		return () => videoActions.clear();
 	}, []);
-	return <VideoController draggable={false} padding={padding} transition={{ duration: 0 }} />;
+	return <VideoController elevation={elevation} draggable={false} padding={padding} transition={{ duration: 0 }} />;
 }
 export const videoControllerConfig: ComponentBenchmarkConfig = {
 	componentName: 'VideoController',
 	tests: [
-		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<VideoControllerBenchmark />, 10) },
+		{ name: 'Mount Time', type: 'mount', fn: () => measureMountTime(<VideoControllerBenchmark elevation={3} />, 10) },
 		{
 			name: 'Re-render',
 			type: 'rerender',
@@ -671,7 +677,7 @@ export const videoConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Render Function Controls',
 			type: 'mount',
-			fn: () => measureMountTime(<Video controls="custom" showProgressIndicator={false}>{({playing, toggleMute}) => <Button onClick={toggleMute}>{playing ? 'Playing' : 'Paused'}</Button>}</Video>, 25),
+			fn: () => measureMountTime(<Video elevation={3} controls="custom" showProgressIndicator={false}>{({playing, toggleMute}) => <Button onClick={toggleMute}>{playing ? 'Playing' : 'Paused'}</Button>}</Video>, 25),
 		},
 		{
 			name: 'Explicit Play Only',
@@ -802,7 +808,7 @@ export const attachmentConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Upload Error',
 			type: 'mount',
-			fn: () => measureMountTime(<Attachment content={{file: 'report.pdf', error: 'Upload failed. Please try again.'}} />, 50),
+			fn: () => measureMountTime(<Attachment elevation={3} content={{file: 'report.pdf', error: 'Upload failed. Please try again.'}} />, 50),
 		},
 		{
 			name: 'Text Preview Setup',
@@ -939,7 +945,7 @@ export const textFieldConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<TextField />, 50),
+			fn: () => measureMountTime(<TextField elevation={3} />, 50),
 		},
 		{
 			name: 'Re-render',
@@ -980,7 +986,7 @@ export const buttonConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<Button label="Click Me" />, 50),
+			fn: () => measureMountTime(<Button elevation={3} label="Click Me" />, 50),
 		},
 		{
 			name: 'Motion Variants Mount Time',
@@ -1044,7 +1050,7 @@ export const buttonBarConfig: ComponentBenchmarkConfig = {
 			name: 'Mixed Input Mount Time',
 			type: 'mount',
 			fn: () => measureMountTime(
-				<ButtonBar aria-label="Quantity">
+				<ButtonBar elevation={3} aria-label="Quantity">
 					<Button iconLeft="basic.plus" aria-label="Increase" />
 					<TextField inputName="Quantity" width={120} defaultValue="100" />
 					<Button iconLeft="basic.minus" aria-label="Decrease" />
@@ -1185,7 +1191,7 @@ export const dotConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<Dot state={"green"} />, 50),
+			fn: () => measureMountTime(<Dot elevation={3} state={"green"} />, 50),
 		},
 		{
 			name: 'Re-render',
@@ -1215,7 +1221,7 @@ export const draggablePanelConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<DraggablePanel drags="right" isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
+					<DraggablePanel elevation={3} drags="right" isClosed={false} sizeConstraints={{min:100, max:0.9, initial:250}}>
 						<div>Panel Content</div>
 					</DraggablePanel>,
 					50,
@@ -1277,7 +1283,7 @@ export const dropDownConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<DropDown options={mockDropDownOptions} />, 50),
+			fn: () => measureMountTime(<DropDown elevation={3} options={mockDropDownOptions} />, 50),
 		},
 		{
 			name: 'Re-render',
@@ -1376,7 +1382,7 @@ export const dataTableConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<DataTable
+					<DataTable elevation={3}
 						columnDefinitions={mockDataTableColumns}
 						tableData={mockDataTableRows}
 						getRowId={(row) => row.id}
@@ -1432,7 +1438,7 @@ export const errorSummaryConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<ErrorSummary entries={mockErrors} />, 50),
+			fn: () => measureMountTime(<ErrorSummary elevation={3} entries={mockErrors} />, 50),
 		},
 		{
 			name: 'Re-render',
@@ -1465,7 +1471,7 @@ export const iconButtonConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<IconButton actionName="Confirm" icon="basic.check" />, 50),
+			fn: () => measureMountTime(<IconButton elevation={3} actionName="Confirm" icon="basic.check" />, 50),
 		},
 		{
 			name: 'Re-render',
@@ -1507,7 +1513,7 @@ export const promptInputConfig: ComponentBenchmarkConfig = {
 			name: 'Mount Time',
 			type: 'mount',
 			fn: () =>
-				measureMountTime(<PromptInput value="Test prompt" onSubmit={() => {}} pasteAttachmentThreshold={1000} />, 50),
+				measureMountTime(<PromptInput elevation={3} value="Test prompt" onSubmit={() => {}} pasteAttachmentThreshold={1000} />, 50),
 		},
 		{
 			name: 'Re-render',
@@ -1899,7 +1905,7 @@ export const textAreaConfig: ComponentBenchmarkConfig = {
 		{
 			name: 'Mount Time',
 			type: 'mount',
-			fn: () => measureMountTime(<TextArea />, 50),
+			fn: () => measureMountTime(<TextArea elevation={3} />, 50),
 		},
 		{
 			name: 'Re-render',
@@ -1961,7 +1967,7 @@ export const tipConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<Tip
+					<Tip elevation={3}
 						tip={{ payload: { label: 'Helpful tip' } }}
 						coords={{ x: 120, y: 80 }}
 						showDelay={60000}
@@ -2029,7 +2035,7 @@ export const toastConfig: ComponentBenchmarkConfig = {
 			type: 'mount',
 			fn: () =>
 				measureMountTime(
-					<Toast
+					<Toast elevation={3}
 						message="Saved successfully"
 						type="success"
 						showDelay={60000}
@@ -2109,6 +2115,7 @@ export const allBenchmarkConfigs = [
 	dialogBoxConfig,
 	modalControllerConfig,
 	popMenuControllerConfig,
+	popMenuConfig,
 	popMenuGroupConfig,
 	promptInputConfig,
 	overlayConfig,

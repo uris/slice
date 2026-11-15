@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Button } from '../Button';
 import { installReducedMotionPreference } from '../playHelpers';
 import { DraggablePanel, type DraggablePanelProps } from './DrggablePanel';
@@ -291,4 +293,20 @@ export const KeyboardOnlyOutline: Story = {
 		await expect(getComputedStyle(rail).outlineStyle).toBe('solid');
 		await expect(getComputedStyle(rail).outlineWidth).toBe('2px');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<ElevationFixture>
+			{(elevation) => (
+				<div style={{ height: 180 }}>
+					<DraggablePanel elevation={elevation} isClosed={false} backgroundColor="core-surface-secondary">
+						Panel content
+					</DraggablePanel>
+				</div>
+			)}
+		</ElevationFixture>
+	),
+	play: async (context) => runElevationPlay(context, 0),
 };

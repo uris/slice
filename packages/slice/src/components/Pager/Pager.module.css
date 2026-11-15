@@ -9,7 +9,7 @@
 	gap: var(--pager-gap);
 	width: min-content;
 	flex: none;
-	z-index: var(--elevation-status);
+	z-index: var(--layer-status);
 }
 
 .viewport {

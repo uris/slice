@@ -54,3 +54,5 @@ export { doneCheckBenchmarkConfig } from './DoneCheck.bench';
 export { videoControllerBenchmarkConfig } from './VideoController.bench';
 
 export { flexBoxBenchmarkConfig } from './FlexBox.bench';
+
+export { popMenuBenchmarkConfig } from './PopMenu.bench';

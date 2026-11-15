@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 import { expect, fireEvent, fn, userEvent, within } from 'storybook/test';
+import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
+import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
 import { Button } from '../Button';
 import type { FileItem } from '../FileList';
 import { TextField } from '../Textfield';
@@ -513,4 +515,10 @@ export const FileDragHighlight: Story = {
 		await fireEvent.keyDown(window, { key: 'Escape' });
 		await expect(root).not.toHaveAttribute('data-file-dragging');
 	},
+};
+
+export const Elevation: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => <ElevationFixture>{(elevation) => <PromptInput elevation={elevation} />}</ElevationFixture>,
+	play: async (context) => runElevationPlay(context, 0),
 };
