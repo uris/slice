@@ -348,3 +348,21 @@ export const PointerPassThrough: Story = {
 		await expect(args.onPointerDown).not.toHaveBeenCalled();
 	},
 };
+
+export const BackgroundBlur: Story = {
+	tags: ['tests'],
+	args: { blur: 8, opacity: 0.7 },
+	render: (args) => (
+		<>
+			<p>Background text remains behind the blurred overlay.</p>
+			<Overlay {...args} data-testid="overlay" />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const root = layer(canvasElement);
+		await waitFor(() => expect(getComputedStyle(backdrop(canvasElement)).opacity).toBe('0.7'));
+		expect(getComputedStyle(root).backdropFilter).toBe('blur(8px)');
+		expect(getComputedStyle(root).opacity).toBe('1');
+		expect(root).not.toHaveAttribute('blur');
+	},
+};

@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useMotionValue, visualElementStore } from 'motion/react';
 import { Button } from 'src/components/Button/Button';
 import { FlexBox } from 'src/components/FlexBox/FlexBox';
 import { runFlexBoxPlay } from 'src/components/playHelpers';
-import { expect, spyOn, waitFor, within } from 'storybook/test';
+import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
 import { ElevationFixture } from '../../../documentation/_components/ElevationFixture';
 import compositionCss from '../../../documentation/_components/LayoutComposition.module.css';
 import { runElevationPlay } from '../../../documentation/_components/elevationPlay';
@@ -198,7 +199,8 @@ export const ChildrenKeepTheirHeightByDefault: StoryObj<typeof FlexBox> = {
 			<div style={{ height: 56 }} data-testid="plain-child">
 				Plain child
 			</div>
-			<FlexBox height={56} data-testid="nested-child">
+			{/* Visible overflow retains the CSS automatic minimum; explicitly allow shrinking below content. */}
+			<FlexBox height={56} style={{ minHeight: 0 }} data-testid="nested-child">
 				Nested child
 			</FlexBox>
 		</FlexBox>
@@ -235,7 +237,8 @@ export const NestedChildrenCanGrowIndependently: StoryObj<typeof FlexBox> = {
 	tags: ['tests'],
 	render: () => (
 		<FlexBox growChildren height={200}>
-			<FlexBox height={56} data-testid="nested-child">
+			{/* Visible overflow retains the CSS automatic minimum; explicitly allow shrinking below content. */}
+			<FlexBox height={56} style={{ minHeight: 0 }} data-testid="nested-child">
 				<div style={{ height: 20 }} data-testid="grandchild">
 					Content
 				</div>
@@ -253,7 +256,8 @@ export const NestedChildrenCanShrinkIndependently: StoryObj<typeof FlexBox> = {
 	tags: ['tests'],
 	render: () => (
 		<FlexBox shrinkChildren height={40}>
-			<FlexBox height={56} data-testid="nested-child">
+			{/* Visible overflow retains the CSS automatic minimum; explicitly allow shrinking below content. */}
+			<FlexBox height={56} style={{ minHeight: 0 }} data-testid="nested-child">
 				<div style={{ height: 56 }} data-testid="grandchild">
 					Content
 				</div>
@@ -281,6 +285,26 @@ export const ExplicitChildFlexOverridesParentDefaults: StoryObj<typeof FlexBox> 
 		expect(child.getBoundingClientRect().height).toBe(200);
 		expect(getComputedStyle(child).flexGrow).toBe('1');
 		expect(getComputedStyle(child).flexShrink).toBe('1');
+	},
+};
+
+export const DefaultOverflowIsVisible: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => <FlexBox data-testid="default-overflow" />,
+	play: async ({ canvasElement }) => {
+		const style = getComputedStyle(within(canvasElement).getByTestId('default-overflow'));
+		expect(style.overflowX).toBe('visible');
+		expect(style.overflowY).toBe('visible');
+	},
+};
+
+export const ExplicitFalseScrollAxesClipDefault: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => <FlexBox scrollX={false} scrollY={false} data-testid="default-clipped" />,
+	play: async ({ canvasElement }) => {
+		const style = getComputedStyle(within(canvasElement).getByTestId('default-clipped'));
+		expect(style.overflowX).toBe('hidden');
+		expect(style.overflowY).toBe('hidden');
 	},
 };
 
@@ -427,5 +451,127 @@ export const ComposedLayoutOverrides: StoryObj<typeof meta> = {
 		await expect(style.boxSizing).toBe('content-box');
 		await expect(style.padding).toBe('12px');
 		await expect(style.margin).toBe('8px');
+	},
+};
+
+export const StaticByDefault: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: (args) => <FlexBox {...args} data-testid="static-box" />,
+	args: {
+		ref: fn(),
+		initial: undefined,
+		animate: undefined,
+		exit: undefined,
+		variants: undefined,
+		transition: undefined,
+		layout: undefined,
+		drag: undefined,
+		draggable: true,
+		onClick: fn(),
+		style: { opacity: 0.6 },
+		padding: 12,
+		children: 'Static layout',
+	},
+	play: async ({ canvasElement, args }) => {
+		const box = within(canvasElement).getByTestId('static-box');
+		await expect(box.tagName).toBe('DIV');
+		await expect(args.ref).toHaveBeenCalledWith(box);
+		await expect(getComputedStyle(box).opacity).toBe('0.6');
+		await expect(getComputedStyle(box).transform).toBe('none');
+		await expect(getComputedStyle(box).padding).toBe('12px');
+		await expect(visualElementStore.has(box)).toBe(false);
+		for (const name of ['animate', 'initial', 'variants', 'transition', 'layout', 'drag', 'whileHover']) {
+			await expect(box).not.toHaveAttribute(name);
+		}
+		await userEvent.hover(box);
+		await userEvent.click(box);
+		await expect(args.onClick).toHaveBeenCalledTimes(1);
+	},
+};
+
+export const AutomaticAnimation: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: (args) => <FlexBox {...args} data-testid="animated-box" />,
+	args: {
+		ref: fn(),
+		initial: { opacity: 0, x: 0 },
+		animate: 'visible',
+		variants: { visible: { opacity: 1, x: 24 } },
+		transition: { duration: 0 },
+		onAnimationComplete: fn(),
+	},
+	play: async ({ canvasElement, args }) => {
+		const box = within(canvasElement).getByTestId('animated-box');
+		await expect(box.tagName).toBe('DIV');
+		await expect(args.ref).toHaveBeenCalledWith(box);
+		await waitFor(() => expect(getComputedStyle(box).opacity).toBe('1'));
+		await waitFor(() => expect(getComputedStyle(box).transform).toBe('matrix(1, 0, 0, 1, 24, 0)'));
+		await waitFor(() => expect(args.onAnimationComplete).toHaveBeenCalled());
+		await expect(visualElementStore.has(box)).toBe(true);
+	},
+};
+
+function motionPropStory(args: StoryObj<typeof FlexBox>['args']): StoryObj<typeof FlexBox> {
+	return {
+		tags: ['tests'],
+		args,
+		render: (props) => <FlexBox {...props} data-testid="automatic-motion" />,
+		play: async ({ canvasElement }) => {
+			const box = within(canvasElement).getByTestId('automatic-motion');
+			await expect(visualElementStore.has(box)).toBe(true);
+			for (const name of ['initial', 'animate', 'exit', 'variants', 'transition', 'layout', 'whileHover']) {
+				await expect(box).not.toHaveAttribute(name);
+			}
+		},
+	};
+}
+
+export const InitialOnlyMotion = motionPropStory({ initial: false });
+export const AnimateOnlyMotion = motionPropStory({ animate: { opacity: 1 } });
+export const ExitOnlyMotion = motionPropStory({ exit: { opacity: 0 } });
+export const TransitionOnlyMotion = motionPropStory({ transition: { duration: 0 } });
+export const VariantsOnlyMotion = motionPropStory({ variants: { visible: { opacity: 1 } } });
+export const LayoutMotion = motionPropStory({ layout: true });
+export const GestureMotion = motionPropStory({ whileHover: { scale: 1.1 } });
+export const MotionCallback = motionPropStory({ onUpdate: fn() });
+export const TransformStyleMotion = motionPropStory({ style: { x: 24 } });
+
+export const NativeStylesStayStatic: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox
+			data-testid="native-styles"
+			style={{ opacity: 0.6, transform: 'translateX(12px)', transition: 'opacity 0.2s' }}
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const box = within(canvasElement).getByTestId('native-styles');
+		await expect(visualElementStore.has(box)).toBe(false);
+		await expect(getComputedStyle(box).transform).toBe('matrix(1, 0, 0, 1, 12, 0)');
+		await expect(getComputedStyle(box).opacity).toBe('0.6');
+	},
+};
+
+function MotionValueLayout() {
+	const opacity = useMotionValue(0.4);
+	return (
+		<>
+			<button type="button" onClick={() => opacity.set(0.7)}>
+				Fade surface
+			</button>
+			<FlexBox data-testid="motion-value-layout" style={{ opacity }} />
+		</>
+	);
+}
+export const MotionValueStyles: StoryObj<typeof FlexBox> = {
+	tags: ['tests'],
+	render: () => <MotionValueLayout />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const box = canvas.getByTestId('motion-value-layout');
+		await expect(visualElementStore.has(box)).toBe(true);
+		await waitFor(() => expect(getComputedStyle(box).opacity).toBe('0.4'));
+		await userEvent.click(canvas.getByRole('button', { name: 'Fade surface' }));
+		await waitFor(() => expect(getComputedStyle(box).opacity).toBe('0.7'));
 	},
 };

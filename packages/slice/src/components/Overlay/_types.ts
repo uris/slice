@@ -11,6 +11,7 @@ type OverlayBaseProps = {
 	pointerEvents?: 'auto' | 'none';
 	transition?: Transition;
 	motionValues?: Variants;
+	blur?: number | string;
 };
 
 export type OverlayProps = Omit<

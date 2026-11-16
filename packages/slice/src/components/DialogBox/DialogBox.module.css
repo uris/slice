@@ -40,6 +40,18 @@
 	-webkit-user-select: none;
 }
 
+.closeIcon {
+	top: 16px;
+	right: 24px;
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	min-height: 20px;
+	min-width: 20px;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
 .contentWrapper {
 	composes: scrollbars from "../../utils/styling/scrollBars.module.css";
 	display: flex;
@@ -64,7 +76,7 @@
 
 .actions {
 	background-color: var(--modal-actions-background-color, var(--modal-background-color));
-	padding: var(--modal-padding);
+	padding: var(--modal-actions-padding);
 	padding-top: var(--modal-padding-adjust);
 	width: 100%;
 	user-select: none;
@@ -79,12 +91,14 @@
 	gap: var(--spacing-s);
 	flex-wrap: wrap;
 	min-width: 0;
+	flex: 1;
 }
 
 .rightActions {
 	gap: var(--spacing-s);
 	flex-wrap: wrap;
 	min-width: 0;
+	flex: 1;
 }
 
 .xs {

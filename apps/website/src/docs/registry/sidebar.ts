@@ -3,7 +3,7 @@ import { SidebarListItemType } from '@/components/SidebarListItem/SidebarListIte
 import { Package } from '@/src/consts/consts';
 
 const designSystemSection: ListSection = [
-	{ type: SidebarListItemType.SectionTitle, title: 'Design System' },
+	{ type: SidebarListItemType.SectionTitle, title: 'Foundations' },
 	{ title: 'Colors', slug: 'colors' },
 	{
 		title: 'Typography',

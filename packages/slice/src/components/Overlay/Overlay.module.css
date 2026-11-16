@@ -4,7 +4,11 @@
 	z-index: var(--layer-overlay);
 	isolation: isolate;
 	pointer-events: auto;
+	/* Blur the page separately from the animated, solid-color dimming layer. */
+	-webkit-backdrop-filter: blur(var(--overlay-blur));
+	backdrop-filter: blur(var(--overlay-blur));
 }
+
 .backdrop {
 	position: absolute;
 	inset: 0;

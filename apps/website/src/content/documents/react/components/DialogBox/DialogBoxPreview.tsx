@@ -11,7 +11,7 @@ export function DialogBoxPreview({ scroll = false }: Readonly<{ scroll?: boolean
 			minWidth={0}
 			minHeight={0}
 			maxHeight={scroll ? 240 : 300}
-			style={{ width: '50%' }}
+			style={{ width: '70%' }}
 			onResolve={() => setOpen(false)}
 			onReject={() => setOpen(false)}
 			onClose={() => setOpen(false)}
@@ -36,8 +36,14 @@ export function DialogBoxPreview({ scroll = false }: Readonly<{ scroll?: boolean
 				)}
 			</DialogBox.Content>
 			<DialogBox.Actions>
-				<Button label="Cancel" variant="outline" backgroundColor={'transparent'} onClick={() => setOpen(false)} />
-				<Button variant={'solid'} label={scroll ? 'Done' : 'Archive'} onClick={() => setOpen(false)} />
+				<Button
+					label="Cancel"
+					variant="outline"
+					backgroundColor={'transparent'}
+					onClick={() => setOpen(false)}
+					width={'fill'}
+				/>
+				<Button variant={'solid'} label={scroll ? 'Done' : 'Archive'} onClick={() => setOpen(false)} width={'fill'} />
 			</DialogBox.Actions>
 		</DialogBox>
 	);

@@ -33,6 +33,10 @@ export function ModalControllerDoc() {
 					},
 				]}
 			/>
+			<P>
+				Set <Code>{'blur={8}'}</Code> on <Code>ModalController</Code> to blur the page behind the dialog by eight
+				pixels. Adjust <Code>overlayOpacity</Code> separately to control dimming.
+			</P>
 			<H3>Wait for a response</H3>
 			<P>
 				{'Use '}
@@ -71,6 +75,16 @@ export function ModalControllerDoc() {
 			</P>
 			<H2 id="props">Props</H2>
 			<P>{'All component props are optional. Color props accept Slice tokens or CSS colors.'}</P>
+			<Definition id="blur">
+				<Prop>blur</Prop>
+				<TypeDef>{'number | string'}</TypeDef>
+				<DefaultVal>undefined</DefaultVal>
+			</Definition>
+			<P>
+				Passed to the backdrop’s <Code openURL="/docs/react/overlay/#blur">blur</Code> prop. Numbers use pixels; strings
+				accept CSS lengths such as <Code>0.5rem</Code>. Omitted or <Code>0</Code> disables blur. The dialog stays sharp,
+				and blur remains visible when <Code>overlayOpacity</Code> is zero.
+			</P>
 			<Definition id="dragConstraintsRef">
 				<Prop>dragConstraintsRef</Prop>
 				<TypeDef>{'React.RefObject<HTMLElement | null>'}</TypeDef>
@@ -134,6 +148,7 @@ export const trackedItems: TrackedItem[] = [
 		id: 'props',
 		title: 'Props',
 		items: [
+			{ id: 'blur', title: 'blur', code: true },
 			{ id: 'dragConstraintsRef', title: 'dragConstraintsRef', code: true },
 			{ id: 'draggable', title: 'draggable', code: true },
 			{ id: 'overlayColor', title: 'overlayColor', code: true },

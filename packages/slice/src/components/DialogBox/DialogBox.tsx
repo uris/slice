@@ -32,7 +32,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		title,
 		dialogName,
 		titleBackgroundColor,
-		titleTextSize = 'l',
+		titleTextSize = 'xl',
 		contentTextSize = 'm',
 		actions,
 		actionsBackgroundColor,
@@ -54,7 +54,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		scrollHandleColorHover = 'var(--core-text-disabled)',
 		titleTextColor = 'var(--core-text-primary)',
 		borderColor = 'var(--core-outline-primary)',
-		borderRadius = 'var(--corner-xl)',
+		borderRadius = 'var(--corner-xxl)',
 		borderWidth = 0,
 		...rest
 	} = props;
@@ -81,7 +81,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 	const viewportSize = useObserveResize(contentWrapperRef);
 	const scrolls = contentSize.height > viewportSize.height;
 	const resolvedTitleBorderWidth = titleBorderWidth ?? (scrolls ? 1 : 0);
-	const titlePaddingBottom = scrolls ? 'var(--spacing-xs)' : '0px';
+	const titlePaddingBottom = scrolls ? 'var(--spacing-m)' : '0px';
 
 	const setActionBorderWidth = useMemo(() => {
 		if (scrolls && actionsBorderWidth === 0 && autoBorderBottom) return '1px';
@@ -92,9 +92,9 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		if (scrolls) {
 			if (padding && typeof padding === 'number') return setStyle(padding);
 			if (padding && typeof padding === 'string') return padding.split(' ')[0];
-			return 'var(--spacing-s)';
+			return 'var(--spacing-m)';
 		}
-		return '0px';
+		return 'var(--spacing-m)';
 	}, [scrolls, padding]);
 
 	// memo dynamic css vars
@@ -108,10 +108,11 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 			'--modal-title-color': titleTextColor,
 			'--modal-border-radius': setStyle(borderRadius),
 			'--modal-border-width': setStyle(borderWidth),
-			'--modal-padding': setStyle(padding, 'var(--spacing-m) var(--spacing-m)'),
-			'--modal-title-padding': setStyle(padding, `var(--spacing-m) var(--spacing-m) ${titlePaddingBottom}`),
+			'--modal-padding': setStyle(padding, 'var(--spacing-s) var(--spacing-l)'),
+			'--modal-title-padding': setStyle(padding, `var(--spacing-l) var(--spacing-l) ${titlePaddingBottom}`),
+			'--modal-actions-padding': setStyle(padding, 'var(--spacing-l) var(--spacing-l)'),
 			'--modal-padding-adjust': setPaddingAdjustment,
-			'--modal-content-margin-top': scrolls ? 'var(--spacing-xxs)' : '0px',
+			'--modal-content-margin-top': '0px',
 			'--modal-background-color': backgroundColor,
 			'--modal-title-border-color': titleBorderColor,
 			'--modal-title-border-width': setStyle(resolvedTitleBorderWidth),
@@ -133,7 +134,6 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		borderWidth,
 		padding,
 		setPaddingAdjustment,
-		scrolls,
 		titlePaddingBottom,
 		resolvedTitleBorderWidth,
 		titleBorderColor,
@@ -222,17 +222,21 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 						</div>
 						{close && (
 							<div className={css.close}>
-								<div className={css.titleIcon}>
+								<div className={css.closeIcon}>
 									<IconButton
 										tooltip={'close'}
 										actionName={'close'}
 										icon={'basic.cross'}
+										iconSize={14}
+										iconColor={'core-text-tertiary'}
 										onClick={handleClose}
 										onToolTip={(tip) => onToolTip?.(tip)}
 										hover={false}
 										backgroundColor={'transparent'}
 										backgroundColorHover={'transparent'}
 										backgroundColorSelected={'transparent'}
+										borderWidth={1}
+										borderColor={'core-text-tertiary'}
 										buttonSize={'s'}
 									/>
 								</div>

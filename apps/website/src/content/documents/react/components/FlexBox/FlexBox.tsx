@@ -5,8 +5,8 @@ import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { contentMaxWidth, contentMinWidth } from '@/src/consts/consts';
 import { FlexBox, Preset } from '@apple-pie/slice';
-import { PresetPreview } from './Preview';
-import { motionCode, presetCode } from './code';
+import { AnimatableSquarePreview, AnimatePresenceExample, PresetPreview, SpringAttachmentPreview } from './Preview';
+import { animatableSquareCode, motionCode, presetCode, springAttachmentCode, springPresenceCode } from './code';
 
 const getPresets = () => {
 	const options: ComponentCanvasItem[] = [];
@@ -64,11 +64,40 @@ export default function FlexBoxDoc() {
 				By default, all "between" based presets attempt to stretch their flex direction box to maximum length (setting{' '}
 				<Code>width | height</Code> to <Code>100%</Code>) placing equal space between items.
 			</P>
+			<H2 id={'animatable'}>Animatable</H2>
+			<P>
+				Supply Motion props such as <Code>initial</Code>, <Code>animate</Code>, or <Code>variants</Code> and{' '}
+				<Code>FlexBox</Code> automatically renders as a <Code>motion.div</Code>, with Motion’s animation, layout, and
+				gesture features. Use it as an animated wrapper around any component; ordinary layouts stay a plain{' '}
+				<Code>div</Code>.
+			</P>
+			<ComponentCanvas
+				minHeight={375}
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-flexbox--default"
+				components={[
+					{
+						label: 'Spring on click for emphasis',
+						component: <SpringAttachmentPreview />,
+						code: { code: springAttachmentCode.trim(), filename: 'SpringAttachment.tsx' },
+					},
+					{
+						label: 'Click to scale and rotate',
+						component: <AnimatableSquarePreview />,
+						code: { code: animatableSquareCode.trim(), filename: 'SpringSquare.tsx' },
+					},
+					{
+						label: 'Animate in/out of the DOM',
+						component: <AnimatePresenceExample />,
+						code: { code: springPresenceCode.trim(), filename: 'SpringPresence.tsx' },
+					},
+				]}
+			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				Explicit layout props override the selected preset; <Code>style</Code> overrides generated styles. Presets
 				generally clip overflow. <Code>Preset.FillScroll</Code> enables vertical scrolling, while{' '}
-				<Code>Preset.Draggable</Code> leaves overflow visible.
+				<Code>Preset.Default</Code>, <Code>Preset.Animatable</Code>, and <Code>Preset.Draggable</Code> leave overflow
+				visible.
 			</P>
 			<P>
 				Size shorthands: <Code>fill</Code> uses 100%, <Code>fit</Code> and <Code>auto</Code> use auto sizing, and{' '}
@@ -371,6 +400,7 @@ export default function FlexBoxDoc() {
 export const trackedItems: TrackedItem[] = [
 	{ id: 'title', title: 'FlexBox component' },
 	{ id: 'usage', title: 'Usage' },
+	{ id: 'animatable', title: 'Animatable' },
 	{ id: 'behavior', title: 'Behavior' },
 	{ id: 'accessibility', title: 'Accessibility' },
 	{

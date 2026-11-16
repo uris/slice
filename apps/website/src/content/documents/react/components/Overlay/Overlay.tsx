@@ -25,6 +25,10 @@ export function OverlayDoc() {
 				<Code>{'opacity'}</Code>
 				{' for a dimmed backdrop, or leave it at zero for a clear pointer-catching layer.'}
 			</P>
+			<P>
+				Use <Code>{'blur={8}'}</Code> to blur the background by eight pixels. Blur is independent of{' '}
+				<Code>opacity</Code> and leaves foreground children sharp.
+			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-overlay--default"
 				components={[
@@ -74,6 +78,15 @@ export function OverlayDoc() {
 				<DefaultVal>{'rgb(0,0,0)'}</DefaultVal>
 			</Definition>
 			<P>{'Backdrop color. Accepts Slice tokens or CSS colors.'}</P>
+			<Definition id="blur">
+				<Prop>blur</Prop>
+				<TypeDef>{'number | string'}</TypeDef>
+				<DefaultVal>0</DefaultVal>
+			</Definition>
+			<P>
+				Background blur radius. Numbers use pixels; strings accept CSS lengths such as <Code>0.5rem</Code>. Set{' '}
+				<Code>0</Code> to disable blur. Blur remains visible when <Code>opacity</Code> is zero.
+			</P>
 			<Definition id="children">
 				<Prop>children</Prop>
 				<TypeDef>{'React.ReactNode'}</TypeDef>
@@ -87,7 +100,7 @@ export function OverlayDoc() {
 			</Definition>
 			<P>
 				{
-					'Backdrop opacity from zero to one. Zero is visually clear and still intercepts pointers. Values are clamped to that range; nonfinite values use zero.'
+					'Backdrop opacity from zero to one. Zero removes dimming and still intercepts pointers; blur is controlled separately. Values are clamped to that range; nonfinite values use zero.'
 				}
 			</P>
 			<Definition id="pointerEvents">
@@ -194,6 +207,7 @@ export const trackedItems: TrackedItem[] = [
 		title: 'Props',
 		items: [
 			{ id: 'backgroundColor', title: 'backgroundColor', code: true },
+			{ id: 'blur', title: 'blur', code: true },
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'opacity', title: 'opacity', code: true },
 			{ id: 'pointerEvents', title: 'pointerEvents', code: true },

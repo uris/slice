@@ -72,6 +72,26 @@ export function OnThisPage() {
 		[scrollBox],
 	);
 
+	const scrollSelectedIntoView = useCallback((targetBounds: DOMRect | null | undefined) => {
+		if (!targetBounds) return;
+		const container = ref.current;
+		if (!container) return;
+		const getDestination = () => {
+			const containerBounds = container.getBoundingClientRect();
+			return (
+				container.scrollTop + targetBounds.bottom - containerBounds.top - container.clientTop - container.clientHeight
+			);
+		};
+		const top = getDestination();
+
+		// Browsers clamp scrollTo to the available range.
+		const destination = Math.max(0, Math.min(top, container.scrollHeight - container.clientHeight));
+		container.scrollTo({
+			top: destination,
+			behavior: 'smooth',
+		});
+	}, []);
+
 	// when this element is scrolled or the window is resized, the position updates
 	const handleUpdateOnThisPageItemId = useCallback(() => {
 		// update state with new item selected and its rect
@@ -114,7 +134,18 @@ export function OnThisPage() {
 		const element = document.getElementById(`tracked-item.${selectedItemId}`);
 		const rect = element?.getBoundingClientRect();
 		setOnThisPageId(selectedItemId, rect);
-	}, [selectedId, amount, scrollAmount, selected, items, lastActive, onThisPageItem, setOnThisPageId]);
+		scrollSelectedIntoView(rect);
+	}, [
+		selectedId,
+		amount,
+		scrollAmount,
+		selected,
+		items,
+		lastActive,
+		onThisPageItem,
+		setOnThisPageId,
+		scrollSelectedIntoView,
+	]);
 
 	// listen to window resize
 	useEffect(() => {
@@ -163,7 +194,13 @@ export function OnThisPage() {
 			animate={{ opacity: 1 }}
 			exit={{ opacity: 0 }}
 			transition={{ ease: 'easeInOut', duration: 0.25 }}
-			onScroll={handleUpdateOnThisPageItemId}
+			onScroll={() => {
+				console.log('scroll start');
+				handleUpdateOnThisPageItemId();
+			}}
+			onScrollEnd={() => console.log('scroll end')}
+			onScrollCapture={() => console.log('scroll capture')}
+			onScrollEndCapture={() => console.log('scroll end capture')}
 		>
 			{items.map((item) => {
 				const { items: _items, title, code, id } = item;

@@ -1,7 +1,7 @@
 'use client';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
-import { motion } from 'motion/react';
+import { type HTMLMotionProps, isForcedMotionValue, isMotionValue, isValidMotionProp, motion } from 'motion/react';
 import React, { useCallback, useMemo } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
 import { setSizeStyle, setStyle } from '../../utils/functions/misc';
@@ -37,11 +37,54 @@ function setFlex(style: string | undefined) {
 	return style;
 }
 
+/** Mount Motion's subscriptions and theme timing only when the layout uses Motion props. */
+const AnimatedFlexBox = React.forwardRef<HTMLDivElement, HTMLMotionProps<'div'>>((props, ref) => {
+	const { current } = useTheme();
+	const reducedMotion = usePrefersReducedMotion();
+	const {
+		variants,
+		animate,
+		transition,
+		initial,
+		exit,
+		layout,
+		layoutId,
+		whileHover,
+		whileTap,
+		whileFocus,
+		whileDrag,
+		whileInView,
+		...rest
+	} = props;
+	const motionVariants = useMemo(
+		() => (reducedMotion ? reduceMotionVariants(variants) : variants),
+		[reducedMotion, variants],
+	);
+	const motionTarget = useMemo(() => (reducedMotion ? reduceMotionTarget(animate) : animate), [reducedMotion, animate]);
+	return (
+		<motion.div
+			{...rest}
+			ref={ref}
+			transition={reducedMotion ? { duration: 0, delay: 0, repeat: 0 } : getWaterTransition(current.motion, transition)}
+			variants={motionVariants}
+			initial={reducedMotion ? false : initial}
+			animate={motionTarget}
+			exit={reducedMotion ? undefined : exit}
+			layout={reducedMotion ? false : layout}
+			layoutId={reducedMotion ? undefined : layoutId}
+			whileHover={reducedMotion ? undefined : whileHover}
+			whileTap={reducedMotion ? undefined : whileTap}
+			whileFocus={reducedMotion ? undefined : whileFocus}
+			whileDrag={reducedMotion ? undefined : whileDrag}
+			whileInView={reducedMotion ? undefined : whileInView}
+		/>
+	);
+});
+AnimatedFlexBox.displayName = 'AnimatedFlexBox';
+
 export const FlexBox = React.memo(
 	React.forwardRef<HTMLDivElement, FlexBoxProps>((rawProps, ref) => {
 		const props = resolveColorProps(rawProps);
-		const { current } = useTheme();
-		const reducedMotion = usePrefersReducedMotion();
 		const {
 			elevation = 0,
 			children,
@@ -65,18 +108,6 @@ export const FlexBox = React.memo(
 			absolute = false,
 			flex,
 			gap,
-			variants,
-			transition,
-			animate,
-			initial,
-			layout,
-			layoutId,
-			whileHover,
-			whileTap,
-			whileFocus,
-			whileDrag,
-			whileInView,
-			exit,
 			border,
 			borderRadius,
 			className,
@@ -166,15 +197,6 @@ export const FlexBox = React.memo(
 			overflow,
 		]);
 
-		const motionVariants = useMemo(
-			() => (reducedMotion ? reduceMotionVariants(variants) : variants),
-			[reducedMotion, variants],
-		);
-		const motionTarget = useMemo(
-			() => (reducedMotion ? reduceMotionTarget(animate) : animate),
-			[reducedMotion, animate],
-		);
-
 		const getFinalStyle = () => {
 			if (wrapperStyle.overflow === undefined) return { ...style, ...wrapperStyle };
 			// Default axes must not undo explicit overflow; caller-provided axes still override the shorthand.
@@ -182,32 +204,34 @@ export const FlexBox = React.memo(
 			return { ...layoutStyle, ...wrapperStyle };
 		};
 
+		const finalStyle = { ...getElevationStyle(elevation), ...getFinalStyle() };
+		const elementProps = {
+			id: divId,
+			className: `${css.flexDiv} ${className ?? ''}`,
+			'data-shrink-children': presets.shrinkChildren,
+			'data-grow-children': growChildren,
+		};
+		// A normal style object and explicitly undefined Motion props keep layout native.
+		const hasMotionProps = Object.entries(rest).some(([key, value]) => value !== undefined && isValidMotionProp(key));
+		const hasMotionStyles = Object.entries(wrapperStyle).some(
+			([key, value]) => value !== undefined && (isMotionValue(value) || isForcedMotionValue(key, {})),
+		);
+		if (hasMotionProps || hasMotionStyles) {
+			return (
+				<AnimatedFlexBox {...elementProps} {...rest} ref={ref} style={finalStyle}>
+					{children}
+				</AnimatedFlexBox>
+			);
+		}
+
+		// Motion-only attributes and values never reach the native layout element.
+		const attributes = Object.fromEntries(Object.entries(rest).filter(([key]) => !isValidMotionProp(key)));
+		// Motion values and transform shorthands have already selected the animated path.
+		const nativeStyle = finalStyle as React.CSSProperties;
 		return (
-			<motion.div
-				id={divId}
-				ref={ref}
-				className={`${css.flexDiv} ${className ?? ''}`}
-				style={{ ...getElevationStyle(elevation), ...getFinalStyle() }}
-				transition={
-					reducedMotion ? { duration: 0, delay: 0, repeat: 0 } : getWaterTransition(current.motion, transition)
-				}
-				variants={motionVariants}
-				initial={reducedMotion ? false : initial}
-				animate={motionTarget}
-				exit={reducedMotion ? undefined : exit}
-				layout={reducedMotion ? false : layout}
-				layoutId={reducedMotion ? undefined : layoutId}
-				whileHover={reducedMotion ? undefined : whileHover}
-				whileTap={reducedMotion ? undefined : whileTap}
-				whileFocus={reducedMotion ? undefined : whileFocus}
-				whileDrag={reducedMotion ? undefined : whileDrag}
-				whileInView={reducedMotion ? undefined : whileInView}
-				data-shrink-children={presets.shrinkChildren}
-				data-grow-children={growChildren}
-				{...rest}
-			>
+			<div {...elementProps} {...attributes} ref={ref} style={nativeStyle}>
 				{children}
-			</motion.div>
+			</div>
 		);
 	}),
 );

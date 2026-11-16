@@ -43,6 +43,7 @@ const reducedTarget = {
 };
 const instanceKeys = new WeakMap<ActiveModal, number>();
 let sequence = 0;
+
 function instanceKey(modal: ActiveModal) {
 	let key = instanceKeys.get(modal);
 	if (key === undefined) {
@@ -160,7 +161,7 @@ function ModalPresentation({
 
 export function ModalController(rawProps: Readonly<ModalControllerProps>) {
 	const props = resolveColorProps(rawProps);
-	const { overlayOpacity = 0.7, overlayColor = 'rgb(0,0,0)', transition } = props;
+	const { overlayOpacity = 0.7, overlayColor = 'rgb(0,0,0)', transition, blur } = props;
 	const { current } = useTheme();
 	const timing = useMemo(() => getWaterTransition(current.motion, transition), [current.motion, transition]);
 	const modal = useModal();
@@ -183,6 +184,7 @@ export function ModalController(rawProps: Readonly<ModalControllerProps>) {
 				opacity={overlayOpacity}
 				backgroundColor={overlayColor}
 				transition={timing}
+				blur={blur}
 				onClick={dismiss}
 			/>
 			<AnimatePresence>

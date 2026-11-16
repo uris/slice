@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useMemo } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -21,6 +22,7 @@ const withoutAria = (attributes: object) =>
 	Object.fromEntries(Object.entries(attributes).filter(([key]) => !key.startsWith('aria-') && key !== 'role'));
 
 type LayerProps = Omit<OverlayProps, 'show' | 'opacity' | 'transition'> & { opacity: number; transition: Transition };
+
 function OverlayLayer({
 	children,
 	opacity,
@@ -31,6 +33,7 @@ function OverlayLayer({
 	style,
 	position = 'fixed',
 	pointerEvents = 'auto',
+	blur = 0,
 	...attributes
 }: LayerProps) {
 	const [isPresent, safeToRemove] = usePresence();
@@ -66,6 +69,7 @@ function OverlayLayer({
 	const rootStyle = {
 		...style,
 		'--overlay-background': backgroundColor,
+		'--overlay-blur': setStyle(blur),
 		position,
 		pointerEvents,
 	} as React.CSSProperties;
