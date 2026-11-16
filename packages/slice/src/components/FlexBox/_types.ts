@@ -26,6 +26,7 @@ export enum Preset {
 	ColumnBetween = 'column-between',
 	Draggable = 'draggable',
 	ButtonBar = 'button-bar',
+	Animatable = 'animatable',
 }
 
 type FlexBoxLayout = Required<
@@ -41,9 +42,9 @@ export const layoutSets: Record<Preset, FlexBoxLayout> = {
 		height: 'fit',
 		justify: 'start',
 		align: 'start',
-		scrollY: false,
-		scrollX: false,
-		overflow: 'hidden',
+		scrollY: undefined,
+		scrollX: undefined,
+		overflow: 'visible',
 		direction: 'column',
 		shrinkChildren: false,
 	},
@@ -193,6 +194,17 @@ export const layoutSets: Record<Preset, FlexBoxLayout> = {
 		height: 'fill',
 		justify: 'start',
 		align: 'start',
+		scrollY: undefined,
+		scrollX: undefined,
+		overflow: 'visible',
+		direction: 'column',
+		shrinkChildren: false,
+	},
+	[Preset.Animatable]: {
+		width: 'fit',
+		height: 'fit',
+		justify: 'center',
+		align: 'center',
 		scrollY: undefined,
 		scrollX: undefined,
 		overflow: 'visible',

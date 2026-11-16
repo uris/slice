@@ -9,4 +9,5 @@ export type ModalControllerProps = {
 	transition?: Transition;
 	motionValues?: Variants;
 	draggable?: boolean;
+	blur?: number | string;
 };

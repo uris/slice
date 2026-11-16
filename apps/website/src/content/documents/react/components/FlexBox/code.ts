@@ -65,3 +65,84 @@ export const motionCode = `
     Content
 </FlexBox>
 `;
+
+export { springMotionSquareCode as animatableSquareCode } from '../../design-system/motion/code';
+
+export const springAttachmentCode = `
+import { Attachment, FlexBox, Preset, motionValues } from '@apple-pie/slice';
+import { useReducedMotion } from 'motion/react';
+import { useState } from 'react';
+
+export function SpringAttachment() {
+	const [state, setState] = useState<'pressed' | 'rest'>('rest');
+	const reduceMotion = useReducedMotion();
+	const spring = (pressed: boolean) => {
+		setState(pressed && !reduceMotion ? 'pressed' : 'rest');
+	};
+
+	return (
+		<FlexBox
+			preset={Preset.Animatable}
+			initial="rest"
+			animate={reduceMotion ? 'rest' : state}
+			variants={{ pressed: { scale: 0.95 }, rest: { scale: 1 } }}
+			transition={motionValues['transition-spring']}
+			onPointerDown={(event) => {
+				if (event.isPrimary && event.button === 0) spring(true);
+			}}
+			onPointerUp={() => spring(false)}
+			onPointerCancel={() => spring(false)}
+			onPointerLeave={() => spring(false)}
+			style={{ cursor: 'pointer' }}
+		>
+			<Attachment
+				content={{ file: 'Project-brief.pdf' }}
+				canRemove={false}
+				onOpen={() => spring(false)}
+				openLabel="Animate attachment"
+			/>
+		</FlexBox>
+	);
+}
+`;
+
+export const springPresenceCode = `
+import { Button, FlexBox, Preset, motionValues } from '@apple-pie/slice';
+import { AnimatePresence } from 'motion/react';
+import { useState } from 'react';
+
+export function SpringPresence() {
+    const [visible, setVisible] = useState<boolean>(false);
+
+    return (
+        <FlexBox preset={Preset.Animatable} gap={24}>
+            <FlexBox
+                preset={Preset.Animatable}
+                width={96}
+                height={96}
+                border={'1px dashed var(--core-outline-primary)'}
+                borderRadius={32}
+            >
+                <AnimatePresence initial={false}>
+                    {visible && (
+                        <FlexBox
+                            width={96}
+                            height={96}
+                            borderRadius={'var(--corner-xxl)'}
+                            background="core-blue"
+                            style={{cursor: 'pointer'}}
+                            initial={{opacity: 0, scale: 0.7, transition: motionValues['transition-water']}}
+                            animate={{opacity: 1, scale: 1, transition: motionValues['transition-spring']}}
+                            exit={{opacity: 0, scale: 0.7, transition: motionValues['transition-water']}}
+                            key={'Animatable'}
+                            onClick={() => setVisible(false)}
+                        />
+                    )}
+                </AnimatePresence>
+            </FlexBox>
+            <Button iconLeft={visible ? 'security.eye-slash' : 'security.eye'}
+                label={visible ? 'Hide' : 'Show'} onClick={() => setVisible((prev) => !prev)}/>
+        </FlexBox>
+    );
+}
+`;

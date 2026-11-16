@@ -3,9 +3,10 @@ import type React from 'react';
 
 /**
  * Convert numeric sizes and dash-separated numeric spacing into CSS pixel values.
+ * Preserve undefined so callers can omit a style; pass "auto" explicitly when needed.
  */
-export function setSizeStyle(size: string | number | undefined): string {
-	if (size === undefined) return 'auto';
+export function setSizeStyle(size: string | number | undefined): string | undefined {
+	if (size === undefined) return size;
 	if (typeof size === 'number') return `${size}px`;
 	if (/^\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?){1,3}$/.test(size)) {
 		return size

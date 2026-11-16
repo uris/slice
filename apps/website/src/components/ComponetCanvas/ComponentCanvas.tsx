@@ -17,6 +17,7 @@ import {
 } from 'motion/react';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { setSizeStyle } from '../../../../../packages/slice/src/utils/functions/misc';
 import { getWaterTransition } from '../../../../../packages/slice/src/utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../../../../packages/slice/src/utils/styling/usePrefersReducedMotion';
 import styles from './ComponentCanvas.module.css';
@@ -44,6 +45,7 @@ export interface ComponentCanvasProps {
 	showCode?: boolean;
 	offsetTop?: boolean;
 	offsetBottom?: boolean;
+	minHeight?: number;
 }
 
 type SlideSettings = { direction: number; reduceMotion: boolean; transition: Transition; contentKey: string };
@@ -100,7 +102,15 @@ function CanvasSlide({ children, settings }: Readonly<{ children: React.ReactNod
 }
 
 export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.ReactElement {
-	const { zoom, components, showControls = false, showCode = true, offsetTop = false, offsetBottom = true } = props;
+	const {
+		zoom,
+		components,
+		showControls = false,
+		showCode = true,
+		offsetTop = false,
+		offsetBottom = true,
+		minHeight,
+	} = props;
 	const { initial, min, max } = zoom ?? { initial: 1, min: 0, max: 2 };
 	const [scale, setScale] = useState(initial);
 	const [{ index: selected, direction }, setPage] = useState({ index: 0, direction: 1 });
@@ -171,8 +181,9 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 			borderBottomLeftRadius: bottomRadius,
 			borderTopWidth: showControls ? 0 : 1,
 			borderBottomWidth: hasCode ? 0 : 1,
+			minHeight: setSizeStyle(minHeight),
 		} as React.CSSProperties;
-	}, [showControls, hasCode]);
+	}, [showControls, hasCode, minHeight]);
 
 	const page = (components?.length ?? 0) > 1;
 

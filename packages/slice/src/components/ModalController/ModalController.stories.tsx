@@ -235,6 +235,9 @@ export const BackdropHitTesting: StoryObj<typeof ModalController> = {
 
 export const UnfocusedPointerOpener: StoryObj<typeof ModalController> = {
 	tags: ['tests'],
+	beforeEach: () => {
+		modalActionsImperative.clear();
+	},
 	render: () => <HostedDialogDemo />,
 	play: async ({ canvasElement }) => {
 		modalActionsImperative.clear();
@@ -246,7 +249,7 @@ export const UnfocusedPointerOpener: StoryObj<typeof ModalController> = {
 		await canvas.findByRole('dialog');
 		await userEvent.keyboard('{Escape}');
 		await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
-		await expect(opener).toHaveFocus();
+		await waitFor(() => expect(opener).toHaveFocus());
 	},
 };
 

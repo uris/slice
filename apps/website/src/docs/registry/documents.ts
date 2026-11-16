@@ -20,6 +20,7 @@ const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 		['icons', () => import('@/documents/react/design-system/icons/IconsDoc')],
 		['motion', () => import('@/documents/react/design-system/motion/MotionDoc')],
 		['spacing', () => import('@/documents/react/design-system/spacing/SpacingDoc')],
+		['elevations', () => import('@/documents/react/design-system/elevations/ElevationsDoc')],
 
 		['data-table', () => import('@/documents/react/components/DataTable/DataTable')],
 		['camera', () => import('@/documents/react/components/Camera/Camera')],

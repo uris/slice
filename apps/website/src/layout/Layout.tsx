@@ -67,7 +67,7 @@ export function Layout() {
 			</FlexBox>
 			<Tip tip={tip} coords={coords} ref={tipRef} />
 			<Toast {...toast} onHide={clear} />
-			<ModalController dragConstraintsRef={viewRef} draggable={true} />
+			<ModalController dragConstraintsRef={viewRef} draggable={true} overlayOpacity={0.2} blur={4} />
 			<VideoController quit={'outside'} draggable={false} dragConstraintsRef={viewRef} />
 		</FlexBox>
 	);

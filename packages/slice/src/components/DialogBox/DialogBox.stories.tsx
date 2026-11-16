@@ -279,7 +279,7 @@ export const ComposedScroll: StoryObj<typeof DialogBox> = {
 		await expect(Math.abs(innerRight - body.getBoundingClientRect().right - 4)).toBeLessThanOrEqual(1);
 		await expect(body.clientHeight).toBeGreaterThan(40);
 		await expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
-		await waitFor(() => expect(getComputedStyle(body.firstElementChild as HTMLElement).marginTop).toBe('2px'));
+		await waitFor(() => expect(getComputedStyle(body.firstElementChild as HTMLElement).marginTop).toBe('0px'));
 		const footer = canvas.getByRole('button', { name: 'Done' }).parentElement?.parentElement as HTMLElement;
 		await waitFor(() => expect(getComputedStyle(footer).borderTopWidth).toBe('1px'));
 	},
@@ -443,7 +443,7 @@ export const ScrollingSectionBackgrounds: StoryObj<typeof DialogBox> = {
 		await userEvent.click(canvas.getByRole('button', { name: 'Toggle overflow' }));
 		for (const section of [header, footer])
 			await waitFor(() => expect(getComputedStyle(section).backgroundColor).toBe('rgb(128, 128, 128)'));
-		await expect(getComputedStyle(header).paddingBottom).toBe('4px');
+		await expect(getComputedStyle(header).paddingBottom).toBe('16px');
 		await expect(getComputedStyle(header).borderBottomWidth).toBe('1px');
 		await expect(getComputedStyle(footer).borderTopWidth).toBe('1px');
 		await expect(getComputedStyle(header).borderBottomStyle).toBe('solid');
@@ -557,7 +557,7 @@ export const DisabledAutomaticDividers: StoryObj<typeof DialogBox> = {
 		await userEvent.click(canvas.getByRole('button', { name: 'Toggle overflow' }));
 		const header = canvas.getByRole('heading', { name: 'Project details' }).parentElement?.parentElement as HTMLElement;
 		const footer = canvas.getByRole('button', { name: 'Done' }).parentElement?.parentElement as HTMLElement;
-		await waitFor(() => expect(getComputedStyle(header).paddingBottom).toBe('4px'));
+		await waitFor(() => expect(getComputedStyle(header).paddingBottom).toBe('16px'));
 		await expect(getComputedStyle(header).borderBottomWidth).toBe('0px');
 		await expect(getComputedStyle(footer).borderTopWidth).toBe('0px');
 	},

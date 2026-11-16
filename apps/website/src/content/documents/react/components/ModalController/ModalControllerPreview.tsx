@@ -8,8 +8,15 @@ function PreviewActions() {
 	const { close, resolve } = useDialogBox();
 	return (
 		<>
-			<Button label="Cancel" variant="outline" onClick={close} />
-			<Button variant={'solid'} label="Archive" onClick={() => resolve('archive')} />
+			<Button label="Cancel" backgroundColor={'transparent'} variant="outline" onClick={close} width={'fill'} />
+			<Button
+				variant={'solid'}
+				backgroundColor={'core-text-light'}
+				textColor={'core-text-dark'}
+				label="Archive"
+				onClick={() => resolve('archive')}
+				width={'fill'}
+			/>
 		</>
 	);
 }

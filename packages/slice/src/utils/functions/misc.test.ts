@@ -17,8 +17,9 @@ import {
 } from './misc';
 
 describe('setSizeStyle', () => {
-	it('defaults undefined to auto and preserves zero', () => {
-		expect(setSizeStyle(undefined)).toBe('auto');
+	it('preserves omitted sizes, explicit auto, and zero', () => {
+		expect(setSizeStyle(undefined)).toBeUndefined();
+		expect(setSizeStyle('auto')).toBe('auto');
 		expect(setSizeStyle(0)).toBe('0px');
 	});
 
