@@ -6,7 +6,7 @@ import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
-import { Icon } from '../Icon';
+import { Button } from '../Button';
 import css from './TextArea.module.css';
 import type { TextAreaProps } from './_types';
 
@@ -39,12 +39,12 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 		placeholder = 'Enter text here...',
 		padding = 'var(--spacing-m) var(--spacing-s) var(--spacing-m) var(--spacing-m)',
 		borderStyle = 'box',
-		borderRadius = corners['corner-l'],
+		borderRadius = corners['corner-m'],
 		error = false,
 		errorMessage,
 		tip,
-		borderColor = 'var(--core-fill-primary)',
-		borderColorFocused = 'var(--core-fill-secondary)',
+		borderColorFocused = 'var(--core-outline-primary)',
+		borderColor = 'var(--core-outline-primary)',
 		borderColorError = 'var(--feedback-warning)',
 		backgroundColor = 'var(--core-surface-secondary)',
 		resizable = true,
@@ -322,16 +322,19 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 				{nativeResizable && <span className={css.resizeGrip} aria-hidden="true" />}
 				{showSendButton && (
 					<div className={css.sendSpace}>
-						<button
-							type="button"
+						<Button
+							variant={'primary'}
+							buttonSize={buttonSize}
+							iconSize={18}
+							iconStrokeWidth={1.5}
+							round
+							iconLeft={'arrows.arrow-top'}
+							onMouseDown={(event) => event.preventDefault()}
 							className={css.send}
 							aria-label={sendActionName.trim() || 'Send'}
 							disabled={!canSubmit}
-							onMouseDown={(event) => event.preventDefault()}
 							onClick={submit}
-						>
-							<Icon name="arrows.arrow-top" size={20} aria-hidden="true" strokeColor="var(--core-text-light)" />
-						</button>
+						/>
 					</div>
 				)}
 			</div>

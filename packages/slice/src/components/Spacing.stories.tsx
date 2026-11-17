@@ -61,9 +61,9 @@ export const DefaultsAndOverrides: StoryObj = {
 		await padding('.text-button', '4px', '4px');
 		await padding('.chip', '0px', '0px');
 		await padding('.switch', '2px', '2px');
-		await expect(getComputedStyle(node('.switch > div')).width).toBe('26px');
+		await expect(getComputedStyle(node('.switch > div')).width).toBe('20px');
 		await padding('.themed-switch', '4px', '4px');
-		await expect(getComputedStyle(node('.themed-switch > div')).width).toBe('26px');
+		await expect(getComputedStyle(node('.themed-switch > div')).width).toBe('20px');
 		await expect(getComputedStyle(node('.themed-switch > div')).height).toBe('14px');
 		await padding('.files > div:first-child', '6px', '6px');
 		await padding('.files > div:last-child', '6px', '6px');

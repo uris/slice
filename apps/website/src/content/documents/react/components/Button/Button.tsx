@@ -25,6 +25,7 @@ import {
 	outlineCode,
 	progressCode,
 	refCode,
+	secondaryCode,
 	solidCode,
 	stylingCode,
 	textCode,
@@ -42,16 +43,21 @@ export function ButtonDoc() {
 			<H2 id={'usage'}>Usage</H2>
 			<H3>Basic use of variants</H3>
 			<P>
-				Use <Code>solid</Code> for emphasis, <Code>outline</Code> for a bordered action, or <Code>text</Code> for a
+				Use <Code>primary</Code> for emphasis, <Code>outline</Code> for a bordered action, or <Code>text</Code> for a
 				quieter option.
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
 				components={[
 					{
-						label: 'Solid',
-						component: <ButtonPreview label="Solid" variant="solid" />,
+						label: 'Primary',
+						component: <ButtonPreview label="Solid" variant="primary" />,
 						code: { code: solidCode.trim() },
+					},
+					{
+						label: 'Secondary',
+						component: <ButtonPreview label="Secondary" variant="secondary" />,
+						code: { code: secondaryCode.trim() },
 					},
 					{
 						label: 'Outline',
@@ -71,7 +77,13 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Handle actions', component: <ButtonActionPreview />, code: { code: usageCode.trim() } }]}
+				components={[
+					{
+						label: 'Handle actions',
+						component: <ButtonActionPreview />,
+						code: { code: usageCode.trim() },
+					},
+				]}
 			/>
 
 			<H3>Add icons</H3>
@@ -83,7 +95,7 @@ export function ButtonDoc() {
 				components={[
 					{
 						label: 'Icon beside a label',
-						component: <ButtonPreview label="Continue" iconRight="arrows.arrow-right" />,
+						component: <ButtonPreview variant={'primary'} label="Continue" iconRight="arrows.arrow-right" />,
 						code: { code: iconsCode.trim() },
 					},
 					{
@@ -115,8 +127,18 @@ export function ButtonDoc() {
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
 				components={[
 					{
-						label: 'Disabled',
-						component: <ButtonPreview label="Continue" disabled />,
+						label: 'Primary disabled',
+						component: <ButtonPreview variant={'primary'} label="Continue" disabled />,
+						code: { code: disabledCode.trim() },
+					},
+					{
+						label: 'Secondary disabled',
+						component: <ButtonPreview variant={'secondary'} label="Continue" disabled />,
+						code: { code: disabledCode.trim() },
+					},
+					{
+						label: 'Outline disabled',
+						component: <ButtonPreview variant={'outline'} label="Continue" disabled />,
 						code: { code: disabledCode.trim() },
 					},
 				]}
@@ -135,7 +157,7 @@ export function ButtonDoc() {
 							<div style={{ width: 320, maxWidth: '100%' }}>
 								<ButtonPreview
 									label="Continue"
-									variant="solid"
+									variant="primary"
 									buttonSize="l"
 									textSize="l"
 									backgroundColor="#2563eb"
@@ -177,7 +199,13 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Form submission', component: <ButtonFormPreview />, code: { code: formCode.trim() } }]}
+				components={[
+					{
+						label: 'Form submission',
+						component: <ButtonFormPreview />,
+						code: { code: formCode.trim() },
+					},
+				]}
 			/>
 
 			<H3>Connect a tooltip</H3>
@@ -258,7 +286,7 @@ export function ButtonDoc() {
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'corner-round'}</DefaultVal>
+				<DefaultVal>{'corner-m'}</DefaultVal>
 			</Definition>
 			<P>Corner radius. Numbers use pixels; strings accept CSS lengths.</P>
 			<Definition id={'borderWidth'}>
@@ -276,7 +304,7 @@ export function ButtonDoc() {
 				<DefaultVal>{'m'}</DefaultVal>
 			</Definition>
 			<P>
-				Shared frame sizes: s=24, m=36, l=44, and xl=56px. A positive number sets a pixel height; auto fits the content
+				Shared frame sizes: s=24, m=32, l=44, and xl=56px. A positive number sets a pixel height; auto fits the content
 				and padding. Typography is controlled separately by textSize.
 			</P>
 			<Definition id={'children'}>
@@ -368,7 +396,7 @@ export function ButtonDoc() {
 			<Definition id={'iconSize'}>
 				<Prop>iconSize</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'20'}</DefaultVal>
+				<DefaultVal>{'18'}</DefaultVal>
 			</Definition>
 			<P>Icon and spinner size in pixels.</P>
 			<Definition id={'label'}>
@@ -497,12 +525,12 @@ export function ButtonDoc() {
 			<P>Underlines the label on hover and keyboard focus.</P>
 			<Definition id={'variant'}>
 				<Prop>variant</Prop>
-				<TypeDef>{"'solid' | 'outline' | 'text'"}</TypeDef>
+				<TypeDef>{"'primary' |'secondary'| 'outline' | 'text'"}</TypeDef>
 				<DefaultVal>{'outline'}</DefaultVal>
 			</Definition>
 			<P>
-				Visual preset. Solid emphasizes the action, outline adds a border, and text uses a transparent background unless
-				overridden.
+				Visual preset. Primary emphasizes the action, secondary adds a tinted fill, outline adds a border, and text uses
+				a transparent background unless overridden.
 			</P>
 			<Definition id={'width'}>
 				<Prop>width</Prop>

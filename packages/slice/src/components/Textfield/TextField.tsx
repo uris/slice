@@ -107,8 +107,8 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		error = false,
 		errorMessage,
 		tip,
-		borderColorFocused = 'var(--core-fill-secondary)',
-		borderColorBlurred = 'var(--core-fill-primary)',
+		borderColorFocused = 'var(--core-outline-primary)',
+		borderColorBlurred = 'var(--core-outline-primary)',
 		borderColorError = 'var(--feedback-warning)',
 		backgroundColorFocused,
 		backgroundColorBlurred,
@@ -293,8 +293,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 	};
 
 	const resolvedBorderRadius = () => {
-		let baseRadius = borderStyle === 'underline' ? 0 : 16;
-		if (variant === 'simple') baseRadius = 100;
+		const baseRadius = borderStyle === 'underline' ? 0 : 'var(--corner-m)';
 		return setStyle(borderRadius, baseRadius);
 	};
 
@@ -344,7 +343,14 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 				data-appear={appearing || undefined}
 				data-collapsed-label={collapsedLabel || undefined}
 				className={`${css.wrapper}${className ? ` ${className}` : ''}`}
-				style={{ ...getElevationStyle(elevation), ...style, ...cssVars, '--tf-width': '100%' } as React.CSSProperties}
+				style={
+					{
+						...getElevationStyle(elevation),
+						...style,
+						...cssVars,
+						'--tf-width': '100%',
+					} as React.CSSProperties
+				}
 			>
 				{variant === 'simple' && leadingIcon}
 				{hasLabel && variant === 'simple' && (

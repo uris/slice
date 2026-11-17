@@ -2,6 +2,7 @@
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React from 'react';
+import { corners } from '../../theme/corners/corners';
 import { tintFromColor } from '../../utils/functions/colors';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Button, type ButtonProps } from '../Button';
@@ -65,8 +66,8 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 		dividerStyle = 'solid',
 		borderRadius,
 		borderWidth = 1,
-		borderColor = 'var(--core-fill-primary)',
-		borderColorFocused = 'var(--core-fill-secondary)',
+		borderColor = 'var(--core-outline-primary)',
+		borderColorFocused = 'var(--core-outline-primary)',
 		borderStyle = 'solid',
 		width,
 		className,
@@ -98,15 +99,9 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 	};
 	const resolvedInset = inset ?? getDefaultInset();
 	const getDefaultBorderRadius = () => {
-		const buttonSize = rawProps.buttonSize ?? 'm';
-		if (typeof buttonSize === 'number') {
-			if (Number.isFinite(buttonSize) && buttonSize > 0) return buttonSize;
-			return buttonStyleDefaults.sizes.m;
-		}
-		if (buttonSize === 'auto') return buttonStyleDefaults.sizes.m;
-		return buttonStyleDefaults.sizes[buttonSize];
+		return borderRadius ?? corners['corner-m'];
 	};
-	const resolvedBorderRadius = borderRadius ?? getDefaultBorderRadius() / 2;
+	const resolvedBorderRadius = borderRadius ?? getDefaultBorderRadius();
 	const wrapperBackgroundColor = resolveColorProps({
 		backgroundColor: rawProps.backgroundColor ?? 'var(--core-surface-secondary)',
 	}).backgroundColor;

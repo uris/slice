@@ -7,7 +7,7 @@ import type { ButtonStyleProps, ElevationProps, FixedSize, ToolTip } from '../sh
 type ButtonBaseProps = ElevationProps &
 	ButtonStyleProps & {
 		children?: React.ReactNode;
-		variant?: 'solid' | 'outline' | 'text';
+		variant?: 'primary' | 'secondary' | 'outline' | 'text';
 		state?: 'normal' | 'hover' | 'disabled';
 		width?: string;
 		label?: string;

@@ -257,7 +257,7 @@ export function TextFieldDoc() {
 			<Definition id={'borderColorBlurred'}>
 				<Prop>borderColorBlurred</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-fill-primary'}</DefaultVal>
+				<DefaultVal>{'core-outline-primary'}</DefaultVal>
 			</Definition>
 			<P>{'Border color when the input is not focused.'}</P>
 			<Definition id={'borderColorError'}>
@@ -275,7 +275,7 @@ export function TextFieldDoc() {
 			<Definition id={'borderColorFocused'}>
 				<Prop>borderColorFocused</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-fill-secondary'}</DefaultVal>
+				<DefaultVal>{'core-outline-primary'}</DefaultVal>
 			</Definition>
 			<P>
 				{'Border color while focused, unless '}
@@ -291,7 +291,7 @@ export function TextFieldDoc() {
 			</Definition>
 			<P>
 				{
-					'Corner radius. Simple fields default to 100px; stacked and outlined fields use 0 for underline borders and 16px otherwise. Explicit values take precedence. Numbers are pixels; strings accept CSS radii.'
+					'Corner radius. Fields default to corner-m (8px), or 0 for underline borders. Explicit values take precedence. Numbers are pixels; strings accept CSS radii.'
 				}
 			</P>
 			<Definition id={'borderStyle'}>

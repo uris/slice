@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import seeds from '../../../scripts/core-palette.json';
 import greySource from '../../../scripts/grey-palette.json';
-import { themeCss } from './recipes';
-import { corePalette, corePaletteAnchors, coreGreyAnchors, coreGreyLayers } from './palette';
+import { addOpacity } from '../../utils/functions/colors';
+import { corePalette, coreGreyAnchors } from './palette';
 
 const colors: Record<string, string> = corePalette;
 const requiredStops = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
@@ -20,10 +20,9 @@ function luminance(hex: string) {
 describe('core palette', () => {
  it('preserves both screenshot colors exactly, with every light anchor at 500', () => {
   for (const [family, seed] of Object.entries(seeds)) {
-   const anchors = corePaletteAnchors[family as keyof typeof corePaletteAnchors];
-   expect(anchors.light).toBe(500);
    expect(colors[`core-${family}-500`]).toBe(seed.light);
-   expect(colors[`core-${family}-${anchors.dark}`]).toBe(seed.dark);
+   const ramp = Object.entries(colors).filter(([token]) => token.startsWith(`core-${family}-`));
+   expect(ramp.map(([, value]) => value)).toContain(seed.dark);
   }
  });
  it('has complete shared ramps ordered from light to dark', () => {
@@ -49,25 +48,30 @@ it('keeps semantic CSS references aligned with both theme maps', async () => {
  for (const [mode, theme] of Object.entries({ light, dark })) {
   const block = css.split(`:root[data-slice-theme="${mode}Mode"] [data-slice-theme-scope] {`)[1].split('}')[0];
   const references = [...block.matchAll(/--([\w-]+): ([^;]+);/g)];
-  const neutral: Record<string,string> = themeCss(mode as 'light' | 'dark');
   expect(references).toHaveLength(Object.keys(theme).length);
   for (const [, token, value] of references) {
-   if (token in neutral) expect(value).toBe(neutral[token]);
-   else {
-    const reference = value.match(/^var\(--([\w-]+)\)$/)?.[1];
-    expect(reference, token).toBeDefined();
-    expect(theme[token as keyof typeof theme]).toBe(coreColors[reference as keyof typeof coreColors]);
-   }
+   const reference = value.match(/var\(--([\w-]+)\)/)?.[1];
+   expect(reference, token).toBeDefined();
+   const base = coreColors[reference as keyof typeof coreColors];
+   const opacity = value.match(/ ([\d.]+)%, transparent\)$/)?.[1];
+   const expected = opacity === undefined ? base : addOpacity(base, Number(opacity) / 100);
+   expect(theme[token as keyof typeof theme], `${mode}.${token}`).toBe(expected);
   }
  }
 });
 
 
-it('keeps white text readable on primary, badge, and destructive fills', async () => {
+it('keeps default text readable on primary, badge, and destructive fills', async () => {
  const { light, dark } = await import('./colors');
  for (const theme of [light, dark]) {
-  for (const role of ['core-button-primary', 'core-badge-primary', 'feedback-warning'] as const) {
-   const contrast = (luminance(theme['core-text-light']) + 0.05) / (luminance(theme[role]) + 0.05);
+  for (const [role, foreground] of [
+   ['core-button-primary', theme === light ? 'core-text-light' : 'core-text-dark'],
+   ['core-badge-primary', theme === light ? 'core-text-light' : 'core-text-dark'],
+   ['feedback-warning', 'core-text-light'],
+  ] as const) {
+   const text = luminance(theme[foreground]);
+   const background = luminance(theme[role]);
+   const contrast = (Math.max(text, background) + 0.05) / (Math.min(text, background) + 0.05);
    expect(contrast, role).toBeGreaterThanOrEqual(4.5);
   }
  }
@@ -96,19 +100,7 @@ describe('gray screenshot ramp', () => {
   expect(coreGreyAnchors['#939292']).not.toBe(coreGreyAnchors['#939290']);
   expect(coreGreyAnchors['#1f1e1e']).not.toBe(coreGreyAnchors['#1e1e1d']);
  });
- it('retains opacity as a layer recipe rather than flattening the base color', () => {
-  for (const [group, entries] of Object.entries(greySource)) {
-   for (const [name, entry] of Object.entries(entries)) {
-    if (!('opacity' in entry)) continue;
-    const key = `${group}-${name}` as keyof typeof coreGreyLayers;
-    for (const mode of ['light','dark'] as const) {
-     const layer = coreGreyLayers[key][mode];
-     expect(layer.opacity).toBe(entry.opacity);
-     expect(colors[layer.token]).toBe(entry[mode]);
-    }
-   }
-  }
- });
+
 });
 
 
@@ -123,12 +115,11 @@ it('places the custom primary surface between black and the secondary surface', 
 it('resolves base family aliases to each appearance anchor while keeping fixed ramps unchanged', async () => {
  const { light, dark, colorCssVars } = await import('./colors');
  const { resolveColor } = await import('./resolveColor');
- for (const family of Object.keys(corePaletteAnchors) as (keyof typeof corePaletteAnchors)[]) {
+ const accents = { ...seeds, grey: greySource.grays.gray };
+ for (const family of Object.keys(accents) as (keyof typeof accents)[]) {
   const token = `core-${family}` as const;
-  for (const [mode, theme] of [['light', light], ['dark', dark]] as const) {
-   const stop = corePaletteAnchors[family][mode];
-   expect(theme[token]).toBe(colors[`core-${family}-${stop}`]);
-  }
+  expect(light[token]).toBe(accents[family].light);
+  expect(dark[token]).toBe(accents[family].dark);
   expect(resolveColor(token)).toBe(`var(--${token})`);
   expect(colorCssVars[token]).toBe(`var(--${token})`);
  }

@@ -104,8 +104,8 @@ export const LightVariant: Story = {
 		await expect(getComputedStyle(badge).minWidth).toBe('24px');
 		await expect(getComputedStyle(badge).paddingInlineStart).toBe('6px');
 		await expect(getComputedStyle(badge).paddingInlineEnd).toBe('6px');
-		await expect(getComputedStyle(badge).paddingTop).toBe('2px');
-		await expect(getComputedStyle(badge).paddingBottom).toBe('2px');
+		await expect(getComputedStyle(badge).paddingTop).toBe('4px');
+		await expect(getComputedStyle(badge).paddingBottom).toBe('4px');
 	},
 };
 
@@ -212,7 +212,9 @@ export const UpdatedColorOverrides: Story = {
 		await expect(badge.style.getPropertyValue('--badge-color')).toBe('var(--core-text-primary)');
 		await userEvent.click(canvas.getByRole('button', { name: 'Change variant' }));
 		await expect(badge.style.getPropertyValue('--badge-bg')).toBe('#2563eb');
-		await expect(badge.style.getPropertyValue('--badge-color')).toBe('var(--core-text-light)');
+		await expect(badge.style.getPropertyValue('--badge-color')).toBe(
+			document.documentElement.dataset.sliceTheme === 'darkMode' ? 'var(--core-text-dark)' : 'var(--core-text-light)',
+		);
 		await userEvent.click(canvas.getByRole('button', { name: 'Use preset' }));
 		await expect(badge.style.getPropertyValue('--badge-bg')).toBe('var(--core-badge-primary)');
 	},

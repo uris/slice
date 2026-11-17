@@ -155,7 +155,7 @@ function WSStoreDemo() {
 				</FlexBox>
 				<FlexBox gap={12} direction={'row'} background={'transparent'}>
 					<Button
-						variant={'solid'}
+						variant={'primary'}
 						label={isConnected ? 'Reconnect' : 'Connect'}
 						onClick={() => {
 							setEventLog([]);

@@ -15,12 +15,12 @@ export function App() {
 					The same free ui-kit you love for building with react, now available for both React Web and React Native.
 				</p>
 				<FlexBox direction={'row'} width={'auto'} gap={24}>
-					<Button variant={'solid'} link={'https://react.slice-uikit.com'} target={'_blank'} paddingLeft={16}>
+					<Button variant={'primary'} link={'https://react.slice-uikit.com'} target={'_blank'} paddingLeft={16}>
 						<FlexBox direction={'row'} align={'center'} justify={'center'} gap={4}>
 							<span style={{ marginLeft: 4 }}>Web Apps</span>
 						</FlexBox>
 					</Button>
-					<Button variant={'solid'} link={'https://react-native.slice-uikit.com'} target={'_blank'} paddingLeft={16}>
+					<Button variant={'primary'} link={'https://react-native.slice-uikit.com'} target={'_blank'} paddingLeft={16}>
 						<FlexBox direction={'row'} align={'center'} justify={'center'} gap={4}>
 							<Icon name={'brands.apple'} />
 							<Icon name={'brands.android'} />

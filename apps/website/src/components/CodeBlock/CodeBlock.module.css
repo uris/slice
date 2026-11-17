@@ -13,12 +13,17 @@
 }
 
 .filename {
-	padding: 10px 16px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 24px;
 	border-bottom: 1px solid var(--core-fill-primary, #3d444d);
 	border-top: 1px solid var(--core-fill-primary, #3d444d);
 	font-family: var(--font-mono), monospace;
-	color: var(--core-text-tertiary, #e1e4e8);
-	font-size: 12px;
+	color: var(--core-text-secondary, #e1e4e8);
+	font-size: 13px;
+	font-weight: 500;
 }
 
 .highlight pre {
@@ -49,10 +54,6 @@
 }
 
 .copyButton {
-	position: absolute;
-	z-index: 5;
-	right: 16px;
-	top: 16px;
 	transition: opacity 0.25s ease-in-out 0s;
 }
 

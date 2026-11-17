@@ -169,7 +169,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 			if (action.position && position !== action.position) return null;
 			return (
 				<Button
-					variant={action.primary ? 'solid' : 'outline'}
+					variant={action.primary ? 'primary' : 'secondary'}
 					key={action.id}
 					label={action.label}
 					aria-label={action.label || action.tooltip || 'Action'}
@@ -228,7 +228,8 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 										actionName={'close'}
 										icon={'basic.cross'}
 										iconSize={14}
-										iconColor={'core-text-tertiary'}
+										iconStrokeWidth={1.75}
+										iconColor={'core-text-secondary'}
 										onClick={handleClose}
 										onToolTip={(tip) => onToolTip?.(tip)}
 										hover={false}
@@ -236,7 +237,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 										backgroundColorHover={'transparent'}
 										backgroundColorSelected={'transparent'}
 										borderWidth={1}
-										borderColor={'core-text-tertiary'}
+										borderColor={'core-fill-primary'}
 										buttonSize={'s'}
 									/>
 								</div>

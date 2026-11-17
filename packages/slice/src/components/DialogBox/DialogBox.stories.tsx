@@ -13,7 +13,7 @@ function DefaultActions() {
 	return (
 		<>
 			<Button label="Cancel" variant="outline" backgroundColor={'transparent'} onClick={close} />
-			<Button variant={'solid'} label="Continue" onClick={() => resolve('continue')} />
+			<Button variant={'primary'} label="Continue" onClick={() => resolve('continue')} />
 		</>
 	);
 }

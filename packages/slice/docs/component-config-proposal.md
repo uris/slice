@@ -29,7 +29,7 @@ export const sliceConfig = {
       height: 6,
     },
     Button: {
-      variant: 'solid',
+      variant: 'secondary',
       borderRadius: 8,
       textColor: 'core-text-primary',
       transition: { duration: 0.15 },

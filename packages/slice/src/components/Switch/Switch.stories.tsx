@@ -29,8 +29,8 @@ const meta = {
 		defaultChecked: false,
 		disabled: false,
 		height: 22,
-		width: 48,
-		knobWidth: 26,
+		width: 36,
+		knobWidth: 20,
 		backgroundColorOn: 'feedback-positive',
 		backgroundColorOff: 'core-text-disabled',
 		knobColor: 'core-surface-primary',
@@ -176,8 +176,8 @@ export const Geometry: Story = {
 			await expect(knob.bottom).toBeLessThanOrEqual(track.bottom);
 		}
 		const defaultSwitch = c.getByRole('switch', { name: 'Default geometry' });
-		await expect(defaultSwitch.getBoundingClientRect().width).toBe(48);
-		await expect(defaultSwitch.firstElementChild?.getBoundingClientRect().width).toBe(26);
+		await expect(defaultSwitch.getBoundingClientRect().width).toBe(36);
+		await expect(defaultSwitch.firstElementChild?.getBoundingClientRect().width).toBe(20);
 		await expect(defaultSwitch.firstElementChild?.getBoundingClientRect().height).toBe(18);
 		await expect(getComputedStyle(c.getByRole('switch', { name: 'Negative padding' })).paddingLeft).toBe('0px');
 	},
@@ -211,10 +211,10 @@ export const KnobShapes: Story = {
 		await expect(getComputedStyle(corners).borderRadius).toBe('6px');
 		await expect(getComputedStyle(corners.firstElementChild as Element).borderRadius).toBe('4px');
 		const clamped = c.getByRole('switch', { name: 'Clamped knob' });
-		await expect(clamped.firstElementChild?.getBoundingClientRect().width).toBe(44);
+		await expect(clamped.firstElementChild?.getBoundingClientRect().width).toBe(32);
 		await expect(getComputedStyle(clamped.firstElementChild as Element).borderRadius).toBe('0px');
 		const invalid = c.getByRole('switch', { name: 'Invalid knob' });
-		await expect(invalid.firstElementChild?.getBoundingClientRect().width).toBe(26);
+		await expect(invalid.firstElementChild?.getBoundingClientRect().width).toBe(20);
 		await userEvent.click(pill);
 		await waitFor(() => {
 			const trackRect = pill.getBoundingClientRect();

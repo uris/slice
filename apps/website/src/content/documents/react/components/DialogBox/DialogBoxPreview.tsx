@@ -43,7 +43,7 @@ export function DialogBoxPreview({ scroll = false }: Readonly<{ scroll?: boolean
 					onClick={() => setOpen(false)}
 					width={'fill'}
 				/>
-				<Button variant={'solid'} label={scroll ? 'Done' : 'Archive'} onClick={() => setOpen(false)} width={'fill'} />
+				<Button variant={'primary'} label={scroll ? 'Done' : 'Archive'} onClick={() => setOpen(false)} width={'fill'} />
 			</DialogBox.Actions>
 		</DialogBox>
 	);

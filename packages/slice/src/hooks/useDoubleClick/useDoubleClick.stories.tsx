@@ -28,7 +28,7 @@ function UseDoubleClickDemo(props: Readonly<UseDoubleClickDemoProps>) {
 		<FlexBox absolute justify={'center'} align={'center'} direction={'column'}>
 			<Button
 				label={'Click Or Double Click Me'}
-				variant={'solid'}
+				variant={'primary'}
 				buttonSize="l"
 				onClick={click}
 				onDoubleClick={doubleClick}
