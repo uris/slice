@@ -39,11 +39,11 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
 					const color = params.has(param) ? surfaceYellow : 'var(--core-text-primary)';
 					return (
 						<input
-							className={classNames(styles.button, styles.type)}
+							className={classNames(styles.button, styles.type, 'body-s-regular')}
 							style={{ color }}
 							key={`main_menu_${label}`}
 							type={'button'}
-							value={label}
+							value={`/  ${label}`}
 							onClick={() => handleClick(option)}
 						/>
 					);

@@ -59,11 +59,5 @@
 }
 
 .type {
-	font-family: var(--font-special), monospace;
-	font-weight: bold;
-	font-size: 12px;
-	line-height: 1.4em;
-	letter-spacing: 0.94%;
-	text-transform: uppercase;
 	color: var(--text-color);
 }
