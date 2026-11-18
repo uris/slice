@@ -1,8 +1,9 @@
 # Component composition
 
-Choose exports according to whether a child has a useful identity outside its
-parent. Apply this convention to new APIs and intentional component refactors;
-do not rename unrelated existing components just to match it.
+Choose clear, component-specific exports. Named section components such as
+`CardTitle`, `CardContent`, and `CardImage` are supported. Structural ownership
+does not require dot notation; preserve existing public APIs when documenting or
+extending a component.
 
 ## Composition across APIs
 
@@ -14,24 +15,10 @@ without adapter callbacks or type assertions, and keep that usage typechecked.
 
 ## Parent-only sections
 
-Expose structural sections through their parent using dot notation:
-
-```
-<DialogBox>
-  <DialogBox.Title>Archive project?</DialogBox.Title>
-  <DialogBox.Content>Keep the project history.</DialogBox.Content>
-  <DialogBox.Actions>...</DialogBox.Actions>
-</DialogBox>
-```
-
-DialogBox implements this shape. Verify each component’s current exports before
-using the same pattern in its consumer docs.
-
-These sections belong to the parent's structure, layout, and semantics. They are
-not standalone controls. Export the parent with typed section members; do not add
-bare `Title`, `Content`, or `Actions` exports or separate public component subpaths
-for these sections. Memoization and generic parent props must retain their public
-types when section members are attached.
+Structural sections belong to the parent's layout and semantics. They may be
+named exports such as `CardTitle`, `CardContent`, and `CardImage`. Existing APIs
+such as `DialogBox.Title` remain valid; verify current exports before writing
+consumer examples. Do not rename sections solely to standardize notation.
 
 Document sections on the parent's page, including their supported props, events,
 and relationship to the parent. They do not need standalone website slugs.

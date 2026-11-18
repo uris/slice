@@ -81,6 +81,7 @@ type TextFieldBaseProps = ElevationProps & {
 	textColorDisabled?: ColorValue;
 	labelColor?: ColorValue;
 	iconLeft?: { name?: SliceIcon; size?: number; color?: ColorValue };
+	/** Opt into a clear control with an optional icon size (20px by default). Empty fields reserve no space. */
 	clearButton?: { size?: number } | null;
 	clearBlurs?: boolean;
 	disabled?: boolean;

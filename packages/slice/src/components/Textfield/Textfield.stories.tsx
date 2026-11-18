@@ -98,7 +98,7 @@ export const Controlled: Story = {
 };
 function ControlledField() {
 	const [value, setValue] = useState('');
-	return <TextField label="Search" value={value} onChange={setValue} />;
+	return <TextField label="Search" clearButton={{}} value={value} onChange={setValue} />;
 }
 export const ControlledUpdates: Story = {
 	tags: ['tests'],
@@ -147,7 +147,7 @@ export const ReadOnly: Story = {
 };
 export const ClearKeepsFocus: Story = {
 	tags: ['tests'],
-	args: { defaultValue: 'Hello' },
+	args: { clearButton: {}, defaultValue: 'Hello' },
 	play: async ({ canvasElement, args }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
@@ -163,7 +163,7 @@ export const ClearKeepsFocus: Story = {
 };
 export const ClearBlurs: Story = {
 	tags: ['tests'],
-	args: { defaultValue: 'Hello', clearBlurs: true },
+	args: { clearButton: {}, defaultValue: 'Hello', clearBlurs: true },
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
@@ -450,7 +450,7 @@ export const NativeFormSubmit: Story = {
 };
 export const ControlledClearRequest: Story = {
 	tags: ['tests'],
-	args: { value: 'Fixed' },
+	args: { clearButton: {}, value: 'Fixed' },
 	play: async ({ canvasElement, args }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
@@ -584,7 +584,7 @@ export const ExternalForm: Story = {
 };
 export const NoCallbackDefaults: Story = {
 	tags: ['tests'],
-	render: () => <TextField inputName="Defaults" actionButton defaultValue="Text" />,
+	render: () => <TextField inputName="Defaults" clearButton={{}} actionButton defaultValue="Text" />,
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
@@ -993,7 +993,7 @@ export const SupportingMessageAlignment: Story = {
 
 export const AppearingClearDelay: Story = {
 	tags: ['tests'],
-	args: { variant: 'stacked', behavior: 'appear' },
+	args: { clearButton: {}, variant: 'stacked', behavior: 'appear' },
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
@@ -1099,4 +1099,83 @@ export const Elevation: StoryObj<typeof meta> = {
 		<ElevationFixture>{(elevation) => <TextField elevation={elevation} label="Project name" />}</ElevationFixture>
 	),
 	play: async (context) => runElevationPlay(context, 0),
+};
+
+export const PlaceholderColorAfterClear: Story = {
+	tags: ['tests'],
+	args: {
+		clearButton: {},
+		textColorFocused: '#ffffff',
+		textColorBlurred: '#ffffff',
+		textColorPlaceholder: 'rgba(235, 235, 245, 0.18)',
+		style: { WebkitTextFillColor: '#ffffff' },
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole('textbox');
+		const originalColor = getComputedStyle(input, '::placeholder').webkitTextFillColor;
+		await expect(originalColor).toBe('rgba(235, 235, 245, 0.18)');
+		await userEvent.type(input, 'saved@example.com');
+		await expect(getComputedStyle(input).webkitTextFillColor).toBe('rgb(255, 255, 255)');
+		await userEvent.click(canvas.getByRole('button', { name: 'Clear text' }));
+		await expect(input).toHaveValue('');
+		await expect(input.matches(':placeholder-shown')).toBe(true);
+		await expect(getComputedStyle(input).webkitTextFillColor).toBe(originalColor);
+		await expect(getComputedStyle(input, '::placeholder').webkitTextFillColor).toBe(originalColor);
+		await expect(getComputedStyle(input, '::placeholder').opacity).toBe('1');
+	},
+};
+
+export const ClearDisabledByDefault: Story = {
+	tags: ['tests'],
+	args: { defaultValue: 'Filled field' },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('textbox'));
+		await expect(canvas.queryByRole('button', { name: 'Clear text' })).not.toBeInTheDocument();
+	},
+};
+
+export const ClearOnlyOccupiesSpaceWhenVisible: Story = {
+	tags: ['tests'],
+	args: { clearButton: {}, label: undefined, inputName: 'Clear layout' },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole('textbox');
+		await userEvent.click(input);
+		const emptyWidth = input.getBoundingClientRect().width;
+		await expect(canvas.queryByRole('button', { name: 'Clear text' })).not.toBeInTheDocument();
+		await userEvent.type(input, 'Text');
+		const clear = canvas.getByRole('button', { name: 'Clear text' });
+		await expect(clear).toBeVisible();
+		await expect(input.getBoundingClientRect().width).toBeLessThan(emptyWidth);
+		input.blur();
+		await expect(clear.getBoundingClientRect().width).toBe(0);
+		await userEvent.click(input);
+		await userEvent.click(canvas.getByRole('button', { name: 'Clear text' }));
+		await expect(canvas.queryByRole('button', { name: 'Clear text' })).not.toBeInTheDocument();
+		await expect(input.getBoundingClientRect().width).toBeCloseTo(emptyWidth, 1);
+	},
+};
+
+export const TransparentPasswordControl: Story = {
+	tags: ['tests'],
+	args: { inputType: 'password', defaultValue: 'secret' },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button', { name: 'Show password' });
+		const expectTransparent = async () => {
+			const background = button.firstElementChild;
+			if (!background) throw new Error('Missing password control background');
+			await expect(getComputedStyle(background).backgroundColor).toMatch(/(?:,\s*0|\/\s*0)\)$/);
+		};
+		await expectTransparent();
+		await userEvent.hover(button);
+		await expectTransparent();
+		await userEvent.click(button);
+		await expect(button).toHaveAccessibleName('Hide password');
+		await expectTransparent();
+		await userEvent.unhover(button);
+		await expectTransparent();
+	},
 };

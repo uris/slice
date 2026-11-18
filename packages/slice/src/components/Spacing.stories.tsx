@@ -50,7 +50,7 @@ export const DefaultsAndOverrides: StoryObj = {
 			await expect(css.paddingRight).toBe(right);
 		};
 		await padding('.plain', '16px', '16px');
-		await padding('.icons', '12px', '12px');
+		await padding('.icons', '12px', '16px');
 		await padding('.labeled', '12px', '16px');
 		await padding('.password', '16px', '12px');
 		await padding('.zero', '0px', '0px');

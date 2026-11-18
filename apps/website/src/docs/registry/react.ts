@@ -5,6 +5,12 @@ import type { Metadata } from 'next';
 export const reactDocSlugs = [
 	'data-table',
 	'camera',
+	'card',
+	'card-title',
+	'card-content',
+	'card-image',
+	'card-footer',
+
 	'video-controller',
 	'video',
 	'spacer',
@@ -66,6 +72,27 @@ export type ReactDocSlug = (typeof reactDocSlugs)[number];
 
 // meta for all slugs including shared
 export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
+	card: {
+		title: 'Card | Slice UIKit',
+		description: 'Compose cards with Card for React: examples, behavior, accessibility, props, and events.',
+	},
+	'card-title': {
+		title: 'CardTitle | Slice UIKit',
+		description: 'Compose cards with CardTitle for React: examples, behavior, accessibility, props, and events.',
+	},
+	'card-content': {
+		title: 'CardContent | Slice UIKit',
+		description: 'Compose cards with CardContent for React: examples, behavior, accessibility, props, and events.',
+	},
+	'card-image': {
+		title: 'CardImage | Slice UIKit',
+		description: 'Compose cards with CardImage for React: examples, behavior, accessibility, props, and events.',
+	},
+	'card-footer': {
+		title: 'CardFooter | Slice UIKit',
+		description: 'Compose cards with CardFooter for React: examples, behavior, accessibility, props, and events.',
+	},
+
 	'data-table': {
 		title: 'DataTable | Slice UIKit',
 		description: 'Build sortable tables with custom cells, row actions, and automatic virtualization.',

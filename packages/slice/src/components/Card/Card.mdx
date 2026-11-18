@@ -1,0 +1,130 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import * as CardStories from './Card.stories';
+import { RenderSource } from '../../../documentation/_components/RenderSource/RenderSource';
+
+<Meta of={CardStories} />
+
+<Unstyled>
+
+# Card
+
+Compose a card with named title, content, image, and footer sections. The default example is a login card; the variations show larger spacing, images, and horizontal actions.
+
+## Login card
+
+The fields manage local input state. Connect the footer action to your application's login handler; the card does not authenticate or send credentials itself.
+
+</Unstyled>
+<RenderSource language="tsx">
+```
+"use client";
+
+import { Card, CardTitle, CardContent, CardFooter, FlexBox, Preset, TextField } from '@apple-pie/slice';
+import { useState } from 'react';
+
+export function LoginCard({ onLogin }: { onLogin?: (email: string, password: string) => void }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  return (
+    <Card maxWidth={375} style={{ width: '100%' }} role="group" aria-label="Account login">
+      <CardTitle title="Log in to your account" text="Enter your email and password to continue." />
+      <CardContent>
+        <FlexBox preset={Preset.Column} width="fill" gap={12}>
+          <TextField label="Email" name="email" placeholder="you@example.com" value={email} onChange={setEmail} backgroundColorBlurred="transparent" inputAttributes={{ autoComplete: 'username' }} />
+          <TextField label="Password" name="password" inputType="password" placeholder="Enter your password" value={password} onChange={setPassword} backgroundColorBlurred="transparent" inputAttributes={{ autoComplete: 'current-password' }} />
+        </FlexBox>
+      </CardContent>
+      <CardFooter actionButtons={[
+        { value: 'login', label: 'Log in', variant: 'primary', disabled: !email.trim() || !password },
+        { value: 'signup', label: 'Sign up', variant: 'secondary', backgroundColor: 'core-button-secondary' },
+      ]} onAction={button => {
+        if (button.value === 'login') onLogin?.(email, password);
+      }} />
+    </Card>
+  );
+}
+```
+</RenderSource>
+<Unstyled>
+
+## Composition and spacing
+
+Children render in authored order, including fragments, repeated sections, and custom content. `Card.padding` is inherited by title, content, and footer sections. Content immediately after a title removes inferred top padding; explicit padding, including zero, wins. Image sections are flush by default and use their own padding.
+
+Set `padding="var(--spacing-xl)"` for more room. Add `CardImage` with a defined height for an image section, or use it as the card's only child. `CardFooter` supports vertical or horizontal actions, or custom children.
+
+## Accessibility
+
+Card and its sections are visual div wrappers. Use meaningful child semantics and labels. The generated CardTitle text is not a heading; supply custom children when the page needs a semantic heading. CardImage exposes its image with alt text, and empty alt text marks decorative images. Action buttons retain their Button semantics.
+
+## Card props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `backgroundColor` | `ColorValue` | `core-surface-secondary (dark); core-surface-primary (light)` | Card surface color. Accepts a Slice color token or a CSS color. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Outer border color and the default separator color for image sections. |
+| `borderRadius` | `number  /  string` | `var(--corner-xl)` | Outer corner radius. Overflow is clipped to the rounded shape. |
+| `borderWidth` | `number  /  string` | `1` | Outer border width. Numbers are pixels; use `0` to hide it. |
+| `children` | `React.ReactNode` | `undefined` | Card sections and custom content, rendered in authored order. Fragments and repeated sections are supported. |
+| `maxWidth` | `number  /  string` | `undefined` | Maximum width. Numbers are pixels; CSS strings such as `100%` also work. Use `style.width` when the card should fill its available width. |
+| `padding` | `number  /  string` | `var(--spacing-m)` | Shared padding for title, content, and footer sections. Image sections remain flush unless they supply their own padding. |
+| `...divAttributes` | HTML div attributes | — | Native attributes and events apply to the wrapper. Classes are appended; explicit styles override defaults. |
+
+## CardTitle props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `actionButton` | `ButtonProps` | `undefined` | Optional action beside the title. Defaults to a text button with automatic height and zero padding; supplied button props override those defaults. |
+| `caption` | `string` | `undefined` | Small uppercase caption above the title. |
+| `children` | `React.ReactNode` | `undefined` | Custom title content. Replaces the generated caption, title, supporting text, and action. |
+| `padding` | `number  /  string` | `inherited Card.padding` | Section padding. Inherits `Card.padding` by default; explicit values, including `0`, take precedence. Numbers are pixels; strings accept CSS padding shorthands. |
+| `text` | `string` | `undefined` | Supporting text below the title. |
+| `title` | `string` | `undefined` | Main title text. Long titles are truncated to one line. |
+| `...divAttributes` | HTML div attributes | — | Native attributes and events apply to the wrapper. Classes are appended; explicit styles override defaults. |
+
+## CardContent props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `React.ReactNode` | `undefined` | Rich content such as fields, text, or other controls. Takes precedence over `text`. |
+| `padding` | `number  /  string` | `inherited Card.padding` | Section padding. Inherits `Card.padding` by default; explicit values, including `0`, take precedence. Numbers are pixels; strings accept CSS padding shorthands. When directly after `CardTitle`, inferred top padding is removed; explicit padding is preserved. |
+| `text` | `string` | `undefined` | Plain-text fallback when `children` is absent. |
+| `...divAttributes` | HTML div attributes | — | Native attributes and events apply to the wrapper. Classes are appended; explicit styles override defaults. |
+
+## CardImage props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `alt` | `string` | `empty string` | Text alternative for the image. Describe meaningful images; use an empty string for decorative images. |
+| `borderColor` | `ColorValue` | `inherited Card.borderColor` | Top and bottom separator color. Accepts a Slice token or a CSS color. |
+| `borderWidth` | `number  /  string` | `1; adjusted by position` | Top and bottom separator width. Default top separator is removed for the first child; both default separators are removed for an image-only card. Explicit values override these defaults. |
+| `children` | `React.ReactNode` | `undefined` | Optional content over the image. Interactive children remain ordinary controls. |
+| `height` | `number  /  string` | `undefined` | Section height and minimum height. Numbers are pixels. Supply a height for an image-only section; `100%` requires a parent with a definite height. |
+| `padding` | `number  /  string` | `0` | Padding for content over the image. Does not inherit `Card.padding`. |
+| `src` | `string` | `undefined` | Image URL. The image fills the section using `object-fit: cover`, cropping when needed. |
+| `...divAttributes` | HTML div attributes | — | Native attributes and events apply to the wrapper. Classes are appended; explicit styles override defaults. |
+
+## CardFooter props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `actionButtons` | `ButtonProps[]` | `undefined` | Button descriptors. Supply stable `id` values when buttons can move or change; omitted IDs use their array positions. |
+| `align` | `'start'  /  'center'  /  'end'` | `start` | Main-axis alignment for the action group. With a horizontal stack, controls move left, center, or right when space remains. |
+| `backgroundColor` | `ColorValue` | `30% black tint of core-surface-secondary (dark); core-surface-primary-tint (light)` | Footer fill, separate from the Card surface. Accepts a Slice token or CSS color. |
+| `borderColor` | `ColorValue` | `core-outline-primary` | Top separator color. |
+| `borderWidth` | `number  /  string` | `1` | Top separator width. Numbers are pixels; use `0` to remove it. |
+| `children` | `React.ReactNode` | `undefined` | Custom footer content. Replaces the generated action buttons. |
+| `layout` | `'fill'  /  'fit'` | `fill` | Default width for generated buttons. `fill` shares available width; `fit` follows content. An individual button’s `width` overrides this default. |
+| `padding` | `number  /  string` | `inherited Card.padding` | Section padding. Inherits `Card.padding` by default; explicit values, including `0`, take precedence. Numbers are pixels; strings accept CSS padding shorthands. |
+| `stack` | `'vertical'  /  'horizontal'` | `vertical` | Generated action-button direction. Vertical stacks place buttons in a column; horizontal stacks place them in a row. |
+| `...divAttributes` | HTML div attributes | — | Native attributes and events apply to the wrapper. Classes are appended; explicit styles override defaults. |
+
+## Actions
+
+CardTitle and CardFooter accept `onAction: (button: ButtonProps) => void`. A button's own `onClick` runs first, then the section callback. Disabled actions do not fire. CardTitle's custom children replace its generated title layout; CardContent's children replace its text fallback; CardFooter's children replace its action buttons. CardImage's children render over its image.
+
+## Website documentation
+
+See [Card](https://www.slice-uikit.com/docs/react/card/), [CardTitle](https://www.slice-uikit.com/docs/react/card-title/), [CardContent](https://www.slice-uikit.com/docs/react/card-content/), [CardImage](https://www.slice-uikit.com/docs/react/card-image/), and [CardFooter](https://www.slice-uikit.com/docs/react/card-footer/) for focused examples and references.
+
+</Unstyled>

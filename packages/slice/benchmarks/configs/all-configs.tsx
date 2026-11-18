@@ -9,6 +9,9 @@ import {
 	Avatar,
 	AvatarGroup,
 	Badge,
+	Card,
+	CardTitle,
+	CardContent,
 	AudioBubble,
 	Camera,
 	CheckBox,
@@ -143,6 +146,39 @@ export const avatarGroupConfig: ComponentBenchmarkConfig = {
 			name: 'Memory',
 			type: 'memory',
 			fn: () => measureMemoryDelta(<AvatarGroup avatars={mockAvatars} />, 10),
+		},
+	],
+};
+
+export const cardConfig: ComponentBenchmarkConfig = {
+	componentName: 'Card',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<Card><CardTitle title="Project" /><CardContent>Project details</CardContent></Card>,
+				50,
+			),
+		},
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () => measureRerenderTime(
+				<Card><CardTitle title="Project" /><CardContent>Project details</CardContent></Card>,
+				(container) => container.rerender(
+					<Card><CardTitle title="Updated project" /><CardContent>Updated details</CardContent></Card>,
+				),
+				50,
+			),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(
+				<Card><CardTitle title="Project" /><CardContent>Project details</CardContent></Card>,
+				10,
+			),
 		},
 	],
 };
@@ -2097,6 +2133,7 @@ export const allBenchmarkConfigs = [
 	avatarGroupConfig,
 	audioBubbleConfig,
 	badgeConfig,
+	cardConfig,
 	cameraConfig,
 	checkBoxConfig,
 	contentEditableConfig,

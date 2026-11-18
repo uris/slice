@@ -56,3 +56,5 @@ export { videoControllerBenchmarkConfig } from './VideoController.bench';
 export { flexBoxBenchmarkConfig } from './FlexBox.bench';
 
 export { popMenuBenchmarkConfig } from './PopMenu.bench';
+
+export { cardBenchmarkConfig } from './Card.bench';

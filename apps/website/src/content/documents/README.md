@@ -85,8 +85,8 @@ Use the existing shared components and this order:
 9. `H2 id="props"`: public props, excluding any documented in a dedicated section.
 10. `H2 id="events"`: custom callbacks and native event support.
 
-Follow the [component composition convention](../../../../../packages/slice/docs/component-composition.md)
-when choosing notation and documentation ownership:
+Follow the [component composition guidance](../../../../../packages/slice/docs/component-composition.md)
+when choosing documentation ownership:
 
 - Use a sidebar `childDocs` group only when a control depends on its parent for
   meaningful use, rather than merely composing well with it. When those dependent
@@ -99,8 +99,9 @@ when choosing notation and documentation ownership:
   Link to each child page rather than repeating its full reference. Child pages
   demonstrate their own usage inside the required parent when applicable.
 - Preserve the actual public API: named controls such as `PopMenuGroup` and
-  `PopMenuItem` remain named exports; structural sections that use dot notation
-  keep that notation. A separate doc page does not imply standalone behavior.
+  `PopMenuItem` remain named exports. Structural sections may also be named exports,
+  such as `CardTitle`; use dot notation only where the actual API exposes it. A
+  separate doc page does not imply standalone behavior.
 - Independently useful controls retain separate top-level sidebar entries and
   pages, even when another control can host them. `RadioButton` works independently
   and composes with `RadioButtonList`; it is not a dependent child doc of that list.

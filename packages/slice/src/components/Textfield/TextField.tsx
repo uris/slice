@@ -26,7 +26,6 @@ import type { TextFieldProps } from './_types';
 const withoutAria = (attributes: object) =>
 	Object.fromEntries(Object.entries(attributes).filter(([key]) => !key.startsWith('aria-') && key !== 'role'));
 const useClientLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
-const defaultClearButton = { size: 20 };
 type ActionMotion = { reduced: boolean; transition: Transition };
 
 function ActionFrame({ children, settings }: { children: React.ReactNode; settings: ActionMotion }) {
@@ -119,7 +118,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		textColorDisabled = 'var(--core-text-disabled)',
 		labelColor = 'var(--core-text-primary)',
 		iconLeft,
-		clearButton = defaultClearButton,
+		clearButton = null,
 		clearBlurs = false,
 		disabled = false,
 		inputType = 'text',
@@ -260,7 +259,8 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		else input.current?.focus();
 	};
 	const iconInset = 'calc(var(--spacing-m) - var(--spacing-xs))';
-	const trailingIcon = (inputType === 'password' && showPasswordToggle) || (!actionButton && clearButton);
+	const trailingIcon =
+		(inputType === 'password' && showPasswordToggle) || (!actionButton && clearButton && text !== '');
 	const getPadding = () => {
 		if (padding != null) return setStyle(padding);
 		if (variant === 'outlined') {
@@ -283,7 +283,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 	const getBackgroundColor = () => {
 		if (inline) return 'transparent';
 		const fallback = borderStyle === 'underline' ? 'transparent' : 'var(--core-surface-secondary)';
-		if (isFocused) return backgroundColorFocused ?? fallback;
+		if (isFocused) return backgroundColorFocused ?? backgroundColorBlurred ?? fallback;
 		return backgroundColorBlurred ?? fallback;
 	};
 	const getBorderWidth = () => {
@@ -428,7 +428,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 							}}
 						/>
 					</div>
-					{clearButton && (
+					{clearButton && text !== '' && (
 						<button
 							type="button"
 							aria-label="Clear text"
@@ -468,6 +468,9 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 						<div className={css.showPassword}>
 							<IconButton
 								actionName={show ? 'Hide password' : 'Show password'}
+								backgroundColor="transparent"
+								backgroundColorHover="transparent"
+								backgroundColorSelected="transparent"
 								icon={show ? 'security.eye-slash' : 'security.eye'}
 								toggle
 								selected={show}

@@ -314,12 +314,16 @@ export function TextFieldDoc() {
 			<Definition id={'clearButton'}>
 				<Prop>clearButton</Prop>
 				<TypeDef>{'{ size?: number } | null'}</TypeDef>
-				<DefaultVal>{'{ size: 20 }'}</DefaultVal>
+				<DefaultVal>{'null'}</DefaultVal>
 			</Definition>
 			<P>
-				{'Size of the clear icon and its reserved slot in pixels. Use '}
-				<Code>{'null'}</Code>
-				{' to remove the control. It is visible only when the field contains text and focus is within the field.'}
+				{'Pass '}
+				<Code>{'{}'}</Code>
+				{' to enable the clear control, or '}
+				<Code>{'{ size: 20 }'}</Code>
+				{
+					' to set its icon size. It appears only when the field contains text and focus is within the field, and occupies no space while hidden or empty.'
+				}
 			</P>
 			<Definition id={'defaultValue'}>
 				<Prop>defaultValue</Prop>

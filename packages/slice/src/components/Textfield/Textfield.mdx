@@ -61,7 +61,7 @@ Reduced-motion preferences use the persistent stacked layout even when `behavior
 | `borderRadius` | `number  /  string` | style-dependent | Corner radius. Defaults to corner-m (8px), or 0 for underline borders. Explicit values take precedence. Numbers are pixels; strings accept CSS radii. |
 | `borderStyle` | `'box'  /  'underline'  /  'none'` | `box` | Chooses a full outline, underline, or no border. |
 | `clearBlurs` | `boolean` | `false` | True blurs the input after requesting a clear. False keeps or restores input focus. |
-| `clearButton` | `{ size?: number }  /  null` | `{ size: 20 }` | Size of the clear icon and its reserved slot in pixels. Use `null` to remove the control. It is visible only when the field contains text and focus is within the field. |
+| `clearButton` | `{ size?: number }  /  null` | `null` | Pass `{}` to enable the clear control, or `{ size: 20 }` to set its icon size. It appears only when the field contains text and focus is within the field, and occupies no space while hidden or empty. |
 | `defaultValue` | `string` | `empty string` | Initial text for an uncontrolled field. Native form reset restores this initial value without emitting `onChange`. |
 | `disabled` | `boolean` | `false` | Disables the input, clear control, action button, and password-visibility control. |
 | `error` | `boolean` | `false` | Applies error border styling. Validation remains application-owned. |

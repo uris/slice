@@ -47,6 +47,7 @@
 	--core-brown: var(--core-brown-500);
 	--core-button-disabled: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
 	--core-button-primary: var(--core-grey-1000);
+	--core-button-secondary: var(--core-grey-0);
 	--core-cyan: var(--core-cyan-500);
 	--core-drop-shadow: var(--core-drop-shadow-light);
 	--core-fill-primary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
@@ -149,6 +150,7 @@
 	--core-brown: var(--core-brown-450);
 	--core-button-disabled: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
 	--core-button-primary: var(--core-grey-0);
+	--core-button-secondary: var(--core-grey-949);
 	--core-cyan: var(--core-cyan-400);
 	--core-drop-shadow: var(--core-drop-shadow-dark);
 	--core-fill-primary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);

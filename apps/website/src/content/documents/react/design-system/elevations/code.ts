@@ -87,3 +87,27 @@ export function ElevationAnimation() {
 	);
 }
 `;
+
+export const elevationVariableCode = `
+.panel {
+  box-shadow: var(--elevation-2);
+}
+
+.panel:hover {
+  box-shadow: var(--elevation-3);
+}
+`;
+
+export const elevationClassCode = `
+import '@apple-pie/slice/styles.css';
+import { ThemeProvider } from '@apple-pie/slice';
+
+export function Surfaces() {
+  return (
+    <ThemeProvider>
+      <div className="elevation-0">Flat surface</div>
+      <div className="elevation-3">Raised surface</div>
+    </ThemeProvider>
+  );
+}
+`;

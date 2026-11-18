@@ -47,6 +47,7 @@ export type Colors = Record<BaseColorToken, string> & {
 	'core-badge-secondary': string;
 	'core-button-disabled': string;
 	'core-button-primary': string;
+	'core-button-secondary': string;
 	'core-drop-shadow': string;
 	'core-gp-logo-primary': string;
 	'core-gp-logo-secondary': string;
