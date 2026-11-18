@@ -126,7 +126,7 @@ export function IconButtonDoc() {
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'50%'}</DefaultVal>
+				<DefaultVal>{'corner-m'}</DefaultVal>
 			</Definition>
 			<P>{'Corner radius. Numbers are pixels; use 0 for square corners.'}</P>
 			<Definition id={'borderWidth'}>
@@ -142,7 +142,7 @@ export function IconButtonDoc() {
 			</Definition>
 			<P>
 				{
-					'Square frame size: s=24, m=36, l=44, xl=56px. A positive finite number sets a custom pixel size; invalid values fall back to 36px.'
+					'Square frame size: s=24, m=32, l=44, xl=56px. A positive finite number sets a custom pixel size; invalid values fall back to 32px.'
 				}
 			</P>
 			<Definition id={'count'}>
@@ -242,9 +242,9 @@ export function IconButtonDoc() {
 			<Definition id={'iconSize'}>
 				<Prop>iconSize</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'20'}</DefaultVal>
+				<DefaultVal>{'18'}</DefaultVal>
 			</Definition>
-			<P>{'Icon size in pixels. Zero hides its geometry; negative or nonfinite values fall back to 20px.'}</P>
+			<P>{'Icon size in pixels. Zero hides its geometry; negative or nonfinite values fall back to 18px.'}</P>
 			<Definition id={'iconStrokeWidth'}>
 				<Prop>iconStrokeWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>

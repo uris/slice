@@ -366,9 +366,12 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps,
 							<Button
 								round
 								aria-label={stopEnabled ? stopActionName : sendActionName}
-								variant={stopEnabled ? 'outline' : 'solid'}
+								variant={'primary'}
+								backgroundColor={stopEnabled ? 'var(--core-surface-primary)' : undefined}
+								iconColor={stopEnabled ? 'var(--core-text-light)' : undefined}
 								iconLeft={stopEnabled ? 'media.stop' : 'arrows.arrow-top'}
-								iconSize={stopEnabled ? 16 : 20}
+								iconSize={16}
+								iconStrokeWidth={1.75}
 								disabled={stopEnabled ? disabled : !canSubmit}
 								progress={!stopEnabled}
 								working={!stopEnabled && working && submitWorking}

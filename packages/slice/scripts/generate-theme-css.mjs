@@ -15,19 +15,10 @@ for (const [mode, colors] of Object.entries({ light, dark })) {
 	const pattern = new RegExp(
 		`(:root\\[data-slice-theme="${mode}Mode"\\] \\[data-slice-theme-scope\\] \\{)[\\s\\S]*?(\\n\\})`,
 	);
-	css = css.replace(pattern, (block, start, end) => {
-		const previous = Object.fromEntries(
-			[...block.matchAll(/--([\w-]+): var\(--([\w-]+)\);/g)].map(([, token, reference]) => [token, reference]),
-		);
-		const declarations = Object.entries(colors).map(([token, value]) => {
-			let expression = neutral[token];
-			if (!expression) {
-				let reference = previous[token];
-				if (!reference || coreColors[reference] !== value)
-					reference = Object.keys(coreColors).find((key) => coreColors[key] === value);
-				if (!reference) throw new Error(`No palette/effect source for ${mode}.${token}`);
-				expression = `var(--${reference})`;
-			}
+	css = css.replace(pattern, (_, start, end) => {
+		const declarations = Object.keys(colors).map((token) => {
+			const expression = neutral[token];
+			if (!expression) throw new Error(`No explicit color declaration for ${mode}.${token}`);
 			return `\t--${token}: ${expression};`;
 		});
 		return `${start}\n${declarations.join('\n')}${end}`;
@@ -38,4 +29,4 @@ for (const [mode, colors] of Object.entries({ light, dark })) {
 	css = css.replace(rootPattern, `$1\n\t--core-surface-primary: ${colors['core-surface-primary']};\n}`);
 }
 await writeFile(path, css);
-console.log('Generated theme CSS from shared palette recipes and theme maps.');
+console.log('Generated theme CSS from explicit theme color declarations.');

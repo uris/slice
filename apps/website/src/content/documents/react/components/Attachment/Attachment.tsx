@@ -61,7 +61,7 @@ const attachmentProps = [
 	{
 		name: 'borderStyle',
 		type: "React.CSSProperties['borderStyle']",
-		defaultValue: 'solid',
+		defaultValue: 'secondary',
 		description: 'Outer border style.',
 	},
 	{ name: 'borderWidth', type: 'number', defaultValue: '1', description: 'Outer border width in pixels.' },
@@ -259,7 +259,7 @@ export function AttachmentDoc() {
 					},
 				]}
 			/>
-			<CodeBlock code={actionsCode.trim()} />
+			<CodeBlock filename={'AttachmentActions.tsx'} code={actionsCode.trim()} />
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				Filenames omit the final extension. Multi-part names retain earlier extensions, so <Code>archive.tar.gz</Code>{' '}

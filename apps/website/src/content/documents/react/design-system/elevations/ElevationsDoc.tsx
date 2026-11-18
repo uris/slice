@@ -1,11 +1,12 @@
+import { CodeBlock } from '@/components/CodeBlock';
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
-import { Code, H1, H2, P } from '@/components/Type/Type';
+import { Code, H1, H2, H3, P } from '@/components/Type/Type';
 import { FlexBox, Preset } from '@apple-pie/slice';
 import { ElevationAnimation, ElevationComparisonPreview } from './ElevationsPreview';
 import { ElevationLevelsTable } from './ElevationsTable';
-import { elevationAnimationCode, elevationComparisonCode } from './code';
+import { elevationAnimationCode, elevationClassCode, elevationComparisonCode, elevationVariableCode } from './code';
 
 export function ElevationsDoc() {
 	return (
@@ -27,6 +28,24 @@ export function ElevationsDoc() {
 				change which element appears in front of another.
 			</P>
 			<ElevationLevelsTable />
+			<H2 id="using-elevation">Using elevation</H2>
+			<H3>CSS variables</H3>
+			<P>
+				Use <Code>--elevation-0</Code> through <Code>--elevation-5</Code> with <Code>box-shadow</Code> in your own
+				styles. This example raises a panel by one level on hover.
+			</P>
+			<CodeBlock language="css" filename="Panel.css" code={elevationVariableCode.trim()} />
+			<H3>Class names</H3>
+			<P>
+				Apply <Code>elevation-0</Code> through <Code>elevation-5</Code> directly to an element. Level <Code>0</Code>{' '}
+				removes its shadow. These classes only set <Code>box-shadow</Code>; surface colors, borders, and stacking order
+				remain separate.
+			</P>
+			<CodeBlock language="tsx" filename="Surfaces.tsx" code={elevationClassCode.trim()} />
+			<P>
+				For Slice components that expose an <Code>elevation</Code> prop, use that prop to choose their shadow. An inline{' '}
+				<Code>boxShadow</Code> style takes precedence over a utility class.
+			</P>
 			<H2 id="guidance">Guidance</H2>
 			<P>
 				Start with a mostly flat page and add elevation where a surface needs to stand apart. A floating toolbar, open
@@ -84,6 +103,7 @@ export const trackedItems: TrackedItem[] = [
 		title: 'Understanding Slice Elevations',
 		items: [{ id: 'elevation-levels', title: 'Elevation levels' }],
 	},
+	{ id: 'using-elevation', title: 'Using elevation' },
 	{ id: 'guidance', title: 'Guidance' },
 ];
 

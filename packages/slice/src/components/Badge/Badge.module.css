@@ -4,12 +4,14 @@
 	line-height: 1em;
 	color: var(--badge-color);
 	background: var(--badge-bg);
+	width: auto;
 	min-width: 24px;
-	width: min-content;
-	border-radius: var(--corner-m);
+	border-radius: var(--corner-xs);
 	white-space: nowrap;
 }
 
 .badge.badge {
-	padding: var(--spacing-xxs) calc(var(--spacing-xs) + var(--spacing-xxs));
+	padding: var(--spacing-xs) calc(var(--spacing-s) - 2px);
 }
+
+/*calc(var(--spacing-xs) + var(--spacing-xxs)*/

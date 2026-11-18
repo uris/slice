@@ -153,17 +153,15 @@ export default function ButtonBarDoc() {
 			<Definition id="borderColorFocused">
 				<Prop>borderColorFocused</Prop>
 				<TypeDef>ColorValue</TypeDef>
-				<DefaultVal>core-fill-secondary</DefaultVal>
+				<DefaultVal>core-outline-primary</DefaultVal>
 			</Definition>
 			<P>Wrapper border color while a child has focus. Composed fields use this instead of an inner outline.</P>
 			<Definition id="borderRadius">
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'half buttonSize'}</DefaultVal>
+				<DefaultVal>{'corner-m'}</DefaultVal>
 			</Definition>
-			<P>
-				Wrapper corner radius. Numeric sizes use half their pixel value; <Code>auto</Code> uses 18px.
-			</P>
+			<P>Wrapper corner radius, defaulting to 8px.</P>
 			<Definition id="borderStyle">
 				<Prop>borderStyle</Prop>
 				<TypeDef>{"CSSProperties['borderStyle']"}</TypeDef>
@@ -192,7 +190,7 @@ export default function ButtonBarDoc() {
 				<DefaultVal>{'m'}</DefaultVal>
 			</Definition>
 			<P>
-				Shared button size: 24, 36, 44, or 56px. Small <Code>buttons</Code> add 2px top and bottom by default for a 28px
+				Shared button size: 24, 32, 44, or 56px. Small <Code>buttons</Code> add 2px top and bottom by default for a 28px
 				frame. Numeric <Code>padding</Code> contributes to that small frame; CSS string <Code>padding</Code> is applied
 				within its fixed frame. Auto follows content.
 			</P>
@@ -321,13 +319,13 @@ export default function ButtonBarDoc() {
 			<Definition id="iconSize">
 				<Prop>iconSize</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'20'}</DefaultVal>
+				<DefaultVal>{'18'}</DefaultVal>
 			</Definition>
 			<P>Icon dimensions in pixels, clamped to a 14px minimum.</P>
 			<Definition id="iconStrokeWidth">
 				<Prop>iconStrokeWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'1.5 at 14px; otherwise 1.25'}</DefaultVal>
+				<DefaultVal>{'1.25'}</DefaultVal>
 			</Definition>
 			<P>
 				Explicit icon stroke <Code>width</Code> overrides the size-dependent default.
@@ -444,7 +442,7 @@ export default function ButtonBarDoc() {
 			</P>
 			<Definition id="variant">
 				<Prop>variant</Prop>
-				<TypeDef>{'solid | outline | text'}</TypeDef>
+				<TypeDef>{'primary | secondary | outline | text'}</TypeDef>
 				<DefaultVal>{'outline'}</DefaultVal>
 			</Definition>
 			<P>

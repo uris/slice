@@ -337,6 +337,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 									key={`${selectedIndex}:${codeBlock.filename ?? 'code'}:${index}`}
 									{...codeBlock}
 									canvas
+									showFilename={true}
 									teased={index === resolvedCode.length - 1}
 									language={codeBlock.language ?? 'tsx'}
 									showCopy={!hidden}
@@ -353,7 +354,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 							aria-expanded={!hidden}
 							buttonSize="s"
 							textSize={'s'}
-							variant={'solid'}
+							variant={'secondary'}
 							backgroundColor={'core-surface-primary'}
 							textColor={'core-text-primary'}
 							padding={16}

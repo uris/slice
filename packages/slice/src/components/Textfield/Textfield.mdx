@@ -55,13 +55,13 @@ Reduced-motion preferences use the persistent stacked layout even when `behavior
 | `backgroundColorBlurred` | `ColorValue` | style-dependent | Background when not focused. Underline borders default to `transparent`; other styles use `core-surface-secondary`. An explicit color overrides the default. `inline` removes the background. |
 | `backgroundColorFocused` | `ColorValue` | style-dependent | Background while focused. Underline borders default to `transparent`; other styles use `core-surface-secondary`. An explicit color overrides the default. `inline` removes the background. |
 | `behavior` | `'persistent'  /  'appear'` | `persistent` | Applies only to `stacked`. `persistent` keeps the label above the input, with the placeholder below when empty. `appear` uses the label as the empty-field placeholder, then moves it into position when a value exists. Reduced motion uses the persistent layout. |
-| `borderColorBlurred` | `ColorValue` | `core-fill-primary` | Border color when the input is not focused. |
+| `borderColorBlurred` | `ColorValue` | `core-outline-primary` | Border color when the input is not focused. |
 | `borderColorError` | `ColorValue` | `feedback-warning` | Border color when `error` is true; takes priority over focus. |
-| `borderColorFocused` | `ColorValue` | `core-fill-secondary` | Border color while focused, unless `error` is true. |
-| `borderRadius` | `number  /  string` | style-dependent | Corner radius. Defaults to 100px for simple fields; stacked/outlined fields use 0 for underline borders and 16px otherwise. Explicit values take precedence. Numbers are pixels; strings accept CSS radii. |
+| `borderColorFocused` | `ColorValue` | `core-outline-primary` | Border color while focused, unless `error` is true. |
+| `borderRadius` | `number  /  string` | style-dependent | Corner radius. Defaults to corner-m (8px), or 0 for underline borders. Explicit values take precedence. Numbers are pixels; strings accept CSS radii. |
 | `borderStyle` | `'box'  /  'underline'  /  'none'` | `box` | Chooses a full outline, underline, or no border. |
 | `clearBlurs` | `boolean` | `false` | True blurs the input after requesting a clear. False keeps or restores input focus. |
-| `clearButton` | `{ size?: number }  /  null` | `{ size: 20 }` | Size of the clear icon and its reserved slot in pixels. Use `null` to remove the control. It is visible only when the field contains text and focus is within the field. |
+| `clearButton` | `{ size?: number }  /  null` | `null` | Pass `{}` to enable the clear control, or `{ size: 20 }` to set its icon size. It appears only when the field contains text and focus is within the field, and occupies no space while hidden or empty. |
 | `defaultValue` | `string` | `empty string` | Initial text for an uncontrolled field. Native form reset restores this initial value without emitting `onChange`. |
 | `disabled` | `boolean` | `false` | Disables the input, clear control, action button, and password-visibility control. |
 | `error` | `boolean` | `false` | Applies error border styling. Validation remains application-owned. |

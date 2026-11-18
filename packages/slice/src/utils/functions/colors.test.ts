@@ -1,32 +1,37 @@
 import { describe, expect, it } from 'vitest';
-import { addOpacity, resolveTransparent, tintFromColor } from './colors';
+import { addOpacity, opacityFromColor, resolveTransparent, tintFromColor } from './colors';
 
 describe('tintFromColor', () => {
-	it('returns the original value for an invalid hex', () => {
-		expect(tintFromColor('not-a-color', 50)).toBe('not-a-color');
-		expect(tintFromColor('#1234', 50)).toBe('#1234');
-	});
+ it.each(['inherit', 'unset'])('preserves %s', color => {
+  expect(tintFromColor(color, 8)).toBe(color);
+ });
+ it.each(['#000000', '#abc', '#1234', 'red', 'rgb(1, 2, 3)', 'var(--custom-color)'])('tints CSS color %s without parsing channels', color => {
+  expect(tintFromColor(color, 8)).toBe(`color-mix(in srgb, ${color} 92%, white)`);
+ });
+ it('resolves theme tokens to live CSS variables', () => {
+  expect(tintFromColor('core-button-primary', -8)).toBe('color-mix(in srgb, var(--core-button-primary) 92%, black)');
+ });
+ it('accepts ratios and percentages and clamps extremes', () => {
+  expect(tintFromColor('white', 0.5)).toBe(tintFromColor('white', 50));
+  expect(tintFromColor('white', -50)).toBe('color-mix(in srgb, white 50%, black)');
+  expect(tintFromColor('white', 500)).toBe('color-mix(in srgb, white 0%, white)');
+  expect(tintFromColor('white', -500)).toBe('color-mix(in srgb, white 0%, black)');
+ });
+});
 
-	it('lightens a color toward white with a positive percent', () => {
-		expect(tintFromColor('#000000', 50)).toBe('#808080');
-	});
-
-	it('darkens a color toward black with a negative percent', () => {
-		expect(tintFromColor('#ffffff', -50)).toBe('#808080');
-	});
-
-	it('treats a [-1..1] ratio the same as an equivalent [-100..100] percent', () => {
-		expect(tintFromColor('#000000', 0.5)).toBe(tintFromColor('#000000', 50));
-	});
-
-	it('expands 3-digit hex shorthand', () => {
-		expect(tintFromColor('#000', 50)).toBe('#808080');
-	});
-
-	it('clamps ratios beyond -100/100', () => {
-		expect(tintFromColor('#000000', 500)).toBe('#ffffff');
-		expect(tintFromColor('#ffffff', -500)).toBe('#000000');
-	});
+describe('opacityFromColor', () => {
+ it.each(['unset', 'inherit'])('preserves %s', color => {
+  expect(opacityFromColor(color, 20)).toBe(color);
+ });
+ it.each(['#abc', '#112233', 'white', 'rgb(1, 2, 3)', 'rgba(1, 2, 3, 0.5)', 'hsl(120 50% 50%)', 'var(--custom-color)', 'transparent'])('mixes CSS color %s with transparent without rewriting its alpha', color => {
+  expect(opacityFromColor(color, 20)).toBe(`color-mix(in srgb, ${color} 20%, transparent)`);
+ });
+ it('resolves Slice tokens while retaining live theme references', () => {
+  expect(opacityFromColor('core-button-primary', 0.12)).toBe('color-mix(in srgb, var(--core-button-primary) 12%, transparent)');
+ });
+ it.each([[0, 0], [1, 100], [0.12, 12], [12, 12], [100, 100], [200, 100], [-0.5, 0], [-20, 0]])('normalizes opacity %s to %s percent', (opacity, percent) => {
+  expect(opacityFromColor('red', opacity)).toBe(`color-mix(in srgb, red ${percent}%, transparent)`);
+ });
 });
 
 describe('addOpacity', () => {

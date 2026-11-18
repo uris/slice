@@ -66,7 +66,7 @@ export function CodeBlock({
 	code,
 	language = 'typescript',
 	filename,
-	showFilename = false,
+	showFilename = true,
 	wrap = false,
 	className,
 	teased = false,
@@ -131,8 +131,42 @@ export function CodeBlock({
 			style={containerStyles}
 		>
 			{showFilename && filename && (
-				<figcaption className={styles.filename} style={{ borderTopWidth: canvas && first ? 0 : undefined }}>
+				<figcaption className={styles.filename} style={{ borderTopWidth: canvas && first ? 1 : 0 }}>
 					{filename}
+					{showCopy && (
+						<div className={styles.copyButton}>
+							<IconButton
+								icon={getCopyIcon()}
+								actionName={filename ? `Copy ${filename}` : 'Copy code'}
+								iconSize={18}
+								iconColor={'core-text-secondary'}
+								buttonSize={'s'}
+								toggle={false}
+								tooltip={'Copy code'}
+								backgroundColorHover={isCopied ? 'feedback-positive' : 'transparent'}
+								backgroundColor={isCopied ? 'feedback-positive' : 'transparent'}
+								borderColor={isCopied ? 'feedback-positive' : 'core-fill-primary'}
+								borderWidth={0}
+								disabled={isRequesting}
+								onClick={async () => {
+									const result = await copy(code);
+									if (result)
+										pushToast({
+											message: 'Code copied to clipboard',
+											type: 'success',
+											duration: 1500,
+										});
+									else
+										pushToast({
+											message: 'Unable to copy to clipboard',
+											type: 'error',
+											duration: 1500,
+										});
+								}}
+								onToolTip={pushTip}
+							/>
+						</div>
+					)}
 				</figcaption>
 			)}
 			<div className={styles.highlight}>
@@ -172,28 +206,6 @@ export function CodeBlock({
 					</code>
 				</pre>
 			</div>
-			{showCopy && (
-				<div className={styles.copyButton}>
-					<IconButton
-						icon={getCopyIcon()}
-						actionName={filename ? `Copy ${filename}` : 'Copy code'}
-						iconSize={18}
-						toggle={false}
-						tooltip={'Copy code'}
-						backgroundColorHover={isCopied ? 'feedback-positive' : 'core-surface-primary'}
-						backgroundColor={isCopied ? 'feedback-positive' : 'core-surface-primary'}
-						borderColor={isCopied ? 'feedback-positive' : 'core-fill-primary'}
-						borderWidth={0}
-						disabled={isRequesting}
-						onClick={async () => {
-							const result = await copy(code);
-							if (result) pushToast({ message: 'Code copied to clipboard', type: 'success', duration: 1500 });
-							else pushToast({ message: 'Unable to copy to clipboard', type: 'error', duration: 1500 });
-						}}
-						onToolTip={pushTip}
-					/>
-				</div>
-			)}
 			<span className={styles.status} role="status">
 				{isCopied ? 'Code copied to clipboard.' : error ? 'Unable to copy code. Please try again.' : ''}
 			</span>

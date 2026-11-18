@@ -280,3 +280,15 @@ export type { FileItem, FileListProps } from './components/FileList';
 
 export { Attachment, ContentType } from './components/Attachment';
 export type { AttachmentProps, Content, ContentFormat } from './components/Attachment';
+
+export { Card, CardTitle, CardContent, CardImage, CardFooter } from './components/Card';
+export type { CardProps, CardTitleProps, CardContentProps, CardImageProps, CardFooterProps } from './components/Card';
+
+export { InfoBox, InfoBoxTitle, InfoBoxContent, InfoBoxImage, InfoBoxAction } from './components/InfoBox';
+export type {
+	InfoBoxProps,
+	InfoBoxTitleProps,
+	InfoBoxContentProps,
+	InfoBoxImageProps,
+	InfoBoxActionProps,
+} from './components/InfoBox';

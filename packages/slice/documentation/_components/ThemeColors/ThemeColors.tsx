@@ -1,8 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { FlexBox, Tip, Toast, type ToolTip, useToolTip } from 'src';
 import { coreColors, dark, light } from '../../../src/theme/colors/colors';
-import { coreGreyRecipes } from '../../../src/theme/colors/palette';
-import { neutralThemeRecipes } from '../../../src/theme/colors/recipes';
+import { addOpacity } from '../../../src/utils/functions/colors';
 import { ColorTile } from '../ColorTile/ColorTile';
 
 type ColorMap = Record<string, string>;
@@ -28,21 +27,18 @@ function groupColors(colors: ColorMap): ColorGroup[] {
 	}));
 }
 
-function getReferencedCoreColors(themeColors: ColorMap, mode: 'light' | 'dark'): ColorMap {
+function getReferencedCoreColors(themeColors: ColorMap): ColorMap {
 	// Build lookup from core value -> core token keys.
 	const valueToCoreKeys = new Map<string, string[]>();
 	for (const [key, value] of Object.entries(coreColors)) {
-		const current = valueToCoreKeys.get(value) ?? [];
+		const current = valueToCoreKeys.get(addOpacity(value, 1)) ?? [];
 		current.push(key);
-		valueToCoreKeys.set(value, current);
+		valueToCoreKeys.set(addOpacity(value, 1), current);
 	}
 
 	const referencedCoreKeys = new Set<string>();
-	for (const [token, recipe] of Object.entries(neutralThemeRecipes)) {
-		if (token in themeColors) referencedCoreKeys.add(coreGreyRecipes[recipe][mode].token);
-	}
 	for (const value of Object.values(themeColors)) {
-		const keys = valueToCoreKeys.get(value);
+		const keys = valueToCoreKeys.get(addOpacity(value, 1));
 		if (!keys) continue;
 		for (const key of keys) referencedCoreKeys.add(key);
 	}
@@ -63,7 +59,7 @@ function ReferencedCoreColors(props: Readonly<{ mode: 'light' | 'dark' }>) {
 	const coords = useToolTip(tip, tipRef);
 	const { mode } = props;
 	const modeColors = mode === 'light' ? light : dark;
-	const groupedColors = groupColors(getReferencedCoreColors(modeColors, mode));
+	const groupedColors = groupColors(getReferencedCoreColors(modeColors));
 
 	const handleCopy = useCallback((token: string, hex: string) => {
 		setMessage('Copied to clipboard');

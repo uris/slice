@@ -234,8 +234,17 @@ export const text: ColorTokenRow[] = [
 export const buttonsAndBadges: ColorTokenRow[] = [
 	{
 		token: 'core-button-primary',
-		lightHex: '#036ECF',
-		darkHex: '#036ECF',
+		lightHex: '#000000',
+		darkHex: '#FFFFFF',
+		opacity: {
+			light: 1,
+			dark: 1,
+		},
+	},
+	{
+		token: 'core-button-secondary',
+		lightHex: '#FFFFFF',
+		darkHex: '#1F1E1E',
 		opacity: {
 			light: 1,
 			dark: 1,

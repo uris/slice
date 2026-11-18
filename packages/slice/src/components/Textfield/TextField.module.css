@@ -69,9 +69,21 @@
 }
 .input::placeholder {
 	color: var(--tf-placeholder-color);
+	-webkit-text-fill-color: var(--tf-placeholder-color);
+	opacity: 1;
 }
 .input:-webkit-autofill {
+	/* Safari allows the clear fill; clipping also hides Chromium's autofill fill. */
+	background-color: transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
+	caret-color: var(--tf-text-color);
+}
+.input:-webkit-autofill:not(:placeholder-shown) {
 	-webkit-text-fill-color: var(--tf-text-color);
+}
+.input:placeholder-shown {
+	-webkit-text-fill-color: var(--tf-placeholder-color);
 }
 .leadingIcon {
 	display: inline-flex;
@@ -86,7 +98,7 @@
 	height: 18px;
 }
 .clearButton {
-	display: inline-flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
 	flex: 0 0 var(--tf-clear-size);
@@ -98,10 +110,9 @@
 	background: transparent;
 	appearance: none;
 	cursor: pointer;
-	visibility: hidden;
 }
 .wrapper:focus-within .clearButton[data-has-value] {
-	visibility: visible;
+	display: inline-flex;
 }
 .clearButton:disabled {
 	cursor: default;

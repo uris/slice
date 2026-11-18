@@ -315,7 +315,7 @@ export const HoverTint: Story = {
 	play: async ({ canvasElement }) => {
 		const button = within(canvasElement).getByRole('button');
 		await userEvent.hover(button);
-		await waitFor(() => expect(button).toHaveStyle({ backgroundColor: 'rgb(51, 51, 51)' }));
+		await waitFor(() => expect(getComputedStyle(button).backgroundColor).toBe('color(srgb 0.2 0.2 0.2)'));
 		await userEvent.unhover(button);
 		await waitFor(() => expect(button).toHaveStyle({ backgroundColor: 'rgb(0, 0, 0)' }));
 	},
@@ -360,10 +360,10 @@ export const SizeDefaults: Story = {
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		for (const [size, height, inset, radius] of [
-			['s', 28, 4, 12],
-			['m', 36, 4, 18],
-			['l', 44, 6, 22],
-			['xl', 56, 10, 28],
+			['s', 28, 4, 8],
+			['m', 32, 4, 8],
+			['l', 44, 6, 8],
+			['xl', 56, 10, 8],
 		] as const) {
 			const group = canvas.getByRole('group', { name: size });
 			await expect(within(group).getByRole('button')).toHaveStyle({ height: `${height}px` });
@@ -389,7 +389,7 @@ export const IconMinimum: Story = {
 	play: async ({ canvasElement }) => {
 		const svg = within(canvasElement).getByRole('button').querySelector('svg');
 		await expect(svg).toHaveAttribute('width', '14');
-		await expect(svg?.querySelector('[stroke-width]')).toHaveAttribute('stroke-width', '1.5');
+		await expect(svg?.querySelector('[stroke-width]')).toHaveAttribute('stroke-width', '1.25');
 	},
 };
 
@@ -730,7 +730,7 @@ export const InputSizesAndOrientation: Story = {
 		for (const orientation of ['horizontal', 'vertical']) {
 			for (const [size, height] of [
 				['s', 28],
-				['m', 36],
+				['m', 32],
 				['l', 44],
 				['xl', 56],
 			] as const) {

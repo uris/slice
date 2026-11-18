@@ -3,8 +3,10 @@ import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { motion, useAnimationControls, usePresence } from 'motion/react';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
+import { opacityFromColor, tintFromColor } from '../../utils';
 import { setStyle as resolveStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { reduceMotionVariants } from '../../utils/styling/reduceMotionTargets';
@@ -19,6 +21,8 @@ import type { ButtonHandle, ButtonProps } from './_types';
 
 const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonRef: React.Ref<ButtonHandle>) => {
 	const props = resolveColorProps(rawProps);
+	const { isDark } = useTheme();
+	const primaryForeground = isDark ? 'var(--core-text-dark)' : 'var(--core-text-light)';
 	const reduceMotion = usePrefersReducedMotion();
 	const motionControls = useAnimationControls();
 	const [isPresent, safeToRemove] = usePresence();
@@ -183,7 +187,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		(icon: boolean) => {
 			if (icon) {
 				if (btnState === 'disabled') return 'var(--core-text-disabled)';
-				if (variant === 'solid') return 'var(--core-text-light)';
+				if (variant === 'primary') return 'var(--core-text-light)';
 			}
 			if (destructive) return 'var(--feedback-warning)';
 			return 'var(--core-text-primary)';
@@ -192,13 +196,13 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	);
 
 	// resolve color tokens for the solid button variant
-	const solid = useMemo(() => {
+	const primary = useMemo(() => {
 		return {
 			border: '0px',
 			iconColor: {
-				normal: iconColor || destructiveColor(true),
-				hover: iconColor || destructiveColor(true),
-				disabled: iconColor || destructiveColor(true),
+				normal: iconColor || (destructive ? destructiveColor(true) : primaryForeground),
+				hover: iconColor || (destructive ? destructiveColor(true) : primaryForeground),
+				disabled: iconColor || (destructive ? destructiveColor(true) : 'var(--core-text-disabled)'),
 			},
 			background: {
 				normal: resolvedBackgroundColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-button-primary)'),
@@ -210,9 +214,46 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				hover: 'transparent',
 				disabled: 'transparent',
 			},
+			outlineColor: opacityFromColor(resolvedBackgroundColor || 'var(--core-button-primary)', 20),
 			color: {
-				normal: textColor || (destructive ? 'white' : 'var(--core-text-light)'),
-				hover: textColor || (destructive ? 'white' : 'var(--core-text-light)'),
+				normal: textColor || (destructive ? 'white' : primaryForeground),
+				hover: textColor || (destructive ? 'white' : primaryForeground),
+				disabled: 'var(--core-text-disabled)',
+			},
+		};
+	}, [
+		textColor,
+		destructive,
+		destructiveColor,
+		resolvedBackgroundColor,
+		resolvedBackgroundColorDisabled,
+		iconColor,
+		primaryForeground,
+	]);
+
+	// resolve color tokens for the solid button variant
+	const secondary = useMemo(() => {
+		return {
+			border: '1px',
+			iconColor: {
+				normal: iconColor || destructiveColor(true),
+				hover: iconColor || destructiveColor(true),
+				disabled: iconColor || destructiveColor(true),
+			},
+			background: {
+				normal: resolvedBackgroundColor || 'var(--core-surface-secondary)',
+				hover: tintFromColor(resolvedBackgroundColor || 'var(--core-surface-secondary)', 5),
+				disabled: resolvedBackgroundColorDisabled || 'var(--core-surface-secondary)',
+			},
+			borderColor: {
+				normal: destructive ? 'var(--feedback-warning)' : 'var(--core-fill-primary)',
+				hover: destructive ? 'var(--feedback-warning)' : 'var(--core-fill-primary)',
+				disabled: 'var(--core-fill-primary)',
+			},
+			outlineColor: 'var(--core-fill-primary)',
+			color: {
+				normal: textColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-primary)'),
+				hover: textColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-primary)'),
 				disabled: 'var(--core-text-disabled)',
 			},
 		};
@@ -228,18 +269,19 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				disabled: iconColor || destructiveColor(true),
 			},
 			background: {
-				normal: resolvedBackgroundColor || 'var(--core-surface-primary)',
-				hover: resolvedBackgroundColor || 'var(--core-surface-primary)',
-				disabled: resolvedBackgroundColorDisabled || 'var(--core-surface-primary)',
+				normal: resolvedBackgroundColor || 'transparent',
+				hover: tintFromColor(resolvedBackgroundColor || 'transparent', 5),
+				disabled: resolvedBackgroundColorDisabled || 'transparent',
 			},
 			borderColor: {
 				normal: destructive ? 'var(--feedback-warning)' : 'var(--core-outline-primary)',
 				hover: destructive ? 'var(--feedback-warning)' : 'var(--core-outline-primary)',
 				disabled: 'var(--core-outline-primary)',
 			},
+			outlineColor: 'var(--core-fill-primary)',
 			color: {
 				normal: textColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-primary)'),
-				hover: textColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-special)'),
+				hover: textColor || (destructive ? 'var(--feedback-warning)' : 'var(--core-text-primary)'),
 				disabled: 'var(--core-text-disabled)',
 			},
 		};
@@ -264,6 +306,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				hover: 'transparent',
 				disabled: 'transparent',
 			},
+			outlineColor: 'var(--core-fill-primary)',
 			color: {
 				normal: textColor || destructiveColor(false),
 				hover: textColor || destructiveColor(false),
@@ -275,11 +318,12 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	// group variant-specific color styles into a single lookup map
 	const colorStyles = useMemo(() => {
 		return {
-			solid,
+			primary,
+			secondary,
 			outline,
 			text,
 		};
-	}, [solid, outline, text]);
+	}, [primary, secondary, outline, text]);
 
 	const resolvedBorderWidth = resolveStyle(borderWidth, colorStyles[variant].border);
 	const resolvedBorderColor = borderColor ?? colorStyles[variant].borderColor[btnState];
@@ -385,7 +429,7 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		...(resolvedPaddingLeft === undefined ? {} : { paddingLeft: resolvedPaddingLeft }),
 		...(paddingTop === undefined ? {} : { paddingTop }),
 		...(paddingBottom === undefined ? {} : { paddingBottom }),
-		borderRadius: borderRadius ?? corners['corner-round'],
+		borderRadius: borderRadius ?? corners['corner-m'],
 		height,
 		maxHeight: autoSize ? 'unset' : height,
 		minHeight: autoSize ? 0 : height,
@@ -430,8 +474,20 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 			'--ui-button-icon-size': iconDivSize,
 			'--ui-button-gap': `${resolvedGap}px`,
 			'--ui-button-padding': getPadding(),
+			'--ui-button-outline-color': colorStyles[variant].outlineColor,
 		} as React.CSSProperties;
-	}, [underline, iconDivSize, resolvedGap, padding, round, autoSize, verticalPadding, bottomPadding]);
+	}, [
+		underline,
+		iconDivSize,
+		resolvedGap,
+		padding,
+		round,
+		autoSize,
+		verticalPadding,
+		bottomPadding,
+		colorStyles,
+		variant,
+	]);
 
 	/* START.DEBUG */
 	useTrackRenders(props, 'Button');

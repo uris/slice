@@ -26,8 +26,8 @@ const meta: Meta<typeof FlexBox> = {
 			mapping: {
 				Buttons: (
 					<>
-						<Button label="Button 1" variant={'solid'} />
-						<Button label="Button 2" variant={'solid'} />
+						<Button label="Button 1" variant={'primary'} />
+						<Button label="Button 2" variant={'primary'} />
 					</>
 				),
 				ShortText: 'This is some text',
@@ -563,6 +563,7 @@ function MotionValueLayout() {
 		</>
 	);
 }
+
 export const MotionValueStyles: StoryObj<typeof FlexBox> = {
 	tags: ['tests'],
 	render: () => <MotionValueLayout />,

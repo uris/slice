@@ -70,13 +70,13 @@ Colors accept Slice tokens or CSS colors. Shared style overrides apply only when
 <tr><td><code>backgroundColor</code></td><td><code>ColorValue</code></td><td><code>core-surface-secondary</code></td><td>Surface color for the wrapper and all buttons. When omitted, individual button backgrounds are preserved.</td></tr>
 <tr><td><code>backgroundColorDisabled</code></td><td><code>ColorValue</code></td><td><code>Button variant default</code></td><td>Shared disabled button background.</td></tr>
 <tr><td><code>backgroundColorHover</code></td><td><code>ColorValue</code></td><td><code>derived from hoverTint</code></td><td>Explicit hover background; takes precedence over the derived tint.</td></tr>
-<tr><td><code>borderColor</code></td><td><code>ColorValue</code></td><td><code>core-fill-primary</code></td><td>Wrapper border color; children have no borders.</td></tr>
-<tr><td><code>borderColorFocused</code></td><td><code>ColorValue</code></td><td><code>core-fill-secondary</code></td><td>Wrapper border color while a child has focus. Composed fields use this instead of an inner outline.</td></tr>
-<tr><td><code>borderRadius</code></td><td><code>number  /  string</code></td><td><code>half buttonSize</code></td><td>Wrapper corner radius. Numeric sizes use half their pixel value; auto uses 18px.</td></tr>
+<tr><td><code>borderColor</code></td><td><code>ColorValue</code></td><td><code>core-outline-primary</code></td><td>Wrapper border color; children have no borders.</td></tr>
+<tr><td><code>borderColorFocused</code></td><td><code>ColorValue</code></td><td><code>core-outline-primary</code></td><td>Wrapper border color while a child has focus. Composed fields use this instead of an inner outline.</td></tr>
+<tr><td><code>borderRadius</code></td><td><code>number  /  string</code></td><td><code>corner-m</code></td><td>Wrapper corner radius, defaulting to 8px.</td></tr>
 <tr><td><code>borderStyle</code></td><td><code>CSSProperties[&#x27;borderStyle&#x27;]</code></td><td><code>solid</code></td><td>Wrapper border style.</td></tr>
 <tr><td><code>borderWidth</code></td><td><code>number  /  string</code></td><td><code>1</code></td><td>Wrapper border thickness. Numbers use pixels.</td></tr>
 <tr><td><code>buttons</code></td><td><code>ButtonProps[]</code></td><td><code>[]</code></td><td>Button definitions rendered before composed Button children.</td></tr>
-<tr><td><code>buttonSize</code></td><td><code>s  /  m  /  l  /  xl  /  auto  /  number</code></td><td><code>m</code></td><td>Shared button size: 24, 36, 44, or 56px. Small buttons add 2px top and bottom by default for a 28px frame. Numeric padding contributes to that small frame; CSS string padding is applied within its fixed frame. Auto follows content.</td></tr>
+<tr><td><code>buttonSize</code></td><td><code>s  /  m  /  l  /  xl  /  auto  /  number</code></td><td><code>m</code></td><td>Shared button size: 24, 32, 44, or 56px. Small buttons add 2px top and bottom by default for a 28px frame. Numeric padding contributes to that small frame; CSS string padding is applied within its fixed frame. Auto follows content.</td></tr>
 <tr><td><code>children</code></td><td><code>ReactNode</code></td><td><code>undefined</code></td><td>Only direct Button and TextField elements are processed. TextField is forced to simple/persistent, uses the bar height, and retains its own width and value callbacks. Other nodes, including fragments and custom wrapper components, are ignored.</td></tr>
 <tr><td><code>destructive</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shared destructive Button styling.</td></tr>
 <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables every button and field when supplied; false also overrides disabled child values.</td></tr>
@@ -92,8 +92,8 @@ Colors accept Slice tokens or CSS colors. Shared style overrides apply only when
 <tr><td><code>iconColor</code></td><td><code>ColorValue</code></td><td><code>core-text-secondary</code></td><td>Shared icon color; individual child colors are retained when omitted.</td></tr>
 <tr><td><code>iconColorHover</code></td><td><code>ColorValue</code></td><td><code>core-text-primary</code></td><td>Shared hover icon color.</td></tr>
 <tr><td><code>iconDualTone</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Passes Button dual-tone behavior through to its icons.</td></tr>
-<tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>20</code></td><td>Icon dimensions in pixels, clamped to a 14px minimum.</td></tr>
-<tr><td><code>iconStrokeWidth</code></td><td><code>number</code></td><td><code>1.5 at 14px; otherwise 1.25</code></td><td>Explicit icon stroke width overrides the size-dependent default.</td></tr>
+<tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>18</code></td><td>Icon dimensions in pixels, clamped to a 14px minimum.</td></tr>
+<tr><td><code>iconStrokeWidth</code></td><td><code>number</code></td><td><code>1.25</code></td><td>Explicit icon stroke width overrides the size-dependent default.</td></tr>
 <tr><td><code>initial</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Motion initial target forwarded to each Button.</td></tr>
 <tr><td><code>inset</code></td><td><code>number  /  string</code></td><td><code>4; l: 6; xl: 10; vertical: 0</code></td><td>Extra left/right space inside edge button backgrounds. Horizontal bars apply it at the first and last item, including fields; vertical bars apply it on both sides of every item. Zero is respected.</td></tr>
 <tr><td><code>orientation</code></td><td><code>horizontal  /  vertical</code></td><td><code>horizontal</code></td><td>Stack direction. Vertical buttons fill the bar width.</td></tr>
@@ -108,7 +108,7 @@ Colors accept Slice tokens or CSS colors. Shared style overrides apply only when
 <tr><td><code>textSize</code></td><td><code>xs  /  s  /  m  /  l  /  xl</code></td><td><code>m</code></td><td>Shared text size, independent of buttonSize.</td></tr>
 <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>Button default</code></td><td>Motion transition forwarded to each Button.</td></tr>
 <tr><td><code>underline</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Underline Button content on hover and keyboard focus.</td></tr>
-<tr><td><code>variant</code></td><td><code>solid  /  outline  /  text</code></td><td><code>outline</code></td><td>Shared Button variant. The wrapper always owns borders and corners.</td></tr>
+<tr><td><code>variant</code></td><td><code>primary  /  secondary  /  outline  /  text</code></td><td><code>outline</code></td><td>Shared Button variant. The wrapper always owns borders and corners.</td></tr>
 <tr><td><code>variants</code></td><td><code>Variants</code></td><td><code>undefined</code></td><td>Motion variants forwarded to each Button.</td></tr>
 <tr><td><code>width</code></td><td><code>string</code></td><td><code>content width</code></td><td>Wrapper width; fill means 100%. Vertical child buttons fill this width.</td></tr>
 <tr><td><code>...divAttributes</code></td><td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td><td><code>undefined</code></td><td>Other non-event DOM attributes apply to the group wrapper. className is appended; component geometry takes precedence over style. Supply aria-label or aria-labelledby to name the group.</td></tr>

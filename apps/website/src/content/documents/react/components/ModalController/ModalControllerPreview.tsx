@@ -10,7 +10,7 @@ function PreviewActions() {
 		<>
 			<Button label="Cancel" backgroundColor={'transparent'} variant="outline" onClick={close} width={'fill'} />
 			<Button
-				variant={'solid'}
+				variant={'secondary'}
 				backgroundColor={'core-text-light'}
 				textColor={'core-text-dark'}
 				label="Archive"

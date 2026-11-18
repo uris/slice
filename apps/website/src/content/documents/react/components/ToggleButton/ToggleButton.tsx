@@ -175,7 +175,7 @@ export function ToggleButtonDoc() {
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'4'}</DefaultVal>
+				<DefaultVal>{'corner-m'}</DefaultVal>
 			</Definition>
 			<P>{'Corner radius. Numbers are pixels; zero gives square corners.'}</P>
 			<Definition id={'borderWidth'}>
@@ -191,10 +191,10 @@ export function ToggleButtonDoc() {
 			</Definition>
 			<P>
 				{
-					'Minimum frame height and width: s=24, m=36, l=44, xl=56px. A positive finite number sets a custom minimum. Content and '
+					'Minimum frame height and width: s=24, m=32, l=44, xl=56px. A positive finite number sets a custom minimum. Content and '
 				}
 				<Code>padding</Code>
-				{' can make the button larger; invalid sizes fall back to 36px.'}
+				{' can make the button larger; invalid sizes fall back to 32px.'}
 			</P>
 			<Definition id={'children'}>
 				<Prop>children</Prop>
@@ -341,9 +341,9 @@ export function ToggleButtonDoc() {
 			<Definition id={'iconSize'}>
 				<Prop>iconSize</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'20'}</DefaultVal>
+				<DefaultVal>{'18'}</DefaultVal>
 			</Definition>
-			<P>{'Icon size in pixels. Negative or nonfinite values fall back to 20px; zero hides its geometry.'}</P>
+			<P>{'Icon size in pixels. Negative or nonfinite values fall back to 18px; zero hides its geometry.'}</P>
 			<Definition id={'iconStrokeWidth'}>
 				<Prop>iconStrokeWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>

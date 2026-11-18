@@ -194,7 +194,7 @@ export function TextAreaDoc() {
 			<Definition id={'borderColor'}>
 				<Prop>borderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-fill-primary'}</DefaultVal>
+				<DefaultVal>{'core-outline-primary'}</DefaultVal>
 			</Definition>
 			<P>{'Outline color while not focused or in an error state.'}</P>
 
@@ -214,7 +214,7 @@ export function TextAreaDoc() {
 			<Definition id={'borderColorFocused'}>
 				<Prop>borderColorFocused</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-fill-secondary'}</DefaultVal>
+				<DefaultVal>{'core-outline-primary'}</DefaultVal>
 			</Definition>
 			<P>
 				{'Outline color while focused, unless '}
@@ -227,7 +227,7 @@ export function TextAreaDoc() {
 			<Definition id={'borderRadius'}>
 				<Prop>borderRadius</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'12'}</DefaultVal>
+				<DefaultVal>{'8'}</DefaultVal>
 			</Definition>
 			<P>{'Field corner radius. Numbers are pixels; CSS values pass through.'}</P>
 

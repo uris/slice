@@ -24,6 +24,17 @@ const documents: Record<Package, ReadonlyMap<string, DocumentLoader>> = {
 
 		['data-table', () => import('@/documents/react/components/DataTable/DataTable')],
 		['camera', () => import('@/documents/react/components/Camera/Camera')],
+		['info-box', () => import('@/documents/react/components/InfoBox/InfoBox')],
+		['info-box-title', () => import('@/documents/react/components/InfoBoxTitle/InfoBoxTitle')],
+		['info-box-content', () => import('@/documents/react/components/InfoBoxContent/InfoBoxContent')],
+		['info-box-image', () => import('@/documents/react/components/InfoBoxImage/InfoBoxImage')],
+		['info-box-action', () => import('@/documents/react/components/InfoBoxAction/InfoBoxAction')],
+		['card', () => import('@/documents/react/components/Card/Card')],
+		['card-title', () => import('@/documents/react/components/CardTitle/CardTitle')],
+		['card-content', () => import('@/documents/react/components/CardContent/CardContent')],
+		['card-image', () => import('@/documents/react/components/CardImage/CardImage')],
+		['card-footer', () => import('@/documents/react/components/CardFooter/CardFooter')],
+
 		['video-controller', () => import('@/documents/react/components/VideoController/VideoController')],
 		['video', () => import('@/documents/react/components/Video/Video')],
 		['spacer', () => import('@/documents/react/components/Spacer/Spacer')],

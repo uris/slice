@@ -18,13 +18,13 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 	const {
 		borderRadius = 'var(--corner-round)',
 		knobRadius = 'var(--corner-round)',
-		knobWidth = 26,
+		knobWidth = 20,
 		name,
 		checked,
 		defaultChecked = false,
 		value,
 		height = 22,
-		width = 48,
+		width = 36,
 		padding,
 		transition,
 		backgroundColorOn = 'var(--feedback-positive)',
@@ -46,7 +46,7 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 	const motionTransition = getWaterTransition(themeMotion, transition);
 	const backgroundColor = on ? backgroundColorOn : backgroundColorOff;
 	const resolvedHeight = Number.isFinite(height) && height > 0 ? Math.max(1, height) : 22;
-	const resolvedWidth = Math.max(resolvedHeight, Number.isFinite(width) && width > 0 ? width : 48);
+	const resolvedWidth = Math.max(resolvedHeight, Number.isFinite(width) && width > 0 ? width : 36);
 	const resolvedPadding = padding === undefined || !Number.isFinite(padding) ? 'var(--spacing-xxs)' : `${padding}px`;
 	const cssVars = {
 		'--switch-width': `${resolvedWidth}px`,
@@ -56,7 +56,7 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 		'--switch-knob-color': knobColor,
 		'--switch-border-radius': radiusValue(borderRadius),
 		'--switch-knob-radius': radiusValue(knobRadius),
-		'--switch-knob-width': `clamp(1px, ${Number.isFinite(knobWidth) && knobWidth > 0 ? knobWidth : 26}px, calc(var(--switch-width) - var(--switch-padding) * 2))`,
+		'--switch-knob-width': `clamp(1px, ${Number.isFinite(knobWidth) && knobWidth > 0 ? knobWidth : 20}px, calc(var(--switch-width) - var(--switch-padding) * 2))`,
 	} as React.CSSProperties;
 
 	/* START.DEBUG */

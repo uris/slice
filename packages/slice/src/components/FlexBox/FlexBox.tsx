@@ -65,7 +65,15 @@ const AnimatedFlexBox = React.forwardRef<HTMLDivElement, HTMLMotionProps<'div'>>
 		<motion.div
 			{...rest}
 			ref={ref}
-			transition={reducedMotion ? { duration: 0, delay: 0, repeat: 0 } : getWaterTransition(current.motion, transition)}
+			transition={
+				reducedMotion
+					? {
+							duration: 0,
+							delay: 0,
+							repeat: 0,
+						}
+					: getWaterTransition(current.motion, transition)
+			}
 			variants={motionVariants}
 			initial={reducedMotion ? false : initial}
 			animate={motionTarget}

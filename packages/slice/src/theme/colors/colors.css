@@ -2,22 +2,22 @@
 
 /* Shared effects and neutral surface values. */
 [data-slice-theme-scope] {
-	--core-drop-shadow-light: rgba(0, 0, 0, 0.1);
 	--core-drop-shadow-dark: rgba(0, 0, 0, 0.48);
-	--core-surface-coverup-translucent-light: rgba(0, 0, 0, 0.32);
+	--core-drop-shadow-light: rgba(0, 0, 0, 0.1);
 	--core-surface-coverup-translucent-dark: rgba(0, 0, 0, 0.48);
-	--core-surface-overlay-translucent-light: rgba(255, 255, 255, 0.8);
+	--core-surface-coverup-translucent-light: rgba(0, 0, 0, 0.32);
 	--core-surface-overlay-translucent-dark: rgba(31, 30, 30, 0.8);
-	--surface-primary-tint-light: #f7f6f5;
-	--surface-primary-tint-dark: #1e1e1d;
-	--scroll-bar-light: #d6d5d4;
+	--core-surface-overlay-translucent-light: rgba(255, 255, 255, 0.8);
 	--scroll-bar-dark: #3c3c3b;
-	--scroll-bar-hover-light: #cccbca;
 	--scroll-bar-hover-dark: #4a4949;
-	--surface-shadow-soft-light: 0px 4px 24px rgba(0, 0, 0, 0.1);
+	--scroll-bar-hover-light: #cccbca;
+	--scroll-bar-light: #d6d5d4;
+	--surface-primary-tint-dark: #1e1e1d;
+	--surface-primary-tint-light: #f7f6f5;
 	--surface-shadow-soft-dark: 0px 4px 24px rgba(0, 0, 0, 0.48);
-	--surface-shadow-strong-light: 0px 4px 64px rgba(0, 0, 0, 0.1);
+	--surface-shadow-soft-light: 0px 4px 24px rgba(0, 0, 0, 0.1);
 	--surface-shadow-strong-dark: 0px 4px 64px rgba(0, 0, 0, 0.48);
+	--surface-shadow-strong-light: 0px 4px 64px rgba(0, 0, 0, 0.1);
 }
 
 /* Root-level token needed for global viewport backgrounds */
@@ -27,51 +27,35 @@
 
 /* Light theme tokens */
 :root[data-slice-theme="lightMode"] [data-slice-theme-scope] {
-	--core-text-primary: var(--core-grey-1000);
-	--core-text-secondary: color-mix(in srgb, var(--core-grey-795) 60%, transparent);
-	--core-text-tertiary: color-mix(in srgb, var(--core-grey-795) 30%, transparent);
-	--core-text-quaternary: color-mix(in srgb, var(--core-grey-795) 18%, transparent);
-	--core-text-disabled: color-mix(in srgb, var(--core-grey-795) 18%, transparent);
-	--core-icon-primary: var(--core-grey-1000);
-	--core-icon-secondary: color-mix(in srgb, var(--core-grey-795) 60%, transparent);
-	--core-icon-disabled: color-mix(in srgb, var(--core-grey-795) 18%, transparent);
-	--core-fill-primary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
-	--core-fill-secondary: color-mix(in srgb, var(--core-grey-820) 30%, transparent);
-	--core-fill-tertiary: color-mix(in srgb, var(--core-grey-595) 20%, transparent);
-	--core-button-disabled: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
-	--core-badge-secondary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
-	--core-surface-primary: var(--core-grey-0);
-	--core-surface-secondary: var(--core-grey-50);
-	--core-surface-elevated: var(--core-grey-0);
-	--core-surface-liquid-glass: color-mix(in srgb, var(--core-grey-0) 80%, transparent);
-	--core-surface-overlay-translucent: color-mix(in srgb, var(--core-grey-0) 80%, transparent);
 	--array-blue: color-mix(in srgb, var(--core-blue-500) 10%, transparent);
 	--array-blue-accent: var(--core-blue-700);
 	--array-cyan: color-mix(in srgb, var(--core-cyan-500) 10%, transparent);
 	--array-cyan-accent: var(--core-cyan-800);
 	--array-lime: color-mix(in srgb, var(--core-lime-500) 10%, transparent);
 	--array-lime-accent: var(--core-lime-700);
-	--array-pink: color-mix(in srgb, var(--core-pink-500) 10%, transparent);
-	--array-pink-accent: var(--core-pink-700);
 	--array-orange: color-mix(in srgb, var(--core-orange-500) 10%, transparent);
 	--array-orange-accent: var(--core-orange-700);
+	--array-pink: color-mix(in srgb, var(--core-pink-500) 10%, transparent);
+	--array-pink-accent: var(--core-pink-700);
 	--array-purple: color-mix(in srgb, var(--core-purple-500) 10%, transparent);
 	--array-purple-accent: var(--core-purple-600);
 	--array-yellow: color-mix(in srgb, var(--core-yellow-500) 10%, transparent);
 	--array-yellow-accent: var(--core-yellow-700);
-	--core-red: var(--core-red-500);
-	--core-orange: var(--core-orange-500);
-	--core-yellow: var(--core-yellow-500);
-	--core-lime: var(--core-lime-500);
-	--core-green: var(--core-green-500);
-	--core-mint: var(--core-mint-500);
-	--core-teal: var(--core-teal-500);
-	--core-cyan: var(--core-cyan-500);
+	--core-badge-primary: var(--core-grey-1000);
+	--core-badge-secondary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
 	--core-blue: var(--core-blue-500);
-	--core-indigo: var(--core-indigo-500);
-	--core-purple: var(--core-purple-500);
-	--core-pink: var(--core-pink-500);
 	--core-brown: var(--core-brown-500);
+	--core-button-disabled: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
+	--core-button-primary: var(--core-grey-1000);
+	--core-button-secondary: var(--core-grey-0);
+	--core-cyan: var(--core-cyan-500);
+	--core-drop-shadow: var(--core-drop-shadow-light);
+	--core-fill-primary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
+	--core-fill-secondary: color-mix(in srgb, var(--core-grey-820) 30%, transparent);
+	--core-fill-tertiary: color-mix(in srgb, var(--core-grey-595) 20%, transparent);
+	--core-gp-logo-primary: var(--core-blue-700);
+	--core-gp-logo-secondary: var(--core-grey-1000);
+	--core-green: var(--core-green-500);
 	--core-grey: var(--core-grey-500);
 	--core-grey-1: var(--core-grey-500);
 	--core-grey-2: var(--core-grey-350);
@@ -79,28 +63,45 @@
 	--core-grey-4: var(--core-grey-185);
 	--core-grey-5: var(--core-grey-95);
 	--core-grey-6: var(--core-grey-40);
-	--core-badge-primary: var(--core-blue-600);
-	--core-button-primary: var(--core-blue-600);
-	--core-drop-shadow: var(--core-drop-shadow-light);
-	--core-gp-logo-primary: var(--core-blue-700);
-	--core-gp-logo-secondary: var(--core-grey-1000);
 	--core-icon-dark: var(--core-grey-1000);
+	--core-icon-disabled: color-mix(in srgb, var(--core-grey-795) 18%, transparent);
 	--core-icon-error: var(--core-red-600);
 	--core-icon-light: var(--core-grey-0);
+	--core-icon-primary: var(--core-grey-1000);
+	--core-icon-secondary: color-mix(in srgb, var(--core-grey-795) 60%, transparent);
 	--core-icon-tertiary: var(--core-blue-500);
-	--core-outline-secondary: var(--core-grey-95);
+	--core-indigo: var(--core-indigo-500);
+	--core-lime: var(--core-lime-500);
+	--core-link-primary: var(--core-blue-600);
+	--core-mint: var(--core-mint-500);
+	--core-orange: var(--core-orange-500);
 	--core-outline-primary: var(--core-grey-95);
+	--core-outline-secondary: var(--core-grey-95);
 	--core-outline-special: var(--core-blue-100);
 	--core-outline-tertiary: var(--core-blue-500);
+	--core-pink: var(--core-pink-500);
+	--core-purple: var(--core-purple-500);
+	--core-red: var(--core-red-500);
 	--core-surface-coverup-translucent: var(--core-surface-coverup-translucent-light);
+	--core-surface-elevated: var(--core-grey-0);
+	--core-surface-liquid-glass: color-mix(in srgb, var(--core-grey-0) 80%, transparent);
+	--core-surface-overlay-translucent: color-mix(in srgb, var(--core-grey-0) 80%, transparent);
+	--core-surface-primary: var(--core-grey-0);
 	--core-surface-primary-tint: var(--surface-primary-tint-light);
+	--core-surface-secondary: var(--core-grey-50);
 	--core-surface-special: var(--core-blue-50);
+	--core-teal: var(--core-teal-500);
+	--core-text-accent: var(--core-cyan-500);
 	--core-text-dark: var(--core-grey-1000);
+	--core-text-disabled: color-mix(in srgb, var(--core-grey-795) 18%, transparent);
 	--core-text-error: var(--core-red-600);
 	--core-text-light: var(--core-grey-0);
+	--core-text-primary: var(--core-grey-1000);
+	--core-text-quaternary: color-mix(in srgb, var(--core-grey-795) 18%, transparent);
+	--core-text-secondary: color-mix(in srgb, var(--core-grey-795) 60%, transparent);
 	--core-text-special: var(--core-blue-600);
-	--core-text-accent: var(--core-cyan-500);
-	--core-link-primary: var(--core-blue-600);
+	--core-text-tertiary: color-mix(in srgb, var(--core-grey-795) 30%, transparent);
+	--core-yellow: var(--core-yellow-500);
 	--eor-tag-employee: var(--core-cyan-700);
 	--eor-tag-overdue: var(--core-red-600);
 	--eor-tag-paid: var(--core-lime-700);
@@ -129,51 +130,35 @@
 
 /* Dark theme tokens */
 :root[data-slice-theme="darkMode"] [data-slice-theme-scope] {
-	--core-text-primary: var(--core-grey-0);
-	--core-text-secondary: color-mix(in srgb, var(--core-grey-51) 60%, transparent);
-	--core-text-tertiary: color-mix(in srgb, var(--core-grey-51) 30%, transparent);
-	--core-text-quaternary: color-mix(in srgb, var(--core-grey-85) 18%, transparent);
-	--core-text-disabled: color-mix(in srgb, var(--core-grey-85) 18%, transparent);
-	--core-icon-primary: var(--core-grey-0);
-	--core-icon-secondary: color-mix(in srgb, var(--core-grey-51) 60%, transparent);
-	--core-icon-disabled: color-mix(in srgb, var(--core-grey-85) 18%, transparent);
-	--core-fill-primary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
-	--core-fill-secondary: color-mix(in srgb, var(--core-grey-85) 30%, transparent);
-	--core-fill-tertiary: color-mix(in srgb, var(--core-grey-595) 20%, transparent);
-	--core-button-disabled: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
-	--core-badge-secondary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
-	--core-surface-primary: var(--core-grey-975);
-	--core-surface-secondary: var(--core-grey-949);
-	--core-surface-elevated: var(--core-grey-949);
-	--core-surface-liquid-glass: color-mix(in srgb, var(--core-grey-949) 80%, transparent);
-	--core-surface-overlay-translucent: color-mix(in srgb, var(--core-grey-949) 80%, transparent);
 	--array-blue: color-mix(in srgb, var(--core-blue-500) 16%, transparent);
 	--array-blue-accent: var(--core-blue-400);
 	--array-cyan: color-mix(in srgb, var(--core-cyan-500) 16%, transparent);
 	--array-cyan-accent: var(--core-cyan-400);
 	--array-lime: color-mix(in srgb, var(--core-lime-500) 16%, transparent);
 	--array-lime-accent: var(--core-lime-400);
-	--array-pink: color-mix(in srgb, var(--core-pink-500) 16%, transparent);
-	--array-pink-accent: var(--core-pink-400);
 	--array-orange: color-mix(in srgb, var(--core-orange-500) 16%, transparent);
 	--array-orange-accent: var(--core-orange-400);
+	--array-pink: color-mix(in srgb, var(--core-pink-500) 16%, transparent);
+	--array-pink-accent: var(--core-pink-400);
 	--array-purple: color-mix(in srgb, var(--core-purple-500) 16%, transparent);
 	--array-purple-accent: var(--core-purple-400);
 	--array-yellow: color-mix(in srgb, var(--core-yellow-500) 16%, transparent);
 	--array-yellow-accent: var(--core-yellow-400);
-	--core-red: var(--core-red-450);
-	--core-orange: var(--core-orange-450);
-	--core-yellow: var(--core-yellow-400);
-	--core-lime: var(--core-lime-450);
-	--core-green: var(--core-green-450);
-	--core-mint: var(--core-mint-400);
-	--core-teal: var(--core-teal-400);
-	--core-cyan: var(--core-cyan-400);
+	--core-badge-primary: var(--core-grey-0);
+	--core-badge-secondary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
 	--core-blue: var(--core-blue-450);
-	--core-indigo: var(--core-indigo-450);
-	--core-purple: var(--core-purple-450);
-	--core-pink: var(--core-pink-450);
 	--core-brown: var(--core-brown-450);
+	--core-button-disabled: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
+	--core-button-primary: var(--core-grey-0);
+	--core-button-secondary: var(--core-grey-949);
+	--core-cyan: var(--core-cyan-400);
+	--core-drop-shadow: var(--core-drop-shadow-dark);
+	--core-fill-primary: color-mix(in srgb, var(--core-grey-565) 12%, transparent);
+	--core-fill-secondary: color-mix(in srgb, var(--core-grey-85) 30%, transparent);
+	--core-fill-tertiary: color-mix(in srgb, var(--core-grey-595) 20%, transparent);
+	--core-gp-logo-primary: var(--core-blue-450);
+	--core-gp-logo-secondary: var(--core-grey-0);
+	--core-green: var(--core-green-450);
 	--core-grey: var(--core-grey-501);
 	--core-grey-1: var(--core-grey-501);
 	--core-grey-2: var(--core-grey-660);
@@ -181,28 +166,45 @@
 	--core-grey-4: var(--core-grey-821);
 	--core-grey-5: var(--core-grey-880);
 	--core-grey-6: var(--core-grey-950);
-	--core-badge-primary: var(--core-blue-600);
-	--core-button-primary: var(--core-blue-600);
-	--core-drop-shadow: var(--core-drop-shadow-dark);
-	--core-gp-logo-primary: var(--core-blue-450);
-	--core-gp-logo-secondary: var(--core-grey-0);
 	--core-icon-dark: var(--core-grey-1000);
+	--core-icon-disabled: color-mix(in srgb, var(--core-grey-85) 18%, transparent);
 	--core-icon-error: var(--core-red-450);
 	--core-icon-light: var(--core-grey-0);
+	--core-icon-primary: var(--core-grey-0);
+	--core-icon-secondary: color-mix(in srgb, var(--core-grey-51) 60%, transparent);
 	--core-icon-tertiary: var(--core-cyan-300);
-	--core-outline-secondary: var(--core-grey-880);
+	--core-indigo: var(--core-indigo-450);
+	--core-lime: var(--core-lime-450);
+	--core-link-primary: var(--core-cyan-300);
+	--core-mint: var(--core-mint-400);
+	--core-orange: var(--core-orange-450);
 	--core-outline-primary: var(--core-grey-821);
+	--core-outline-secondary: var(--core-grey-880);
 	--core-outline-special: var(--core-cyan-900);
 	--core-outline-tertiary: var(--core-cyan-300);
+	--core-pink: var(--core-pink-450);
+	--core-purple: var(--core-purple-450);
+	--core-red: var(--core-red-450);
 	--core-surface-coverup-translucent: var(--core-surface-coverup-translucent-dark);
+	--core-surface-elevated: var(--core-grey-949);
+	--core-surface-liquid-glass: color-mix(in srgb, var(--core-grey-949) 80%, transparent);
+	--core-surface-overlay-translucent: color-mix(in srgb, var(--core-grey-949) 80%, transparent);
+	--core-surface-primary: var(--core-grey-975);
 	--core-surface-primary-tint: var(--surface-primary-tint-dark);
+	--core-surface-secondary: var(--core-grey-949);
 	--core-surface-special: var(--core-cyan-950);
+	--core-teal: var(--core-teal-400);
+	--core-text-accent: var(--core-cyan-300);
 	--core-text-dark: var(--core-grey-1000);
+	--core-text-disabled: color-mix(in srgb, var(--core-grey-85) 18%, transparent);
 	--core-text-error: var(--core-red-450);
 	--core-text-light: var(--core-grey-0);
+	--core-text-primary: var(--core-grey-0);
+	--core-text-quaternary: color-mix(in srgb, var(--core-grey-85) 18%, transparent);
+	--core-text-secondary: color-mix(in srgb, var(--core-grey-51) 60%, transparent);
 	--core-text-special: var(--core-cyan-300);
-	--core-text-accent: var(--core-cyan-300);
-	--core-link-primary: var(--core-cyan-300);
+	--core-text-tertiary: color-mix(in srgb, var(--core-grey-51) 30%, transparent);
+	--core-yellow: var(--core-yellow-400);
 	--eor-tag-employee: var(--core-cyan-700);
 	--eor-tag-overdue: var(--core-red-450);
 	--eor-tag-paid: var(--core-lime-700);
@@ -228,201 +230,267 @@
 [data-slice-theme-scope] .array-lime {
 	background: var(--array-lime);
 }
+
 [data-slice-theme-scope] .array-lime-accent {
 	color: var(--array-lime-accent);
 }
+
 [data-slice-theme-scope] .array-pink {
 	background: var(--array-pink);
 }
+
 [data-slice-theme-scope] .array-pink-accent {
 	color: var(--array-pink-accent);
 }
+
 [data-slice-theme-scope] .array-orange {
 	background: var(--array-orange);
 }
+
 [data-slice-theme-scope] .array-orange-accent {
 	color: var(--array-orange-accent);
 }
+
 [data-slice-theme-scope] .array-purple {
 	background: var(--array-purple);
 }
+
 [data-slice-theme-scope] .array-purple-accent {
 	color: var(--array-purple-accent);
 }
+
 [data-slice-theme-scope] .array-blue {
 	background: var(--array-blue);
 }
+
 [data-slice-theme-scope] .array-blue-accent {
 	color: var(--array-blue-accent);
 }
+
 [data-slice-theme-scope] .array-cyan {
 	background: var(--array-cyan);
 }
+
 [data-slice-theme-scope] .array-cyan-accent {
 	color: var(--array-cyan-accent);
 }
+
 [data-slice-theme-scope] .array-yellow {
 	background: var(--array-yellow);
 }
+
 [data-slice-theme-scope] .array-yellow-accent {
 	color: var(--array-yellow-accent);
 }
+
 [data-slice-theme-scope] .core-badge-primary {
 	background: var(--core-badge-primary);
 }
+
 [data-slice-theme-scope] .core-badge-secondary {
 	background: var(--core-badge-secondary);
 }
+
 [data-slice-theme-scope] .core-button-disabled {
 	background: var(--core-button-disabled);
 }
+
 [data-slice-theme-scope] .core-button-primary {
 	background: var(--core-button-primary);
 }
+
 [data-slice-theme-scope] .core-drop-shadow {
 	box-shadow: var(--core-drop-shadow);
 }
+
 [data-slice-theme-scope] .core-gp-logo-primary {
 	color: var(--core-gp-logo-primary);
 }
+
 [data-slice-theme-scope] .core-gp-logo-secondary {
 	color: var(--core-gp-logo-secondary);
 }
+
 [data-slice-theme-scope] .core-icon-dark {
 	color: var(--core-icon-dark);
 }
+
 [data-slice-theme-scope] .core-icon-disabled {
 	color: var(--core-icon-disabled);
 }
+
 [data-slice-theme-scope] .core-icon-error {
 	color: var(--core-icon-error);
 }
+
 [data-slice-theme-scope] .core-icon-light {
 	color: var(--core-icon-light);
 }
+
 [data-slice-theme-scope] .core-icon-primary {
 	color: var(--core-icon-primary);
 }
+
 [data-slice-theme-scope] .core-icon-secondary {
 	color: var(--core-icon-secondary);
 }
+
 [data-slice-theme-scope] .core-icon-tertiary {
 	color: var(--core-icon-tertiary);
 }
+
 [data-slice-theme-scope] .core-link-primary {
 	color: var(--core-link-primary);
 }
+
 [data-slice-theme-scope] .core-outline-primary {
 	border-color: var(--core-outline-primary);
 }
+
 [data-slice-theme-scope] .core-outline-secondary {
 	border-color: var(--core-outline-secondary);
 }
+
 [data-slice-theme-scope] .core-outline-special {
 	border-color: var(--core-outline-special);
 }
+
 [data-slice-theme-scope] .core-outline-tertiary {
 	border-color: var(--core-outline-tertiary);
 }
+
 [data-slice-theme-scope] .core-surface-coverup-translucent {
 	background: var(--core-surface-coverup-translucent);
 }
+
 [data-slice-theme-scope] .core-surface-overlay-translucent {
 	background: var(--core-surface-overlay-translucent);
 }
+
 [data-slice-theme-scope] .core-surface-primary {
 	background: var(--core-surface-primary);
 }
+
 [data-slice-theme-scope] .core-surface-primary-tint {
 	background: var(--core-surface-primary-tint);
 }
+
 [data-slice-theme-scope] .core-surface-secondary {
 	background: var(--core-surface-secondary);
 }
+
 [data-slice-theme-scope] .core-surface-special {
 	background: var(--core-surface-special);
 }
+
 [data-slice-theme-scope] .core-text-dark {
 	color: var(--core-text-dark);
 }
+
 [data-slice-theme-scope] .core-text-disabled {
 	color: var(--core-text-disabled);
 }
+
 [data-slice-theme-scope] .core-text-error {
 	color: var(--core-text-error);
 }
+
 [data-slice-theme-scope] .core-text-light {
 	color: var(--core-text-light);
 }
+
 [data-slice-theme-scope] .core-text-primary {
 	color: var(--core-text-primary);
 }
+
 [data-slice-theme-scope] .core-text-secondary {
 	color: var(--core-text-secondary);
 }
+
 [data-slice-theme-scope] .core-text-special {
 	color: var(--core-text-special);
 }
+
 [data-slice-theme-scope] .core-text-accent {
 	color: var(--core-text-accent);
 }
+
 [data-slice-theme-scope] .core-text-tertiary {
 	color: var(--core-text-tertiary);
 }
+
 [data-slice-theme-scope] .eor-tag-employee {
 	color: var(--eor-tag-employee);
 }
+
 [data-slice-theme-scope] .eor-tag-overdue {
 	color: var(--eor-tag-overdue);
 }
+
 [data-slice-theme-scope] .eor-tag-paid {
 	color: var(--eor-tag-paid);
 }
+
 [data-slice-theme-scope] .eor-tag-pending {
 	color: var(--eor-tag-pending);
 }
+
 [data-slice-theme-scope] .eor-tag-professional {
 	color: var(--eor-tag-professional);
 }
+
 [data-slice-theme-scope] .feedback-attention {
 	color: var(--feedback-attention);
 }
+
 [data-slice-theme-scope] .feedback-informative {
 	color: var(--feedback-informative);
 }
+
 [data-slice-theme-scope] .feedback-positive {
 	color: var(--feedback-positive);
 }
+
 [data-slice-theme-scope] .feedback-urgency {
 	color: var(--feedback-urgency);
 }
+
 [data-slice-theme-scope] .feedback-warning {
 	color: var(--feedback-warning);
 }
+
 [data-slice-theme-scope] .gia-tag-risk-high {
 	color: var(--gia-tag-risk-high);
 }
+
 [data-slice-theme-scope] .gia-tag-risk-low {
 	color: var(--gia-tag-risk-low);
 }
+
 [data-slice-theme-scope] .gia-tag-risk-moderate {
 	color: var(--gia-tag-risk-moderate);
 }
+
 [data-slice-theme-scope] .gia-text-excerpt-highlight {
 	color: var(--gia-text-excerpt-highlight);
 }
+
 [data-slice-theme-scope] .gia-text-selection {
 	color: var(--gia-text-selection);
 }
+
 [data-slice-theme-scope] .scroll-bar {
 	color: var(--scroll-bar);
 }
+
 [data-slice-theme-scope] .scroll-bar-hover {
 	color: var(--scroll-bar-hover);
 }
+
 [data-slice-theme-scope] .surface-shadow-soft {
 	color: var(--surface-shadow-soft);
 }
+
 [data-slice-theme-scope] .surface-shadow-strong {
 	color: var(--surface-shadow-strong);
 }

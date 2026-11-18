@@ -3,6 +3,7 @@ import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useContext, useId, useMemo, useRef } from 'react';
 import { useObserveResize } from '../../hooks/useObserveResize/useObserveResize';
+import { resolveColor, tintFromColor } from '../../utils';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Button } from '../Button';
@@ -38,9 +39,9 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		actionsBackgroundColor,
 		titleIcon,
 		titleIconDualTone = true,
-		titleBorderColor = 'var(--core-fill-primary)',
+		titleBorderColor = 'var(--core-outline-primary)',
 		titleBorderWidth,
-		actionsBorderColor = 'var(--core-fill-primary)',
+		actionsBorderColor = 'var(--core-outline-primary)',
 		actionsBorderWidth = 0,
 		autoBorderBottom = true,
 		onAction,
@@ -84,9 +85,10 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 	const titlePaddingBottom = scrolls ? 'var(--spacing-m)' : '0px';
 
 	const setActionBorderWidth = useMemo(() => {
+		if (typeof actionsBackgroundColor === 'number' || actionsBackgroundColor === 'tint') return '1px';
 		if (scrolls && actionsBorderWidth === 0 && autoBorderBottom) return '1px';
 		return setStyle(actionsBorderWidth);
-	}, [actionsBorderWidth, scrolls, autoBorderBottom]);
+	}, [actionsBorderWidth, scrolls, autoBorderBottom, actionsBackgroundColor]);
 
 	const setPaddingAdjustment = useMemo(() => {
 		if (scrolls) {
@@ -96,6 +98,14 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		}
 		return 'var(--spacing-m)';
 	}, [scrolls, padding]);
+
+	const resolveActionsBg = useMemo(() => {
+		if (typeof actionsBackgroundColor === 'number' || actionsBackgroundColor === 'tint') {
+			const tint = actionsBackgroundColor === 'tint' ? -30 : Number(actionsBackgroundColor);
+			return tintFromColor(resolveColor(backgroundColor), tint);
+		}
+		return resolveColor(actionsBackgroundColor);
+	}, [actionsBackgroundColor, backgroundColor]);
 
 	// memo dynamic css vars
 	const cssVars = useMemo(() => {
@@ -117,7 +127,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 			'--modal-title-border-color': titleBorderColor,
 			'--modal-title-border-width': setStyle(resolvedTitleBorderWidth),
 			'--modal-title-background-color': titleBackgroundColor ?? backgroundColor,
-			'--modal-actions-background-color': actionsBackgroundColor ?? backgroundColor,
+			'--modal-actions-background-color': resolveActionsBg ?? backgroundColor,
 			'--modal-actions-border-color': actionsBorderColor,
 			'--modal-scroll-handle': setStyle(scrollHandleColor),
 			'--modal-scroll-handle-hover': setStyle(scrollHandleColorHover),
@@ -138,7 +148,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 		resolvedTitleBorderWidth,
 		titleBorderColor,
 		actionsBorderColor,
-		actionsBackgroundColor,
+		resolveActionsBg,
 		titleBackgroundColor,
 		backgroundColor,
 		scrollHandleColor,
@@ -169,7 +179,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 			if (action.position && position !== action.position) return null;
 			return (
 				<Button
-					variant={action.primary ? 'solid' : 'outline'}
+					variant={action.primary ? 'primary' : 'secondary'}
 					key={action.id}
 					label={action.label}
 					aria-label={action.label || action.tooltip || 'Action'}
@@ -228,7 +238,8 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 										actionName={'close'}
 										icon={'basic.cross'}
 										iconSize={14}
-										iconColor={'core-text-tertiary'}
+										iconStrokeWidth={1.75}
+										iconColor={'core-text-secondary'}
 										onClick={handleClose}
 										onToolTip={(tip) => onToolTip?.(tip)}
 										hover={false}
@@ -236,7 +247,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 										backgroundColorHover={'transparent'}
 										backgroundColorSelected={'transparent'}
 										borderWidth={1}
-										borderColor={'core-text-tertiary'}
+										borderColor={'core-fill-primary'}
 										buttonSize={'s'}
 									/>
 								</div>

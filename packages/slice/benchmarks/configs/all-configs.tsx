@@ -1,3 +1,4 @@
+import { InfoBox, InfoBoxTitle, InfoBoxContent } from '../../src/components/InfoBox';
 import { Attachment } from '../../src/components/Attachment';
 /**
  * Centralized benchmark configurations
@@ -9,6 +10,9 @@ import {
 	Avatar,
 	AvatarGroup,
 	Badge,
+	Card,
+	CardTitle,
+	CardContent,
 	AudioBubble,
 	Camera,
 	CheckBox,
@@ -143,6 +147,72 @@ export const avatarGroupConfig: ComponentBenchmarkConfig = {
 			name: 'Memory',
 			type: 'memory',
 			fn: () => measureMemoryDelta(<AvatarGroup avatars={mockAvatars} />, 10),
+		},
+	],
+};
+
+export const cardConfig: ComponentBenchmarkConfig = {
+	componentName: 'Card',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<Card><CardTitle title="Project" /><CardContent>Project details</CardContent></Card>,
+				50,
+			),
+		},
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () => measureRerenderTime(
+				<Card><CardTitle title="Project" /><CardContent>Project details</CardContent></Card>,
+				(container) => container.rerender(
+					<Card><CardTitle title="Updated project" /><CardContent>Updated details</CardContent></Card>,
+				),
+				50,
+			),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(
+				<Card><CardTitle title="Project" /><CardContent>Project details</CardContent></Card>,
+				10,
+			),
+		},
+	],
+};
+
+export const infoBoxConfig: ComponentBenchmarkConfig = {
+	componentName: 'InfoBox',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<InfoBox><InfoBoxTitle title="Project" /><InfoBoxContent>Project details</InfoBoxContent></InfoBox>,
+				50,
+			),
+		},
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () => measureRerenderTime(
+				<InfoBox><InfoBoxTitle title="Project" /><InfoBoxContent>Project details</InfoBoxContent></InfoBox>,
+				(container) => container.rerender(
+					<InfoBox><InfoBoxTitle title="Updated project" /><InfoBoxContent>Updated details</InfoBoxContent></InfoBox>,
+				),
+				50,
+			),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(
+				<InfoBox><InfoBoxTitle title="Project" /><InfoBoxContent>Project details</InfoBoxContent></InfoBox>,
+				10,
+			),
 		},
 	],
 };
@@ -2097,6 +2167,8 @@ export const allBenchmarkConfigs = [
 	avatarGroupConfig,
 	audioBubbleConfig,
 	badgeConfig,
+	cardConfig,
+	infoBoxConfig,
 	cameraConfig,
 	checkBoxConfig,
 	contentEditableConfig,

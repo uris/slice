@@ -1,0 +1,113 @@
+.info-box-button {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+	box-sizing: border-box;
+	padding: var(--info-box-padding);
+	border-radius: var(--info-box-corner-radius);
+	border-color: var(--info-box-border-color);
+	border-width: var(--info-box-border-width);
+	border-style: solid;
+	background-color: var(--info-box-background-color);
+	color: var(--core-text-primary);
+	max-width: var(--info-box-max-width);
+	min-width: var(--info-box-min-width);
+	gap: var(--spacing-s);
+	transition: background-color var(--motion-water-duration) var(--motion-water) 0s;
+
+	&:hover {
+		background-color: var(--info-box-background-color-hover);
+	}
+}
+
+/* align center if no content */
+.info-box-button:not(:has(.info-box-content)) {
+	align-items: center;
+}
+
+.info-box-content-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	box-sizing: border-box;
+	flex: 1;
+	min-width: 0;
+	gap: 0;
+}
+
+.info-box-title {
+	max-width: 100%;
+	color: var(--core-text-primary);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0;
+}
+
+.info-box-content {
+	max-width: 100%;
+	color: var(--core-text-secondary);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0;
+}
+
+.info-box-image {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+	box-sizing: border-box;
+	flex-shrink: 0;
+	padding-top: var(--spacing-xxs);
+}
+
+.info-box-action {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	flex-shrink: 0;
+	align-self: stretch;
+	height: auto;
+}
+
+.info-box-main {
+	display: flex;
+	align-items: inherit;
+	gap: inherit;
+	flex: 1;
+	min-width: 0;
+}
+
+.info-box-press {
+	appearance: none;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	border-radius: var(--info-box-corner-radius);
+}
+
+.info-box-press:focus-visible {
+	outline: 2px solid var(--core-outline-special);
+	outline-offset: 4px;
+}
+
+.info-box-press:disabled {
+	cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.info-box-button {
+		transition: none;
+	}
+}

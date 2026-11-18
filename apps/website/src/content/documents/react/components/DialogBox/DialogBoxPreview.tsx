@@ -1,5 +1,5 @@
 'use client';
-import { Button, DialogBox } from '@apple-pie/slice';
+import { Button, DialogBox, FlexBox, Preset } from '@apple-pie/slice';
 import { useState } from 'react';
 import styles from '../_shared/LayerPreview.module.css';
 
@@ -43,7 +43,41 @@ export function DialogBoxPreview({ scroll = false }: Readonly<{ scroll?: boolean
 					onClick={() => setOpen(false)}
 					width={'fill'}
 				/>
-				<Button variant={'solid'} label={scroll ? 'Done' : 'Archive'} onClick={() => setOpen(false)} width={'fill'} />
+				<Button variant={'primary'} label={scroll ? 'Done' : 'Archive'} onClick={() => setOpen(false)} width={'fill'} />
+			</DialogBox.Actions>
+		</DialogBox>
+	);
+}
+
+export function DialogBoxTint() {
+	const [open, setOpen] = useState(true);
+	if (!open) return <Button label="Open dialog" onClick={() => setOpen(true)} />;
+	return (
+		<DialogBox<string>
+			minWidth={0}
+			minHeight={0}
+			style={{ width: '70%' }}
+			onResolve={() => setOpen(false)}
+			onReject={() => setOpen(false)}
+			onClose={() => setOpen(false)}
+			actionsBackgroundColor={'tint'}
+		>
+			<DialogBox.Title>{'Project details'}</DialogBox.Title>
+			<DialogBox.Content>
+				Bring upcoming milestones and open decisions into one shared plan. Keep notes close to the work so everyone has
+				the context they need.
+			</DialogBox.Content>
+			<DialogBox.Actions>
+				<FlexBox preset={Preset.Row} justify={'end'} gap={8}>
+					<Button
+						label="Cancel"
+						variant="outline"
+						backgroundColor={'transparent'}
+						onClick={() => setOpen(false)}
+						width={'fill'}
+					/>
+					<Button variant={'primary'} label={'Done'} onClick={() => setOpen(false)} width={'fill'} />
+				</FlexBox>
 			</DialogBox.Actions>
 		</DialogBox>
 	);

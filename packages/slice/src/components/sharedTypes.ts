@@ -27,10 +27,10 @@ export type ButtonStyleProps = PaddingProps & {
 
 export const buttonStyleDefaults = {
 	gap: 6,
-	iconSize: 20,
+	iconSize: 18,
 	minIconSize: 14,
-	minIconStrokeWidth: 1.5,
-	sizes: { s: 24, m: 36, l: 44, xl: 56 },
+	minIconStrokeWidth: 1.25,
+	sizes: { s: 24, m: 32, l: 44, xl: 56 },
 	padding: {
 		horizontal: 'calc(var(--spacing-s) + var(--spacing-xs))',
 		icon: 'var(--spacing-s)',

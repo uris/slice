@@ -22,7 +22,7 @@ Anchor hex values bypass conversion, so rounding never changes the supplied colo
 Regenerate with `npm run generate:palette` from this workspace.
 
 `coreColors` combines these ramps with a shared gray ramp, the existing theme
-neutrals, and effects. Neutral theme mappings now reference these ramps and shared opacity recipes. Chromatic families use `core-<color>`
+neutrals, and effects. Theme mappings reference these ramps directly. Chromatic families use `core-<color>`
 instead of the former brand names: sea becomes blue, sky becomes cyan, land
 becomes lime, and magenta becomes pink. Array tokens use the same family names: `array-blue`, `array-cyan`,
 `array-lime`, and `array-pink` (and their `-accent` counterparts) reference those ramps.
@@ -47,20 +47,19 @@ possible. Closely spaced values receive adjacent numbers so none are discarded
 or merged. Standard 50, 100–900, and 950 stops are interpolated where absent.
 Unlike the chromatic ramps, gray includes exact white and black endpoints.
 
-`coreGreyAnchors` maps original hex values to ramp tokens. `coreGreyLayers` records
-the source token and exact opacity for each translucent fill/label in both
-appearances. These preserve the source recipes. `coreGreyRecipes` also includes opaque fills, text, and backgrounds; `recipes.ts` maps them into active theme tokens.
+`coreGreyAnchors` maps original hex values to ramp tokens. Theme tokens declare
+opacity directly with `addOpacity` in `colors.ts`.
 Their visible color depends on the underlying surface; the ramp stores their
 unflattened base colors. For example, primary fill is `core-grey-565` (`#808080`)
 at 12%, and secondary light text is `core-grey-795` (`#434242`) at 60%.
 
-## Theme recipes
+## Theme colors
 
-`recipes.ts` is the shared mapping from neutral theme tokens to source recipes.
-`resolveColorRecipe` produces hex for opaque colors and RGBA for translucent
-colors, suitable for JavaScript and React Native. `colorRecipeCss` produces a
-palette CSS variable or `color-mix(..., transparent)` for web. Alpha stays in the
-color value; recipes never set component opacity or bake against a backdrop.
+`colors.ts` lists every light and dark token explicitly. Opaque colors reference
+`coreColors` directly. Translucent colors use the existing `addOpacity` utility
+with a core color and a numeric alpha. No recipe resolution runs at runtime.
+The CSS generator reads those same declarations and emits palette variables or
+`color-mix(..., transparent)` for opacity.
 
 Existing theme token names remain stable. Primary/secondary surfaces use the
 screenshot backgrounds, primary text uses black/white, secondary text and icons
@@ -81,8 +80,7 @@ CSS retains palette references, while native resources preserve numeric alpha.
 `../../../scripts/grey-custom.json` adds `core-grey-975` (`#101010`) between pure
 black and the secondary surface (`#1f1e1e`). The dark `core-surface-primary` role
 uses this custom stop; light primary stays white. Original screenshot anchors and
-recipes remain unchanged. The override is explicit in `neutralRecipe` in
-`recipes.ts`, so both CSS and native resolve the same color.
+recipes remain unchanged. The mapping is explicit in `dark` in `colors.ts`, so CSS and native use the same color.
 
 
 ## Array backgrounds and accents
@@ -99,7 +97,7 @@ choices do not guarantee 4.5:1 contrast for normal text on every tinted surface.
 
 Use `core-red`, `core-blue`, and the other `core-<family>` aliases for the base
 accent that follows the current appearance. They resolve to the exact light/dark
-anchors recorded in `corePaletteAnchors`; `core-grey` uses 500 / 501.
+colors declared directly in `colors.ts`; `core-grey` uses 500 / 501.
 Numbered ramp tokens remain fixed and unchanged for explicit shade selection.
 These base aliases are palette accents, not contrast-adjusted text roles.
 

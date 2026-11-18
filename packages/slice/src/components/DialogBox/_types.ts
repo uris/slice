@@ -45,7 +45,7 @@ type DialogBoxBaseProps<T = string> = ElevationProps & {
 	close?: boolean;
 	actions?: DialogBoxAction<T>[];
 	/** Footer fill. Defaults to backgroundColor, including while scrolling. */
-	actionsBackgroundColor?: ColorValue;
+	actionsBackgroundColor?: ColorValue | 'tint' | number;
 	actionsBorderColor?: ColorValue;
 	actionsBorderWidth?: number;
 	autoBorderBottom?: boolean;

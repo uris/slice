@@ -16,6 +16,7 @@ import { useTheme } from '../../hooks/useTheme/useTheme';
 import type { VideoDescriptor } from '../../stores/video';
 import { getVideo, useVideo, videoActions } from '../../stores/video';
 import { corners } from '../../theme/corners/corners';
+import { addOpacity } from '../../utils';
 import { classNames, setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
@@ -69,6 +70,7 @@ function VideoLayer({
 		onQuit,
 	} = options;
 	const [present, safeToRemove] = usePresence();
+	const { colors } = useTheme();
 	const reduced = usePrefersReducedMotion();
 	const animation = useAnimationControls();
 	const dragControls = useDragControls();
@@ -213,12 +215,13 @@ function VideoLayer({
 						<IconButton
 							actionName="Close video"
 							icon="basic.cross"
-							buttonSize="l"
 							onClick={handleHide}
-							backgroundColor="rgba(255,255,255,0.05)"
-							backgroundColorHover="rgba(255,255,255,0.25)"
+							backgroundColor={addOpacity(colors['core-surface-primary'], 0.5)}
+							backgroundColorHover={addOpacity(colors['core-surface-primary'], 1)}
 							iconColor="var(--core-text-light)"
 							iconColorHover="var(--core-text-light)"
+							borderColor={'core-outline-primary'}
+							borderWidth={1}
 						/>
 					)}
 				</motion.div>

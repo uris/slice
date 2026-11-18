@@ -257,7 +257,7 @@ export function TextFieldDoc() {
 			<Definition id={'borderColorBlurred'}>
 				<Prop>borderColorBlurred</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-fill-primary'}</DefaultVal>
+				<DefaultVal>{'core-outline-primary'}</DefaultVal>
 			</Definition>
 			<P>{'Border color when the input is not focused.'}</P>
 			<Definition id={'borderColorError'}>
@@ -275,7 +275,7 @@ export function TextFieldDoc() {
 			<Definition id={'borderColorFocused'}>
 				<Prop>borderColorFocused</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-fill-secondary'}</DefaultVal>
+				<DefaultVal>{'core-outline-primary'}</DefaultVal>
 			</Definition>
 			<P>
 				{'Border color while focused, unless '}
@@ -291,7 +291,7 @@ export function TextFieldDoc() {
 			</Definition>
 			<P>
 				{
-					'Corner radius. Simple fields default to 100px; stacked and outlined fields use 0 for underline borders and 16px otherwise. Explicit values take precedence. Numbers are pixels; strings accept CSS radii.'
+					'Corner radius. Fields default to corner-m (8px), or 0 for underline borders. Explicit values take precedence. Numbers are pixels; strings accept CSS radii.'
 				}
 			</P>
 			<Definition id={'borderStyle'}>
@@ -314,12 +314,16 @@ export function TextFieldDoc() {
 			<Definition id={'clearButton'}>
 				<Prop>clearButton</Prop>
 				<TypeDef>{'{ size?: number } | null'}</TypeDef>
-				<DefaultVal>{'{ size: 20 }'}</DefaultVal>
+				<DefaultVal>{'null'}</DefaultVal>
 			</Definition>
 			<P>
-				{'Size of the clear icon and its reserved slot in pixels. Use '}
-				<Code>{'null'}</Code>
-				{' to remove the control. It is visible only when the field contains text and focus is within the field.'}
+				{'Pass '}
+				<Code>{'{}'}</Code>
+				{' to enable the clear control, or '}
+				<Code>{'{ size: 20 }'}</Code>
+				{
+					' to set its icon size. It appears only when the field contains text and focus is within the field, and occupies no space while hidden or empty.'
+				}
 			</P>
 			<Definition id={'defaultValue'}>
 				<Prop>defaultValue</Prop>

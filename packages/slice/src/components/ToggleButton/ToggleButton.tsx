@@ -29,7 +29,7 @@ export const ToggleButton = React.memo(function ToggleButton(props: ToggleButton
 		paddingBottom,
 		paddingLeft,
 		deselect = true,
-		borderRadius = 4,
+		borderRadius = 'var(--corner-m)',
 		backgroundColor = 'core-surface-secondary',
 		backgroundColorHover = 'core-surface-secondary',
 		backgroundColorSelected = 'core-text-special',

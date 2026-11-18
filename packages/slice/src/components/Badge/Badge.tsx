@@ -2,6 +2,7 @@
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React from 'react';
+import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Badge.module.css';
@@ -9,6 +10,8 @@ import type { BadgeProps } from './_types';
 
 export const Badge = React.memo((rawProps: BadgeProps) => {
 	const props = resolveColorProps(rawProps);
+	const { isDark } = useTheme();
+	const primaryForeground = isDark ? 'var(--core-text-dark)' : 'var(--core-text-light)';
 	const {
 		elevation = 0,
 		count,
@@ -31,7 +34,7 @@ export const Badge = React.memo((rawProps: BadgeProps) => {
 
 	const displayCount = typeof count === 'number' && count > 99 ? '99+' : String(count);
 	const cssVars = {
-		'--badge-color': textColor ?? (variant === 'light' ? 'var(--core-text-primary)' : 'var(--core-text-light)'),
+		'--badge-color': textColor ?? (variant === 'light' ? 'var(--core-text-primary)' : primaryForeground),
 		'--badge-bg':
 			backgroundColor ?? (variant === 'light' ? 'var(--core-badge-secondary)' : 'var(--core-badge-primary)'),
 	} as React.CSSProperties;

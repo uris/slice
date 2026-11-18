@@ -171,7 +171,7 @@ export function SwitchDoc() {
 			<Definition id={'knobWidth'}>
 				<Prop>knobWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'26'}</DefaultVal>
+				<DefaultVal>{'20'}</DefaultVal>
 			</Definition>
 			<P>
 				Knob width in pixels. Defaults to a pill shape. Width is clamped to the available track space. Invalid or
@@ -207,10 +207,10 @@ export function SwitchDoc() {
 			<Definition id={'width'}>
 				<Prop>width</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'48'}</DefaultVal>
+				<DefaultVal>{'36'}</DefaultVal>
 			</Definition>
 			<P>
-				Track <Code>width</Code> in pixels. Invalid or nonpositive values fall back to 48; width is at least the track
+				Track <Code>width</Code> in pixels. Invalid or nonpositive values fall back to 36; width is at least the track
 				height.
 			</P>
 			<Definition id={'buttonAttributes'}>

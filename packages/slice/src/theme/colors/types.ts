@@ -1,5 +1,7 @@
 import type { corePalette } from './palette';
-import type { BaseColorToken } from './recipes';
+
+type PaletteFamily<Token> = Token extends `core-${infer Family}-${number}` ? Family : never;
+type BaseColorToken = `core-${PaletteFamily<keyof typeof corePalette>}` | `core-grey-${1 | 2 | 3 | 4 | 5 | 6}`;
 
 export type CoreColors = Record<keyof typeof corePalette, string> & {
 	'core-drop-shadow-light': string;
@@ -45,6 +47,7 @@ export type Colors = Record<BaseColorToken, string> & {
 	'core-badge-secondary': string;
 	'core-button-disabled': string;
 	'core-button-primary': string;
+	'core-button-secondary': string;
 	'core-drop-shadow': string;
 	'core-gp-logo-primary': string;
 	'core-gp-logo-secondary': string;

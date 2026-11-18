@@ -119,7 +119,11 @@ export function ModelsPromptPreview() {
 						if (event) setCaller(event.currentTarget);
 					}}
 				/>
-				<ToggleButton icon={'media.mic'} backgroundColor={'core-fill-primary'} borderRadius={100} />
+				<ToggleButton
+					icon={'media.mic'}
+					backgroundColor={'core-fill-primary'}
+					backgroundColorHover={'core-fill-primary'}
+				/>
 				{caller && (
 					<PopMenu caller={caller} name="Models" dismissAll={close} onDismiss={close}>
 						{models.map((name) => (

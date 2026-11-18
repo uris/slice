@@ -40,7 +40,7 @@ const meta = {
 		label: 'Highlight',
 		icon: 'weather.sun',
 		buttonSize: 'm',
-		iconSize: 20,
+		iconSize: 18,
 		textSize: 's',
 		selected: undefined,
 		defaultSelected: false,
@@ -215,8 +215,8 @@ export const ChildrenDefaultSize: Story = {
 	args: { ...ChildrenRow.args, buttonSize: undefined, icon: undefined },
 	play: async ({ canvasElement }) => {
 		const button = within(canvasElement).getByRole('button', { name: 'Custom content' });
-		expect(getComputedStyle(button).minHeight).toBe('36px');
-		expect(button.getBoundingClientRect().height).toBeGreaterThanOrEqual(36);
+		expect(getComputedStyle(button).minHeight).toBe('32px');
+		expect(button.getBoundingClientRect().height).toBeGreaterThanOrEqual(32);
 	},
 };
 export const AvatarAndText: Story = {
@@ -381,7 +381,7 @@ export const LabelOutside: Story = {
 		const frame = b.querySelector('[class*="frame"]') as HTMLElement;
 		const background = b.querySelector('[class*="background"]') as HTMLElement;
 		const label = c.getByText('Highlight');
-		await expect(frame.getBoundingClientRect().width).toBe(36);
+		await expect(frame.getBoundingClientRect().width).toBe(32);
 		await expect(background.getBoundingClientRect().width).toBeLessThan(b.getBoundingClientRect().width);
 		await expect(label.getBoundingClientRect().left).toBeGreaterThanOrEqual(frame.getBoundingClientRect().right);
 		const textColor = getComputedStyle(label).color;

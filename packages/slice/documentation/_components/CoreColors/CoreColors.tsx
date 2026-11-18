@@ -1,7 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { FlexBox, Tip, Toast, type ToolTip, useToolTip } from 'src';
-import { coreColors } from '../../../src/theme/colors/colors';
-import { corePaletteAnchors } from '../../../src/theme/colors/palette';
+import { coreColors, dark, light } from '../../../src/theme/colors/colors';
 import { ColorTile } from '../ColorTile/ColorTile';
 
 export function CoreColors() {
@@ -37,10 +36,12 @@ export function CoreColors() {
 	function getAnchorLabel(token: string) {
 		const match = /^core-([a-z]+)-(\d+)$/.exec(token);
 		if (!match) return undefined;
-		const anchor = corePaletteAnchors[match[1] as keyof typeof corePaletteAnchors];
-		if (!anchor) return undefined;
-		if (Number(match[2]) === anchor.light) return 'Light accent';
-		if (Number(match[2]) === anchor.dark) return 'Dark accent';
+		const alias = `core-${match[1]}`;
+		const lightColors: ColorMap = light;
+		const darkColors: ColorMap = dark;
+		const value = coreColors[token as keyof typeof coreColors];
+		if (value === lightColors[alias]) return 'Light accent';
+		if (value === darkColors[alias]) return 'Dark accent';
 		return undefined;
 	}
 

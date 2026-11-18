@@ -36,7 +36,7 @@ const meta: Meta<typeof Button> = {
 	},
 	args: {
 		buttonSize: 'l',
-		variant: 'solid',
+		variant: 'primary',
 		label: 'Button Label',
 		textSize: 'm',
 		iconRight: SliceIcons.arrows.arrowRight,
@@ -73,7 +73,7 @@ export default meta;
 export const AutoChildren: StoryObj<typeof Button> = {
 	args: {
 		buttonSize: 'auto',
-		variant: 'solid',
+		variant: 'primary',
 		iconLeft: undefined,
 		iconRight: undefined,
 		children: (
@@ -99,7 +99,7 @@ export const ChildrenPaddingAndGap: StoryObj<typeof Button> = {
 	tags: ['tests'],
 	args: {
 		buttonSize: 'auto',
-		variant: 'solid',
+		variant: 'primary',
 		iconLeft: undefined,
 		iconRight: undefined,
 		padding: '2px 10px',
@@ -137,7 +137,7 @@ export const SharedSizes: StoryObj<typeof Button> = {
 		const canvas = within(canvasElement);
 		for (const [name, height] of [
 			['s', 24],
-			['m', 36],
+			['m', 32],
 			['l', 44],
 			['xl', 56],
 			['52', 52],
@@ -575,7 +575,7 @@ export const BorderOverrides: StoryObj<typeof Button> = {
 	tags: ['tests'],
 	render: () => (
 		<FlexBox gap={12}>
-			{(['solid', 'outline', 'text'] as const).flatMap((variant) =>
+			{(['primary', 'secondary', 'outline', 'text'] as const).flatMap((variant) =>
 				(['s', 'auto', 52] as const).map((buttonSize) => (
 					<Button
 						key={`${variant}-${buttonSize}`}
@@ -587,13 +587,13 @@ export const BorderOverrides: StoryObj<typeof Button> = {
 					/>
 				)),
 			)}
-			<Button label="Disabled border" variant="solid" disabled borderWidth="3px" borderColor="#123456" />
+			<Button label="Disabled border" variant="primary" disabled borderWidth="3px" borderColor="#123456" />
 			<Button label="Destructive border" destructive fill borderWidth={2} borderColor="core-text-primary" />
 		</FlexBox>
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		for (const variant of ['solid', 'outline', 'text']) {
+		for (const variant of ['primary', 'secondary', 'outline', 'text']) {
 			for (const size of ['s', 'auto', 52]) {
 				const button = canvas.getByRole('button', { name: `${variant}-${size}` });
 				await expect(getComputedStyle(button).borderTopWidth).toBe('2px');
@@ -619,7 +619,7 @@ export const ZeroAndRoundBorders: StoryObj<typeof Button> = {
 		<FlexBox gap={12}>
 			<Button label="Borderless outline" borderWidth={0} borderColor="transparent" />
 			<Button label="Color only" borderColor="#123456" />
-			<Button label="Width only" variant="solid" borderWidth={2} />
+			<Button label="Width only" variant="primary" borderWidth={2} />
 			<Button buttonSize="auto" round iconLeft="basic.home" aria-label="Round bordered" borderWidth={3} />
 		</FlexBox>
 	),
@@ -636,7 +636,7 @@ export const ZeroAndRoundBorders: StoryObj<typeof Button> = {
 		await expect(getComputedStyle(widthOnly).borderTopColor).toBe('rgba(0, 0, 0, 0)');
 		const round = canvas.getByRole('button', { name: 'Round bordered' }).getBoundingClientRect();
 		await expect(round.width).toBe(round.height);
-		await expect(round.width).toBe(38);
+		await expect(round.width).toBe(36);
 	},
 };
 
@@ -646,7 +646,7 @@ export const BodyTextSizes: StoryObj<typeof Button> = {
 		docs: {
 			description: {
 				story:
-					'Compare all body text sizes at the default 36px button height. Each row compares labels without descenders (Button Label) and with descenders (Typography), paired in solid and outline variants.',
+					'Compare all body text sizes at the default 32px button height. Each row compares labels without descenders (Button Label) and with descenders (Typography), paired in primary and outline variants.',
 			},
 		},
 	},
@@ -655,8 +655,8 @@ export const BodyTextSizes: StoryObj<typeof Button> = {
 			{(['xs', 's', 'm', 'l', 'xl'] as const).map((textSize) => (
 				<FlexBox key={textSize} align="center" gap={16}>
 					<span style={{ width: 24 }}>{textSize}</span>
-					<Button variant="solid" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
-					<Button variant="solid" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
+					<Button variant="primary" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
+					<Button variant="primary" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
 					<Button variant="outline" buttonSize="m" textSize={textSize} label="Button Label" width="160px" />
 					<Button variant="outline" buttonSize="m" textSize={textSize} label="Typography" width="160px" />
 				</FlexBox>
@@ -858,4 +858,20 @@ export const Elevation: StoryObj<typeof meta> = {
 		<ElevationFixture>{(elevation) => <Button elevation={elevation} label="Save changes" />}</ElevationFixture>
 	),
 	play: async (context) => runElevationPlay(context, 0),
+};
+
+export const PrimaryFocusOpacity: StoryObj<typeof Button> = {
+	tags: ['tests'],
+	args: { variant: 'primary', label: 'Focus tint', backgroundColor: '#123456' },
+	render: Default.render,
+	play: async ({ canvasElement }) => {
+		const button = within(canvasElement).getByRole('button', { name: 'Focus tint' });
+		await userEvent.tab();
+		await expect(button).toHaveFocus();
+		const styles = getComputedStyle(button);
+		await expect(styles.outlineStyle).toBe('solid');
+		await expect(styles.outlineWidth).toBe('3px');
+		await expect(styles.outlineColor).toMatch(/(?:,\s*0\.2\)|\/\s*0\.2\))/);
+		await expect(styles.backgroundColor).toBe('rgb(18, 52, 86)');
+	},
 };

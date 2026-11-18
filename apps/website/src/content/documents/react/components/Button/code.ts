@@ -17,7 +17,14 @@ export const solidCode = `
 import { Button } from '@apple-pie/slice';
 
 export default function SolidButton() {
-    return <Button label="Solid" variant="solid" />;
+    return <Button label="Solid" variant="primary" />;
+}
+`;
+export const secondaryCode = `
+import { Button } from '@apple-pie/slice';
+
+export default function OutlineButton() {
+    return <Button label="Secondary" variant="secondary" />;
 }
 `;
 export const outlineCode = `
@@ -45,7 +52,7 @@ export const iconOnlyCode = `
 export const stylingCode = `
 <Button
     label="Continue"
-    variant="solid"
+    variant="primary"
     buttonSize="l"
     textSize="l"
     backgroundColor="#2563eb"

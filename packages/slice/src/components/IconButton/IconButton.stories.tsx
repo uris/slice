@@ -36,7 +36,7 @@ const meta = {
 		actionName: 'More options',
 		icon: 'basic.more-horiz',
 		buttonSize: 'm',
-		iconSize: 20,
+		iconSize: 18,
 		borderRadius: '50%',
 		borderWidth: 0,
 		borderColor: 'core-outline-primary',
@@ -197,7 +197,7 @@ export const InvalidSize: Story = {
 	args: { buttonSize: Number.NaN, iconSize: -1, borderWidth: -2 },
 	play: async ({ canvasElement }) => {
 		const b = within(canvasElement).getByRole('button');
-		await expect(b).toHaveStyle({ width: '36px', borderWidth: '0px' });
+		await expect(b).toHaveStyle({ width: '32px', borderWidth: '0px' });
 	},
 };
 export const Count: Story = {
