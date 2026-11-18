@@ -8,12 +8,7 @@
 	gap: 0;
 	flex: 0;
 
-	&::after {
-		content: "|";
-		display: inline-flex;
-		padding-left: 24px;
-		color: var(--core-fill-secondary);
-	}
+	
 }
 
 .identity {
