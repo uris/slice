@@ -1550,17 +1550,20 @@ export async function runButtonProgressFlowPlay<TArgs>({ canvasElement, args }: 
 	const storyArgs = asArgs(args);
 	const button = canvas.getByRole('button');
 
-	await userEvent.click(button);
-	// the progress branch defers onClick until the indicator finishes -
-	// it must not fire immediately
+	// A userEvent click can take longer than the 50ms action timer under coverage.
+	// Dispatch synchronously and assert before yielding to any timer callbacks.
+	fireEvent.click(button);
 	if (isFn(storyArgs.onClick)) {
-		await expect(storyArgs.onClick).not.toHaveBeenCalled();
+		expect(storyArgs.onClick).not.toHaveBeenCalled();
 	}
-	await expect(canvasElement.querySelector('[class*="container"]')).toBeInTheDocument();
+	expect(canvasElement.querySelector('[class*="container"]')).toBeInTheDocument();
 
 	// The Button owns its action timer and invokes the deferred click with `undefined`.
 	if (isFn(storyArgs.onClick)) {
-		await waitFor(() => expect(storyArgs.onClick).toHaveBeenCalledWith(undefined));
+		await waitFor(() => {
+			expect(storyArgs.onClick).toHaveBeenCalledTimes(1);
+			expect(storyArgs.onClick).toHaveBeenCalledWith(undefined);
+		});
 	}
 }
 
