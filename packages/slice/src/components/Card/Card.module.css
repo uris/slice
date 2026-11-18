@@ -113,7 +113,7 @@
 .footer-buttons {
 	display: flex;
 	justify-content: var(--footer-alignment);
-	align-items: flex-start;
+	align-items: center;
 	flex-direction: var(--footer-buttons-stack);
 	box-sizing: border-box;
 	width: 100%;

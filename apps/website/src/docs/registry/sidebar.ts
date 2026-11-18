@@ -65,6 +65,19 @@ const reactComponentSection: ListSection = [
 	{ title: 'FileList', slug: 'file-list', code: true },
 	{ title: 'FlexBox', slug: 'flex-box', code: true, isNew: true },
 	{ title: 'FlexDiv', slug: 'flex-div', code: true, deprecated: true },
+	{
+		title: 'InfoBox',
+		slug: 'info-box',
+		id: 'sidebar.group.info-box',
+		code: true,
+		childDocs: [
+			{ title: 'InfoBox', slug: 'info-box', code: true },
+			{ title: 'InfoBoxTitle', slug: 'info-box-title', code: true },
+			{ title: 'InfoBoxContent', slug: 'info-box-content', code: true },
+			{ title: 'InfoBoxImage', slug: 'info-box-image', code: true },
+			{ title: 'InfoBoxAction', slug: 'info-box-action', code: true },
+		],
+	},
 	{ title: 'Icon', slug: 'icon', code: true },
 	{ title: 'IconButton', slug: 'icon-button', code: true },
 

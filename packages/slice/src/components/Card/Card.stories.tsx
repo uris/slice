@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import image from '../../../../../apps/website/public/images/flowers-sunflower.png';
+import { Badge } from '../Badge';
+import { Button } from '../Button';
 import { FlexBox, Preset } from '../FlexBox';
 import { TextField } from '../Textfield';
 import { Card } from './Card';
@@ -179,26 +181,17 @@ export const NoImage: Story = {
 	render: (args) => {
 		return (
 			<Card {...args} maxWidth={350}>
-				<CardTitle
-					caption={'Security'}
-					title={'Security analysis details'}
-					text={'Summary of security analysis and exposure to virus'}
-					actionButton={{ label: 'help', iconRight: 'alerts.question', variant: 'text' }}
-					onAction={(button) => console.log({ button })}
-				/>
+				<CardTitle>
+					<FlexBox className={'body-xl-regular'} preset={Preset.RowBetween}>
+						This is the title
+						<Badge variant={'light'} count={'Beta'} />
+					</FlexBox>
+				</CardTitle>
 				<CardContent>This is the cards content and has and type of children that you might want</CardContent>
-				<CardFooter
-					layout={'fill'}
-					stack={'horizontal'}
-					align={'center'}
-					actionButtons={[
-						{ label: 'Sign Up', variant: 'secondary', backgroundColor: 'core-button-secondary' },
-						{ label: 'Login', variant: 'primary' },
-					]}
-					onAction={(button) => {
-						console.log(button.label);
-					}}
-				/>
+				<CardFooter layout={'fill'} stack={'horizontal'} align={'edges'}>
+					<Button label={'Sign Up'} backgroundColor={'core-button-secondary'} />
+					<Button label={'Login'} variant={'primary'} />
+				</CardFooter>
 			</Card>
 		);
 	},

@@ -45,22 +45,20 @@ export function CardFooter(props: Readonly<CardFooterProps>) {
 
 	return (
 		<div {...divProps} className={classNames(css['footer-wrapper'], className ?? '')} style={styles}>
-			{children ??
-				(actionButtons && (
-					<div className={classNames(css['footer-buttons'], 'body-m-regular')}>
-						{actionButtons.map((button, index) => (
-							<Button
-								key={button.id ?? index}
-								width={layout}
-								{...button}
-								onClick={(event) => {
-									button.onClick?.(event);
-									onAction?.(button);
-								}}
-							/>
-						))}
-					</div>
-				))}
+			<div className={classNames(css['footer-buttons'], 'body-m-regular')}>
+				{children ??
+					actionButtons?.map((button, index) => (
+						<Button
+							key={button.id ?? index}
+							width={layout}
+							{...button}
+							onClick={(event) => {
+								button.onClick?.(event);
+								onAction?.(button);
+							}}
+						/>
+					))}
+			</div>
 		</div>
 	);
 }

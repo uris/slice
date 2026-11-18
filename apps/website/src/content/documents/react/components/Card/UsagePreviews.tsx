@@ -17,7 +17,11 @@ export function LoginCardPreview({
 	padding,
 	withImage = false,
 	onLogin,
-}: { padding?: CardProps['padding']; withImage?: boolean; onLogin?: (email: string, password: string) => void }) {
+}: {
+	padding?: CardProps['padding'];
+	withImage?: boolean;
+	onLogin?: (email: string, password: string) => void;
+}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	return (
@@ -32,7 +36,7 @@ export function LoginCardPreview({
 						placeholder="you@example.com"
 						value={email}
 						onChange={setEmail}
-						backgroundColorBlurred="transparent"
+						backgroundColorBlurred="core-surface-primary"
 						inputAttributes={{ autoComplete: 'username' }}
 					/>
 					<TextField
@@ -42,7 +46,7 @@ export function LoginCardPreview({
 						placeholder="Enter your password"
 						value={password}
 						onChange={setPassword}
-						backgroundColorBlurred="transparent"
+						backgroundColorBlurred="core-surface-primary"
 						inputAttributes={{ autoComplete: 'current-password' }}
 					/>
 				</FlexBox>
@@ -107,7 +111,12 @@ export function FooterCardPreview({ horizontal = false }: { horizontal?: boolean
 				stack={horizontal ? 'horizontal' : 'vertical'}
 				layout="fill"
 				actionButtons={[
-					{ value: 'save', label: saved ? 'Saved' : 'Save changes', variant: 'primary', onClick: () => setSaved(true) },
+					{
+						value: 'save',
+						label: saved ? 'Saved' : 'Save changes',
+						variant: 'primary',
+						onClick: () => setSaved(true),
+					},
 					{ value: 'cancel', label: 'Cancel', variant: 'secondary', onClick: () => setSaved(false) },
 				]}
 			/>

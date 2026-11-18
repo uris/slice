@@ -1,3 +1,4 @@
+import { InfoBox, InfoBoxTitle, InfoBoxContent } from '../../src/components/InfoBox';
 import { Attachment } from '../../src/components/Attachment';
 /**
  * Centralized benchmark configurations
@@ -177,6 +178,39 @@ export const cardConfig: ComponentBenchmarkConfig = {
 			type: 'memory',
 			fn: () => measureMemoryDelta(
 				<Card><CardTitle title="Project" /><CardContent>Project details</CardContent></Card>,
+				10,
+			),
+		},
+	],
+};
+
+export const infoBoxConfig: ComponentBenchmarkConfig = {
+	componentName: 'InfoBox',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(
+				<InfoBox><InfoBoxTitle title="Project" /><InfoBoxContent>Project details</InfoBoxContent></InfoBox>,
+				50,
+			),
+		},
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () => measureRerenderTime(
+				<InfoBox><InfoBoxTitle title="Project" /><InfoBoxContent>Project details</InfoBoxContent></InfoBox>,
+				(container) => container.rerender(
+					<InfoBox><InfoBoxTitle title="Updated project" /><InfoBoxContent>Updated details</InfoBoxContent></InfoBox>,
+				),
+				50,
+			),
+		},
+		{
+			name: 'Memory',
+			type: 'memory',
+			fn: () => measureMemoryDelta(
+				<InfoBox><InfoBoxTitle title="Project" /><InfoBoxContent>Project details</InfoBoxContent></InfoBox>,
 				10,
 			),
 		},
@@ -2134,6 +2168,7 @@ export const allBenchmarkConfigs = [
 	audioBubbleConfig,
 	badgeConfig,
 	cardConfig,
+	infoBoxConfig,
 	cameraConfig,
 	checkBoxConfig,
 	contentEditableConfig,

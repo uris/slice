@@ -1,0 +1,42 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as InfoBoxStories from './InfoBox.stories';
+
+<Meta of={InfoBoxStories} />
+
+# InfoBox
+
+Compose an information row with the named `InfoBoxImage`, `InfoBoxTitle`,
+`InfoBoxContent`, and `InfoBoxAction` sections.
+
+<Canvas of={InfoBoxStories.Default} />
+
+Sections may appear in any JSX order, including inside fragments. The visual order
+is always image, title, content, then action. Each section may appear once; put
+custom content inside a section. Unsupported direct children and duplicate
+sections produce an error rather than silently disappearing.
+
+## Press and actions
+
+Providing `onPress` or `onClick` makes the image and text region a native button,
+with keyboard activation and a visible focus ring. `onPress` receives the mouse
+event, `name`, and `id`. Native `onClick` runs first; calling `preventDefault()`
+there cancels `onPress`.
+
+Action controls are siblings of this button, so pressing an action does not also
+press the row. `disabled` disables the main button; set the action control's own
+`disabled` prop separately. Without either row callback the main region is static.
+Use noninteractive content inside the image, title, and content sections when the
+row is pressable; place interactive controls inside `InfoBoxAction`.
+
+<Canvas of={InfoBoxStories.ActionButton} />
+
+## Colors and images
+
+`backgroundColorHover` accepts the same tokens and CSS colors as `backgroundColor`.
+Pressable rows otherwise receive a light tint in dark mode and a dark tint in
+light mode. Static rows retain their background unless an explicit hover color is
+provided.
+
+Use `alt` to describe an image, or leave it empty for a decorative image.
+`iconStrokeWidth` controls the fallback icon's stroke. Custom children take
+precedence over `src`, which takes precedence over `iconName`.

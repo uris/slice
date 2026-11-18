@@ -19,7 +19,7 @@ export function App() {
 						<Button width={'fill'} variant={'primary'} link={'/docs/react/colors'} target={'_top'}>
 							<FlexBox direction={'row'} align={'center'} justify={'center'} gap={8}>
 								<Icon name={'basic.planet'} strokeColor={'var(--core-text-dark)'} />
-								<span style={{ color: 'var(--core-text-dark)' }}>Web Apps</span>
+								<span style={{ color: 'var(--core-text-dark)' }}>Web apps</span>
 							</FlexBox>
 						</Button>
 						<Button
@@ -31,7 +31,7 @@ export function App() {
 							<FlexBox direction={'row'} align={'center'} justify={'center'} gap={8}>
 								<Icon name={'brands.apple'} />
 								<Icon name={'brands.android'} />
-								<span>Native Apps</span>
+								<span>Native apps</span>
 								<Badge variant={'light'} title={'Alpha'} count={'Alpha'} />
 							</FlexBox>
 						</Button>

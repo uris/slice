@@ -4,8 +4,9 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { Code, DefaultVal, Definition, H1, H2, H3, Method, P, Prop, TypeDef } from '@/components/Type/Type';
 import { FlexBox, Preset } from '@apple-pie/slice';
-import { DialogBoxPreview } from './DialogBoxPreview';
+import { DialogBoxPreview, DialogBoxTint } from './DialogBoxPreview';
 import { actionCode, scrollingCode, sharedActionsCode, shorthandCode, usageCode } from './code';
+
 export function DialogBoxDoc() {
 	return (
 		<FlexBox preset={Preset.Column} maxWidth={680} style={{ minWidth: 420 }}>
@@ -34,6 +35,11 @@ export function DialogBoxDoc() {
 					{
 						label: 'Basic usage',
 						component: <DialogBoxPreview />,
+						code: { code: usageCode.trim(), filename: 'DialogBoxExample.tsx' },
+					},
+					{
+						label: 'Basic usage',
+						component: <DialogBoxTint />,
 						code: { code: usageCode.trim(), filename: 'DialogBoxExample.tsx' },
 					},
 				]}
@@ -463,6 +469,7 @@ export function DialogBoxDoc() {
 		</FlexBox>
 	);
 }
+
 export const trackedItems: TrackedItem[] = [
 	{ id: 'title', title: 'DialogBox component' },
 	{ id: 'usage', title: 'Usage' },

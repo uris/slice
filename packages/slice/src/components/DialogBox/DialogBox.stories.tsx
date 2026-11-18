@@ -415,7 +415,7 @@ export const ScrollingSectionBackgrounds: StoryObj<typeof DialogBox> = {
 		const [overflow, setOverflow] = useState(false);
 		return (
 			<>
-				<span data-testid="scroll-color" style={{ display: 'none', backgroundColor: 'var(--core-fill-primary)' }} />
+				<span data-testid="scroll-color" style={{ display: 'none', backgroundColor: 'var(--core-outline-primary)' }} />
 				<button type="button" onClick={() => setOverflow((value) => !value)}>
 					Toggle overflow
 				</button>
@@ -575,4 +575,85 @@ export const Elevation: StoryObj<typeof meta> = {
 		</ElevationFixture>
 	),
 	play: async (context) => runElevationPlay(context, 5),
+};
+
+function actionTintStory(value: 'tint' | number, expectedColor: string): StoryObj<typeof DialogBox> {
+	return {
+		tags: ['tests'],
+		args: {
+			title: 'Tinted actions',
+			backgroundColor: '#808080',
+			actionsBackgroundColor: value,
+			autoBorderBottom: false,
+			actionsBorderWidth: 0,
+			actions: [{ id: 'done', label: 'Done' }],
+		},
+		render: (args) => (
+			<>
+				<span data-testid="expected-tint" style={{ display: 'none', backgroundColor: expectedColor }} />
+				<DialogBox {...args}>Project details</DialogBox>
+			</>
+		),
+		play: async ({ canvasElement }) => {
+			const canvas = within(canvasElement);
+			const footer = canvas.getByRole('button', { name: 'Done' }).parentElement?.parentElement as HTMLElement;
+			await expect(getComputedStyle(footer).backgroundColor).toBe(
+				getComputedStyle(canvas.getByTestId('expected-tint')).backgroundColor,
+			);
+			await expect(getComputedStyle(footer).borderTopWidth).toBe('1px');
+		},
+	};
+}
+
+export const DefaultActionsTint = actionTintStory('tint', 'color-mix(in srgb, #808080 70%, black)');
+export const PositiveActionsTint = actionTintStory(20, 'color-mix(in srgb, #808080 80%, white)');
+export const NegativeActionsTint = actionTintStory(-20, 'color-mix(in srgb, #808080 80%, black)');
+export const ZeroActionsTint = actionTintStory(0, 'color-mix(in srgb, #808080 100%, white)');
+
+export const ActionsTintFollowsBase: StoryObj<typeof DialogBox> = {
+	tags: ['tests'],
+	render: (args) => {
+		const [changed, setChanged] = useState(false);
+		return (
+			<>
+				<span
+					data-testid="expected-tint"
+					style={{
+						display: 'none',
+						backgroundColor: changed
+							? 'color-mix(in srgb, #404040 70%, black)'
+							: 'color-mix(in srgb, #808080 70%, black)',
+					}}
+				/>
+				<DialogBox
+					{...args}
+					title="Changing tint"
+					backgroundColor={changed ? '#404040' : '#808080'}
+					actionsBackgroundColor="tint"
+				>
+					<DialogBox.Content>
+						<button type="button" onClick={() => setChanged(true)}>
+							Change base color
+						</button>
+					</DialogBox.Content>
+					<DialogBox.Actions>
+						<Button label="Done" />
+					</DialogBox.Actions>
+				</DialogBox>
+			</>
+		);
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const footer = canvas.getByRole('button', { name: 'Done' }).parentElement?.parentElement as HTMLElement;
+		const before = getComputedStyle(footer).backgroundColor;
+		await expect(before).toBe(getComputedStyle(canvas.getByTestId('expected-tint')).backgroundColor);
+		await userEvent.click(canvas.getByRole('button', { name: 'Change base color' }));
+		await waitFor(() => {
+			expect(getComputedStyle(footer).backgroundColor).not.toBe(before);
+			expect(getComputedStyle(footer).backgroundColor).toBe(
+				getComputedStyle(canvas.getByTestId('expected-tint')).backgroundColor,
+			);
+		});
+	},
 };

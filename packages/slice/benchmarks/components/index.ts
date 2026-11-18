@@ -58,3 +58,5 @@ export { flexBoxBenchmarkConfig } from './FlexBox.bench';
 export { popMenuBenchmarkConfig } from './PopMenu.bench';
 
 export { cardBenchmarkConfig } from './Card.bench';
+
+export { infoBoxBenchmarkConfig } from './InfoBox.bench';
