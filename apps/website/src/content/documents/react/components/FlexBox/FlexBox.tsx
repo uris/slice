@@ -16,7 +16,7 @@ const getPresets = () => {
 		const preview = {
 			label: `Preset: ${label}`,
 			component: <PresetPreview preset={value} />,
-			code: { code: presetCode(value).trim() },
+			code: { filename: `FlexBox-${value}.tsx`, code: presetCode(value).trim() },
 		};
 		options.push(preview);
 	}
@@ -336,7 +336,7 @@ export default function FlexBoxDoc() {
 				FlexBox exposes Motion’s native animation props directly. Use <Code>initial</Code>, <Code>animate</Code>, and{' '}
 				<Code>exit</Code> for declarative states; partial <Code>transition</Code> settings are merged with Water.
 			</P>
-			<CodeBlock language="tsx" code={motionCode.trim()} />
+			<CodeBlock filename="FlexBoxMotion.tsx" language="tsx" code={motionCode.trim()} />
 			<Definition id="animate">
 				<Prop>animate</Prop>
 				<TypeDef>{'boolean | TargetAndTransition | VariantLabels'}</TypeDef>

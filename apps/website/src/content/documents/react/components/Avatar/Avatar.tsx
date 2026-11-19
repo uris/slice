@@ -26,7 +26,7 @@ export function AvatarDoc() {
 					{
 						label: 'Photo avatar',
 						component: <Avatar name={'John Wick'} size={40} image={'/images/jw-profile.png'} />,
-						code: { code: usageCode.trim() },
+						code: { filename: 'AvatarExample.tsx', code: usageCode.trim() },
 					},
 				]}
 			/>
@@ -43,7 +43,7 @@ export function AvatarDoc() {
 					{
 						label: 'Initials fallback',
 						component: <Avatar name={'John Wick'} size={40} backgroundColor="array-cyan-accent" />,
-						code: { code: initialsCode.trim() },
+						code: { filename: 'AvatarInitials.tsx', code: initialsCode.trim() },
 					},
 				]}
 			/>

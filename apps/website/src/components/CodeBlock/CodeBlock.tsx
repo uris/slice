@@ -1,8 +1,9 @@
 'use client';
 
-import { IconButton } from '@apple-pie/slice';
+import { IconButton, useTheme } from '@apple-pie/slice';
 import { useClipboard } from '@apple-pie/slice/hooks';
 import { useTipActions, useToastActions } from '@apple-pie/slice/stores';
+import { opacityFromColor } from '@apple-pie/slice/utils';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import styles from './CodeBlock.module.css';
@@ -25,17 +26,19 @@ export interface CodeBlockProps {
 
 // All snippets share one lazily loaded highlighter for TypeScript, TSX, and CSS.
 async function createCodeHighlighter() {
-	const [{ createHighlighterCore }, { createJavaScriptRegexEngine }, typescript, tsx, theme, css] = await Promise.all([
-		import('shiki/core'),
-		import('shiki/engine/javascript'),
-		import('shiki/langs/typescript.mjs'),
-		import('shiki/langs/tsx.mjs'),
-		import('shiki/themes/github-dark.mjs'),
-		import('shiki/langs/css.mjs'),
-	]);
+	const [{ createHighlighterCore }, { createJavaScriptRegexEngine }, typescript, tsx, dark, light, css] =
+		await Promise.all([
+			import('shiki/core'),
+			import('shiki/engine/javascript'),
+			import('shiki/langs/typescript.mjs'),
+			import('shiki/langs/tsx.mjs'),
+			import('shiki/themes/github-dark.mjs'),
+			import('shiki/themes/github-light.mjs'),
+			import('shiki/langs/css.mjs'),
+		]);
 	return createHighlighterCore({
 		langs: [typescript.default, tsx.default, css.default],
-		themes: [theme.default],
+		themes: [dark.default, light.default],
 		engine: createJavaScriptRegexEngine(),
 	});
 }
@@ -76,6 +79,7 @@ export function CodeBlock({
 	showCopy = true,
 }: Readonly<CodeBlockProps>) {
 	const { copy, isCopied, isRequesting, error } = useClipboard({ watchPermissions: false });
+	const { isDark } = useTheme();
 	const [instance, setInstance] = useState<Awaited<ReturnType<typeof createCodeHighlighter>>>();
 	const pushTip = useTipActions().push;
 	const pushToast = useToastActions().push;
@@ -97,10 +101,10 @@ export function CodeBlock({
 	}, []);
 
 	const highlighted = useMemo(
-		() => instance?.codeToTokens(code, { lang: language, theme: 'github-dark' }),
-		[instance, code, language],
+		() => instance?.codeToTokens(code, { lang: language, theme: isDark ? 'github-dark' : 'github-light' }),
+		[instance, code, language, isDark],
 	);
-	const { tokens, fg = '#e1e4e8' } = highlighted ?? {};
+	const { tokens, fg = 'var(--core-text-primary)' } = highlighted ?? {};
 
 	// adjust display based on integration into canvas or displayed solo
 	const containerStyles = useMemo(() => {
@@ -114,7 +118,7 @@ export function CodeBlock({
 			marginBottom: canvas || teased ? 0 : 24,
 			marginTop: canvas || teased ? 0 : 24,
 			borderWidth: canvas ? 0 : 1,
-			background: canvas ? 'transparent' : 'var(--core-surface-secondary)',
+			background: opacityFromColor('core-surface-primary-tint', 50),
 			overflow: canvas ? 'visible' : 'hidden',
 		} as React.CSSProperties;
 	}, [canvas, teased, last]);

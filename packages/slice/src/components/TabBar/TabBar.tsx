@@ -24,7 +24,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		underlineSelectedColor,
 		iconColor,
 		iconColorSelected,
-
+		iconStrokeWidth = 1.5,
 		options = [],
 		value,
 		defaultValue,
@@ -176,6 +176,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		options,
 		padding,
 		iconSize,
+		iconStrokeWidth,
 		iconGap,
 		tabGap,
 		tabWidth,
@@ -200,8 +201,19 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		selectedOption?.underlineSelectedColor ?? underlineSelectedColor ?? selectedAccent ?? 'var(--core-text-special)';
 	const baselineColor = selectedOption?.underlineColor ?? underlineColor ?? borderColor;
 	const context = useMemo(
-		() => ({ value: active, firstValue, iconDualTone, disabled, register, select, navigate, onToolTip, colors }),
-		[active, firstValue, iconDualTone, disabled, register, select, navigate, onToolTip, colors],
+		() => ({
+			value: active,
+			firstValue,
+			iconDualTone,
+			iconStrokeWidth,
+			disabled,
+			register,
+			select,
+			navigate,
+			onToolTip,
+			colors,
+		}),
+		[active, firstValue, iconDualTone, iconStrokeWidth, disabled, register, select, navigate, onToolTip, colors],
 	);
 	const vars = {
 		'--tab-bar-height': setStyle(height),
@@ -271,4 +283,5 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		</TabContext.Provider>
 	);
 }
+
 export const TabBar = React.memo(TabBarComponent) as <T = string>(props: TabBarProps<T>) => React.JSX.Element;

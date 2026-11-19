@@ -42,19 +42,33 @@ export function TabBarDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
 				components={[
-					{ label: 'Icons and counts', component: <TabBarExtrasExample />, code: { code: extrasCode.trim() } },
+					{
+						label: 'Icons and counts',
+						component: <TabBarExtrasExample />,
+						code: { filename: 'TabBarExtras.tsx', code: extrasCode.trim() },
+					},
 				]}
 			/>
 			<H3>Fill the available width</H3>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
-				components={[{ label: 'Equal-width tabs', component: <TabBarFillExample />, code: { code: fillCode.trim() } }]}
+				components={[
+					{
+						label: 'Equal-width tabs',
+						component: <TabBarFillExample />,
+						code: { filename: 'TabBarFill.tsx', code: fillCode.trim() },
+					},
+				]}
 			/>
 			<H3>Disable the group</H3>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
 				components={[
-					{ label: 'Disabled tabs', component: <TabBarDisabledExample />, code: { code: disabledCode.trim() } },
+					{
+						label: 'Disabled tabs',
+						component: <TabBarDisabledExample />,
+						code: { filename: 'TabBarDisabled.tsx', code: disabledCode.trim() },
+					},
 				]}
 			/>
 			<H3>Set an accent</H3>
@@ -63,7 +77,13 @@ export function TabBarDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tabbar--default"
-				components={[{ label: 'Set an accent', component: <TabBarColorExample />, code: { code: colorsCode.trim() } }]}
+				components={[
+					{
+						label: 'Set an accent',
+						component: <TabBarColorExample />,
+						code: { filename: 'TabBarColors.tsx', code: colorsCode.trim() },
+					},
+				]}
 			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
@@ -192,6 +212,15 @@ export function TabBarDoc() {
 				<DefaultVal>{'20'}</DefaultVal>
 			</Definition>
 			<P>{'Default size of tab icons in pixels. A Tab or TabOption iconSize overrides it.'}</P>
+			<Definition id="iconStrokeWidth">
+				<Prop>iconStrokeWidth</Prop>
+				<TypeDef>number</TypeDef>
+				<DefaultVal>1.5</DefaultVal>
+			</Definition>
+			<P>
+				Default stroke width for tab icons in SVG viewBox units. An individual <Code>Tab</Code> or{' '}
+				<Code>TabOption</Code> can override it.
+			</P>
 			<Definition id={'justify'}>
 				<Prop>justify</Prop>
 				<TypeDef>{"'start' | 'center' | 'end'"}</TypeDef>
@@ -380,6 +409,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'iconDualTone', title: 'iconDualTone', code: true },
 			{ id: 'iconGap', title: 'iconGap', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
+			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'justify', title: 'justify', code: true },
 			{ id: 'options', title: 'options', code: true },
 			{ id: 'padding', title: 'padding', code: true },

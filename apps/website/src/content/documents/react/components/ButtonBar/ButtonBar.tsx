@@ -37,7 +37,7 @@ export default function ButtonBarDoc() {
 			<P>
 				For a concise alternative, supply <Code>ButtonProps</Code> records through <Code>buttons</Code>.
 			</P>
-			<CodeBlock code={optionsCode} language="tsx" />
+			<CodeBlock filename="ButtonBarOptions.tsx" code={optionsCode} language="tsx" />
 			<H3>Group multiple button bars</H3>
 			<P>
 				Compose multiple <Code>ButtonBar</Code> components in a <Code>FlexBox</Code> using the built in{' '}
@@ -49,7 +49,7 @@ export default function ButtonBarDoc() {
 					{
 						label: 'Multiple Button Bars',
 						component: <GroupedButtonBarUsageExample />,
-						code: { code: flexBoxCode.trim() },
+						code: { filename: 'ButtonBarLayout.tsx', code: flexBoxCode.trim() },
 					},
 				]}
 			/>
@@ -63,7 +63,7 @@ export default function ButtonBarDoc() {
 					{
 						label: 'Vertical layout',
 						component: <ButtonBarVerticalExample />,
-						code: { code: verticalOrientation.trim() },
+						code: { filename: 'ButtonBarVertical.tsx', code: verticalOrientation.trim() },
 					},
 				]}
 			/>
@@ -78,7 +78,7 @@ export default function ButtonBarDoc() {
 					{
 						label: 'Combined with TextField',
 						component: <InputFieldExample />,
-						code: { code: inputField.trim() },
+						code: { filename: 'ButtonBarInputField.tsx', code: inputField.trim() },
 					},
 				]}
 			/>

@@ -5,7 +5,7 @@ import { Caption } from '@/components/Type/Type';
 import { classNames } from '@/src/utils/misc';
 import { Button, IconButton, Pager, Slider } from '@apple-pie/slice';
 import { useTheme } from '@apple-pie/slice/hooks';
-import { addOpacity } from '@apple-pie/slice/utils';
+import { opacityFromColor } from '@apple-pie/slice/utils';
 import {
 	AnimatePresence,
 	type Transition,
@@ -102,15 +102,7 @@ function CanvasSlide({ children, settings }: Readonly<{ children: React.ReactNod
 }
 
 export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.ReactElement {
-	const {
-		zoom,
-		components,
-		showControls = false,
-		showCode = true,
-		offsetTop = false,
-		offsetBottom = true,
-		minHeight,
-	} = props;
+	const { zoom, components, showControls = false, showCode = true, offsetBottom = true, minHeight } = props;
 	const { initial, min, max } = zoom ?? { initial: 1, min: 0, max: 2 };
 	const [scale, setScale] = useState(initial);
 	const [{ index: selected, direction }, setPage] = useState({ index: 0, direction: 1 });
@@ -197,13 +189,12 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 	}, [hidden]);
 
 	const codeMaskStyles = useMemo(() => {
-		const color = current.colors['core-surface-secondary'];
-		const colorFrom = addOpacity(color, 1);
-		const colorTo = addOpacity(color, 0.5);
+		const color = current.colors['core-surface-primary-tint'];
+		const colorTo = opacityFromColor('core-surface-primary-tint', 80);
 		return {
-			background: `linear-gradient(to top, ${colorFrom} 0%, ${colorTo} 80%)`,
+			background: `linear-gradient(to top, ${color} 0%, ${colorTo} 80%)`,
 		} as React.CSSProperties;
-	}, [current.colors['core-surface-secondary']]);
+	}, [current.colors['core-surface-primary-tint']]);
 
 	// Re-measure after page changes, highlighting, wrapping, and container resizes.
 	useEffect(() => {
@@ -329,8 +320,13 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 				</div>
 			</div>
 			{hasCode && (
-				<div className={styles.code} style={{ maxHeight: hidden ? 100 : height }}>
-					<div className={styles.codePage} ref={codeBlockRef} inert={hidden || undefined}>
+				<div className={styles.code} style={{ maxHeight: hidden ? 84 : height }}>
+					<div
+						className={styles.codePage}
+						ref={codeBlockRef}
+						inert={hidden || undefined}
+						style={{ opacity: hidden ? 0.25 : 1 }}
+					>
 						{resolvedCode.map((codeBlock, index) => {
 							return (
 								<CodeBlock
@@ -347,7 +343,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 							);
 						})}
 					</div>
-					<div className={styles.codeMask} style={{ ...codeMaskStyles, opacity: hidden ? 1 : 0 }} />
+					{/*<div className={styles.codeMask} style={{...codeMaskStyles, opacity: hidden ? 1 : 0}}/>*/}
 					<div className={styles.show} style={buttonStyles}>
 						<Button
 							label={hidden ? 'Show code' : 'Hide code'}

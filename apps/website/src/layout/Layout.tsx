@@ -1,5 +1,6 @@
 'use client';
 
+import { useRightPanelClosed } from '@/docs/stores/store';
 import { detailsPanelConstraints, sidePanelConstraints } from '@/src/consts/consts';
 import { Content } from '@/src/layout/Content';
 import { Details } from '@/src/layout/Details';
@@ -27,6 +28,7 @@ export function Layout() {
 	const tip = useTip();
 	const toast = useToast();
 	const { clear } = useToastActions();
+	const rightPanelClosed = useRightPanelClosed();
 	const coords = useToolTip(tip, tipRef);
 
 	return (
@@ -46,7 +48,7 @@ export function Layout() {
 					dragHandle={false}
 					sizeConstraints={sidePanelConstraints}
 					className={styles.sidebar}
-					borderRight={'1px solid var(--core-surface-secondary)'}
+					borderRight={'1px solid var(--core-outline-primary)'}
 				>
 					<Sidebar />
 				</DraggablePanel>
@@ -56,11 +58,11 @@ export function Layout() {
 				<DraggablePanel
 					drags={'left'}
 					resizeHandleLabel="Resize page outline sidebar"
-					isClosed={false}
+					isClosed={rightPanelClosed}
 					dragHandle={false}
 					sizeConstraints={detailsPanelConstraints}
-					className={classNames(styles.sidebar, styles.sidebarRight)}
-					borderLeft={'1px solid var(--core-surface-secondary)'}
+					className={classNames(styles.sidebar)}
+					borderLeft={'1px dashed var(--core-outline-primary)'}
 				>
 					<Details />
 				</DraggablePanel>

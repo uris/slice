@@ -11,12 +11,13 @@ import { CodeBlock } from '@/components/CodeBlock';
 ```
 
 `code` is required. `filename` and `className` are optional. `showFilename` defaults
-to `false`; set it to `true` to display the filename header. The code area uses
+to `true`; set it to `false` to hide the filename header. Website documentation
+examples must provide a descriptive filename and keep the header visible. The code area uses
 `--core-surface-primary-tint`, with transparent backgrounds behind the colored text.
 The language defaults
 to `typescript`; use `tsx` for JSX and `css` for stylesheets. Plain code renders immediately; highlighting
 loads in the browser using a shared highlighter with only TypeScript, TSX, CSS, and
-the GitHub Dark theme. Whitespace is preserved and long lines scroll horizontally.
+the GitHub Dark and GitHub Light themes, following the active website theme. Whitespace is preserved and long lines scroll horizontally.
 
 Set `wrap` to wrap long lines. Continuations align with the source line’s first
 non-whitespace character, keeping its indentation and the line-number gutter.

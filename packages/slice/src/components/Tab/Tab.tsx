@@ -33,6 +33,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 		underlineSelectedColor,
 		iconColor,
 		iconColorSelected,
+		iconStrokeWidth,
 		...attributes
 	} = resolveColorProps(rawProps);
 	const group = useContext(TabContext);
@@ -59,6 +60,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 			underlineSelectedColor,
 			iconColor,
 			iconColorSelected,
+			iconStrokeWidth,
 		}),
 		[
 			value,
@@ -78,6 +80,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 			underlineSelectedColor,
 			iconColor,
 			iconColorSelected,
+			iconStrokeWidth,
 		],
 	);
 	useClientLayoutEffect(
@@ -134,6 +137,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 						style={{ width: '100%', height: '100%' }}
 						dualTone={group.iconDualTone}
 						strokeColor="currentColor"
+						stroke={iconStrokeWidth ?? group.iconStrokeWidth}
 					/>
 				</span>
 			)}
@@ -142,4 +146,5 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 		</button>
 	);
 }
+
 export const Tab = React.memo(TabComponent) as <T = string>(props: TabProps<T>) => React.JSX.Element;

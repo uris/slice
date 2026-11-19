@@ -3,8 +3,8 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, H1, H2, H3, P } from '@/components/Type/Type';
+import { SpacingImage } from '@/documents/react/design-system/spacing/SpacingImage';
 import { FlexBox, Preset } from '@apple-pie/slice';
-import spacingGrid from '../../../../../assets/colors/spacing-grid-test4.svg';
 import { SpacingTokensTable } from './SpacingTokensTable';
 
 export function SpacingDoc() {
@@ -28,9 +28,10 @@ export function SpacingDoc() {
 			<GradientCanvas
 				caption={'2× spacing rhythm'}
 				height={350}
-				imageSrc={spacingGrid}
 				imageDescription={'Spacing grid showing steps that double in size, with an additional 24px step'}
-			/>
+			>
+				<SpacingImage size={200} />
+			</GradientCanvas>
 			<H2 id="guidance">Guidance</H2>
 			<H3>Build a consistent rhythm</H3>
 			<P>

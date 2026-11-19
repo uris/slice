@@ -19,6 +19,8 @@ export type TabOption<T = string> = TabColorProps & {
 	icon?: SliceIcon | null;
 	/** Overrides the inherited TabBar icon size in pixels. */
 	iconSize?: number;
+	/** Overrides the inherited TabBar icon stroke width in SVG viewBox units. */
+	iconStrokeWidth?: number;
 	toolTip?: string;
 	count?: number;
 	disabled?: boolean;

@@ -37,7 +37,7 @@ export function ColorButton(props: Readonly<ColorButtonProps>) {
 			'--color-value': color.value ?? 'transparent',
 			'--color-opacity': color.opacity ?? 1,
 			'--border-color': color.theme === 'light' ? 'var(--core-fill-primary)' : 'transparent',
-			'--border-width': color.theme === 'light' ? 1 : 'transparent',
+			'--border-width': color.theme === 'light' ? '1px' : 'transparent',
 			'--background-color': color.theme === 'light' ? '#ffffff' : '#000000',
 			'--text-color': color.theme === 'light' ? '#000000' : '#ffffff',
 			'--opacity-color': color.theme === 'light' ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.6)',

@@ -5,11 +5,11 @@
 [data-slice-theme-scope] {
 	--font-family: var(--slice-font-family, "Funnel Sans");
 	/* FONT WEIGHTS (based on funnel sans) */
-	--font-weight-regular: 360;
-	--font-weight-medium: 420;
-	--font-weight-semi: 480;
-	--font-weight-bold: 500;
-	--font-weight-extra: 560;
+	--font-weight-regular: 420;
+	--font-weight-medium: 480;
+	--font-weight-semi: 540;
+	--font-weight-bold: 600;
+	--font-weight-extra: 660;
 	/* FONT SIZES - in rem - factor of base 16px for web */
 	--font-size-xs: 0.75rem; /* 12px */
 	--font-size-s: 0.875rem; /* 14px */

@@ -26,8 +26,12 @@ export default function FlexDivDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-flexdiv--default"
 				components={[
-					{ label: 'Row', component: <RowPreview />, code: { code: rowCode.trim() } },
-					{ label: 'Column', component: <ColumnPreview />, code: { code: columnCode.trim() } },
+					{ label: 'Row', component: <RowPreview />, code: { filename: 'FlexDivRow.tsx', code: rowCode.trim() } },
+					{
+						label: 'Column',
+						component: <ColumnPreview />,
+						code: { filename: 'FlexDivColumn.tsx', code: columnCode.trim() },
+					},
 				]}
 			/>
 			<H3>Scrolling</H3>
@@ -37,7 +41,13 @@ export default function FlexDivDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-flexdiv--default"
-				components={[{ label: 'Scrollable column', component: <ScrollPreview />, code: { code: scrollCode.trim() } }]}
+				components={[
+					{
+						label: 'Scrollable column',
+						component: <ScrollPreview />,
+						code: { filename: 'FlexDivScroll.tsx', code: scrollCode.trim() },
+					},
+				]}
 			/>
 			<H2 id="behavior">Behavior</H2>
 			<P>
@@ -246,7 +256,7 @@ export default function FlexDivDoc() {
 				FlexDiv exposes Motion’s native animation props directly. Use <Code>initial</Code>, <Code>animate</Code>, and{' '}
 				<Code>exit</Code> for declarative states; partial <Code>transition</Code> settings are merged with Water.
 			</P>
-			<CodeBlock language="tsx" code={motionCode.trim()} />
+			<CodeBlock filename="FlexDivMotion.tsx" language="tsx" code={motionCode.trim()} />
 			<Definition id="animate">
 				<Prop>animate</Prop>
 				<TypeDef>{'boolean | TargetAndTransition | VariantLabels'}</TypeDef>

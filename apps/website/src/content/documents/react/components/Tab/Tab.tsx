@@ -69,7 +69,11 @@ export function TabDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-tab--default"
 				components={[
-					{ label: 'Override selected colors', component: <TabColorExample />, code: { code: colorsCode.trim() } },
+					{
+						label: 'Override selected colors',
+						component: <TabColorExample />,
+						code: { filename: 'TabColors.tsx', code: colorsCode.trim() },
+					},
 				]}
 			/>
 			<H2 id="behavior">Behavior</H2>
@@ -155,6 +159,14 @@ export function TabDoc() {
 				<DefaultVal>TabBar iconSize (20px by default)</DefaultVal>
 			</Definition>
 			<P>Overrides the inherited icon size for this tab, in pixels. Also supported on TabBar options.</P>
+			<Definition id="iconStrokeWidth">
+				<Prop>iconStrokeWidth</Prop>
+				<TypeDef>number</TypeDef>
+				<DefaultVal>TabBar iconStrokeWidth (1.5 by default)</DefaultVal>
+			</Definition>
+			<P>
+				Overrides the inherited icon stroke width in SVG viewBox units. Also supported on <Code>TabBar</Code> options.
+			</P>
 			<Definition id={'id'}>
 				<Prop>id</Prop>
 				<TypeDef>{'string'}</TypeDef>
@@ -277,6 +289,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'iconColor', title: 'iconColor', code: true },
 			{ id: 'iconColorSelected', title: 'iconColorSelected', code: true },
 			{ id: 'iconSize', title: 'iconSize', code: true },
+			{ id: 'iconStrokeWidth', title: 'iconStrokeWidth', code: true },
 			{ id: 'id', title: 'id', code: true },
 			{ id: 'label', title: 'label', code: true },
 			{ id: 'panelId', title: 'panelId', code: true },

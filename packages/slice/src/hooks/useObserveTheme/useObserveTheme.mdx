@@ -14,6 +14,12 @@ import {Spacer} from '../../components/Spacer';
         ## Signature
         `useObserveTheme()`
 
+        ## Server rendering
+        During server rendering and hydration, the hook returns the provider's `initialTheme`.
+        After hydration it synchronizes with the theme already applied to the document,
+        including a saved preference applied by an early script. Pass the same `initialTheme`
+        on the server and client so theme-dependent markup hydrates consistently.
+
         ## Parameters
         This hook does not take parameters.
 

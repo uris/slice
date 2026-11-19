@@ -454,7 +454,9 @@ export function PromptInputDoc() {
 						<DefaultVal>{defaultValue}</DefaultVal>
 					</Definition>
 					<P>{description}</P>
-					{name === 'children' && <CodeBlock language="typescript" code={actionsType} />}
+					{name === 'children' && (
+						<CodeBlock filename="PromptInputActions.ts" language="typescript" code={actionsType} />
+					)}
 				</Fragment>
 			))}
 			<H2 id="events">Events</H2>

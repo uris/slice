@@ -1,4 +1,5 @@
 import { LogoHeader } from '@/components/LogoHeader/LogoHeader';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher/ThemeSwitcher';
 import { menuOptionsReact, menuOptionsReactNative } from '@/docs/registry/menu';
 import { usePackageType } from '@/docs/stores/store';
 import { Package, surfaceYellow } from '@/src/consts/consts';
@@ -33,21 +34,26 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.menu}>
-				<LogoHeader />
-				{options.map((option: MainMenuOption, index: number) => {
-					const { label, param } = option;
-					const color = params.has(param) ? surfaceYellow : 'var(--core-text-primary)';
-					return (
-						<input
-							className={classNames(styles.button, styles.type, 'body-s-regular')}
-							style={{ color }}
-							key={`main_menu_${label}`}
-							type={'button'}
-							value={`/  ${label}`}
-							onClick={() => handleClick(option)}
-						/>
-					);
-				})}
+				<div className={styles['menu-left']}>
+					<LogoHeader />
+					<div className={styles['menu-options']}>
+						{options.map((option: MainMenuOption, index: number) => {
+							const { label, param } = option;
+							const color = params.has(param) ? surfaceYellow : 'var(--core-text-primary)';
+							return (
+								<input
+									className={classNames(styles.button, styles.type, 'body-m-bold')}
+									style={{ color }}
+									key={`main_menu_${label}`}
+									type={'button'}
+									value={`/ ${label}`}
+									onClick={() => handleClick(option)}
+								/>
+							);
+						})}
+					</div>
+				</div>
+				<ThemeSwitcher />
 			</div>
 		</div>
 	);

@@ -141,7 +141,11 @@ export function TextFieldDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-textfield--default"
 				components={[
-					{ label: 'Invalid field', component: <TextFieldErrorExample />, code: { code: errorCode.trim() } },
+					{
+						label: 'Invalid field',
+						component: <TextFieldErrorExample />,
+						code: { filename: 'TextFieldError.tsx', code: errorCode.trim() },
+					},
 				]}
 			/>
 			<H2 id="behavior">Behavior</H2>

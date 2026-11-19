@@ -110,7 +110,7 @@ export function GradientCanvas(props: Readonly<GradientCanvasProps>) {
 					<Caption style={{ paddingLeft: 0 }}>{caption}</Caption>
 				</div>
 			)}
-			<div className={classNames(css.content)}>{imageSrc ? renderImage() : children}</div>
+			<div className={classNames(css.content)}>{children ?? renderImage()}</div>
 		</div>
 	);
 }

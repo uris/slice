@@ -9,6 +9,7 @@ type TabBarContextValue = {
 	value: unknown;
 	firstValue: unknown;
 	iconDualTone: boolean;
+	iconStrokeWidth?: number;
 	colors: TabColorProps;
 	disabled: boolean;
 	register: (element: HTMLButtonElement, option: TabOption<unknown>) => () => void;

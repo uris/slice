@@ -139,3 +139,39 @@ export const IconSizeOverride: Story = {
 		}
 	},
 };
+
+export const IconStrokeWidth: Story = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<TabBar
+				tabBarName="Option stroke widths"
+				iconStrokeWidth={2}
+				options={[
+					{ value: 'inherited', label: 'Inherited', icon: 'basic.home' },
+					{ value: 'override', label: 'Override', icon: 'basic.home', iconStrokeWidth: 3 },
+				]}
+			/>
+			<TabBar tabBarName="Composed stroke widths" iconStrokeWidth={2}>
+				<Tab value="child" label="Child" icon="basic.home" iconStrokeWidth={0.5} />
+				<Tab value="zero" label="Zero" icon="basic.home" iconStrokeWidth={0} />
+			</TabBar>
+			<TabBar tabBarName="Default stroke width">
+				<Tab value="default" label="Default" icon="basic.home" />
+			</TabBar>
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, width] of [
+			['Inherited', '2'],
+			['Override', '3'],
+			['Child', '0.5'],
+			['Zero', '0'],
+			['Default', '1.5'],
+		]) {
+			const shape = canvas.getByRole('tab', { name }).querySelector('[stroke-width]');
+			await expect(shape).toHaveAttribute('stroke-width', width);
+		}
+	},
+};
