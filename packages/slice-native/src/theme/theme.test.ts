@@ -20,7 +20,7 @@ describe('native themes', () => {
 	});
 	it('converts all typography styles to numeric native dimensions', () => {
 		expect(Object.keys(lightTheme.type)).toEqual(Object.keys(webLight.type));
-		expect(lightTheme.type['body-m-regular']).toMatchObject({ fontSize: 15, lineHeight: 21, fontWeight: 360, letterSpacing: 0.140625 });
+		expect(lightTheme.type['body-m-regular']).toMatchObject({ fontSize: 15, lineHeight: 21, fontWeight: 420, letterSpacing: 0.140625 });
 		expect(createTypography('AppFont').h1.fontFamily).toBe('AppFont');
 		for (const style of Object.values(lightTheme.type)) {
 			for (const property of ['fontSize', 'lineHeight', 'letterSpacing'] as const) expect(Number.isFinite(style[property])).toBe(true);
@@ -45,7 +45,7 @@ describe('native themes', () => {
 
 it.each(['regular', 'medium', 'bold'] as const)('computes shared body-xxl-%s typography in both native themes', (weight) => {
  const key = `body-xxl-${weight}` as const;
- const weights = { regular: 360, medium: 420, bold: 500 };
+ const weights = { regular: 420, medium: 480, bold: 600 };
  for (const theme of [lightTheme, darkTheme]) {
   expect(theme.type[key]).toMatchObject({ fontSize: 18, fontWeight: weights[weight] });
   expect(theme.type[key].lineHeight).toBeCloseTo(29.25, 6);

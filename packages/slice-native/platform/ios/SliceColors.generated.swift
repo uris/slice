@@ -43,6 +43,7 @@ public enum SliceColors {
     public static var coreBrown: Color { Color("core-brown", bundle: bundle) }
     public static var coreButtonDisabled: Color { Color("core-button-disabled", bundle: bundle) }
     public static var coreButtonPrimary: Color { Color("core-button-primary", bundle: bundle) }
+    public static var coreButtonSecondary: Color { Color("core-button-secondary", bundle: bundle) }
     public static var coreCyan: Color { Color("core-cyan", bundle: bundle) }
     public static var coreDropShadow: Color { Color("core-drop-shadow", bundle: bundle) }
     public static var coreFillPrimary: Color { Color("core-fill-primary", bundle: bundle) }
@@ -138,6 +139,7 @@ public enum SliceUIColors {
     public static var coreBrown: UIColor { SliceColors.uiColor(named: "core-brown") }
     public static var coreButtonDisabled: UIColor { SliceColors.uiColor(named: "core-button-disabled") }
     public static var coreButtonPrimary: UIColor { SliceColors.uiColor(named: "core-button-primary") }
+    public static var coreButtonSecondary: UIColor { SliceColors.uiColor(named: "core-button-secondary") }
     public static var coreCyan: UIColor { SliceColors.uiColor(named: "core-cyan") }
     public static var coreDropShadow: UIColor { SliceColors.uiColor(named: "core-drop-shadow") }
     public static var coreFillPrimary: UIColor { SliceColors.uiColor(named: "core-fill-primary") }
