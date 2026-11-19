@@ -30,7 +30,10 @@ export default function IconDoc() {
 				components={Object.entries(SliceIcons).map(([group, icons]) => ({
 					label: group,
 					component: <IconGroupPreview icons={Object.values(icons)} />,
-					code: { code: galleryCode.replace('SliceIcons.basic', `SliceIcons.${group}`).trim() },
+					code: {
+						filename: `Icons-${group}.tsx`,
+						code: galleryCode.replace('SliceIcons.basic', `SliceIcons.${group}`).trim(),
+					},
 				}))}
 			/>
 
@@ -42,7 +45,11 @@ export default function IconDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-icon--default"
 				components={[
-					{ label: 'Core ramp colors', component: <IconColorsPreview />, code: { code: colorsCode.trim() } },
+					{
+						label: 'Core ramp colors',
+						component: <IconColorsPreview />,
+						code: { filename: 'IconColors.tsx', code: colorsCode.trim() },
+					},
 				]}
 			/>
 			<H3>Sizes and strokes</H3>
@@ -57,7 +64,7 @@ export default function IconDoc() {
 					{
 						label: 'Sizes and stroke weights',
 						component: <IconSizesPreview />,
-						code: { code: sizesCode.trim() },
+						code: { filename: 'IconSizes.tsx', code: sizesCode.trim() },
 					},
 				]}
 			/>

@@ -755,7 +755,7 @@ export const StackedTypography: Story = {
 		);
 		expect(Math.abs(label.getBoundingClientRect().left - input.getBoundingClientRect().left)).toBeLessThan(1);
 		expect(getComputedStyle(label.parentElement as HTMLElement).backgroundColor).toBe('rgba(0, 0, 0, 0)');
-		expect(getComputedStyle(label).fontWeight).toBe('420');
+		expect(getComputedStyle(label).fontWeight).toBe('480');
 	},
 };
 export const UnlabeledStacked: Story = {

@@ -19,6 +19,8 @@ type TabBarBaseProps<T> = TabColorProps & {
 	closeWidth?: number | string;
 	padding?: number | string;
 	iconSize?: number;
+	/** Default icon stroke width in SVG viewBox units; individual tabs may override it. */
+	iconStrokeWidth?: number;
 	iconDualTone?: boolean;
 	iconGap?: number;
 	tabGap?: number;

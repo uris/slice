@@ -150,20 +150,16 @@
 	font: inherit;
 	letter-spacing: inherit;
 	color: inherit;
-	border: 0;
 	padding: 0;
 	margin: 0;
 	background-color: transparent;
 	cursor: pointer;
-	text-decoration-line: underline;
-	text-decoration-thickness: 1px;
-	text-underline-offset: 3px;
-	text-decoration-style: solid;
-	text-decoration-color: var(--underline-color);
+	outline: 0;
+	border: 0;
 
 	&:hover,
 	&:focus-visible {
-		text-decoration-color: var(--underline-hover-color);
+		background-color: var(--core-surface-special);
 	}
 
 	&:focus-visible {

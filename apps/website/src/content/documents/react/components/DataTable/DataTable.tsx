@@ -32,7 +32,7 @@ export default function DataTableDoc() {
 					{
 						label: 'Default Table',
 						component: <TablePreview />,
-						code: { code: usageCode.trim() },
+						code: { filename: 'DataTableExample.tsx', code: usageCode.trim() },
 						hasRefresh: true,
 					},
 				]}
@@ -48,7 +48,7 @@ export default function DataTableDoc() {
 					{
 						label: 'Custom cells rendering',
 						component: <CustomCellsPreview />,
-						code: { code: customCode.trim() },
+						code: { filename: 'DataTableCustom.tsx', code: customCode.trim() },
 						hasRefresh: true,
 					},
 				]}
@@ -70,7 +70,7 @@ export default function DataTableDoc() {
 					{
 						label: 'Virtualization: 1,000 rows',
 						component: <LargeTablePreview />,
-						code: { code: largeCode.trim() },
+						code: { filename: 'DataTableLarge.tsx', code: largeCode.trim() },
 						hasRefresh: true,
 					},
 				]}

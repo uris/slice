@@ -171,7 +171,7 @@ export default function DraggablePanelDoc() {
 				follow the available space, or mix both to keep a readable minimum while limiting how much of the layout the
 				panel can occupy.
 			</P>
-			<CodeBlock code={constraintsCode.trim()} language="tsx" />
+			<CodeBlock filename="DraggablePanelConstraints.tsx" code={constraintsCode.trim()} language="tsx" />
 			<P>
 				Pass <Code>containerRef</Code> to measure percentages against the surrounding layout. Without it, percentages
 				use the viewport width. In an 800px container, the percentage example starts at 320px and allows widths from

@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 
 export function Providers({ children }: Readonly<{ children: ReactNode }>) {
 	return (
-		<ThemeProvider theme="darkMode" system={false} global>
+		<ThemeProvider initialTheme="darkMode" initialSystem={false} global>
 			{children}
 		</ThemeProvider>
 	);

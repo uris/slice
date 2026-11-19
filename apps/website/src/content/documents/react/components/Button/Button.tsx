@@ -52,22 +52,22 @@ export function ButtonDoc() {
 					{
 						label: 'Primary',
 						component: <ButtonPreview label="Solid" variant="primary" />,
-						code: { code: solidCode.trim() },
+						code: { filename: 'ButtonPrimary.tsx', code: solidCode.trim() },
 					},
 					{
 						label: 'Secondary',
 						component: <ButtonPreview label="Secondary" variant="secondary" />,
-						code: { code: secondaryCode.trim() },
+						code: { filename: 'ButtonSecondary.tsx', code: secondaryCode.trim() },
 					},
 					{
 						label: 'Outline',
 						component: <ButtonPreview label="Outline" variant="outline" />,
-						code: { code: outlineCode.trim() },
+						code: { filename: 'ButtonOutline.tsx', code: outlineCode.trim() },
 					},
 					{
 						label: 'Text',
 						component: <ButtonPreview label="Text Button" variant="text" />,
-						code: { code: textCode.trim() },
+						code: { filename: 'ButtonTextVariant.tsx', code: textCode.trim() },
 					},
 				]}
 			/>
@@ -81,7 +81,7 @@ export function ButtonDoc() {
 					{
 						label: 'Handle actions',
 						component: <ButtonActionPreview />,
-						code: { code: usageCode.trim() },
+						code: { filename: 'ButtonExample.tsx', code: usageCode.trim() },
 					},
 				]}
 			/>
@@ -96,12 +96,12 @@ export function ButtonDoc() {
 					{
 						label: 'Icon beside a label',
 						component: <ButtonPreview variant={'primary'} label="Continue" iconRight="arrows.arrow-right" />,
-						code: { code: iconsCode.trim() },
+						code: { filename: 'ButtonIcons.tsx', code: iconsCode.trim() },
 					},
 					{
 						label: 'Icon only',
 						component: <ButtonPreview iconLeft="basic.cross" round aria-label="Quit" />,
-						code: { code: iconOnlyCode.trim() },
+						code: { filename: 'ButtonIconOnly.tsx', code: iconOnlyCode.trim() },
 					},
 				]}
 			/>
@@ -115,7 +115,11 @@ export function ButtonDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--auto-children"
 				components={[
-					{ label: 'Custom content', component: <ButtonChildrenPreview />, code: { code: childrenCode.trim() } },
+					{
+						label: 'Custom content',
+						component: <ButtonChildrenPreview />,
+						code: { filename: 'ButtonChildren.tsx', code: childrenCode.trim() },
+					},
 				]}
 			/>
 			<H3>Disable an action</H3>
@@ -129,17 +133,17 @@ export function ButtonDoc() {
 					{
 						label: 'Primary disabled',
 						component: <ButtonPreview variant={'primary'} label="Continue" disabled />,
-						code: { code: disabledCode.trim() },
+						code: { filename: 'ButtonDisabled.tsx', code: disabledCode.trim() },
 					},
 					{
 						label: 'Secondary disabled',
 						component: <ButtonPreview variant={'secondary'} label="Continue" disabled />,
-						code: { code: disabledCode.trim() },
+						code: { filename: 'ButtonDisabled.tsx', code: disabledCode.trim() },
 					},
 					{
 						label: 'Outline disabled',
 						component: <ButtonPreview variant={'outline'} label="Continue" disabled />,
-						code: { code: disabledCode.trim() },
+						code: { filename: 'ButtonDisabled.tsx', code: disabledCode.trim() },
 					},
 				]}
 			/>
@@ -166,7 +170,7 @@ export function ButtonDoc() {
 								/>
 							</div>
 						),
-						code: { code: stylingCode.trim() },
+						code: { filename: 'ButtonStyling.tsx', code: stylingCode.trim() },
 					},
 				]}
 			/>
@@ -178,7 +182,13 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Working', component: <ButtonWorkingPreview />, code: { code: workingCode.trim() } }]}
+				components={[
+					{
+						label: 'Working',
+						component: <ButtonWorkingPreview />,
+						code: { filename: 'ButtonWorking.tsx', code: workingCode.trim() },
+					},
+				]}
 			/>
 
 			<H3>Delay an action</H3>
@@ -189,7 +199,11 @@ export function ButtonDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
 				components={[
-					{ label: 'Delayed action', component: <ButtonProgressPreview />, code: { code: progressCode.trim() } },
+					{
+						label: 'Delayed action',
+						component: <ButtonProgressPreview />,
+						code: { filename: 'ButtonProgress.tsx', code: progressCode.trim() },
+					},
 				]}
 			/>
 
@@ -203,7 +217,7 @@ export function ButtonDoc() {
 					{
 						label: 'Form submission',
 						component: <ButtonFormPreview />,
-						code: { code: formCode.trim() },
+						code: { filename: 'ButtonForm.tsx', code: formCode.trim() },
 					},
 				]}
 			/>
@@ -214,7 +228,13 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Tooltip', component: <ButtonTooltipPreview />, code: { code: tooltipCode.trim() } }]}
+				components={[
+					{
+						label: 'Tooltip',
+						component: <ButtonTooltipPreview />,
+						code: { filename: 'ButtonTooltip.tsx', code: tooltipCode.trim() },
+					},
+				]}
 			/>
 
 			<H2 id={'behavior'}>Behavior</H2>
@@ -571,7 +591,13 @@ export function ButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
-				components={[{ label: 'Animation', component: <ButtonMotionPreview />, code: { code: motionCode.trim() } }]}
+				components={[
+					{
+						label: 'Animation',
+						component: <ButtonMotionPreview />,
+						code: { filename: 'ButtonMotion.tsx', code: motionCode.trim() },
+					},
+				]}
 			/>
 			<Definition id={'animate'}>
 				<Prop>animate</Prop>
@@ -646,7 +672,11 @@ export function ButtonDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-button--default"
 				components={[
-					{ label: 'Activate through a ref', component: <ButtonRefPreview />, code: { code: refCode.trim() } },
+					{
+						label: 'Activate through a ref',
+						component: <ButtonRefPreview />,
+						code: { filename: 'ButtonRef.tsx', code: refCode.trim() },
+					},
 				]}
 			/>
 			<Definition id={'triggerClick'}>

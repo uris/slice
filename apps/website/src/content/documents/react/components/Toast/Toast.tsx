@@ -205,14 +205,18 @@ export function ToastDoc() {
 					{
 						label: 'Success',
 						component: <ToastPreview type={ToastType.Success} />,
-						code: { code: successCode.trim() },
+						code: { filename: 'ToastSuccess.tsx', code: successCode.trim() },
 					},
 					{
 						label: 'Warning',
 						component: <ToastPreview type={ToastType.Warning} />,
-						code: { code: warningCode.trim() },
+						code: { filename: 'ToastWarning.tsx', code: warningCode.trim() },
 					},
-					{ label: 'Error', component: <ToastPreview type={ToastType.Error} />, code: { code: errorCode.trim() } },
+					{
+						label: 'Error',
+						component: <ToastPreview type={ToastType.Error} />,
+						code: { filename: 'ToastError.tsx', code: errorCode.trim() },
+					},
 				]}
 			/>
 			<H2 id="behavior">Behavior</H2>
@@ -230,14 +234,14 @@ export function ToastDoc() {
 				directly into <Code>Toast</Code> and pass <Code>toastActions.clear</Code> to <Code>onHide</Code>; identity
 				checks keep an older exit from clearing a newer notification. Queuing and stacking are application decisions.
 			</P>
-			<CodeBlock code={storeCode.trim()} language="tsx" />
+			<CodeBlock filename="ToastStore.tsx" code={storeCode.trim()} language="tsx" />
 			<H3>Attach an action</H3>
 			<P>
 				Attach a typed <Code>data</Code> payload and handle <Code>onClick(event, data)</Code>. The data type is
 				inferred, or can be supplied explicitly as <Code>Toast&lt;T&gt;</Code>. The optional shared store accepts typed
 				payloads and handlers directly.
 			</P>
-			<CodeBlock code={actionCode.trim()} language="tsx" />
+			<CodeBlock filename="ToastAction.tsx" code={actionCode.trim()} language="tsx" />
 			<H2 id="accessibility">Accessibility</H2>
 			<P>
 				A persistent live region announces updates politely by default. <Code>urgency="assertive"</Code> uses an alert.
@@ -280,7 +284,7 @@ export function ToastDoc() {
 				Overrides the theme motion transition. Reduced-motion preferences override both motion props with immediate,
 				static states.
 			</P>
-			<CodeBlock code={motionCode.trim()} language="tsx" />
+			<CodeBlock filename="ToastMotion.tsx" code={motionCode.trim()} language="tsx" />
 			<H2 id="events">Events</H2>
 			<Definition id="onClick">
 				<Method>onClick</Method>

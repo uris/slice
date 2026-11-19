@@ -176,7 +176,7 @@ export function ProgressIndicatorDoc() {
 				<Code>duration</Code> stops playback once without hiding the indicator or completing application work. Toggle{' '}
 				<Code>show</Code> off and on to start another cycle.
 			</P>
-			<CodeBlock language="tsx" code={timedCode.trim()} />
+			<CodeBlock filename="ProgressIndicatorTimed.tsx" language="tsx" code={timedCode.trim()} />
 			<H2 id="behavior">Behavior</H2>
 			<P>
 				<Code>show</Code> controls presence and starts a playback cycle. <Code>duration</Code> limits that cycle in
@@ -233,7 +233,7 @@ export function ProgressIndicatorDoc() {
 				Presence timing and easing. Reduced motion overrides custom movement and animation delays, including during
 				exit.
 			</P>
-			<CodeBlock language="tsx" code={motionCode.trim()} />
+			<CodeBlock filename="ProgressIndicatorMotion.tsx" language="tsx" code={motionCode.trim()} />
 			<H2 id="events">Events</H2>
 			<Definition id="onStart">
 				<Method>onStart</Method>

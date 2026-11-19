@@ -11,6 +11,7 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 	trackedItems: [],
 	onThisPageItem: null,
 	minTop: null,
+	rightPanelClosed: false,
 	scrollBox: createRef<HTMLDivElement>(),
 	scrollBoxSize: undefined,
 	visibleItems: new Set<string>(),
@@ -65,6 +66,13 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 			if (minTop === get().minTop) return;
 			set({ minTop });
 		},
+		setRightPanelClosed: (rightPanelClosed: boolean) => {
+			set({ rightPanelClosed });
+		},
+		toggleRightPanel: () => {
+			const rightPanelClosed = !get().rightPanelClosed;
+			set({ rightPanelClosed });
+		},
 	},
 }));
 
@@ -86,3 +94,4 @@ export const useInitialized = () => useDocsStore((state) => state.initialized);
 export const useLoadState = () => useDocsStore((state) => state.loadState);
 export const useOnThisPageItem = () => useDocsStore((state) => state.onThisPageItem);
 export const useMinTop = () => useDocsStore((state) => state.minTop);
+export const useRightPanelClosed = () => useDocsStore((state) => state.rightPanelClosed);

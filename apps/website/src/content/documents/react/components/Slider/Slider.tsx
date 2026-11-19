@@ -83,7 +83,7 @@ export function SliderDoc() {
 					{
 						label: 'Disabled slider',
 						component: <SliderDisabledExample />,
-						code: { code: disabledCode.trim() },
+						code: { filename: 'SliderDisabled.tsx', code: disabledCode.trim() },
 					},
 				]}
 			/>

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Funnel_Sans, Geist_Mono, JetBrains_Mono } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { Providers } from './providers';
+import { themeScript } from './theme-script';
 import '@apple-pie/slice/styles.css';
 import './styles.css';
 
@@ -39,8 +40,13 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
 		<html
 			lang="en"
 			data-slice-theme="darkMode"
+			suppressHydrationWarning
 			className={`${funnelSans.variable}  ${jetBrainsMono.variable} ${geistMono.variable}`}
 		>
+			<head>
+				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: fixed bootstrap source; cookie values are allowlisted, never interpolated into HTML or code. */}
+				<script id="slice-theme-init" dangerouslySetInnerHTML={{ __html: themeScript }} />
+			</head>
 			<body>
 				<Providers>{children}</Providers>
 			</body>

@@ -219,7 +219,7 @@ export function AttachmentDoc() {
 					(['xs', 's', 'm', 'l', 'xl'] as const).map((size) => ({
 						label: uploading ? `${size} · Uploading` : size,
 						component: <AttachmentSizePreview size={size} uploading={uploading} />,
-						code: { code: sizesCode.trim() },
+						code: { filename: 'AttachmentSizes.tsx', code: sizesCode.trim() },
 					})),
 				)}
 			/>
@@ -232,12 +232,20 @@ export function AttachmentDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-attachment--uploading"
 				components={[
-					{ label: 'Known progress', component: <UploadAttachmentPreview />, code: { code: uploadCode.trim() } },
-					{ label: 'Upload failed', component: <UploadErrorPreview />, code: { code: errorCode.trim() } },
+					{
+						label: 'Known progress',
+						component: <UploadAttachmentPreview />,
+						code: { filename: 'AttachmentUpload.tsx', code: uploadCode.trim() },
+					},
+					{
+						label: 'Upload failed',
+						component: <UploadErrorPreview />,
+						code: { filename: 'AttachmentError.tsx', code: errorCode.trim() },
+					},
 					{
 						label: 'Unknown progress',
 						component: <UploadAttachmentPreview indeterminate />,
-						code: { code: indeterminateCode.trim() },
+						code: { filename: 'AttachmentIndeterminate.tsx', code: indeterminateCode.trim() },
 					},
 				]}
 			/>

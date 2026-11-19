@@ -1,5 +1,4 @@
-import { useTheme } from '@apple-pie/slice';
-import { addOpacity } from '@apple-pie/slice/utils';
+import { opacityFromColor } from '@apple-pie/slice/utils';
 import type React from 'react';
 import styles from './TipBox.module.css';
 
@@ -12,15 +11,13 @@ interface TipBoxProps {
 }
 
 export function TipBox(props: Readonly<TipBoxProps>) {
-	const { title, children, noBorder, inline = false, noMargin = true } = props;
-	const { current } = useTheme();
-	const green = current.colors['feedback-positive'];
+	const { title, children, noBorder = true, inline = false, noMargin = true } = props;
 
 	const cssStyles = {
-		color: green,
-		background: addOpacity(green, 0.05),
+		color: 'var(--array-lime-accent)',
+		background: 'var(--array-lime)',
 		borderWidth: noBorder ? 0 : 1,
-		borderColor: addOpacity(green, 0.25),
+		borderColor: opacityFromColor('array-lime-accent', 75),
 		display: inline ? 'inline-flex' : 'flex',
 		flexDirection: inline ? 'row' : 'column',
 		marginBottom: noMargin ? 0 : 24,

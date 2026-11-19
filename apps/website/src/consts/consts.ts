@@ -21,11 +21,8 @@ export const minScreenSize = 360;
 // content bg color
 export const surfaceDark = tintFromColor(darkTheme.colors['core-surface-primary-tint'], -0.2);
 
-// sidebar surface color
-export const surfaceDarker = tintFromColor(darkTheme.colors['core-surface-primary-tint'], -0.3);
-
 // modified yellow color
-export const surfaceYellow = '#ffd333';
+export const surfaceYellow = '#ff8d28';
 
 // modified green color
 export const surfaceGreen = '#00DAC3';

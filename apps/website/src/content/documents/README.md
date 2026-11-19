@@ -159,6 +159,10 @@ item's `code` object: `{ code: exampleCode.trim(), filename: 'Example.tsx' }`.
 Use an array of these objects when the preview needs several files, such as TSX
 and CSS. Each object accepts `language`, `showFilename`, and `wrap`; set
 `showFilename: true` for multi-file examples so readers can distinguish the files.
+Every displayed code example must have a descriptive `filename`, including single-file
+canvas examples and standalone `CodeBlock` examples. Keep filename headers visible.
+Use an extension that matches the example (`.tsx`, `.ts`, or `.css`); generated
+example galleries should supply a filename for each item.
 There is no separate `codeFilename` property. The canvas owns the collapsible code
 display; do not repeat the same snippet in a separate `CodeBlock`. A page may start
 its previews under Usage rather than duplicating a lead preview above Usage.

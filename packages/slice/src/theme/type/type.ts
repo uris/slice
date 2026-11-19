@@ -6,11 +6,11 @@ const fontFamily = `var(--slice-font-family, "Funnel Sans")`;
 
 // base weights
 export const fontWeights = {
-	regular: 360,
-	medium: 420,
-	semi: 480,
-	bold: 500,
-	extra: 560,
+	regular: 420,
+	medium: 480,
+	semi: 540,
+	bold: 600,
+	extra: 660,
 };
 
 // base sizes

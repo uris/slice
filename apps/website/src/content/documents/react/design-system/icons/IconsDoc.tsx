@@ -5,9 +5,9 @@ import type { TrackedItem } from '@/components/OnThisPage/OnThisPage';
 import { Path } from '@/components/Path/Path';
 import { TipBox } from '@/components/TipBox/TipBox';
 import { Code, H1, H2, H3, P } from '@/components/Type/Type';
+import { IconGrid } from '@/documents/react/design-system/icons/IconGrid';
 import { iconStylesCode } from '@/documents/react/design-system/icons/code';
 import { AllIcons, PreviewSizes, trackedIconGGroupItems } from '@/documents/react/design-system/icons/previews';
-import iconGrid from '@/src/assets/colors/icon-grid-trash.svg';
 import { FlexBox, Preset } from '@apple-pie/slice';
 
 export function IconsDoc() {
@@ -29,9 +29,10 @@ export function IconsDoc() {
 			<GradientCanvas
 				caption={'24px Grid | 1.5 stroke'}
 				height={400}
-				imageSrc={iconGrid}
 				imageDescription={'Trash icon overlaid on its construction grid and alignment guides'}
-			/>
+			>
+				<IconGrid size={250} />
+			</GradientCanvas>
 			<H3>Sizes and strokes</H3>
 			<P>
 				Use <Code>size</Code> to set the icon’s width and height in pixels, and <Code>stroke</Code> to control its

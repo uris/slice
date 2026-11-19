@@ -192,7 +192,7 @@ export function TipDoc() {
 				Customizes reveal timing and easing. Hiding always stops animation and changes visibility immediately. Reduced
 				motion overrides custom movement and animation delays.
 			</P>
-			<CodeBlock language="tsx" code={motionCode.trim()} />
+			<CodeBlock filename="TipMotion.tsx" language="tsx" code={motionCode.trim()} />
 			<H2 id="events">Events</H2>
 			<P>
 				Native wrapper handlers are forwarded. Document-level click and Escape handling remains active while a valid

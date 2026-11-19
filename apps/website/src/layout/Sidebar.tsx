@@ -5,12 +5,16 @@ import { SidebarDocuments } from '@/components/SidebarDocuments/SidebarDocuments
 import { getSidebarDocSections } from '@/docs/registry/sidebar';
 import { usePackageType, useSlug } from '@/docs/stores/store';
 import { Package, sidePanelConstraints, surfaceYellow } from '@/src/consts/consts';
-import { FlexBox, Preset, Tab, TabBar } from '@apple-pie/slice';
+import { FlexBox, Preset, Tab, TabBar, useTheme } from '@apple-pie/slice';
+import { opacityFromColor } from '@apple-pie/slice/utils';
 import { useCallback, useEffect } from 'react';
 
 export function Sidebar() {
 	const packageType = usePackageType();
 	const slug = useSlug();
+	const { isDark } = useTheme();
+	const baseBgColor = 'core-surface-secondary';
+	const bgColor = opacityFromColor('core-surface-secondary', isDark ? 100 : 25);
 
 	const handleChangeTab = useCallback(
 		(tab: Package) => {
@@ -30,7 +34,7 @@ export function Sidebar() {
 	return (
 		<FlexBox
 			preset={Preset.FillStart}
-			background={'core-surface-primary'}
+			background={bgColor}
 			style={{
 				minWidth: sidePanelConstraints.min,
 			}}
@@ -44,8 +48,12 @@ export function Sidebar() {
 					onChange={handleChangeTab}
 					padding={'4px 0 0 0'}
 				>
-					<Tab value={Package.React}>React</Tab>
-					<Tab value={Package.ReactNative}>React Native</Tab>
+					<Tab icon={'basic.atom'} className={'body-m-bold'} value={Package.React}>
+						Web
+					</Tab>
+					<Tab icon={'electronics.smartphone'} className={'body-m-bold'} value={Package.ReactNative}>
+						Native
+					</Tab>
 				</TabBar>
 				<FlexBox preset={Preset.FillScroll}>
 					<SidebarDocList items={getSidebarDocSections(packageType)} />

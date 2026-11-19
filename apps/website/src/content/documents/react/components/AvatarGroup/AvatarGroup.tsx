@@ -66,7 +66,13 @@ export function AvatarGroupDoc() {
 			</TipBox>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-avatargroup--default"
-				components={[{ label: 'Overflow avatars', component: <MoreAvatarsPreview />, code: { code: moreCode.trim() } }]}
+				components={[
+					{
+						label: 'Overflow avatars',
+						component: <MoreAvatarsPreview />,
+						code: { filename: 'AvatarGroupMore.tsx', code: moreCode.trim() },
+					},
+				]}
 			/>
 			<H3>Adjust the spacing</H3>
 			<P>

@@ -11,6 +11,7 @@ export type DocsStoreType = {
 	section: SiteSection | null;
 	trackedItems: TrackedItem[];
 	onThisPageItem: TrackedItemInfo | null;
+	rightPanelClosed: boolean;
 	minTop: number | null;
 	scrollBox: RefObject<HTMLDivElement | null>;
 	scrollBoxSize: { height: number | undefined; width: number | undefined } | undefined;
@@ -26,6 +27,8 @@ export type DocsStoreType = {
 		setLoadState: (loadState: LoadState) => void;
 		setOnThisPageId: (id: string | null, rect: DOMRect | undefined) => void;
 		setMinTop: (minTop: number | undefined) => void;
+		setRightPanelClosed: (rightPanelClosed: boolean) => void;
+		toggleRightPanel: () => void;
 	};
 };
 

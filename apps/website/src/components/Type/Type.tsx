@@ -1,7 +1,7 @@
 'use client';
 
 import { useDocsActions } from '@/docs/stores/store';
-import { surfaceGreen, surfaceYellow } from '@/src/consts/consts';
+import { surfaceYellow } from '@/src/consts/consts';
 import { classNames } from '@/src/utils/misc';
 import { FlexBox, type FlexBoxProps } from '@apple-pie/slice';
 import { useIntersecting } from '@apple-pie/slice/hooks';
@@ -184,8 +184,8 @@ export function Method(props: Readonly<TextProps>) {
 	const visibility = useTextVisibility<HTMLSpanElement>(props);
 	const { children } = props;
 	const cssVars = {
-		color: surfaceGreen,
-		backgroundColor: addOpacity(surfaceGreen, 0.1),
+		color: 'var(--array-lime-accent)',
+		backgroundColor: 'var(--array-lime)',
 	} as React.CSSProperties;
 	return (
 		<span {...visibility} className={styles.prop} style={cssVars}>

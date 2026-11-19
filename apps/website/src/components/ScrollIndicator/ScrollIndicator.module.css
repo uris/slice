@@ -3,8 +3,8 @@
 	display: block;
 	top: 0;
 	left: 0;
-	width: 1px;
-	min-width: 1px;
-	background-color: yellow;
+	width: 2px;
+	min-width: 2px;
+	background-color: var(--feedback-urgency);
 	transition: height, top 0.2s ease-out;
 }

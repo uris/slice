@@ -366,6 +366,11 @@ export const TranslucentTransitions: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
+		const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+		const pointer = MODE === 'test' ? (await import('vitest/browser')).userEvent : userEvent;
+		const finishBackground = async (element: HTMLElement) => {
+			await Promise.all(element.getAnimations().map((animation) => animation.finished));
+		};
 		for (const name of ['Translucent icon', 'Translucent toggle']) {
 			const button = canvas.getByRole('button', { name });
 			const background = button.querySelector<HTMLElement>('[class*="background"]');
@@ -389,14 +394,17 @@ export const TranslucentTransitions: Story = {
 					requestAnimationFrame(sample);
 				});
 			const entering = sampleFrames();
-			await userEvent.hover(button);
+			await pointer.hover(button);
 			const enterFrames = await entering;
 			await expect(enterFrames.length).toBeGreaterThan(2);
 			await expect(Math.max(...enterFrames)).toBeLessThanOrEqual(50);
-			await expect(getComputedStyle(background).backgroundColor).toBe('rgb(48, 48, 48)');
+			// Sample the transition for flashes, then await the browser animation itself.
+			await finishBackground(background);
+			await waitFor(() => expect(getComputedStyle(background).backgroundColor).toBe('rgb(48, 48, 48)'));
 			const leaving = sampleFrames();
-			await userEvent.unhover(button);
+			await pointer.unhover(button);
 			await expect(Math.max(...(await leaving))).toBeLessThanOrEqual(50);
+			await finishBackground(background);
 		}
 	},
 };

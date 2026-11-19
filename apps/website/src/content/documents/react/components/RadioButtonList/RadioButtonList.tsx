@@ -68,7 +68,7 @@ export function RadioButtonListDoc() {
 					{
 						label: 'Disabled choices',
 						component: <RadioButtonListDisabledExample />,
-						code: { code: disabledCode.trim() },
+						code: { filename: 'RadioButtonListDisabled.tsx', code: disabledCode.trim() },
 					},
 				]}
 			/>

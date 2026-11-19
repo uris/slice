@@ -22,7 +22,13 @@ export function ToggleButtonDoc() {
 			</P>
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-togglebutton--default"
-				components={[{ label: 'Basic usage', component: <ToggleButtonPreview />, code: { code: exampleCode.trim() } }]}
+				components={[
+					{
+						label: 'Basic usage',
+						component: <ToggleButtonPreview />,
+						code: { filename: 'ToggleButtonExample.tsx', code: exampleCode.trim() },
+					},
+				]}
 			/>
 
 			<H3>Disabled</H3>
@@ -36,7 +42,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Disabled',
 						component: <ToggleButtonPreview variant="disabled" />,
-						code: { code: disabledCode.trim() },
+						code: { filename: 'ToggleButtonDisabled.tsx', code: disabledCode.trim() },
 					},
 				]}
 			/>
@@ -51,7 +57,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Label outside',
 						component: <ToggleButtonPreview variant="outside" />,
-						code: { code: outsideCode.trim() },
+						code: { filename: 'ToggleButtonOutside.tsx', code: outsideCode.trim() },
 					},
 				]}
 			/>
@@ -67,7 +73,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Animated',
 						component: <ToggleButtonPreview variant="animated" />,
-						code: { code: motionCode.trim() },
+						code: { filename: 'ToggleButtonMotion.tsx', code: motionCode.trim() },
 					},
 				]}
 			/>
@@ -82,7 +88,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Text only',
 						component: <ToggleButtonPreview variant="text" />,
-						code: { code: textOnly.trim() },
+						code: { filename: 'ToggleButtonTextOnly.tsx', code: textOnly.trim() },
 					},
 				]}
 			/>
@@ -99,7 +105,7 @@ export function ToggleButtonDoc() {
 					{
 						label: 'Custom content',
 						component: <ToggleButtonPreview variant="children" />,
-						code: { code: childrenCode.trim() },
+						code: { filename: 'ToggleButtonChildren.tsx', code: childrenCode.trim() },
 					},
 				]}
 			/>

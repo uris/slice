@@ -73,7 +73,11 @@ export function ErrorSummaryDoc() {
 			<ComponentCanvas
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-errorsummary--default"
 				components={[
-					{ label: 'Live validation', component: <ErrorSummaryLiveExample />, code: { code: liveCode.trim() } },
+					{
+						label: 'Live validation',
+						component: <ErrorSummaryLiveExample />,
+						code: { filename: 'ErrorSummaryLive.tsx', code: liveCode.trim() },
+					},
 				]}
 			/>
 			<H3>Choose announcement urgency</H3>
