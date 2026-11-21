@@ -1,18 +1,18 @@
-import type React from 'react';
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import type { ColorValue } from '../../theme';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { ButtonProps } from '../Button';
 
 /** Card preserves authored child order, including fragments, repeated sections, and custom content. */
 export type CardBaseProps = {
 	maxWidth?: number | string;
 	/** Shared section padding. Explicit section padding and styles take precedence. */
-	padding?: number | string;
+	padding?: SizeValue;
 	backgroundColor?: ColorValue;
 	borderColor?: ColorValue;
-	borderRadius?: string | number;
+	borderRadius?: RadiusValue;
 	borderWidth?: string | number;
-	children?: React.ReactNode;
+	children?: ReactNode;
 };
 
 export type CardProps = CardBaseProps & HTMLAttributes<HTMLDivElement>;
@@ -22,9 +22,10 @@ export type CardTitleBaseProps = {
 	caption?: string;
 	title?: string;
 	text?: string;
-	padding?: number | string;
-	children?: React.ReactNode;
-	actionButton?: ButtonProps;
+	padding?: SizeValue;
+	children?: ReactNode;
+	/** Button descriptors or custom content rendered beside the title. */
+	action?: ButtonProps[] | ReactNode;
 	onAction?: (button: ButtonProps) => void;
 };
 
@@ -34,9 +35,9 @@ export type CardImageBaseProps = {
 	/** Describe meaningful images; omit or use an empty string for decorative images. */
 	alt?: string;
 	src?: string;
-	padding?: number | string;
+	padding?: SizeValue;
 	height?: number | string;
-	children?: React.ReactNode;
+	children?: ReactNode;
 	borderWidth?: string | number;
 	borderColor?: ColorValue;
 };
@@ -44,21 +45,21 @@ export type CardImageBaseProps = {
 export type CardImageProps = CardImageBaseProps & HTMLAttributes<HTMLDivElement>;
 
 export type CardContentBaseProps = {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	text?: string;
-	padding?: number | string;
+	padding?: SizeValue;
 };
 
 export type CardContentProps = CardContentBaseProps & HTMLAttributes<HTMLDivElement>;
 
 /** Custom children replace the generated action buttons. */
 export type CardFooterBaseProps = {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	actionButtons?: ButtonProps[];
 	stack?: 'vertical' | 'horizontal';
 	layout?: 'fill' | 'fit';
 	align?: 'start' | 'center' | 'end' | 'edges';
-	padding?: number | string;
+	padding?: SizeValue;
 	backgroundColor?: ColorValue;
 	borderColor?: ColorValue;
 	borderWidth?: number | string;

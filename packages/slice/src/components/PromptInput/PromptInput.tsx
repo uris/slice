@@ -1,7 +1,10 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { resolveColor } from '../../theme';
+import { opacityFromColor } from '../../utils/functions/colors';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -35,6 +38,7 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps,
 		borderStyle = 'solid',
 		borderColor = 'var(--core-outline-secondary)',
 		borderColorFocused = 'var(--core-outline-secondary)',
+		backgroundColor,
 		borderAnimate = true,
 		borderWidth = 1,
 		borderRadius = 16,
@@ -228,18 +232,20 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps,
 	const innerRadius =
 		typeof borderRadius === 'number'
 			? `${Math.max(0, borderRadius - size)}px`
-			: `max(0px, calc(${borderRadius} - ${size}px))`;
+			: `max(0px, calc(${resolveRadius(borderRadius)} - ${size}px))`;
 	const variables = {
 		'--prompt-width': setStyle(width),
 		'--prompt-max-width': setStyle(maxWidth, 'none'),
 		'--prompt-min-width': setStyle(minWidth, '0px'),
 		'--prompt-border-color': getBorder(),
 		'--prompt-focused-border': borderColorFocused ?? getBorder(),
+		'--prompt-outline-color': opacityFromColor(borderColorFocused ?? getBorder(), 30),
 		'--prompt-border-width': `${size}px`,
-		'--prompt-border-radius': setStyle(borderRadius),
+		'--prompt-border-radius': resolveRadius(borderRadius),
 		'--prompt-inner-border-radius': innerRadius,
 		'--prompt-state': working && borderAnimate && !reducedMotion ? 'running' : 'paused',
-		'--prompt-toolbar-gap': setStyle(toolbarGap),
+		'--prompt-toolbar-gap': resolveSize(toolbarGap),
+		'--prompt-background-color': resolveColor(backgroundColor) ?? 'var(--core-surface-secondary)',
 	} as React.CSSProperties;
 	return (
 		<div
@@ -317,6 +323,7 @@ const PromptInputBase = React.forwardRef<HTMLDivElement, PromptProps>((rawProps,
 					inputName={inputName}
 					placeholder={working ? placeholderWorking : placeholder}
 					{...textAreaProps}
+					className={`${css.editor} ${textAreaProps?.className ?? ''}`}
 					maxLength={textLimit}
 					inputRef={editor}
 					value={text}

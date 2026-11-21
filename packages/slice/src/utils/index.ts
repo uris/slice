@@ -1,3 +1,5 @@
+export { resolveRadius, resolveSize } from '../theme/resolveSize';
+export type { RadiusToken, RadiusValue, SizeValue, SpacingToken } from '../theme/resolveSize';
 export { resolveShortcut } from './functions/resolveShortcut';
 export { copyToClipboard, hexToRgb, setStyle, classNames } from './functions/misc';
 export { debounce } from './functions/debounce';

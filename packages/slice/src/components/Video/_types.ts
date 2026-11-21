@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue } from '../../theme/resolveSize';
 import type { ElevationProps } from '../sharedTypes';
 
 export type CustomVideoControls = {
@@ -62,7 +63,7 @@ type VideoBaseProps = ElevationProps & {
 	poster?: string;
 	width?: number | string;
 	height?: number | string;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	borderWidth?: number | string;
 	borderColor?: ColorValue;
 	backgroundColor?: ColorValue;

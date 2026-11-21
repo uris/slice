@@ -183,8 +183,8 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 		const translateY = hidden ? '50%' : '0';
 		return {
 			bottom: hidden ? '50%' : '24px',
-			left: '50%',
-			transform: `translateY(${translateY}) translateX(-50%)`,
+			right: 24,
+			transform: `translateY(${translateY})`,
 		} as React.CSSProperties;
 	}, [hidden]);
 
@@ -298,10 +298,11 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 					{page && (
 						<div className={classNames(styles.nav, styles.left)}>
 							<IconButton
-								backgroundColor={'core-fill-primary'}
+								backgroundColor={'transparent'}
 								backgroundColorHover={'core-fill-primary'}
 								icon={'arrows.chevron-left'}
 								actionName="Previous preview"
+								iconStrokeWidth={1.5}
 								onClick={() => cycleIndex(selectedIndex - 1, -1)}
 							/>
 						</div>
@@ -309,10 +310,11 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 					{page && (
 						<div className={classNames(styles.nav, styles.right)}>
 							<IconButton
-								backgroundColor={'core-fill-primary'}
+								backgroundColor={'transparent'}
 								backgroundColorHover={'core-fill-primary'}
 								icon={'arrows.chevron-right'}
 								actionName="Next preview"
+								iconStrokeWidth={1.5}
 								onClick={() => cycleIndex(selectedIndex + 1, 1)}
 							/>
 						</div>
@@ -320,7 +322,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 				</div>
 			</div>
 			{hasCode && (
-				<div className={styles.code} style={{ maxHeight: hidden ? 84 : height }}>
+				<div className={styles.code} style={{ maxHeight: hidden ? 45 : height }}>
 					<div
 						className={styles.codePage}
 						ref={codeBlockRef}
@@ -355,6 +357,7 @@ export function ComponentCanvas(props: Readonly<ComponentCanvasProps>): React.Re
 							textColor={'core-text-primary'}
 							padding={16}
 							onClick={() => setHidden(!hidden)}
+							iconRight={'editor.script'}
 						/>
 					</div>
 				</div>

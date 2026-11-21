@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveSize } from '../../theme/resolveSize';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Avatar } from '../Avatar';
 import { AvatarOverflow } from '../Avatar/Avatar';
@@ -31,6 +32,7 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 		size = 40,
 		lazyLoad = false,
 		textSize = 'm',
+		textColor,
 		borderWidth,
 		backgroundColor,
 		overlap = 8,
@@ -55,8 +57,8 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 	// compose CSS custom properties for spacing and overlap
 	const cssVars = useMemo(() => {
 		return {
-			'--ag-gap': `${gap ?? 0}px`,
-			'--ag-margin': `${margin ?? 0}px`,
+			'--ag-gap': resolveSize(gap, 0),
+			'--ag-margin': resolveSize(margin, 0),
 			'--ag-overlap': `${overlap > 0 ? -overlap : 0}px`,
 		} as React.CSSProperties;
 	}, [overlap, gap, margin]);
@@ -66,6 +68,7 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 			itemClassName: css.avatar,
 			avatarProps: {
 				backgroundColor,
+				textColor,
 				size,
 				lazyLoad,
 				textSize,
@@ -79,6 +82,7 @@ export const AvatarGroup = React.memo((rawProps: AvatarGroupProps) => {
 		}),
 		[
 			backgroundColor,
+			textColor,
 			size,
 			lazyLoad,
 			textSize,

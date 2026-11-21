@@ -16,30 +16,43 @@
 	background: var(--prompt-border-color);
 	animation: bgRotate 3s linear infinite;
 	animation-play-state: var(--prompt-state);
-	transition: background var(--motion-water-duration) var(--motion-water);
+	outline-color: transparent;
+	transition: background var(--motion-water-duration) var(--motion-water), outline-color var(--motion-water-duration)
+		var(--motion-water);
 }
+
 .wrapper:focus-within {
 	background: var(--prompt-focused-border);
+	outline: 3px solid var(--prompt-outline-color);
 }
+
+.wrapper .editor:focus-within {
+	outline-color: transparent;
+}
+
 .surface {
 	display: flex;
 	flex-direction: column;
 	min-width: 0;
 	border-radius: var(--prompt-inner-border-radius);
-	background: var(--core-surface-secondary);
+	background: var(--prompt-background-color);
 }
+
 /* Keep the opaque surface over the gradient; translucent fills reveal it through the whole composer. */
 .wrapper[data-file-dragging] {
 	background: var(--core-outline-special);
 }
+
 .wrapper[data-file-dragging] .surface {
 	box-shadow: inset 0 0 0 2px var(--core-outline-special);
 }
+
 .attachments {
 	padding: var(--spacing-m) var(--spacing-m) 0;
 	box-sizing: border-box;
 	width: 100%;
 }
+
 .buttonBar {
 	display: flex;
 	align-items: center;
@@ -47,6 +60,7 @@
 	gap: var(--spacing-s);
 	padding: var(--spacing-s) var(--spacing-m) var(--spacing-m);
 }
+
 .actions {
 	display: flex;
 	align-items: center;
@@ -55,23 +69,28 @@
 	flex: 1;
 	min-width: 0;
 }
+
 .rejection {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 	padding: 0 var(--spacing-m) var(--spacing-s);
 }
+
 .rejection:empty {
 	display: none;
 }
+
 @property --border-angle {
 	syntax: "<angle>";
 	inherits: false;
 	initial-value: 0turn;
 }
+
 @keyframes bgRotate {
 	100% {
 		--border-angle: 1turn;
 	}
 }
+
 @media (prefers-reduced-motion: reduce) {
 	.wrapper {
 		animation: none;

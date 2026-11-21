@@ -74,3 +74,15 @@ Unfinished sidebar entries keep their own slugs and show the missing-document vi
 until an implementation is registered. Import failures show a separate loading error
 inside the same shell. Missing slugs (`/docs/react/` or `/docs/react-native/`) also retain
 the docs shell.
+
+## Realtime voice demo
+
+The Overview voice block connects directly to OpenAI over WebRTC using Slice’s
+`WebRTCConnection`. Set the server-only `PRIVATE_API_BASE_URL` (see `.env.example`)
+to the same backend used by the portfolio. It must serve
+`POST /openai/realtime/session` and return an ephemeral client token in `value`.
+The website proxies this via `/server/openai/realtime/session/request`; no OpenAI
+API key is sent to the browser. The backend owns credentials and rate limiting.
+Docs pages remain prerendered; only the token endpoint runs on demand.
+
+`node --test tests/realtime-session.test.cjs` runs its token-route contract tests.

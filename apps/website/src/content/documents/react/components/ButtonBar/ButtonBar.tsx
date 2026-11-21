@@ -299,7 +299,7 @@ export default function ButtonBarDoc() {
 			<Definition id="iconColor">
 				<Prop>iconColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-secondary'}</DefaultVal>
+				<DefaultVal>core-text-primary</DefaultVal>
 			</Definition>
 			<P>Shared icon color; individual child colors are retained when omitted.</P>
 			<Definition id="iconColorHover">
@@ -325,10 +325,11 @@ export default function ButtonBarDoc() {
 			<Definition id="iconStrokeWidth">
 				<Prop>iconStrokeWidth</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'1.25'}</DefaultVal>
+				<DefaultVal>1.5</DefaultVal>
 			</Definition>
 			<P>
-				Explicit icon stroke <Code>width</Code> overrides the size-dependent default.
+				Shared icon stroke width. Explicit bar values override child values; when omitted, individual child widths are
+				retained.
 			</P>
 			<Definition id="initial">
 				<Prop>initial</Prop>
@@ -407,7 +408,7 @@ export default function ButtonBarDoc() {
 			<Definition id="textColor">
 				<Prop>textColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-secondary'}</DefaultVal>
+				<DefaultVal>core-text-primary</DefaultVal>
 			</Definition>
 			<P>Shared text color; individual child colors are retained when omitted.</P>
 			<Definition id="textColorHover">

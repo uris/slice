@@ -1,11 +1,11 @@
 'use client';
+import { resolveRadius } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useObserveResize } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import css from './DraggablePanel.module.css';
@@ -348,7 +348,7 @@ export const DragHandle = React.memo((rawProps: Readonly<DragHandleProps>) => {
 		return {
 			'--drag-handle-width': `${width}px`,
 			'--drag-handle-height': `${height}px`,
-			'--drag-handle-radius': setStyle(radius),
+			'--drag-handle-radius': resolveRadius(radius),
 			'--drag-handle-border': `${stroke}px`,
 			'--drag-handle-border-color': `${strokeColor}`,
 			'--drag-handle-bg': `${color}`,

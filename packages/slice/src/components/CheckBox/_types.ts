@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SizeValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon/_types';
 
 type CheckBoxBaseProps = {
@@ -14,7 +15,7 @@ type CheckBoxBaseProps = {
 	iconColor?: ColorValue;
 	iconColorSelected?: ColorValue;
 	iconSize?: number;
-	gap?: number;
+	gap?: SizeValue;
 	textColor?: ColorValue;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	textTopOffset?: number;

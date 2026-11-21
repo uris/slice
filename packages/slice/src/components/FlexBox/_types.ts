@@ -1,6 +1,7 @@
 import type { HTMLMotionProps, TargetAndTransition, VariantLabels } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { ElevationProps } from '../sharedTypes';
 
 export enum Size {
@@ -222,6 +223,8 @@ type FlexBoxBaseProps = ElevationProps & {
 	scrollX?: boolean;
 	absolute?: boolean;
 	background?: ColorValue;
+	/** Text color for the wrapper. Omit it to use a CSS class or inherit. */
+	color?: ColorValue;
 	direction?: 'row' | 'column';
 	align?: 'start' | 'center' | 'end';
 	justify?: 'start' | 'top' | 'center' | 'end' | 'bottom' | 'between';
@@ -234,11 +237,11 @@ type FlexBoxBaseProps = ElevationProps & {
 	wrap?: boolean;
 	border?: string;
 	overflow?: React.CSSProperties['overflow'];
-	padding?: number | string;
-	margin?: number | string;
+	padding?: SizeValue;
+	margin?: SizeValue;
 	animate?: boolean | TargetAndTransition | VariantLabels;
-	gap?: number;
-	borderRadius?: number | string;
+	gap?: SizeValue;
+	borderRadius?: RadiusValue;
 	scrollHandle?: ColorValue;
 	scrollHandleHover?: ColorValue;
 	shrinkChildren?: boolean;

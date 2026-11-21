@@ -1,6 +1,7 @@
 import type React from 'react';
 import type { HTMLAttributes } from 'react';
 import type { ColorValue } from '../../theme';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { BadgeProps } from '../Badge';
 import type { ButtonProps } from '../Button';
 import type { ChipProps } from '../Chip';
@@ -11,11 +12,11 @@ export type InfoBoxBaseProps = {
 	maxWidth?: number | string;
 	minWidth?: number | string;
 	/** Padding inside the InfoBox surface. Numbers are pixels; strings accept CSS shorthands. */
-	padding?: number | string;
+	padding?: SizeValue;
 	backgroundColor?: ColorValue;
 	backgroundColorHover?: ColorValue;
 	borderColor?: ColorValue;
-	borderRadius?: string | number;
+	borderRadius?: RadiusValue;
 	borderWidth?: string | number;
 	children?: React.ReactNode;
 	/** Disables the main press target; independent action controls keep their own disabled state. */
@@ -59,7 +60,7 @@ export type InfoBoxActionBaseProps = {
 	chip?: ChipProps;
 	button?: ButtonProps;
 	badge?: BadgeProps;
-	contentGap?: string | number;
+	contentGap?: SizeValue;
 };
 
 export type InfoBoxActionProps = InfoBoxActionBaseProps & HTMLAttributes<HTMLDivElement>;

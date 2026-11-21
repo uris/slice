@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
+import { resolveSize } from '../../theme/resolveSize';
 import { classNames } from '../../utils';
-import { setSizeStyle } from '../../utils/functions/misc';
 import { Badge } from '../Badge';
 import { Button } from '../Button';
 import { Chip } from '../Chip';
@@ -20,7 +20,7 @@ export function InfoBoxAction(props: Readonly<InfoBoxActionProps>) {
 	} = props;
 
 	const styles = {
-		marginLeft: setSizeStyle(contentGap),
+		marginLeft: resolveSize(contentGap),
 		...style,
 	} as CSSProperties;
 

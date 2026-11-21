@@ -48,7 +48,7 @@ export const Badge = React.memo((rawProps: BadgeProps) => {
 			aria-atomic="true"
 			{...divAttributes}
 		>
-			{displayCount}
+			<span className={css.label}>{displayCount}</span>
 		</div>
 	);
 });

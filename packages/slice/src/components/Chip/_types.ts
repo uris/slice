@@ -1,6 +1,7 @@
 import type { Transition } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon/_types';
 import type { ToolTip } from '../sharedTypes';
 
@@ -13,6 +14,7 @@ type ChipBaseProps = {
 	icon?: SliceIcon;
 	iconSize?: number;
 	iconPosition?: 'left' | 'right';
+	iconStroke?: number;
 	iconColor?: ColorValue;
 	iconColorHover?: ColorValue;
 	backgroundColor?: ColorValue;
@@ -32,13 +34,13 @@ type ChipBaseProps = {
 	borderColor?: ColorValue;
 	borderColorHover?: ColorValue;
 	borderColorDisabled?: ColorValue;
-	borderRadius?: number | string;
-	gap?: number;
-	padding?: number | string;
-	paddingTop?: number | string;
-	paddingRight?: number | string;
-	paddingBottom?: number | string;
-	paddingLeft?: number | string;
+	borderRadius?: RadiusValue;
+	gap?: SizeValue;
+	padding?: SizeValue;
+	paddingTop?: SizeValue;
+	paddingRight?: SizeValue;
+	paddingBottom?: SizeValue;
+	paddingLeft?: SizeValue;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 

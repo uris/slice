@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { corners } from '../../theme/corners/corners';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { useAudioVisualizer } from '../../utils/audio/useAudioVisualizer';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
@@ -65,8 +66,8 @@ function BaseAudioLevel(rawProps: Readonly<AudioLevelProps>) {
 		return {
 			'--level-width': setStyle(width),
 			'--level-height': setStyle(height),
-			'--level-gap': setStyle(gap),
-			'--level-bar-border-radius': setStyle(borderRadius),
+			'--level-gap': resolveSize(gap),
+			'--level-bar-border-radius': resolveRadius(borderRadius),
 			'--level-border-color': borderColor,
 			'--level-border-width': setStyle(borderWidth),
 			'--level-color': backgroundColorActive,

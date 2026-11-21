@@ -57,6 +57,16 @@ Use `showSendButton` for a send action and `returnSubmits` for Enter submission.
 />;
 ```
 
+### Show character usage
+
+Set `showCharacters` to place the count inside the bottom-left corner. Add
+`maxLength` to show the used count against the limit; without a limit, it shows
+only the used count. It can appear alongside the send button.
+
+```tsx filename="BudgetNotes.tsx"
+<TextArea inputName="Budget notes" placeholder="What will this budget cover?" rows={3} maxLength={300} showCharacters />
+```
+
 ### Add field guidance
 
 Provide a `tip` for normal editing and an `errorMessage` for validation feedback.
@@ -128,7 +138,8 @@ Reduced-motion preferences disable color and focus transitions. Auto-grow follow
 | `rows` | `number` | `6` | Starting line count, also the minimum content height during auto-grow. Values are rounded down and clamped to at least one. |
 | `sendActionName` | `string` | `Send` | Accessible action name for the send button. Empty text falls back to `Send`. |
 | `sendOffset` | `{ bottom: number; right: number }` | `{ bottom: 10, right: 10 }` | Send-button offsets from the field edges, in pixels. Space beneath the text keeps the button clear of the value. |
-| `sendSize` | `number` | `36` | Send-button width and height in pixels. |
+| `sendSize` | `number` | `24` | Send-button width and height in pixels. |
+| `showCharacters` | `boolean` | `false` | Shows a small character count inside the field; includes the limit when `maxLength` is set. |
 | `showSendButton` | `boolean` | `false` | Shows a native send button. It is disabled for empty or whitespace-only text, disabled/read-only fields, or when no `onSubmit` is provided. |
 | `submitClears` | `boolean` | `true` | Requests an empty value after submission through `onChange`. Local fields clear immediately; controlled fields wait for the parent to update `value`. |
 | `textColor` | `ColorValue` | `core-text-primary` | Value color, including during errors. |

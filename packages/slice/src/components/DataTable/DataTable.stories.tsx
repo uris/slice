@@ -541,7 +541,7 @@ export const CellPadding: StoryObj<typeof TypedDataTable> = {
 };
 
 export const NoTopBorder: StoryObj<typeof TypedDataTable> = {
-	args: { noTopBorder: true, borderStyle: 'box', borderRadius: 0 },
+	args: { borderStyle: 'box', borderRadius: 0 },
 	play: async ({ canvasElement }) => {
 		const table = within(canvasElement).getByRole('table');
 		await expect(table.parentElement).toHaveStyle({
@@ -598,4 +598,12 @@ export const Elevation: StoryObj<typeof meta> = {
 		</ElevationFixture>
 	),
 	play: async (context) => runElevationPlay(context, 0),
+};
+
+export const ExplicitTopBorder: StoryObj<typeof TypedDataTable> = {
+	tags: ['tests'],
+	args: { noTopBorder: false, borderStyle: 'box', borderRadius: 0 },
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).getByRole('table').parentElement).toHaveStyle({ borderTopWidth: '1px' });
+	},
 };

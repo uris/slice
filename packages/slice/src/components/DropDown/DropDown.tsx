@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -239,28 +240,28 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 		return `${setStyle(borderWidth)} solid ${getBorderColor()}`;
 	};
 	const getPadding = () => {
-		if (padding != null) return setStyle(padding);
+		if (padding != null) return resolveSize(padding);
 		if (borderStyle === 'none') return '0 0 var(--spacing-s) 0';
 		if (variant === 'outlined')
 			return 'calc(var(--spacing-s) + var(--dd-label-font-size, 0px) / 2) var(--spacing-m) var(--spacing-s)';
 		return 'var(--spacing-s) calc(var(--spacing-m) - var(--spacing-xs)) var(--spacing-s) var(--spacing-m)';
 	};
 	const sidePadding: React.CSSProperties = {};
-	if (paddingTop != null) sidePadding.paddingTop = setStyle(paddingTop);
-	if (paddingRight != null) sidePadding.paddingRight = setStyle(paddingRight);
-	if (paddingBottom != null) sidePadding.paddingBottom = setStyle(paddingBottom);
-	if (paddingLeft != null) sidePadding.paddingLeft = setStyle(paddingLeft);
+	if (paddingTop != null) sidePadding.paddingTop = resolveSize(paddingTop);
+	if (paddingRight != null) sidePadding.paddingRight = resolveSize(paddingRight);
+	if (paddingBottom != null) sidePadding.paddingBottom = resolveSize(paddingBottom);
+	if (paddingLeft != null) sidePadding.paddingLeft = resolveSize(paddingLeft);
 	const getBackgroundColor = () => {
 		if (backgroundColor !== undefined) return backgroundColor;
 		if (borderStyle === 'underline') return 'transparent';
 		return 'var(--core-surface-secondary)';
 	};
 	const cssVars = {
-		'--dd-gap': setStyle(gap),
+		'--dd-gap': resolveSize(gap),
 		'--dd-height': setStyle(height),
 		'--dd-width': setStyle(width),
 		'--dd-margin': inline ? '0 var(--spacing-xs)' : '0',
-		'--dd-border-radius': borderStyle === 'box' ? setStyle(borderRadius) : '0px',
+		'--dd-border-radius': borderStyle === 'box' ? resolveRadius(borderRadius) : '0px',
 		'--dd-border': borderStyle === 'box' ? getBorder() : 'none',
 		'--dd-border-bottom': getBorder(),
 		'--dd-color': getTextColor(),
@@ -269,7 +270,10 @@ function DropDownComponent<T = string>(rawProps: DropDownProps<T>) {
 		'--dd-icon-size': setStyle(iconSize),
 		'--dd-label-color': disabled ? textColorDisabled : labelColor,
 		'--dd-display': inline ? 'inline-flex' : 'flex',
-		'--dd-stacked-gap': setStyle(Number.isFinite(stackedGap) ? Math.max(0, stackedGap) : 2),
+		'--dd-stacked-gap': resolveSize(
+			typeof stackedGap === 'number' && Number.isFinite(stackedGap) ? Math.max(0, stackedGap) : stackedGap,
+			2,
+		),
 		'--dd-label-background': labelBackgroundColor,
 	} as React.CSSProperties;
 	/* START.DEBUG */

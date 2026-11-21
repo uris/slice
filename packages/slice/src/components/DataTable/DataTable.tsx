@@ -1,8 +1,9 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
-import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useObserveResize } from '../../hooks';
 import { corners } from '../../theme/corners/corners';
 import { accessibleKeyDown, setStyle } from '../../utils/functions/misc';
@@ -23,18 +24,18 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 		elevation = 0,
 		name,
 		backgroundColor = 'var(--core-surface-primary)',
-		headerBackgroundColor = 'var(--core-surface-secondary)',
-		headerBackgroundColorHover = 'var(--core-surface-primary-tint)',
-		candyStripeBackgroundColor = 'var(--core-surface-primary-tint)',
-		backgroundColorHoverRow = 'var(--core-surface-primary-tint)',
-		handleHoverColor = 'var(--core-button-primary)',
+		headerBackgroundColor,
+		headerBackgroundColorHover,
+		candyStripeBackgroundColor,
+		backgroundColorHoverRow,
+		handleHoverColor,
 		freezeColumn = false,
 		headerSticky = true,
 		height = 'auto',
 		width = '100%',
 		maxWidth,
 		colResize = true,
-		colReorder = true,
+		colReorder = false,
 		columnOrder: controlledColumnOrder,
 		columnWidths: controlledColumnWidths,
 		defaultSort,
@@ -42,7 +43,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 		freezeColumnBackgroundColor,
 		borderColor = 'var(--core-outline-primary)',
 		borderStyle = 'box',
-		noTopBorder = false,
+		noTopBorder = true,
 		cellPadding,
 		columnDefinitions = [],
 		tableData = [],
@@ -138,16 +139,16 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 			'--table-width': setStyle(width),
 			'--table-max-width': setStyle(maxWidth),
 			'--table-height': setStyle(height),
-			'--table-margin': setStyle(margin, 0),
+			'--table-margin': resolveSize(margin, 0),
 			'--table-background-color': backgroundColor,
-			'--table-hover-background': backgroundColorHoverRow,
+			'--table-hover-background': backgroundColorHoverRow ?? backgroundColor,
 			'--table-row-height': `${rowHeight}px`,
 			'--table-column-box-shadow': columnBoxShadow,
 			'--table-header-box-shadow': headerBoxShadow,
 			'--table-corner-box-shadow': cornerBoxShadow,
-			'--table-header-background-color': headerBackgroundColor,
-			'--table-header-background-color-hover': headerBackgroundColorHover,
-			'--table-candy-stripe-background-color': candyStripeBackgroundColor,
+			'--table-header-background-color': headerBackgroundColor ?? backgroundColor,
+			'--table-header-background-color-hover': headerBackgroundColorHover ?? backgroundColor,
+			'--table-candy-stripe-background-color': candyStripeBackgroundColor ?? backgroundColor,
 			'--table-freeze-column-position': freezeColumn ? 'sticky' : 'relative',
 			'--table-header-sticky-position': headerSticky ? 'sticky' : 'relative',
 			'--table-border-color': borderColor,
@@ -157,8 +158,8 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 			'--table-border-width': borderStyle === 'none' ? '0' : '1px',
 			'--table-border-top-width': noTopBorder || borderStyle === 'none' ? '0' : '1px',
 			'--table-border-sides': borderStyle === 'box' ? '1px' : '0',
-			'--table-handle-hover-color': handleHoverColor,
-			'--table-border-radius': borderStyle === 'box' ? setStyle(borderRadius) : corners['corner-none'],
+			'--table-handle-hover-color': handleHoverColor ?? backgroundColor,
+			'--table-border-radius': borderStyle === 'box' ? resolveRadius(borderRadius) : corners['corner-none'],
 		} as React.CSSProperties;
 	}, [
 		backgroundColor,
@@ -401,7 +402,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 				<thead ref={headerRef}>
 					<tr>
 						{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
-							const padding = setStyle(col.padding ?? cellPadding, 'var(--spacing-m)');
+							const padding = resolveSize(col.padding ?? cellPadding, 'var(--spacing-m)');
 							const sortable = resolveColumnSortKey(col) !== undefined;
 							const cursor = sortable ? 'pointer' : 'default';
 							const last = colIndex === orderedColumns.length - 1;
@@ -447,7 +448,10 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 									{renderCellResizeHandle(last, col)}
 									<div
 										className={styles.headerCellWrapper}
-										style={{ padding, justifyContent: resolveAlignValue(col.justifyHeader ?? col.justify ?? 'start') }}
+										style={{
+											padding,
+											justifyContent: resolveAlignValue(col.justifyHeader ?? col.justify ?? 'start'),
+										}}
 									>
 										{renderHeader(col, sortKey)}
 									</div>
@@ -463,7 +467,12 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 							<td
 								role="presentation"
 								colSpan={Math.max(1, orderedColumns.length)}
-								style={{ height: rowWindow.topSpacerHeight, padding: 0, border: 0, background: backgroundColor }}
+								style={{
+									height: rowWindow.topSpacerHeight,
+									padding: 0,
+									border: 0,
+									background: backgroundColor,
+								}}
 							/>
 						</tr>
 					)}
@@ -487,7 +496,7 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 									{orderedColumns.map((col: ColumnDefinition<T>, colIndex: number) => {
 										const justifyContent = resolveAlignValue(col.justify ?? 'start');
 										const alignItems = resolveAlignValue(col.align);
-										const padding = setStyle(col.padding ?? cellPadding, 'var(--spacing-m)');
+										const padding = resolveSize(col.padding ?? cellPadding, 'var(--spacing-m)');
 										const whiteSpace = col.nowrap ? 'nowrap' : '';
 										const background =
 											candyStripeBackgroundColor && rowIndex % 2 !== 0 ? candyStripeBackgroundColor : backgroundColor;
@@ -551,7 +560,12 @@ export function DataTable<T>(rawProps: Readonly<DataTableProps<T>>) {
 							<td
 								role="presentation"
 								colSpan={Math.max(1, orderedColumns.length)}
-								style={{ height: rowWindow.bottomSpacerHeight, padding: 0, border: 0, background: backgroundColor }}
+								style={{
+									height: rowWindow.bottomSpacerHeight,
+									padding: 0,
+									border: 0,
+									background: backgroundColor,
+								}}
 							/>
 						</tr>
 					)}
@@ -566,6 +580,7 @@ interface DefaultHeaderRendererProps<T> {
 	col: HeaderContext<T, unknown>['column'];
 	sortKey: SortKey<T>;
 }
+
 export function DefaultHeaderRenderer<T>(props: Readonly<DefaultHeaderRendererProps<T>>) {
 	const { col, sortKey } = props;
 	const sortable = col.sort !== undefined;
@@ -574,7 +589,7 @@ export function DefaultHeaderRenderer<T>(props: Readonly<DefaultHeaderRendererPr
 	const justify = col.justifyHeader ?? col.justify ?? 'start';
 	const showSortIcon = sortable && (col.showSortIcon ?? true);
 	const indicator = showSortIcon ? (
-		<Icon name={sorted ? sortIcon : 'system.blank'} pointerEvents={'none'} size={16} />
+		<Icon name={sorted ? sortIcon : 'system.blank'} pointerEvents={'none'} size={16} stroke={1.5} />
 	) : null;
 	return (
 		<div className={styles.header} style={{ justifyContent: resolveAlignValue(justify) }}>
@@ -590,6 +605,7 @@ export function DefaultHeaderRenderer<T>(props: Readonly<DefaultHeaderRendererPr
 interface DefaultCellRendererProps<T> {
 	value: unknown;
 }
+
 export function DefaultCellRenderer<T>(props: Readonly<DefaultCellRendererProps<T>>) {
 	const { value } = props;
 	return value?.toString() ?? '';

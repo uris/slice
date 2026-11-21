@@ -98,6 +98,8 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 		'--tab-icon-color': iconColor ?? group.colors.iconColor ?? 'currentColor',
 		'--tab-icon-color-selected': iconColorSelected ?? group.colors.iconColorSelected ?? accent ?? 'currentColor',
 	} as React.CSSProperties;
+	const content = label ?? children ?? 'Tab';
+	const plainText = typeof content === 'string' || typeof content === 'number';
 	return (
 		<button
 			{...withoutAria(attributes)}
@@ -141,7 +143,7 @@ function TabComponent<T = string>(rawProps: TabProps<T>) {
 					/>
 				</span>
 			)}
-			{label ?? children ?? 'Tab'}
+			{plainText ? <span className={css.label}>{content}</span> : content}
 			{count !== undefined && count !== 0 && <Badge variant="light" hideZero={false} count={count} />}
 		</button>
 	);

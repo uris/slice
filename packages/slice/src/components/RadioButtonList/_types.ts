@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { SizeValue } from '../../theme/resolveSize';
 import type { RadioButtonOption, RadioButtonProps } from '../RadioButton';
 
 export type RadioButtonListOption<T = string> = Omit<RadioButtonProps<T>, 'checked' | 'defaultChecked' | 'name'> & {
@@ -15,9 +16,9 @@ type RadioButtonListBaseProps<T = string> = {
 	disabled?: boolean;
 	direction?: 'row' | 'column';
 	wrap?: boolean;
-	gap?: number;
-	itemGap?: number;
-	marginBottom?: number | string;
+	gap?: SizeValue;
+	itemGap?: SizeValue;
+	marginBottom?: SizeValue;
 	width?: number | string;
 	onChange?: (value: T, option: RadioButtonOption<T>) => void;
 };

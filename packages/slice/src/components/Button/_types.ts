@@ -1,6 +1,7 @@
 import type { HTMLMotionProps, Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme';
+import type { RadiusValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon';
 import type { ButtonStyleProps, ElevationProps, FixedSize, ToolTip } from '../sharedTypes';
 
@@ -23,7 +24,7 @@ type ButtonBaseProps = ElevationProps &
 		iconSize?: number;
 		/** Defaults to 1.5 at 14px; otherwise uses Icon’s default. */
 		iconStrokeWidth?: number;
-		borderRadius?: number | string;
+		borderRadius?: RadiusValue;
 		/** Overrides the variant border width in every state. Numbers use pixels. */
 		borderWidth?: number | string;
 		/** Overrides the variant border color in every state. */

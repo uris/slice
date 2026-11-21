@@ -4,14 +4,15 @@ import { motion } from 'motion/react';
 import React, { useState } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { type RadiusValue, resolveBoxSides, resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import css from './Switch.module.css';
 import type { SwitchProps } from './_types';
 
-const radiusValue = (value: number | string) =>
-	typeof value === 'number' ? (Number.isFinite(value) ? `${Math.max(0, value)}px` : 'var(--corner-round)') : value;
+const radiusValue = (value: RadiusValue) =>
+	resolveRadius(typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : value, 'corner-round');
 
 function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 	const props = resolveColorProps(rawProps);
@@ -27,7 +28,7 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 		width = 36,
 		padding,
 		transition,
-		backgroundColorOn = 'var(--feedback-positive)',
+		backgroundColorOn = 'var(--core-green)',
 		backgroundColorOff = 'var(--core-text-disabled)',
 		knobColor = 'var(--core-surface-primary)',
 		onChange,
@@ -47,16 +48,20 @@ function SwitchComponent<T = string>(rawProps: SwitchProps<T>) {
 	const backgroundColor = on ? backgroundColorOn : backgroundColorOff;
 	const resolvedHeight = Number.isFinite(height) && height > 0 ? Math.max(1, height) : 22;
 	const resolvedWidth = Math.max(resolvedHeight, Number.isFinite(width) && width > 0 ? width : 36);
-	const resolvedPadding = padding === undefined || !Number.isFinite(padding) ? 'var(--spacing-xxs)' : `${padding}px`;
+	const { top, right, bottom, left } = resolveBoxSides(resolveSize(padding, 'spacing-xxs'));
+	const clampPadding = (side: string) => `clamp(0px, ${side}, ${(resolvedHeight - 1) / 2}px)`;
 	const cssVars = {
 		'--switch-width': `${resolvedWidth}px`,
 		'--switch-height': `${resolvedHeight}px`,
-		'--switch-padding': `clamp(0px, ${resolvedPadding}, ${(resolvedHeight - 1) / 2}px)`,
-		'--switch-knob-size': 'calc(var(--switch-height) - var(--switch-padding) * 2)',
+		'--switch-padding-top': clampPadding(top),
+		'--switch-padding-right': clampPadding(right),
+		'--switch-padding-bottom': clampPadding(bottom),
+		'--switch-padding-left': clampPadding(left),
+		'--switch-knob-size': 'calc(var(--switch-height) - var(--switch-padding-top) - var(--switch-padding-bottom))',
 		'--switch-knob-color': knobColor,
 		'--switch-border-radius': radiusValue(borderRadius),
 		'--switch-knob-radius': radiusValue(knobRadius),
-		'--switch-knob-width': `clamp(1px, ${Number.isFinite(knobWidth) && knobWidth > 0 ? knobWidth : 20}px, calc(var(--switch-width) - var(--switch-padding) * 2))`,
+		'--switch-knob-width': `clamp(1px, ${Number.isFinite(knobWidth) && knobWidth > 0 ? knobWidth : 20}px, calc(var(--switch-width) - var(--switch-padding-left) - var(--switch-padding-right)))`,
 	} as React.CSSProperties;
 
 	/* START.DEBUG */

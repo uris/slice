@@ -10,7 +10,7 @@ import {
 	runSliderPlay,
 	runSliderWithoutHandlersPlay,
 } from 'src/components/playHelpers';
-import { expect, fireEvent, fn, userEvent, within } from 'storybook/test';
+import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
 
 const meta: Meta<typeof Slider> = {
 	title: 'Components/Slider',
@@ -35,14 +35,14 @@ const meta: Meta<typeof Slider> = {
 		min: 0,
 		max: 100,
 		width: 100,
-		height: 2,
+		height: 3,
 		touchHeight: 24,
-		trackHeadSize: 12,
+		trackHeadSize: 14,
 		trackHeadBorderWidth: 1,
-		trackHeadBorderColor: 'var(--core-outline-secondary)',
+		trackHeadBorderColor: 'var(--core-outline-primary)',
 		cursor: 'grabbing',
-		trackHeadColor: 'var(--core-text-light)',
-		progressColor: 'var(--core-text-tertiary)',
+		trackHeadColor: 'var(--core-surface-primary)',
+		progressColor: 'var(--core-outline-primary)',
 		trackColor: 'var(--core-surface-secondary)',
 		onChange: fn(),
 		onChangeEnd: fn(),
@@ -332,5 +332,46 @@ export const Cancellation: StoryObj<typeof Slider> = {
 		await userEvent.click(c.getByRole('button', { name: 'Disable slider' }));
 		fireEvent.pointerUp(slider, { pointerId: 2 });
 		await expect(canceledCommit).not.toHaveBeenCalled();
+	},
+};
+
+export const HeadFocusAndDragOutline: StoryObj<typeof Slider> = {
+	tags: ['tests'],
+	render: () => (
+		<>
+			<button type="button">Before slider</button>
+			<Slider aria-label="Outlined slider" />
+			<button type="button">After slider</button>
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole('slider');
+		const wrapper = input.parentElement as HTMLElement;
+		const head = wrapper.querySelector('[class*="trackHead"]') as HTMLElement;
+		await expect(head).toHaveStyle({ width: '14px', height: '14px' });
+		await expect(wrapper.querySelector('[class*="trackBg"]')).toHaveStyle({ height: '3px' });
+		canvas.getByRole('button', { name: 'Before slider' }).focus();
+		await userEvent.tab();
+		await expect(input).toHaveFocus();
+		await waitFor(() => expect(head).toHaveStyle({ outlineWidth: '3px', outlineStyle: 'solid' }));
+		await userEvent.tab();
+		await expect(getComputedStyle(head).outlineStyle).toBe('none');
+		fireEvent.pointerDown(input, { pointerId: 1, button: 0, isPrimary: true });
+		await expect(wrapper).toHaveAttribute('data-dragging');
+		await expect(head).toHaveStyle({ outlineWidth: '3px', outlineStyle: 'solid' });
+		fireEvent.pointerCancel(input, { pointerId: 1 });
+		await expect(wrapper).not.toHaveAttribute('data-dragging');
+		await expect(getComputedStyle(head).outlineStyle).toBe('none');
+	},
+};
+
+export const InvalidAppearanceDefaults: StoryObj<typeof Slider> = {
+	tags: ['tests'],
+	args: { height: Number.NaN, trackHeadSize: Number.NaN },
+	play: async ({ canvasElement }) => {
+		const wrapper = within(canvasElement).getByRole('slider').parentElement as HTMLElement;
+		await expect(wrapper.querySelector('[class*="trackHead"]')).toHaveStyle({ width: '14px', height: '14px' });
+		await expect(wrapper.querySelector('[class*="trackBg"]')).toHaveStyle({ height: '3px' });
 	},
 };

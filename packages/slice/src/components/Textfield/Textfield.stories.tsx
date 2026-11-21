@@ -626,7 +626,9 @@ export const Outlined: Story = {
 		const label = canvas.getByText('Email', { selector: 'label' });
 		const wrapper = input.closest('[data-variant]');
 		if (!wrapper) throw new Error('Missing wrapper');
-		expect(Math.abs(label.getBoundingClientRect().left - input.getBoundingClientRect().left)).toBeLessThan(1);
+		const icon = wrapper.querySelector('[class*="leadingIcon"]');
+		if (!icon) throw new Error('Missing leading icon');
+		expect(Math.abs(label.getBoundingClientRect().left - icon.getBoundingClientRect().left)).toBeLessThan(1);
 		expect(
 			Math.abs(
 				label.getBoundingClientRect().top +
@@ -831,7 +833,9 @@ export const OutlinedDefaultPadding: Story = {
 		expect(
 			Math.abs(valueBounds.top + valueBounds.height / 2 - bounds.top - bounds.height / 2 + inputOpticalLift(input)),
 		).toBeLessThan(0.5);
-		expect(Math.abs(label.getBoundingClientRect().left - input.getBoundingClientRect().left)).toBeLessThan(1);
+		const icon = wrapper.querySelector('[class*="leadingIcon"]');
+		if (!icon) throw new Error('Missing leading icon');
+		expect(Math.abs(label.getBoundingClientRect().left - icon.getBoundingClientRect().left)).toBeLessThan(1);
 		expect(
 			Math.abs(
 				label.getBoundingClientRect().top +
@@ -1177,5 +1181,47 @@ export const TransparentPasswordControl: Story = {
 		await expectTransparent();
 		await userEvent.unhover(button);
 		await expectTransparent();
+	},
+};
+
+export const FocusOutline: Story = {
+	tags: ['tests'],
+	args: { borderColorFocused: '#123456' },
+	play: async ({ canvasElement }) => {
+		const input = within(canvasElement).getByRole('textbox');
+		const wrapper = input.closest('[data-variant]') as HTMLElement;
+		await userEvent.click(input);
+		await waitFor(() => expect(wrapper).toHaveStyle({ outlineWidth: '3px', outlineStyle: 'solid' }));
+		input.blur();
+		await waitFor(() => expect(getComputedStyle(wrapper).outlineStyle).toBe('none'));
+	},
+};
+
+export const LeadingIconDefaults: Story = {
+	tags: ['tests'],
+	args: { iconLeft: { name: 'basic.search' } },
+	render: (args) => (
+		<>
+			<span data-testid="placeholder-color" style={{ color: 'var(--core-text-tertiary)' }} hidden />
+			<TextField {...args} />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const svg = canvasElement.querySelector('[class*="leadingIcon"] svg');
+		await expect(svg).toHaveAttribute('width', '18');
+		const canvas = within(canvasElement);
+		await expect(getComputedStyle(canvas.getByRole('textbox'), '::placeholder').color).toBe(
+			getComputedStyle(canvas.getByTestId('placeholder-color')).color,
+		);
+		await expect(svg?.querySelector('[stroke-width]')).toHaveAttribute('stroke-width', '1.5');
+	},
+};
+export const LeadingIconOverride: Story = {
+	...LeadingIconDefaults,
+	args: { iconLeft: { name: 'basic.search', size: 24, stroke: 0 } },
+	play: async ({ canvasElement }) => {
+		const svg = canvasElement.querySelector('[class*="leadingIcon"] svg');
+		await expect(svg).toHaveAttribute('width', '24');
+		await expect(svg?.querySelector('[stroke-width]')).toHaveAttribute('stroke-width', '0');
 	},
 };

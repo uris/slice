@@ -14,8 +14,10 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useTheme } from '../../hooks';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { classNames, setStyle } from '../../utils';
 import { mergedPresenceMotionValues } from '../../utils/functions/misc';
+import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -57,9 +59,11 @@ const defaultMotionValues = {
 	exit: { y: 5, opacity: 0 },
 } satisfies Variants;
 
-export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
+export function PopMenu<T = unknown>(rawProps: Readonly<PopMenuProps<T>>) {
+	const props = resolveColorProps(rawProps);
 	const {
 		elevation = 3,
+		inline = false,
 		level = 0,
 		children,
 		id,
@@ -86,7 +90,7 @@ export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 
 	// Resolve the host before measuring; submenus inherit the parent host unless explicitly overridden.
 	const inheritedPortal = useContext(PortalContext);
-	const portalTarget = usePopMenuPortal(caller, portalContainer, inheritedPortal);
+	const portalTarget = usePopMenuPortal(caller, inline ? false : portalContainer, inheritedPortal);
 	const dismissBranch = useContext(BranchDismissContext);
 	const rootCaller = useContext(RootCallerContext) ?? caller;
 	const { current } = useTheme();
@@ -110,7 +114,7 @@ export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 		offset,
 		gap,
 		container: portalTarget,
-		enabled: portalTarget !== undefined,
+		enabled: !inline && portalTarget !== undefined,
 	});
 	const { coords, resolved, constraints, visible, resetMenu } = layout;
 	const reduceMotion = usePrefersReducedMotion();
@@ -164,13 +168,18 @@ export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 		if (event.key === 'Escape' || (event.key === 'ArrowLeft' && level > 0)) {
 			event.preventDefault();
 			event.stopPropagation();
-			closeCurrentMenu();
+			if (inline) {
+				activeSubMenu?.caller.focus();
+				dismissSubMenu();
+			} else {
+				closeCurrentMenu();
+			}
 		}
 		if (event.key === 'ArrowRight' && (event.target as HTMLElement).getAttribute('aria-haspopup') === 'menu') {
 			event.preventDefault();
 			(event.target as HTMLButtonElement).click();
 		}
-		if (event.key === 'Tab') {
+		if (!inline && event.key === 'Tab') {
 			// Resolve the next tab stop before dismissal removes the focused menu item.
 			const stops = Array.from(
 				((rootCaller?.getRootNode() as Document | ShadowRoot) ?? document).querySelectorAll<HTMLElement>(
@@ -218,14 +227,14 @@ export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 	const appearanceStyles = useMemo(() => {
 		return {
 			'--pop-background-color': backgroundColor,
-			'--pop-padding': setStyle(padding),
+			'--pop-padding': resolveSize(padding),
 			'--pop-border-width': setStyle(borderWidth),
 			'--pop-border-color': borderColor,
-			'--pop-gap': setStyle(gap),
-			'--pop-border-radius': setStyle(borderRadius),
-			'--pop-min-width': setStyle(minWidth, 'unset'),
+			'--pop-gap': resolveSize(gap),
+			'--pop-border-radius': resolveRadius(borderRadius),
+			'--pop-min-width': setStyle(minWidth, inline ? '0' : 'unset'),
 		} as CSSProperties;
-	}, [backgroundColor, borderWidth, borderColor, gap, padding, borderRadius, minWidth]);
+	}, [backgroundColor, borderWidth, borderColor, gap, padding, borderRadius, minWidth, inline]);
 
 	// Restore focus only while it remains in this menu, then delegate whole-tree closure to its owner.
 	const handleDismissAll = useCallback(() => {
@@ -305,7 +314,7 @@ export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 	// Wait for automatic host creation; false is a resolved request to render in place.
 	if (portalTarget === undefined) return null;
 	const content = (
-		<PortalContext.Provider value={portalTarget}>
+		<PortalContext.Provider value={inline ? inheritedPortal : portalTarget}>
 			<RootCallerContext.Provider value={rootCaller}>
 				<PopMenuContext.Provider value={menuActions}>
 					<PopMenuActiveSubMenuContext.Provider value={activeSubMenu?.caller.id}>
@@ -316,14 +325,19 @@ export function PopMenu<T = unknown>(props: Readonly<PopMenuProps<T>>) {
 							onKeyDown={handleKeyDown}
 							ref={menuRef}
 							variants={resolvedVariants}
-							initial={reduceMotion ? false : 'initial'}
+							initial={inline || reduceMotion ? false : 'initial'}
 							animate={animationControls}
 							exit={'exit'}
 							transition={resolvedTransition}
-							className={classNames(divClass, styles.popMenu)}
-							style={{ ...getElevationStyle(elevation), ...divStyle, ...appearanceStyles, ...posStyles }}
+							className={classNames(divClass, styles.popMenu, inline ? styles.inlineMenu : '')}
+							style={{
+								...getElevationStyle(elevation),
+								...divStyle,
+								...appearanceStyles,
+								...(inline ? undefined : posStyles),
+							}}
 							onScroll={(e) => e.stopPropagation()}
-							inert={!resolved}
+							inert={!inline && !resolved}
 							onAnimationComplete={handleAnimationComplete}
 							role={'menu'}
 							tabIndex={-1}

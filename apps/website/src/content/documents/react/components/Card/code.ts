@@ -62,8 +62,21 @@ import { Card, CardTitle, CardContent } from '@apple-pie/slice';
 export function TitledCard() {
   return (
     <Card maxWidth={375} style={{ width: '100%' }}>
-      <CardTitle caption="Account" title="Security settings" text="Manage the details that protect your account." actionButton={{ label: 'Help', iconRight: 'alerts.question' }} />
+      <CardTitle caption="Account" title="Security settings" text="Manage the details that protect your account." action={[{ label: 'Help', iconRight: 'alerts.question' }]} />
       <CardContent>Review your password and sign-in preferences.</CardContent>
+    </Card>
+  );
+}
+`;
+
+export const titleStatusCode = `
+import { Badge, Card, CardContent, CardTitle } from '@apple-pie/slice';
+
+export function ProjectStatusCard() {
+  return (
+    <Card>
+      <CardTitle title="Project status" action={<Badge count="Ready" />} />
+      <CardContent text="All checks have passed." />
     </Card>
   );
 }

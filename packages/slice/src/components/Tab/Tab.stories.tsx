@@ -31,7 +31,10 @@ export const IconAndCount: Story = {
 	args: { icon: 'basic.home', count: 12 },
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		expect(canvas.getByRole('tab', { name: 'Details 12' })).toBeInTheDocument();
+		const tab = canvas.getByRole('tab', { name: 'Details 12' });
+		const label = within(tab).getByText('Details');
+		const transform = new DOMMatrix(getComputedStyle(label).transform);
+		expect(transform.f).toBeCloseTo(-0.067 * Number.parseFloat(getComputedStyle(label).fontSize));
 		expect(canvas.queryByRole('img')).not.toBeInTheDocument();
 	},
 };

@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import {
@@ -12,7 +13,7 @@ import {
 import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
-import { setStyle } from '../../utils/functions/misc';
+import { opacityFromColor, setStyle } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import typeCss from '../../utils/styling/type.module.css';
@@ -114,7 +115,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		textColorFocused = 'var(--core-text-primary)',
 		textColorBlurred = 'var(--core-text-primary)',
 		textColorError = 'var(--feedback-warning)',
-		textColorPlaceholder = 'var(--core-text-disabled)',
+		textColorPlaceholder = 'var(--core-text-tertiary)',
 		textColorDisabled = 'var(--core-text-disabled)',
 		labelColor = 'var(--core-text-primary)',
 		iconLeft,
@@ -262,7 +263,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 	const trailingIcon =
 		(inputType === 'password' && showPasswordToggle) || (!actionButton && clearButton && text !== '');
 	const getPadding = () => {
-		if (padding != null) return setStyle(padding);
+		if (padding != null) return resolveSize(padding);
 		if (variant === 'outlined') {
 			return 'calc(var(--spacing-s) + var(--tf-label-font-size, 0px) / 2) var(--spacing-m)';
 		}
@@ -281,8 +282,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		return textColorBlurred;
 	};
 	const getBackgroundColor = () => {
-		if (inline) return 'transparent';
-		const fallback = borderStyle === 'underline' ? 'transparent' : 'var(--core-surface-secondary)';
+		const fallback = 'transparent';
 		if (isFocused) return backgroundColorFocused ?? backgroundColorBlurred ?? fallback;
 		return backgroundColorBlurred ?? fallback;
 	};
@@ -294,7 +294,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 
 	const resolvedBorderRadius = () => {
 		const baseRadius = borderStyle === 'underline' ? 0 : 'var(--corner-m)';
-		return setStyle(borderRadius, baseRadius);
+		return resolveRadius(borderRadius, baseRadius);
 	};
 
 	const cssVars = {
@@ -304,6 +304,7 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		'--tf-border-radius': resolvedBorderRadius(),
 		'--tf-bg-color': getBackgroundColor(),
 		'--tf-border-color': getBorderColor(),
+		'--tf-outline-color': opacityFromColor(getBorderColor(), 50),
 		'--tf-border-width': getBorderWidth(),
 		'--tf-border-top-width': borderStyle === 'box' ? '1px' : '0px',
 		'--tf-text-color': getTextColor(),
@@ -314,7 +315,10 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		'--tf-input-width': width === 'auto' ? 'auto' : '100%',
 		'--tf-clear-size': setStyle(clearButton?.size ?? 20),
 		'--tf-icon-size': setStyle(iconLeft?.size ?? 20),
-		'--tf-stacked-gap': setStyle(Number.isFinite(stackedGap) ? Math.max(0, stackedGap) : 2),
+		'--tf-stacked-gap': resolveSize(
+			typeof stackedGap === 'number' && Number.isFinite(stackedGap) ? Math.max(0, stackedGap) : stackedGap,
+			2,
+		),
 		'--tf-label-background': labelBackgroundColor,
 	} as React.CSSProperties;
 	/* START.DEBUG */
@@ -324,8 +328,9 @@ function TextFieldComponent(rawProps: TextFieldProps) {
 		<span className={css.leadingIcon} aria-hidden="true">
 			<Icon
 				name={iconLeft.name}
-				size={iconLeft.size ?? 20}
-				strokeColor={iconLeft.color ?? theme.current.colors['core-icon-secondary']}
+				size={iconLeft.size ?? 18}
+				strokeColor={iconLeft.color ?? theme.current.colors['core-icon-primary']}
+				stroke={iconLeft.stroke ?? 1.5}
 			/>
 		</span>
 	) : null;

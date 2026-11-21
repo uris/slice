@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useTheme } from '../../hooks';
 import { resolveColor } from '../../theme/colors/resolveColor';
+import { resolveSize } from '../../theme/resolveSize';
 import { tintFromColor } from '../../utils/functions/colors';
 import { classNames, setSizeStyle } from '../../utils/functions/misc';
 import { Button } from '../Button';
@@ -39,7 +40,7 @@ export function CardFooter(props: Readonly<CardFooterProps>) {
 		'--footer-background-color': resolveColor(backgroundColor),
 		'--footer-buttons-stack': stack === 'vertical' ? 'column' : 'row',
 		'--footer-alignment': resolveAlign(),
-		padding: setSizeStyle(padding),
+		padding: resolveSize(padding),
 		...style,
 	} as CSSProperties;
 

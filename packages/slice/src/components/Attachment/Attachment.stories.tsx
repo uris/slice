@@ -586,3 +586,40 @@ export const Elevation: StoryObj<typeof meta> = {
 	),
 	play: async (context) => runElevationPlay(context, 0),
 };
+
+export const Horizontal: Story = {
+	args: { orientation: 'horizontal', maxWidth: 320, content: { file: 'Quarterly report.pdf' } },
+	render: (args) => (
+		<div style={{ width: 400, maxWidth: '100%' }}>
+			<Attachment {...args} />
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const group = within(canvasElement).getByRole('group', { name: 'Quarterly report' });
+		const preview = group.querySelector(`.${css.canvas}`) as HTMLElement;
+		const info = group.querySelector(`.${css.info}`) as HTMLElement;
+		await waitFor(() => {
+			const thumbnail = preview.getBoundingClientRect();
+			const details = info.getBoundingClientRect();
+			expect(thumbnail.width).toBe(thumbnail.height);
+			expect(Math.abs(thumbnail.height - details.height)).toBeLessThan(1);
+			expect(thumbnail.right).toBeLessThan(details.left);
+		});
+		const container = group.parentElement as HTMLElement;
+		await expect(group.getBoundingClientRect().width).toBe(Math.min(320, container.clientWidth));
+		container.style.width = '220px';
+		await expect(group.getBoundingClientRect().width).toBe(Math.min(220, container.clientWidth));
+	},
+};
+
+export const HorizontalText: Story = {
+	args: { orientation: 'horizontal', content: 'A short document preview.' },
+	play: async ({ canvasElement, args }) => {
+		const group = within(canvasElement).getByRole('group', { name: 'Clipboard content' });
+		const icon = group.querySelector(`.${css.fileThumbnail} svg`);
+		await expect(icon).toBeVisible();
+		await expect(icon).toHaveAttribute('width', '20');
+		await expect(group.querySelector(`.${css.textThumbnail}`)).toBeNull();
+		await expect(group).toHaveAccessibleDescription(`text. ${args.content}`);
+	},
+};

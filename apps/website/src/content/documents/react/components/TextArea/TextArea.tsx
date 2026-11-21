@@ -526,9 +526,19 @@ export function TextAreaDoc() {
 			<Definition id={'sendSize'}>
 				<Prop>sendSize</Prop>
 				<TypeDef>{'number'}</TypeDef>
-				<DefaultVal>{'36'}</DefaultVal>
+				<DefaultVal>24</DefaultVal>
 			</Definition>
 			<P>{'Send-button width and height in pixels.'}</P>
+
+			<Definition id={'showCharacters'}>
+				<Prop>showCharacters</Prop>
+				<TypeDef>{'boolean'}</TypeDef>
+				<DefaultVal>{'false'}</DefaultVal>
+			</Definition>
+			<P>
+				Shows a small tertiary character count inside the bottom-left corner. With <Code>maxLength</Code>, it shows the
+				used count and limit. It can be combined with the send button.
+			</P>
 
 			<Definition id={'showSendButton'}>
 				<Prop>showSendButton</Prop>
@@ -748,6 +758,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'sendActionName', title: 'sendActionName', code: true },
 			{ id: 'sendOffset', title: 'sendOffset', code: true },
 			{ id: 'sendSize', title: 'sendSize', code: true },
+			{ id: 'showCharacters', title: 'showCharacters', code: true },
 			{ id: 'showSendButton', title: 'showSendButton', code: true },
 			{ id: 'submitClears', title: 'submitClears', code: true },
 			{ id: 'textColor', title: 'textColor', code: true },

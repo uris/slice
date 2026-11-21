@@ -2,6 +2,7 @@ import type { HTMLMotionProps, Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts/useKeyboardShortcuts';
 import type { ColorValue } from '../../theme';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon';
 import type { ElevationProps, FixedSize } from '../sharedTypes';
 
@@ -31,6 +32,8 @@ export type PopMenuItemClickInfo<T = unknown> = Pick<
 };
 
 export interface PopMenuBase<T = unknown> extends ElevationProps {
+	/** Render an always-visible menu in the normal document flow. */
+	inline?: boolean;
 	/** Defaults to auto; submenus inherit their parent's resolved host. */
 	portalContainer?: 'auto' | HTMLElement | false;
 	/** Nesting level used to stack submenus above their parent. */
@@ -39,9 +42,9 @@ export interface PopMenuBase<T = unknown> extends ElevationProps {
 	id?: string;
 	options?: PropMenuEntry<T>[];
 	children?: React.ReactNode;
-	padding?: number | string;
+	padding?: SizeValue;
 	backgroundColor?: ColorValue;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	borderWidth?: number;
 	borderColor?: ColorValue;
 	/** Enter/exit overrides; bypassed when the user prefers reduced motion. */
@@ -50,7 +53,7 @@ export interface PopMenuBase<T = unknown> extends ElevationProps {
 	transition?: Transition;
 	caller?: PopCaller;
 	offset?: PopOffset;
-	gap?: number;
+	gap?: SizeValue;
 	minWidth?: number;
 	onClickItem?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => void;
 	onHoverItem?: (e: React.MouseEvent<HTMLButtonElement>, item: Pick<PopMenuItemBase<T>, 'id' | 'label'>) => void;
@@ -77,7 +80,7 @@ export interface PopMenuItemBase<T = unknown> {
 	iconColor?: ColorValue;
 	iconColorHover?: ColorValue;
 	iconColorDisabled?: ColorValue;
-	iconGap?: number;
+	iconGap?: SizeValue;
 	backgroundColor?: ColorValue;
 	backgroundColorHover?: ColorValue;
 	label?: string;
@@ -86,8 +89,9 @@ export interface PopMenuItemBase<T = unknown> {
 	textColorDisabled?: ColorValue;
 	textSize?: FixedSize;
 	subMenu?: (props: PopMenuSubMenuProps) => React.ReactNode;
-	padding?: number | string;
-	gap?: number | string;
+	padding?: SizeValue;
+	outerPadding?: SizeValue;
+	gap?: SizeValue;
 	/** Display a custom string or automatically format a shared shortcut definition. Does not register a binding. */
 	shortcut?: string | KeyboardShortcut;
 	toggle?: boolean;
@@ -103,7 +107,7 @@ export interface PopMenuItemGroupBase<T = unknown> {
 	textColor?: ColorValue;
 	textColorHover?: ColorValue;
 	textSize?: FixedSize;
-	padding?: number | string;
+	padding?: SizeValue;
 	items?: PopMenuItemBase<T>[];
 	children?: React.ReactNode;
 	borderWidth?: number | string;
@@ -111,7 +115,7 @@ export interface PopMenuItemGroupBase<T = unknown> {
 	onClickItem?: (e: React.MouseEvent<HTMLButtonElement>, item: PopMenuItemClickInfo<T>) => void;
 	onHoverItem?: (e: React.MouseEvent<HTMLButtonElement>, item: Pick<PopMenuItemBase<T>, 'id' | 'label'>) => void;
 	dismissAll?: () => void;
-	gap?: number | string;
+	gap?: SizeValue;
 }
 
 export type PropMenuEntry<T = unknown> =

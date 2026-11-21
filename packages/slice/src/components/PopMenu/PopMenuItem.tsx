@@ -1,12 +1,16 @@
 import type React from 'react';
 import { type CSSProperties, useCallback, useContext, useId, useMemo } from 'react';
-import { classNames, resolveShortcut, setStyle } from '../../utils';
+import { useTheme } from '../../hooks';
+import { resolveColor } from '../../theme/colors/resolveColor';
+import { resolveSize } from '../../theme/resolveSize';
+import { classNames, resolveShortcut, setStyle, tintFromColor } from '../../utils';
 import { Icon } from '../Icon';
 import styles from './PopMenu.module.css';
 import { PopMenuActiveSubMenuContext, noopDismiss, usePopMenuActions } from './PopMenuContext';
 import type { PopMenuItemClickInfo, PopMenuItemProps } from './_types';
 
 export function PopMenuItem<T = unknown>(props: PopMenuItemProps<T>) {
+	const { isDark } = useTheme();
 	const {
 		children,
 		data,
@@ -22,8 +26,8 @@ export function PopMenuItem<T = unknown>(props: PopMenuItemProps<T>) {
 		toggled = false,
 		shortcut,
 		subMenu,
-		backgroundColor = 'var(--core-surface-secondary)',
-		backgroundColorHover = 'var(--core-fill-secondary)',
+		backgroundColor,
+		backgroundColorHover,
 		textColor = 'var(--core-text-primary)',
 		textColorHover = 'var(--core-text-primary)',
 		textColorDisabled = 'var(--core-text-tertiary)',
@@ -35,7 +39,8 @@ export function PopMenuItem<T = unknown>(props: PopMenuItemProps<T>) {
 		iconSize = 16,
 		iconGap = 6,
 		gap = 24,
-		padding = '3px 4px',
+		padding = '5px 6px',
+		outerPadding = '0 2px',
 		textSize = 'm',
 		level,
 		className = '',
@@ -51,6 +56,11 @@ export function PopMenuItem<T = unknown>(props: PopMenuItemProps<T>) {
 	const activeSubMenuId = useContext(PopMenuActiveSubMenuContext);
 	const dismissAll = menu?.dismissAll ?? dismissAllProp ?? noopDismiss;
 	const isDisabled = Boolean(disabled || props['aria-disabled'] === true || props['aria-disabled'] === 'true');
+	const ownBackground = resolveColor(backgroundColor);
+	const itemBackground = ownBackground ?? 'var(--pop-background-color, transparent)';
+	const hoverBackground =
+		resolveColor(backgroundColorHover) ??
+		tintFromColor(ownBackground ?? 'var(--pop-background-color, var(--core-surface-secondary))', isDark ? 10 : -5);
 	const generatedId = useId();
 	const itemId = id?.trim() || generatedId;
 	const itemName = name?.trim() || label?.trim() || id?.trim();
@@ -87,18 +97,19 @@ export function PopMenuItem<T = unknown>(props: PopMenuItemProps<T>) {
 			'--item-icon-color-hover': iconColorHover,
 			'--item-icon-color-disabled': iconColorDisabled,
 			'--icon-size': setStyle(iconSize),
-			'--icon-gap': setStyle(iconGap),
-			'--background-color': backgroundColor,
-			'--background-color-hover': isDisabled ? backgroundColor : backgroundColorHover,
+			'--icon-gap': resolveSize(iconGap),
+			'--item-background-color': itemBackground,
+			'--item-background-color-hover': isDisabled ? itemBackground : hoverBackground,
 			'--text-color': isDisabled ? textColorDisabled : textColor,
 			'--text-color-hover': isDisabled ? textColorDisabled : textColorHover,
-			'--item-wrapper-padding': setStyle(padding),
-			'--item-gap': setStyle(gap),
+			'--item-wrapper-padding': resolveSize(padding),
+			'--item-padding': resolveSize(outerPadding),
+			'--item-gap': resolveSize(gap),
 			'--shortcut-color': isDisabled ? textColorDisabled : 'var(--core-text-secondary)',
 		} as CSSProperties;
 	}, [
-		backgroundColor,
-		backgroundColorHover,
+		itemBackground,
+		hoverBackground,
 		textColor,
 		textColorHover,
 		textColorDisabled,
@@ -109,6 +120,7 @@ export function PopMenuItem<T = unknown>(props: PopMenuItemProps<T>) {
 		iconSize,
 		iconGap,
 		padding,
+		outerPadding,
 		gap,
 	]);
 

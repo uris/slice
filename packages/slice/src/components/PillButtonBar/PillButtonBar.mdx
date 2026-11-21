@@ -1,0 +1,57 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './PillButtonBar.stories';
+
+<Meta of={Stories} />
+
+# PillButtonBar
+
+Choose between related views with content-sized tabs and a sliding selection pill.
+
+<Canvas of={Stories.Default} />
+
+Compose `Tab` children or pass `options`. Use `defaultValue` for an initial
+selection or pass `value` and `onChange` to control it. Give the group a
+`tabBarName` and connect each tab to its panel with `id` and `panelId`.
+Arrow keys move focus and selection, skipping disabled tabs. Home and End
+select the first and last enabled choices. The pill moves immediately when
+reduced motion is enabled.
+
+```tsx
+import { PillButtonBar, Tab } from '@apple-pie/slice';
+
+<PillButtonBar tabBarName="Time range" defaultValue="week" pillInset={4} pillElevation={2}>
+  <Tab value="day" label="Day" />
+  <Tab value="week" label="Week" />
+  <Tab value="month" label="Month" />
+</PillButtonBar>
+```
+
+## Appearance
+
+The bar fits the combined width of its tabs, gaps, inset, and border. It sizes to the height of its options by default. Adjust `padding` for the space around
+each label and icon, and `pillInset` for the space around the selection pill.
+Set `height` when the bar needs to match a fixed-height control.
+
+| Prop | Default | Description |
+| --- | --- | --- |
+| `backgroundColor` | `tintFromColor('core-surface-secondary', -2)` | Track fill. |
+| `borderColor` | `tintFromColor('core-surface-secondary', -4)` | Track outline color. |
+| `borderWidth` | `1` | Track outline width. |
+| `borderRadius` | `var(--corner-l)` | Track corner radius. |
+| `elevation` | `0` | Track shadow. |
+| `height` | `auto` | Overall bar height. |
+| `iconSize` | `18` | Default tab icon size. |
+| `padding` | `1px 8px` | Vertical and horizontal padding inside each tab. |
+| `pillBackgroundColor` | `core-surface-primary` | Selected pill fill. |
+| `pillBorderColor` | `core-outline-primary` | Selected pill outline color. |
+| `pillBorderWidth` | `0` | Selected pill outline width. |
+| `pillBorderRadius` | `var(--corner-m)` | Selected pill corner radius. |
+| `pillElevation` | `1` | Selected pill shadow. |
+| `pillInset` | `4` | Space between the inside edge of the track and the tabs. |
+| `tabGap` | `4` | Space between neighboring tabs. |
+| `textColor` | `core-text-secondary` | Unselected label color. |
+| `textColorSelected` | `core-text-primary` | Selected label color. |
+| `textSize` | `l` | Tab label text size. |
+
+Color props accept Slice tokens and CSS colors. Numeric dimensions use pixels.
+See [TabBar](/?path=/docs/components-tabbar--docs) for shared selection and layout props.

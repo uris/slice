@@ -93,6 +93,8 @@ export default defineConfig({
 				],
 				test: {
 					name: 'storybook',
+					// Real pointer/focus interactions must not compete across story iframes.
+					fileParallelism: false,
 					browser: {
 						enabled: true,
 						headless: true,

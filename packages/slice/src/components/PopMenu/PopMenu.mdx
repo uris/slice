@@ -30,6 +30,18 @@ import { PopMenu, PopMenuGroup, PopMenuItem } from '@apple-pie/slice';
 </PopMenu>
 ```
 
+## Inline menus
+
+Set `inline` to render an always-visible menu in the page layout. Inline menus
+use the same appearance props and support anchored submenus.
+
+## Item backgrounds
+
+Items use the containing menu’s `backgroundColor` by default. Set an item’s
+`backgroundColor` to override it. Hover and keyboard focus use a tint of the
+effective item background. Set `backgroundColorHover` for a specific hover
+and focus color.
+
 ## Item actions and typed payloads
 
 Items accept `data?: T` and `onClick(event, item)`. The same API works in root

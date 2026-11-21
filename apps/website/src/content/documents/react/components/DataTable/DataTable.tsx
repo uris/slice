@@ -286,7 +286,7 @@ export default function DataTableDoc() {
 			<Definition id="noTopBorder">
 				<Prop>noTopBorder</Prop>
 				<TypeDef>boolean</TypeDef>
-				<DefaultVal>false</DefaultVal>
+				<DefaultVal>true</DefaultVal>
 			</Definition>
 			<P>Removes the top edge above the header. Header bottom borders and the remaining grid borders are preserved.</P>
 			<Definition id="rowHeight">

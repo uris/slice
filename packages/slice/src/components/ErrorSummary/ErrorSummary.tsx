@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import {
@@ -173,9 +174,9 @@ const ErrorSummaryComponent = React.forwardRef<HTMLDivElement, ErrorSummaryProps
 		'--error-bg-color': backgroundColor,
 		'--error-border-color': borderColor,
 		'--error-border-width': setStyle(borderWidth),
-		'--error-border-radius': setStyle(borderRadius),
-		'--error-padding': setStyle(padding),
-		'--error-gap': setStyle(gap),
+		'--error-border-radius': resolveRadius(borderRadius),
+		'--error-padding': resolveSize(padding),
+		'--error-gap': resolveSize(gap),
 	} as React.CSSProperties;
 	/* START.DEBUG */
 	useTrackRenders(props, 'ErrorSummary');

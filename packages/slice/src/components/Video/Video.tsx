@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { type SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -397,7 +398,7 @@ const BaseVideo = React.forwardRef<VideoElement, VideoProps>((rawProps, ref) => 
 		return {
 			'--video-width': setStyle(width, 'unset'),
 			'--video-height': setStyle(height, 'unset'),
-			'--video-border-radius': setStyle(borderRadius, corners['corner-none']),
+			'--video-border-radius': resolveRadius(borderRadius, corners['corner-none']),
 			'--video-border-size': setStyle(borderWidth, 0),
 			'--video-border-color': setStyle(borderColor, 'transparent'),
 			'--video-bg-color': setStyle(backgroundColor, 'transparent'),

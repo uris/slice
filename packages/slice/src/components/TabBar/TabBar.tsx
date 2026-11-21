@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks';
+import { resolveSize } from '../../theme/resolveSize';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
@@ -13,9 +14,10 @@ import css from './TabBar.module.css';
 import type { TabBarProps } from './_types';
 import { TabContext, useClientLayoutEffect, withoutAria } from './shared';
 
-function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
+function TabBarComponent<T = string>(rawProps: TabBarProps<T> & { pillStyle?: React.CSSProperties }) {
 	const {
 		children,
+		pillStyle,
 		tabBarName,
 		accentColor,
 		textColor,
@@ -172,6 +174,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 		active,
 		disabled,
 		underline,
+		pillStyle,
 		children,
 		options,
 		padding,
@@ -218,10 +221,10 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 	const vars = {
 		'--tab-bar-height': setStyle(height),
 		'--tab-bar-width': setStyle(width),
-		'--tab-bar-gap': setStyle(tabGap),
-		'--tab-bar-padding': setStyle(padding),
+		'--tab-bar-gap': resolveSize(tabGap),
+		'--tab-bar-padding': resolveSize(padding),
 		'--tab-bar-icon-size': setStyle(iconSize),
-		'--tab-bar-icon-gap': setStyle(iconGap),
+		'--tab-bar-icon-gap': resolveSize(iconGap),
 		'--tab-bar-tab-width': tabWidth === 'fill' ? 'auto' : tabWidth === 'compact' ? 'max-content' : setStyle(tabWidth),
 		'--tab-bar-tab-flex': tabWidth === 'fill' ? '1 1 0' : tabWidth === 'compact' ? '0 1 auto' : '0 0 auto',
 		'--tab-bar-border': border ? '1px' : '0px',
@@ -240,7 +243,8 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 					aria-label={accessibleName}
 					aria-orientation="horizontal"
 					aria-disabled={disabled || undefined}
-					className={`${css.list} ${css[textSize]}`}
+					className={`${css.list} ${css[textSize]}${pillStyle ? ` ${css.pillTrack}` : ''}`}
+					style={pillStyle}
 					data-icon-dual-tone={iconDualTone || undefined}
 				>
 					{children !== undefined
@@ -259,7 +263,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 						<motion.div
 							key={reduced ? 'static' : 'animated'}
 							aria-hidden="true"
-							className={css.indicator}
+							className={pillStyle ? css.pillIndicator : css.indicator}
 							initial={false}
 							animate={indicator}
 							transition={timing}
@@ -284,4 +288,7 @@ function TabBarComponent<T = string>(rawProps: TabBarProps<T>) {
 	);
 }
 
-export const TabBar = React.memo(TabBarComponent) as <T = string>(props: TabBarProps<T>) => React.JSX.Element;
+export const TabBarLayout = React.memo(TabBarComponent) as <T = string>(
+	props: TabBarProps<T> & { pillStyle?: React.CSSProperties },
+) => React.JSX.Element;
+export const TabBar = TabBarLayout as <T = string>(props: TabBarProps<T>) => React.JSX.Element;

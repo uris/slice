@@ -1,11 +1,13 @@
 import { type RefObject, useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import type { SizeValue } from '../../theme/resolveSize';
+import { measureCssLength } from '../../utils/styling/measureCssLength';
 import type { PopCaller, PopCoords, PopOffset, PopSizeConstraints } from './_types';
 
 export function usePopMenu(options: {
 	menuRef?: RefObject<HTMLDivElement | null>;
 	caller?: PopCaller | null;
 	offset?: PopOffset | null;
-	gap?: number | null;
+	gap?: SizeValue | null;
 	container?: HTMLElement | false;
 	enabled?: boolean;
 }) {
@@ -35,7 +37,7 @@ export function usePopMenu(options: {
 			callerRect.left >= windowWidth;
 		if (callerOutsideViewport) return;
 
-		const menuGap = gap ?? 0;
+		const menuGap = measureCssLength(menu, gap, 0);
 		const topEdge = Math.min(windowHeight, Math.max(0, callerRect.top - menuGap));
 		// Side placements align with the caller top and flip horizontally before viewport clamping.
 		let downwardAnchor = callerRect.bottom + menuGap;

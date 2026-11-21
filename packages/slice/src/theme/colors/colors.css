@@ -383,6 +383,11 @@
 	background: var(--core-surface-special);
 }
 
+/* Text color utilities start */
+[data-slice-theme-scope] .core-text-accent {
+	color: var(--core-text-accent);
+}
+
 [data-slice-theme-scope] .core-text-dark {
 	color: var(--core-text-dark);
 }
@@ -403,6 +408,10 @@
 	color: var(--core-text-primary);
 }
 
+[data-slice-theme-scope] .core-text-quaternary {
+	color: var(--core-text-quaternary);
+}
+
 [data-slice-theme-scope] .core-text-secondary {
 	color: var(--core-text-secondary);
 }
@@ -411,13 +420,10 @@
 	color: var(--core-text-special);
 }
 
-[data-slice-theme-scope] .core-text-accent {
-	color: var(--core-text-accent);
-}
-
 [data-slice-theme-scope] .core-text-tertiary {
 	color: var(--core-text-tertiary);
 }
+/* Text color utilities end */
 
 [data-slice-theme-scope] .eor-tag-employee {
 	color: var(--eor-tag-employee);
@@ -517,10 +523,6 @@
 	border: 1px solid var(--core-outline-primary);
 	background: var(--core-surface-secondary);
 	color: var(--core-text-primary);
-}
-
-[data-slice-theme-scope] .core-text-quaternary {
-	color: var(--core-text-quaternary);
 }
 
 [data-slice-theme-scope] .core-fill-primary {

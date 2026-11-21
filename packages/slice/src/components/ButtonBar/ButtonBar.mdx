@@ -89,11 +89,11 @@ Colors accept Slice tokens or CSS colors. Shared style overrides apply only when
 <tr><td><code>fill</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Button fill treatment; separate from choosing a filled icon name.</td></tr>
 <tr><td><code>gap</code></td><td><code>number</code></td><td><code>6</code></td><td>Pixel gap between icons and content, and between composed children. Does not space buttons apart.</td></tr>
 <tr><td><code>hoverTint</code></td><td><code>number</code></td><td><code>4</code></td><td>Percentage mixed toward white on hover, clamped to 0–100. Zero disables tinting. Explicit hover backgrounds take precedence.</td></tr>
-<tr><td><code>iconColor</code></td><td><code>ColorValue</code></td><td><code>core-text-secondary</code></td><td>Shared icon color; individual child colors are retained when omitted.</td></tr>
+<tr><td><code>iconColor</code></td><td><code>ColorValue</code></td><td><code>core-text-primary</code></td><td>Shared icon color; individual child colors are retained when omitted.</td></tr>
 <tr><td><code>iconColorHover</code></td><td><code>ColorValue</code></td><td><code>core-text-primary</code></td><td>Shared hover icon color.</td></tr>
 <tr><td><code>iconDualTone</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Passes Button dual-tone behavior through to its icons.</td></tr>
 <tr><td><code>iconSize</code></td><td><code>number</code></td><td><code>18</code></td><td>Icon dimensions in pixels, clamped to a 14px minimum.</td></tr>
-<tr><td><code>iconStrokeWidth</code></td><td><code>number</code></td><td><code>1.25</code></td><td>Explicit icon stroke width overrides the size-dependent default.</td></tr>
+<tr><td><code>iconStrokeWidth</code></td><td><code>number</code></td><td><code>1.5</code></td><td>Shared icon stroke width. Explicit bar values override child values; when omitted, individual child widths are retained.</td></tr>
 <tr><td><code>initial</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Motion initial target forwarded to each Button.</td></tr>
 <tr><td><code>inset</code></td><td><code>number  /  string</code></td><td><code>4; l: 6; xl: 10; vertical: 0</code></td><td>Extra left/right space inside edge button backgrounds. Horizontal bars apply it at the first and last item, including fields; vertical bars apply it on both sides of every item. Zero is respected.</td></tr>
 <tr><td><code>orientation</code></td><td><code>horizontal  /  vertical</code></td><td><code>horizontal</code></td><td>Stack direction. Vertical buttons fill the bar width.</td></tr>
@@ -103,7 +103,7 @@ Colors accept Slice tokens or CSS colors. Shared style overrides apply only when
 <tr><td><code>paddingRight</code></td><td><code>number  /  string</code></td><td><code>Button default</code></td><td>Button right padding, separate from the bar edge inset.</td></tr>
 <tr><td><code>paddingTop</code></td><td><code>number  /  string</code></td><td><code>2 for s; Button default otherwise</code></td><td>Button top padding. Explicit side values override shorthand and defaults.</td></tr>
 <tr><td><code>state</code></td><td><code>normal  /  hover  /  disabled</code></td><td><code>normal</code></td><td>Shared Button visual state.</td></tr>
-<tr><td><code>textColor</code></td><td><code>ColorValue</code></td><td><code>core-text-secondary</code></td><td>Shared text color; individual child colors are retained when omitted.</td></tr>
+<tr><td><code>textColor</code></td><td><code>ColorValue</code></td><td><code>core-text-primary</code></td><td>Shared text color; individual child colors are retained when omitted.</td></tr>
 <tr><td><code>textColorHover</code></td><td><code>ColorValue</code></td><td><code>core-text-primary</code></td><td>Shared hover text color.</td></tr>
 <tr><td><code>textSize</code></td><td><code>xs  /  s  /  m  /  l  /  xl</code></td><td><code>m</code></td><td>Shared text size, independent of buttonSize.</td></tr>
 <tr><td><code>transition</code></td><td><code>Transition</code></td><td><code>Button default</code></td><td>Motion transition forwarded to each Button.</td></tr>

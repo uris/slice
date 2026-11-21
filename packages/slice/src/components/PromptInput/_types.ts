@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { FileItem } from '../FileList';
 import type { TextAreaProps } from '../TextArea';
 import type { UploadAreaProps, UploadFileRejection } from '../UploadArea';
@@ -52,12 +53,13 @@ type BasePromptProps = ElevationProps & {
 	width?: string | number;
 	maxWidth?: string | number;
 	minWidth?: string | number;
+	backgroundColor?: ColorValue;
 	borderStyle?: 'solid' | 'gradient' | 'none';
 	borderWidth?: number;
 	borderColor?: ColorValue;
 	borderColorFocused?: ColorValue;
 	borderAnimate?: boolean;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	placeholder?: string;
 	placeholderWorking?: string;
 	focused?: boolean;
@@ -68,7 +70,7 @@ type BasePromptProps = ElevationProps & {
 	attachButton?: boolean;
 	stopEnabled?: boolean;
 	maxLength?: number;
-	toolbarGap?: number;
+	toolbarGap?: SizeValue;
 	attachmentsDisabled?: boolean;
 	submitWorking?: boolean;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';

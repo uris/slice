@@ -1,5 +1,6 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { ElevationProps } from '../sharedTypes';
 
 export enum ToastType {
@@ -23,8 +24,8 @@ export interface ToastBaseProps<T = unknown> extends ElevationProps {
 	message?: string | null;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	border?: boolean;
-	padding?: number | string;
-	borderRadius?: number | string;
+	padding?: SizeValue;
+	borderRadius?: RadiusValue;
 	position?: 'top' | 'bottom';
 	container?: 'window' | 'parent';
 	offset?: number;

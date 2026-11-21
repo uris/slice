@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import {
@@ -149,7 +150,7 @@ function ToastComponent<T>(props: ToastProps<T>, forwardedRef: React.ForwardedRe
 		return getWaterTransition(theme.motion, transition);
 	}, [reduced, theme.motion, transition]);
 	const cssVars = {
-		'--toast-padding': setStyle(
+		'--toast-padding': resolveSize(
 			padding,
 			close
 				? 'var(--spacing-s) calc(var(--spacing-m) - var(--spacing-xs)) var(--spacing-s) var(--spacing-m)'
@@ -158,7 +159,7 @@ function ToastComponent<T>(props: ToastProps<T>, forwardedRef: React.ForwardedRe
 		'--toast-background': colorScheme.bg,
 		'--toast-color': colorScheme.text,
 		'--toast-border': border ? `1px solid ${colorScheme.border}` : '0px solid transparent',
-		'--toast-border-radius': setStyle(borderRadius),
+		'--toast-border-radius': resolveRadius(borderRadius),
 		'--toast-position': container === 'window' ? 'fixed' : 'absolute',
 		'--toast-offset': setStyle(offset),
 	} as React.CSSProperties;

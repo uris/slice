@@ -37,14 +37,16 @@ const props = [
 	{
 		name: 'backgroundColor',
 		type: 'ColorValue',
-		defaultValue: 'var(--core-surface-secondary)',
-		description: <>{'Content background color.'}</>,
+		defaultValue: 'Containing menu background',
+		description: (
+			<>Overrides the containing menu’s background for this item. Standalone items default to transparent.</>
+		),
 	},
 	{
 		name: 'backgroundColorHover',
 		type: 'ColorValue',
-		defaultValue: 'var(--core-fill-secondary)',
-		description: <>{'Content background during pointer hover and keyboard-visible focus.'}</>,
+		defaultValue: 'Tint of the item background',
+		description: <>Overrides the default tint during pointer hover and keyboard-visible focus.</>,
 	},
 	{
 		name: 'children',

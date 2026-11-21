@@ -74,13 +74,20 @@ Card and its sections are visual div wrappers. Use meaningful child semantics an
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `actionButton` | `ButtonProps` | `undefined` | Optional action beside the title. Defaults to a text button with automatic height and zero padding; supplied button props override those defaults. |
+| `action` | `ButtonProps[]` or `React.ReactNode` | `undefined` | Content beside the title. Button descriptors generate text buttons with automatic height and zero padding by default. Supplied button props override those defaults. |
 | `caption` | `string` | `undefined` | Small uppercase caption above the title. |
 | `children` | `React.ReactNode` | `undefined` | Custom title content. Replaces the generated caption, title, supporting text, and action. |
 | `padding` | `number  /  string` | `inherited Card.padding` | Section padding. Inherits `Card.padding` by default; explicit values, including `0`, take precedence. Numbers are pixels; strings accept CSS padding shorthands. |
 | `text` | `string` | `undefined` | Supporting text below the title. |
 | `title` | `string` | `undefined` | Main title text. Long titles are truncated to one line. |
 | `...divAttributes` | HTML div attributes | — | Native attributes and events apply to the wrapper. Classes are appended; explicit styles override defaults. |
+
+Pass button descriptors for generated actions, or supply a React node for custom content.
+
+```tsx
+<CardTitle title="Security settings" action={[{ label: 'Help', iconRight: 'alerts.question' }]} />
+<CardTitle title="Project status" action={<Badge count="Ready" />} />
+```
 
 ## CardContent props
 
@@ -121,7 +128,7 @@ Card and its sections are visual div wrappers. Use meaningful child semantics an
 
 ## Actions
 
-CardTitle and CardFooter accept `onAction: (button: ButtonProps) => void`. A button's own `onClick` runs first, then the section callback. Disabled actions do not fire. CardTitle's custom children replace its generated title layout; CardContent's children replace its text fallback; CardFooter's children replace its action buttons. CardImage's children render over its image.
+CardTitle and CardFooter accept `onAction: (button: ButtonProps) => void` for buttons generated from descriptors. A button's own `onClick` runs first, then the section callback. Disabled buttons invoke neither callback. Custom nodes passed to CardTitle's `action` handle their own interactions. CardTitle's custom children replace its generated title layout; CardContent's children replace its text fallback; CardFooter's children replace its action buttons. CardImage's children render over its image.
 
 ## Website documentation
 

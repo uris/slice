@@ -43,6 +43,7 @@ export const reactDocSlugs = [
 	'radio-button-list',
 	'tab',
 	'tab-bar',
+	'pill-button-bar',
 	'icon',
 	'flex-box',
 	'flex-div',
@@ -67,7 +68,7 @@ export const reactDocSlugs = [
 	'use-last-updated',
 	'placeholder',
 	'get-started',
-	'installation',
+	'overview',
 	'resources',
 	...sharedDocSlugs,
 ] as const;
@@ -255,6 +256,10 @@ export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
 		title: 'Tab | Slice UIKit',
 		description: 'Compose individual choices inside TabBar with labels, icons, counts, and connected panels.',
 	},
+	'pill-button-bar': {
+		title: 'PillButtonBar | Slice UIKit',
+		description: 'Switch between related views with a sliding selection pill.',
+	},
 	'tab-bar': {
 		title: 'TabBar | Slice UIKit',
 		description: 'Organize related views into a compact row of tabs, with optional icons and counts.',
@@ -349,9 +354,10 @@ export const reactDocsMetadata: Record<ReactDocSlug, Metadata> = {
 		title: 'Get Started | Slice UIKit',
 		description: 'Get started with Slice UIKit.',
 	},
-	installation: {
-		title: 'Installation | Slice UIKit',
-		description: 'Install Slice UIKit in your project.',
+	overview: {
+		title: 'Overview | Slice UIKit',
+		description:
+			'Explore Slice components in real UI: an interactive collection of workspace, account, and media examples.',
 	},
 	resources: {
 		title: 'Resources | Slice UIKit',

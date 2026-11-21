@@ -15,7 +15,7 @@ export function TipBox(props: Readonly<TipBoxProps>) {
 
 	const cssStyles = {
 		color: 'var(--array-lime-accent)',
-		background: 'var(--array-lime)',
+		background: opacityFromColor('array-lime-accent', 5),
 		borderWidth: noBorder ? 0 : 1,
 		borderColor: opacityFromColor('array-lime-accent', 75),
 		display: inline ? 'inline-flex' : 'flex',

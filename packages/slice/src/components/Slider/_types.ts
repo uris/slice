@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue } from '../../theme/resolveSize';
 
 type SliderBaseProps = {
 	value?: number;
@@ -11,7 +12,7 @@ type SliderBaseProps = {
 	touchHeight?: number | string;
 	trackHeadSize?: number | null;
 	trackHeadOnHover?: true;
-	trackHeadBorderRadius?: string | number | null;
+	trackHeadBorderRadius?: RadiusValue | null;
 	trackHeadColor?: ColorValue;
 	trackColor?: ColorValue;
 	progressColor?: ColorValue;

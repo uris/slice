@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SizeValue } from '../../theme/resolveSize';
 import type { FixedSize, ToolTip } from '../sharedTypes';
 
 export type FileItem = {
@@ -21,11 +22,12 @@ type FileListBaseProps<T extends File | FileItem> = {
 	attachmentSize?: FixedSize;
 	listName?: string;
 	direction?: 'row' | 'column';
-	gap?: number;
+	attachmentOrientation?: 'vertical' | 'horizontal';
+	gap?: SizeValue;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	maxWidth?: number | string;
 	minWidth?: number | string;
-	padding?: number | string;
+	padding?: SizeValue;
 	iconSize?: number;
 	onChange?: (files: T[]) => void;
 	backgroundColor?: ColorValue;

@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 
 export type ContentEditableEditEndReason = 'blur' | 'enter' | 'escape' | 'external';
 type ContentEditableBaseProps = {
@@ -15,8 +16,8 @@ type ContentEditableBaseProps = {
 	textColor?: ColorValue;
 	textColorPlaceholder?: ColorValue;
 	clamp?: number;
-	padding?: number | string;
-	borderRadius?: number | string;
+	padding?: SizeValue;
+	borderRadius?: RadiusValue;
 	backgroundColor?: ColorValue;
 	onChange?: (draft: string) => void;
 	onCommit?: (value: string, previousValue: string) => void;

@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { SizeValue } from '../../theme/resolveSize';
 import type { AvatarProps } from '../Avatar';
 import type { ToolTip } from '../sharedTypes';
 
@@ -24,6 +25,7 @@ export type AvatarGroupBaseProps = Pick<
 	| 'outerBorderColor'
 	| 'lazyLoad'
 	| 'textSize'
+	| 'textColor'
 > & {
 	/** Used only when children is undefined. */
 	avatars?: AvatarInfo[] | null;
@@ -36,10 +38,10 @@ export type AvatarGroupBaseProps = Pick<
 	/** Width and height of each avatar in pixels. Defaults to 40. */
 	size?: number;
 	overlap?: number;
-	gap?: number;
+	gap?: SizeValue;
 	/** Accessible group label. Defaults to people when omitted or blank. */
 	groupName?: string;
-	margin?: number;
+	margin?: SizeValue;
 	onToolTip?: (tip: ToolTip | null) => void;
 };
 

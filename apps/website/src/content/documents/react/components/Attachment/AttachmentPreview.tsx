@@ -24,9 +24,16 @@ function useImageAttachmentContent() {
 	return content;
 }
 
-export function ImageAttachmentPreview() {
+export function ImageAttachmentPreview({ orientation }: Pick<AttachmentProps, 'orientation'>) {
 	const content = useImageAttachmentContent();
-	return <Attachment content={content} canRemove={false} />;
+	return (
+		<Attachment
+			content={content}
+			orientation={orientation}
+			maxWidth={orientation === 'horizontal' ? 320 : undefined}
+			canRemove={false}
+		/>
+	);
 }
 
 export function AttachmentSizePreview({

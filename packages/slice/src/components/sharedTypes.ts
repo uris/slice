@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ElevationLevel } from '../theme/elevations/_types';
+import type { SizeValue } from '../theme/resolveSize';
 
 /** Shadow depth of a component's own surface, independent of stacking order. */
 export type ElevationProps = {
@@ -13,16 +14,16 @@ export type FixedSize = Exclude<ComponentSize, 'auto'>;
 export type ButtonSize = Exclude<ComponentSize, 'xs'> | number;
 
 export type PaddingProps = {
-	padding?: number | string;
-	paddingTop?: number | string;
-	paddingRight?: number | string;
-	paddingBottom?: number | string;
-	paddingLeft?: number | string;
+	padding?: SizeValue;
+	paddingTop?: SizeValue;
+	paddingRight?: SizeValue;
+	paddingBottom?: SizeValue;
+	paddingLeft?: SizeValue;
 };
 
 export type ButtonStyleProps = PaddingProps & {
 	buttonSize?: ButtonSize;
-	gap?: number;
+	gap?: SizeValue;
 };
 
 export const buttonStyleDefaults = {

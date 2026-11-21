@@ -389,7 +389,7 @@ export const IconMinimum: Story = {
 	play: async ({ canvasElement }) => {
 		const svg = within(canvasElement).getByRole('button').querySelector('svg');
 		await expect(svg).toHaveAttribute('width', '14');
-		await expect(svg?.querySelector('[stroke-width]')).toHaveAttribute('stroke-width', '1.25');
+		await expect(svg?.querySelector('[stroke-width]')).toHaveAttribute('stroke-width', '1.5');
 	},
 };
 
@@ -751,4 +751,49 @@ export const Elevation: StoryObj<typeof meta> = {
 		</ElevationFixture>
 	),
 	play: async (context) => runElevationPlay(context, 0),
+};
+
+export const ChildStrokeOverrides: Story = {
+	tags: ['tests'],
+	args: { buttons: undefined },
+	render: (args) => (
+		<ButtonBar {...args}>
+			<Button label="Default stroke" iconLeft="basic.plus" />
+			<Button label="Custom stroke" iconLeft="basic.plus" iconStrokeWidth={0.75} />
+			<Button label="Zero stroke" iconLeft="basic.plus" iconStrokeWidth={0} />
+		</ButtonBar>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		for (const [name, width] of [
+			['Default stroke', '1.5'],
+			['Custom stroke', '0.75'],
+			['Zero stroke', '0'],
+		]) {
+			await expect(canvas.getByRole('button', { name }).querySelector('[stroke-width]')).toHaveAttribute(
+				'stroke-width',
+				width,
+			);
+		}
+	},
+};
+
+export const DefaultForeground: Story = {
+	tags: ['tests'],
+	args: { buttons: undefined },
+	render: (args) => (
+		<>
+			<span data-testid="primary-color" style={{ color: 'var(--core-text-primary)' }} hidden />
+			<ButtonBar {...args}>
+				<Button label="Default foreground" iconLeft="basic.plus" />
+				<TextField label="Search" value="Document" />
+			</ButtonBar>
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const expected = getComputedStyle(canvas.getByTestId('primary-color')).color;
+		await expect(getComputedStyle(canvas.getByRole('button', { name: 'Default foreground' })).color).toBe(expected);
+		await expect(getComputedStyle(canvas.getByRole('textbox', { name: 'Search' })).color).toBe(expected);
+	},
 };

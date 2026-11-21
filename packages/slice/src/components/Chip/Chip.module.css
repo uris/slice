@@ -93,6 +93,10 @@
 .chip:focus-within .icon {
 	color: var(--ui-chip-icon-color-hover);
 }
+.label.label {
+	line-height: 1em;
+	transform: translateY(-0.067em);
+}
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }

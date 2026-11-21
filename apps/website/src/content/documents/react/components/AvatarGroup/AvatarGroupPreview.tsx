@@ -7,7 +7,7 @@ import { overflowParticipants } from './data';
 
 function CollaboratorsDialog({ people = [], ...props }: ModalComponentProps & { people?: AvatarInfo[] }) {
 	return (
-		<DialogBox {...props} title="All collaborators" minWidth={300} maxHeight={300} borderWidth={0}>
+		<DialogBox {...props} title="All collaborators" minWidth={300} maxHeight={300} borderWidth={0} close={false}>
 			<ul className={styles.people}>
 				{people.map((person) => (
 					<li className={styles.person} key={person.id}>
@@ -15,6 +15,7 @@ function CollaboratorsDialog({ people = [], ...props }: ModalComponentProps & { 
 							name={`${person.first} ${person.last}`}
 							image={person.image}
 							backgroundColor={person.backgroundColor ?? 'core-fill-primary'}
+							textColor={person.backgroundColor ? 'core-text-light' : undefined}
 							size={40}
 						/>
 						<span>

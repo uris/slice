@@ -42,9 +42,10 @@ export function SideBarListSection(props: Readonly<SideBarListSectionProps>) {
 	const selectedPackageType = usePackageType();
 
 	const handleClickDoc = useCallback((info: DocsContext) => {
-		const { slug, packageType } = info;
+		const { slug, packageType, docSidebar } = info;
 		if (!slug || !packageType) return;
-		window.open(`/docs/${packageType}/${slug}/`, '_top');
+		const query = docSidebar === undefined ? '' : `?docSidebar=${docSidebar}`;
+		window.open(`/docs/${packageType}/${slug}/${query}`, '_top');
 	}, []);
 
 	return (

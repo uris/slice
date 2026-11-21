@@ -22,6 +22,9 @@
 	transition: color var(--motion-water-duration) var(--motion-water), background-color var(--motion-water-duration)
 		var(--motion-water);
 }
+.label {
+	transform: translateY(-0.067em);
+}
 .option.selected {
 	color: var(--tab-text-color-selected, var(--core-text-special));
 }

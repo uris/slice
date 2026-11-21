@@ -1,6 +1,7 @@
 import type { Transition } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { Type } from '../../theme/type/types';
 import type { SliceIcon } from '../Icon/_types';
 import type { ElevationProps } from '../sharedTypes';
@@ -39,7 +40,7 @@ type TextFieldBaseProps = ElevationProps & {
 	label?: string;
 	variant?: 'simple' | 'stacked' | 'outlined';
 	behavior?: 'persistent' | 'appear';
-	stackedGap?: number;
+	stackedGap?: SizeValue;
 	labelBackgroundColor?: ColorValue;
 	stackedLabelTextSize?: keyof Type;
 	labelSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
@@ -63,9 +64,9 @@ type TextFieldBaseProps = ElevationProps & {
 	/** Defaults to fill: flexes into available space. Use auto for content sizing or a CSS width such as max-content. */
 	width?: number | string;
 	height?: number | string;
-	padding?: string | number;
+	padding?: SizeValue;
 	/** Simple fields default to 100px; stacked/outlined fields use 0 for underline borders, otherwise 16px. */
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	textAlign?: 'left' | 'center';
 	borderColorFocused?: ColorValue;
 	borderColorBlurred?: ColorValue;
@@ -80,7 +81,7 @@ type TextFieldBaseProps = ElevationProps & {
 	textColorPlaceholder?: ColorValue;
 	textColorDisabled?: ColorValue;
 	labelColor?: ColorValue;
-	iconLeft?: { name?: SliceIcon; size?: number; color?: ColorValue };
+	iconLeft?: { name?: SliceIcon; size?: number; color?: ColorValue; stroke?: number };
 	/** Opt into a clear control with an optional icon size (20px by default). Empty fields reserve no space. */
 	clearButton?: { size?: number } | null;
 	clearBlurs?: boolean;

@@ -163,6 +163,15 @@ export default function FlexBoxDoc() {
 				<DefaultVal>{'false'}</DefaultVal>
 			</Definition>
 			<P>Centers the container horizontally using margin: 0 auto, overriding the margin prop.</P>
+			<Definition id="color">
+				<Prop>color</Prop>
+				<TypeDef>ColorValue</TypeDef>
+				<DefaultVal>inherited</DefaultVal>
+			</Definition>
+			<P>
+				Text color accepts a theme token or CSS color. Omit <Code>color</Code> to inherit from the parent or use a
+				text-color class such as <Code>core-text-secondary</Code>.
+			</P>
 			<Definition id="children">
 				<Prop>children</Prop>
 				<TypeDef>{'React.ReactNode'}</TypeDef>
@@ -413,6 +422,7 @@ export const trackedItems: TrackedItem[] = [
 			{ id: 'border', title: 'border', code: true },
 			{ id: 'borderRadius', title: 'borderRadius', code: true },
 			{ id: 'centerSelf', title: 'centerSelf', code: true },
+			{ id: 'color', title: 'color', code: true },
 			{ id: 'children', title: 'children', code: true },
 			{ id: 'direction', title: 'direction', code: true },
 			{ id: 'elevation', title: 'elevation', code: true },

@@ -388,7 +388,7 @@ export function TextFieldDoc() {
 			<P>{'Wrapper height in pixels or CSS units.'}</P>
 			<Definition id={'iconLeft'}>
 				<Prop>iconLeft</Prop>
-				<TypeDef>{'{ name?: string; size?: number; color?: ColorValue }'}</TypeDef>
+				<TypeDef>{'{ name?: string; size?: number; color?: ColorValue; stroke?: number }'}</TypeDef>
 				<DefaultVal>{'undefined'}</DefaultVal>
 			</Definition>
 			<P>
@@ -396,7 +396,15 @@ export function TextFieldDoc() {
 				<Code>{'size'}</Code>
 				{' is pixels; '}
 				<Code>{'color'}</Code>
-				{' accepts tokens or CSS colors.'}
+				{' accepts tokens or CSS colors. Omitted values use '}
+				<Code>18px</Code>
+				{', '}
+				<Code>core-icon-primary</Code>
+				{', and a stroke width of '}
+				<Code>1.5</Code>
+				{'. '}
+				<Code>stroke</Code>
+				{' overrides the SVG stroke width, including zero.'}
 			</P>
 			<Definition id={'inline'}>
 				<Prop>inline</Prop>
@@ -616,7 +624,7 @@ export function TextFieldDoc() {
 			<Definition id={'textColorPlaceholder'}>
 				<Prop>textColorPlaceholder</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-disabled'}</DefaultVal>
+				<DefaultVal>core-text-tertiary</DefaultVal>
 			</Definition>
 			<P>{'Placeholder text color.'}</P>
 			<Definition id={'textSize'}>

@@ -1,21 +1,22 @@
 import type { Transition } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 
 type SwitchBaseProps<T = string> = {
 	/** Native button name and accessible label. Blank or omitted names fall back to Switch. */
 	name?: string;
 	checked?: boolean;
 	defaultChecked?: boolean;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	height?: number;
 	width?: number;
 	backgroundColorOff?: ColorValue;
 	backgroundColorOn?: ColorValue;
 	knobColor?: ColorValue;
-	knobRadius?: number | string;
+	knobRadius?: RadiusValue;
 	knobWidth?: number;
-	padding?: number;
+	padding?: SizeValue;
 	/** Settings merged with Water for knob movement and knob/track color changes. */
 	transition?: Transition;
 	/** Callback metadata, not a submitted form value. */

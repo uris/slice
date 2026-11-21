@@ -1,9 +1,11 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
+import { opacityFromColor } from '../../utils';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Button } from '../Button';
@@ -46,17 +48,18 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 		borderColorFocused = 'var(--core-outline-primary)',
 		borderColor = 'var(--core-outline-primary)',
 		borderColorError = 'var(--feedback-warning)',
-		backgroundColor = 'var(--core-surface-secondary)',
+		backgroundColor = 'transparent',
 		resizable = true,
 		showSendButton = false,
+		showCharacters = false,
 		sendActionName = 'Send',
 		sendOffset = defaultSendOffset,
-		sendSize = 36,
+		sendSize = 24,
 		returnSubmits = false,
 		textSize = 'm',
 		textColor = 'var(--core-text-primary)',
 		textColorDisabled = 'var(--core-text-disabled)',
-		textColorPlaceholder = 'var(--core-text-disabled)',
+		textColorPlaceholder = 'var(--core-text-tertiary)',
 		textColorError = 'var(--feedback-warning)',
 		disabled = false,
 		readOnly = false,
@@ -83,6 +86,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 	};
 	const message = (error ? errorMessage : tip)?.trim();
 	const messageId = `${id}-message`;
+	const charactersId = `${id}-characters`;
 	const ref = useRef<HTMLTextAreaElement>(null);
 	const setInputRef = useCallback(
 		(element: HTMLTextAreaElement | null) => {
@@ -109,7 +113,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 	const growing = autoGrow && height === 'auto';
 	const nativeResizable = resizable && !growing && height === 'auto';
 	const rowCount = Number.isFinite(rows) ? Math.max(1, Math.floor(rows)) : 6;
-	const buttonSize = Number.isFinite(sendSize) ? Math.max(0, sendSize) : 36;
+	const buttonSize = Number.isFinite(sendSize) ? Math.max(0, sendSize) : 24;
 	const bottomOffset = Number.isFinite(sendOffset.bottom) ? Math.max(0, sendOffset.bottom) : 10;
 	const rightOffset = Number.isFinite(sendOffset.right) ? Math.max(0, sendOffset.right) : 10;
 	const changeText = (next: string) => {
@@ -202,6 +206,7 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 		textSize,
 		padding,
 		showSendButton,
+		showCharacters,
 		resizable,
 		sendSize,
 		sendOffset,
@@ -242,10 +247,11 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 	const cssVars = {
 		'--ta-height': setStyle(height),
 		'--ta-max-height': setStyle(maxHeight, 'none'),
-		'--ta-padding': setStyle(padding),
-		'--ta-border-radius': setStyle(borderRadius),
+		'--ta-padding': resolveSize(padding),
+		'--ta-border-radius': resolveRadius(borderRadius),
 		'--ta-bg-color': backgroundColor,
 		'--ta-border-color': getBorderColor(),
+		'--ta-outline-color': opacityFromColor(getBorderColor(), 50),
 		'--ta-border-width': getBorderWidth(),
 		'--ta-text-color': disabled ? textColorDisabled : textColor,
 		'--ta-placeholder-color': textColorPlaceholder,
@@ -282,7 +288,9 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 					placeholder={placeholder}
 					aria-label={getAccessibleName()}
 					aria-invalid={error || undefined}
-					aria-describedby={message ? messageId : undefined}
+					aria-describedby={
+						[message ? messageId : '', showCharacters ? charactersId : ''].filter(Boolean).join(' ') || undefined
+					}
 					rows={rowCount}
 					maxLength={maxLength}
 					disabled={disabled}
@@ -320,21 +328,29 @@ function TextAreaComponent(rawProps: TextAreaProps) {
 					}}
 				/>
 				{nativeResizable && <span className={css.resizeGrip} aria-hidden="true" />}
-				{showSendButton && (
-					<div className={css.sendSpace}>
-						<Button
-							variant={'primary'}
-							buttonSize={buttonSize}
-							iconSize={18}
-							iconStrokeWidth={1.5}
-							round
-							iconLeft={'arrows.arrow-top'}
-							onMouseDown={(event) => event.preventDefault()}
-							className={css.send}
-							aria-label={sendActionName.trim() || 'Send'}
-							disabled={!canSubmit}
-							onClick={submit}
-						/>
+				{(showSendButton || showCharacters) && (
+					<div className={showSendButton ? css.sendSpace : css.characterSpace}>
+						{showCharacters && (
+							<span id={charactersId} className={`${css.characters} ${css.xs}`}>
+								{text.length}
+								{maxLength === undefined ? '' : ` / ${maxLength}`} characters
+							</span>
+						)}
+						{showSendButton && (
+							<Button
+								variant={'primary'}
+								buttonSize={buttonSize}
+								iconSize={18}
+								iconStrokeWidth={1.5}
+								round
+								iconLeft={'arrows.arrow-top'}
+								onMouseDown={(event) => event.preventDefault()}
+								className={css.send}
+								aria-label={sendActionName.trim() || 'Send'}
+								disabled={!canSubmit}
+								onClick={submit}
+							/>
+						)}
 					</div>
 				)}
 			</div>

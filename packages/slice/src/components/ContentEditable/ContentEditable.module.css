@@ -22,21 +22,31 @@
 	-webkit-user-select: text;
 	border-radius: var(--di-radius);
 	background-color: var(--di-background);
-	outline: none;
-	transition: background-color var(--motion-water-duration) var(--motion-water);
+	outline-color: var(--di-background);
+	transition: background-color, outline var(--motion-water-duration) var(--motion-water);
+
+	&::selection {
+		background-color: var(--core-yellow);
+		color: var(--core-text-dark);
+	}
 }
+
 .input[data-clamped]:not([data-editable]) {
 	display: -webkit-inline-box;
 }
+
 .input[data-editable] {
 	-webkit-line-clamp: unset;
 	overflow: auto;
 	cursor: text;
+	caret-color: var(--core-blue);
 }
+
 .input[data-editable][data-empty] {
 	/* Keep the caret at the text edge clear of the rounded overflow clip. */
 	overflow: visible;
 }
+
 .input[data-empty]::before {
 	content: attr(data-placeholder);
 	color: var(--di-placeholder-color);
@@ -44,27 +54,39 @@
 	user-select: none;
 	-webkit-user-select: none;
 }
+
 .input[data-empty][data-placeholder=""]::before {
 	content: "\200b";
 }
+
 .input[data-empty] br {
 	display: none;
 }
+
+.input[data-focused="true"] {
+	outline: 6px solid var(--di-background);
+}
+
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }
+
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
+
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
 }
+
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
+
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }
+
 @media (prefers-reduced-motion: reduce) {
 	.input {
 		transition: none;

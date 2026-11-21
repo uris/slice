@@ -1,6 +1,7 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon';
 import type { CustomVideoControls } from '../Video';
 import type { ElevationProps } from '../sharedTypes';
@@ -17,8 +18,8 @@ export type VideoControllerProps = ElevationProps & {
 	exit?: string;
 	draggable?: boolean;
 	dragIcon?: SliceIcon;
-	padding?: number | string;
-	borderRadius?: number | string;
+	padding?: SizeValue;
+	borderRadius?: RadiusValue;
 	/** Replaces the descriptor selection. Omitted flags are off; quit is managed separately. */
 	customControls?: CustomVideoControls;
 	showProgressIndicator?: boolean;

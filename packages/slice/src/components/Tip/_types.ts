@@ -1,6 +1,7 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { ElevationProps, ToolTip } from '../sharedTypes';
 
 export interface ToolTipBaseProps extends ElevationProps {
@@ -10,8 +11,8 @@ export interface ToolTipBaseProps extends ElevationProps {
 	textColor?: ColorValue;
 	border?: boolean;
 	borderColor?: ColorValue;
-	padding?: number | string;
-	borderRadius?: number | string;
+	padding?: SizeValue;
+	borderRadius?: RadiusValue;
 	coords?: { x: number; y: number };
 	showDelay?: number;
 	hideDelay?: number;

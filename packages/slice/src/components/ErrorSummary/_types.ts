@@ -1,6 +1,7 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { ElevationProps } from '../sharedTypes';
 
 export type ErrorMessage = {
@@ -18,9 +19,9 @@ type ErrorSummaryBaseProps = ElevationProps & {
 	backgroundColor?: ColorValue;
 	borderColor?: ColorValue;
 	borderWidth?: number | string;
-	borderRadius?: number | string;
-	padding?: number | string;
-	gap?: number | string;
+	borderRadius?: RadiusValue;
+	padding?: SizeValue;
+	gap?: SizeValue;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	transition?: Transition;
 	motionValues?: Variants;

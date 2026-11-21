@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useEffect, useId, useRef, useState } from 'react';
@@ -115,8 +116,8 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawPro
 		'--ua-border': `${borderWidth}px`,
 		'--ua-border-style': borderStyle,
 		'--ua-border-color': dragging || busy ? borderColorHover : borderColor,
-		'--ua-radius': setStyle(borderRadius),
-		'--ua-padding': setStyle(padding),
+		'--ua-radius': resolveRadius(borderRadius),
+		'--ua-padding': resolveSize(padding),
 		'--ua-bg-color': dragging ? backgroundColorHover : backgroundColor,
 		'--ua-icon-size': `${iconSize}px`,
 		'--ua-width': setStyle(width),
@@ -169,7 +170,13 @@ const UploadAreaBase = React.forwardRef<HTMLDivElement, UploadAreaProps>((rawPro
 				}}
 			>
 				<span className={css.icon}>
-					<Icon size={iconSize} name={icon} strokeColor={dragging ? iconColorHover : iconColor} decorative />
+					<Icon
+						size={iconSize}
+						stroke={1.2}
+						name={icon}
+						strokeColor={dragging ? iconColorHover : iconColor}
+						decorative
+					/>
 				</span>
 				<span className={css.title}>{title}</span>
 				<span id={messageId} className={`${css.message} ${css[textSize]}`}>

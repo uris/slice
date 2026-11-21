@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -36,6 +37,7 @@ export const Camera = React.memo(
 			audio = true,
 			width,
 			height,
+			displayError = true,
 			showControlBar = true,
 			showProfileButton = false,
 			showSettingsButton = false,
@@ -157,6 +159,7 @@ export const Camera = React.memo(
 			(options?: CameraSnapshotOptions) => {
 				if (options?.toggle && snapshotURL.current) {
 					updateSnapshot();
+					onSnapshot?.(undefined);
 					return undefined;
 				}
 				const photo = takeSnapshot(options);
@@ -202,15 +205,16 @@ export const Camera = React.memo(
 
 		// determine whether the poster should be shown instead of live video
 		const showPoster = useMemo(() => {
-			if (cameraError) return false;
-			if (cameraSupport === false) return true;
+			if (displayError && cameraError) return false;
+			if (!cameraSupport) return true;
 			return !cameraOn;
-		}, [cameraError, cameraSupport, cameraOn]);
+		}, [cameraError, cameraSupport, cameraOn, displayError]);
 
 		// determine whether the camera error message should be shown
 		const showError = useMemo(() => {
+			if (!displayError) return false;
 			return Boolean(cameraError);
-		}, [cameraError]);
+		}, [cameraError, displayError]);
 
 		// resolve the translucent controls background from the active theme
 		const controlsBg = useMemo(() => {
@@ -235,7 +239,7 @@ export const Camera = React.memo(
 					'--camera-background-color': backgroundColor,
 					'--camera-border-color': borderColor,
 					'--camera-border-width': setStyle(borderWidth),
-					'--camera-border-radius': setStyle(borderRadius),
+					'--camera-border-radius': resolveRadius(borderRadius),
 					'--camera-height': setStyle(height),
 					'--camera-controls-bg': controlsBg,
 					'--camera-controls-transform': setControlBarVisible,
@@ -330,7 +334,7 @@ export const Camera = React.memo(
 								name={'basic.cross'}
 								pointer={true}
 								actionName={'Clear snapshot'}
-								onClick={() => updateSnapshot()}
+								onClick={() => handleSnapshot({ toggle: true })}
 							/>
 						</div>
 						<img className={css.snapshot} src={snapshot} alt={'Snapshot'} />

@@ -1,3 +1,5 @@
+export { resolveRadius, resolveSize } from './resolveSize';
+export type { RadiusToken, RadiusValue, SizeValue, SpacingToken } from './resolveSize';
 export {
 	type SliceTheme,
 	darkTheme,

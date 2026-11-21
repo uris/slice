@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import {
@@ -17,7 +18,7 @@ import type { VideoDescriptor } from '../../stores/video';
 import { getVideo, useVideo, videoActions } from '../../stores/video';
 import { corners } from '../../theme/corners/corners';
 import { addOpacity } from '../../utils';
-import { classNames, setStyle } from '../../utils/functions/misc';
+import { classNames } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -127,8 +128,8 @@ function VideoLayer({
 	const fallbackClose = !ready || quit === 'outside' || (quit === 'inside' && !mergedControls?.progress);
 	const radius = borderRadius ?? videoProps.borderRadius ?? corners['corner-m'];
 	const style = {
-		'--overlay-padding': setStyle(padding, 'var(--spacing-xxl)'),
-		'--video-border-radius': setStyle(radius),
+		'--overlay-padding': resolveSize(padding, 'var(--spacing-xxl)'),
+		'--video-border-radius': resolveRadius(radius),
 	} as React.CSSProperties;
 	const moveWithKeyboard = (event: React.KeyboardEvent<HTMLButtonElement>) => {
 		const directions: Record<string, [number, number]> = {

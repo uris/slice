@@ -36,8 +36,13 @@
 	background-clip: border-box;
 	border: solid var(--ta-border-color);
 	border-width: var(--ta-border-width);
-	transition: background-color var(--motion-water-duration) var(--motion-water), border-color
-		var(--motion-water-duration) var(--motion-water);
+	outline-color: transparent;
+	transition: background-color, outline-color, border-color, var(--motion-water-duration) var(--motion-water),
+		border-color var(--motion-water-duration) var(--motion-water);
+}
+
+.wrapper:focus-within {
+	outline: 3px solid var(--ta-outline-color);
 }
 
 .textarea {
@@ -101,9 +106,22 @@
 }
 
 .sendSpace {
+	display: flex;
+	align-items: flex-end;
 	flex: 0 0 calc(var(--ta-send-size) + var(--ta-send-bottom));
 }
 
+.characterSpace {
+	flex: 0 0 auto;
+	padding-top: var(--spacing-s);
+}
+.characters {
+	color: var(--core-text-tertiary);
+	overflow-wrap: anywhere;
+}
+.sendSpace .characters {
+	padding-right: calc(var(--ta-send-size) + var(--ta-send-right));
+}
 .send {
 	position: absolute;
 	bottom: var(--ta-send-bottom);

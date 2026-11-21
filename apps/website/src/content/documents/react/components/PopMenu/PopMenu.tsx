@@ -16,7 +16,7 @@ const menuProps = [
 		defaultValue: 'var(--core-surface-secondary)',
 		description: (
 			<>
-				{'Menu background. Use a CSS color or a '}
+				{'Menu background and the default background for its items. Use a theme token, CSS color, or a '}
 				<Code>{'var(--\u2026)'}</Code>
 				{' expression.'}
 			</>
@@ -112,6 +112,12 @@ const menuProps = [
 				absent.
 			</>
 		),
+	},
+	{
+		name: 'inline',
+		type: 'boolean',
+		defaultValue: 'false',
+		description: <>Renders an always-visible menu in the page layout with support for anchored submenus.</>,
 	},
 	{
 		name: 'level',

@@ -7,7 +7,7 @@ import * as Stories from './Attachment.stories';
 
 Preview an image, clipboard text, or a file-type icon with an extension-free filename.
 Clipboard content is labeled `Clipboard content`; text previews show the first 250 characters.
-Text files show an escaped excerpt of their first 250 characters; other files use the icon fallback. Image object URLs are released on replacement or unmount.
+In vertical orientation, text files show an escaped excerpt of their first 250 characters; other files use the icon fallback. Image object URLs are released on replacement or unmount.
 
 `content` accepts a raw browser `File`, a `FileItem`, or clipboard text. Raw files show
 previews and metadata without upload status. Use `FileItem` when you need progress or errors.
@@ -87,7 +87,7 @@ while the error is shown. Clear `error` when retrying to restore the normal prev
 
 ## Styling
 
-`textSize` uses the theme's `xs`, `s`, `m`, `l`, and `xl` body styles. `size` sets
+In the default vertical orientation, `textSize` uses the theme's `xs`, `s`, `m`, `l`, and `xl` body styles. `size` sets
 the card width and preview height to 100, 125, 140, 160, or 180px; the default is `m`.
 `width` overrides the card width, and `height` overrides the preview height. The filename
 and metadata sit below the preview, so total card height includes those rows.
@@ -96,14 +96,20 @@ show the file size. The accessible description retains the size at every card si
 
 <Canvas of={Stories.Sizes} />
 
+Set `orientation="horizontal"` to place a square thumbnail beside the file details.
+The filename and metadata or upload row determine the thumbnail size. Text content uses the text-file icon. The card fills its
+container by default. Set `maxWidth` to cap it or `width` to request a specific width.
+
+<Canvas of={Stories.Horizontal} />
+
 `backgroundColor` sets the card and canvas background. Text and icon previews share
 the primary surface background. `textColor` and `textColorLight` style the filename
 and metadata; `thumbColor` styles preview text. `borderColor`, `borderWidth`,
 `borderStyle`, and `borderRadius` style the outer card, with an inset canvas radius.
 
-`iconSize` sets the fallback icon size (48px by default). `iconGap` controls metadata spacing.
+`iconSize` sets the fallback icon size (20px by default in horizontal orientation and 48px in vertical orientation). `iconGap` controls metadata spacing.
 `padding` controls each information row, defaulting to zero vertically and spacing-xs
-horizontally. `thumbPadding` and `thumbTextSize` control the text and fallback preview.
+horizontally. `thumbPadding` and `thumbTextSize` control the text and fallback preview. Horizontal previews default to `spacing-xxs` padding.
 Numeric dimensions use pixels; CSS strings and padding shorthands pass through exactly,
 including zero. Color props accept Slice theme color values.
 

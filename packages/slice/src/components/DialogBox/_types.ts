@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon/_types';
 import type { ElevationProps, ToolTip } from '../sharedTypes';
 
@@ -25,11 +26,11 @@ type DialogBoxBaseProps<T = string> = ElevationProps & {
 	minWidth?: number | string;
 	maxWidth?: number | string;
 	maxHeight?: number | string;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	borderColor?: ColorValue;
 	borderWidth?: number | string;
 	backgroundColor?: ColorValue;
-	padding?: number | string;
+	padding?: SizeValue;
 	title?: string;
 	dialogName?: string;
 	/** Header fill. Defaults to backgroundColor, including while scrolling. */

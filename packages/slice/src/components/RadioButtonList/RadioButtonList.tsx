@@ -2,6 +2,7 @@
 
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveSize } from '../../theme/resolveSize';
 import { setStyle } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { RadioButton, type RadioButtonOption } from '../RadioButton';
@@ -69,8 +70,8 @@ function RadioButtonListComponent<T = string>(rawProps: RadioButtonListProps<T>)
 	}, [controlled]);
 	const cssVars = {
 		'--rb-list-flex-wrap': wrap ? 'wrap' : 'nowrap',
-		'--rb-list-margin-bottom': setStyle(marginBottom, '0px'),
-		'--rb-gap': `${Number.isFinite(gap) ? Math.max(0, gap) : 16}px`,
+		'--rb-list-margin-bottom': resolveSize(marginBottom, '0px'),
+		'--rb-gap': resolveSize(typeof gap === 'number' && Number.isFinite(gap) ? Math.max(0, gap) : gap, 16),
 		'--rb-list-width': setStyle(width, 'min-content'),
 	} as React.CSSProperties;
 	/* START.DEBUG */

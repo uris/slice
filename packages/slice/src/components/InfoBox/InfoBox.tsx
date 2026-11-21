@@ -3,6 +3,7 @@
 import type { CSSProperties, MouseEvent } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
 import { resolveColor } from '../../theme/colors/resolveColor';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { tintFromColor } from '../../utils/functions/colors';
 import { classNames, setSizeStyle } from '../../utils/functions/misc';
 import css from './InfoBox.module.css';
@@ -37,14 +38,14 @@ export function InfoBox(props: Readonly<InfoBoxProps>) {
 		return resolveColor(backgroundColor);
 	};
 	const styles = {
-		'--info-box-corner-radius': setSizeStyle(borderRadius),
+		'--info-box-corner-radius': resolveRadius(borderRadius),
 		'--info-box-border-width': setSizeStyle(borderWidth),
 		'--info-box-border-color': resolveColor(borderColor),
 		'--info-box-max-width': setSizeStyle(maxWidth),
 		'--info-box-min-width': setSizeStyle(minWidth),
 		'--info-box-background-color': resolveColor(backgroundColor),
 		'--info-box-background-color-hover': getHoverColor(),
-		'--info-box-padding': setSizeStyle(padding),
+		'--info-box-padding': resolveSize(padding),
 		...style,
 	} as CSSProperties;
 	const sections = parseSections(children);

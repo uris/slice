@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { motion, useAnimationControls, usePresence } from 'motion/react';
@@ -337,7 +338,10 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 		return buttonStyleDefaults.sizes[buttonSize] ?? buttonStyleDefaults.sizes.m;
 	};
 	const height = getHeight();
-	const resolvedGap = Number.isFinite(gap) ? Math.max(0, gap) : buttonStyleDefaults.gap;
+	const resolvedGap = resolveSize(
+		typeof gap === 'number' && Number.isFinite(gap) ? Math.max(0, gap) : gap,
+		buttonStyleDefaults.gap,
+	);
 	const hasChildren = children !== undefined && children !== null;
 	const hasComposedContent = hasChildren && typeof children !== 'string' && typeof children !== 'number';
 	const buttonContent = children ?? label;
@@ -425,11 +429,11 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 				: colorStyles[variant].color[btnState],
 		backgroundColor: getBackgroundColor(),
 		backgroundClip: 'padding-box' as const,
-		...(resolvedPaddingRight === undefined ? {} : { paddingRight: resolvedPaddingRight }),
-		...(resolvedPaddingLeft === undefined ? {} : { paddingLeft: resolvedPaddingLeft }),
-		...(paddingTop === undefined ? {} : { paddingTop }),
-		...(paddingBottom === undefined ? {} : { paddingBottom }),
-		borderRadius: borderRadius ?? corners['corner-m'],
+		...(resolvedPaddingRight === undefined ? {} : { paddingRight: resolveSize(resolvedPaddingRight) }),
+		...(resolvedPaddingLeft === undefined ? {} : { paddingLeft: resolveSize(resolvedPaddingLeft) }),
+		...(paddingTop === undefined ? {} : { paddingTop: resolveSize(paddingTop) }),
+		...(paddingBottom === undefined ? {} : { paddingBottom: resolveSize(paddingBottom) }),
+		borderRadius: resolveRadius(borderRadius, corners['corner-m']),
 		height,
 		maxHeight: autoSize ? 'unset' : height,
 		minHeight: autoSize ? 0 : height,
@@ -464,15 +468,14 @@ const ButtonComponent = forwardRef<ButtonHandle, ButtonProps>((rawProps, buttonR
 	// compose CSS custom properties for decoration and icon sizing
 	const cssVars = useMemo(() => {
 		const getPadding = () => {
-			if (typeof padding === 'number') return `${padding}px`;
-			if (padding !== undefined) return padding;
+			if (padding !== undefined) return resolveSize(padding, 'unset');
 			if (round && !autoSize) return '0px';
 			return `${verticalPadding}px 0 ${bottomPadding}px`;
 		};
 		return {
 			'--ui-button-decoration': underline ? 'underline' : 'unset',
 			'--ui-button-icon-size': iconDivSize,
-			'--ui-button-gap': `${resolvedGap}px`,
+			'--ui-button-gap': resolvedGap,
 			'--ui-button-padding': getPadding(),
 			'--ui-button-outline-color': colorStyles[variant].outlineColor,
 		} as React.CSSProperties;

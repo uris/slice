@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useTheme } from '../../hooks';
 import { resolveColor } from '../../theme';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { classNames, setSizeStyle } from '../../utils/functions/misc';
 import css from './Card.module.css';
 import type { CardProps } from './_types';
@@ -20,12 +21,12 @@ export function Card(props: Readonly<CardProps>) {
 		...divProps
 	} = props;
 	const styles = {
-		'--card-corner-radius': setSizeStyle(borderRadius),
+		'--card-corner-radius': resolveRadius(borderRadius),
 		'--card-border-width': setSizeStyle(borderWidth),
 		'--card-border-color': resolveColor(borderColor),
 		'--card-max-width': setSizeStyle(maxWidth),
 		'--card-background-color': resolveColor(backgroundColor),
-		'--card-padding': setSizeStyle(padding),
+		'--card-padding': resolveSize(padding),
 		...style,
 	} as CSSProperties;
 

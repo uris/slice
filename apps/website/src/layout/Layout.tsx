@@ -48,7 +48,7 @@ export function Layout() {
 					dragHandle={false}
 					sizeConstraints={sidePanelConstraints}
 					className={styles.sidebar}
-					borderRight={'1px solid var(--core-outline-primary)'}
+					borderRight={'1px solid var(--core-outline-secondary)'}
 				>
 					<Sidebar />
 				</DraggablePanel>
@@ -62,7 +62,7 @@ export function Layout() {
 					dragHandle={false}
 					sizeConstraints={detailsPanelConstraints}
 					className={classNames(styles.sidebar)}
-					borderLeft={'1px dashed var(--core-outline-primary)'}
+					borderLeft={'1px dashed var(--core-fill-primary)'}
 				>
 					<Details />
 				</DraggablePanel>

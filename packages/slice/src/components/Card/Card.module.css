@@ -24,6 +24,16 @@
 	padding: var(--card-padding, var(--spacing-m));
 }
 
+.title-wrapper {
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-direction: row;
+	box-sizing: border-box;
+	width: 100%;
+	gap: var(--spacing-xs);
+}
+
 .title {
 	display: flex;
 	justify-content: flex-start;
@@ -31,7 +41,7 @@
 	flex-direction: column;
 	box-sizing: border-box;
 	width: 100%;
-	gap: var(--spacing-xs);
+	gap: var(--spacing-xxs);
 }
 
 .title-section {
@@ -54,7 +64,13 @@
 }
 
 .action {
-	min-width: max-content;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-direction: row;
+	box-sizing: border-box;
+	gap: var(--spacing-xs);
+	max-width: min-content;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;

@@ -6,10 +6,12 @@
 	min-width: 0;
 	max-width: 100%;
 }
+
 .message {
 	padding: var(--spacing-xs) var(--tf-message-right, 0px) 0 var(--tf-message-left, 0px);
 	overflow-wrap: anywhere;
 }
+
 .wrapper {
 	position: relative;
 	display: inline-flex;
@@ -29,8 +31,13 @@
 	background-clip: border-box;
 	border: solid var(--tf-border-color);
 	border-width: var(--tf-border-width);
-	transition: background-color var(--motion-water-duration) var(--motion-water), border-color
-		var(--motion-water-duration) var(--motion-water);
+	outline-color: transparent;
+	transition: background-color, outline-color, border-color var(--motion-water-duration) var(--motion-water),
+		border-color var(--motion-water-duration) var(--motion-water);
+}
+
+.wrapper:focus-within {
+	outline: 3px solid var(--tf-outline-color);
 }
 
 .container {
@@ -41,14 +48,17 @@
 	min-width: 0;
 	gap: 8px;
 }
+
 .label {
 	flex: 0 0 auto;
 	color: var(--tf-label-color);
 	white-space: nowrap;
 }
+
 .wrapper[data-variant="simple"] > .label {
 	translate: 0 -0.067em;
 }
+
 .input {
 	flex: 1 1 auto;
 	min-width: 0;
@@ -67,11 +77,13 @@
 	translate: 0 -0.067em;
 	transition: color var(--motion-water-duration) var(--motion-water);
 }
+
 .input::placeholder {
 	color: var(--tf-placeholder-color);
 	-webkit-text-fill-color: var(--tf-placeholder-color);
 	opacity: 1;
 }
+
 .input:-webkit-autofill {
 	/* Safari allows the clear fill; clipping also hides Chromium's autofill fill. */
 	background-color: transparent;
@@ -79,24 +91,29 @@
 	background-clip: text;
 	caret-color: var(--tf-text-color);
 }
+
 .input:-webkit-autofill:not(:placeholder-shown) {
 	-webkit-text-fill-color: var(--tf-text-color);
 }
+
 .input:placeholder-shown {
 	-webkit-text-fill-color: var(--tf-placeholder-color);
 }
+
 .leadingIcon {
 	display: inline-flex;
 	flex: 0 0 var(--tf-icon-size);
 	width: var(--tf-icon-size);
 	height: var(--tf-icon-size);
 }
+
 .showPassword {
 	display: inline-flex;
 	flex: 0 0 18px;
 	width: 18px;
 	height: 18px;
 }
+
 .clearButton {
 	display: none;
 	align-items: center;
@@ -111,32 +128,41 @@
 	appearance: none;
 	cursor: pointer;
 }
+
 .wrapper:focus-within .clearButton[data-has-value] {
 	display: inline-flex;
 }
+
 .clearButton:disabled {
 	cursor: default;
 	opacity: 0.5;
 }
+
 .action {
 	display: inline-flex;
 	flex: 0 0 auto;
 }
+
 .xs {
 	composes: body-xs-regular from "../../utils/styling/type.module.css";
 }
+
 .s {
 	composes: body-s-regular from "../../utils/styling/type.module.css";
 }
+
 .m {
 	composes: body-m-regular from "../../utils/styling/type.module.css";
 }
+
 .l {
 	composes: body-l-regular from "../../utils/styling/type.module.css";
 }
+
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }
+
 @media (prefers-reduced-motion: reduce) {
 	.wrapper,
 	.input {
@@ -151,45 +177,55 @@
 	flex: 1 1 auto;
 	min-width: 0;
 }
+
 .labelSlot {
 	display: grid;
 	grid-template-rows: 1fr;
 	margin-bottom: var(--tf-stacked-gap);
 }
+
 .labelSlot > .label {
 	min-height: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
 .wrapper[data-variant="stacked"] .container {
 	align-items: flex-end;
 }
+
 .wrapper[data-appear] .labelSlot {
 	transition: opacity var(--motion-water-duration) var(--motion-water), transform var(--motion-water-duration)
 		var(--motion-water);
 }
+
 .wrapper[data-appear] :is(.input, .leadingIcon, .clearButton, .showPassword, .action) {
 	transform: translateY(0);
 	transition: color var(--motion-water-duration) var(--motion-water), transform var(--motion-water-duration)
 		var(--motion-water);
 }
+
 .wrapper[data-collapsed-label] :is(.input, .leadingIcon, .clearButton, .showPassword, .action) {
 	transform: translateY(calc(-0.5 * var(--tf-label-space, 0px)));
 }
+
 .wrapper[data-appear] .clearButton {
 	transform: none;
 	opacity: 0;
 	transition: none;
 }
+
 .wrapper[data-appear]:focus-within .clearButton[data-has-value] {
 	opacity: 1;
 	transition: opacity var(--motion-water-duration) var(--motion-water) 100ms, visibility 0s linear 100ms;
 }
+
 .wrapper[data-collapsed-label] .labelSlot {
 	opacity: 0;
 	transform: translateY(8px);
 	pointer-events: none;
 }
+
 .wrapper[data-variant="outlined"] .labelSlot {
 	z-index: 1;
 	position: absolute;
@@ -201,15 +237,23 @@
 	background: var(--tf-label-background);
 	transform: translateY(-50%);
 }
+
+.wrapper[data-variant="outlined"] .leadingIcon + .textColumn .labelSlot {
+	left: calc(-1 * (var(--tf-icon-size) + 8px + var(--spacing-xs)));
+	max-width: calc(100% + var(--tf-icon-size) + 8px + 2 * var(--spacing-xs));
+}
+
 .wrapper[data-variant="outlined"] .labelSlot > .label {
 	line-height: 1em;
 }
+
 @media (prefers-reduced-motion: reduce) {
 	.wrapper[data-appear]:focus-within .clearButton[data-has-value],
 	.wrapper[data-appear] .labelSlot,
 	.wrapper[data-appear] :is(.input, .leadingIcon, .clearButton, .showPassword, .action) {
 		transition: none;
 	}
+
 	.wrapper[data-collapsed-label] :is(.input, .leadingIcon, .clearButton, .showPassword, .action) {
 		transform: none;
 	}

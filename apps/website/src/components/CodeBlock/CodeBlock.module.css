@@ -17,13 +17,14 @@
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	padding: 10px 24px;
+	padding: 12px 24px;
 	border-bottom: 1px solid var(--core-outline-primary, #3d444d);
 	border-top: 1px solid var(--core-outline-primary, #3d444d);
 	font-family: var(--font-mono), monospace;
 	color: var(--core-text-secondary, #e1e4e8);
 	font-size: 13px;
 	font-weight: 500;
+	flex-shrink: 0;
 }
 
 .highlight pre {

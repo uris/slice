@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue } from '../../theme/resolveSize';
 import type { ElevationProps } from '../sharedTypes';
 
 export type Constraint = { initial: number; max: number; min: number };
@@ -13,7 +14,7 @@ export type DraggablePanelResizeInfo = {
 export type DragHandleProps = {
 	width?: number;
 	height?: number;
-	radius?: number | string;
+	radius?: RadiusValue;
 	stroke?: number;
 	strokeColor?: ColorValue;
 	color?: ColorValue;

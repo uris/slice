@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { ElevationProps } from '../sharedTypes';
 
 /* Note: T is the shape of a single row of data the table is bound to. */
@@ -35,7 +36,7 @@ type ColumnBase<T, V> = {
 	/* Only affects the default header renderer. */
 	showSortIcon?: boolean;
 	align?: 'start' | 'center' | 'end';
-	padding?: number | string;
+	padding?: SizeValue;
 	nowrap?: boolean;
 	compare?: (a: T, b: T) => number;
 	/* Defaults to true: sort by key, falling back to id. False disables sorting. */
@@ -79,9 +80,9 @@ export interface DataTableProps<T> extends ElevationProps {
 	height?: number | string;
 	width?: number | string;
 	maxWidth?: number | string;
-	margin?: number | string;
+	margin?: SizeValue;
 	/** Default header/body cell padding. Column padding takes precedence. Numbers use pixels. */
-	cellPadding?: number | string;
+	cellPadding?: SizeValue;
 	headerSticky?: boolean;
 	freezeColumn?: boolean;
 	backgroundColor?: ColorValue;
@@ -94,7 +95,7 @@ export interface DataTableProps<T> extends ElevationProps {
 	borderStyle?: 'box' | 'row' | 'none';
 	/** Removes the top edge above the header, retaining other configured borders. */
 	noTopBorder?: boolean;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	borderColor?: ColorValue;
 	tableData?: T[];
 	colResize?: boolean;

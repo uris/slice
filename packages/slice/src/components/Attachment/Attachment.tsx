@@ -1,7 +1,9 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
-import { type CSSProperties, useId } from 'react';
+import { type CSSProperties, useId, useRef } from 'react';
+import { useObserveResize } from '../../hooks/useObserveResize/useObserveResize';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { FileIcon } from '../FileIcon';
@@ -24,16 +26,17 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 		textSize = 's',
 		size = 'm',
 		width,
+		maxWidth,
 		height,
 		borderColor = 'var(--core-outline-primary)',
 		borderWidth = 1,
 		borderStyle = 'solid',
 		borderRadius = 16,
-		iconSize = 48,
+		iconSize,
 		iconGap = 4,
 		padding = '0 var(--spacing-xs)',
 		thumbTextSize = 10,
-		thumbPadding = 'var(--spacing-m)',
+		thumbPadding,
 		canRemove,
 		removeLabel,
 		attachmentName,
@@ -43,9 +46,14 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 		onRemove,
 		onToolTip,
 		className,
+		orientation = 'vertical',
 		style,
 		...nativeAttributes
 	} = resolveColorProps(props);
+	const horizontal = orientation === 'horizontal';
+	const previewIconSize = iconSize ?? (horizontal ? 20 : 48);
+	const infoRef = useRef<HTMLDivElement>(null);
+	const { height: infoHeight } = useObserveResize(horizontal ? infoRef : undefined, { ignore: 'width' });
 	const descriptionId = useId();
 	const errorId = useId();
 	const fileItem = typeof content === 'object' && 'file' in content ? content : undefined;
@@ -55,6 +63,7 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 	const showFileSize = size !== 'xs' && size !== 's';
 	const showUploadPercent = size !== 'xs' && size !== 's';
 	const { thumbnail, isLoading, contentFormat, fileSize, fileExtension, fileName } = useContentThumbnail(content);
+	const compactText = horizontal && (thumbnail?.type === 'text' || contentFormat === 'text');
 	const getLabel = () => {
 		if (content === undefined) return '';
 		if (typeof content === 'string') return 'Clipboard content';
@@ -92,16 +101,18 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 		'--text-color-light': textColorLight,
 		'--background-color': backgroundColor,
 		'--thumb-color': thumbColor,
-		'--attachment-width': setStyle(width ?? sizes[size]),
+		'--attachment-width': setStyle(width ?? (horizontal ? '100%' : sizes[size])),
+		'--attachment-max-width': maxWidth == null ? undefined : setStyle(maxWidth),
 		'--attachment-height': setStyle(height ?? sizes[size]),
 		'--border-color': borderColor,
 		'--border-width': setStyle(borderWidth),
 		'--border-style': borderStyle,
-		'--border-radius': setStyle(borderRadius),
-		'--icon-gap': setStyle(iconGap),
-		'--info-padding': setStyle(padding),
+		'--border-radius': resolveRadius(borderRadius),
+		'--icon-gap': resolveSize(iconGap),
+		'--info-padding': resolveSize(padding),
 		'--thumb-text-size': setStyle(thumbTextSize),
-		'--thumb-padding': setStyle(thumbPadding),
+		'--thumb-padding': resolveSize(thumbPadding ?? (horizontal ? 'var(--spacing-xxs)' : 'var(--spacing-m)')),
+		'--compact-thumbnail-size': infoHeight > 0 ? setStyle(infoHeight) : undefined,
 		...style,
 	} as CSSProperties;
 
@@ -114,13 +125,18 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 				[description ? descriptionId : undefined, error ? errorId : undefined].filter(Boolean).join(' ') || undefined
 			}
 			aria-disabled={disabled || undefined}
-			className={[styles.wrapper, className].filter(Boolean).join(' ')}
+			className={[styles.wrapper, horizontal && styles.horizontal, className].filter(Boolean).join(' ')}
 			style={cssVars}
 		>
 			<div className={styles.canvas}>
 				{error ? (
-					// biome-ignore lint/a11y/noNoninteractiveTabindex: Long errors scroll within the fixed preview and must be keyboard reachable.
-					<div id={errorId} className={`${styles.errorPreview} ${styles[textSize]}`} role="alert" tabIndex={0}>
+					<div
+						id={errorId}
+						className={`${styles.errorPreview} ${styles[textSize]}`}
+						role="alert"
+						// biome-ignore lint/a11y/noNoninteractiveTabindex: Long errors scroll within the fixed preview and must be keyboard reachable.
+						tabIndex={0}
+					>
 						<span className={styles.errorMessage}>
 							<span className={styles.srOnly}>{actionName}: </span>
 							{error}
@@ -132,19 +148,21 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 							<AttachmentImagePreview
 								key={thumbnail.src}
 								src={thumbnail.src}
-								iconSize={iconSize}
+								iconSize={previewIconSize}
 								color={textColorLight}
 							/>
 						)}
-						{isLoading && (
+						{isLoading && !compactText && (
 							<div className={styles.previewLoader}>
 								<ProgressIndicator decorative inline show size={20} color={textColorLight} />
 							</div>
 						)}
-						{thumbnail?.type === 'text' && <span className={styles.textThumbnail}>{thumbnail.text}</span>}
-						{!thumbnail && !isLoading && content !== undefined && (
+						{!compactText && thumbnail?.type === 'text' && (
+							<span className={styles.textThumbnail}>{thumbnail.text}</span>
+						)}
+						{(compactText || (!thumbnail && !isLoading && content !== undefined)) && (
 							<div className={styles.fileThumbnail}>
-								<FileIcon type={contentFormat} size={iconSize} decorative />
+								<FileIcon type={compactText ? 'text' : contentFormat} size={previewIconSize} decorative />
 							</div>
 						)}
 					</div>
@@ -167,7 +185,7 @@ export function Attachment(props: Readonly<AttachmentProps>) {
 					{description}
 				</span>
 			)}
-			<div className={styles.info}>
+			<div className={styles.info} ref={infoRef}>
 				<div className={styles.textRow}>
 					<span className={`${styles.filename} ${styles[textSize]}`} title={label}>
 						{label}

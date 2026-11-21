@@ -40,6 +40,7 @@ import {
 	Slider,
 	Spacer,
 	Switch,
+	PillButtonBar,
 	TabBar,
 	Tab,
 	TextArea,
@@ -1969,6 +1970,27 @@ export const tabBarConfig: ComponentBenchmarkConfig = {
 	],
 };
 
+export const pillButtonBarConfig: ComponentBenchmarkConfig = {
+	componentName: 'PillButtonBar',
+	tests: [
+		{
+			name: 'Mount Time',
+			type: 'mount',
+			fn: () => measureMountTime(<PillButtonBar options={mockTabBarTabs} />, 50),
+		},
+		{
+			name: 'Re-render',
+			type: 'rerender',
+			fn: () =>
+				measureRerenderTime(
+					<PillButtonBar options={mockTabBarTabs} value="1" />,
+					(container) => container.rerender(<PillButtonBar options={mockTabBarTabs} value="2" />),
+					50,
+				),
+		},
+	],
+};
+
 export const textAreaConfig: ComponentBenchmarkConfig = {
 	componentName: 'TextArea',
 	tests: [
@@ -2201,6 +2223,7 @@ export const allBenchmarkConfigs = [
 	switchConfig,
 	tabConfig,
 	tabBarConfig,
+	pillButtonBarConfig,
 	textAreaConfig,
 	tipConfig,
 	toastConfig,

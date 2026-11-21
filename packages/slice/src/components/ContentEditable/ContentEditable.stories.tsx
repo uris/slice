@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { expect, fireEvent, fn, userEvent, within } from 'storybook/test';
+import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
 import { useDoubleClick } from '../../hooks/useDoubleClick/useDoubleClick';
 import { ContentEditable } from './ContentEditable';
 import type { ContentEditableProps } from './_types';
@@ -526,5 +526,16 @@ export const CustomNoWrap: Story = {
 		const title = within(canvasElement).getByTestId('title');
 		await expect(getComputedStyle(title).whiteSpace).toBe('nowrap');
 		await expect(title.getBoundingClientRect().height).toBeLessThanOrEqual(21);
+	},
+};
+
+export const FocusOutline: Story = {
+	tags: ['tests'],
+	args: { isEditable: true, defaultValue: 'Editable title' },
+	play: async ({ canvasElement }) => {
+		const input = text(canvasElement);
+		input.focus();
+		await expect(input).toHaveAttribute('data-focused', 'true');
+		await waitFor(() => expect(getComputedStyle(input).outlineWidth).toBe('6px'));
 	},
 };

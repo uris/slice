@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { Type } from '../../theme/type/types';
 import type { ElevationProps } from '../sharedTypes';
 
@@ -35,7 +36,7 @@ type DropDownBaseProps<T = string> = ElevationProps & {
 	variant?: 'simple' | 'stacked' | 'outlined';
 	behavior?: 'persistent' | 'appear';
 	labelSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
-	stackedGap?: number;
+	stackedGap?: SizeValue;
 	stackedLabelTextSize?: keyof Type;
 	labelBackgroundColor?: ColorValue;
 	tip?: string;
@@ -49,7 +50,7 @@ type DropDownBaseProps<T = string> = ElevationProps & {
 	valueKey?: string;
 	/** Treat the first option as a prompt. Defaults to true only when its value is an empty string. */
 	placeholder?: boolean;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	borderStyle?: 'underline' | 'box' | 'none';
 	iconColor?: ColorValue;
 	backgroundColor?: ColorValue;
@@ -63,15 +64,15 @@ type DropDownBaseProps<T = string> = ElevationProps & {
 	borderWidth?: number;
 	width?: number | string;
 	height?: number | string;
-	padding?: number | string;
-	paddingLeft?: number | string;
-	paddingRight?: number | string;
-	paddingTop?: number | string;
-	paddingBottom?: number | string;
+	padding?: SizeValue;
+	paddingLeft?: SizeValue;
+	paddingRight?: SizeValue;
+	paddingTop?: SizeValue;
+	paddingBottom?: SizeValue;
 	iconSize?: number;
 	disabled?: boolean;
 	error?: boolean;
-	gap?: number;
+	gap?: SizeValue;
 	inline?: boolean;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	onChange?: (value: T, option: DropDownOption<T>, index: number) => void;

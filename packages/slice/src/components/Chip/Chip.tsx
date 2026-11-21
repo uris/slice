@@ -5,7 +5,7 @@ import React, { useRef, useState } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { setStyle } from '../../utils/functions/misc';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import { Icon } from '../Icon';
@@ -38,6 +38,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 		iconSize = 16,
 		disabled = false,
 		iconPosition = 'left',
+		iconStroke = 1.5,
 		textSize = 'm',
 		textColor = 'var(--core-text-primary)',
 		textColorHover = !interactive ? textColor : 'var(--core-text-special)',
@@ -85,6 +86,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 	const hovered = useRef(false);
 	const focused = useRef(false);
 	const content = label ?? children;
+	const plainText = typeof content === 'string' || typeof content === 'number';
 	const hasContent = content !== undefined && content !== null && content !== false && content !== '';
 	const compact = textSize === 'xs' || textSize === 's';
 	const vertical = compact ? 'var(--spacing-xs)' : 'var(--spacing-s)';
@@ -94,10 +96,10 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 	const hasLeadingIcon = Boolean(icon) && (iconPosition === 'left' || iconOnly);
 	const hasTrailingIcon = Boolean(onRemove) || (Boolean(icon) && (iconPosition === 'right' || iconOnly));
 	const paddingSides = {
-		paddingTop: paddingTop === undefined ? undefined : setStyle(paddingTop),
-		paddingRight: paddingRight === undefined ? undefined : setStyle(paddingRight),
-		paddingBottom: paddingBottom === undefined ? undefined : setStyle(paddingBottom),
-		paddingLeft: paddingLeft === undefined ? undefined : setStyle(paddingLeft),
+		paddingTop: paddingTop === undefined ? undefined : resolveSize(paddingTop),
+		paddingRight: paddingRight === undefined ? undefined : resolveSize(paddingRight),
+		paddingBottom: paddingBottom === undefined ? undefined : resolveSize(paddingBottom),
+		paddingLeft: paddingLeft === undefined ? undefined : resolveSize(paddingLeft),
 	};
 	// Disabled and selected palettes take precedence over both normal and hover colors.
 	const stateColor = (normal: string, selectedColor: string, disabledColor = normal) => {
@@ -106,14 +108,14 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 		return normal;
 	};
 	const cssVars = {
-		'--ui-chip-padding': padding === undefined ? undefined : setStyle(padding),
+		'--ui-chip-padding': padding === undefined ? undefined : resolveSize(padding),
 		'--ui-chip-padding-top': vertical,
 		'--ui-chip-padding-right': hasTrailingIcon ? iconSide : horizontal,
 		'--ui-chip-padding-bottom': vertical,
 		'--ui-chip-padding-left': hasLeadingIcon ? iconSide : horizontal,
-		'--ui-chip-gap': `${gap}px`,
+		'--ui-chip-gap': resolveSize(gap),
 		'--ui-chip-icon-size': `${iconSize}px`,
-		'--ui-chip-border-radius': setStyle(borderRadius),
+		'--ui-chip-border-radius': resolveRadius(borderRadius),
 		'--ui-chip-border-width': `${borderWidth}px`,
 		'--ui-chip-border-color': stateColor(borderColor, borderColorSelected, borderColorDisabled),
 		'--ui-chip-border-color-hover': stateColor(borderColorHover, borderColorSelected, borderColorDisabled),
@@ -127,7 +129,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 	} as React.CSSProperties;
 	const iconContent = icon ? (
 		<span className={css.icon} aria-hidden="true">
-			<Icon name={icon} size={iconSize} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+			<Icon name={icon} size={iconSize} stroke={iconStroke} strokeColor="currentColor" pointer={false} tabIndex={-1} />
 		</span>
 	) : null;
 	const contentNodes = (
@@ -137,7 +139,7 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 			transition={{ layout: layoutTransition }}
 		>
 			{iconPosition === 'left' && iconContent}
-			{hasContent && <span className={css[textSize]}>{content}</span>}
+			{hasContent && <span className={`${css[textSize]}${plainText ? ` ${css.label}` : ''}`}>{content}</span>}
 			{iconPosition === 'right' && iconContent}
 		</motion.span>
 	);
@@ -266,7 +268,14 @@ export const Chip = React.memo((rawProps: ChipProps) => {
 										className={css.icon}
 										aria-hidden="true"
 									>
-										<Icon name="basic.cross" size={iconSize} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+										<Icon
+											name="basic.cross"
+											size={iconSize}
+											strokeColor="currentColor"
+											stroke={iconStroke}
+											pointer={false}
+											tabIndex={-1}
+										/>
 									</motion.span>
 								</button>
 							)}

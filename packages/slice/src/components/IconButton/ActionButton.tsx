@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { animate as animateBackground } from 'motion/mini';
@@ -207,7 +208,7 @@ export const ActionButton = React.memo(function ActionButton(rawProps: ActionBut
 	const radius =
 		typeof borderRadius === 'number'
 			? `${Number.isFinite(borderRadius) ? Math.max(0, borderRadius) : 0}px`
-			: borderRadius;
+			: resolveRadius(borderRadius);
 	const color = on ? iconColorSelected : activeHover ? iconColorHover : iconColor;
 	const background = on ? backgroundColorSelected : activeHover ? backgroundColorHover : backgroundColor;
 	const iconTarget = useMemo<TargetAndTransition>(() => {

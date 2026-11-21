@@ -22,8 +22,8 @@ const designSystemSection: ListSection = [
 
 const gettingStartedSection: ListSection = [
 	{ type: SidebarListItemType.SectionTitle, title: 'Getting Started', display: false },
-	{ title: 'Installation', slug: 'installation' },
-	{ title: 'Overview', slug: 'get-started' },
+	{ title: 'Overview', slug: 'overview', docSidebar: false },
+	{ title: 'Get Started', slug: 'get-started' },
 	{ title: 'Resources', slug: 'resources' },
 ];
 
@@ -84,6 +84,7 @@ const reactComponentSection: ListSection = [
 	{ title: 'ModalController', slug: 'modal-controller', code: true },
 	{ title: 'Overlay', slug: 'overlay', code: true },
 	{ title: 'Pager', slug: 'pager', code: true },
+	{ title: 'PillButtonBar', slug: 'pill-button-bar', code: true },
 	{
 		title: 'PopMenu',
 		id: 'sidebar.group.pop-menu',

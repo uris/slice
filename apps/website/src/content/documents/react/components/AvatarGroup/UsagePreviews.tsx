@@ -35,8 +35,20 @@ export function AvatarGroupColorsExample() {
 	return (
 		<AvatarGroup
 			avatars={[
-				{ id: 'jane', first: 'Jane', last: 'Smith', backgroundColor: 'array-cyan-accent' },
-				{ id: 'morgan', first: 'Morgan', last: 'Chen', textColor: '#ffffff', backgroundColor: '#2563eb' },
+				{
+					id: 'jane',
+					first: 'Jane',
+					last: 'Smith',
+					textColor: 'core-text-light',
+					backgroundColor: 'array-cyan-accent',
+				},
+				{
+					id: 'morgan',
+					first: 'Morgan',
+					last: 'Chen',
+					textColor: 'core-text-light',
+					backgroundColor: 'array-blue-accent',
+				},
 			]}
 			borderWidth={1}
 			size={48}

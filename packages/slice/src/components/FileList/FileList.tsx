@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { resolveSize } from '../../theme/resolveSize';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Attachment } from '../Attachment';
@@ -124,6 +125,7 @@ const FileListBase = React.forwardRef<HTMLDivElement, FileListProps<File | FileI
 		files = [],
 		variant = 'list',
 		attachmentSize,
+		attachmentOrientation,
 		onChange,
 		onToolTip,
 		listName = 'Files',
@@ -174,10 +176,10 @@ const FileListBase = React.forwardRef<HTMLDivElement, FileListProps<File | FileI
 	const cssVars = {
 		'--file-max-width': getMaxWidth(),
 		'--file-min-width': getMinWidth(),
-		'--file-gap': setStyle(gap),
+		'--file-gap': resolveSize(gap),
 		'--file-direction': direction,
 		'--file-wrap': direction === 'column' ? 'nowrap' : 'wrap',
-		'--file-padding': setStyle(padding ?? 'calc(var(--spacing-xs) + var(--spacing-xxs))'),
+		'--file-padding': resolveSize(padding ?? 'calc(var(--spacing-xs) + var(--spacing-xxs))'),
 		'--file-icon-size': setStyle(iconSize ?? 24),
 		'--file-bg-color': backgroundColor ?? 'var(--core-surface-secondary)',
 	} as React.CSSProperties;
@@ -200,7 +202,10 @@ const FileListBase = React.forwardRef<HTMLDivElement, FileListProps<File | FileI
 					if (button.ownerDocument.activeElement === button) {
 						const buttons = Array.from(root.current?.querySelectorAll<HTMLButtonElement>('button') ?? []);
 						const position = buttons.indexOf(button);
-						focusAfterRemoval.current = { removed: button, next: buttons[position + 1] ?? buttons[position - 1] };
+						focusAfterRemoval.current = {
+							removed: button,
+							next: buttons[position + 1] ?? buttons[position - 1],
+						};
 					}
 					onChange?.(files.filter((_, itemIndex) => itemIndex !== index));
 				};
@@ -215,6 +220,7 @@ const FileListBase = React.forwardRef<HTMLDivElement, FileListProps<File | FileI
 								textSize={textSize}
 								iconSize={iconSize}
 								padding={padding}
+								orientation={attachmentOrientation}
 								backgroundColor={backgroundColor}
 								canRemove={canRemove && (!item.uploading || Boolean(item.error?.trim()))}
 								removeLabel={`Remove file ${name}`}

@@ -28,5 +28,14 @@ for (const [mode, colors] of Object.entries({ light, dark })) {
 	);
 	css = css.replace(rootPattern, `$1\n\t--core-surface-primary: ${colors['core-surface-primary']};\n}`);
 }
+const textUtilities = Object.keys(light)
+	.filter((token) => token.startsWith('core-text-'))
+	.sort()
+	.map((token) => `[data-slice-theme-scope] .${token} {\n\tcolor: var(--${token});\n}`)
+	.join('\n\n');
+css = css.replace(
+	/(\/\* Text color utilities start \*\/)[\s\S]*?(\/\* Text color utilities end \*\/)/,
+	(_, start, end) => `${start}\n${textUtilities}\n${end}`,
+);
 await writeFile(path, css);
 console.log('Generated theme CSS from explicit theme color declarations.');

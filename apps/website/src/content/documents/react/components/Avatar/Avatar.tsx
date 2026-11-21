@@ -42,7 +42,9 @@ export function AvatarDoc() {
 				components={[
 					{
 						label: 'Initials fallback',
-						component: <Avatar name={'John Wick'} size={40} backgroundColor="array-cyan-accent" />,
+						component: (
+							<Avatar name={'John Wick'} size={40} backgroundColor="array-cyan-accent" textColor={'core-text-light'} />
+						),
 						code: { filename: 'AvatarInitials.tsx', code: initialsCode.trim() },
 					},
 				]}

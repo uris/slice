@@ -57,6 +57,12 @@
 	border: 0;
 }
 
+.wrapper[data-dragging] .trackHead,
+.control:focus-visible ~ .trackWrapper .trackHead {
+	outline: 3px solid var(--slider-outline-color);
+	border-color: var(--slider-progress-color);
+}
+
 .trackWrapper {
 	position: relative;
 	box-sizing: border-box;

@@ -39,7 +39,7 @@
 	font-family: var(--font-family), sans-serif;
 	font-weight: var(--font-weight-regular);
 	font-size: var(--font-size-l);
-	color: var(--c--core-text-primary);
+	color: var(--core-text-primary);
 	line-height: var(--line-height-l);
 	letter-spacing: var(--letter-spacing-xs);
 }

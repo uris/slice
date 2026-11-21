@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 
 export type AudioLevelBaseProps = {
 	audioStream?: MediaStream | MediaStreamTrack | null;
@@ -7,11 +8,11 @@ export type AudioLevelBaseProps = {
 	levelName?: string;
 	backgroundColor?: ColorValue;
 	backgroundColorActive?: ColorValue;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	borderColor?: ColorValue;
 	borderWidth?: number;
 	width?: number | string;
-	gap?: number;
+	gap?: SizeValue;
 	height?: number;
 	minActiveBars?: number;
 	barCount?: number;

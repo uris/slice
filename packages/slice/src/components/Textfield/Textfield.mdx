@@ -68,7 +68,7 @@ Reduced-motion preferences use the persistent stacked layout even when `behavior
 | `errorMessage` | `string` | `undefined` | Text beneath the field when `error` is true. Empty text is hidden, and `tip` stays hidden in an error state. The visible message describes the input for assistive technology. |
 | `focused` | `boolean` | `undefined` | Optional focus request. Changes to `true` focus the enabled input; changes to `false` blur it. Omit it for ordinary user-driven focus. |
 | `height` | `number  /  string` | `auto` | Wrapper height in pixels or CSS units. |
-| `iconLeft` | `{ name?: string; size?: number; color?: ColorValue }` | `undefined` | Optional leading icon configuration. `size` is pixels; `color` accepts tokens or CSS colors. |
+| `iconLeft` | `{ name?: string; size?: number; color?: ColorValue; stroke?: number }` | `undefined` | Optional leading icon configuration. `size` is pixels; `color` accepts tokens or CSS colors. |
 | `inline` | `boolean` | `false` | Removes the field background; border configuration remains active. |
 | `inputAttributes` | `TextFieldProps['inputAttributes']` | `{}` | Native input settings such as `autoComplete`, `inputMode`, `required`, `minLength`, `pattern`, and `form`. Autocomplete follows the browser or form default unless specified; use `inputAttributes={{ autoComplete: 'off' }}` to request no suggestions, or a token such as `given-name` to guide autofill. Managed values, events, identifiers, styling, and raw ARIA attributes are excluded; use the named component props instead. |
 | `inputId` | `string` | `generated` | ID of the native input. The visible label targets this ID automatically. |
@@ -91,7 +91,7 @@ Reduced-motion preferences use the persistent stacked layout even when `behavior
 | `textColorDisabled` | `ColorValue` | `core-text-disabled` | Text color of the input and visible label while disabled. |
 | `textColorError` | `ColorValue` | `feedback-warning` | Error message text color; the input value keeps its normal color. |
 | `textColorFocused` | `ColorValue` | `core-text-primary` | Input text color while focused, unless disabled. Error state does not change the value color. |
-| `textColorPlaceholder` | `ColorValue` | `core-text-disabled` | Placeholder text color. |
+| `textColorPlaceholder` | `ColorValue` | `core-text-tertiary` | Placeholder text color. |
 | `textSize` | `'xs'  /  's'  /  'm'  /  'l'  /  'xl'` | `m` | Typography size of the native input text. |
 | `tip` | `string` | `undefined` | Helpful text beneath the field when `error` is false. Empty text is hidden. The visible message describes the input for assistive technology. |
 | `value` | `string` | `undefined` | Controlled text. The field reports edits through `onChange` and waits for the parent to update this value. |

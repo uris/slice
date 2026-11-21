@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { FileItem, FileListProps } from '../FileList';
 import type { SliceIcon } from '../Icon/_types';
 import type { ElevationProps, ToolTip } from '../sharedTypes';
@@ -34,8 +35,8 @@ type UploadAreaBaseProps = ElevationProps & {
 	borderColorHover?: ColorValue | null;
 	borderStyle?: string;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
-	padding?: number | string;
-	borderRadius?: number | string;
+	padding?: SizeValue;
+	borderRadius?: RadiusValue;
 	acceptedTypes?: string[];
 	multiple?: boolean;
 	disabled?: boolean;

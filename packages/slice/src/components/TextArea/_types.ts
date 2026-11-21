@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { ElevationProps } from '../sharedTypes';
 
 type NativeInputAttributes = Omit<
@@ -45,7 +46,7 @@ type TextAreaBaseProps = ElevationProps & {
 	autoGrow?: boolean;
 	focused?: boolean;
 	placeholder?: string;
-	padding?: number | string;
+	padding?: SizeValue;
 	error?: boolean;
 	errorMessage?: string;
 	tip?: string;
@@ -55,11 +56,13 @@ type TextAreaBaseProps = ElevationProps & {
 	borderColorError?: ColorValue;
 	resizable?: boolean;
 	showSendButton?: boolean;
+	/** Show the used character count, and the limit when maxLength is set, inside the editor. */
+	showCharacters?: boolean;
 	sendActionName?: string;
 	sendOffset?: { bottom: number; right: number };
 	sendSize?: number;
 	backgroundColor?: ColorValue;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	returnSubmits?: boolean;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	textColor?: ColorValue;

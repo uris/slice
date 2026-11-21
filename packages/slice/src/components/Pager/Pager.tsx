@@ -9,11 +9,12 @@ import {
 	usePresence,
 	usePresenceData,
 } from 'motion/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
+import { measureCssLength } from '../../utils/styling/measureCssLength';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
 import css from './Pager.module.css';
 import type { PagerProps } from './_types';
@@ -168,7 +169,18 @@ export const Pager = React.memo((rawProps: PagerProps) => {
 	const distanceFactor = Number.isFinite(scaleFactor) ? Math.min(1, Math.max(0, scaleFactor)) : 0.8;
 	const minimumScale =
 		Number.isFinite(minScale) && minScale > 0 ? Math.min(selectedScale, minScale) : Math.min(selectedScale, 0.5);
-	const spacing = Number.isFinite(gap) ? Math.max(0, gap) : 8;
+	const wrapperRef = useRef<HTMLDivElement>(null);
+	const [measuredGap, setMeasuredGap] = useState(8);
+	useEffect(() => {
+		const wrapper = wrapperRef.current;
+		if (!wrapper || typeof gap !== 'string') return;
+		const measure = () => setMeasuredGap(Math.max(0, measureCssLength(wrapper, gap, 8)));
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(wrapper);
+		return () => observer.disconnect();
+	}, [gap]);
+	const spacing = typeof gap === 'string' ? measuredGap : Math.max(0, Number.isFinite(gap) ? gap : 8);
 	const slotSize = dotSize * selectedScale;
 	const window = { start: windowStart, previousStart: windowState.start, stride: slotSize + spacing, transition };
 	const cssVars = {
@@ -188,6 +200,7 @@ export const Pager = React.memo((rawProps: PagerProps) => {
 
 	return (
 		<div
+			ref={wrapperRef}
 			role="group"
 			aria-label="Pages"
 			{...divAttributes}

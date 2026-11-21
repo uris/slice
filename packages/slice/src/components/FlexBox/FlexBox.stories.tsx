@@ -576,3 +576,31 @@ export const MotionValueStyles: StoryObj<typeof FlexBox> = {
 		await waitFor(() => expect(getComputedStyle(box).opacity).toBe('0.7'));
 	},
 };
+
+export const TextColor: StoryObj<typeof meta> = {
+	tags: ['tests'],
+	render: () => (
+		<FlexBox color="#123456" data-testid="parent-color">
+			<FlexBox data-testid="inherited-color">Inherited text</FlexBox>
+			<FlexBox className="core-text-secondary" data-testid="class-color">
+				Class color
+			</FlexBox>
+			<FlexBox initial={false} color="core-text-secondary" data-testid="motion-color">
+				Motion color
+			</FlexBox>
+			<FlexBox color="core-text-secondary" style={{ color: '#654321' }} data-testid="override-color">
+				Style override
+			</FlexBox>
+		</FlexBox>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const color = (id: string) => getComputedStyle(canvas.getByTestId(id)).color;
+		await expect(color('parent-color')).toBe('rgb(18, 52, 86)');
+		await expect(color('inherited-color')).toBe(color('parent-color'));
+		await expect(color('class-color')).not.toBe(color('parent-color'));
+		await expect(color('motion-color')).toBe(color('class-color'));
+		await expect(canvas.getByTestId('motion-color').style.color).toBe('var(--core-text-secondary)');
+		await expect(color('override-color')).toBe('rgb(101, 67, 33)');
+	},
+};

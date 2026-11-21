@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useTheme } from '../../hooks';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveRadius } from '../../theme/resolveSize';
+import { opacityFromColor, tintFromColor } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './Slider.module.css';
 import type { SliderProps } from './_types';
@@ -16,6 +19,8 @@ import {
 type Interaction = { kind: 'pointer' | 'keyboard'; latest: number; changed: boolean };
 
 export const Slider = React.memo((rawProps: SliderProps) => {
+	const { isDark } = useTheme();
+	const tintValue = isDark ? 25 : -25;
 	const props = resolveColorProps(rawProps);
 	const {
 		value,
@@ -23,20 +28,20 @@ export const Slider = React.memo((rawProps: SliderProps) => {
 		min = 0,
 		max = 100,
 		width = 100,
-		height = 2,
+		height = 3,
 		touchHeight = 24,
-		trackHeadSize = 12,
+		trackHeadSize = 14,
 		trackHeadOnHover,
 		step,
 		disabled = false,
 		disabledOpacity = 0.5,
 		trackHeadBorderRadius = '100%',
 		cursor = 'grabbing',
-		trackHeadColor = 'var(--core-text-light)',
+		trackHeadColor = 'var(--core-surface-primary)',
 		trackColor = 'var(--core-surface-secondary)',
-		progressColor = 'var(--core-text-tertiary)',
+		progressColor = 'var(--core-outline-primary)',
 		trackHeadBorderWidth = 1,
-		trackHeadBorderColor = 'var(--core-outline-secondary)',
+		trackHeadBorderColor = 'var(--core-outline-primary)',
 		onChange,
 		onChangeEnd,
 		onKeyDown,
@@ -100,7 +105,7 @@ export const Slider = React.memo((rawProps: SliderProps) => {
 		if (!hadInteraction) onChangeEnd?.(next, sliderPercent(next, minimum, maximum));
 	};
 
-	const headSize = trackHeadSize === null ? 0 : Number.isFinite(trackHeadSize) ? Math.max(0, trackHeadSize) : 12;
+	const headSize = trackHeadSize === null ? 0 : Number.isFinite(trackHeadSize) ? Math.max(0, trackHeadSize) : 14;
 	const padding = Math.ceil(headSize / 2);
 	const borderWidth = Number.isFinite(trackHeadBorderWidth) ? Math.max(0, trackHeadBorderWidth) : 1;
 	const radius =
@@ -108,12 +113,12 @@ export const Slider = React.memo((rawProps: SliderProps) => {
 			? Number.isFinite(trackHeadBorderRadius)
 				? `${Math.max(0, trackHeadBorderRadius)}px`
 				: '100%'
-			: (trackHeadBorderRadius ?? '100%');
+			: resolveRadius(trackHeadBorderRadius, '100%');
 	const cssVars = {
 		'--slider-padding': `${padding}px`,
 		'--slider-native-thumb-size': `${padding * 2}px`,
 		'--slider-width': width === 'auto' ? '100%' : sliderLength(width, 100),
-		'--slider-height': sliderLength(height, 2),
+		'--slider-height': sliderLength(height, 3),
 		'--slider-touch-height': sliderLength(touchHeight, 24),
 		'--slider-hit-height': 'max(var(--slider-touch-height), var(--slider-height), var(--slider-head-size))',
 		'--slider-cursor': disabled ? 'default' : cursor,
@@ -121,7 +126,8 @@ export const Slider = React.memo((rawProps: SliderProps) => {
 		'--slider-head-radius': radius,
 		'--slider-head-size': `${headSize}px`,
 		'--slider-head-color': trackHeadColor ?? 'var(--core-text-primary)',
-		'--slider-progress-color': progressColor ?? 'var(--core-text-primary)',
+		'--slider-progress-color': tintFromColor(progressColor, tintValue) ?? 'var(--core-text-primary)',
+		'--slider-outline-color': opacityFromColor(progressColor, 100) ?? 'var(--core-text-primary)',
 		'--slider-track-color': trackColor ?? 'var(--core-surface-secondary)',
 		'--slider-track-head-border': `${borderWidth}px solid ${trackHeadBorderColor}`,
 		'--slider-opacity': disabled

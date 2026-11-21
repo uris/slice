@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { FileIconTypes } from '../FileIcon';
 import type { FileItem } from '../FileList';
 import type { ElevationProps, FixedSize, ToolTip } from '../sharedTypes';
@@ -22,15 +23,18 @@ export type AttachmentBaseProps = ElevationProps & {
 	borderColor?: ColorValue;
 	borderWidth?: number;
 	borderStyle?: React.CSSProperties['borderStyle'];
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	iconSize?: number;
-	iconGap?: number;
+	iconGap?: SizeValue;
 	/** Exact padding inside each information row. */
-	padding?: number | string;
+	padding?: SizeValue;
 	width?: number | string;
+	/** Caps the attachment width. Numbers use pixels. */
+	maxWidth?: number | string;
+	/** Preview height in vertical orientation. Horizontal thumbnails follow the information block. */
 	height?: number | string;
 	thumbTextSize?: number;
-	thumbPadding?: number | string;
+	thumbPadding?: SizeValue;
 	/** Removal is shown only when a handler is supplied; false hides it. */
 	canRemove?: boolean;
 	/** Accessible name of the attachment group; defaults to the displayed filename. */
@@ -47,6 +51,8 @@ export type AttachmentBaseProps = ElevationProps & {
 	backgroundColor?: ColorValue;
 	thumbColor?: ColorValue;
 	size?: FixedSize;
+	/** Defaults to vertical. Horizontal places a square thumbnail beside the file details. */
+	orientation?: 'horizontal' | 'vertical';
 };
 
 export type AttachmentProps = AttachmentBaseProps &

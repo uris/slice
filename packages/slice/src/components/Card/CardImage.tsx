@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { resolveColor } from '../../theme/colors/resolveColor';
+import { resolveSize } from '../../theme/resolveSize';
 import { classNames, setSizeStyle } from '../../utils/functions/misc';
 import css from './Card.module.css';
 import type { CardImageProps } from './_types';
@@ -9,7 +10,7 @@ export function CardImage(props: Readonly<CardImageProps>) {
 	const styles = {
 		minHeight: height,
 		height,
-		padding: setSizeStyle(padding),
+		padding: resolveSize(padding),
 		borderTopWidth: setSizeStyle(borderWidth),
 		borderBottomWidth: setSizeStyle(borderWidth),
 		borderColor: resolveColor(borderColor),

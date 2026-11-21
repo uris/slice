@@ -1471,11 +1471,16 @@ export async function runButtonOutlineDestructiveHoverPlay<TArgs>({ canvasElemen
 	// literal `var(...)` string the component actually sets
 	await expect(button.style.borderColor).toBe('var(--feedback-warning)');
 
-	await userEvent.hover(button);
+	// A focused button deliberately retains its tooltip after pointer exit.
+	button.blur();
+	fireEvent.focusOut(button);
+	fireEvent.mouseOver(button);
 	if (isFn(storyArgs.onToolTip)) {
-		await expect(storyArgs.onToolTip).toHaveBeenCalled();
+		await expect(storyArgs.onToolTip).toHaveBeenLastCalledWith(
+			expect.objectContaining({ payload: { label: storyArgs.tooltip } }),
+		);
 	}
-	await userEvent.unhover(button);
+	fireEvent.mouseOut(button, { relatedTarget: canvasElement.ownerDocument.body });
 	if (isFn(storyArgs.onToolTip)) {
 		await expect(storyArgs.onToolTip).toHaveBeenLastCalledWith(null);
 	}

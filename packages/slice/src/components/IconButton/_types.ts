@@ -1,6 +1,7 @@
 import type { Transition, Variants } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon/_types';
 import type { ButtonSize, ElevationProps, ToolTip } from '../sharedTypes';
 
@@ -20,7 +21,7 @@ type IconButtonBaseProps = ElevationProps & {
 	backgroundColorSelected?: ColorValue;
 	borderWidth?: number;
 	borderColor?: ColorValue;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	disabled?: boolean;
 	hover?: boolean;
 	toggle?: boolean;

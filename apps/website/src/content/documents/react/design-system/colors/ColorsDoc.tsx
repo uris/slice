@@ -76,6 +76,11 @@ export function ColorsDoc() {
 				columns={colorColumns}
 				caption="Outline and border theme tokens"
 			/>
+			<P>
+				Use a text token as a CSS class inside <Code>ThemeProvider</Code>. For example,{' '}
+				<Code>{'className="core-text-primary"'}</Code> sets the text color and follows the active theme. Combine it with
+				a typography class such as <Code>body-s-regular</Code>.
+			</P>
 			<ColorTableTemplate
 				id="theme-text"
 				name="Text"

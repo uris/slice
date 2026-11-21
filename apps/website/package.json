@@ -2,6 +2,9 @@
 	"name": "@slice/website",
 	"private": true,
 	"scripts": {
+		"generate:library-inventory": "node scripts/generate-library-inventory.cjs",
+		"predev": "npm run generate:library-inventory",
+		"prebuild": "npm run generate:library-inventory",
 		"dev": "next dev --webpack --port 6008",
 		"build": "next build --webpack",
 		"start": "next start --port 6008",

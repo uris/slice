@@ -1,4 +1,5 @@
 import { type CSSProperties, useId, useMemo } from 'react';
+import { resolveSize } from '../../theme/resolveSize';
 import { classNames, setStyle } from '../../utils';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import styles from './PopMenu.module.css';
@@ -46,9 +47,9 @@ export function PopMenuGroup<T = unknown>(rawProps: Readonly<PopMenuItemGroupPro
 		'--group-text-color-hover': textColorHover,
 		'--group-border-width': setStyle(borderWidth),
 		'--group-border-color': borderColor,
-		'--group-padding': setStyle(padding),
-		'--group-margin-gap': setStyle(gap),
-		'--group-wrapper-padding-top': hasTitle ? 0 : setStyle(gap),
+		'--group-padding': resolveSize(padding),
+		'--group-margin-gap': resolveSize(gap),
+		'--group-wrapper-padding-top': hasTitle ? 0 : resolveSize(gap),
 		...style,
 	} as CSSProperties;
 

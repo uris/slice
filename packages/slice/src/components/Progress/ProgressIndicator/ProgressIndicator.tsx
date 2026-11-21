@@ -15,6 +15,7 @@ import { classNames, mergedPresenceMotionValues } from '../../../utils/functions
 import { resolveColorProps } from '../../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../../utils/styling/usePrefersReducedMotion';
+import { resolveSize } from '../../theme/resolveSize';
 import css from './ProgressIndicator.module.css';
 import type { ProgressIndicatorProps } from './_types';
 import { useSpinnerPlayback } from './useSpinnerPlayback';

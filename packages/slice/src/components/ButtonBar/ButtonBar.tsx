@@ -1,7 +1,10 @@
 'use client';
+import { resolveRadius } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React from 'react';
+import { useTheme } from '../../hooks';
+import { resolveColor } from '../../theme';
 import { corners } from '../../theme/corners/corners';
 import { tintFromColor } from '../../utils/functions/colors';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
@@ -50,6 +53,7 @@ function isTextField(element: BarChild): element is React.ReactElement<TextField
 }
 
 export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<ButtonBarProps>) {
+	const { isDark } = useTheme();
 	const {
 		elevation = 0,
 		buttons = [],
@@ -58,10 +62,11 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 		onClick,
 		orientation = 'horizontal',
 		inset,
-		hoverTint = 4,
+		hoverTint = isDark ? 5 : -5,
 		divider = true,
 		dividerColor = 'var(--core-fill-primary)',
 		dividerOpacity = 0.75,
+		iconStrokeWidth = 1.5,
 		dividerWidth = 1,
 		dividerStyle = 'solid',
 		borderRadius,
@@ -101,7 +106,7 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 	const getDefaultBorderRadius = () => {
 		return borderRadius ?? corners['corner-m'];
 	};
-	const resolvedBorderRadius = borderRadius ?? getDefaultBorderRadius();
+	const resolvedBorderRadius = resolveRadius(getDefaultBorderRadius());
 	const wrapperBackgroundColor = resolveColorProps({
 		backgroundColor: rawProps.backgroundColor ?? 'var(--core-surface-secondary)',
 	}).backgroundColor;
@@ -156,7 +161,7 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 						textSize: rawProps.textSize ?? field.textSize,
 						backgroundColorBlurred: rawProps.backgroundColor ?? field.backgroundColorBlurred ?? 'transparent',
 						backgroundColorFocused: rawProps.backgroundColor ?? field.backgroundColorFocused ?? 'transparent',
-						textColorBlurred: rawProps.textColor ?? field.textColorBlurred ?? 'var(--core-text-secondary)',
+						textColorBlurred: rawProps.textColor ?? field.textColorBlurred ?? 'var(--core-text-primary)',
 						textColorFocused:
 							rawProps.textColorHover ?? rawProps.textColor ?? field.textColorFocused ?? 'var(--core-text-primary)',
 					})}
@@ -171,14 +176,10 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 		const backgroundColor = resolveColorProps({
 			backgroundColor: rawProps.backgroundColor ?? element.props.backgroundColor ?? 'var(--core-surface-secondary)',
 		}).backgroundColor;
-		const tint = Number.isFinite(hoverTint) ? Math.min(100, Math.max(0, hoverTint)) : 8;
 		const getHoverBackground = () => {
 			if (element.props.backgroundColorHover !== undefined) return element.props.backgroundColorHover;
-			if (tint === 0) return backgroundColor;
-			if (/^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(backgroundColor)) {
-				return tintFromColor(backgroundColor, tint / 100);
-			}
-			return `color-mix(in srgb, ${backgroundColor} ${100 - tint}%, white ${tint}%)`;
+			if (hoverTint === 0) return backgroundColor;
+			return tintFromColor(resolveColor(backgroundColor), hoverTint);
 		};
 		const callbacks: Record<string, unknown> = {};
 		for (const [key, parentHandler] of Object.entries(events)) {
@@ -204,10 +205,11 @@ export const ButtonBar = React.memo(function ButtonBar(rawProps: Readonly<Button
 			paddingBottom: element.props.paddingBottom ?? defaultVerticalPadding,
 			backgroundColor,
 			backgroundColorHover: getHoverBackground(),
-			textColor: element.props.textColor ?? 'var(--core-text-secondary)',
-			iconColor: element.props.iconColor ?? 'var(--core-text-secondary)',
+			textColor: element.props.textColor ?? 'var(--core-text-primary)',
+			iconColor: element.props.iconColor ?? 'var(--core-text-primary)',
 			textColorHover: element.props.textColorHover ?? 'var(--core-text-primary)',
 			iconColorHover: element.props.iconColorHover ?? 'var(--core-text-primary)',
+			iconStrokeWidth: rawProps.iconStrokeWidth ?? element.props.iconStrokeWidth ?? iconStrokeWidth,
 			...shared,
 			buttonSize: getChildSize(element.props),
 			...callbacks,

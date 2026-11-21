@@ -1,4 +1,5 @@
 'use client';
+import { resolveBoxSides, resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import React, { useContext, useId, useMemo, useRef } from 'react';
@@ -92,8 +93,7 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 
 	const setPaddingAdjustment = useMemo(() => {
 		if (scrolls) {
-			if (padding && typeof padding === 'number') return setStyle(padding);
-			if (padding && typeof padding === 'string') return padding.split(' ')[0];
+			if (padding) return resolveBoxSides(padding).top;
 			return 'var(--spacing-m)';
 		}
 		return 'var(--spacing-m)';
@@ -116,11 +116,11 @@ const BaseDialogBox = <T = string>(rawProps: DialogBoxProps<T>) => {
 			'--modal-max-width': setStyle(maxWidth),
 			'--modal-border-color': borderColor,
 			'--modal-title-color': titleTextColor,
-			'--modal-border-radius': setStyle(borderRadius),
+			'--modal-border-radius': resolveRadius(borderRadius),
 			'--modal-border-width': setStyle(borderWidth),
-			'--modal-padding': setStyle(padding, 'var(--spacing-s) var(--spacing-l)'),
-			'--modal-title-padding': setStyle(padding, `var(--spacing-l) var(--spacing-l) ${titlePaddingBottom}`),
-			'--modal-actions-padding': setStyle(padding, 'var(--spacing-l) var(--spacing-l)'),
+			'--modal-padding': resolveSize(padding, 'var(--spacing-s) var(--spacing-l)'),
+			'--modal-title-padding': resolveSize(padding, `var(--spacing-l) var(--spacing-l) ${titlePaddingBottom}`),
+			'--modal-actions-padding': resolveSize(padding, 'var(--spacing-l) var(--spacing-l)'),
 			'--modal-padding-adjust': setPaddingAdjustment,
 			'--modal-content-margin-top': '0px',
 			'--modal-background-color': backgroundColor,

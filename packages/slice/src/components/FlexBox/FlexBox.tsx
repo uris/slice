@@ -1,10 +1,10 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { type HTMLMotionProps, isForcedMotionValue, isMotionValue, isValidMotionProp, motion } from 'motion/react';
 import React, { useCallback, useMemo } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
-import { setSizeStyle, setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { reduceMotionTarget, reduceMotionVariants } from '../../utils/styling/reduceMotionTargets';
@@ -102,6 +102,7 @@ export const FlexBox = React.memo(
 			scrollBox = false,
 			overflow,
 			background = 'transparent',
+			color,
 			direction = undefined,
 			align = undefined,
 			justify = undefined,
@@ -162,9 +163,9 @@ export const FlexBox = React.memo(
 				alignItems: `${setFlex(presets.align)}`,
 				alignContent: presets.alignContent,
 				boxSizing: 'border-box',
-				padding: `${setSizeStyle(padding ?? 0)}`,
+				padding: `${resolveSize(padding ?? 0)}`,
 				...(padding === undefined ? { paddingRight: setPaddingRight(padding, scrollBox) } : {}),
-				margin: centerSelf ? '0 auto' : `${setSizeStyle(margin)}`,
+				margin: centerSelf ? '0 auto' : `${resolveSize(margin)}`,
 				width: `${absolute ? 'unset' : setSize(presets.width, false)}`,
 				height: `${absolute ? 'unset' : setSize(presets.height, true)}`,
 				maxWidth: `${maxWidth !== undefined ? setSize(maxWidth, false) : 'unset'}`,
@@ -173,14 +174,14 @@ export const FlexBox = React.memo(
 				bottom: `${absolute ? '0' : 'unset'}`,
 				left: `${absolute ? '0' : 'unset'}`,
 				right: `${absolute ? '0' : 'unset'}`,
-				gap: presets.gap !== undefined ? `${presets.gap}px` : 'unset',
+				gap: resolveSize(presets.gap, 'unset'),
 				border: `${border ?? 'unset'}`,
 				background: `${background ?? 'transparent'}`,
 				overflow: presets.overflow,
 				overflowY: setScroll(scrollY ?? (overflow === undefined ? presets.scrollY : undefined)),
 				overflowX: setScroll(scrollX ?? (overflow === undefined ? presets.scrollX : undefined)),
-				borderRadius: setStyle(borderRadius),
-				color: 'var(--core-text-primary)',
+				borderRadius: resolveRadius(borderRadius),
+				color,
 				'--flex-div-scroll-border': `${background ?? 'transparent'}`,
 				'--flex-div-scroll-handle': `${scrollHandle ?? 'var(--scroll-bar)'}`,
 				'--flex-div-scroll-handle-hover': `${scrollHandleHover ?? 'var(--scroll-bar-hover)'}`,
@@ -192,6 +193,7 @@ export const FlexBox = React.memo(
 			margin,
 			border,
 			background,
+			color,
 			centerSelf,
 			maxWidth,
 			scrollHandle,

@@ -1,6 +1,7 @@
 import type { Transition } from 'motion/react';
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { SizeValue } from '../../theme/resolveSize';
 
 type PagerBaseProps = {
 	size?: number;
@@ -10,7 +11,7 @@ type PagerBaseProps = {
 	colorOn?: ColorValue;
 	colorHover?: ColorValue;
 	pages?: number;
-	gap?: number;
+	gap?: SizeValue;
 	/** Scale of the selected dot. */
 	scale?: number;
 	/** Multiplier applied for each page away from the selection. */

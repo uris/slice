@@ -54,7 +54,7 @@ export const sharedDocsMetadata: Record<SharedDocSlug, Metadata> = {
 // Keep unknown route slugs so missing documents can render inside the docs shell.
 export type DocsSlug = string;
 
-export type DocsContext = { slug?: DocsSlug | null; packageType?: Package | null };
+export type DocsContext = { slug?: DocsSlug | null; packageType?: Package | null; docSidebar?: boolean };
 
 export enum SiteSection {
 	Docs = 'docs',

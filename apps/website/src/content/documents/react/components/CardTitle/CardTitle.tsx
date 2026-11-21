@@ -1,21 +1,21 @@
 import { ComponentCanvas } from '@/components/ComponetCanvas/ComponentCanvas';
 import { Path } from '@/components/Path/Path';
-import { Code, H1, H2, H3, P } from '@/components/Type/Type';
+import { Code, H1, H2, P } from '@/components/Type/Type';
 import { FlexBox, Preset } from '@apple-pie/slice';
 import { type CardDocProp, CardEventsReference, CardPropsReference, cardTrackedItems } from '../Card/Reference';
-import { TitleCardPreview } from '../Card/UsagePreviews';
-import { titleCode } from '../Card/code';
+import { TitleCardPreview, TitleStatusPreview } from '../Card/UsagePreviews';
+import { titleCode, titleStatusCode } from '../Card/code';
 
 const props: CardDocProp[] = [
 	{
-		name: 'actionButton',
-		type: 'ButtonProps',
+		name: 'action',
+		type: 'ButtonProps[] | React.ReactNode',
 		defaultValue: 'undefined',
 		description: (
 			<>
-				{
-					'Optional action beside the title. Defaults to a text button with automatic height and zero padding; supplied button props override those defaults.'
-				}
+				Content beside the title. Pass an array of <Code>ButtonProps</Code> to generate buttons or a React node to
+				render custom content. Generated buttons default to the <Code>text</Code> variant, automatic height, and zero
+				padding. Supplied button props override these defaults.
 			</>
 		),
 	},
@@ -69,26 +69,23 @@ export default function CardTitleDoc() {
 				storybookUrl="https://react.slice-uikit.com/?path=/story/components-card--no-image"
 				components={[
 					{
-						label: 'Title with an action',
+						label: 'Button descriptors',
 						component: <TitleCardPreview />,
 						code: { code: titleCode.trim(), filename: 'CardTitleExample.tsx' },
+					},
+					{
+						label: 'Custom React node',
+						component: <TitleStatusPreview />,
+						code: { code: titleStatusCode.trim(), filename: 'ProjectStatusCard.tsx' },
 					},
 				]}
 			/>
 
 			<H2 id="behavior">Behavior</H2>
 			<P>
-				<>
-					{
-						'Without custom children, the section renders its caption, title, supporting text, and optional action. Custom '
-					}
-					<Code>children</Code>
-					{' replace that generated layout. The action’s own '}
-					<Code>onClick</Code>
-					{' callback runs before '}
-					<Code>onAction</Code>
-					{'. CardTitle does not submit a form or open a help panel automatically.'}
-				</>
+				Custom <Code>children</Code> replace the generated title layout, including <Code>action</Code>. For generated
+				buttons, each button’s <Code>onClick</Code> runs before <Code>onAction</Code>. Handle interactions for custom
+				actions on the supplied nodes themselves.
 			</P>
 			<H2 id="accessibility">Accessibility</H2>
 			<P>

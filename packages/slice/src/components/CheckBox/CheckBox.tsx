@@ -2,6 +2,7 @@
 
 import React, { useEffect, useId, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveSize } from '../../theme/resolveSize';
 import { accessibleKeyDown } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
@@ -53,8 +54,8 @@ export const CheckBox = React.memo((rawProps: CheckBoxProps) => {
 			: state === 'mixed'
 				? 'var(--core-icon-primary)'
 				: state
-					? 'var(--core-text-special)'
-					: 'var(--core-icon-secondary)');
+					? 'var(--core-icon-primary)'
+					: 'var(--core-outline-primary)');
 	const resolvedTextColor = textColor ?? (disabled ? 'var(--core-text-disabled)' : 'var(--core-text-primary)');
 	const offset = Number.isFinite(textTopOffset) ? textTopOffset : 0;
 	// Padding reserves space; compensate for flex alignment so the visible text moves by the full signed offset.
@@ -62,7 +63,7 @@ export const CheckBox = React.memo((rawProps: CheckBoxProps) => {
 	const cssVars = {
 		'--cb-align': align === 'top' ? 'flex-start' : align === 'bottom' ? 'flex-end' : 'center',
 		'--cb-icon-size': `${iconSize}px`,
-		'--cb-gap': `${gap}px`,
+		'--cb-gap': resolveSize(gap),
 		'--cb-text-color': resolvedTextColor,
 		'--cb-text-padding-top': `${Math.max(offset, 0)}px`,
 		'--cb-text-padding-bottom': `${Math.max(-offset, 0)}px`,

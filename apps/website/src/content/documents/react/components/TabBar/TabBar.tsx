@@ -288,7 +288,7 @@ export function TabBarDoc() {
 			</P>
 			<Definition id={'textSize'}>
 				<Prop>textSize</Prop>
-				<TypeDef>{"'xs' | 's' | 'm' | 'l' | 'xl'"}</TypeDef>
+				<TypeDef>{"'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl'"}</TypeDef>
 				<DefaultVal>{'m'}</DefaultVal>
 			</Definition>
 			<P>{'Text size for tab labels.'}</P>

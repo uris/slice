@@ -1,6 +1,7 @@
 'use client';
 
 import {
+	Badge,
 	Card,
 	CardContent,
 	CardFooter,
@@ -71,9 +72,18 @@ export function TitleCardPreview() {
 				caption="Account"
 				title="Security settings"
 				text="Manage the details that protect your account."
-				actionButton={{ label: 'Help', iconRight: 'alerts.question' }}
+				action={[{ label: 'Help', iconRight: 'alerts.question' }]}
 			/>
 			<CardContent>Review your password and sign-in preferences.</CardContent>
+		</Card>
+	);
+}
+
+export function TitleStatusPreview() {
+	return (
+		<Card padding={20} style={{ width: '100%' }}>
+			<CardTitle title="Project status" action={<Badge count="Ready" />} />
+			<CardContent text="All checks have passed." />
 		</Card>
 	);
 }

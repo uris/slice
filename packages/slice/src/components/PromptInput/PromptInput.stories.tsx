@@ -375,9 +375,14 @@ export const SurfaceFocus: Story = {
 		const input = canvas.getByRole('textbox', { name: 'Message' });
 		await fireEvent.click(canvas.getByTestId('composer'));
 		await expect(input).toHaveFocus();
+		const wrapper = canvas.getByTestId('composer');
+		await expect(getComputedStyle(wrapper).outlineWidth).toBe('3px');
+		await expect(getComputedStyle(wrapper).outlineColor).not.toBe('rgba(0, 0, 0, 0)');
+		await expect(getComputedStyle(input.parentElement as HTMLElement).outlineColor).toBe('rgba(0, 0, 0, 0)');
 		const button = canvas.getByRole('button', { name: 'Models' });
 		await userEvent.click(button);
 		await expect(button).toHaveFocus();
+		await expect(getComputedStyle(wrapper).outlineWidth).toBe('3px');
 	},
 };
 export const CancelSurfaceFocus: Story = {

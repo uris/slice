@@ -70,6 +70,7 @@ export const KeyboardSend: Story = {
 	args: { showSendButton: true, defaultValue: 'Send this' },
 	play: async ({ canvasElement, args }) => {
 		const canvas = within(canvasElement);
+		expect(canvas.getByRole('button', { name: 'Send' })).toHaveStyle({ width: '24px', height: '24px' });
 		await userEvent.click(canvas.getByRole('textbox'));
 		await userEvent.tab();
 		expect(canvas.getByRole('button', { name: 'Send' })).toHaveFocus();
@@ -766,4 +767,59 @@ export const Elevation: StoryObj<typeof meta> = {
 		<ElevationFixture>{(elevation) => <TextArea elevation={elevation} label="Description" />}</ElevationFixture>
 	),
 	play: async (context) => runElevationPlay(context, 0),
+};
+
+export const FocusOutline: Story = {
+	tags: ['tests'],
+	args: { borderColorFocused: '#123456' },
+	play: async ({ canvasElement }) => {
+		const input = within(canvasElement).getByRole('textbox');
+		const wrapper = input.parentElement as HTMLElement;
+		await userEvent.click(input);
+		await waitFor(() => expect(wrapper).toHaveStyle({ outlineWidth: '3px', outlineStyle: 'solid' }));
+		input.blur();
+		await waitFor(() => expect(getComputedStyle(wrapper).outlineStyle).toBe('none'));
+	},
+};
+
+export const CharacterCount: Story = {
+	args: { showCharacters: true, maxLength: 10, showSendButton: true, tip: 'Keep it brief.' },
+	render: (args) => {
+		const [value, setValue] = useState('');
+		return <TextArea {...args} value={value} onChange={setValue} />;
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole('textbox');
+		await expect(canvas.getByText('0 / 10 characters')).toBeVisible();
+		await userEvent.type(input, 'Hello world');
+		await expect(input).toHaveValue('Hello worl');
+		const count = canvas.getByText('10 / 10 characters');
+		await expect(input).toHaveAccessibleDescription('Keep it brief. 10 / 10 characters');
+		const send = canvas.getByRole('button', { name: 'Send' });
+		expect(count.getBoundingClientRect().right).toBeLessThan(send.getBoundingClientRect().left);
+		await userEvent.click(send);
+		await expect(canvas.getByText('0 / 10 characters')).toBeVisible();
+	},
+};
+
+export const CharacterCountWithoutLimit: Story = {
+	tags: ['tests'],
+	args: { showCharacters: true, defaultValue: 'Note' },
+	render: (args) => (
+		<form>
+			<TextArea {...args} />
+			<button type="reset">Reset notes</button>
+		</form>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole('textbox');
+		await expect(canvas.getByText('4 characters')).toBeVisible();
+		await userEvent.type(input, 's');
+		await expect(canvas.getByText('5 characters')).toBeVisible();
+		await expect(canvas.queryByRole('button', { name: 'Send' })).not.toBeInTheDocument();
+		await userEvent.click(canvas.getByRole('button', { name: 'Reset notes' }));
+		await expect(canvas.getByText('4 characters')).toBeVisible();
+	},
 };

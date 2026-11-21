@@ -62,3 +62,7 @@ export const sizesCode = `
 // The size prop defaults to 'm'; width and height can override these dimensions.
 type AttachmentSize = 'xs' | 's' | 'm' | 'l' | 'xl';
 `;
+
+export const horizontalCode = `
+<Attachment content={file} orientation="horizontal" maxWidth={320} />
+`;

@@ -633,7 +633,7 @@ export const ItemAttributes: Story = {
 		await expect(custom).toHaveClass('custom-action');
 		await expect(custom).toHaveStyle({ opacity: '0.9' });
 		await userEvent.click(canvas.getByText('Actions'));
-		await expect(canvas.getByRole('menu')).toBeVisible();
+		await waitFor(() => expect(canvas.getByRole('menu')).toBeVisible());
 	},
 };
 
@@ -1234,3 +1234,104 @@ const playMenuElevation: NonNullable<Story['play']> = async ({ canvasElement, ar
 export const DefaultElevation: Story = { tags: ['tests'], play: playMenuElevation };
 export const RaisedElevation: Story = { tags: ['tests'], args: { elevation: 5 }, play: playMenuElevation };
 export const FlatElevation: Story = { tags: ['tests'], args: { elevation: 0 }, play: playMenuElevation };
+
+export const ThemeColorTokens: Story = {
+	tags: ['tests'],
+	args: { borderColor: 'core-outline-primary', backgroundColor: 'core-surface-secondary' },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const page = within(canvasElement.ownerDocument.body);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const menu = await page.findByRole('menu');
+		const reference = canvasElement.ownerDocument.createElement('span');
+		menu.appendChild(reference);
+		reference.style.color = 'var(--core-outline-primary)';
+		expect(getComputedStyle(menu).borderTopColor).toBe(getComputedStyle(reference).color);
+		reference.style.color = 'var(--core-surface-secondary)';
+		expect(getComputedStyle(menu).backgroundColor).toBe(getComputedStyle(reference).color);
+		reference.remove();
+	},
+};
+
+export const ItemBackgroundInheritance: Story = {
+	tags: ['tests'],
+	args: {
+		backgroundColor: '#daeaf5',
+		options: [
+			{ label: 'Inherited' },
+			{
+				title: 'Grouped',
+				items: [
+					{ label: 'Inherited in group', backgroundColor: undefined },
+					{ label: 'Explicit override', backgroundColor: 'core-surface-secondary' },
+					{ label: 'Disabled inherited', disabled: true },
+				],
+			},
+		],
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const page = within(canvasElement.ownerDocument.body);
+		await userEvent.click(canvas.getByRole('button', { name: 'Button 1' }));
+		const menu = await page.findByRole('menu');
+		await waitFor(() => expect(menu).not.toHaveAttribute('inert'));
+		menu.focus();
+		const row = (name: string) => within(menu).getByRole('menuitem', { name }).firstElementChild as HTMLElement;
+		const background = getComputedStyle(menu).backgroundColor;
+		await expect(background).toBe('rgb(218, 234, 245)');
+		await expect(getComputedStyle(row('Inherited in group')).backgroundColor).toBe(background);
+		await expect(getComputedStyle(row('Disabled inherited')).backgroundColor).toBe(background);
+		const reference = canvasElement.ownerDocument.createElement('span');
+		menu.appendChild(reference);
+		reference.style.color = 'var(--core-surface-secondary)';
+		await expect(getComputedStyle(row('Explicit override')).backgroundColor).toBe(getComputedStyle(reference).color);
+
+		const inherited = row('Inherited');
+		await expect(getComputedStyle(inherited).backgroundColor).toBe(background);
+		const { MODE } = (import.meta as ImportMeta & { env: { MODE: string } }).env;
+		if (MODE === 'test') {
+			const { userEvent: pointer } = await import('vitest/browser');
+			await pointer.hover(inherited);
+			const hoveredColor = getComputedStyle(inherited).backgroundColor;
+			reference.style.color = 'color-mix(in srgb, #daeaf5 95%, black)';
+			const lightHover = getComputedStyle(reference).color;
+			reference.style.color = 'color-mix(in srgb, #daeaf5 90%, white)';
+			const expectedColors = [lightHover, getComputedStyle(reference).color];
+			await expect(expectedColors).toContain(hoveredColor);
+			await pointer.unhover(inherited);
+		}
+		reference.remove();
+		await userEvent.keyboard('{Escape}');
+	},
+};
+
+export const InlineMenu: Story = {
+	tags: ['tests'],
+	render: () => (
+		<PopMenu
+			inline
+			name="Inline actions"
+			backgroundColor="#daeaf5"
+			options={[{ label: 'Edit' }, { label: 'Colors', subMenu: colorsSubMenu }]}
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const page = within(canvasElement.ownerDocument.body);
+		const menu = canvas.getByRole('menu', { name: 'Inline actions' });
+		const edit = within(menu).getByRole('menuitem', { name: 'Edit' });
+		await expect(menu).toBeVisible();
+		await expect(edit).not.toHaveFocus();
+		await expect(getComputedStyle(edit.firstElementChild as HTMLElement).backgroundColor).toBe('rgb(218, 234, 245)');
+		await userEvent.click(edit);
+		await expect(menu).toBeVisible();
+		const opener = within(menu).getByRole('menuitem', { name: 'Colors' });
+		await userEvent.click(opener);
+		const item = await page.findByRole('menuitem', { name: 'Red' });
+		await waitFor(() => expect(item).toHaveFocus());
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(page.queryByRole('menuitem', { name: 'Red' })).not.toBeInTheDocument());
+		await expect(menu).toBeVisible();
+		await expect(opener).toHaveFocus();
+	},
+};

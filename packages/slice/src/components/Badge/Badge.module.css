@@ -15,3 +15,8 @@
 }
 
 /*calc(var(--spacing-xs) + var(--spacing-xxs)*/
+
+.label {
+	display: inline-block;
+	transform: translateY(-0.067em);
+}

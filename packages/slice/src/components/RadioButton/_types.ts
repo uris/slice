@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue, SizeValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon/_types';
 
 export type RadioButtonOption<T = string> = { fieldName?: string; label?: string; value?: T };
@@ -20,7 +21,8 @@ type RadioButtonBaseProps<T = string> = {
 	iconColor?: ColorValue;
 	iconColorSelected?: ColorValue;
 	iconSize?: number;
-	gap?: number;
+	iconStroke?: number;
+	gap?: SizeValue;
 	textColor?: ColorValue;
 	textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 	textTopOffset?: number;
@@ -28,8 +30,8 @@ type RadioButtonBaseProps<T = string> = {
 	backgroundColorSelected?: ColorValue;
 	borderColor?: ColorValue;
 	borderWidth?: number;
-	borderRadius?: number | string;
-	padding?: number | string;
+	borderRadius?: RadiusValue;
+	padding?: SizeValue;
 	onChange?: (option: RadioButtonOption<T>, checked: boolean) => void;
 };
 export type RadioButtonProps<T = string> = Omit<

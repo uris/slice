@@ -35,7 +35,7 @@ export const Default: Story = {
 				<CardTitle
 					title={'Log in to your account'}
 					text={'Use the form below to enter your user name and password.'}
-					actionButton={{ label: 'help', iconRight: 'alerts.question', variant: 'text' }}
+					action={[{ label: 'help', iconRight: 'alerts.question', variant: 'text' }]}
 					onAction={(button) => console.log({ button })}
 				/>
 				<CardContent>
@@ -81,7 +81,7 @@ export const LargerSpacing: Story = {
 				<CardTitle
 					title={'Log in to your account'}
 					text={'Use the form below to enter your user name and password.'}
-					actionButton={{ label: 'help', iconRight: 'alerts.question', variant: 'text' }}
+					action={[{ label: 'help', iconRight: 'alerts.question', variant: 'text' }]}
 					onAction={(button) => console.log({ button })}
 				/>
 				<CardContent>
@@ -127,7 +127,7 @@ export const WithImage: Story = {
 				<CardTitle
 					title={'Log in to your account'}
 					text={'Use the form below to enter your user name and password.'}
-					actionButton={{ label: 'help', iconRight: 'alerts.question', variant: 'text' }}
+					action={[{ label: 'help', iconRight: 'alerts.question', variant: 'text' }]}
 					onAction={(button) => console.log({ button })}
 				/>
 				<CardImage src={image} height={200} />
@@ -296,8 +296,12 @@ export const ActionCallbacks: Story = {
 		<Card>
 			<CardTitle
 				title="Actions"
-				actionButton={{ label: 'Help', onClick: () => actionOrder('title-button') }}
-				onAction={() => actionOrder('title-action')}
+				action={[
+					{ id: 'help', label: 'Help', onClick: () => actionOrder('title-button') },
+					{ id: 'settings', label: 'Settings', onClick: () => actionOrder('settings-button') },
+					{ id: 'disabled', label: 'Disabled', disabled: true },
+				]}
+				onAction={({ id }) => actionOrder(`title-action:${id}`)}
 			/>
 			<CardFooter
 				actionButtons={[
@@ -312,13 +316,47 @@ export const ActionCallbacks: Story = {
 		actionOrder.mockClear();
 		const canvas = within(canvasElement);
 		await userEvent.click(canvas.getByRole('button', { name: 'Help' }));
+		await userEvent.click(canvas.getByRole('button', { name: 'Settings' }));
+		const disabled = canvas.getByRole('button', { name: 'Disabled' });
+		await expect(disabled).toBeDisabled();
+		await userEvent.click(disabled);
 		await userEvent.click(canvas.getAllByRole('button', { name: 'Save' })[0]);
 		await expect(actionOrder.mock.calls.map(([name]) => name)).toEqual([
 			'title-button',
-			'title-action',
+			'title-action:help',
+			'settings-button',
+			'title-action:settings',
 			'footer-button',
 			'footer-action',
 		]);
+	},
+};
+
+const customTitleClick = fn();
+const customTitleAction = fn();
+
+export const CustomTitleActions: Story = {
+	tags: ['tests'],
+	render: () => (
+		<Card>
+			<CardTitle
+				title="Custom actions"
+				onAction={customTitleAction}
+				action={[
+					<Button key="help" label="Help" variant="text" onClick={customTitleClick} />,
+					<Badge key="status" count="Ready" />,
+				]}
+			/>
+		</Card>
+	),
+	play: async ({ canvasElement }) => {
+		customTitleClick.mockClear();
+		customTitleAction.mockClear();
+		const canvas = within(canvasElement);
+		await expect(canvas.getByText('Ready')).toBeVisible();
+		await userEvent.click(canvas.getByRole('button', { name: 'Help' }));
+		await expect(customTitleClick).toHaveBeenCalledTimes(1);
+		await expect(customTitleAction).not.toHaveBeenCalled();
 	},
 };
 

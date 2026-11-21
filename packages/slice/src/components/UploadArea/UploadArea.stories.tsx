@@ -15,7 +15,14 @@ const meta = {
 } satisfies Meta<typeof UploadArea>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Default: Story = {};
+export const Default: Story = {
+	play: async ({ canvasElement }) => {
+		await expect(within(canvasElement).getByRole('button').querySelector('[stroke-width]')).toHaveAttribute(
+			'stroke-width',
+			'1.2',
+		);
+	},
+};
 export const Busy: Story = { args: { busy: true, files: [{ file: 'report.pdf', uploading: true, progress: 45 }] } };
 function ControlledArea(props: UploadAreaProps) {
 	const [files, setFiles] = useState<FileItem[]>(props.files ?? []);

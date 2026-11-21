@@ -1,4 +1,5 @@
 'use client';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { getElevationStyle } from '../../utils/styling/getElevationStyle';
 
 import { motion, useAnimationControls } from 'motion/react';
@@ -6,7 +7,7 @@ import React, { useEffect, useId, useMemo } from 'react';
 import { useTheme } from '../../hooks/useTheme/useTheme';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
-import { classNames, mergedPresenceMotionValues, setStyle } from '../../utils/functions/misc';
+import { classNames, mergedPresenceMotionValues } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { getWaterTransition } from '../../utils/styling/getWaterTransition';
 import { usePrefersReducedMotion } from '../../utils/styling/usePrefersReducedMotion';
@@ -96,11 +97,11 @@ const TipBase = React.forwardRef<HTMLDivElement, ToolTipProps>((rawProps, ref) =
 		};
 	}, [enabled, tip, dismiss]);
 	const cssVars = {
-		'--tooltip-padding': setStyle(padding, 'var(--spacing-xs) var(--spacing-s)'),
+		'--tooltip-padding': resolveSize(padding, 'var(--spacing-xs) var(--spacing-s)'),
 		'--tooltip-background': backgroundColor ?? 'var(--core-surface-secondary)',
 		'--tooltip-color': textColor ?? 'var(--core-text-primary)',
 		'--tooltip-border': border ? `1px solid ${borderColor ?? 'var(--core-outline-primary)'}` : 'unset',
-		'--tooltip-border-radius': setStyle(borderRadius),
+		'--tooltip-border-radius': resolveRadius(borderRadius),
 	} as React.CSSProperties;
 	/* START.DEBUG */
 	useTrackRenders(props, 'Tip');

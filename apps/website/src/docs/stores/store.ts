@@ -11,6 +11,7 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 	trackedItems: [],
 	onThisPageItem: null,
 	minTop: null,
+	docSidebar: true,
 	rightPanelClosed: false,
 	scrollBox: createRef<HTMLDivElement>(),
 	scrollBoxSize: undefined,
@@ -18,13 +19,22 @@ export const useDocsStore = create<DocsStoreType>((set, get) => ({
 	scrollAmount: 0,
 	scrollDirection: null,
 	actions: {
-		setDocContext: (slug, packageType, section) => {
+		setDocContext: (slug, packageType, section, docSidebar = true) => {
 			set((state) => {
-				if (state.slug === slug && state.packageType === packageType && state.section === section) return state;
+				if (
+					state.slug === slug &&
+					state.packageType === packageType &&
+					state.section === section &&
+					state.docSidebar === docSidebar &&
+					state.rightPanelClosed === !docSidebar
+				)
+					return state;
 				return {
 					slug,
 					packageType,
 					section,
+					docSidebar,
+					rightPanelClosed: !docSidebar,
 					visibleItems: new Set<string>(),
 					scrollAmount: 0,
 					initialized: true,
@@ -95,3 +105,5 @@ export const useLoadState = () => useDocsStore((state) => state.loadState);
 export const useOnThisPageItem = () => useDocsStore((state) => state.onThisPageItem);
 export const useMinTop = () => useDocsStore((state) => state.minTop);
 export const useRightPanelClosed = () => useDocsStore((state) => state.rightPanelClosed);
+
+export const useDocSidebar = () => useDocsStore((state) => state.docSidebar);

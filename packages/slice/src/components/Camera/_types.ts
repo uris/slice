@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ColorValue } from '../../theme/colors/resolveColor';
+import type { RadiusValue } from '../../theme/resolveSize';
 import type { SliceIcon } from '../Icon/_types';
 import type { ElevationProps } from '../sharedTypes';
 
@@ -58,7 +59,7 @@ export interface BaseCameraProps extends ElevationProps {
 	backgroundColor?: ColorValue;
 	borderColor?: ColorValue;
 	borderWidth?: number | string;
-	borderRadius?: number | string;
+	borderRadius?: RadiusValue;
 	audio?: boolean;
 	width?: number | string;
 	height?: number | string;
@@ -66,6 +67,7 @@ export interface BaseCameraProps extends ElevationProps {
 	startCameraOff?: boolean;
 	startAudioMuted?: boolean;
 	playLocalAudio?: boolean;
+	displayError?: boolean;
 	userProfile?: UserProfile;
 	sessionSettings?: Settings;
 	onVideoStream?: (stream: MediaStream) => void;

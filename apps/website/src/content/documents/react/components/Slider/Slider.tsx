@@ -146,11 +146,11 @@ export function SliderDoc() {
 			<Definition id={'height'}>
 				<Prop>height</Prop>
 				<TypeDef>{'number | string'}</TypeDef>
-				<DefaultVal>{'2'}</DefaultVal>
+				<DefaultVal>3</DefaultVal>
 			</Definition>
 			<P>
 				Track thickness. Numbers are pixels; strings accept CSS lengths. Negative numbers become zero; non-finite
-				numbers use 2.
+				numbers use 3.
 			</P>
 			<Definition id={'max'}>
 				<Prop>max</Prop>
@@ -170,7 +170,7 @@ export function SliderDoc() {
 			<Definition id={'progressColor'}>
 				<Prop>progressColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-tertiary'}</DefaultVal>
+				<DefaultVal>core-outline-primary</DefaultVal>
 			</Definition>
 			<P>Color of the filled track.</P>
 			<Definition id={'step'}>
@@ -200,7 +200,7 @@ export function SliderDoc() {
 			<Definition id={'trackHeadBorderColor'}>
 				<Prop>trackHeadBorderColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-outline-secondary'}</DefaultVal>
+				<DefaultVal>core-outline-primary</DefaultVal>
 			</Definition>
 			<P>Head border color.</P>
 			<Definition id={'trackHeadBorderRadius'}>
@@ -218,7 +218,7 @@ export function SliderDoc() {
 			<Definition id={'trackHeadColor'}>
 				<Prop>trackHeadColor</Prop>
 				<TypeDef>{'ColorValue'}</TypeDef>
-				<DefaultVal>{'core-text-light'}</DefaultVal>
+				<DefaultVal>core-surface-primary</DefaultVal>
 			</Definition>
 			<P>Head background color.</P>
 			<Definition id={'trackHeadOnHover'}>
@@ -233,9 +233,9 @@ export function SliderDoc() {
 			<Definition id={'trackHeadSize'}>
 				<Prop>trackHeadSize</Prop>
 				<TypeDef>{'number | null'}</TypeDef>
-				<DefaultVal>{'12'}</DefaultVal>
+				<DefaultVal>14</DefaultVal>
 			</Definition>
-			<P>Head diameter in pixels. Zero or null hides it; negative values become zero and non-finite values use 12.</P>
+			<P>Head diameter in pixels. Zero or null hides it; negative values become zero and non-finite values use 14.</P>
 			<Definition id={'value'}>
 				<Prop>value</Prop>
 				<TypeDef>{'number'}</TypeDef>

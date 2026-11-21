@@ -10,6 +10,8 @@ export type {
 	ToolTip,
 	ToolTipInfo,
 } from './components/sharedTypes';
+export { resolveRadius, resolveSize } from './theme/resolveSize';
+export type { RadiusToken, RadiusValue, SizeValue, SpacingToken } from './theme/resolveSize';
 export { ToolTipType, buttonStyleDefaults } from './components/sharedTypes';
 
 export {
@@ -168,6 +170,7 @@ export type { SwitchProps } from './components/Switch';
 export { ToggleButton } from './components/ToggleButton';
 export type { ToggleButtonProps } from './components/ToggleButton';
 
+export { PillButtonBar, type PillButtonBarProps } from './components/PillButtonBar';
 export { TabBar } from './components/TabBar';
 export { Tab } from './components/Tab';
 export type { TabBarProps } from './components/TabBar';

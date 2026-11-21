@@ -3,6 +3,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
 import { corners } from '../../theme/corners/corners';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { setStyle } from '../../utils/functions/misc';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import css from './ContentEditable.module.css';
@@ -167,12 +168,12 @@ function ContentEditableComponent(rawProps: ContentEditableProps) {
 	};
 	const cssVars = {
 		'--di-width': setStyle(width),
-		'--di-padding': setStyle(padding),
+		'--di-padding': resolveSize(padding),
 		'--di-text-align': textAlign,
 		'--di-color': textColor ?? 'inherit',
 		'--di-placeholder-color': textColorPlaceholder,
 		'--di-background': isEditable ? backgroundColor : 'transparent',
-		'--di-radius': setStyle(borderRadius),
+		'--di-radius': resolveRadius(borderRadius),
 		'--di-clamp': Number.isFinite(clamp) && clamp > 0 ? Math.floor(clamp) : 'none',
 	} as React.CSSProperties;
 	/* START.DEBUG */

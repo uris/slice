@@ -52,3 +52,39 @@
 .xl {
 	composes: body-xl-regular from "../../utils/styling/type.module.css";
 }
+
+.xxl {
+	composes: body-xxl-regular from "../../utils/styling/type.module.css";
+}
+
+.pillTrack {
+	box-sizing: border-box;
+	isolation: isolate;
+	padding: var(--pill-inset);
+	border: var(--pill-track-border-width) solid var(--pill-track-border-color);
+	border-radius: var(--pill-track-radius);
+	background: var(--pill-track-background);
+}
+
+.pillTrack [role="tab"] {
+	position: relative;
+	z-index: 1;
+	border-radius: var(--pill-radius);
+}
+
+.pillTrack [role="tab"]:focus-visible {
+	outline: 2px solid var(--core-outline-special);
+	outline-offset: -2px;
+}
+
+.pillIndicator {
+	position: absolute;
+	inset-block: var(--pill-inset);
+	left: 0;
+	box-sizing: border-box;
+	border: var(--pill-border-width) solid var(--pill-border-color);
+	border-radius: var(--pill-radius);
+	background: var(--pill-background);
+	box-shadow: var(--pill-shadow);
+	pointer-events: none;
+}

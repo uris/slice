@@ -1,6 +1,8 @@
 'use client';
 import React, { useContext } from 'react';
 import { useTrackRenders } from '../../hooks/useTrackRenders/useTrackRenders';
+import { resolveColor } from '../../theme';
+import { resolveRadius, resolveSize } from '../../theme/resolveSize';
 import { resolveColorProps } from '../../utils/functions/resolveColorProps';
 import { Icon } from '../Icon';
 import css from './RadioButton.module.css';
@@ -9,6 +11,7 @@ import type { RadioButtonProps } from './_types';
 
 const length = (value: number | string, fallback: string) =>
 	typeof value === 'number' ? (Number.isFinite(value) ? `${Math.max(0, value)}px` : fallback) : value;
+
 function RadioButtonComponent<T = string>(rawProps: RadioButtonProps<T>) {
 	const group = useContext(RadioGroupContext);
 	const ownProps = Object.fromEntries(
@@ -28,9 +31,10 @@ function RadioButtonComponent<T = string>(rawProps: RadioButtonProps<T>) {
 		formValue,
 		iconChecked = 'system.check-circle',
 		iconUnChecked = 'system.circle',
-		iconColor = 'var(--core-text-primary)',
-		iconColorSelected,
+		iconColor = resolveColor('core-text-tertiary'),
+		iconColorSelected = 'var(--core-icon-primary)',
 		iconSize = 20,
+		iconStroke = 1.5,
 		gap = 6,
 		textColor = 'var(--core-text-primary)',
 		textSize = 'm',
@@ -64,7 +68,7 @@ function RadioButtonComponent<T = string>(rawProps: RadioButtonProps<T>) {
 	const cssVars = {
 		'--rb-align': align === 'top' ? 'flex-start' : align === 'bottom' ? 'flex-end' : 'center',
 		'--rb-icon-size': `${size}px`,
-		'--rb-gap': `${Number.isFinite(gap) ? Math.max(0, gap) : 6}px`,
+		'--rb-gap': resolveSize(typeof gap === 'number' && Number.isFinite(gap) ? Math.max(0, gap) : gap, 6),
 		'--rb-icon-color': iconColor,
 		'--rb-icon-color-selected': iconColorSelected ?? iconColor,
 		'--rb-text-color': textColor,
@@ -74,8 +78,8 @@ function RadioButtonComponent<T = string>(rawProps: RadioButtonProps<T>) {
 		'--rb-background-selected': backgroundColorSelected,
 		'--rb-border-width': length(borderWidth, '0px'),
 		'--rb-border-color': borderColor,
-		'--rb-border-radius': length(borderRadius, '8px'),
-		'--rb-padding': length(padding, '0px'),
+		'--rb-border-radius': resolveRadius(borderRadius, '8px'),
+		'--rb-padding': resolveSize(padding, '0px'),
 	} as React.CSSProperties;
 	/* START.DEBUG */
 	useTrackRenders(props, 'RadioButton');
@@ -110,10 +114,24 @@ function RadioButtonComponent<T = string>(rawProps: RadioButtonProps<T>) {
 				{size > 0 && (
 					<span className={css.icon} aria-hidden="true">
 						<span className={css.unchecked}>
-							<Icon name={iconUnChecked} size={size} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+							<Icon
+								name={iconUnChecked}
+								stroke={iconStroke}
+								size={size}
+								strokeColor="currentColor"
+								pointer={false}
+								tabIndex={-1}
+							/>
 						</span>
 						<span className={css.checked}>
-							<Icon name={iconChecked} size={size} strokeColor="currentColor" pointer={false} tabIndex={-1} />
+							<Icon
+								name={iconChecked}
+								stroke={iconStroke}
+								size={size}
+								strokeColor="currentColor"
+								pointer={false}
+								tabIndex={-1}
+							/>
 						</span>
 					</span>
 				)}
@@ -122,6 +140,7 @@ function RadioButtonComponent<T = string>(rawProps: RadioButtonProps<T>) {
 		</label>
 	);
 }
+
 RadioButtonComponent.displayName = 'RadioButton';
 export const RadioButton = React.memo(RadioButtonComponent) as <T = string>(
 	props: RadioButtonProps<T>,

@@ -18,6 +18,7 @@ import {
 import {
 	actionsCode,
 	errorCode,
+	horizontalCode,
 	imageCode,
 	indeterminateCode,
 	pdfCode,
@@ -103,7 +104,8 @@ const attachmentProps = [
 		name: 'height',
 		type: 'number | string',
 		defaultValue: 'derived from size',
-		description: 'Preview height only; filename and status rows add to the total card height. Numbers use pixels.',
+		description:
+			'Preview height in vertical orientation. Horizontal thumbnails use the height of the file details. Numbers use pixels.',
 	},
 	{
 		name: 'iconGap',
@@ -114,14 +116,27 @@ const attachmentProps = [
 	{
 		name: 'iconSize',
 		type: 'number',
-		defaultValue: '48',
+		defaultValue: '20 horizontal, 48 vertical',
 		description: 'Size of the fallback file-type icon in pixels.',
+	},
+	{
+		name: 'maxWidth',
+		type: 'number | string',
+		defaultValue: 'undefined',
+		description: 'Caps the card width. Numbers use pixels.',
 	},
 	{
 		name: 'openLabel',
 		type: 'string',
 		defaultValue: 'Open <original filename>',
 		description: 'Accessible name for the optional preview action. Blank values use the contextual default.',
+	},
+	{
+		name: 'orientation',
+		type: "'horizontal' | 'vertical'",
+		defaultValue: 'vertical',
+		description:
+			'Horizontal places a square thumbnail beside the file details and fills the available width by default.',
 	},
 	{
 		name: 'padding',
@@ -140,7 +155,7 @@ const attachmentProps = [
 		type: "'xs' | 's' | 'm' | 'l' | 'xl'",
 		defaultValue: 'm',
 		description:
-			'Card width and preview height: 100, 125, 140, 160, or 180 pixels. Explicit dimensions override each axis.',
+			'Sets the default vertical card width and preview height. Also controls which metadata appears in both orientations.',
 	},
 	{ name: 'textColor', type: 'ColorValue', defaultValue: 'core-text-primary', description: 'Filename color.' },
 	{
@@ -159,7 +174,7 @@ const attachmentProps = [
 	{
 		name: 'thumbPadding',
 		type: 'number | string',
-		defaultValue: 'var(--spacing-m)',
+		defaultValue: 'spacing-m vertical, spacing-xxs horizontal',
 		description:
 			'Exact padding inside text and file-icon previews. Numbers use pixels; CSS strings and zero are supported.',
 	},
@@ -167,7 +182,7 @@ const attachmentProps = [
 	{
 		name: 'width',
 		type: 'number | string',
-		defaultValue: 'derived from size',
+		defaultValue: 'derived from orientation and size',
 		description: 'Card width. Numbers use pixels; CSS lengths are supported.',
 	},
 	{
@@ -209,6 +224,22 @@ export function AttachmentDoc() {
 						label: 'PDF file',
 						component: <PdfAttachmentPreview />,
 						code: { code: pdfCode.trim(), filename: 'PdfAttachment.tsx' },
+					},
+				]}
+			/>
+			<H3>Horizontal orientation</H3>
+			<P>
+				Set <Code>orientation="horizontal"</Code> to place the thumbnail beside the filename and file information. The
+				thumbnail matches the height of those rows. Text content uses the text-file icon. Use <Code>maxWidth</Code> to
+				cap the card’s width.
+			</P>
+			<ComponentCanvas
+				storybookUrl="https://react.slice-uikit.com/?path=/story/components-attachment--horizontal"
+				components={[
+					{
+						label: 'Horizontal image attachment',
+						component: <ImageAttachmentPreview orientation="horizontal" />,
+						code: { code: horizontalCode.trim(), filename: 'HorizontalAttachment.tsx' },
 					},
 				]}
 			/>
@@ -272,7 +303,7 @@ export function AttachmentDoc() {
 			<P>
 				Filenames omit the final extension. Multi-part names retain earlier extensions, so <Code>archive.tar.gz</Code>{' '}
 				displays as <Code>archive.tar</Code>. Strings display as <Code>Clipboard content</Code>, with the first 250
-				characters in the preview. Text files show the same excerpt while keeping their own filename and size.
+				characters in the vertical preview. Text files show the same excerpt while keeping their own filename and size.
 			</P>
 			<P>
 				File sizes use 1024-based units, with at most one decimal place: <Code>5 k</Code>, <Code>5 mb</Code>, or{' '}

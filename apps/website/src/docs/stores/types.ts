@@ -11,6 +11,7 @@ export type DocsStoreType = {
 	section: SiteSection | null;
 	trackedItems: TrackedItem[];
 	onThisPageItem: TrackedItemInfo | null;
+	docSidebar: boolean;
 	rightPanelClosed: boolean;
 	minTop: number | null;
 	scrollBox: RefObject<HTMLDivElement | null>;
@@ -19,7 +20,12 @@ export type DocsStoreType = {
 	scrollDirection: 'up' | 'down' | null | undefined;
 	visibleItems: Set<string>;
 	actions: {
-		setDocContext: (slug: DocsSlug | null, packageType: Package | null, section: SiteSection | null) => void;
+		setDocContext: (
+			slug: DocsSlug | null,
+			packageType: Package | null,
+			section: SiteSection | null,
+			docSidebar?: boolean,
+		) => void;
 		setTrackedItems: (trackedItems: TrackedItem[] | null) => void;
 		updateVisibleItems: (itemId: string | null | undefined, visible: boolean) => void;
 		setScrollBoxSize: (size: { height: number | undefined; width: number | undefined }) => void;
